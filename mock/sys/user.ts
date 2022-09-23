@@ -46,7 +46,7 @@ const fakeCodeList: any = {
 export default [
   // mock user login
   {
-    url: '/basic-api/login',
+    url: '/api/login',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {
@@ -69,7 +69,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/getUserInfo',
+    url: '/api/getUserInfo',
     method: 'get',
     response: (request: requestParams) => {
       const token = getRequestToken(request);

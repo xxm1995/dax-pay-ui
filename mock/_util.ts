@@ -1,10 +1,10 @@
 // Interface data format used to return a unified format
 import { ResultEnum } from '/@/enums/httpEnum';
 
-export function resultSuccess<T = Recordable>(result: T, { message = 'ok' } = {}) {
+export function resultSuccess<T = Recordable>(data: T, { message = 'ok' } = {}) {
   return {
     code: ResultEnum.SUCCESS,
-    result,
+    data,
     message,
     type: 'success',
   };

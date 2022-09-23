@@ -9291,6 +9291,11 @@ vue@^3.2.33:
     "@vue/server-renderer" "3.2.37"
     "@vue/shared" "3.2.37"
 
+vxe-table@^4.3.5:
+  version "4.3.5"
+  resolved "https://registry.npmmirror.com/vxe-table/-/vxe-table-4.3.5.tgz#023a5e3833dde341ccd035320f10aef61176aa23"
+  integrity sha512-JEvGAs7SBN1rWn5f2tkoRiXd/rAT7RfnDTTlFsHsTtASiUTKNTISI2WBsVeLkkNRTs0SXh6FgrYsIPO2soSBXA==
+
 warning@^4.0.0:
   version "4.0.3"
   resolved "https://registry.npmmirror.com/warning/-/warning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
@@ -9575,6 +9580,11 @@ write-file-atomic@^4.0.1:
   dependencies:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.7"
+
+xe-utils@^3.5.6:
+  version "3.5.6"
+  resolved "https://registry.npmmirror.com/xe-utils/-/xe-utils-3.5.6.tgz#1d8cf03d635bc2ede3f34bfdf39ce6051b6fcaaa"
+  integrity sha512-oFZWxtTqxR6a2FtTQ1vSD10ab+XUXSz6jWaTaK+CsfbpIWH79jU6DipJJPgw9zxfYigcnJvb98aaT188kqhqcA==
 
 xlsx@^0.18.5:
   version "0.18.5"
