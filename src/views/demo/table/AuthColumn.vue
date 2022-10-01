@@ -25,7 +25,7 @@
                   confirm: handleOpen.bind(null, record),
                 },
                 ifShow: (_action) => {
-                  return record.status !== 'enable'; // 根据业务控制是否显示: 非enable状态的不显示启用按钮
+                  return record.status !== 'enable' // 根据业务控制是否显示: 非enable状态的不显示启用按钮
                 },
               },
               {
@@ -35,7 +35,7 @@
                   confirm: handleOpen.bind(null, record),
                 },
                 ifShow: () => {
-                  return record.status === 'enable'; // 根据业务控制是否显示: enable状态的显示禁用按钮
+                  return record.status === 'enable' // 根据业务控制是否显示: enable状态的显示禁用按钮
                 },
               },
               {
@@ -46,7 +46,7 @@
                 },
                 auth: 'super', // 同时根据权限和业务控制是否显示
                 ifShow: () => {
-                  return true;
+                  return true
                 },
               },
             ]"
@@ -57,10 +57,10 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { BasicTable, useTable, BasicColumn, TableAction } from '/@/components/Table';
+  import { defineComponent } from 'vue'
+  import { BasicTable, useTable, BasicColumn, TableAction } from '/@/components/Table'
 
-  import { demoListApi } from '/@/api/demo/table';
+  import { demoListApi } from '/@/api/demo/table'
   const columns: BasicColumn[] = [
     {
       title: '编号',
@@ -102,7 +102,7 @@
       dataIndex: 'address',
       auth: 'super', // 同时根据权限和业务控制是否显示
       ifShow: (_column) => {
-        return true;
+        return true
       },
     },
     {
@@ -114,7 +114,7 @@
       dataIndex: 'endTime',
       width: 200,
     },
-  ];
+  ]
   export default defineComponent({
     components: { BasicTable, TableAction },
     setup() {
@@ -133,22 +133,22 @@
           dataIndex: 'action',
           // slots: { customRender: 'action' },
         },
-      });
+      })
       function handleEdit(record: Recordable) {
-        console.log('点击了编辑', record);
+        console.log('点击了编辑', record)
       }
       function handleDelete(record: Recordable) {
-        console.log('点击了删除', record);
+        console.log('点击了删除', record)
       }
       function handleOpen(record: Recordable) {
-        console.log('点击了启用', record);
+        console.log('点击了启用', record)
       }
       return {
         registerTable,
         handleEdit,
         handleDelete,
         handleOpen,
-      };
+      }
     },
-  });
+  })
 </script>
