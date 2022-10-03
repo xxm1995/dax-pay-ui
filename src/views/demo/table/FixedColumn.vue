@@ -27,10 +27,10 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { BasicTable, useTable, BasicColumn, TableAction } from '/@/components/Table';
+  import { defineComponent } from 'vue'
+  import { BasicTable, useTable, BasicColumn, TableAction } from '/@/components/Table'
 
-  import { demoListApi } from '/@/api/demo/table';
+  import { demoListApi } from '/@/api/demo/table'
   const columns: BasicColumn[] = [
     {
       title: 'ID',
@@ -62,7 +62,7 @@
       dataIndex: 'endTime',
       width: 200,
     },
-  ];
+  ]
   export default defineComponent({
     components: { BasicTable, TableAction },
     setup() {
@@ -78,18 +78,18 @@
           dataIndex: 'action',
           // slots: { customRender: 'action' },
         },
-      });
+      })
       function handleDelete(record: Recordable) {
-        console.log('点击了删除', record);
+        console.log('点击了删除', record)
       }
       function handleOpen(record: Recordable) {
-        console.log('点击了启用', record);
+        console.log('点击了启用', record)
       }
       return {
         registerTable,
         handleDelete,
         handleOpen,
-      };
+      }
     },
-  });
+  })
 </script>

@@ -1,5 +1,5 @@
-const { name } = require('./package.json');
-const path = require('path');
+const { name } = require('./package.json')
+const path = require('path')
 
 module.exports = {
   apps: [
@@ -15,4 +15,4 @@ module.exports = {
       },
     },
   ],
-};
+}

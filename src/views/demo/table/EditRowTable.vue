@@ -10,21 +10,14 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import {
-    BasicTable,
-    useTable,
-    TableAction,
-    BasicColumn,
-    ActionItem,
-    EditRecordRow,
-  } from '/@/components/Table';
-  import { optionsListApi } from '/@/api/demo/select';
+  import { defineComponent, ref } from 'vue'
+  import { BasicTable, useTable, TableAction, BasicColumn, ActionItem, EditRecordRow } from '/@/components/Table'
+  import { optionsListApi } from '/@/api/demo/select'
 
-  import { demoListApi } from '/@/api/demo/table';
-  import { treeOptionsListApi } from '/@/api/demo/tree';
-  import { cloneDeep } from 'lodash-es';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  import { demoListApi } from '/@/api/demo/table'
+  import { treeOptionsListApi } from '/@/api/demo/tree'
+  import { cloneDeep } from 'lodash-es'
+  import { useMessage } from '/@/hooks/web/useMessage'
 
   const columns: BasicColumn[] = [
     {
@@ -58,9 +51,9 @@
       align: 'right',
       editRule: async (text) => {
         if (text === '2') {
-          return '不能输入该值';
+          return '不能输入该值'
         }
-        return '';
+        return ''
       },
     },
     {
@@ -148,7 +141,7 @@
 
       editComponent: 'Checkbox',
       editValueMap: (value) => {
-        return value ? '是' : '否';
+        return value ? '是' : '否'
       },
       width: 100,
     },
@@ -158,21 +151,19 @@
       editRow: true,
       editComponent: 'Switch',
       editValueMap: (value) => {
-        return value ? '开' : '关';
+        return value ? '开' : '关'
       },
       width: 100,
     },
-  ];
+  ]
   export default defineComponent({
     components: { BasicTable, TableAction },
     setup() {
-      const { createMessage: msg } = useMessage();
-      const currentEditKeyRef = ref('');
+      const { createMessage: msg } = useMessage()
+      const currentEditKeyRef = ref('')
       const [registerTable] = useTable({
         title: '可编辑行示例',
-        titleHelpMessage: [
-          '本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变',
-        ],
+        titleHelpMessage: ['本例中修改[数字输入框]这一列时，同一行的[远程下拉]列的当前编辑数据也会同步发生改变'],
         api: demoListApi,
         columns: columns,
         showIndexColumn: false,
@@ -184,39 +175,39 @@
           dataIndex: 'action',
           // slots: { customRender: 'action' },
         },
-      });
+      })
 
       function handleEdit(record: EditRecordRow) {
-        currentEditKeyRef.value = record.key;
-        record.onEdit?.(true);
+        currentEditKeyRef.value = record.key
+        record.onEdit?.(true)
       }
 
       function handleCancel(record: EditRecordRow) {
-        currentEditKeyRef.value = '';
-        record.onEdit?.(false, false);
+        currentEditKeyRef.value = ''
+        record.onEdit?.(false, false)
       }
 
       async function handleSave(record: EditRecordRow) {
         // 校验
-        msg.loading({ content: '正在保存...', duration: 0, key: 'saving' });
-        const valid = await record.onValid?.();
+        msg.loading({ content: '正在保存...', duration: 0, key: 'saving' })
+        const valid = await record.onValid?.()
         if (valid) {
           try {
-            const data = cloneDeep(record.editValueRefs);
-            console.log(data);
+            const data = cloneDeep(record.editValueRefs)
+            console.log(data)
             //TODO 此处将数据提交给服务器保存
             // ...
             // 保存之后提交编辑状态
-            const pass = await record.onEdit?.(false, true);
+            const pass = await record.onEdit?.(false, true)
             if (pass) {
-              currentEditKeyRef.value = '';
+              currentEditKeyRef.value = ''
             }
-            msg.success({ content: '数据已保存', key: 'saving' });
+            msg.success({ content: '数据已保存', key: 'saving' })
           } catch (error) {
-            msg.error({ content: '保存失败', key: 'saving' });
+            msg.error({ content: '保存失败', key: 'saving' })
           }
         } else {
-          msg.error({ content: '请填写正确的数据', key: 'saving' });
+          msg.error({ content: '请填写正确的数据', key: 'saving' })
         }
       }
 
@@ -228,7 +219,7 @@
               disabled: currentEditKeyRef.value ? currentEditKeyRef.value !== record.key : false,
               onClick: handleEdit.bind(null, record),
             },
-          ];
+          ]
         }
         return [
           {
@@ -242,15 +233,15 @@
               confirm: handleCancel.bind(null, record, column),
             },
           },
-        ];
+        ]
       }
 
       function onEditChange({ column, value, record }) {
         // 本例
         if (column.dataIndex === 'id') {
-          record.editValueRefs.name4.value = `${value}`;
+          record.editValueRefs.name4.value = `${value}`
         }
-        console.log(column, value, record);
+        console.log(column, value, record)
       }
 
       return {
@@ -258,7 +249,7 @@
         handleEdit,
         createActions,
         onEditChange,
-      };
+      }
     },
-  });
+  })
 </script>

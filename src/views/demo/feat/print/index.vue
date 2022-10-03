@@ -8,11 +8,11 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { PageWrapper } from '/@/components/Page';
-  import { CollapseContainer } from '/@/components/Container/index';
+  import { defineComponent } from 'vue'
+  import { PageWrapper } from '/@/components/Page'
+  import { CollapseContainer } from '/@/components/Container/index'
 
-  import printJS from 'print-js';
+  import printJS from 'print-js'
 
   export default defineComponent({
     name: 'AppLogo',
@@ -26,24 +26,21 @@
           ],
           properties: ['name', 'email', 'phone'],
           type: 'json',
-        });
+        })
       }
 
       function imagePrint() {
         printJS({
-          printable: [
-            'https://anncwb.github.io/anncwb/images/preview1.png',
-            'https://anncwb.github.io/anncwb/images/preview2.png',
-          ],
+          printable: ['https://anncwb.github.io/anncwb/images/preview1.png', 'https://anncwb.github.io/anncwb/images/preview2.png'],
           type: 'image',
           header: 'Multiple Images',
           imageStyle: 'width:100%;',
-        });
+        })
       }
       return {
         jsonPrint,
         imagePrint,
-      };
+      }
     },
-  });
+  })
 </script>

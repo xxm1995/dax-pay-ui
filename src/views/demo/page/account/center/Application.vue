@@ -15,11 +15,7 @@
               <div :class="`${prefixCls}__card-num`">
                 新增用户：<span>{{ item.new }}</span>
               </div>
-              <Icon
-                :class="`${prefixCls}__card-download`"
-                v-if="item.download"
-                :icon="item.download"
-              />
+              <Icon :class="`${prefixCls}__card-download`" v-if="item.download" :icon="item.download" />
             </Card>
           </ListItem>
         </a-col>
@@ -28,10 +24,10 @@
   </List>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { List, Card, Row, Col } from 'ant-design-vue';
-  import Icon from '/@/components/Icon/index';
-  import { applicationList } from './data';
+  import { defineComponent } from 'vue'
+  import { List, Card, Row, Col } from 'ant-design-vue'
+  import Icon from '/@/components/Icon/index'
+  import { applicationList } from './data'
 
   export default defineComponent({
     components: {
@@ -46,9 +42,9 @@
       return {
         prefixCls: 'account-center-application',
         list: applicationList,
-      };
+      }
     },
-  });
+  })
 </script>
 <style lang="less">
   .account-center-application {

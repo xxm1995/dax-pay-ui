@@ -1,8 +1,5 @@
 <template>
-  <BasicTable
-    @register="registerTable"
-    :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
-  >
+  <BasicTable @register="registerTable" :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }">
     <template #form-custom> custom-slot </template>
     <template #headerTop>
       <a-alert type="info" show-icon>
@@ -23,17 +20,17 @@
   </BasicTable>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { BasicTable, useTable } from '/@/components/Table';
-  import { getBasicColumns, getFormConfig } from './tableData';
-  import { Alert } from 'ant-design-vue';
+  import { defineComponent, ref } from 'vue'
+  import { BasicTable, useTable } from '/@/components/Table'
+  import { getBasicColumns, getFormConfig } from './tableData'
+  import { Alert } from 'ant-design-vue'
 
-  import { demoListApi } from '/@/api/demo/table';
+  import { demoListApi } from '/@/api/demo/table'
 
   export default defineComponent({
     components: { BasicTable, AAlert: Alert },
     setup() {
-      const checkedKeys = ref<Array<string | number>>([]);
+      const checkedKeys = ref<Array<string | number>>([])
       const [registerTable, { getForm }] = useTable({
         title: '开启搜索区域',
         api: demoListApi,
@@ -44,15 +41,15 @@
         tableSetting: { fullScreen: true },
         showIndexColumn: false,
         rowKey: 'id',
-      });
+      })
 
       function getFormValues() {
-        console.log(getForm().getFieldsValue());
+        console.log(getForm().getFieldsValue())
       }
 
       function onSelectChange(selectedRowKeys: (string | number)[]) {
-        console.log(selectedRowKeys);
-        checkedKeys.value = selectedRowKeys;
+        console.log(selectedRowKeys)
+        checkedKeys.value = selectedRowKeys
       }
 
       return {
@@ -60,7 +57,7 @@
         getFormValues,
         checkedKeys,
         onSelectChange,
-      };
+      }
     },
-  });
+  })
 </script>

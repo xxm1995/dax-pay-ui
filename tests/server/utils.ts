@@ -4,6 +4,6 @@ export class Result {
       code: 0,
       success: true,
       result: data,
-    };
+    }
   }
 }

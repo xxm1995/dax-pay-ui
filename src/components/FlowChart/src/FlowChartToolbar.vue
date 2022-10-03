@@ -4,10 +4,7 @@
       <Tooltip placement="bottom" v-bind="item.disabled ? { visible: false } : {}">
         <template #title>{{ item.tooltip }}</template>
         <span :class="`${prefixCls}-toolbar__icon`" v-if="item.icon" @click="onControl(item)">
-          <Icon
-            :icon="item.icon"
-            :class="item.disabled ? 'cursor-not-allowed disabeld' : 'cursor-pointer'"
-          />
+          <Icon :icon="item.icon" :class="item.disabled ? 'cursor-not-allowed disabeld' : 'cursor-pointer'" />
         </span>
       </Tooltip>
       <Divider v-if="item.separate" type="vertical" />
@@ -15,14 +12,14 @@
   </div>
 </template>
 <script lang="ts">
-  import type { ToolbarConfig } from './types';
+  import type { ToolbarConfig } from './types'
 
-  import { defineComponent, ref, onUnmounted, unref, nextTick, watchEffect } from 'vue';
-  import { Divider, Tooltip } from 'ant-design-vue';
-  import { Icon } from '/@/components/Icon';
+  import { defineComponent, ref, onUnmounted, unref, nextTick, watchEffect } from 'vue'
+  import { Divider, Tooltip } from 'ant-design-vue'
+  import { Icon } from '/@/components/Icon'
 
-  import { useFlowChartContext } from './useFlowContext';
-  import { ToolbarTypeEnum } from './enum';
+  import { useFlowChartContext } from './useFlowContext'
+  import { ToolbarTypeEnum } from './enum'
 
   export default defineComponent({
     name: 'FlowChartToolbar',
@@ -72,65 +69,65 @@
           icon: 'carbon:document-view',
           tooltip: '查看数据',
         },
-      ]);
+      ])
 
-      const { logicFlow } = useFlowChartContext();
+      const { logicFlow } = useFlowChartContext()
 
       function onHistoryChange({ data: { undoAble, redoAble } }) {
-        const itemsList = unref(toolbarItemList);
-        const undoIndex = itemsList.findIndex((item) => item.type === ToolbarTypeEnum.UNDO);
-        const redoIndex = itemsList.findIndex((item) => item.type === ToolbarTypeEnum.REDO);
+        const itemsList = unref(toolbarItemList)
+        const undoIndex = itemsList.findIndex((item) => item.type === ToolbarTypeEnum.UNDO)
+        const redoIndex = itemsList.findIndex((item) => item.type === ToolbarTypeEnum.REDO)
         if (undoIndex !== -1) {
-          unref(toolbarItemList)[undoIndex].disabled = !undoAble;
+          unref(toolbarItemList)[undoIndex].disabled = !undoAble
         }
         if (redoIndex !== -1) {
-          unref(toolbarItemList)[redoIndex].disabled = !redoAble;
+          unref(toolbarItemList)[redoIndex].disabled = !redoAble
         }
       }
 
       const onControl = (item) => {
-        const lf = unref(logicFlow);
+        const lf = unref(logicFlow)
         if (!lf) {
-          return;
+          return
         }
         switch (item.type) {
           case ToolbarTypeEnum.ZOOM_IN:
-            lf.zoom();
-            break;
+            lf.zoom()
+            break
           case ToolbarTypeEnum.ZOOM_OUT:
-            lf.zoom(true);
-            break;
+            lf.zoom(true)
+            break
           case ToolbarTypeEnum.RESET_ZOOM:
-            lf.resetZoom();
-            break;
+            lf.resetZoom()
+            break
           case ToolbarTypeEnum.UNDO:
-            lf.undo();
-            break;
+            lf.undo()
+            break
           case ToolbarTypeEnum.REDO:
-            lf.redo();
-            break;
+            lf.redo()
+            break
           case ToolbarTypeEnum.SNAPSHOT:
-            lf.getSnapshot();
-            break;
+            lf.getSnapshot()
+            break
           case ToolbarTypeEnum.VIEW_DATA:
-            emit('view-data');
-            break;
+            emit('view-data')
+            break
         }
-      };
+      }
 
       watchEffect(async () => {
         if (unref(logicFlow)) {
-          await nextTick();
-          unref(logicFlow)?.on('history:change', onHistoryChange);
+          await nextTick()
+          unref(logicFlow)?.on('history:change', onHistoryChange)
         }
-      });
+      })
 
       onUnmounted(() => {
-        unref(logicFlow)?.off('history:change', onHistoryChange);
-      });
-      return { toolbarItemList, onControl };
+        unref(logicFlow)?.off('history:change', onHistoryChange)
+      })
+      return { toolbarItemList, onControl }
     },
-  });
+  })
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-flow-chart-toolbar';

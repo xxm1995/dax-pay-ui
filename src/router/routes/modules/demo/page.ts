@@ -1,10 +1,10 @@
-import type { AppRouteModule } from '/@/router/types';
+import type { AppRouteModule } from '/@/router/types'
 
-import { getParentLayout, LAYOUT } from '/@/router/constant';
-import { ExceptionEnum } from '/@/enums/exceptionEnum';
-import { t } from '/@/hooks/web/useI18n';
+import { getParentLayout, LAYOUT } from '/@/router/constant'
+import { ExceptionEnum } from '/@/enums/exceptionEnum'
+import { t } from '/@/hooks/web/useI18n'
 
-const ExceptionPage = () => import('/@/views/sys/exception/Exception.vue');
+const ExceptionPage = () => import('/@/views/sys/exception/Exception.vue')
 
 const page: AppRouteModule = {
   path: '/page-demo',
@@ -250,6 +250,6 @@ const page: AppRouteModule = {
     },
     // =============================list end=============================
   ],
-};
+}
 
-export default page;
+export default page

@@ -4,7 +4,7 @@ module.exports = {
   semi: false, //行位是否使用分号
   vueIndentScriptAndStyle: true, // vue文件的script标签和Style标签下的内容需要缩进
   singleQuote: true, // 强制使用单引号
-  trailingComma: 'all',
+  trailingComma: 'all', // 强制最后一行也要有斗号
   proseWrap: 'never',
   htmlWhitespaceSensitivity: 'strict',
   endOfLine: 'auto',

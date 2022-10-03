@@ -74,8 +74,7 @@
           <a-divider />
           <a-descriptions title="组名称" :column="1">
             <a-descriptions-item label="学名">
-              Citrullus lanatus (Thunb.) Matsum. et
-              Nakai一年生蔓生藤本；茎、枝粗壮，具明显的棱。卷须较粗..
+              Citrullus lanatus (Thunb.) Matsum. et Nakai一年生蔓生藤本；茎、枝粗壮，具明显的棱。卷须较粗..
             </a-descriptions-item>
           </a-descriptions>
           <a-divider />
@@ -93,12 +92,12 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { BasicTable, useTable } from '/@/components/Table';
-  import { PageWrapper } from '/@/components/Page';
-  import { Divider, Card, Empty, Descriptions, Steps, Tabs } from 'ant-design-vue';
+  import { defineComponent } from 'vue'
+  import { BasicTable, useTable } from '/@/components/Table'
+  import { PageWrapper } from '/@/components/Page'
+  import { Divider, Card, Empty, Descriptions, Steps, Tabs } from 'ant-design-vue'
 
-  import { refundTimeTableSchema, refundTimeTableData } from './data';
+  import { refundTimeTableSchema, refundTimeTableData } from './data'
   export default defineComponent({
     components: {
       BasicTable,
@@ -121,11 +120,11 @@
         dataSource: refundTimeTableData,
         showIndexColumn: false,
         scroll: { y: 300 },
-      });
+      })
 
       return {
         registerTimeTable,
-      };
+      }
     },
-  });
+  })
 </script>

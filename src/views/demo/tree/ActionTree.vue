@@ -28,69 +28,69 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, unref } from 'vue';
-  import { BasicTree, TreeActionType } from '/@/components/Tree/index';
-  import { treeData } from './data';
-  import { useMessage } from '/@/hooks/web/useMessage';
-  import { PageWrapper } from '/@/components/Page';
+  import { defineComponent, ref, unref } from 'vue'
+  import { BasicTree, TreeActionType } from '/@/components/Tree/index'
+  import { treeData } from './data'
+  import { useMessage } from '/@/hooks/web/useMessage'
+  import { PageWrapper } from '/@/components/Page'
 
   export default defineComponent({
     components: { BasicTree, PageWrapper },
     setup() {
-      const treeRef = ref<Nullable<TreeActionType>>(null);
-      const { createMessage } = useMessage();
+      const treeRef = ref<Nullable<TreeActionType>>(null)
+      const { createMessage } = useMessage()
 
       function getTree() {
-        const tree = unref(treeRef);
+        const tree = unref(treeRef)
         if (!tree) {
-          throw new Error('tree is null!');
+          throw new Error('tree is null!')
         }
-        return tree;
+        return tree
       }
 
       function handleLevel(level: number) {
-        getTree().filterByLevel(level);
+        getTree().filterByLevel(level)
       }
 
       function handleSetCheckData() {
-        getTree().setCheckedKeys(['0-0']);
+        getTree().setCheckedKeys(['0-0'])
       }
 
       function handleGetCheckData() {
-        const keys = getTree().getCheckedKeys();
-        createMessage.success(JSON.stringify(keys));
+        const keys = getTree().getCheckedKeys()
+        createMessage.success(JSON.stringify(keys))
       }
 
       function handleSetSelectData() {
-        getTree().setSelectedKeys(['0-0']);
+        getTree().setSelectedKeys(['0-0'])
       }
 
       function handleGetSelectData() {
-        const keys = getTree().getSelectedKeys();
-        createMessage.success(JSON.stringify(keys));
+        const keys = getTree().getSelectedKeys()
+        createMessage.success(JSON.stringify(keys))
       }
 
       function handleGetSelectNode() {
-        const keys = getTree().getSelectedKeys();
-        const node = getTree().getSelectedNode(keys[0]);
-        createMessage.success(node !== null ? JSON.stringify(node) : null);
+        const keys = getTree().getSelectedKeys()
+        const node = getTree().getSelectedNode(keys[0])
+        createMessage.success(node !== null ? JSON.stringify(node) : null)
       }
 
       function handleSetExpandData() {
-        getTree().setExpandedKeys(['0-0']);
+        getTree().setExpandedKeys(['0-0'])
       }
 
       function handleGetExpandData() {
-        const keys = getTree().getExpandedKeys();
-        createMessage.success(JSON.stringify(keys));
+        const keys = getTree().getExpandedKeys()
+        createMessage.success(JSON.stringify(keys))
       }
 
       function checkAll(checkAll: boolean) {
-        getTree().checkAll(checkAll);
+        getTree().checkAll(checkAll)
       }
 
       function expandAll(checkAll: boolean) {
-        getTree().expandAll(checkAll);
+        getTree().expandAll(checkAll)
       }
 
       function appendNodeByKey(parentKey: string | null = null) {
@@ -104,17 +104,17 @@
           push: 'push',
           // 往前插入
           // push:'unshift'
-        });
+        })
       }
 
       function deleteNodeByKey(key: string) {
-        getTree().deleteNodeByKey(key);
+        getTree().deleteNodeByKey(key)
       }
 
       function updateNodeByKey(key: string) {
         getTree().updateNodeByKey(key, {
           title: 'parent2-new',
-        });
+        })
       }
 
       return {
@@ -133,7 +133,7 @@
         updateNodeByKey,
         checkAll,
         expandAll,
-      };
+      }
     },
-  });
+  })
 </script>

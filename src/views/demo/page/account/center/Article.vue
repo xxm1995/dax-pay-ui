@@ -24,12 +24,7 @@
         <div>
           <template v-for="action in actions" :key="action.text">
             <div :class="`${prefixCls}__action`">
-              <Icon
-                v-if="action.icon"
-                :class="`${prefixCls}__action-icon`"
-                :icon="action.icon"
-                :color="action.color"
-              />
+              <Icon v-if="action.icon" :class="`${prefixCls}__action-icon`" :icon="action.icon" :color="action.color" />
               {{ action.text }}
             </div>
           </template>
@@ -40,10 +35,10 @@
   </List>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { List, Tag } from 'ant-design-vue';
-  import Icon from '/@/components/Icon/index';
-  import { actions, articleList } from './data';
+  import { defineComponent } from 'vue'
+  import { List, Tag } from 'ant-design-vue'
+  import Icon from '/@/components/Icon/index'
+  import { actions, articleList } from './data'
 
   export default defineComponent({
     components: {
@@ -58,9 +53,9 @@
         prefixCls: 'account-center-article',
         list: articleList,
         actions,
-      };
+      }
     },
-  });
+  })
 </script>
 <style lang="less" scoped>
   .account-center-article {

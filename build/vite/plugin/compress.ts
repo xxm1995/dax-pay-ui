@@ -2,16 +2,13 @@
  * Used to package and output gzip. Note that this does not work properly in Vite, the specific reason is still being investigated
  * https://github.com/anncwb/vite-plugin-compression
  */
-import type { PluginOption } from 'vite';
-import compressPlugin from 'vite-plugin-compression';
+import type { PluginOption } from 'vite'
+import compressPlugin from 'vite-plugin-compression'
 
-export function configCompressPlugin(
-  compress: 'gzip' | 'brotli' | 'none',
-  deleteOriginFile = false,
-): PluginOption | PluginOption[] {
-  const compressList = compress.split(',');
+export function configCompressPlugin(compress: 'gzip' | 'brotli' | 'none', deleteOriginFile = false): PluginOption | PluginOption[] {
+  const compressList = compress.split(',')
 
-  const plugins: PluginOption[] = [];
+  const plugins: PluginOption[] = []
 
   if (compressList.includes('gzip')) {
     plugins.push(
@@ -19,7 +16,7 @@ export function configCompressPlugin(
         ext: '.gz',
         deleteOriginFile,
       }),
-    );
+    )
   }
 
   if (compressList.includes('brotli')) {
@@ -29,7 +26,7 @@ export function configCompressPlugin(
         algorithm: 'brotliCompress',
         deleteOriginFile,
       }),
-    );
+    )
   }
-  return plugins;
+  return plugins
 }

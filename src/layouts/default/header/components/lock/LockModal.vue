@@ -1,11 +1,5 @@
 <template>
-  <BasicModal
-    :footer="null"
-    :title="t('layout.header.lockScreen')"
-    v-bind="$attrs"
-    :class="prefixCls"
-    @register="register"
-  >
+  <BasicModal :footer="null" :title="t('layout.header.lockScreen')" v-bind="$attrs" :class="prefixCls" @register="register">
     <div :class="`${prefixCls}__entry`">
       <div :class="`${prefixCls}__header`">
         <img :src="avatar" :class="`${prefixCls}__header-img`" />
@@ -25,27 +19,27 @@
   </BasicModal>
 </template>
 <script lang="ts">
-  import { defineComponent, computed } from 'vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { BasicModal, useModalInner } from '/@/components/Modal/index';
-  import { BasicForm, useForm } from '/@/components/Form/index';
+  import { defineComponent, computed } from 'vue'
+  import { useI18n } from '/@/hooks/web/useI18n'
+  import { useDesign } from '/@/hooks/web/useDesign'
+  import { BasicModal, useModalInner } from '/@/components/Modal/index'
+  import { BasicForm, useForm } from '/@/components/Form/index'
 
-  import { useUserStore } from '/@/store/modules/user';
-  import { useLockStore } from '/@/store/modules/lock';
-  import headerImg from '/@/assets/images/header.jpg';
+  import { useUserStore } from '/@/store/modules/user'
+  import { useLockStore } from '/@/store/modules/lock'
+  import headerImg from '/@/assets/images/header.jpg'
   export default defineComponent({
     name: 'LockModal',
     components: { BasicModal, BasicForm },
 
     setup() {
-      const { t } = useI18n();
-      const { prefixCls } = useDesign('header-lock-modal');
-      const userStore = useUserStore();
-      const lockStore = useLockStore();
+      const { t } = useI18n()
+      const { prefixCls } = useDesign('header-lock-modal')
+      const userStore = useUserStore()
+      const lockStore = useLockStore()
 
-      const getRealName = computed(() => userStore.getUserInfo?.realName);
-      const [register, { closeModal }] = useModalInner();
+      const getRealName = computed(() => userStore.getUserInfo?.realName)
+      const [register, { closeModal }] = useModalInner()
 
       const [registerForm, { validateFields, resetFields }] = useForm({
         showActionButtonGroup: false,
@@ -60,24 +54,24 @@
             required: true,
           },
         ],
-      });
+      })
 
       async function handleLock() {
-        const values = (await validateFields()) as any;
-        const password: string | undefined = values.password;
-        closeModal();
+        const values = (await validateFields()) as any
+        const password: string | undefined = values.password
+        closeModal()
 
         lockStore.setLockInfo({
           isLock: true,
           pwd: password,
-        });
-        await resetFields();
+        })
+        await resetFields()
       }
 
       const avatar = computed(() => {
-        const { avatar } = userStore.getUserInfo;
-        return avatar || headerImg;
-      });
+        const { avatar } = userStore.getUserInfo
+        return avatar || headerImg
+      })
 
       return {
         t,
@@ -87,9 +81,9 @@
         registerForm,
         handleLock,
         avatar,
-      };
+      }
     },
-  });
+  })
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-header-lock-modal';

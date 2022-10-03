@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts" setup>
-  import AppSearchKeyItem from './AppSearchKeyItem.vue';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  const { prefixCls } = useDesign('app-search-footer');
-  const { t } = useI18n();
+  import AppSearchKeyItem from './AppSearchKeyItem.vue'
+  import { useDesign } from '/@/hooks/web/useDesign'
+  import { useI18n } from '/@/hooks/web/useI18n'
+  const { prefixCls } = useDesign('app-search-footer')
+  const { t } = useI18n()
 </script>
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-app-search-footer';
@@ -41,8 +41,7 @@
       margin-right: 0.4em;
       background-color: linear-gradient(-225deg, #d5dbe4, #f8f8f8);
       border-radius: 2px;
-      box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
-        0 1px 2px 1px rgb(30 35 90 / 40%);
+      box-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff, 0 1px 2px 1px rgb(30 35 90 / 40%);
       align-items: center;
       justify-content: center;
 

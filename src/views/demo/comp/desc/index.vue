@@ -23,9 +23,9 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { Description, DescItem, useDescription } from '/@/components/Description/index';
-  import { PageWrapper } from '/@/components/Page';
+  import { defineComponent } from 'vue'
+  import { Description, DescItem, useDescription } from '/@/components/Description/index'
+  import { PageWrapper } from '/@/components/Page'
 
   const mockData: Recordable = {
     username: 'test',
@@ -37,7 +37,7 @@
     sex: '男',
     certy: '3504256199xxxxxxxxx',
     tag: 'orange',
-  };
+  }
   const schema: DescItem[] = [
     {
       field: 'username',
@@ -47,7 +47,7 @@
       field: 'nickName',
       label: '昵称',
       render: (curVal, data) => {
-        return `${data.username}-${curVal}`;
+        return `${data.username}-${curVal}`
       },
     },
     {
@@ -62,7 +62,7 @@
       field: 'addr',
       label: '地址',
     },
-  ];
+  ]
   export default defineComponent({
     components: { Description, PageWrapper },
     setup() {
@@ -70,16 +70,16 @@
         title: 'useDescription',
         data: mockData,
         schema: schema,
-      });
+      })
 
       const [register1] = useDescription({
         title: '无边框',
         bordered: false,
         data: mockData,
         schema: schema,
-      });
+      })
 
-      return { mockData, schema, register, register1 };
+      return { mockData, schema, register, register1 }
     },
-  });
+  })
 </script>

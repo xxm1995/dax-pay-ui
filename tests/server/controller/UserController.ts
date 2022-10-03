@@ -1,15 +1,15 @@
-import UserService from '../service/UserService';
+import UserService from '../service/UserService'
 
 class UserController {
-  private service: UserService = new UserService();
+  private service: UserService = new UserService()
 
   login = async (ctx) => {
-    ctx.body = await this.service.login();
-  };
+    ctx.body = await this.service.login()
+  }
 
   getUserInfoById = async (ctx) => {
-    ctx.body = await this.service.getUserInfoById();
-  };
+    ctx.body = await this.service.getUserInfoById()
+  }
 }
 
-export default new UserController();
+export default new UserController()

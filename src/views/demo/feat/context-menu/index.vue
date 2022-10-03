@@ -10,17 +10,17 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { useContextMenu } from '/@/hooks/web/useContextMenu';
-  import { CollapseContainer } from '/@/components/Container';
-  import { useMessage } from '/@/hooks/web/useMessage';
-  import { PageWrapper } from '/@/components/Page';
+  import { defineComponent } from 'vue'
+  import { useContextMenu } from '/@/hooks/web/useContextMenu'
+  import { CollapseContainer } from '/@/components/Container'
+  import { useMessage } from '/@/hooks/web/useMessage'
+  import { PageWrapper } from '/@/components/Page'
 
   export default defineComponent({
     components: { CollapseContainer, PageWrapper },
     setup() {
-      const [createContextMenu] = useContextMenu();
-      const { createMessage } = useMessage();
+      const [createContextMenu] = useContextMenu()
+      const { createMessage } = useMessage()
       function handleContext(e: MouseEvent) {
         createContextMenu({
           event: e,
@@ -29,18 +29,18 @@
               label: 'New',
               icon: 'bi:plus',
               handler: () => {
-                createMessage.success('click new');
+                createMessage.success('click new')
               },
             },
             {
               label: 'Open',
               icon: 'bx:bxs-folder-open',
               handler: () => {
-                createMessage.success('click open');
+                createMessage.success('click open')
               },
             },
           ],
-        });
+        })
       }
 
       function handleMultipleContext(e: MouseEvent) {
@@ -60,7 +60,7 @@
                     {
                       label: 'New1-1-1',
                       handler: () => {
-                        createMessage.success('click new');
+                        createMessage.success('click new')
                       },
                     },
                     {
@@ -76,10 +76,10 @@
               ],
             },
           ],
-        });
+        })
       }
 
-      return { handleContext, handleMultipleContext };
+      return { handleContext, handleMultipleContext }
     },
-  });
+  })
 </script>

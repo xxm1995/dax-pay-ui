@@ -30,21 +30,21 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent } from 'vue'
 
-  import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getRoleListByPage } from '/@/api/demo/system';
+  import { BasicTable, useTable, TableAction } from '/@/components/Table'
+  import { getRoleListByPage } from '/@/api/demo/system'
 
-  import { useDrawer } from '/@/components/Drawer';
-  import RoleDrawer from './RoleDrawer.vue';
+  import { useDrawer } from '/@/components/Drawer'
+  import RoleDrawer from './RoleDrawer.vue'
 
-  import { columns, searchFormSchema } from './role.data';
+  import { columns, searchFormSchema } from './role.data'
 
   export default defineComponent({
     name: 'RoleManagement',
     components: { BasicTable, RoleDrawer, TableAction },
     setup() {
-      const [registerDrawer, { openDrawer }] = useDrawer();
+      const [registerDrawer, { openDrawer }] = useDrawer()
       const [registerTable, { reload }] = useTable({
         title: '角色列表',
         api: getRoleListByPage,
@@ -64,27 +64,27 @@
           // slots: { customRender: 'action' },
           fixed: undefined,
         },
-      });
+      })
 
       function handleCreate() {
         openDrawer(true, {
           isUpdate: false,
-        });
+        })
       }
 
       function handleEdit(record: Recordable) {
         openDrawer(true, {
           record,
           isUpdate: true,
-        });
+        })
       }
 
       function handleDelete(record: Recordable) {
-        console.log(record);
+        console.log(record)
       }
 
       function handleSuccess() {
-        reload();
+        reload()
       }
 
       return {
@@ -94,7 +94,7 @@
         handleEdit,
         handleDelete,
         handleSuccess,
-      };
+      }
     },
-  });
+  })
 </script>

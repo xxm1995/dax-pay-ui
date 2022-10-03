@@ -112,4 +112,4 @@ export default {
 
     mixSidebarFixed: '固定展开菜单',
   },
-};
+}

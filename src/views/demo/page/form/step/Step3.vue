@@ -17,8 +17,8 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { Result, Descriptions } from 'ant-design-vue';
+  import { defineComponent } from 'vue'
+  import { Result, Descriptions } from 'ant-design-vue'
   export default defineComponent({
     components: {
       [Result.name]: Result,
@@ -29,11 +29,11 @@
     setup(_, { emit }) {
       return {
         redo: () => {
-          emit('redo');
+          emit('redo')
         },
-      };
+      }
     },
-  });
+  })
 </script>
 <style lang="less" scoped>
   .step3 {

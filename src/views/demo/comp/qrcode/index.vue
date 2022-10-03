@@ -1,11 +1,7 @@
 <template>
   <PageWrapper title="二维码组件使用示例">
     <div class="flex flex-wrap">
-      <CollapseContainer
-        title="基础示例"
-        :canExpan="true"
-        class="text-center mb-6 qrcode-demo-item"
-      >
+      <CollapseContainer title="基础示例" :canExpan="true" class="text-center mb-6 qrcode-demo-item">
         <QrCode :value="qrCodeUrl" />
       </CollapseContainer>
 
@@ -60,14 +56,7 @@
       </CollapseContainer>
 
       <CollapseContainer title="扩展绘制示例" class="text-center qrcode-demo-item">
-        <QrCode
-          :value="qrCodeUrl"
-          :width="200"
-          :options="{ margin: 5 }"
-          ref="qrDiyRef"
-          :logo="LogoImg"
-          @done="onQrcodeDone"
-        />
+        <QrCode :value="qrCodeUrl" :width="200" :options="{ margin: 5 }" ref="qrDiyRef" :logo="LogoImg" @done="onQrcodeDone" />
         <a-button class="mb-2" type="primary" @click="downloadDiy"> 下载 </a-button>
         <div class="msg">要进行扩展绘制则不能将tag设为img</div>
       </CollapseContainer>
@@ -75,37 +64,37 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, unref } from 'vue';
-  import { QrCode, QrCodeActionType } from '/@/components/Qrcode/index';
-  import LogoImg from '/@/assets/images/logo.png';
-  import { CollapseContainer } from '/@/components/Container/index';
-  import { PageWrapper } from '/@/components/Page';
+  import { defineComponent, ref, unref } from 'vue'
+  import { QrCode, QrCodeActionType } from '/@/components/Qrcode/index'
+  import LogoImg from '/@/assets/images/logo.png'
+  import { CollapseContainer } from '/@/components/Container/index'
+  import { PageWrapper } from '/@/components/Page'
 
-  const qrCodeUrl = 'https://www.vvbin.cn';
+  const qrCodeUrl = 'https://www.vvbin.cn'
   export default defineComponent({
     components: { CollapseContainer, QrCode, PageWrapper },
     setup() {
-      const qrRef = ref<Nullable<QrCodeActionType>>(null);
-      const qrDiyRef = ref<Nullable<QrCodeActionType>>(null);
+      const qrRef = ref<Nullable<QrCodeActionType>>(null)
+      const qrDiyRef = ref<Nullable<QrCodeActionType>>(null)
       function download() {
-        const qrEl = unref(qrRef);
-        if (!qrEl) return;
-        qrEl.download('文件名');
+        const qrEl = unref(qrRef)
+        if (!qrEl) return
+        qrEl.download('文件名')
       }
       function downloadDiy() {
-        const qrEl = unref(qrDiyRef);
-        if (!qrEl) return;
-        qrEl.download('Qrcode');
+        const qrEl = unref(qrDiyRef)
+        if (!qrEl) return
+        qrEl.download('Qrcode')
       }
 
       function onQrcodeDone({ ctx }: any) {
         if (ctx instanceof CanvasRenderingContext2D) {
           // 额外绘制
-          ctx.fillStyle = 'black';
-          ctx.font = '16px "微软雅黑"';
-          ctx.textBaseline = 'bottom';
-          ctx.textAlign = 'center';
-          ctx.fillText('你帅你先扫', 100, 195, 200);
+          ctx.fillStyle = 'black'
+          ctx.font = '16px "微软雅黑"'
+          ctx.textBaseline = 'bottom'
+          ctx.textAlign = 'center'
+          ctx.fillText('你帅你先扫', 100, 195, 200)
         }
       }
       return {
@@ -116,9 +105,9 @@
         downloadDiy,
         qrRef,
         qrDiyRef,
-      };
+      }
     },
-  });
+  })
 </script>
 <style scoped>
   .qrcode-demo-item {

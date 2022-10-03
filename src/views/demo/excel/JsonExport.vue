@@ -10,11 +10,11 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { BasicTable } from '/@/components/Table';
-  import { jsonToSheetXlsx } from '/@/components/Excel';
-  import { columns, data } from './data';
-  import { PageWrapper } from '/@/components/Page';
+  import { defineComponent } from 'vue'
+  import { BasicTable } from '/@/components/Table'
+  import { jsonToSheetXlsx } from '/@/components/Excel'
+  import { columns, data } from './data'
+  import { PageWrapper } from '/@/components/Page'
 
   export default defineComponent({
     components: { BasicTable, PageWrapper },
@@ -24,7 +24,7 @@
         jsonToSheetXlsx({
           data,
           filename: '使用key作为默认头部.xlsx',
-        });
+        })
       }
 
       function customHeader() {
@@ -44,7 +44,7 @@
             // 指定顺序
             header: ['name', 'id'],
           },
-        });
+        })
       }
 
       return {
@@ -52,7 +52,7 @@
         customHeader,
         columns,
         data,
-      };
+      }
     },
-  });
+  })
 </script>

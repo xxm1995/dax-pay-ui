@@ -10,10 +10,10 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index';
-  import { CollapseContainer } from '/@/components/Container';
-  import { PageWrapper } from '/@/components/Page';
+  import { defineComponent } from 'vue'
+  import { BasicForm, FormSchema, useForm } from '/@/components/Form/index'
+  import { CollapseContainer } from '/@/components/Container'
+  import { PageWrapper } from '/@/components/Page'
 
   const getSchamas = (): FormSchema[] => {
     return [
@@ -27,7 +27,7 @@
         componentProps: {
           placeholder: '自定义placeholder',
           onChange: (e: any) => {
-            console.log(e);
+            console.log(e)
           },
         },
       },
@@ -109,8 +109,8 @@
       //     ],
       //   },
       // },
-    ];
-  };
+    ]
+  }
 
   function getAppendSchemas(): FormSchema[] {
     return [
@@ -146,7 +146,7 @@
           span: 8,
         },
       },
-    ];
+    ]
   }
   export default defineComponent({
     components: { BasicForm, CollapseContainer, PageWrapper },
@@ -159,8 +159,8 @@
         },
         compact: true,
         showAdvancedButton: true,
-      });
-      const extraSchemas: FormSchema[] = [];
+      })
+      const extraSchemas: FormSchema[] = []
       for (let i = 14; i < 30; i++) {
         extraSchemas.push({
           field: 'field' + i,
@@ -169,27 +169,22 @@
           colProps: {
             span: 8,
           },
-        });
+        })
       }
       const [register1] = useForm({
         labelWidth: 120,
-        schemas: [
-          ...getSchamas(),
-          ...getAppendSchemas(),
-          { field: '', component: 'Divider', label: '更多字段' },
-          ...extraSchemas,
-        ],
+        schemas: [...getSchamas(), ...getAppendSchemas(), { field: '', component: 'Divider', label: '更多字段' }, ...extraSchemas],
         actionColOptions: {
           span: 24,
         },
         compact: true,
         showAdvancedButton: true,
         alwaysShowLines: 2,
-      });
+      })
       return {
         register,
         register1,
-      };
+      }
     },
-  });
+  })
 </script>

@@ -1,12 +1,7 @@
 <template>
   <PageWrapper :class="prefixCls" title="搜索列表">
     <template #headerContent>
-      <BasicForm
-        :class="`${prefixCls}__header-form`"
-        :labelWidth="100"
-        :schemas="schemas"
-        :showActionButtonGroup="false"
-      />
+      <BasicForm :class="`${prefixCls}__header-form`" :labelWidth="100" :schemas="schemas" :showActionButtonGroup="false" />
     </template>
 
     <div :class="`${prefixCls}__container`">
@@ -21,12 +16,7 @@
                 <div :class="`${prefixCls}__action`">
                   <template v-for="action in actions" :key="action.icon">
                     <div :class="`${prefixCls}__action-item`">
-                      <Icon
-                        v-if="action.icon"
-                        :class="`${prefixCls}__action-icon`"
-                        :icon="action.icon"
-                        :color="action.color"
-                      />
+                      <Icon v-if="action.icon" :class="`${prefixCls}__action-icon`" :icon="action.icon" :color="action.color" />
                       {{ action.text }}
                     </div>
                   </template>
@@ -53,13 +43,13 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { Tag } from 'ant-design-vue';
-  import { defineComponent } from 'vue';
-  import Icon from '/@/components/Icon/index';
-  import { BasicForm } from '/@/components/Form/index';
-  import { actions, searchList, schemas } from './data';
-  import { PageWrapper } from '/@/components/Page';
-  import { List } from 'ant-design-vue';
+  import { Tag } from 'ant-design-vue'
+  import { defineComponent } from 'vue'
+  import Icon from '/@/components/Icon/index'
+  import { BasicForm } from '/@/components/Form/index'
+  import { actions, searchList, schemas } from './data'
+  import { PageWrapper } from '/@/components/Page'
+  import { List } from 'ant-design-vue'
 
   export default defineComponent({
     components: {
@@ -77,9 +67,9 @@
         list: searchList,
         actions,
         schemas,
-      };
+      }
     },
-  });
+  })
 </script>
 <style lang="less" scoped>
   .list-search {

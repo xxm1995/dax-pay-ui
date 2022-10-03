@@ -1,12 +1,7 @@
 <template>
   <PageWrapper title="动画组件示例">
     <div class="flex">
-      <Select
-        :options="options"
-        v-model:value="value"
-        placeholder="选择动画"
-        :style="{ width: '150px' }"
-      />
+      <Select :options="options" v-model:value="value" placeholder="选择动画" :style="{ width: '150px' }" />
       <a-button type="primary" class="ml-4" @click="start"> start </a-button>
     </div>
     <component :is="`${value}Transition`">
@@ -15,9 +10,9 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { Select } from 'ant-design-vue';
-  import { PageWrapper } from '/@/components/Page';
+  import { defineComponent, ref } from 'vue'
+  import { Select } from 'ant-design-vue'
+  import { PageWrapper } from '/@/components/Page'
   import {
     FadeTransition,
     ScaleTransition,
@@ -32,7 +27,7 @@
     ScaleRotateTransition,
     ExpandXTransition,
     ExpandTransition,
-  } from '/@/components/Transition';
+  } from '/@/components/Transition'
 
   const transitionList = [
     'Fade',
@@ -48,12 +43,12 @@
     'ScaleRotate',
     'ExpandX',
     'Expand',
-  ];
+  ]
   const options = transitionList.map((item) => ({
     label: item,
     value: item,
     key: item,
-  }));
+  }))
 
   export default defineComponent({
     components: {
@@ -74,17 +69,17 @@
       ExpandTransition,
     },
     setup() {
-      const value = ref('Fade');
-      const show = ref(true);
+      const value = ref('Fade')
+      const show = ref(true)
       function start() {
-        show.value = false;
+        show.value = false
         setTimeout(() => {
-          show.value = true;
-        }, 300);
+          show.value = true
+        }, 300)
       }
-      return { options, value, start, show };
+      return { options, value, start, show }
     },
-  });
+  })
 </script>
 <style lang="less" scoped>
   .box {

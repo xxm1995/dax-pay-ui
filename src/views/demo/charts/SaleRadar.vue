@@ -4,11 +4,11 @@
   </Card>
 </template>
 <script lang="ts">
-  import type { Ref } from 'vue';
+  import type { Ref } from 'vue'
 
-  import { defineComponent, ref, watch } from 'vue';
-  import { Card } from 'ant-design-vue';
-  import { useECharts } from '/@/hooks/web/useECharts';
+  import { defineComponent, ref, watch } from 'vue'
+  import { Card } from 'ant-design-vue'
+  import { useECharts } from '/@/hooks/web/useECharts'
 
   export default defineComponent({
     components: { Card },
@@ -24,13 +24,13 @@
       },
     },
     setup(props) {
-      const chartRef = ref<HTMLDivElement | null>(null);
-      const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>);
+      const chartRef = ref<HTMLDivElement | null>(null)
+      const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>)
       watch(
         () => props.loading,
         () => {
           if (props.loading) {
-            return;
+            return
           }
           setOptions({
             legend: {
@@ -91,11 +91,11 @@
                 ],
               },
             ],
-          });
+          })
         },
         { immediate: true },
-      );
-      return { chartRef };
+      )
+      return { chartRef }
     },
-  });
+  })
 </script>

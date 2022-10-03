@@ -51,32 +51,32 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { BasicDragVerify, DragVerifyActionType, PassingData } from '/@/components/Verify/index';
-  import { useMessage } from '/@/hooks/web/useMessage';
-  import { BugOutlined, RightOutlined } from '@ant-design/icons-vue';
-  import { PageWrapper } from '/@/components/Page';
+  import { defineComponent, ref } from 'vue'
+  import { BasicDragVerify, DragVerifyActionType, PassingData } from '/@/components/Verify/index'
+  import { useMessage } from '/@/hooks/web/useMessage'
+  import { BugOutlined, RightOutlined } from '@ant-design/icons-vue'
+  import { PageWrapper } from '/@/components/Page'
 
   export default defineComponent({
     components: { BasicDragVerify, BugOutlined, RightOutlined, PageWrapper },
     setup() {
-      const { createMessage } = useMessage();
-      const el1 = ref<Nullable<DragVerifyActionType>>(null);
-      const el2 = ref<Nullable<DragVerifyActionType>>(null);
-      const el3 = ref<Nullable<DragVerifyActionType>>(null);
-      const el4 = ref<Nullable<DragVerifyActionType>>(null);
-      const el5 = ref<Nullable<DragVerifyActionType>>(null);
+      const { createMessage } = useMessage()
+      const el1 = ref<Nullable<DragVerifyActionType>>(null)
+      const el2 = ref<Nullable<DragVerifyActionType>>(null)
+      const el3 = ref<Nullable<DragVerifyActionType>>(null)
+      const el4 = ref<Nullable<DragVerifyActionType>>(null)
+      const el5 = ref<Nullable<DragVerifyActionType>>(null)
 
       function handleSuccess(data: PassingData) {
-        const { time } = data;
-        createMessage.success(`校验成功,耗时${time}秒`);
+        const { time } = data
+        createMessage.success(`校验成功,耗时${time}秒`)
       }
 
       function handleBtnClick(elRef: Nullable<DragVerifyActionType>) {
         if (!elRef) {
-          return;
+          return
         }
-        elRef.resume();
+        elRef.resume()
       }
       return {
         handleSuccess,
@@ -86,9 +86,9 @@
         el4,
         el5,
         handleBtnClick,
-      };
+      }
     },
-  });
+  })
 </script>
 <style lang="less" scoped>
   .bg-gray-700 {

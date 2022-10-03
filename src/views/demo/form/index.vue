@@ -10,22 +10,10 @@
         @reset="handleReset"
       >
         <template #selectA="{ model, field }">
-          <a-select
-            :options="optionsA"
-            mode="multiple"
-            v-model:value="model[field]"
-            @change="valueSelectA = model[field]"
-            allowClear
-          />
+          <a-select :options="optionsA" mode="multiple" v-model:value="model[field]" @change="valueSelectA = model[field]" allowClear />
         </template>
         <template #selectB="{ model, field }">
-          <a-select
-            :options="optionsB"
-            mode="multiple"
-            v-model:value="model[field]"
-            @change="valueSelectB = model[field]"
-            allowClear
-          />
+          <a-select :options="optionsB" mode="multiple" v-model:value="model[field]" @change="valueSelectB = model[field]" allowClear />
         </template>
         <template #localSearch="{ model, field }">
           <ApiSelect
@@ -56,35 +44,35 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { computed, defineComponent, unref, ref } from 'vue';
-  import { BasicForm, FormSchema, ApiSelect } from '/@/components/Form/index';
-  import { CollapseContainer } from '/@/components/Container';
-  import { useMessage } from '/@/hooks/web/useMessage';
-  import { PageWrapper } from '/@/components/Page';
+  import { computed, defineComponent, unref, ref } from 'vue'
+  import { BasicForm, FormSchema, ApiSelect } from '/@/components/Form/index'
+  import { CollapseContainer } from '/@/components/Container'
+  import { useMessage } from '/@/hooks/web/useMessage'
+  import { PageWrapper } from '/@/components/Page'
 
-  import { optionsListApi } from '/@/api/demo/select';
-  import { useDebounceFn } from '@vueuse/core';
-  import { treeOptionsListApi } from '/@/api/demo/tree';
-  import { Select } from 'ant-design-vue';
-  import { cloneDeep } from 'lodash-es';
+  import { optionsListApi } from '/@/api/demo/select'
+  import { useDebounceFn } from '@vueuse/core'
+  import { treeOptionsListApi } from '/@/api/demo/tree'
+  import { Select } from 'ant-design-vue'
+  import { cloneDeep } from 'lodash-es'
 
-  const valueSelectA = ref<string[]>([]);
-  const valueSelectB = ref<string[]>([]);
-  const options = ref<Recordable[]>([]);
-  for (let i = 1; i < 10; i++) options.value.push({ label: '选项' + i, value: `${i}` });
+  const valueSelectA = ref<string[]>([])
+  const valueSelectB = ref<string[]>([])
+  const options = ref<Recordable[]>([])
+  for (let i = 1; i < 10; i++) options.value.push({ label: '选项' + i, value: `${i}` })
 
   const optionsA = computed(() => {
     return cloneDeep(unref(options)).map((op) => {
-      op.disabled = unref(valueSelectB).indexOf(op.value) !== -1;
-      return op;
-    });
-  });
+      op.disabled = unref(valueSelectB).indexOf(op.value) !== -1
+      return op
+    })
+  })
   const optionsB = computed(() => {
     return cloneDeep(unref(options)).map((op) => {
-      op.disabled = unref(valueSelectA).indexOf(op.value) !== -1;
-      return op;
-    });
-  });
+      op.disabled = unref(valueSelectA).indexOf(op.value) !== -1
+      return op
+    })
+  })
 
   const provincesOptions = [
     {
@@ -99,7 +87,7 @@
       value: '2',
       key: '2',
     },
-  ];
+  ]
   const citiesOptionsData = {
     guangdong: [
       {
@@ -135,7 +123,7 @@
         key: '3',
       },
     ],
-  };
+  }
 
   const schemas: FormSchema[] = [
     {
@@ -157,20 +145,20 @@
       // componentProps:{},
       // can func
       componentProps: ({ schema, formModel }) => {
-        console.log('form:', schema);
-        console.log('formModel:', formModel);
+        console.log('form:', schema)
+        console.log('formModel:', formModel)
         return {
           placeholder: '自定义placeholder',
           onChange: (e: any) => {
-            console.log(e);
+            console.log(e)
           },
-        };
+        }
       },
       renderComponentContent: () => {
         return {
           prefix: () => 'pSlot',
           suffix: () => 'sSlot',
-        };
+        }
       },
     },
     {
@@ -183,7 +171,7 @@
       },
       componentProps: {
         onChange: (e: any) => {
-          console.log(e);
+          console.log(e)
         },
       },
       suffix: '天',
@@ -366,11 +354,11 @@
         // not request untill to select
         immediate: false,
         onChange: (e) => {
-          console.log('selected:', e);
+          console.log('selected:', e)
         },
         // atfer request callback
         onOptionsChange: (options) => {
-          console.log('get options', options.length, options);
+          console.log('get options', options.length, options)
         },
       },
       colProps: {
@@ -473,7 +461,7 @@
         },
         afterFetch: (v) => {
           //do something
-          return v;
+          return v
         },
         resultField: 'list',
       },
@@ -502,24 +490,21 @@
           placeholder: '省份与城市联动',
           onChange: (e: any) => {
             // console.log(e)
-            let citiesOptions =
-              e == 1
-                ? citiesOptionsData[provincesOptions[0].id]
-                : citiesOptionsData[provincesOptions[1].id];
+            let citiesOptions = e == 1 ? citiesOptionsData[provincesOptions[0].id] : citiesOptionsData[provincesOptions[1].id]
             // console.log(citiesOptions)
             if (e === undefined) {
-              citiesOptions = [];
+              citiesOptions = []
             }
-            formModel.city = undefined; //  reset city value
-            const { updateSchema } = formActionType;
+            formModel.city = undefined //  reset city value
+            const { updateSchema } = formActionType
             updateSchema({
               field: 'city',
               componentProps: {
                 options: citiesOptions,
               },
-            });
+            })
           },
-        };
+        }
       },
     },
     {
@@ -629,20 +614,20 @@
         allowHalf: true,
       },
     },
-  ];
+  ]
 
   export default defineComponent({
     components: { BasicForm, CollapseContainer, PageWrapper, ApiSelect, ASelect: Select },
     setup() {
-      const check = ref(null);
-      const { createMessage } = useMessage();
-      const keyword = ref<string>('');
+      const check = ref(null)
+      const { createMessage } = useMessage()
+      const keyword = ref<string>('')
       const searchParams = computed<Recordable>(() => {
-        return { keyword: unref(keyword) };
-      });
+        return { keyword: unref(keyword) }
+      })
 
       function onSearch(value: string) {
-        keyword.value = value;
+        keyword.value = value
       }
       return {
         schemas,
@@ -654,14 +639,14 @@
         onSearch: useDebounceFn(onSearch, 300),
         searchParams,
         handleReset: () => {
-          keyword.value = '';
+          keyword.value = ''
         },
         handleSubmit: (values: any) => {
-          console.log('values', values);
-          createMessage.success('click search,values:' + JSON.stringify(values));
+          console.log('values', values)
+          createMessage.success('click search,values:' + JSON.stringify(values))
         },
         check,
-      };
+      }
     },
-  });
+  })
 </script>

@@ -1,5 +1,5 @@
-import UserController from './controller/UserController';
-import FileController from './controller/FileController';
+import UserController from './controller/UserController'
+import FileController from './controller/FileController'
 
 export default [
   // user
@@ -20,4 +20,4 @@ export default [
     method: 'post',
     action: FileController.upload,
   },
-];
+]

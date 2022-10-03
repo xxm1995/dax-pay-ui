@@ -13,13 +13,13 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, watch, ref, unref, watchEffect } from 'vue';
-  import { Transfer } from 'ant-design-vue';
-  import { isFunction } from '/@/utils/is';
-  import { get, omit } from 'lodash-es';
-  import { propTypes } from '/@/utils/propTypes';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { TransferDirection, TransferItem } from 'ant-design-vue/lib/transfer';
+  import { computed, defineComponent, watch, ref, unref, watchEffect } from 'vue'
+  import { Transfer } from 'ant-design-vue'
+  import { isFunction } from '/@/utils/is'
+  import { get, omit } from 'lodash-es'
+  import { propTypes } from '/@/utils/propTypes'
+  import { useI18n } from '/@/hooks/web/useI18n'
+  import { TransferDirection, TransferItem } from 'ant-design-vue/lib/transfer'
   export default defineComponent({
     name: 'ApiTransfer',
     components: { Transfer },
@@ -48,18 +48,18 @@
     },
     emits: ['options-change', 'change'],
     setup(props, { attrs, emit }) {
-      const _dataSource = ref<TransferItem[]>([]);
-      const _targetKeys = ref<string[]>([]);
-      const { t } = useI18n();
+      const _dataSource = ref<TransferItem[]>([])
+      const _targetKeys = ref<string[]>([])
+      const { t } = useI18n()
 
       const getAttrs = computed(() => {
         return {
           ...(!props.api ? { dataSource: unref(_dataSource) } : {}),
           ...attrs,
-        };
-      });
+        }
+      })
       const getdataSource = computed(() => {
-        const { labelField, valueField } = props;
+        const { labelField, valueField } = props
 
         return unref(_dataSource).reduce((prev, next: Recordable) => {
           if (next) {
@@ -67,69 +67,69 @@
               ...omit(next, [labelField, valueField]),
               title: next[labelField],
               key: next[valueField],
-            });
+            })
           }
-          return prev;
-        }, [] as TransferItem[]);
-      });
+          return prev
+        }, [] as TransferItem[])
+      })
       const getTargetKeys = computed<string[]>(() => {
         if (unref(_targetKeys).length > 0) {
-          return unref(_targetKeys);
+          return unref(_targetKeys)
         }
         if (Array.isArray(props.value)) {
-          return props.value;
+          return props.value
         }
-        return [];
-      });
+        return []
+      })
 
       function handleChange(keys: string[], direction: TransferDirection, moveKeys: string[]) {
-        _targetKeys.value = keys;
-        console.log(direction);
-        console.log(moveKeys);
-        emit('change', keys);
+        _targetKeys.value = keys
+        console.log(direction)
+        console.log(moveKeys)
+        emit('change', keys)
       }
 
       watchEffect(() => {
-        props.immediate && !props.alwaysLoad && fetch();
-      });
+        props.immediate && !props.alwaysLoad && fetch()
+      })
 
       watch(
         () => props.params,
         () => {
-          fetch();
+          fetch()
         },
         { deep: true },
-      );
+      )
 
       async function fetch() {
-        const api = props.api;
+        const api = props.api
         if (!api || !isFunction(api)) {
           if (Array.isArray(props.dataSource)) {
-            _dataSource.value = props.dataSource;
+            _dataSource.value = props.dataSource
           }
-          return;
+          return
         }
-        _dataSource.value = [];
+        _dataSource.value = []
         try {
-          const res = await api(props.params);
+          const res = await api(props.params)
           if (Array.isArray(res)) {
-            _dataSource.value = res;
-            emitChange();
-            return;
+            _dataSource.value = res
+            emitChange()
+            return
           }
           if (props.resultField) {
-            _dataSource.value = get(res, props.resultField) || [];
+            _dataSource.value = get(res, props.resultField) || []
           }
-          emitChange();
+          emitChange()
         } catch (error) {
-          console.warn(error);
+          console.warn(error)
         } finally {
         }
       }
       function emitChange() {
-        emit('options-change', unref(getdataSource));
+        emit('options-change', unref(getdataSource))
       }
-      return { getTargetKeys, getdataSource, t, getAttrs, handleChange };
+      return { getTargetKeys, getdataSource, t, getAttrs, handleChange }
     },
-  });
+  })
 </script>

@@ -27,11 +27,11 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { BasicForm, useForm } from '/@/components/Form';
-  import { step1Schemas } from './data';
+  import { defineComponent } from 'vue'
+  import { BasicForm, useForm } from '/@/components/Form'
+  import { step1Schemas } from './data'
 
-  import { Select, Input, Divider } from 'ant-design-vue';
+  import { Select, Input, Divider } from 'ant-design-vue'
   export default defineComponent({
     components: {
       BasicForm,
@@ -54,18 +54,18 @@
           text: '下一步',
         },
         submitFunc: customSubmitFunc,
-      });
+      })
 
       async function customSubmitFunc() {
         try {
-          const values = await validate();
-          emit('next', values);
+          const values = await validate()
+          emit('next', values)
         } catch (error) {}
       }
 
-      return { register };
+      return { register }
     },
-  });
+  })
 </script>
 <style lang="less" scoped>
   .step1 {

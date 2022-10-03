@@ -3,20 +3,20 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onMounted, onUnmounted, watchEffect, watch, unref, nextTick } from 'vue';
-  import { useDebounceFn } from '@vueuse/core';
-  import { useAppStore } from '/@/store/modules/app';
-  import { useWindowSizeFn } from '/@/hooks/event/useWindowSizeFn';
-  import CodeMirror from 'codemirror';
-  import { MODE } from './../typing';
+  import { ref, onMounted, onUnmounted, watchEffect, watch, unref, nextTick } from 'vue'
+  import { useDebounceFn } from '@vueuse/core'
+  import { useAppStore } from '/@/store/modules/app'
+  import { useWindowSizeFn } from '/@/hooks/event/useWindowSizeFn'
+  import CodeMirror from 'codemirror'
+  import { MODE } from './../typing'
   // css
-  import './codemirror.css';
-  import 'codemirror/theme/idea.css';
-  import 'codemirror/theme/material-palenight.css';
+  import './codemirror.css'
+  import 'codemirror/theme/idea.css'
+  import 'codemirror/theme/material-palenight.css'
   // modes
-  import 'codemirror/mode/javascript/javascript';
-  import 'codemirror/mode/css/css';
-  import 'codemirror/mode/htmlmixed/htmlmixed';
+  import 'codemirror/mode/javascript/javascript'
+  import 'codemirror/mode/css/css'
+  import 'codemirror/mode/htmlmixed/htmlmixed'
 
   const props = defineProps({
     mode: {
@@ -24,56 +24,53 @@
       default: MODE.JSON,
       validator(value: any) {
         // 这个值必须匹配下列字符串中的一个
-        return Object.values(MODE).includes(value);
+        return Object.values(MODE).includes(value)
       },
     },
     value: { type: String, default: '' },
     readonly: { type: Boolean, default: false },
-  });
+  })
 
-  const emit = defineEmits(['change']);
+  const emit = defineEmits(['change'])
 
-  const el = ref();
-  let editor: Nullable<CodeMirror.Editor>;
+  const el = ref()
+  let editor: Nullable<CodeMirror.Editor>
 
-  const debounceRefresh = useDebounceFn(refresh, 100);
-  const appStore = useAppStore();
+  const debounceRefresh = useDebounceFn(refresh, 100)
+  const appStore = useAppStore()
 
   watch(
     () => props.value,
     async (value) => {
-      await nextTick();
-      const oldValue = editor?.getValue();
+      await nextTick()
+      const oldValue = editor?.getValue()
       if (value !== oldValue) {
-        editor?.setValue(value ? value : '');
+        editor?.setValue(value ? value : '')
       }
     },
     { flush: 'post' },
-  );
+  )
 
   watchEffect(() => {
-    editor?.setOption('mode', props.mode);
-  });
+    editor?.setOption('mode', props.mode)
+  })
 
   watch(
     () => appStore.getDarkMode,
     async () => {
-      setTheme();
+      setTheme()
     },
     {
       immediate: true,
     },
-  );
+  )
 
   function setTheme() {
-    unref(editor)?.setOption(
-      'theme',
-      appStore.getDarkMode === 'light' ? 'idea' : 'material-palenight',
-    );
+    unref(editor)?.setOption('theme', appStore.getDarkMode === 'light' ? 'idea' : 'material-palenight')
   }
 
   function refresh() {
-    editor?.refresh();
+    editor?.refresh()
   }
 
   async function init() {
@@ -82,7 +79,7 @@
       autoCloseTags: true,
       foldGutter: true,
       gutters: ['CodeMirror-linenumbers'],
-    };
+    }
 
     editor = CodeMirror(el.value!, {
       value: '',
@@ -93,21 +90,21 @@
       lineWrapping: true,
       lineNumbers: true,
       ...addonOptions,
-    });
-    editor?.setValue(props.value);
-    setTheme();
+    })
+    editor?.setValue(props.value)
+    setTheme()
     editor?.on('change', () => {
-      emit('change', editor?.getValue());
-    });
+      emit('change', editor?.getValue())
+    })
   }
 
   onMounted(async () => {
-    await nextTick();
-    init();
-    useWindowSizeFn(debounceRefresh);
-  });
+    await nextTick()
+    init()
+    useWindowSizeFn(debounceRefresh)
+  })
 
   onUnmounted(() => {
-    editor = null;
-  });
+    editor = null
+  })
 </script>

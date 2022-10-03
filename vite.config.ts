@@ -1,35 +1,35 @@
-import type { UserConfig, ConfigEnv } from 'vite';
-import pkg from './package.json';
-import dayjs from 'dayjs';
-import { loadEnv } from 'vite';
-import { resolve } from 'path';
-import { generateModifyVars } from './build/generate/generateModifyVars';
-import { createProxy } from './build/vite/proxy';
-import { wrapperEnv } from './build/utils';
-import { createVitePlugins } from './build/vite/plugin';
-import { OUTPUT_DIR } from './build/constant';
+import type { UserConfig, ConfigEnv } from 'vite'
+import pkg from './package.json'
+import dayjs from 'dayjs'
+import { loadEnv } from 'vite'
+import { resolve } from 'path'
+import { generateModifyVars } from './build/generate/generateModifyVars'
+import { createProxy } from './build/vite/proxy'
+import { wrapperEnv } from './build/utils'
+import { createVitePlugins } from './build/vite/plugin'
+import { OUTPUT_DIR } from './build/constant'
 
 function pathResolve(dir: string) {
-  return resolve(process.cwd(), '.', dir);
+  return resolve(process.cwd(), '.', dir)
 }
 
-const { dependencies, devDependencies, name, version } = pkg;
+const { dependencies, devDependencies, name, version } = pkg
 const __APP_INFO__ = {
   pkg: { dependencies, devDependencies, name, version },
   lastBuildTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-};
+}
 
 export default ({ command, mode }: ConfigEnv): UserConfig => {
-  const root = process.cwd();
+  const root = process.cwd()
 
-  const env = loadEnv(mode, root);
+  const env = loadEnv(mode, root)
 
   // The boolean type read by loadEnv is a string. This function can be converted to boolean type
-  const viteEnv = wrapperEnv(env);
+  const viteEnv = wrapperEnv(env)
 
-  const { VITE_PORT, VITE_PUBLIC_PATH, VITE_PROXY, VITE_DROP_CONSOLE } = viteEnv;
+  const { VITE_PORT, VITE_PUBLIC_PATH, VITE_PROXY, VITE_DROP_CONSOLE } = viteEnv
 
-  const isBuild = command === 'build';
+  const isBuild = command === 'build'
 
   return {
     base: VITE_PUBLIC_PATH,
@@ -103,13 +103,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
 
     optimizeDeps: {
       // @iconify/iconify: The dependency is dynamically and virtually loaded by @purge-icons/generated, so it needs to be specified explicitly
-      include: [
-        '@vue/runtime-core',
-        '@vue/shared',
-        '@iconify/iconify',
-        'ant-design-vue/es/locale/zh_CN',
-        'ant-design-vue/es/locale/en_US',
-      ],
+      include: ['@vue/runtime-core', '@vue/shared', '@iconify/iconify', 'ant-design-vue/es/locale/zh_CN', 'ant-design-vue/es/locale/en_US'],
     },
-  };
-};
+  }
+}

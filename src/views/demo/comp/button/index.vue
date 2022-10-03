@@ -55,9 +55,7 @@
             <h3>primary</h3>
             <a-button type="primary" preIcon="mdi:page-next-outline"> 主按钮 </a-button>
             <a-button type="primary" class="ml-2" disabled> 禁用 </a-button>
-            <a-button type="primary" class="ml-2" danger preIcon="mdi:page-next-outline">
-              危险
-            </a-button>
+            <a-button type="primary" class="ml-2" danger preIcon="mdi:page-next-outline"> 危险 </a-button>
             <a-button type="primary" class="ml-2" loading> loading </a-button>
             <a-button type="link" class="ml-2"> link </a-button>
             <a-button type="link" class="ml-2" loading> loading link </a-button>
@@ -103,10 +101,10 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { PageWrapper } from '/@/components/Page';
-  import { Card, Row, Col } from 'ant-design-vue';
+  import { defineComponent } from 'vue'
+  import { PageWrapper } from '/@/components/Page'
+  import { Card, Row, Col } from 'ant-design-vue'
   export default defineComponent({
     components: { PageWrapper, ACard: Card, ARow: Row, ACol: Col },
-  });
+  })
 </script>

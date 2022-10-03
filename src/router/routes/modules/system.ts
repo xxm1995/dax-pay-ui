@@ -1,5 +1,5 @@
-import type { AppRouteModule } from '/@/router/types';
-import { LAYOUT } from '/@/router/constant';
+import type { AppRouteModule } from '/@/router/types'
+import { LAYOUT } from '/@/router/constant'
 
 const system: AppRouteModule = {
   path: '/system1',
@@ -20,6 +20,6 @@ const system: AppRouteModule = {
       },
     },
   ],
-};
+}
 
-export default system;
+export default system

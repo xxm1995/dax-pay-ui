@@ -1,4 +1,4 @@
-import { FormSchema } from '/@/components/Form';
+import { FormSchema } from '/@/components/Form'
 
 export const step1Schemas: FormSchema[] = [
   {
@@ -56,13 +56,13 @@ export const step1Schemas: FormSchema[] = [
     renderComponentContent: () => {
       return {
         prefix: () => '￥',
-      };
+      }
     },
     colProps: {
       span: 24,
     },
   },
-];
+]
 
 export const step2Schemas: FormSchema[] = [
   {
@@ -75,4 +75,4 @@ export const step2Schemas: FormSchema[] = [
       span: 24,
     },
   },
-];
+]

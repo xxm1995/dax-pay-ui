@@ -2,10 +2,10 @@
   <div ref="chartRef" :style="{ height, width }"></div>
 </template>
 <script lang="ts">
-  import { defineComponent, PropType, ref, Ref, onMounted } from 'vue';
+  import { defineComponent, PropType, ref, Ref, onMounted } from 'vue'
 
-  import { useECharts } from '/@/hooks/web/useECharts';
-  import { getLineData } from './data';
+  import { useECharts } from '/@/hooks/web/useECharts'
+  import { getLineData } from './data'
 
   export default defineComponent({
     props: {
@@ -19,9 +19,9 @@
       },
     },
     setup() {
-      const chartRef = ref<HTMLDivElement | null>(null);
-      const { setOptions, echarts } = useECharts(chartRef as Ref<HTMLDivElement>);
-      const { barData, lineData, category } = getLineData;
+      const chartRef = ref<HTMLDivElement | null>(null)
+      const { setOptions, echarts } = useECharts(chartRef as Ref<HTMLDivElement>)
+      const { barData, lineData, category } = getLineData
       onMounted(() => {
         setOptions({
           backgroundColor: '#0f375f',
@@ -109,9 +109,9 @@
               data: lineData,
             },
           ],
-        });
-      });
-      return { chartRef };
+        })
+      })
+      return { chartRef }
     },
-  });
+  })
 </script>

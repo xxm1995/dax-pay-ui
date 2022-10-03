@@ -23,13 +23,13 @@
   </Tooltip>
 </template>
 <script lang="ts">
-  import type { SizeType } from '../../types/table';
-  import { defineComponent, ref } from 'vue';
-  import { Tooltip, Dropdown, Menu } from 'ant-design-vue';
-  import { ColumnHeightOutlined } from '@ant-design/icons-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
-  import { useTableContext } from '../../hooks/useTableContext';
-  import { getPopupContainer } from '/@/utils';
+  import type { SizeType } from '../../types/table'
+  import { defineComponent, ref } from 'vue'
+  import { Tooltip, Dropdown, Menu } from 'ant-design-vue'
+  import { ColumnHeightOutlined } from '@ant-design/icons-vue'
+  import { useI18n } from '/@/hooks/web/useI18n'
+  import { useTableContext } from '../../hooks/useTableContext'
+  import { getPopupContainer } from '/@/utils'
 
   export default defineComponent({
     name: 'SizeSetting',
@@ -41,16 +41,16 @@
       MenuItem: Menu.Item,
     },
     setup() {
-      const table = useTableContext();
-      const { t } = useI18n();
+      const table = useTableContext()
+      const { t } = useI18n()
 
-      const selectedKeysRef = ref<SizeType[]>([table.getSize()]);
+      const selectedKeysRef = ref<SizeType[]>([table.getSize()])
 
       function handleTitleClick({ key }: { key: SizeType }) {
-        selectedKeysRef.value = [key];
+        selectedKeysRef.value = [key]
         table.setProps({
           size: key,
-        });
+        })
       }
 
       return {
@@ -58,7 +58,7 @@
         selectedKeysRef,
         getPopupContainer,
         t,
-      };
+      }
     },
-  });
+  })
 </script>

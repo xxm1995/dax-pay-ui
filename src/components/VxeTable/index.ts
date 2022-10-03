@@ -1,14 +1,14 @@
-import { App } from 'vue';
-import 'xe-utils';
-import VXETable from 'vxe-table';
-import 'vxe-table/lib/style.css';
+import { App } from 'vue'
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
 
 /**
  * 加载vxe-table
  * @param app
  */
 export function useTable(app: App) {
-  app.use(VXETable);
+  app.use(VXETable)
 
   // 给 vue 实例挂载内部对象，例如：
   // app.config.globalProperties.$XModal = VXETable.modal

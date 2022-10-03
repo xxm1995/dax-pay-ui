@@ -23,11 +23,11 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { BasicTable, useTable } from '/@/components/Table';
-  import { getBasicColumns, getFormConfig } from './tableData';
+  import { defineComponent } from 'vue'
+  import { BasicTable, useTable } from '/@/components/Table'
+  import { getBasicColumns, getFormConfig } from './tableData'
 
-  import { demoListApi } from '/@/api/demo/table';
+  import { demoListApi } from '/@/api/demo/table'
 
   export default defineComponent({
     components: { BasicTable },
@@ -42,7 +42,7 @@
         showIndexColumn: false,
         isCanResizeParent: true,
         rowKey: 'id',
-      });
+      })
 
       const [registerTable1] = useTable({
         api: demoListApi,
@@ -54,7 +54,7 @@
         isCanResizeParent: true,
         useSearchForm: false,
         rowKey: 'id',
-      });
+      })
 
       const [registerTable2] = useTable({
         api: demoListApi,
@@ -67,13 +67,13 @@
         useSearchForm: false,
         pagination: false,
         rowKey: 'id',
-      });
+      })
 
       return {
         registerTable,
         registerTable1,
         registerTable2,
-      };
+      }
     },
-  });
+  })
 </script>

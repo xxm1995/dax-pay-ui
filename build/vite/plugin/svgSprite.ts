@@ -3,8 +3,8 @@
  * https://github.com/anncwb/vite-plugin-svg-icons
  */
 
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
-import path from 'path';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import path from 'path'
 
 export function configSvgIconsPlugin(isBuild: boolean) {
   const svgIconsPlugin = createSvgIconsPlugin({
@@ -12,6 +12,6 @@ export function configSvgIconsPlugin(isBuild: boolean) {
     svgoOptions: isBuild,
     // default
     symbolId: 'icon-[dir]-[name]',
-  });
-  return svgIconsPlugin;
+  })
+  return svgIconsPlugin
 }

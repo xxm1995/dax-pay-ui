@@ -9,17 +9,17 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { BasicForm, useForm } from '/@/components/Form';
-  import { defineComponent } from 'vue';
-  import { schemas } from './data';
-  import { useMessage } from '/@/hooks/web/useMessage';
-  import { PageWrapper } from '/@/components/Page';
+  import { BasicForm, useForm } from '/@/components/Form'
+  import { defineComponent } from 'vue'
+  import { schemas } from './data'
+  import { useMessage } from '/@/hooks/web/useMessage'
+  import { PageWrapper } from '/@/components/Page'
 
   export default defineComponent({
     name: 'FormBasicPage',
     components: { BasicForm, PageWrapper },
     setup() {
-      const { createMessage } = useMessage();
+      const { createMessage } = useMessage()
       const [register, { validate, setProps }] = useForm({
         labelCol: {
           span: 8,
@@ -36,30 +36,30 @@
           text: '提交',
         },
         submitFunc: customSubmitFunc,
-      });
+      })
 
       async function customSubmitFunc() {
         try {
-          await validate();
+          await validate()
           setProps({
             submitButtonOptions: {
               loading: true,
             },
-          });
+          })
           setTimeout(() => {
             setProps({
               submitButtonOptions: {
                 loading: false,
               },
-            });
-            createMessage.success('提交成功！');
-          }, 2000);
+            })
+            createMessage.success('提交成功！')
+          }, 2000)
         } catch (error) {}
       }
 
-      return { register };
+      return { register }
     },
-  });
+  })
 </script>
 <style lang="less" scoped>
   .form-wrap {
