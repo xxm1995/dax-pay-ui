@@ -1,3 +1,5 @@
+import { PageResult } from "/#/axios";
+
 /**
  * 分页属性
  */
@@ -10,7 +12,27 @@ export interface Pagination {
 /**
  * 分页参数
  */
-export interface PageParams {
+export interface PageParam {
+  // 每页数量
   size: number
+  // 当前页数
   current: number
+}
+
+/**
+ * 表格分页对象
+ */
+export interface TablePageModel<T = any> {
+  // 加载状态
+  loading: boolean
+  // 批量操作标识
+  batchOperateFlag: boolean
+  // 高级查询条件生效状态
+  superQueryFlag: boolean
+  // 分页参数
+  pages: PageParam
+  // 查询参数
+  queryParam: object
+  // 结果
+  pagination: PageResult<T>
 }

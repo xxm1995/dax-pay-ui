@@ -9,10 +9,34 @@ import 'vxe-table/lib/style.css'
  */
 export function useTable(app: App) {
   app.use(VXETable)
-
-  // 给 vue 实例挂载内部对象，例如：
-  // app.config.globalProperties.$XModal = VXETable.modal
-  // app.config.globalProperties.$XPrint = VXETable.print
-  // app.config.globalProperties.$XSaveFile = VXETable.saveFile
-  // app.config.globalProperties.$XReadFile = VXETable.readFile
 }
+
+/**
+ * 配置
+ */
+VXETable.setup({
+  // 表格配置
+  table: {
+    resizable: true,
+    border: true,
+    stripe: true,
+    showOverflow: true,
+    showHeaderOverflow: true,
+    size: 'medium',
+    tooltipConfig: {
+      enterable: true,
+    },
+  },
+  // 工具条配置
+  toolbar: {
+    size: null,
+    custom: true,
+    buttons: [],
+    tools: [],
+  },
+  // 分页配置
+  pager: {
+    border: true,
+    size: 'medium',
+  },
+})
