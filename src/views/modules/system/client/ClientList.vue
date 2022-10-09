@@ -8,7 +8,6 @@
         <template #buttons>
           <a-space>
             <a-button type="primary" @click="add">新建</a-button>
-            <a-button @click="queryPage">查询</a-button>
           </a-space>
         </template>
       </vxe-toolbar>
@@ -58,8 +57,8 @@
 
   // 查询条件
   const fields = [
-    { field: 'code', type: STRING, name: '编码', placeholder: '请输入数据源编码' },
-    { field: 'name', type: STRING, name: '名称', placeholder: '请输入数据源名称' },
+    { field: 'code', type: STRING, name: '编码', placeholder: '请输入终端编码' },
+    { field: 'name', type: STRING, name: '名称', placeholder: '请输入终端名称' },
   ]
 
   onMounted(() => {
@@ -78,7 +77,7 @@
   }
   // 新增
   function add() {
-    clientEdit.value.visible = true
+    clientEdit.value.init()
   }
 </script>
 

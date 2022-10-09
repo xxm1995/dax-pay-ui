@@ -6,6 +6,7 @@ import {
   InputNumber,
   Empty,
   Select,
+  Switch,
   Tree,
   TreeSelect,
   Card,
@@ -45,6 +46,7 @@ export function registerGlobComp(app: App) {
   app.use(TimePicker)
   app.use(Empty)
   app.use(Select)
+  app.use(Switch)
   app.use(Tree)
   app.use(TreeSelect)
   app.use(Card)

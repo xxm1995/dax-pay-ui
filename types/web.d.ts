@@ -1,4 +1,4 @@
-import { PageResult } from "/#/axios";
+import { PageResult } from '/#/axios'
 
 /**
  * 分页属性
@@ -20,7 +20,7 @@ export interface PageParam {
 }
 
 /**
- * 表格分页对象
+ * 分页表格列表对象
  */
 export interface TablePageModel<T = any> {
   // 加载状态
@@ -36,3 +36,8 @@ export interface TablePageModel<T = any> {
   // 结果
   pagination: PageResult<T>
 }
+
+/**
+ * 编辑界面参数对象
+ */
+export interface EditModel {}
