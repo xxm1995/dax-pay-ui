@@ -45,14 +45,14 @@
 
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
-  import { page } from '/@/views/modules/system/client/Client.api'
-  import useTable from '/@/hooks/bootx/useTable'
+  import { page } from './Client.api'
+  import useTablePage from '/@/hooks/bootx/useTablePage'
   import ClientEdit from './ClientEdit.vue'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTable(queryPage)
+  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const clientEdit = ref()
   // 查询条件z
   const fields = [
@@ -76,7 +76,7 @@
   }
   // 新增
   function add() {
-    clientEdit.value.init()
+    clientEdit.value.init(null, '')
   }
 </script>
 

@@ -32,24 +32,8 @@ export interface TablePageModel<T = any> {
 }
 
 /**
- * 编辑界面参数对象
- */
-export interface EditModel {
-
-}
-
-/**
  * 基础实体对象
  */
-export class BaseEntity {
-  id: number
-}
-
-/**
- * 表单类型
- */
-export enum FormType {
-  Add,
-  Edit,
-  Show,
+export interface BaseEntity {
+  id: number | null
 }

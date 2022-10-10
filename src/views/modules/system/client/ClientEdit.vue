@@ -8,17 +8,17 @@
     :confirmLoading="confirmLoading"
   >
     <a-spin :spinning="confirmLoading">
-      <a-form class="small-from-item" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="主键" name="id" :hidden="true">
+      <a-form class="small-from-item" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-item label="主键" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="编码" has-feedback name="code">
+        <a-form-item label="编码" v-bind="validateInfos.code" name="code">
           <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
         </a-form-item>
-        <a-form-item label="名称" has-feedback name="name">
+        <a-form-item label="名称" v-bind="validateInfos.name" name="name">
           <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
         </a-form-item>
-        <a-form-item label="启用状态" name="enable">
+        <a-form-item label="启用状态" v-bind="validateInfos.enable" name="enable">
           <a-switch checked-children="开" un-checked-children="关" v-model:checked="form.enable" :disabled="showable || form.system" />
         </a-form-item>
         <a-form-item label="系统内置" name="system">
@@ -34,7 +34,7 @@
             :filter-option="search"
             :disabled="showable"
             style="width: 100%"
-            placeholder="选择关联的终端"
+            placeholder="选择关联的登录方式"
           >
             <a-select-option v-for="o in loginTypes" :key="o.id">
               {{ o.name }}
@@ -56,68 +56,81 @@
 </template>
 
 <script lang="ts" setup>
-  import { reactive, toRef, toRefs } from 'vue'
-  const model = reactive({
-    // 表单项标题文字
-    labelCol: {
-      sm: { span: 7 },
-    },
-    // 表单项内容
-    wrapperCol: {
-      sm: { span: 13 },
-    },
-    title: '新增',
-    rawForm: {},
-    modalWidth: '50%',
-    confirmLoading: false,
-    visible: false,
-    editable: false,
-    addable: false,
-    showable: false,
-    type: 'add',
-  })
-  const { labelCol, wrapperCol, title, modalWidth, confirmLoading, visible, editable, addable, showable, type } = toRefs(model)
-  const form = reactive({
+  import { nextTick, reactive } from 'vue'
+  import useFormEdit from '/@/hooks/bootx/useFormEdit'
+  import { Client, get } from './Client.api'
+  import { useForm } from 'ant-design-vue/lib/form'
+  import { FormType } from '/@/enums/formTypeEnum'
+
+  const {
+    initFormModel,
+    handleCancel,
+    search,
+    labelCol,
+    wrapperCol,
+    title,
+    modalWidth,
+    confirmLoading,
+    visible,
+    editable,
+    showable,
+    type,
+  } = useFormEdit()
+  let form = reactive({
     id: null,
-    code: null,
-    name: null,
+    code: '',
+    name: '',
     system: false,
     enable: true,
     loginTypeIdList: [],
     description: '',
-  })
+  } as Client)
+  // 校验状态
   const rules = reactive({
     code: [
-      { required: true, message: '请输入应用编码', trigger: ['change', 'blur'] },
+      { required: true, message: '请输入应用编码' },
       // { validator: validateCode, trigger: 'blur' },
     ],
-    name: [{ required: true, message: '请输入应用名称', trigger: ['change', 'blur'] }],
-    enable: [{ required: true, message: '请选择启用状态', trigger: ['change', 'blur'] }],
+    name: [{ required: true, message: '请输入应用名称' }],
+    enable: [{ required: true, message: '请选择启用状态' }],
   })
+  // 表单
+  const { resetFields, validate, validateInfos } = useForm(form, rules)
 
-  function handleCancel() {
-    visible.value = false
-    addable.value = false
-    editable.value = false
-    showable.value = false
-  }
   function validateCode(rule, value, callback) {}
+  // 入口
+  function init(id, editType: FormType) {
+    initFormModel(id, editType)
+    resetForm()
+    getInfo(id, editType)
+  }
+  // 获取信息
+  function getInfo(id, type: FormType) {
+    // this.initLoginTypes()
+    if ([FormType.Edit, FormType.Show].includes(type)) {
+      confirmLoading.value = true
+      get(id).then(({ data }) => {
+        form = reactive(data)
+        confirmLoading.value = false
+      })
+    } else {
+      confirmLoading.value = false
+    }
+  }
+  // 保存
+  async function handleOk() {
+    validate().then(() => {
+      confirmLoading.value = true
+      console.log(form)
+      confirmLoading.value = false
+    })
+  }
 
-  function init(record, editType: string, ...vars) {
-    type.value = editType
-    visible.value = true
-    if (editType && editType === 'add') {
-      addable.value = true
-      title.value = '新增'
-    }
-    if (editType === 'edit') {
-      editable.value = true
-      title.value = '修改'
-    }
-    if (editType === 'show') {
-      showable.value = true
-      title.value = '查看'
-    }
+  // 重置表单的校验
+  function resetForm() {
+    nextTick(() => {
+      resetFields()
+    })
   }
   defineExpose({
     init,

@@ -88,7 +88,7 @@ export const articleList = (() => {
   const result: any[] = []
   for (let i = 0; i < 4; i++) {
     result.push({
-      title: 'Vben Admin',
+      title: 'Bootx Platform',
       description: ['Vben', '设计语言', 'Typescript'],
       content: '基于Vue Next, TypeScript, Ant Design实现的一套完整的企业级后台管理系统。',
       time: '2020-11-14 11:20',
