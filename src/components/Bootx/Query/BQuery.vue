@@ -73,10 +73,12 @@
 </script>
 
 <style lang="less" scoped>
-  /deep/ .ant-form-item {
-    margin-bottom: 8px;
-  }
-  .ant-row {
-    width: 100%;
+  .query {
+    /deep/ .ant-form-item {
+      margin-bottom: 8px;
+    }
+    .ant-row {
+      width: 100%;
+    }
   }
 </style>

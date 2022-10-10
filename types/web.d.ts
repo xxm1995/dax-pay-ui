@@ -23,12 +23,6 @@ export interface PageParam {
  * 分页表格列表对象
  */
 export interface TablePageModel<T = any> {
-  // 加载状态
-  loading: boolean
-  // 批量操作标识
-  batchOperateFlag: boolean
-  // 高级查询条件生效状态
-  superQueryFlag: boolean
   // 分页参数
   pages: PageParam
   // 查询参数
@@ -40,4 +34,22 @@ export interface TablePageModel<T = any> {
 /**
  * 编辑界面参数对象
  */
-export interface EditModel {}
+export interface EditModel {
+
+}
+
+/**
+ * 基础实体对象
+ */
+export class BaseEntity {
+  id: number
+}
+
+/**
+ * 表单类型
+ */
+export enum FormType {
+  Add,
+  Edit,
+  Show,
+}

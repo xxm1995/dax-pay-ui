@@ -8,14 +8,14 @@
     :confirmLoading="confirmLoading"
   >
     <a-spin :spinning="confirmLoading">
-      <a-form ref="form" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="主键" name="id" hidden="true">
+      <a-form class="small-from-item" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <a-form-item label="主键" name="id" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="编码" name="code">
+        <a-form-item label="编码" has-feedback name="code">
           <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
         </a-form-item>
-        <a-form-item label="名称" name="name">
+        <a-form-item label="名称" has-feedback name="name">
           <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
         </a-form-item>
         <a-form-item label="启用状态" name="enable">
@@ -57,7 +57,6 @@
 
 <script lang="ts" setup>
   import { reactive, toRef, toRefs } from 'vue'
-
   const model = reactive({
     // 表单项标题文字
     labelCol: {
@@ -78,11 +77,10 @@
     type: 'add',
   })
   const { labelCol, wrapperCol, title, modalWidth, confirmLoading, visible, editable, addable, showable, type } = toRefs(model)
-
   const form = reactive({
     id: null,
-    code: '',
-    name: '',
+    code: null,
+    name: null,
     system: false,
     enable: true,
     loginTypeIdList: [],
@@ -90,11 +88,11 @@
   })
   const rules = reactive({
     code: [
-      { required: true, message: '请输入应用编码' },
+      { required: true, message: '请输入应用编码', trigger: ['change', 'blur'] },
       // { validator: validateCode, trigger: 'blur' },
     ],
-    name: [{ required: true, message: '请输入应用名称' }],
-    enable: [{ required: true, message: '请选择启用状态' }],
+    name: [{ required: true, message: '请输入应用名称', trigger: ['change', 'blur'] }],
+    enable: [{ required: true, message: '请选择启用状态', trigger: ['change', 'blur'] }],
   })
 
   function handleCancel() {
@@ -126,21 +124,4 @@
   })
 </script>
 
-<style lang="less" scoped>
-  /* 抽屉样式按钮 */
-  .drawer-button {
-    z-index: 1;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    border-top: 1px solid #e8e8e8;
-    padding: 10px 16px;
-    text-align: right;
-    left: 0;
-    background: #fff;
-    border-radius: 0 0 2px 2px;
-    .ant-btn {
-      margin-left: 10px;
-    }
-  }
-</style>
+<style lang="less" scoped></style>

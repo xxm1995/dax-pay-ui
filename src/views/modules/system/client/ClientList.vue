@@ -54,8 +54,7 @@
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTable(queryPage)
   const clientEdit = ref()
-
-  // 查询条件
+  // 查询条件z
   const fields = [
     { field: 'code', type: STRING, name: '编码', placeholder: '请输入终端编码' },
     { field: 'name', type: STRING, name: '名称', placeholder: '请输入终端名称' },
@@ -67,7 +66,7 @@
 
   // 分页查询
   function queryPage() {
-    model.loading = true
+    loading.value = true
     page({
       ...model.queryParam,
       ...pages,

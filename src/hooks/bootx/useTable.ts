@@ -1,11 +1,11 @@
 import { TablePageModel } from '/#/web'
-import { reactive, toRefs } from 'vue'
+import { reactive, ref, toRefs } from 'vue'
 import { PageResult } from '/#/axios'
 
 /**
  * 获取数据对象
  */
-export default function (queryPageCallback: CallableFunction) {
+export default function <T>(queryPageCallback: CallableFunction) {
   // 数据内容
   const model = reactive({
     pages: {
@@ -13,19 +13,21 @@ export default function (queryPageCallback: CallableFunction) {
       current: 1,
     },
     queryParam: {},
-    loading: false,
-    batchOperateFlag: false,
-    superQueryFlag: false,
     pagination: {},
-  } as TablePageModel)
+  } as TablePageModel<T>)
 
-  // 拆分
-  const { loading, batchOperateFlag, superQueryFlag } = toRefs(model)
+  // 加载状态
+  const loading = ref(false)
+  // 批量操作标识
+  const batchOperateFlag = ref(false)
+  // 高级查询条件生效状态
+  const superQueryFlag = ref(false)
+
   // 不可以被重新赋值, 否则会失去绑定
   const { pages, pagination } = model
   // 普通查询
   function query() {
-    model.superQueryFlag = false
+    superQueryFlag.value = false
     resetPage()
     queryPageCallback()
   }
@@ -45,7 +47,7 @@ export default function (queryPageCallback: CallableFunction) {
     pagination.size = Number(res.size)
     pagination.total = Number(res.total)
     pagination.records = res.records
-    model.loading = false
+    loading.value = false
   }
   // 重置查询
   function resetQuery() {
@@ -54,7 +56,7 @@ export default function (queryPageCallback: CallableFunction) {
   }
   // 重置查询参数
   function resetQueryParams() {
-    model.superQueryFlag = false
+    superQueryFlag.value = false
     model.queryParam = {}
   }
   // ok按钮

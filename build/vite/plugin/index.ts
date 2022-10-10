@@ -21,7 +21,10 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
 
   const vitePlugins: (PluginOption | PluginOption[])[] = [
     // have to
-    vue(),
+    vue({
+      // 响应式变量
+      reactivityTransform: true,
+    }),
     // have to
     vueJsx(),
     // support name

@@ -1,0 +1,50 @@
+/* wangEditor start */
+.editor-content-view {
+  border: 3px solid #ccc;
+  border-radius: 5px;
+  padding: 0 10px;
+  margin-top: 20px;
+  overflow-x: auto;
+  blockquote {
+    border-left: 8px solid #d0e5f2;
+    padding: 10px 10px;
+    margin: 10px 0;
+    background-color: #f1f1f1;
+  }
+  code {
+    font-family: monospace;
+    background-color: #eee;
+    padding: 3px;
+    border-radius: 3px;
+  }
+  pre {
+    & > code {
+      display: block;
+      padding: 10px;
+    }
+  }
+  table {
+    border-collapse: collapse;
+  }
+  th {
+    background-color: #f1f1f1;
+  }
+  input[type="checkbox"] {
+    margin-right: 5px;
+  }
+}
+.editor-content-view p,
+.editor-content-view li {
+  white-space: pre-wrap;
+}
+.editor-content-view td,
+.editor-content-view th {
+  border: 1px solid #ccc;
+  min-width: 50px;
+  height: 20px;
+}
+.editor-content-view ul,
+.editor-content-view ol {
+  padding-left: 20px;
+}
+/* wangEditor end */
