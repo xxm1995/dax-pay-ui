@@ -8,15 +8,15 @@
     :confirmLoading="confirmLoading"
   >
     <a-spin :spinning="confirmLoading">
-      <a-form class="small-from-item" :label-col="labelCol" :wrapper-col="wrapperCol">
+      <a-form class="small-from-item" ref="formRef" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-item label="主键" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
         <a-form-item label="编码" v-bind="validateInfos.code" name="code">
-          <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
+          <a-input v-model:value="form.code" :disabled="showable" @blur="validate('code')" placeholder="请输入编码" />
         </a-form-item>
         <a-form-item label="名称" v-bind="validateInfos.name" name="name">
-          <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
+          <a-input v-model:value="form.name" :disabled="showable" @blur="validate('name')" placeholder="请输入名称" />
         </a-form-item>
         <a-form-item label="启用状态" v-bind="validateInfos.enable" name="enable">
           <a-switch checked-children="开" un-checked-children="关" v-model:checked="form.enable" :disabled="showable || form.system" />
@@ -58,9 +58,11 @@
 <script lang="ts" setup>
   import { nextTick, reactive, ref } from 'vue'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, Client, get, update } from './Client.api'
+  import { add, Client, existsByCode, existsByCodeNotId, get, update } from './Client.api'
   import { useForm } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
+  import { FormInstance } from 'ant-design-vue/es'
+  import { findAll, LoginType } from '/@/views/modules/system/loginType/LoginType.api'
 
   const {
     initFormModel,
@@ -76,7 +78,7 @@
     showable,
     formEditType,
   } = useFormEdit()
-  const loginTypes = ref([])
+  const loginTypes = ref([] as Array<LoginType>)
   const form = ref({
     id: null,
     code: '',
@@ -90,12 +92,21 @@
   const rules = reactive({
     code: [
       { required: true, message: '请输入应用编码' },
-      // { validator: validateCode, trigger: 'blur' },
+      { validator: validateCode, trigger: 'blur' },
     ],
     name: [{ required: true, message: '请输入应用名称' }],
     enable: [{ required: true, message: '请选择启用状态' }],
   })
-  function validateCode(rule, value, callback) {}
+  // 校验编码重复
+  async function validateCode() {
+    const { code, id } = form.value
+    if (!code) {
+      return Promise.resolve()
+    }
+    const res = formEditType.value === FormEditType.Edit ? await existsByCodeNotId(code, id) : await existsByCode(code)
+    return res.data ? Promise.reject('该编码已存在!') : Promise.resolve()
+  }
+  const formRef = ref<FormInstance>()
 
   // 表单
   const { resetFields, validate, validateInfos } = useForm(form, rules)
@@ -106,6 +117,7 @@
   function init(id, editType: FormEditType) {
     initFormModel(id, editType)
     resetForm()
+    initLoginTypes()
     getInfo(id, editType)
   }
   // 获取信息
@@ -120,6 +132,11 @@
     } else {
       confirmLoading.value = false
     }
+  }
+  // 初始化登录方式列表
+  async function initLoginTypes() {
+    const { data } = await findAll()
+    loginTypes.value = data
   }
   // 保存
   function handleOk() {

@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import 'xe-utils'
 import VXETable from 'vxe-table'
-import 'vxe-table/lib/style.css'
+import 'vxe-table/styles/index.scss'
 
 /**
  * 加载vxe-table

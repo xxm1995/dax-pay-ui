@@ -13,10 +13,18 @@ const system: AppRouteModule = {
   children: [
     {
       path: 'client',
-      name: 'Client',
+      name: 'ClientList',
       component: () => import('/@/views/modules/system/client/ClientList.vue'),
       meta: {
         title: '终端管理',
+      },
+    },
+    {
+      path: 'loginType',
+      name: 'LoginTypeList',
+      component: () => import('/@/views/modules/system/loginType/LoginTypeList.vue'),
+      meta: {
+        title: '登录方式',
       },
     },
   ],

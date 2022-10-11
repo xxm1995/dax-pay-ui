@@ -74,7 +74,7 @@
 
 <style lang="less" scoped>
   .query {
-    /deep/ .ant-form-item {
+    .ant-form-item {
       margin-bottom: 8px;
     }
     .ant-row {
