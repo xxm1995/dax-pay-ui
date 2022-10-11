@@ -33,29 +33,26 @@ const transform: AxiosTransform = {
   transformResponseHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
     const { t } = useI18n()
     const { isTransformResponse, isReturnNativeResponse } = options
-    // 是否返回原生响应头 比如：需要获取响应头时使用该属性
-    if (isReturnNativeResponse) {
-      return res
-    }
+
     // 不进行任何处理，直接返回
     // 用于页面代码可能需要直接获取code，data，message这些信息时开启
-    if (!isTransformResponse) {
-      return res.data
-    }
+    // if (!isTransformResponse) {
+    //   return res.data
+    // }
     // 错误的时候返回
     // 获取请求头重的数据
     const rawData = res.data
     if (!rawData) {
       // return '[HTTP] Request has no return value';
-      throw new Error(t('sys.api.apiRequestFailed'))
+      throw new Error('请求出错，请稍候重试')
     }
     //  这里 code，data，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code, data, message } = rawData
+    const { code, msg, traceId } = rawData
 
     // 这里逻辑可以根据项目进行修改
     const hasSuccess = rawData && Reflect.has(rawData, 'code') && code === ResultEnum.SUCCESS
     if (hasSuccess) {
-      return data
+      return rawData
     }
 
     // 在此处根据自己项目的实际情况对不同的code执行不同的操作
@@ -63,14 +60,14 @@ const transform: AxiosTransform = {
     let timeoutMsg = ''
     switch (code) {
       case ResultEnum.TIMEOUT:
-        timeoutMsg = t('sys.api.timeoutMessage')
+        timeoutMsg = '登录超时,请重新登录!'
         const userStore = useUserStoreWithOut()
         userStore.setToken(undefined)
         userStore.logout(true)
         break
       default:
-        if (message) {
-          timeoutMsg = message
+        if (msg) {
+          timeoutMsg = msg
         }
     }
 
@@ -81,8 +78,8 @@ const transform: AxiosTransform = {
     } else if (options.errorMessageMode === 'message') {
       createMessage.error(timeoutMsg)
     }
-
-    throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'))
+    console.error('TraceId:', traceId)
+    throw new Error(timeoutMsg || '请求出错，请稍候重试')
   },
 
   // 请求之前处理config
@@ -115,9 +112,9 @@ const transform: AxiosTransform = {
           config.data = data
           config.params = params
         } else {
-          // 非GET请求如果没有提供data，则将params视为data
-          config.data = params
-          config.params = undefined
+          // 非GET请求如果没有提供data，则将params视为data (去除, 非GET也会进行普通参数请求)
+          // config.data = params
+          // config.params = undefined
         }
         if (joinParamsToUrl) {
           config.url = setObjToUrlParams(config.url as string, Object.assign({}, config.params, config.data))
@@ -221,7 +218,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           joinPrefix: true,
           // 是否返回原生响应头 比如：需要获取响应头时使用该属性
           isReturnNativeResponse: false,
-          // 需要对返回数据进行处理
+          // 需要对返回数据进行处理 (无效)
           isTransformResponse: false,
           // post请求的时候添加参数到url
           joinParamsToUrl: false,
@@ -240,7 +237,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           // 是否携带token
           withToken: true,
           retryRequest: {
-            isOpenRetry: true,
+            isOpenRetry: false,
             count: 5,
             waitTime: 100,
           },

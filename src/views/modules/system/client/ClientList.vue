@@ -4,14 +4,14 @@
       <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar>
+      <vxe-toolbar ref="vxeToolbar" :refresh="{ query: queryPage }">
         <template #buttons>
           <a-space>
             <a-button type="primary" @click="add">新建</a-button>
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table row-id="id" :data="pagination.records" :loading="loading">
+      <vxe-table ref="vxeTable" row-id="id" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
         <vxe-column field="code" title="编码" />
         <vxe-column field="name" title="名称" />
@@ -29,6 +29,21 @@
         </vxe-column>
         <vxe-column field="description" title="描述" />
         <vxe-column field="createTime" title="创建时间" />
+        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+          <template #default="{ row }">
+            <span>
+              <a href="javascript:" @click="show(row)">查看</a>
+            </span>
+            <a-divider type="vertical" />
+            <span>
+              <a href="javascript:" @click="edit(row)">编辑</a>
+            </span>
+            <a-divider type="vertical" />
+            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
+              <a href="javascript:" style="color: red">删除</a>
+            </a-popconfirm>
+          </template>
+        </vxe-column>
       </vxe-table>
       <vxe-pager
         size="medium"
@@ -45,20 +60,22 @@
 
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
-  import { page } from './Client.api'
+  import { del, page } from './Client.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import ClientEdit from './ClientEdit.vue'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
+  import { FormEditType } from '/@/enums/formTypeEnum'
+  import { useMessage } from '/@/hooks/web/useMessage'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
-  const clientEdit = ref()
-  // 查询条件z
+  // 查询条件
   const fields = [
-    { field: 'code', type: STRING, name: '编码', placeholder: '请输入终端编码' },
-    { field: 'name', type: STRING, name: '名称', placeholder: '请输入终端名称' },
+    { field: 'code', formType: STRING, name: '编码', placeholder: '请输入终端编码' },
+    { field: 'name', formType: STRING, name: '名称', placeholder: '请输入终端名称' },
   ]
+  const clientEdit = ref()
 
   onMounted(() => {
     queryPage()
@@ -76,7 +93,24 @@
   }
   // 新增
   function add() {
-    clientEdit.value.init(null, '')
+    clientEdit.value.init(null, FormEditType.Add)
+  }
+  // 查看
+  function edit(record) {
+    clientEdit.value.init(record.id, FormEditType.Edit)
+  }
+  // 查看
+  function show(record) {
+    clientEdit.value.init(record.id, FormEditType.Show)
+  }
+
+  // 删除
+  const { notification } = useMessage()
+  function remove(record) {
+    del(record.id).then(() => {
+      notification.success({ message: '删除成功' })
+    })
+    queryPage()
   }
 </script>
 

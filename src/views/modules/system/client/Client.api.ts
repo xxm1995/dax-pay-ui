@@ -25,7 +25,7 @@ export const get = (id) => {
 /**
  * 添加
  */
-export const add = (obj) => {
+export const add = (obj: Client) => {
   return defHttp.post({
     url: '/client/add',
     data: obj,
@@ -35,10 +35,46 @@ export const add = (obj) => {
 /**
  * 更新
  */
-export const update = (obj) => {
+export const update = (obj: Client) => {
   return defHttp.post({
     url: '/client/update',
     data: obj,
+  })
+}
+
+/**
+ * 删除
+ */
+export const del = (id) => {
+  return defHttp.delete({
+    url: '/client/delete',
+    params: { id },
+  })
+}
+
+/**
+ * 查询全部
+ */
+export const findAll = () => {
+  return defHttp.get<Result<Array<Client>>>({
+    url: '/client/findAll',
+  })
+}
+
+/**
+ * 编码是否被使用
+ */
+export const existsByCode = (code: string) => {
+  return defHttp.get<Result<boolean>>({
+    url: '/client/existsByCode',
+    method: 'GET',
+  })
+}
+export const existsByCodeNotId = (code: string, id: number) => {
+  return defHttp.get<Result<boolean>>({
+    url: '/client/existsByCodeNotId',
+    method: 'GET',
+    params: { code, id },
   })
 }
 

@@ -1,5 +1,5 @@
 import { reactive, toRefs } from 'vue'
-import { FormType } from "/@/enums/formTypeEnum";
+import { FormEditType } from '/@/enums/formTypeEnum'
 
 export default function () {
   const model = reactive({
@@ -18,23 +18,23 @@ export default function () {
     editable: false,
     addable: false,
     showable: false,
-    type: FormType.Add,
+    formEditType: FormEditType.Add,
   })
   // 状态
-  const { labelCol, wrapperCol, title, modalWidth, confirmLoading, visible, editable, addable, showable, type } = toRefs(model)
+  const { labelCol, wrapperCol, title, modalWidth, confirmLoading, visible, editable, addable, showable, formEditType } = toRefs(model)
 
-  function initFormModel(record, fromType: FormType, ...vars) {
-    type.value = fromType
+  function initFormModel(record, editType: FormEditType, ...vars) {
+    formEditType.value = editType
     visible.value = true
-    if (type.value === FormType.Add) {
+    if (formEditType.value === FormEditType.Add) {
       addable.value = true
       title.value = '新增'
     }
-    if (type.value === FormType.Edit) {
+    if (formEditType.value === FormEditType.Edit) {
       editable.value = true
       title.value = '修改'
     }
-    if (type.value === FormType.Show) {
+    if (formEditType.value === FormEditType.Show) {
       showable.value = true
       title.value = '查看'
     }
@@ -64,7 +64,7 @@ export default function () {
     editable,
     addable,
     showable,
-    type,
+    formEditType,
     initFormModel,
     handleCancel,
     search,

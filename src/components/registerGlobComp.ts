@@ -5,7 +5,9 @@ import {
   Input,
   InputNumber,
   Empty,
+  Popconfirm,
   Select,
+  SelectOption,
   Switch,
   Tree,
   TreeSelect,
@@ -45,7 +47,9 @@ export function registerGlobComp(app: App) {
   app.use(DatePicker)
   app.use(TimePicker)
   app.use(Empty)
+  app.use(Popconfirm)
   app.use(Select)
+  app.use(SelectOption)
   app.use(Switch)
   app.use(Tree)
   app.use(TreeSelect)

@@ -56,11 +56,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, reactive } from 'vue'
+  import { nextTick, reactive, ref } from 'vue'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { Client, get } from './Client.api'
+  import { add, Client, get, update } from './Client.api'
   import { useForm } from 'ant-design-vue/lib/form'
-  import { FormType } from '/@/enums/formTypeEnum'
+  import { FormEditType } from '/@/enums/formTypeEnum'
 
   const {
     initFormModel,
@@ -74,9 +74,10 @@
     visible,
     editable,
     showable,
-    type,
+    formEditType,
   } = useFormEdit()
-  let form = reactive({
+  const loginTypes = ref([])
+  const form = ref({
     id: null,
     code: '',
     name: '',
@@ -94,23 +95,26 @@
     name: [{ required: true, message: '请输入应用名称' }],
     enable: [{ required: true, message: '请选择启用状态' }],
   })
+  function validateCode(rule, value, callback) {}
+
   // 表单
   const { resetFields, validate, validateInfos } = useForm(form, rules)
+  // 事件
+  const emits = defineEmits(['ok'])
 
-  function validateCode(rule, value, callback) {}
   // 入口
-  function init(id, editType: FormType) {
+  function init(id, editType: FormEditType) {
     initFormModel(id, editType)
     resetForm()
     getInfo(id, editType)
   }
   // 获取信息
-  function getInfo(id, type: FormType) {
+  function getInfo(id, editType: FormEditType) {
     // this.initLoginTypes()
-    if ([FormType.Edit, FormType.Show].includes(type)) {
+    if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
       confirmLoading.value = true
       get(id).then(({ data }) => {
-        form = reactive(data)
+        form.value = data
         confirmLoading.value = false
       })
     } else {
@@ -118,11 +122,17 @@
     }
   }
   // 保存
-  async function handleOk() {
-    validate().then(() => {
+  function handleOk() {
+    validate().then(async () => {
       confirmLoading.value = true
-      console.log(form)
+      if (formEditType.value === FormEditType.Add) {
+        await add(form.value)
+      } else if (formEditType.value === FormEditType.Edit) {
+        await update(form.value)
+      }
       confirmLoading.value = false
+      handleCancel()
+      emits('ok')
     })
   }
 

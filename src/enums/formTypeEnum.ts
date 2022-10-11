@@ -1,7 +1,7 @@
 /**
- * 表单类型
+ * 表单编辑类型
  */
-export enum FormType {
+export enum FormEditType {
   Add,
   Edit,
   Show,
