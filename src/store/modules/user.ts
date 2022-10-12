@@ -57,6 +57,7 @@ export const useUserStore = defineStore({
     },
   },
   actions: {
+    // token信心
     setToken(info: string | undefined) {
       this.token = info ? info : '' // for null or undefined value
       setAuthCache(TOKEN_KEY, info)
@@ -80,36 +81,33 @@ export const useUserStore = defineStore({
       this.sessionTimeout = false
     },
     /**
-     * @description: login
+     * 登录方法
      */
-    async login(
-      params: LoginParams & {
-        goHome?: boolean
-        mode?: ErrorMessageMode
-      },
-    ): Promise<GetUserInfoModel | null> {
+    async login(params: LoginParams) {
       try {
-        const { goHome = true, mode, ...loginParams } = params
-        const data = await loginApi(loginParams, mode)
-        const { token } = data.data
-
-        // save token
+        const { data: token } = await loginApi(params)
+        // 保存token
         this.setToken(token)
-        return this.afterLoginAction(goHome)
+        await this.afterLoginAction(true)
+        return token
       } catch (error) {
         return Promise.reject(error)
       }
     },
-    async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
+    /**
+     * 登录后操作
+     */
+    async afterLoginAction(goHome?: boolean) {
       if (!this.getToken) return null
-      // get user info
-      const userInfo = await this.getUserInfoAction()
-
+      // 获取用户信息
+      await this.getUserInfoAction()
       const sessionTimeout = this.sessionTimeout
+      // 超时
       if (sessionTimeout) {
         this.setSessionTimeout(false)
       } else {
         const permissionStore = usePermissionStore()
+        console.log(permissionStore)
         if (!permissionStore.isDynamicAddedRoute) {
           const routes = await permissionStore.buildRoutesAction()
           routes.forEach((route) => {
@@ -118,21 +116,13 @@ export const useUserStore = defineStore({
           router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw)
           permissionStore.setDynamicAddedRoute(true)
         }
-        goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME))
+        goHome && (await router.replace(PageEnum.BASE_HOME))
       }
-      return userInfo
     },
-    async getUserInfoAction(): Promise<UserInfo | null> {
+    // 获取并存储用户信息
+    async getUserInfoAction() {
       if (!this.getToken) return null
       const { data: userInfo } = await getUserInfo()
-      const { roles = [] } = userInfo
-      if (isArray(roles)) {
-        const roleList = roles.map((item) => item.value) as RoleEnum[]
-        this.setRoleList(roleList)
-      } else {
-        userInfo.roles = []
-        this.setRoleList([])
-      }
       this.setUserInfo(userInfo)
       return userInfo
     },

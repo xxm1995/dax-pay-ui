@@ -4,17 +4,17 @@
       <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" />
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
-          {{ getUserInfo.realName }}
+          {{ getUserInfo.name }}
         </span>
       </span>
     </span>
 
     <template #overlay>
       <Menu @click="handleMenuClick">
-        <MenuItem key="doc" :text="t('layout.header.dropdownItemDoc')" icon="ion:document-text-outline" v-if="getShowDoc" />
-        <MenuDivider v-if="getShowDoc" />
-        <MenuItem v-if="getUseLockPage" key="lock" :text="t('layout.header.tooltipLock')" icon="ion:lock-closed-outline" />
-        <MenuItem key="logout" :text="t('layout.header.dropdownItemLoginOut')" icon="ion:power-outline" />
+<!--        <MenuItem key="doc" text="文档" icon="ion:document-text-outline" v-if="getShowDoc" />-->
+<!--        <MenuDivider v-if="getShowDoc" />-->
+        <MenuItem v-if="getUseLockPage" key="lock" text="锁定屏幕" icon="ion:lock-closed-outline" />
+        <MenuItem key="logout" text="退出系统" icon="ion:power-outline" />
       </Menu>
     </template>
   </Dropdown>
@@ -49,7 +49,7 @@
       Dropdown,
       Menu,
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
-      MenuDivider: Menu.Divider,
+      // MenuDivider: Menu.Divider,
       LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
     },
     props: {
@@ -57,15 +57,14 @@
     },
     setup() {
       const { prefixCls } = useDesign('header-user-dropdown')
-      const { t } = useI18n()
       const { getShowDoc, getUseLockPage } = useHeaderSetting()
       const userStore = useUserStore()
 
+      // 用户信息
       const getUserInfo = computed(() => {
-        const { realName = '', avatar, desc } = userStore.getUserInfo || {}
-        return { realName, avatar: avatar || headerImg, desc }
+        const { name = '', avatar } = userStore.getUserInfo || {}
+        return { name, avatar: headerImg }
       })
-
       const [register, { openModal }] = useModal()
 
       function handleLock() {
@@ -98,10 +97,9 @@
 
       return {
         prefixCls,
-        t,
         getUserInfo,
         handleMenuClick,
-        getShowDoc,
+        // getShowDoc,
         register,
         getUseLockPage,
       }

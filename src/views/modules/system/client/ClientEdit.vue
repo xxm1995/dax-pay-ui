@@ -10,13 +10,13 @@
     <a-spin :spinning="confirmLoading">
       <a-form class="small-from-item" ref="formRef" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-item label="主键" :hidden="true">
-          <a-input v-model:value="form.id" :disabled="showable" />
+          <Input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
         <a-form-item label="编码" v-bind="validateInfos.code" name="code">
-          <a-input v-model:value="form.code" :disabled="showable" @blur="validate('code')" placeholder="请输入编码" />
+          <Input v-model:value="form.code" :disabled="showable" @blur="validate('code')" placeholder="请输入编码" />
         </a-form-item>
         <a-form-item label="名称" v-bind="validateInfos.name" name="name">
-          <a-input v-model:value="form.name" :disabled="showable" @blur="validate('name')" placeholder="请输入名称" />
+          <Input v-model:value="form.name" :disabled="showable" @blur="validate('name')" placeholder="请输入名称" />
         </a-form-item>
         <a-form-item label="启用状态" v-bind="validateInfos.enable" name="enable">
           <a-switch checked-children="开" un-checked-children="关" v-model:checked="form.enable" :disabled="showable || form.system" />
@@ -59,9 +59,8 @@
   import { nextTick, reactive, ref } from 'vue'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { add, Client, existsByCode, existsByCodeNotId, get, update } from './Client.api'
-  import { Rule, useForm } from "ant-design-vue/lib/form";
+  import { FormInstance, Rule, useForm } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
-  import { FormInstance } from 'ant-design-vue/es'
   import { findAll, LoginType } from '/@/views/modules/system/loginType/LoginType.api'
 
   const {

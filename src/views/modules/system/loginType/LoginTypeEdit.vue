@@ -10,13 +10,13 @@
     <a-spin :spinning="confirmLoading">
       <a-form class="small-from-item" ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-item label="主键" name="id" :hidden="true">
-          <a-input v-model:value="form.id" :disabled="showable" />
+          <Input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
         <a-form-item label="编码" name="code">
-          <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入登录方式编码" />
+          <Input v-model:value="form.code" :disabled="showable" placeholder="请输入登录方式编码" />
         </a-form-item>
         <a-form-item label="名称" name="name">
-          <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入登录方式名称" />
+          <Input v-model:value="form.name" :disabled="showable" placeholder="请输入登录方式名称" />
         </a-form-item>
         <a-form-item label="类型" name="type">
           <a-radio-group v-model:value="form.type" button-style="solid">
@@ -35,7 +35,7 @@
           <a-switch checked-children="开" un-checked-children="关" v-model:checked="form.captcha" :disabled="showable" />
         </a-form-item>
         <a-form-item label="超时时间(分钟)" name="timeout">
-          <a-input-number
+          <Input-number
             v-model:value="form.timeout"
             :disabled="showable"
             :precision="0"
@@ -45,7 +45,7 @@
           />
         </a-form-item>
         <a-form-item label="密码可错误次数" name="pwdErrNum" v-show="form.type === PASSWORD">
-          <a-input-number
+          <Input-number
             v-model:value="form.pwdErrNum"
             :disabled="showable"
             :min="-1"
@@ -73,8 +73,7 @@
   import { nextTick, reactive, ref } from 'vue'
   import { add, LoginType, get, existsByCode, existsByCodeNotId, update, PASSWORD, OPEN_ID } from './LoginType.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
-  import { FormInstance } from 'ant-design-vue/es'
-  import { Rule } from 'ant-design-vue/lib/form'
+  import { FormInstance, Rule } from 'ant-design-vue/lib/form'
 
   const {
     initFormModel,
@@ -99,7 +98,7 @@
     enable: true,
     description: '',
   } as LoginType)
-
+  const formRef = ref<FormInstance>()
   // 校验状态
   const rules = reactive({
     code: [
@@ -118,7 +117,6 @@
     const res = formEditType.value === FormEditType.Edit ? await existsByCodeNotId(code, id) : await existsByCode(code)
     return res.data ? Promise.reject('该编码已存在!') : Promise.resolve()
   }
-  const formRef = ref<FormInstance>()
 
   // 事件
   const emits = defineEmits(['ok'])

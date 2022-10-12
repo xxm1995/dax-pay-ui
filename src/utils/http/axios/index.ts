@@ -135,8 +135,8 @@ const transform: AxiosTransform = {
     // 请求之前处理config
     const token = getToken()
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
-      // jwt token
-      ;(config as Recordable).headers.Authorization = options.authenticationScheme ? `${options.authenticationScheme} ${token}` : token
+      // 添加 token 到请求头
+      ;(config as Recordable).headers.AccessToken = token
     }
     return config
   },

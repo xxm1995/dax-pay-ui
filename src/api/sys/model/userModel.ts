@@ -1,9 +1,19 @@
 /**
- * @description: Login interface parameters
+ * 账密登录参数
  */
 export interface LoginParams {
-  username: string
+  // 账号/手机号/邮箱
+  account: string
+  // 密码
   password: string
+  // 终端
+  client: string
+  // 登录方式
+  loginType: string
+  // 验证码key
+  captchaKey: string
+  // 验证码
+  captcha: string
 }
 
 export interface RoleInfo {
@@ -12,27 +22,15 @@ export interface RoleInfo {
 }
 
 /**
- * @description: Login interface return value
- */
-export interface LoginResultModel {
-  userId: string | number
-  token: string
-  role: RoleInfo
-}
-
-/**
- * @description: Get user information return value
+ * 登录后用户信息
  */
 export interface GetUserInfoModel {
-  roles: RoleInfo[]
   // 用户id
-  userId: string | number
-  // 用户名
+  userId: number
+  // 名称
+  name: string
+  // 账号
   username: string
-  // 真实名字
-  realName: string
   // 头像
   avatar: string
-  // 介绍
-  desc?: string
 }

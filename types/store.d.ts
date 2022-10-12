@@ -31,13 +31,14 @@ export interface ErrorLogInfo {
 }
 
 export interface UserInfo {
-  userId: string | number
+  // 用户id
+  userId: number
+  // 名称
+  name: string
+  // 账号
   username: string
-  realName: string
+  // 头像
   avatar: string
-  desc?: string
-  homePath?: string
-  roles: RoleInfo[]
 }
 
 export interface BeforeMiniState {
