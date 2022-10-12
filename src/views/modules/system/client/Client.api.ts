@@ -68,7 +68,7 @@ export const existsByCode = (code: string) => {
   return defHttp.get<Result<boolean>>({
     url: '/client/existsByCode',
     method: 'GET',
-    params: { code }
+    params: { code },
   })
 }
 export const existsByCodeNotId = (code: string, id) => {
@@ -80,7 +80,7 @@ export const existsByCodeNotId = (code: string, id) => {
 }
 
 /**
- * 实体类接口
+ * 终端
  */
 export interface Client extends BaseEntity {
   // 编码

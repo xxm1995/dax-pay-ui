@@ -59,7 +59,7 @@
   import { nextTick, reactive, ref } from 'vue'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { add, Client, existsByCode, existsByCodeNotId, get, update } from './Client.api'
-  import { useForm } from 'ant-design-vue/lib/form'
+  import { Rule, useForm } from "ant-design-vue/lib/form";
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { FormInstance } from 'ant-design-vue/es'
   import { findAll, LoginType } from '/@/views/modules/system/loginType/LoginType.api'
@@ -96,7 +96,7 @@
     ],
     name: [{ required: true, message: '请输入应用名称' }],
     enable: [{ required: true, message: '请选择启用状态' }],
-  })
+  } as Record<string, Rule[]>)
   // 校验编码重复
   async function validateCode() {
     const { code, id } = form.value
@@ -122,7 +122,6 @@
   }
   // 获取信息
   function getInfo(id, editType: FormEditType) {
-    // this.initLoginTypes()
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
       confirmLoading.value = true
       get(id).then(({ data }) => {

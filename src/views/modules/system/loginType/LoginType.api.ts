@@ -62,7 +62,25 @@ export const findAll = () => {
 }
 
 /**
- * 实体类接口
+ * 编码是否被使用
+ */
+export const existsByCode = (code: string) => {
+  return defHttp.get<Result<boolean>>({
+    url: '/loginType/existsByCode',
+    method: 'GET',
+    params: { code },
+  })
+}
+export const existsByCodeNotId = (code: string, id) => {
+  return defHttp.get<Result<boolean>>({
+    url: '/loginType/existsByCodeNotId',
+    method: 'GET',
+    params: { code, id },
+  })
+}
+
+/**
+ * 登录方式
  */
 export interface LoginType extends BaseEntity {
   // 编码
@@ -84,3 +102,6 @@ export interface LoginType extends BaseEntity {
   // 描述
   description: string
 }
+// 类型
+export const OPEN_ID = 'openId'
+export const PASSWORD = 'password'

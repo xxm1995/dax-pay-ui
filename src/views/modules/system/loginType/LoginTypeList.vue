@@ -15,7 +15,7 @@
         <vxe-column type="seq" width="60" />
         <vxe-column field="code" title="编码" />
         <vxe-column field="name" title="名称" />
-        <vxe-column field="captcha" title="系统内置">
+        <vxe-column field="system" title="系统内置">
           <template #default="{ row }">
             <a-tag v-if="row.system" color="green">是</a-tag>
             <a-tag v-else color="red">否</a-tag>
@@ -76,7 +76,7 @@
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
-  const loginType = ref()
+  const loginTypeEdit = ref()
   // 查询条件
   const fields = [
     { field: 'code', formType: STRING, name: '编码', placeholder: '请输入登录方式编码' },
@@ -99,15 +99,15 @@
   }
   // 新增
   function add() {
-    loginType.value.init(null, FormEditType.Add)
+    loginTypeEdit.value.init(null, FormEditType.Add)
   }
   // 查看
   function edit(record) {
-    loginType.value.init(record.id, FormEditType.Edit)
+    loginTypeEdit.value.init(record.id, FormEditType.Edit)
   }
   // 查看
   function show(record) {
-    loginType.value.init(record.id, FormEditType.Show)
+    loginTypeEdit.value.init(record.id, FormEditType.Show)
   }
 
   // 删除
