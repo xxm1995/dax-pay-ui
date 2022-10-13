@@ -41,7 +41,9 @@ export function transformMenuModule(menuModule: MenuModule): Menu {
   return menuList[0]
 }
 
-// 将路由转换成菜单
+/**
+ * 将路由转换成菜单
+ */
 export function transformRouteToMenu(routeModList: AppRouteModule[], routerMapping = false) {
   // 借助 lodash 深拷贝
   const cloneRouteModList = cloneDeep(routeModList)

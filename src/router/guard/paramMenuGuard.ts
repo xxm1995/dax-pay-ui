@@ -32,16 +32,15 @@ export function createParamMenuGuard(router: Router) {
     next()
   })
 }
-
 const getPermissionMode = () => {
   const appStore = useAppStoreWithOut()
   return appStore.getProjectConfig.permissionMode
 }
-
+// 后端模式
 const isBackMode = () => {
   return getPermissionMode() === PermissionModeEnum.BACK
 }
-
+// 路由映射
 const isRouteMappingMode = () => {
   return getPermissionMode() === PermissionModeEnum.ROUTE_MAPPING
 }

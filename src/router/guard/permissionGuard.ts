@@ -15,6 +15,10 @@ const ROOT_PATH = RootRoute.path
 
 const whitePathList: PageEnum[] = [LOGIN_PATH]
 
+/**
+ * 路由守卫
+ * @param router
+ */
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut()
   const permissionStore = usePermissionStoreWithOut()
@@ -22,6 +26,7 @@ export function createPermissionGuard(router: Router) {
     if (
       from.path === ROOT_PATH &&
       to.path === PageEnum.BASE_HOME &&
+      // TODO 没有用户首页配置这个字段
       userStore.getUserInfo.homePath &&
       userStore.getUserInfo.homePath !== PageEnum.BASE_HOME
     ) {
@@ -94,7 +99,8 @@ export function createPermissionGuard(router: Router) {
       next()
       return
     }
-
+    console.log(`路由守卫`)
+    // 重载菜单
     const routes = await permissionStore.buildRoutesAction()
 
     routes.forEach((route) => {

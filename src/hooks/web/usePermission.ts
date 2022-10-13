@@ -41,6 +41,7 @@ export function usePermission() {
    * @param id
    */
   async function resume() {
+    console.log('重置和重新获得权限资源信息')
     const tabStore = useMultipleTabStore()
     tabStore.clearCacheTabs()
     resetRouter()

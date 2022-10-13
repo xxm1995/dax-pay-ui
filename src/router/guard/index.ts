@@ -46,7 +46,7 @@ function createPageGuard(router: Router) {
   })
 }
 
-// Used to handle page loading status
+// 用于处理页面加载状态
 function createPageLoadingGuard(router: Router) {
   const userStore = useUserStoreWithOut()
   const appStore = useAppStoreWithOut()

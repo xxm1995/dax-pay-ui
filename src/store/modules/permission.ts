@@ -18,7 +18,7 @@ import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
 
 import { filter } from '/@/utils/helper/treeHelper'
 
-import { getMenuList } from '/@/api/sys/menu'
+import { getMenuList, getPermissions } from "/@/api/sys/menu";
 import { getPermCode } from '/@/api/sys/user'
 
 import { useMessage } from '/@/hooks/web/useMessage'
@@ -103,14 +103,22 @@ export const usePermissionStore = defineStore({
       this.backMenuList = []
       this.lastBuildMenuTime = 0
     },
-    async changePermissionCode() {
-      const codeList = await getPermCode()
-      this.setPermCodeList(codeList)
+    /**
+     * 权限码和菜单更新
+     */
+    async changeMenuAndPermCode() {
+      const {
+        data: { menus, resourcePerms },
+      } = await getPermissions('admin')
+      console.log(menus)
+      // this.setBackMenuList(menus)
+      this.setPermCodeList(resourcePerms)
     },
 
-    // 构建路由
+    /**
+     * 构建路由
+     */
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
-      const { t } = useI18n()
       const userStore = useUserStore()
       const appStore = useAppStoreWithOut()
 
@@ -141,7 +149,8 @@ export const usePermissionStore = defineStore({
        * */
       const patchHomeAffix = (routes: AppRouteRecordRaw[]) => {
         if (!routes || routes.length === 0) return
-        let homePath: string = userStore.getUserInfo.homePath || PageEnum.BASE_HOME
+        // let homePath: string = userStore.getUserInfo.homePath || PageEnum.BASE_HOME
+        let homePath: string = PageEnum.BASE_HOME
 
         function patcher(routes: AppRouteRecordRaw[], parentPath = '') {
           if (parentPath) parentPath = parentPath + '/'
@@ -180,7 +189,7 @@ export const usePermissionStore = defineStore({
           routes = flatMultiLevelRoutes(routes)
           break
 
-        // 路由映射， 默认进入该case
+        // 路由映射， 默认进入该case(不用了)
         case PermissionModeEnum.ROUTE_MAPPING:
           // 对非一级路由进行过滤
           routes = filter(asyncRoutes, routeFilter)
@@ -196,7 +205,6 @@ export const usePermissionStore = defineStore({
           menuList.sort((a, b) => {
             return (a.meta?.orderNo || 0) - (b.meta?.orderNo || 0)
           })
-
           // 设置菜单列表
           this.setFrontMenuList(menuList)
 
@@ -205,38 +213,34 @@ export const usePermissionStore = defineStore({
           routes = flatMultiLevelRoutes(routes)
           break
 
-        //  If you are sure that you do not need to do background dynamic permissions, please comment the entire judgment below
-        //  如果确定不需要做后台动态权限，请在下方评论整个判断
+        // 后端控制 现在在用的方案
         case PermissionModeEnum.BACK:
           const { createMessage } = useMessage()
 
           createMessage.loading({
-            content: t('sys.app.menuLoading'),
+            content: '菜单加载中...',
             duration: 1,
           })
 
-          // !Simulate to obtain permission codes from the background,
-          // 模拟从后台获取权限码，
-          // this function may only need to be executed once, and the actual project can be put at the right time by itself
-          // 这个功能可能只需要执行一次，实际项目可以自己放在合适的时间
           let routeList: AppRouteRecordRaw[] = []
+
+          // 获取菜单和权限码
           try {
-            await this.changePermissionCode()
-            routeList = (await getMenuList()) as AppRouteRecordRaw[]
+            await this.changeMenuAndPermCode()
+            // 获取菜单列表
+            routeList = this.backMenuList as any
           } catch (error) {
             console.error(error)
           }
 
-          // Dynamically introduce components
           // 动态引入组件
+          console.log(routeList)
           routeList = transformObjToRoute(routeList)
 
-          //  Background routing to menu structure
           //  后台路由到菜单结构
           const backMenuList = transformRouteToMenu(routeList)
           this.setBackMenuList(backMenuList)
 
-          // remove meta.ignoreRoute item
           // 删除 meta.ignoreRoute 项
           routeList = filter(routeList, routeRemoveIgnoreFilter)
           routeList = routeList.filter(routeRemoveIgnoreFilter)

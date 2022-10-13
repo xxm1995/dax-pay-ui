@@ -78,6 +78,7 @@ export const useAppStore = defineStore({
     },
 
     async resetAllState() {
+      console.log('重置所有状态')
       resetRouter()
       Persistent.clearAll()
     },

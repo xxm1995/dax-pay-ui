@@ -12,95 +12,94 @@ import {
 import { SIDE_BAR_BG_COLOR_LIST, HEADER_PRESET_BG_COLOR_LIST } from './designSetting'
 import { primaryColor } from '../../build/config/themeConfig'
 
-// ! You need to clear the browser cache after the change
+// ! 更改后需要清除浏览器缓存
 const setting: ProjectConfig = {
-  // Whether to show the configuration button
+  // 是否显示配置按钮
   showSettingButton: true,
 
-  // Whether to show the theme switch button
+  // 是否显示主题切换按钮
   showDarkModeToggle: true,
 
-  // `Settings` button position
+  // `Settings` 按钮位置
   settingButtonPosition: SettingButtonPositionEnum.AUTO,
 
-  // Permission mode
-  permissionMode: PermissionModeEnum.ROUTE_MAPPING,
+  // 权限模式
+  permissionMode: PermissionModeEnum.BACK,
 
-  // Permission-related cache is stored in sessionStorage or localStorage
+  // 权限相关缓存存储在sessionStorage或localStorage中
   permissionCacheType: CacheTypeEnum.LOCAL,
 
-  // Session timeout processing
+  // 会话超时处理
   sessionTimeoutProcessing: SessionTimeoutProcessingEnum.ROUTE_JUMP,
 
-  // color
+  // 颜色
   themeColor: primaryColor,
 
-  // Website gray mode, open for possible mourning dates
+  // 灰度迷失
   grayMode: false,
 
-  // Color Weakness Mode
+  // 色日模式
   colorWeak: false,
 
-  // Whether to cancel the menu, the top, the multi-tab page display, for possible embedded in other systems
+  // 是否取消菜单，顶部，多选项卡页面显示，对于可能嵌入其他系统
   fullContent: false,
 
-  // content mode
+  // 内容模式
   contentMode: ContentEnum.FULL,
 
-  // Whether to display the logo
+  // 是否显示Logo
   showLogo: true,
 
-  // Whether to show footer
+  // 是否显示页脚
   showFooter: false,
 
-  // Header configuration
+  // 页头设置
   headerSetting: {
-    // header bg color
+    // 背景颜色
     bgColor: HEADER_PRESET_BG_COLOR_LIST[0],
-    // Fixed at the top
+    // 固定在顶部
     fixed: true,
-    // Whether to show top
+    // 是否显示
     show: true,
-    // theme
+    // 主题
     theme: ThemeEnum.LIGHT,
-    // Whether to enable the lock screen function
+    // 是否启用锁屏功能
     useLockPage: true,
-    // Whether to show the full screen button
+    // 是否显示全屏按钮
     showFullScreen: true,
-    // Whether to show the document button
+    // 是否显示文档按钮
     showDoc: true,
-    // Whether to show the notification button
+    // 是否显示通知按钮
     showNotice: true,
-    // Whether to display the menu search
+    // 是否显示搜索按钮
     showSearch: true,
   },
 
-  // Menu configuration
+  // 菜单配置
   menuSetting: {
-    // sidebar menu bg color
+    // 背景颜色
     bgColor: SIDE_BAR_BG_COLOR_LIST[0],
-    //  Whether to fix the left menu
+    // 是否固定
     fixed: true,
     // Menu collapse
     collapsed: false,
-    // When sider hide because of the responsive layout
+    // 当sider因为响应式布局而隐藏时
     siderHidden: false,
-    // Whether to display the menu name when folding the menu
+    // 折叠菜单时是否显示菜单名称
     collapsedShowTitle: false,
-    // Whether it can be dragged
-    // Only limited to the opening of the left menu, the mouse has a drag bar on the right side of the menu
+    // 是否可以拖动仅限于左侧菜单的打开，鼠标在菜单的右侧有一个拖动条
     canDrag: false,
-    // Whether to show no dom
+    // Whether to show no dom 是否不显示dom
     show: true,
-    // Whether to show dom
+    // Whether to show dom 是否隐藏
     hidden: false,
-    // Menu width
+    // Menu width 宽度
     menuWidth: 210,
-    // Menu mode
+    // Menu mode 模式
     mode: MenuModeEnum.INLINE,
-    // Menu type
+    // Menu 类型
     type: MenuTypeEnum.SIDEBAR,
-    // Menu theme
+    // Menu 主题
     theme: ThemeEnum.DARK,
     // Split menu
     split: false,

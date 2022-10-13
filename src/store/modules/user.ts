@@ -107,12 +107,13 @@ export const useUserStore = defineStore({
         this.setSessionTimeout(false)
       } else {
         const permissionStore = usePermissionStore()
-        console.log(permissionStore)
         if (!permissionStore.isDynamicAddedRoute) {
+          // 构建路由
           const routes = await permissionStore.buildRoutesAction()
           routes.forEach((route) => {
             router.addRoute(route as unknown as RouteRecordRaw)
           })
+          // 404路由
           router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw)
           permissionStore.setDynamicAddedRoute(true)
         }
