@@ -39,8 +39,9 @@
               <a href="javascript:" @click="edit(row)">编辑</a>
             </span>
             <a-divider type="vertical" />
-            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-              <a href="javascript:" style="color: red">删除</a>
+            <a-popconfirm :disabled="row.system" title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
+              <a href="javascript:" v-if="!row.system" style="color: red">删除</a>
+              <a href="javascript:" v-else disabled>删除</a>
             </a-popconfirm>
           </template>
         </vxe-column>
@@ -67,7 +68,6 @@
   import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { getAppEnvConfig } from "/@/utils/env";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)

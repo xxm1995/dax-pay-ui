@@ -35,5 +35,5 @@ export interface TablePageModel<T = any> {
  * 基础实体对象
  */
 export interface BaseEntity {
-  id: number | null
+  id?: number | null | undefined
 }

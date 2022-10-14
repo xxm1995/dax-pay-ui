@@ -38,7 +38,7 @@ const setting: ProjectConfig = {
   // 灰度迷失
   grayMode: false,
 
-  // 色日模式
+  // 色弱模式
   colorWeak: false,
 
   // 是否取消菜单，顶部，多选项卡页面显示，对于可能嵌入其他系统
@@ -117,12 +117,13 @@ const setting: ProjectConfig = {
     mixSideFixed: false,
   },
 
-  // Multi-label
+  // 多标签配置
   multiTabsSetting: {
+    // 缓存
     cache: false,
     // Turn on
     show: true,
-    // Is it possible to drag and drop sorting tabs
+    // 是否可以拖放排序标签
     canDrag: true,
     // Turn on quick actions
     showQuick: true,

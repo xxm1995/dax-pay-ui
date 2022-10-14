@@ -22,6 +22,7 @@ import { useMessage } from '/@/hooks/web/useMessage'
 import { PageEnum } from '/@/enums/pageEnum'
 import { getAppEnvConfig } from '/@/utils/env'
 import { PermMenu } from '/@/api/sys/model/menuModel'
+import dashboard from '/@/router/routes/modules/dashboard'
 
 interface PermissionState {
   // Permission code list
@@ -118,7 +119,7 @@ export const usePermissionStore = defineStore({
      * 转换权限菜单为系统中的菜单
      */
     convertMenus(permMenus: PermMenu[]): AppRouteRecordRaw[] {
-      return permMenus.map((o) => {
+      return permMenus?.map((o) => {
         const menu = {
           name: o.name,
           path: o.path,
@@ -136,8 +137,7 @@ export const usePermissionStore = defineStore({
           },
           children: this.convertMenus(o.children),
         } as AppRouteRecordRaw
-        if (o.component.toUpperCase()){
-
+        if (o.component.toUpperCase()) {
         }
         return menu
       })
@@ -228,12 +228,9 @@ export const usePermissionStore = defineStore({
 
           // 动态引入组件
           routeList = transformObjToRoute(routeList)
-          console.log(routeList)
-
           //  后台路由到菜单结构
           const backMenuList = transformRouteToMenu(routeList)
           this.setBackMenuList(backMenuList)
-
           // 删除 meta.ignoreRoute 项
           routeList = filter(routeList, routeRemoveIgnoreFilter)
           routeList = routeList.filter(routeRemoveIgnoreFilter)
@@ -244,6 +241,7 @@ export const usePermissionStore = defineStore({
       }
 
       routes.push(ERROR_LOG_ROUTE)
+      routes.push(dashboard)
       patchHomeAffix(routes)
       return routes
     },

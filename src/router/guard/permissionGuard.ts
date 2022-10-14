@@ -25,7 +25,8 @@ export function createPermissionGuard(router: Router) {
   router.beforeEach(async (to, from, next) => {
     if (
       from.path === ROOT_PATH &&
-      to.path === PageEnum.BASE_HOME &&
+      to.path === PageEnum.BASE_HOME
+      &&
       // TODO 没有用户首页配置这个字段
       userStore.getUserInfo.homePath &&
       userStore.getUserInfo.homePath !== PageEnum.BASE_HOME

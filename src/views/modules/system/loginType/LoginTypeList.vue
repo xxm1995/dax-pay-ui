@@ -46,7 +46,8 @@
             </span>
             <a-divider type="vertical" />
             <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-              <a href="javascript:" style="color: red">删除</a>
+              <a href="javascript:" v-if="!row.system" style="color: red">删除</a>
+              <a href="javascript:" v-else disabled>删除</a>
             </a-popconfirm>
           </template>
         </vxe-column>
@@ -66,13 +67,14 @@
 
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
-  import { del, page } from './LoginType.api'
+  import { del, LoginType, page } from "./LoginType.api";
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import LoginTypeEdit from './LoginTypeEdit.vue'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
+  import { BaseEntity } from "/#/web";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -102,11 +104,11 @@
     loginTypeEdit.value.init(null, FormEditType.Add)
   }
   // 查看
-  function edit(record) {
+  function edit(record: LoginType) {
     loginTypeEdit.value.init(record.id, FormEditType.Edit)
   }
   // 查看
-  function show(record) {
+  function show(record: LoginType) {
     loginTypeEdit.value.init(record.id, FormEditType.Show)
   }
 

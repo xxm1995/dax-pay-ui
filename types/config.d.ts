@@ -160,5 +160,5 @@ export interface GlobEnvConfig {
   // Upload url
   VITE_GLOB_UPLOAD_URL?: string
   // 终端类型
-  VITE_GLOB_APP_CLIENT?: string
+  VITE_GLOB_APP_CLIENT: string
 }

@@ -29,7 +29,6 @@ function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
       item.component = null
     } else {
       // 内部打开, 开是否是 Iframe 方式
-      console.log(item.component)
       if ((item.component as string).toUpperCase() === 'IFRAME') {
         // item.meta.frameSrc = item.iframeUrl
         item.meta.frameSrc = 'https://vvbin.cn/doc-next/'
