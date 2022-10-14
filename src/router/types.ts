@@ -8,6 +8,8 @@ export type Component<T = any> = ReturnType<typeof defineComponent> | (() => Pro
 export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
   name: string
   meta: RouteMeta
+  targetOutside?: boolean
+  iframeUrl?: string
   component?: Component | string
   components?: Component
   children?: AppRouteRecordRaw[]

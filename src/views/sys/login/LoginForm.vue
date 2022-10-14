@@ -65,6 +65,7 @@
   import { useUserStore } from '/@/store/modules/user'
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin'
   import { useDesign } from '/@/hooks/web/useDesign'
+  import { getAppEnvConfig } from '/@/utils/env'
   //import { onKeyStroke } from '@vueuse/core';
 
   const ACol = Col
@@ -97,10 +98,12 @@
   async function handleLogin() {
     const data = await validForm()
     if (!data) return
+    const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
+
     try {
       loading.value = true
       const token = await userStore.login({
-        client: 'admin',
+        client: VITE_GLOB_APP_CLIENT as string,
         loginType: 'password',
         password: data.password,
         account: data.account,

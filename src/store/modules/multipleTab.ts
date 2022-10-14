@@ -23,11 +23,13 @@ export interface MultipleTabState {
 
 function handleGotoPage(router: Router) {
   const go = useGo(router)
+  console.log(router)
   go(unref(router.currentRoute).path, true)
 }
 
 const getToTarget = (tabItem: RouteLocationNormalized) => {
   const { params, path, query } = tabItem
+  console.log(123)
   return {
     params: params || {},
     path,
@@ -121,6 +123,8 @@ export const useMultipleTabStore = defineStore({
     async addTab(route: RouteLocationNormalized) {
       const { path, name, fullPath, params, query, meta } = getRawRoute(route)
       // 404  The page does not need to add a tab
+      // console.log(route)
+      // console.log(path, name, fullPath, params, query, meta)
       if (
         path === PageEnum.ERROR_PAGE ||
         path === PageEnum.BASE_LOGIN ||
@@ -197,8 +201,7 @@ export const useMultipleTabStore = defineStore({
       if (index === 0) {
         // There is only one tab, then jump to the homepage, otherwise jump to the right tab
         if (this.tabList.length === 1) {
-          const userStore = useUserStore()
-          toTarget = userStore.getUserInfo.homePath || PageEnum.BASE_HOME
+          toTarget = PageEnum.BASE_HOME
         } else {
           //  Jump to the right tab
           const page = this.tabList[index + 1]

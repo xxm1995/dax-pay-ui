@@ -6,7 +6,6 @@ import { cloneDeep, omit } from 'lodash-es'
 import { warn } from '/@/utils/log'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-export type LayoutMapKey = 'LAYOUT'
 const IFRAME = () => import('/@/views/sys/iframe/FrameBlank.vue')
 
 const LayoutMap = new Map<string, () => Promise<typeof import('*.vue')>>()
@@ -16,32 +15,53 @@ LayoutMap.set('IFRAME', IFRAME)
 
 let dynamicViewsModules: Record<string, () => Promise<Recordable>>
 
-// Dynamic introduction
+/**
+ * 动态导入路由
+ */
 function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
   dynamicViewsModules = dynamicViewsModules || import.meta.glob('../../views/**/*.{vue,tsx}')
+  // 路由是否为空
   if (!routes) return
   routes.forEach((item) => {
-    if (!item.component && item.meta?.frameSrc) {
-      item.component = 'IFRAME'
-    }
     const { component, name } = item
+    // 是否外部打开 TODO 后面需要处理下
+    if (item.targetOutside) {
+      item.component = null
+    } else {
+      // 内部打开, 开是否是 Iframe 方式
+      console.log(item.component)
+      if ((item.component as string).toUpperCase() === 'IFRAME') {
+        // item.meta.frameSrc = item.iframeUrl
+        item.meta.frameSrc = 'https://vvbin.cn/doc-next/'
+      }
+    }
+
     const { children } = item
+    // 组件替换
     if (component) {
-      const layoutFound = LayoutMap.get(component.toUpperCase())
-      if (layoutFound) {
-        item.component = layoutFound
+      const componentName = component.toUpperCase()
+      if (['LAYOUT', 'IFRAME'].includes(componentName)) {
+        item.component = LayoutMap.get(componentName)
       } else {
         item.component = dynamicImport(dynamicViewsModules, component as string)
       }
     } else if (name) {
       item.component = getParentLayout()
     }
+    // 有自己菜单进行递归
     children && asyncImportRoute(children)
   })
 }
 
+/**
+ * 动态引入组件 可以识别 src/views/ 下创建的组件
+ * @param dynamicViewsModules
+ * @param component
+ */
 function dynamicImport(dynamicViewsModules: Record<string, () => Promise<Recordable>>, component: string) {
+  // 路径集合
   const keys = Object.keys(dynamicViewsModules)
+  // 查询配置路径对应的组件
   const matchKeys = keys.filter((key) => {
     const k = key.replace('../../views', '')
     const startFlag = component.startsWith('/')
@@ -54,12 +74,10 @@ function dynamicImport(dynamicViewsModules: Record<string, () => Promise<Recorda
     const matchKey = matchKeys[0]
     return dynamicViewsModules[matchKey]
   } else if (matchKeys?.length > 1) {
-    warn(
-      'Please do not create `.vue` and `.TSX` files with the same file name in the same hierarchical directory under the views folder. This will cause dynamic introduction failure',
-    )
+    warn('请不要在views文件夹下的同一层次目录中创建具有相同文件名的 .vue 和 .TSX 文件。这将导致动态引入失败')
     return
   } else {
-    warn('在src/views/下找不到`' + component + '.vue` 或 `' + component + '.tsx`, 请自行创建!')
+    warn('在src/views/下找不到`' + component + '.vue` 或 `' + component + '.tsx`, 请检查路径是否正确!')
     return EXCEPTION_COMPONENT
   }
 }
@@ -67,7 +85,7 @@ function dynamicImport(dynamicViewsModules: Record<string, () => Promise<Recorda
 /**
  * 将后端对象变成路由对象
  */
-export function transformObjToRoute<T = AppRouteModule>(routeList: AppRouteModule[]): T[] {
+export function transformObjToRoute<T = AppRouteModule>(routeList: AppRouteRecordRaw[]): T[] {
   routeList.forEach((route) => {
     const component = route.component as string
     if (component) {
@@ -118,7 +136,7 @@ function promoteRouteLevel(routeModule: AppRouteModule) {
   // 使用vue-router拼接菜单
   // createRouter 创建一个可以被 Vue 应用程序使用的路由实例
   let router: Router | null = createRouter({
-    routes: [routeModule as unknown as RouteRecordNormalized],
+    routes: [routeModule],
     history: createWebHashHistory(),
   })
   // getRoutes： 获取所有 路由记录的完整列表。
@@ -132,7 +150,7 @@ function promoteRouteLevel(routeModule: AppRouteModule) {
 }
 
 // Add all sub-routes to the secondary route
-// 将所有子路由添加到二级路由
+// 将所有子路由添加到二级路由 弃用
 function addToChildren(routes: RouteRecordNormalized[], children: AppRouteRecordRaw[], routeModule: AppRouteModule) {
   for (let index = 0; index < children.length; index++) {
     const child = children[index]
@@ -151,7 +169,7 @@ function addToChildren(routes: RouteRecordNormalized[], children: AppRouteRecord
 }
 
 // Determine whether the level exceeds 2 levels
-// 判断级别是否超过2级
+// 判断级别是否超过2级 弃用
 function isMultipleRoute(routeModule: AppRouteModule) {
   // Reflect.has 与 in 操作符 相同, 用于检查一个对象(包括它原型链上)是否拥有某个属性
   if (!routeModule || !Reflect.has(routeModule, 'children') || !routeModule.children?.length) {

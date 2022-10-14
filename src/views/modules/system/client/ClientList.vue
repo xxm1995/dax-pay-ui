@@ -67,6 +67,7 @@
   import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
+  import { getAppEnvConfig } from "/@/utils/env";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)

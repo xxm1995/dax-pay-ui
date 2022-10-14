@@ -9,7 +9,6 @@ import { useRouter } from 'vue-router'
 
 export function initAffixTabs(): string[] {
   const affixList = ref<RouteLocationNormalized[]>([])
-
   const tabStore = useMultipleTabStore()
   const router = useRouter()
   /**
@@ -27,6 +26,7 @@ export function initAffixTabs(): string[] {
   }
 
   /**
+   * 打开选项卡
    * @description: Set fixed tabs
    */
   function addAffixTabs(): void {
@@ -50,6 +50,10 @@ export function initAffixTabs(): string[] {
   return affixList.value.map((item) => item.meta?.title).filter(Boolean) as string[]
 }
 
+/**
+ * 选项卡拖动
+ * @param affixTextList
+ */
 export function useTabsDrag(affixTextList: string[]) {
   const tabStore = useMultipleTabStore()
   const { multiTabsSetting } = projectSetting

@@ -5,13 +5,16 @@ import { cloneDeep } from 'lodash-es'
 import { isUrl } from '/@/utils/is'
 import { RouteParams } from 'vue-router'
 import { toRaw } from 'vue'
+import { PermMenu } from '/@/api/sys/model/menuModel'
 
 export function getAllParentPath<T = Recordable>(treeData: T[], path: string) {
   const menuList = findPath(treeData, (n) => n.path === path) as Menu[]
   return (menuList || []).map((item) => item.path)
 }
 
-// 路径处理
+/**
+ * 路径处理
+ */
 function joinParentPath(menus: Menu[], parentPath = '') {
   for (let index = 0; index < menus.length; index++) {
     const menu = menus[index]

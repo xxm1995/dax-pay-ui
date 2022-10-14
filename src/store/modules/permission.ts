@@ -2,7 +2,6 @@ import type { AppRouteRecordRaw, Menu } from '/@/router/types'
 
 import { defineStore } from 'pinia'
 import { store } from '/@/store'
-import { useI18n } from '/@/hooks/web/useI18n'
 import { useUserStore } from './user'
 import { useAppStoreWithOut } from './app'
 import { toRaw } from 'vue'
@@ -13,16 +12,16 @@ import projectSetting from '/@/settings/projectSetting'
 
 import { PermissionModeEnum } from '/@/enums/appEnum'
 
-import { asyncRoutes } from '/@/router/routes'
 import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
 
 import { filter } from '/@/utils/helper/treeHelper'
 
-import { getMenuList, getPermissions } from "/@/api/sys/menu";
-import { getPermCode } from '/@/api/sys/user'
+import { getPermissions } from '/@/api/sys/menu'
 
 import { useMessage } from '/@/hooks/web/useMessage'
 import { PageEnum } from '/@/enums/pageEnum'
+import { getAppEnvConfig } from '/@/utils/env'
+import { PermMenu } from '/@/api/sys/model/menuModel'
 
 interface PermissionState {
   // Permission code list
@@ -106,13 +105,42 @@ export const usePermissionStore = defineStore({
     /**
      * 权限码和菜单更新
      */
-    async changeMenuAndPermCode() {
+    async changeMenuAndPermCode(): Promise<PermMenu[]> {
+      const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
       const {
         data: { menus, resourcePerms },
-      } = await getPermissions('admin')
-      console.log(menus)
-      // this.setBackMenuList(menus)
+      } = await getPermissions(VITE_GLOB_APP_CLIENT as string)
       this.setPermCodeList(resourcePerms)
+      return menus
+    },
+
+    /**
+     * 转换权限菜单为系统中的菜单
+     */
+    convertMenus(permMenus: PermMenu[]): AppRouteRecordRaw[] {
+      return permMenus.map((o) => {
+        const menu = {
+          name: o.name,
+          path: o.path,
+          component: o.component,
+          targetOutside: o.targetOutside,
+          iframeUrl: o.iframeUrl,
+          redirect: o.redirect,
+          meta: {
+            orderNo: o.sortNo,
+            title: o.title,
+            icon: o.icon,
+            hideMenu: o.hidden,
+            hideChildrenInMenu: o.hideChildrenInMenu,
+            ignoreKeepAlive: !o.keepAlive,
+          },
+          children: this.convertMenus(o.children),
+        } as AppRouteRecordRaw
+        if (o.component.toUpperCase()){
+
+        }
+        return menu
+      })
     },
 
     /**
@@ -126,7 +154,7 @@ export const usePermissionStore = defineStore({
       const roleList = toRaw(userStore.getRoleList) || []
       const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig
 
-      // 路由过滤器 在 函数filter 作为回调传入遍历使用
+      // 路由过滤器 在 函数filter 作为回调传入遍历使用 (无用了)
       const routeFilter = (route: AppRouteRecordRaw) => {
         const { meta } = route
         // 抽出角色
@@ -178,41 +206,6 @@ export const usePermissionStore = defineStore({
       }
 
       switch (permissionMode) {
-        // 角色权限
-        case PermissionModeEnum.ROLE:
-          // 对非一级路由进行过滤
-          routes = filter(asyncRoutes, routeFilter)
-          // 对一级路由根据角色权限过滤
-          routes = routes.filter(routeFilter)
-          // Convert multi-level routing to level 2 routing
-          // 将多级路由转换为 2 级路由
-          routes = flatMultiLevelRoutes(routes)
-          break
-
-        // 路由映射， 默认进入该case(不用了)
-        case PermissionModeEnum.ROUTE_MAPPING:
-          // 对非一级路由进行过滤
-          routes = filter(asyncRoutes, routeFilter)
-          // 对一级路由再次根据角色权限过滤
-          routes = routes.filter(routeFilter)
-          // 将路由转换成菜单
-          const menuList = transformRouteToMenu(routes, true)
-          // 移除掉 ignoreRoute: true 的路由 非一级路由
-          routes = filter(routes, routeRemoveIgnoreFilter)
-          // 移除掉 ignoreRoute: true 的路由 一级路由；
-          routes = routes.filter(routeRemoveIgnoreFilter)
-          // 对菜单进行排序
-          menuList.sort((a, b) => {
-            return (a.meta?.orderNo || 0) - (b.meta?.orderNo || 0)
-          })
-          // 设置菜单列表
-          this.setFrontMenuList(menuList)
-
-          // Convert multi-level routing to level 2 routing
-          // 将多级路由转换为 2 级路由
-          routes = flatMultiLevelRoutes(routes)
-          break
-
         // 后端控制 现在在用的方案
         case PermissionModeEnum.BACK:
           const { createMessage } = useMessage()
@@ -226,16 +219,16 @@ export const usePermissionStore = defineStore({
 
           // 获取菜单和权限码
           try {
-            await this.changeMenuAndPermCode()
-            // 获取菜单列表
-            routeList = this.backMenuList as any
+            const permMenus = await this.changeMenuAndPermCode()
+            // 将 后端获取的菜单转换为系统中的菜单格式
+            routeList = this.convertMenus(permMenus)
           } catch (error) {
             console.error(error)
           }
 
           // 动态引入组件
-          console.log(routeList)
           routeList = transformObjToRoute(routeList)
+          console.log(routeList)
 
           //  后台路由到菜单结构
           const backMenuList = transformRouteToMenu(routeList)
