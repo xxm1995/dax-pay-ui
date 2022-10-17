@@ -1,5 +1,5 @@
 import { defHttp } from '/@/utils/http/axios'
-import { PageResult, Result } from '/#/axios'
+import { Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
 
 /**
@@ -53,6 +53,32 @@ export const del = (id) => {
 }
 
 /**
+ * 资源列表
+ */
+export const resourceList = (menuId) => {
+  return defHttp.get<Result<Array<Resource>>>({
+    url: '/perm/menu/resourceList',
+    params: { menuId },
+  })
+}
+
+/**
+ * 权限码是否重复
+ */
+export const existsByPermCode = (permCode) => {
+  return defHttp.get<Result<boolean>>({
+    url: '/perm/menu/existsByPermCode',
+    params: { permCode },
+  })
+}
+export const existsByPermCodeNotId = (permCode, id) => {
+  return defHttp.get<Result<boolean>>({
+    url: '/perm/menu/existsByPermCodeNotId',
+    params: { permCode, id },
+  })
+}
+
+/**
  * 权限_菜单
  */
 export interface Menu extends BaseEntity {
@@ -64,8 +90,6 @@ export interface Menu extends BaseEntity {
   title: string
   // 路由名称
   name: string
-  // 菜单权限编码
-  permCode: string
   // 菜单图标
   icon: string
   // 是否隐藏
@@ -92,6 +116,24 @@ export interface Menu extends BaseEntity {
   hiddenHeaderContent: boolean
   // 系统菜单
   admin?: boolean
+  // 描述
+  remark?: string
+}
+
+/**
+ * 权限_资源(码)
+ */
+export interface Resource extends BaseEntity {
+  // 菜单权限编码
+  permCode: string
+  // 菜单名称
+  title: string
+  // 终端code
+  clientCode?: string
+  //是否有效
+  effect: boolean
+  // 父id
+  parentId?: number | null
   // 描述
   remark?: string
 }

@@ -4,14 +4,14 @@
       <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar :refresh="{ query: queryPage }">
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
         <template #buttons>
           <a-space>
             <a-button type="primary" @click="add">新建</a-button>
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table row-id="id" :data="pagination.records" :loading="loading">
+      <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
         <vxe-column field="code" title="编码" />
         <vxe-column field="name" title="名称" />
@@ -67,27 +67,35 @@
 
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
-  import { del, LoginType, page } from "./LoginType.api";
+  import { del, LoginType, page } from './LoginType.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import LoginTypeEdit from './LoginTypeEdit.vue'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
-  import { BaseEntity } from "/#/web";
+  import { $ref } from 'vue/macros'
+  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
-  const loginTypeEdit = ref()
   // 查询条件
   const fields = [
     { field: 'code', formType: STRING, name: '编码', placeholder: '请输入登录方式编码' },
     { field: 'name', formType: STRING, name: '名称', placeholder: '请输入登录方式名称' },
   ]
+  let xTable: VxeTableInstance = $ref()
+  let xToolbar: VxeToolbarInstance = $ref()
+  const loginTypeEdit: any = $ref()
 
   onMounted(() => {
+    vxeBind()
     queryPage()
   })
+
+  function vxeBind() {
+    xTable.connect(xToolbar)
+  }
 
   // 分页查询
   function queryPage() {
@@ -101,15 +109,15 @@
   }
   // 新增
   function add() {
-    loginTypeEdit.value.init(null, FormEditType.Add)
+    loginTypeEdit.init(null, FormEditType.Add)
   }
   // 查看
   function edit(record: LoginType) {
-    loginTypeEdit.value.init(record.id, FormEditType.Edit)
+    loginTypeEdit.init(record.id, FormEditType.Edit)
   }
   // 查看
   function show(record: LoginType) {
-    loginTypeEdit.value.init(record.id, FormEditType.Show)
+    loginTypeEdit.init(record.id, FormEditType.Show)
   }
 
   // 删除

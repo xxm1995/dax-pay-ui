@@ -62,6 +62,7 @@
   import { FormInstance, Rule, useForm } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { findAll, LoginType } from '/@/views/modules/system/loginType/LoginType.api'
+  import { $ref } from 'vue/macros'
 
   const {
     initFormModel,
@@ -105,7 +106,7 @@
     const res = formEditType.value === FormEditType.Edit ? await existsByCodeNotId(code, id) : await existsByCode(code)
     return res.data ? Promise.reject('该编码已存在!') : Promise.resolve()
   }
-  const formRef = ref<FormInstance>()
+  const formRef: FormInstance = $ref()
 
   // 表单
   const { resetFields, validate, validateInfos } = useForm(form, rules)

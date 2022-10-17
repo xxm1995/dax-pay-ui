@@ -74,6 +74,7 @@
   import { add, LoginType, get, existsByCode, existsByCodeNotId, update, PASSWORD, OPEN_ID } from './LoginType.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
+  import { $ref } from 'vue/macros'
 
   const {
     initFormModel,
@@ -98,7 +99,7 @@
     enable: true,
     description: '',
   } as LoginType)
-  const formRef = ref<FormInstance>()
+  const formRef: FormInstance = $ref()
   // 校验状态
   const rules = reactive({
     code: [
@@ -141,7 +142,7 @@
   }
   // 保存
   function handleOk() {
-    formRef.value!.validate().then(async () => {
+    formRef.validate().then(async () => {
       confirmLoading.value = true
       if (formEditType.value === FormEditType.Add) {
         await add(form.value)
@@ -157,7 +158,7 @@
   // 重置表单的校验
   function resetForm() {
     nextTick(() => {
-      formRef.value!.resetFields()
+      formRef.resetFields()
     })
   }
   defineExpose({

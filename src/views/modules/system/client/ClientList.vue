@@ -4,14 +4,14 @@
       <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="vxeToolbar" :refresh="{ query: queryPage }">
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
         <template #buttons>
           <a-space>
             <a-button type="primary" @click="add">新建</a-button>
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table ref="vxeTable" row-id="id" :data="pagination.records" :loading="loading">
+      <vxe-table ref="xTable" row-id="id" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
         <vxe-column field="code" title="编码" />
         <vxe-column field="name" title="名称" />
@@ -68,6 +68,8 @@
   import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
+  import { $ref } from 'vue/macros'
+  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -76,11 +78,18 @@
     { field: 'code', formType: STRING, name: '编码', placeholder: '请输入终端编码' },
     { field: 'name', formType: STRING, name: '名称', placeholder: '请输入终端名称' },
   ]
-  const clientEdit = ref()
+  let xTable: VxeTableInstance = $ref()
+  let xToolbar: VxeToolbarInstance = $ref()
+  const clientEdit: any = $ref()
 
   onMounted(() => {
+    vxeBind()
     queryPage()
   })
+
+  function vxeBind() {
+    xTable.connect(xToolbar)
+  }
 
   // 分页查询
   function queryPage() {
@@ -94,15 +103,15 @@
   }
   // 新增
   function add() {
-    clientEdit.value.init(null, FormEditType.Add)
+    clientEdit.init(null, FormEditType.Add)
   }
   // 查看
   function edit(record) {
-    clientEdit.value.init(record.id, FormEditType.Edit)
+    clientEdit.init(record.id, FormEditType.Edit)
   }
   // 查看
   function show(record) {
-    clientEdit.value.init(record.id, FormEditType.Show)
+    clientEdit.init(record.id, FormEditType.Show)
   }
 
   // 删除

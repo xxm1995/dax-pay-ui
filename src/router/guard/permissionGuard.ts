@@ -100,6 +100,7 @@ export function createPermissionGuard(router: Router) {
       next()
       return
     }
+    //TODO 添加 websocket连接. 字典信息缓存
     console.log(`路由守卫`)
     // 重载菜单
     const routes = await permissionStore.buildRoutesAction()

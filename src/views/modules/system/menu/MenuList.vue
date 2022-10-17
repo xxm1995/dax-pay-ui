@@ -25,7 +25,7 @@
       </a-form>
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar zoom :refresh="{ query: init }">
+      <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: init }">
         <template #buttons>
           <a-button type="primary" @click="add()"> 新建 </a-button>
           <a-button style="margin-left: 8px" @click="allTreeExpand(true)">展开所有</a-button>
@@ -37,7 +37,7 @@
         :stripe="false"
         show-overflow
         border="inner"
-        ref="xTree"
+        ref="xTable"
         :loading="loading"
         :tree-config="{ children: 'children' }"
         :data="tableData"
@@ -57,7 +57,7 @@
         <vxe-column field="icon" title="图标" :visible="false">
           <template #default="{ row }">
             <div v-if="row.icon !== ''">
-<!--              <a-icon :type="row.icon" />-->
+              <!--              <a-icon :type="row.icon" />-->
             </div>
           </template>
         </vxe-column>
@@ -68,7 +68,7 @@
             <a href="javascript:" v-if="!row.admin" @click="edit(row)">编辑</a>
             <a href="javascript:" v-else disabled>编辑</a>
             <a-divider type="vertical" />
-            <a href="javascript:" @click="resourceList(row)">权限资源</a>
+            <a href="javascript:" @click="resourcePage(row)">权限资源</a>
             <a-divider type="vertical" />
             <a-dropdown>
               <a class="ant-dropdown-link"> 更多 </a>
@@ -93,21 +93,24 @@
         </vxe-column>
       </vxe-table>
       <menu-edit ref="menuEdit" @ok="init" />
+      <resource-list ref="resourceList" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { getAppEnvConfig } from '/@/utils/env'
-
   import { $ref } from 'vue/macros'
-  import { nextTick, onMounted, ref } from 'vue'
+  import { nextTick, onMounted } from 'vue'
   import { Client, findAll } from '/@/views/modules/system/client/Client.api'
   import XEUtils from 'xe-utils'
   import { menuTree, Menu } from './Menu.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import MenuEdit from './MenuEdit.vue'
+  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+  import ResourceList from './ResourceList.vue'
   const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
+
   let clientCode = $ref(VITE_GLOB_APP_CLIENT)
   let searchName = $ref()
   let loading = $ref(false)
@@ -115,13 +118,20 @@
   let clients = $ref([] as Client[])
   let remoteTableData = $ref([] as Menu[])
   let tableData = $ref([] as Menu[])
-  let xTree = ref()
-  let menuEdit = ref()
+  let xTable: VxeTableInstance = $ref()
+  let xToolbar: VxeToolbarInstance = $ref()
+  let menuEdit: any = $ref()
+  let resourceList: any = $ref()
 
   onMounted(() => {
+    vxeBind()
     initClients()
     init()
   })
+
+  function vxeBind() {
+    xTable.connect(xToolbar)
+  }
 
   async function initClients() {
     const { data } = await findAll()
@@ -138,13 +148,22 @@
   }
 
   function add() {
-    menuEdit.value.init(null, FormEditType.Add)
+    menuEdit.init(null, FormEditType.Add, clientCode)
   }
   function edit(record: Menu) {
-    menuEdit.value.init(record.id, FormEditType.Edit)
+    menuEdit.init(record.id, FormEditType.Edit, clientCode)
   }
   function show(record: Menu) {
-    menuEdit.value.init(record.id, FormEditType.Show)
+    menuEdit.init(record.id, FormEditType.Show, clientCode)
+  }
+  function addChildren(row) {
+    menuEdit.init(null, FormEditType.Other, clientCode, row)
+  }
+  function copy(id) {
+    menuEdit.init(id, FormEditType.Other, clientCode)
+  }
+  function resourcePage(record: Menu) {
+    resourceList.init(record)
   }
 
   /**
@@ -163,7 +182,7 @@
       tableData = remoteTableData
     }
     nextTick(() => {
-      xTree.value.setAllTreeExpand(treeExpand)
+      xTable.setAllTreeExpand(treeExpand)
     })
   }
   /**
@@ -171,7 +190,7 @@
    */
   function allTreeExpand(value) {
     nextTick(() => {
-      xTree.value.setAllTreeExpand(treeExpand)
+      xTable.setAllTreeExpand(treeExpand)
     })
     treeExpand = value
   }
