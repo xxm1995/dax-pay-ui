@@ -1,0 +1,154 @@
+<template>
+  <basic-modal
+    v-bind="$attrs"
+    :loading="confirmLoading"
+    :width="modalWidth"
+    :title="title"
+    :visible="visible"
+    :mask-closable="showable"
+    @cancel="handleCancel"
+  >
+    <a-form class="small-from-item" ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+      <a-form-item label="主键" :hidden="true">
+        <a-input v-model:value="form.id" :disabled="showable" />
+      </a-form-item>
+      <a-form-item label="编码" name="code">
+        <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
+      </a-form-item>
+      <a-form-item label="名称" name="name">
+        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
+      </a-form-item>
+      <a-form-item label="类型" name="type">
+        <a-select :disabled="!addable" v-model:value="form.type" style="width: 100%" placeholder="选择支付方式">
+          <a-select-option :value="1">自身数据</a-select-option>
+          <a-select-option :value="2">用户范围</a-select-option>
+          <a-select-option :value="3">部门范围</a-select-option>
+          <a-select-option :value="4">部门和用户范围</a-select-option>
+          <a-select-option :value="5">全部数据</a-select-option>
+          <a-select-option :value="6">所在部门</a-select-option>
+          <a-select-option :value="7">所在及下级部门</a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="说明" name="remark">
+        <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入说明" />
+      </a-form-item>
+    </a-form>
+    <template #footer>
+      <a-space>
+        <a-button key="cancel" @click="handleCancel">取消</a-button>
+        <a-button v-if="!showable" key="forward" :loading="confirmLoading" type="primary" @click="handleOk">保存</a-button>
+      </a-space>
+    </template>
+  </basic-modal>
+</template>
+
+<script lang="ts" setup>
+  import { nextTick, reactive } from 'vue'
+  import { $ref } from 'vue/macros'
+  import useFormEdit from '/@/hooks/bootx/useFormEdit'
+  import { add, get, update, DataScope } from './DataScope.api'
+  import { FormInstance, Rule } from 'ant-design-vue/lib/form'
+  import { FormEditType } from '/@/enums/formTypeEnum'
+  import { BasicModal } from '/@/components/Modal'
+  import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
+  import { existsByCode, existsByCodeNotId, existsByName, existsByNameNotId } from '/@/views/modules/system/role/Role.api'
+
+  const {
+    initFormModel,
+    handleCancel,
+    search,
+    labelCol,
+    wrapperCol,
+    title,
+    modalWidth,
+    confirmLoading,
+    visible,
+    addable,
+    editable,
+    showable,
+    formEditType,
+  } = useFormEdit()
+  // 表单
+  const formRef = $ref<FormInstance>()
+  let form = $ref({
+    id: null,
+    code: '',
+    name: '',
+    type: 1,
+    remark: '',
+  } as DataScope)
+  // 校验
+  const rules = reactive({
+    name: [
+      { required: true, message: '请输入数据权限名称' },
+      { validator: validateName, trigger: 'blur' },
+    ],
+    code: [
+      { required: true, message: '请输入数据权限编码' },
+      { validator: validateCode, trigger: 'blur' },
+    ],
+    type: [{ required: true, message: '请选择数据权限范围' }],
+  } as Record<string, Rule[]>)
+  // 事件
+  const emits = defineEmits(['ok'])
+  // 入口
+  function init(id, editType: FormEditType) {
+    initFormModel(id, editType)
+    resetForm()
+    getInfo(id, editType)
+  }
+  // 获取信息
+  function getInfo(id, editType: FormEditType) {
+    if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
+      confirmLoading.value = true
+      get(id).then(({ data }) => {
+        form = data
+        confirmLoading.value = false
+      })
+    } else {
+      confirmLoading.value = false
+    }
+  }
+  // 保存
+  function handleOk() {
+    formRef.validate().then(async () => {
+      confirmLoading.value = true
+      if (formEditType.value === FormEditType.Add) {
+        await add(form)
+      } else if (formEditType.value === FormEditType.Edit) {
+        await update(form)
+      }
+      confirmLoading.value = false
+      handleCancel()
+      emits('ok')
+    })
+  }
+
+  // 重置表单的校验
+  function resetForm() {
+    nextTick(() => {
+      formRef.resetFields()
+    })
+  }
+  async function validateCode() {
+    const { code, id } = form
+    if (!code) {
+      return Promise.resolve()
+    }
+    const res = formEditType.value === FormEditType.Edit ? await existsByCodeNotId(code, id) : await existsByCode(code)
+    return res.data ? Promise.reject('该编码已存在!') : Promise.resolve()
+  }
+  async function validateName() {
+    const { name, id } = form
+    if (!name) {
+      return Promise.resolve()
+    }
+    const res = formEditType.value === FormEditType.Edit ? await existsByNameNotId(name, id) : await existsByName(name)
+    return res.data ? Promise.reject('该编码已存在!') : Promise.resolve()
+  }
+  defineExpose({
+    init,
+  })
+</script>
+
+<style lang="less" scoped></style>

@@ -28,11 +28,13 @@ export default function <T>(queryPageCallback: CallableFunction) {
   // 普通查询
   function query() {
     superQueryFlag.value = false
+    batchOperateFlag.value = false
     resetPage()
     queryPageCallback()
   }
   // 表格翻页或变动
   function handleTableChange({ currentPage, pageSize }) {
+    batchOperateFlag.value = false
     pages.current = currentPage
     pages.size = pageSize
     queryPageCallback()

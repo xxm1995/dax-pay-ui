@@ -73,7 +73,7 @@ const getBaseOptions = () => {
   const { t } = useI18n()
   return {
     okText: t('common.okText'),
-    centered: true,
+    centered: false,
   }
 }
 

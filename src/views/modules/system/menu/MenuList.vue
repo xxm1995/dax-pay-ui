@@ -108,7 +108,7 @@
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import ResourceList from './ResourceList.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import Icon from "/@/components/Icon/src/Icon.vue";
+  import Icon from '/@/components/Icon'
 
   const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
   const { createConfirm, notification } = useMessage()
