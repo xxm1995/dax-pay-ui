@@ -22,19 +22,45 @@
           />
         </a-form-item>
         <a-form-item label="菜单名称" name="title">
-          <a-input v-model:value="form.title" :disabled="showable" placeholder="请输入title" />
+          <a-input v-model:value="form.title" :disabled="showable" placeholder="请输入菜单名称" />
         </a-form-item>
-        <a-form-item label="路由名称" name="name">
+        <a-form-item name="name">
+          <template #label>
+            <a-space>
+              <span>路由名称</span>
+              <a-tooltip>
+                <template #title>
+                  <span>
+                    此处名称应和vue组件的name属性保持一致。<br />
+                    路由名称不能重复，主要用于路由缓存功能。<br />
+                    如果路由名称和vue组件的name属性不一致，则会导致路由缓存失效。
+                  </span>
+                </template>
+                <Icon icon="ant-design:info-circle-outlined" />
+              </a-tooltip>
+            </a-space>
+          </template>
           <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入路由名称" />
         </a-form-item>
         <a-form-item label="访问路径" name="path">
           <a-input v-model:value="form.path" :disabled="showable" placeholder="请输入访问路径" />
         </a-form-item>
-        <a-form-item label="组件名称" name="component">
+        <a-form-item name="component">
+          <template #label>
+            <a-space>
+              <span>组件</span>
+              <a-tooltip title="Layout 和 Iframe可以直接输入，自定义组件需要输入/src下的全路径">
+                <Icon icon="ant-design:info-circle-outlined" />
+              </a-tooltip>
+            </a-space>
+          </template>
           <a-input v-model:value="form.component" :disabled="showable" placeholder="请输入组件名称" />
         </a-form-item>
-        <a-form-item label="菜单跳转地址(重定向)" name="redirect">
+        <a-form-item label="默认跳转地址(重定向)" name="redirect">
           <a-input v-model:value="form.redirect" :disabled="showable" placeholder="请输入重定向" />
+        </a-form-item>
+        <a-form-item label="菜单图标" name="icon">
+          <icon-picker v-model:value="form.icon" />
         </a-form-item>
         <a-form-item label="排序" name="sortNo">
           <a-input-number placeholder="请输入菜单排序，可以是小数" :disabled="showable" v-model:value="form.sortNo" style="width: 200px" />
@@ -61,12 +87,15 @@
 
 <script lang="ts" setup>
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { computed, nextTick, onMounted, reactive, ref } from 'vue'
+  import { computed, nextTick } from 'vue'
   import { $ref } from 'vue/macros'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { add, get, Menu, menuTree, update } from '/@/views/modules/system/menu/Menu.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { treeDataTranslate } from '/@/utils/dataUtil'
+  import Icon from '/@/components/Icon/src/Icon.vue'
+  import IconPicker from '/@/components/Icon/src/IconPicker.vue'
+  import CollapseContainer from '/@/components/Container/src/collapse/CollapseContainer.vue'
 
   const { initFormModel, handleCancel, search, labelCol, wrapperCol, title, confirmLoading, visible, editable, showable, formEditType } =
     useFormEdit()
@@ -74,6 +103,7 @@
   let form = $ref({
     parentId: null,
     title: '',
+    clientCode: '',
     name: '',
     path: '',
     component: '',
@@ -90,11 +120,11 @@
 
   const rules = computed(() => {
     return {
-      parentId: [{ required: form.menuType === 1, message: '请选择父级菜单' }],
-      title: [{ required: true, message: '请输入菜单或权限名称' }],
-      name: [{ required: true, message: '请输入路由名称' }],
-      path: [{ required: true, message: '请输入菜单路径' }],
-      url: [{ required: true, message: '请输入菜单路径' }],
+      parentId: [{ required: form.menuType === 1, message: '请选择父级菜单', trigger: ['blur', 'change'] }],
+      title: [{ required: true, message: '请输入菜单名称', trigger: ['blur', 'change'] }],
+      name: [{ required: true, message: '请输入路由名称', trigger: ['blur', 'change'] }],
+      path: [{ required: true, message: '请输入菜单路径', trigger: ['blur', 'change'] }],
+      url: [{ required: true, message: '请输入菜单路径', trigger: ['blur', 'change'] }],
     } as Record<string, Rule[]>
   })
   let treeData: unknown[] = $ref()
@@ -107,6 +137,7 @@
     initMenuTree(clientCode)
     initFormModel(id, editType)
     resetForm()
+    form.clientCode = clientCode
     getInfo(id, editType, row)
   }
   // 查询树
@@ -151,7 +182,7 @@
   function handleOk() {
     formRef.validate().then(async () => {
       confirmLoading.value = true
-      if (formEditType.value === FormEditType.Add) {
+      if ([FormEditType.Add, FormEditType.Other].includes(formEditType.value)) {
         await add(form)
       } else if (formEditType.value === FormEditType.Edit) {
         await update(form)

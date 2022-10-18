@@ -44,7 +44,7 @@
       >
         <vxe-column field="title" title="菜单名称" tree-node />
         <vxe-column field="name" title="路由名称" />
-        <vxe-column field="menuType" title="菜单类型">
+        <vxe-column field="menuType" title="菜单类型" :visible="false">
           <template #default="{ row }">
             <span v-show="String(row.menuType) === '0'">一级菜单</span>
             <span v-show="String(row.menuType) === '1'">子菜单</span>
@@ -54,10 +54,10 @@
         <vxe-column field="path" title="请求路径" />
         <vxe-column field="sortNo" title="排序" :visible="false" />
         <vxe-column field="component" title="组件" />
-        <vxe-column field="icon" title="图标" :visible="false">
+        <vxe-column field="icon" title="图标">
           <template #default="{ row }">
             <div v-if="row.icon !== ''">
-              <!--              <a-icon :type="row.icon" />-->
+              <icon :icon="row.icon" />
             </div>
           </template>
         </vxe-column>
@@ -81,10 +81,8 @@
                     <a @click="copy(row.id)">复制</a>
                   </a-menu-item>
                   <a-menu-item>
-                    <a-popconfirm title="是否删除菜单或权限" @confirm="remove(row)" okText="是" cancelText="否">
-                      <a href="javascript:" v-if="!row.admin" style="color: red">删除</a>
-                      <a href="javascript:" v-else disabled>删除</a>
-                    </a-popconfirm>
+                    <a href="javascript:" v-if="!row.admin" @click="remove(row)" style="color: red">删除</a>
+                    <a href="javascript:" v-else disabled>删除</a>
                   </a-menu-item>
                 </a-menu>
               </template>
@@ -104,13 +102,16 @@
   import { nextTick, onMounted } from 'vue'
   import { Client, findAll } from '/@/views/modules/system/client/Client.api'
   import XEUtils from 'xe-utils'
-  import { menuTree, Menu } from './Menu.api'
+  import { menuTree, Menu, del } from './Menu.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import MenuEdit from './MenuEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import ResourceList from './ResourceList.vue'
-  const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
+  import { useMessage } from '/@/hooks/web/useMessage'
+  import Icon from "/@/components/Icon/src/Icon.vue";
 
+  const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
+  const { createConfirm, notification } = useMessage()
   let clientCode = $ref(VITE_GLOB_APP_CLIENT)
   let searchName = $ref()
   let loading = $ref(false)
@@ -164,6 +165,20 @@
   }
   function resourcePage(record: Menu) {
     resourceList.init(record)
+  }
+
+  function remove(record: Menu) {
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '是否删除该条数据',
+      onOk: () => {
+        del(record.id).then(() => {
+          notification.success({ message: '删除成功' })
+          init()
+        })
+      },
+    })
   }
 
   /**

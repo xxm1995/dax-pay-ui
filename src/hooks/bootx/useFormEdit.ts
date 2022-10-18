@@ -12,7 +12,7 @@ export default function () {
       sm: { span: 13 },
     },
     title: '新增',
-    modalWidth: '50%',
+    modalWidth: 640,
     confirmLoading: false,
     visible: false,
     editable: false,
