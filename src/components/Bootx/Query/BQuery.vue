@@ -46,7 +46,7 @@
     },
     // 默认展示几个
     defaultItemCount: { type: Number, default: 2 },
-
+    // 所占栅格宽度
     defaultItemMd: { type: Number, default: 6 },
     // 禁用查询
     disabledQuery: { type: Boolean, default: false },

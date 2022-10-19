@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="m-3 p-3 pt-5 bg-white">
-      <b-query v-model="model.queryParam" :fields="fields" :default-item-md="8" @query="queryPage" @reset="resetQueryParams" />
+      <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: queryPage }" />
-      <vxe-table ref="xTable"  row-id="id" :loading="loading" :data="pagination.records">
+      <vxe-table ref="xTable" row-id="id" :loading="loading" :data="pagination.records">
         <vxe-column type="seq" title="序号" width="60" />
         <vxe-column field="tableName" title="表名称" />
         <vxe-column field="engine" title="引擎类型" />
@@ -44,9 +44,10 @@
 
   const { handleTableChange, resetQueryParams, pageQueryResHandel, pagination, pages, model, loading } = useTablePage(queryPage)
 
+  // 查询条件
   const fields = [
-    // { field: 'tableName', type: STRING, name: '名称', placeholder: '请输入表名称' },
-    // { field: 'tableComment', type: STRING, name: '描述', placeholder: '请输入表描述' },
+    { field: 'tableName', type: STRING, name: '名称', placeholder: '请输入表名称' },
+    { field: 'tableComment', type: STRING, name: '描述', placeholder: '请输入表描述' },
   ] as QueryField[]
 
   let xTable = $ref<VxeTableInstance>()

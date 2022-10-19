@@ -76,14 +76,12 @@ export const existsByCodeNotId = (code: string, id) => {
 export const existsByName = (name: string) => {
   return defHttp.get<Result<boolean>>({
     url: '/role/existsByName',
-    method: 'GET',
     params: { name },
   })
 }
 export const existsByNameNotId = (name: string, id) => {
   return defHttp.get<Result<boolean>>({
     url: '/role/existsByNameNotId',
-    method: 'GET',
     params: { name, id },
   })
 }

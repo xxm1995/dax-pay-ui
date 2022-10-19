@@ -63,6 +63,7 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { findAll, LoginType } from '/@/views/modules/system/loginType/LoginType.api'
   import { $ref } from 'vue/macros'
+  import { useValidate } from '/@/hooks/bootx/useValidate'
 
   const {
     initFormModel,
@@ -78,6 +79,8 @@
     showable,
     formEditType,
   } = useFormEdit()
+  const { existsByServer } = useValidate()
+
   const loginTypes = ref([] as Array<LoginType>)
   const form = ref({
     id: null,
@@ -97,15 +100,6 @@
     name: [{ required: true, message: '请输入应用名称' }],
     enable: [{ required: true, message: '请选择启用状态' }],
   } as Record<string, Rule[]>)
-  // 校验编码重复
-  async function validateCode() {
-    const { code, id } = form.value
-    if (!code) {
-      return Promise.resolve()
-    }
-    const res = formEditType.value === FormEditType.Edit ? await existsByCodeNotId(code, id) : await existsByCode(code)
-    return res.data ? Promise.reject('该编码已存在!') : Promise.resolve()
-  }
   const formRef: FormInstance = $ref()
 
   // 表单
@@ -157,6 +151,12 @@
     nextTick(() => {
       resetFields()
     })
+  }
+
+  // 校验编码重复
+  async function validateCode() {
+    const { code, id } = form.value
+    return existsByServer(code, id, formEditType, existsByCode, existsByCodeNotId)
   }
   defineExpose({
     init,

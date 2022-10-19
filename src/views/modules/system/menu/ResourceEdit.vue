@@ -32,9 +32,11 @@
   import { nextTick } from 'vue'
   import { add, get, Resource, update } from './Menu.api'
   import { BasicModal } from '/@/components/Modal/'
+  import { useValidate } from '/@/hooks/bootx/useValidate'
 
   const { initFormModel, handleCancel, search, labelCol, wrapperCol, title, confirmLoading, visible, editable, showable, formEditType } =
     useFormEdit()
+  const { existsByServer } = useValidate()
 
   let form = $ref({
     id: null,

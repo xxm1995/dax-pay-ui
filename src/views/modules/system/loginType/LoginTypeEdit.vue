@@ -75,6 +75,8 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { $ref } from 'vue/macros'
+  import { useValidate } from '/@/hooks/bootx/useValidate'
+  const { existsByServer } = useValidate()
 
   const {
     initFormModel,
@@ -112,11 +114,7 @@
   // 校验编码重复
   async function validateCode() {
     const { code, id } = form.value
-    if (!code) {
-      return Promise.resolve()
-    }
-    const res = formEditType.value === FormEditType.Edit ? await existsByCodeNotId(code, id) : await existsByCode(code)
-    return res.data ? Promise.reject('该编码已存在!') : Promise.resolve()
+    return existsByServer(code, id, formEditType, existsByCode, existsByCodeNotId)
   }
 
   // 事件

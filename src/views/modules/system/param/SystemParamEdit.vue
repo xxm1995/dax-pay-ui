@@ -12,25 +12,27 @@
       <a-form-item label="主键" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
-      <a-form-item label="编码" name="code">
-        <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
+      <a-form-item label="参数名称" name="name">
+        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入参数名称" />
       </a-form-item>
-      <a-form-item label="名称" name="name">
-        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
+      <a-form-item label="参数键名" name="paramKey">
+        <a-input v-model:value="form.paramKey" :disabled="showable" placeholder="请输入参数键名" />
       </a-form-item>
-      <a-form-item label="类型" name="type">
-        <a-select :disabled="!addable" v-model:value="form.type" style="width: 100%" placeholder="选择支付方式">
-          <a-select-option :value="1">自身数据</a-select-option>
-          <a-select-option :value="2">用户范围</a-select-option>
-          <a-select-option :value="3">部门范围</a-select-option>
-          <a-select-option :value="4">部门和用户范围</a-select-option>
-          <a-select-option :value="5">全部数据</a-select-option>
-          <a-select-option :value="6">所在部门</a-select-option>
-          <a-select-option :value="7">所在及下级部门</a-select-option>
-        </a-select>
+      <a-form-item label="参数值" name="value">
+        <a-input v-model:value="form.value" :disabled="showable" placeholder="请输入参数值" />
       </a-form-item>
-      <a-form-item label="说明" name="remark">
-        <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入说明" />
+      <a-form-item label="参数类型" name="type">
+        <a-select
+          allowClear
+          :options="paramTypeList"
+          style="width: 220px"
+          :disabled="showable"
+          v-model="form.type"
+          placeholder="请选择状态"
+        />
+      </a-form-item>
+      <a-form-item label="备注" name="remark">
+        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -46,11 +48,10 @@
   import { nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, existsByCode, existsByCodeNotId, existsByName, existsByNameNotId, DataScope } from './DataScope.api'
+  import { add, get, update, existsByKey, existsByKeyNotId, SystemParam } from './SystemParam.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
-  import { STRING } from '/@/components/Bootx/Query/Query'
   import { useValidate } from '/@/hooks/bootx/useValidate'
 
   const {
@@ -59,36 +60,38 @@
     search,
     labelCol,
     wrapperCol,
-    title,
     modalWidth,
+    title,
     confirmLoading,
     visible,
-    addable,
     editable,
     showable,
     formEditType,
   } = useFormEdit()
   const { existsByServer } = useValidate()
+
   // 表单
   const formRef = $ref<FormInstance>()
   let form = $ref({
     id: null,
-    code: '',
     name: '',
-    type: 1,
+    paramKey: '',
+    value: '',
+    type: 2,
+    internal: false,
     remark: '',
-  } as DataScope)
+  } as SystemParam)
+  // 参数类型
+  let paramTypeList = $ref([])
   // 校验
   const rules = reactive({
-    name: [
-      { required: true, message: '请输入数据权限名称' },
-      { validator: validateName, trigger: 'blur' },
+    name: [{ required: true, message: '参数名称必填', trigger: ['blur', 'change'] }],
+    paramKey: [
+      { required: true, message: '参数键名必填', trigger: ['blur', 'change'] },
+      { validator: validateKey, trigger: 'blur' },
     ],
-    code: [
-      { required: true, message: '请输入数据权限编码' },
-      { validator: validateCode, trigger: 'blur' },
-    ],
-    type: [{ required: true, message: '请选择数据权限范围' }],
+    value: [{ required: true, message: '参数内容必填', trigger: ['blur', 'change'] }],
+    type: [{ required: true, message: '参数类型必填', trigger: ['blur', 'change'] }],
   } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
@@ -131,18 +134,10 @@
       formRef.resetFields()
     })
   }
-  async function validateCode() {
-    const { code, id } = form
-    return existsByServer(code, id, formEditType.value, existsByCode, existsByCodeNotId)
-    if (!code) {
-      return Promise.resolve()
-    }
-    const res = formEditType.value === FormEditType.Edit ? await existsByCodeNotId(code, id) : await existsByCode(code)
-    return res.data ? Promise.reject('该编码已存在!') : Promise.resolve()
-  }
-  async function validateName() {
-    const { name, id } = form
-    return existsByServer(name, id, formEditType.value, existsByName, existsByNameNotId)
+  // 校验key值
+  async function validateKey() {
+    const { paramKey, id } = form
+    return existsByServer(paramKey, id, formEditType.value, existsByKey, existsByKeyNotId, '该Key已存在')
   }
   defineExpose({
     init,

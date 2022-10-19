@@ -1,17 +1,31 @@
 <template>
-  <basic-modal :loading="confirmLoading" v-bind="$attrs" :title="title" :visible="visible" :mask-closable="showable" @cancel="handleCancel">
-    <a-form class="small-from-item" :model="form" ref="formRef" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+  <basic-modal
+    v-bind="$attrs"
+    :loading="confirmLoading"
+    :width="modalWidth"
+    :title="title"
+    :visible="visible"
+    :mask-closable="showable"
+    @cancel="handleCancel"
+  >
+    <a-form class="small-from-item" ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
       <a-form-item label="主键" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
-      <a-form-item label="编码" name="code">
-        <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
+      <a-form-item label="字典编码" name="dictCode">
+        <a-input v-model:value="form.dictCode" disabled />
       </a-form-item>
-      <a-form-item label="名称" name="name">
-        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
+      <a-form-item label="字典项编码" name="code">
+        <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入字典项code" />
       </a-form-item>
-      <a-form-item label="说明" name="remark">
-        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入说明" />
+      <a-form-item label="字典项名称" name="name">
+        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入字典项名称" />
+      </a-form-item>
+      <a-form-item label="排序" name="sortNo">
+        <a-input-number v-model:value="form.sortNo" :disabled="showable" placeholder="请输入排序" />
+      </a-form-item>
+      <a-form-item label="备注" name="remark">
+        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -27,41 +41,55 @@
   import { nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, existsByCode, existsByCodeNotId, existsByName, existsByNameNotId, Role } from './Role.api'
+  import { add, get, update, existsByCode, existsByCodeNotId, DictItem } from './DictItem.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
+  import { Dict } from '/@/views/modules/system/dict/Dict.api'
   import { useValidate } from '/@/hooks/bootx/useValidate'
 
-  const { initFormModel, handleCancel, search, labelCol, wrapperCol, title, confirmLoading, visible, editable, showable, formEditType } =
-    useFormEdit()
+  const {
+    initFormModel,
+    handleCancel,
+    search,
+    labelCol,
+    wrapperCol,
+    modalWidth,
+    title,
+    confirmLoading,
+    visible,
+    editable,
+    showable,
+    formEditType,
+  } = useFormEdit()
   const { existsByServer } = useValidate()
-
   // 表单
   const formRef = $ref<FormInstance>()
   let form = $ref({
     id: null,
+    dictId: null,
+    dictCode: null,
     code: '',
     name: '',
+    sortNo: 0,
     remark: '',
-  } as Role)
+  } as DictItem)
   // 校验
   const rules = reactive({
-    name: [
-      { required: true, message: '请输入角色名称', trigger: ['blur', 'change'] },
-      { validator: validateName, trigger: 'blur' },
-    ],
     code: [
-      { required: true, message: '请输入角色代码', trigger: ['blur', 'change'] },
+      { required: true, message: '请输入字典项编码', trigger: ['blur', 'change'] },
       { validator: validateCode, trigger: 'blur' },
     ],
+    name: [{ required: true, message: '请输入字典项名称', trigger: ['blur', 'change'] }],
   } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  function init(id, editType: FormEditType) {
+  function init(id, editType: FormEditType, dict: Dict) {
     initFormModel(id, editType)
     resetForm()
+    form.dictId = dict.id as number
+    form.dictCode = dict.code
     getInfo(id, editType)
   }
   // 获取信息
@@ -91,17 +119,17 @@
     })
   }
 
-  // 重置表单的校验
-  function resetForm() {
-    nextTick(() => formRef.resetFields())
-  }
+  // 校验编码重复
   async function validateCode() {
     const { code, id } = form
-    return existsByServer(code, id, formEditType.value, existsByCode, existsByCodeNotId)
+    return existsByServer(code, id, formEditType, existsByCode, existsByCodeNotId)
   }
-  async function validateName() {
-    const { name, id } = form
-    return existsByServer(name, id, formEditType.value, existsByName, existsByNameNotId)
+
+  // 重置表单的校验
+  function resetForm() {
+    nextTick(() => {
+      formRef.resetFields()
+    })
   }
   defineExpose({
     init,

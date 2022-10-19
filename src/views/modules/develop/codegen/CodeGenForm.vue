@@ -2,14 +2,10 @@
   <a-drawer title="代码生成参数配置" width="50%" :visible="visible" :destroyOnClose="true" :maskClosable="false" @close="handleCancel">
     <a-form ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
       <a-form-item label="功能模块名称" name="module">
-        <a-row>
-          <a-col :span="18">
-            <a-input v-model:value="form.module" />
-          </a-col>
-          <a-col :span="6">
-            <a-button style="width: 100%" @click="genParams">生成其他参数</a-button>
-          </a-col>
-        </a-row>
+        <a-input-group compact>
+          <a-input v-model:value="form.module" style="width: calc(100% - 115px)" />
+          <a-button type="primary" @click="genParams">生成其他参数</a-button>
+        </a-input-group>
       </a-form-item>
       <a-form-item label="基础包名称" name="basePack">
         <a-input v-model:value="form.basePack" />
