@@ -3,6 +3,7 @@
     <a-form-item :label="field.name">
       <!-- 文本输入 -->
       <a-input
+        @keyup.enter="query"
         allowClear
         v-if="field.type === STRING"
         :placeholder="field.placeholder ? field.placeholder : '请输入查询值'"
@@ -28,7 +29,7 @@
         v-else-if="field.type === LIST"
         :placeholder="field.placeholder ? field.placeholder : '请选择查询值'"
         v-model:value="queryParams[field.field]"
-        :options="field.list"
+        :options="field.selectList"
       />
       <!-- 日期 -->
       <a-date-picker
@@ -36,7 +37,7 @@
         v-else-if="field.type === DATE"
         style="width: 100%"
         :placeholder="field.placeholder ? field.placeholder : '请选择日期'"
-        :valueFormat="queryParams.format ? queryParams.format : 'yyyy-MM-DD'"
+        :valueFormat="field.format ? field.format : 'yyyy-MM-DD'"
         v-model:value="queryParams[field.field]"
       />
       <!-- 时间 -->
@@ -45,7 +46,7 @@
         v-else-if="field.type === TIME"
         style="width: 100%"
         :placeholder="field.placeholder ? field.placeholder : '请选择时间'"
-        :valueFormat="queryParams.format ? queryParams.format : 'HH:mm:ss'"
+        :valueFormat="field.format ? field.format : 'HH:mm:ss'"
         v-model:value="queryParams[field.field]"
       />
       <!-- 日期时间 -->
@@ -55,7 +56,7 @@
         v-else-if="field.type === DATE_TIME"
         style="width: 100%"
         :placeholder="field.placeholder ? field.placeholder : '请选择日期时间'"
-        :valueFormat="queryParams.format ? queryParams.format : 'yyyy-MM-DD HH:mm:ss'"
+        :valueFormat="field.format ? field.format : 'yyyy-MM-DD HH:mm:ss'"
         v-model:value="queryParams[field.field]"
       />
       <!-- 默认文本输入 -->
@@ -70,7 +71,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { BOOLEAN, DATE, DATE_TIME, LIST, NUMBER, QueryField, STRING, TIME } from './SuperQueryCode'
+  import { BOOLEAN, DATE, DATE_TIME, LIST, NUMBER, QueryField, STRING, TIME } from './Query'
+  const emits = defineEmits(['enterQuery'])
   const props = withDefaults(
     defineProps<{
       // 查询字段属性
@@ -84,6 +86,9 @@
       md: 6,
     },
   )
+  function query() {
+    emits('enterQuery')
+  }
 </script>
 
 <style scoped></style>

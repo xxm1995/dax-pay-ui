@@ -50,7 +50,7 @@
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
-  import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
+  import { STRING } from '/@/components/Bootx/Query/Query'
   import { existsByCode, existsByCodeNotId, existsByName, existsByNameNotId } from '/@/views/modules/system/role/Role.api'
 
   const {

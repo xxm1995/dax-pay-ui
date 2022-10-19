@@ -8,6 +8,7 @@
         :field="field"
         :md="defaultItemMd"
         :query-params="queryParams"
+        @enterQuery="query"
       />
       <a-col :md="defaultItemMd" :sm="24">
         <a-space>

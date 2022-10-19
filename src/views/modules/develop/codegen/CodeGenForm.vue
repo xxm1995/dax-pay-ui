@@ -1,0 +1,145 @@
+<template>
+  <a-drawer title="代码生成参数配置" width="50%" :visible="visible" :destroyOnClose="true" :maskClosable="false" @close="handleCancel">
+    <a-form ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+      <a-form-item label="功能模块名称" name="module">
+        <a-row>
+          <a-col :span="18">
+            <a-input v-model:value="form.module" />
+          </a-col>
+          <a-col :span="6">
+            <a-button style="width: 100%" @click="genParams">生成其他参数</a-button>
+          </a-col>
+        </a-row>
+      </a-form-item>
+      <a-form-item label="基础包名称" name="basePack">
+        <a-input v-model:value="form.basePack" />
+      </a-form-item>
+      <a-form-item label="实体类名称" name="entityName">
+        <a-input v-model:value="form.entityName" />
+      </a-form-item>
+      <a-form-item label="vue版本" name="vueVersion">
+        <a-select v-model:value="form.vueVersion" :default-value="form.vueVersion" style="width: 100%" placeholder="选择vue版本">
+          <!--          <a-select-option key="v2">Vue2</a-select-option>-->
+          <a-select-option key="v3">Vue3</a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="基类" name="baseEntity">
+        <a-select v-model:value="form.baseEntity" :default-value="form.baseEntity" style="width: 100%" placeholder="选择基类">
+          <a-select-option key="MpBaseEntity">MpBaseEntity</a-select-option>
+          <a-select-option key="MpDelEntity">MpDelEntity</a-select-option>
+          <a-select-option key="MpCreateEntity">MpCreateEntity</a-select-option>
+          <a-select-option key="MpIdEntity">MpIdEntity</a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="创建人" name="author">
+        <a-input v-model:value="form.author" />
+      </a-form-item>
+      <template v-if="genPackFlag">
+        <a-form-item label="请求地址" name="baseEntity">
+          <a-input v-model:value="form.requestPath" />
+        </a-form-item>
+        <a-form-item label="接口文件目录" name="vueApiPath">
+          <a-input v-model:value="form.vueApiPath" />
+        </a-form-item>
+        <a-form-item label="core包路径" name="corePack">
+          <a-input v-model:value="form.corePack" />
+        </a-form-item>
+        <a-form-item label="dto包路径" name="dtoPack">
+          <a-input v-model:value="form.dtoPack" />
+        </a-form-item>
+        <a-form-item label="参数包路径" name="paramPack">
+          <a-input v-model:value="form.paramPack" />
+        </a-form-item>
+      </template>
+    </a-form>
+    <div class="drawer-button">
+      <a-button key="cancel" @click="handleCancel">取消</a-button>
+      <a-button key="forward" type="primary" :disabled="!genPackFlag" @click="handleOk">生成</a-button>
+    </div>
+  </a-drawer>
+</template>
+
+<script lang="ts" setup>
+  import { getTableGenParam } from './CodeGen.api'
+  import { $ref } from 'vue/macros'
+  import { nextTick } from 'vue'
+  import useFormEdit from '/@/hooks/bootx/useFormEdit'
+  import { FormInstance } from 'ant-design-vue/lib/form'
+
+  const { labelCol, wrapperCol, visible } = useFormEdit()
+
+  const form = $ref({
+    basePack: 'cn.bootx',
+    module: '',
+    tableName: '',
+    entityName: '',
+    baseEntity: 'MpBaseEntity',
+    vueVersion: 'v3',
+    corePack: '',
+    paramPack: '',
+    dtoPack: '',
+    controllerPack: '',
+    requestPath: '',
+    vueApiPath: '',
+    author: 'xxm',
+  })
+  const rules = {}
+
+  let genType = $ref('down' as 'down' | 'preview')
+  let genPackFlag = $ref(false)
+  let formRef = $ref<FormInstance>()
+
+  const emits = defineEmits(['down', 'preview'])
+
+  function show(tableName, type: 'down' | 'preview') {
+    visible.value = true
+    form.tableName = tableName
+    genType = type
+    genPackFlag = false
+    getGenConfigParam()
+  }
+  // 确定
+  function handleOk() {
+    formRef.validate().then(() => {
+      emits(genType, form)
+    })
+  }
+  /**
+   * 获取代码生成配置信息
+   */
+  async function getGenConfigParam() {
+    // 获取功能模块名称
+    const { data } = await getTableGenParam(form.tableName)
+    form.entityName = data.entityName
+    form.module = data.module
+  }
+  /**
+   * 生成代码生成参数参数
+   */
+  function genParams() {
+    const { basePack, module } = form
+    // 包名
+    form.corePack = `${basePack}.core.${module}`
+    form.paramPack = `${basePack}.param.${module}`
+    form.dtoPack = `${basePack}.dto.${module}`
+    form.controllerPack = `${basePack}.controller`
+
+    form.requestPath = `/${module}`
+    form.vueApiPath = `/api/${module}`
+    genPackFlag = true
+  }
+  function handleCancel() {
+    resetForm()
+    visible.value = false
+  }
+  function resetForm() {
+    nextTick(() => {
+      formRef.resetFields()
+    })
+  }
+  defineExpose({
+    show,
+  })
+</script>
+
+<style scoped></style>

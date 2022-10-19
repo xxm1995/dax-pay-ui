@@ -56,7 +56,7 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'
-  import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
+  import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -65,7 +65,7 @@
   const fields = [
     { field: 'code', type: STRING, name: '角色编号', placeholder: '请输入角色编码' },
     { field: 'name', type: STRING, name: '角色名称', placeholder: '请输入角色名称' },
-  ]
+  ] as QueryField[]
   let xTable = $ref<VxeTableInstance>()
   let xToolbar = $ref<VxeToolbarInstance>()
 

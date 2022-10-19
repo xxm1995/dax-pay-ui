@@ -97,7 +97,7 @@
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
+  import { STRING } from '/@/components/Bootx/Query/Query'
   import Icon from '/@/components/Icon/src/Icon.vue'
 
   // 使用hooks

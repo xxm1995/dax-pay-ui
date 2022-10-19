@@ -31,21 +31,24 @@ const transform: AxiosTransform = {
    * @description: 处理响应数据。如果数据不是预期格式，可直接抛出错误
    */
   transformResponseHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
-    const { t } = useI18n()
-    const { isTransformResponse, isReturnNativeResponse } = options
-
     // 不进行任何处理，直接返回
     // 用于页面代码可能需要直接获取code，data，message这些信息时开启
     // if (!isTransformResponse) {
     //   return res.data
     // }
     // 错误的时候返回
-    // 获取请求头重的数据
+    const contentType = res.headers['content-type']
     const rawData = res.data
+    // 获取请求头的数据
     if (!rawData) {
-      // return '[HTTP] Request has no return value';
       throw new Error('请求出错，请稍候重试')
     }
+    // 下载流处理
+    if (contentType === 'application/octet-stream') {
+      return rawData
+    }
+
+    // 接收的通常是json的数据
     //  这里 code，data，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     const { code, msg, traceId } = rawData
 
@@ -75,9 +78,9 @@ const transform: AxiosTransform = {
     // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
     // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
     if (options.errorMessageMode === 'modal') {
-      createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg })
+      createErrorModal({ title: '错误提示', content: timeoutMsg || '请求出错，请稍候重试' })
     } else if (options.errorMessageMode === 'message') {
-      createMessage.error(timeoutMsg)
+      createMessage.error(timeoutMsg || '请求出错，请稍候重试')
     }
     console.error('TraceId:', traceId)
     throw new Error(timeoutMsg || '请求出错，请稍候重试')

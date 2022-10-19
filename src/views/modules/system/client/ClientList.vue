@@ -65,7 +65,7 @@
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import ClientEdit from './ClientEdit.vue'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
-  import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
+  import { STRING } from '/@/components/Bootx/Query/Query'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'

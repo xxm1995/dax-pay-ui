@@ -142,7 +142,7 @@
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
       confirmLoading.value = true
       get(id).then(({ data }) => {
-        form = data
+        form = data as Menu
         confirmLoading.value = false
       })
       // 新增
@@ -162,7 +162,7 @@
         // 复制
         const { data } = await get(id)
         delete data.id
-        form = data
+        form = data as Menu
         confirmLoading.value = false
       }
     }

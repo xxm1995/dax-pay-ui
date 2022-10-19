@@ -16,7 +16,7 @@ export const menuTree = (clientCode: string) => {
  * 获取单条
  */
 export const get = (id) => {
-  return defHttp.get<Result<Menu>>({
+  return defHttp.get<Result<Menu | Resource>>({
     url: '/perm/menu/findById',
     params: { id },
   })
@@ -25,7 +25,7 @@ export const get = (id) => {
 /**
  * 添加
  */
-export const add = (obj: Menu) => {
+export const add = (obj: Menu | Resource) => {
   return defHttp.post({
     url: '/perm/menu/add',
     data: obj,
@@ -35,7 +35,7 @@ export const add = (obj: Menu) => {
 /**
  * 更新
  */
-export const update = (obj: Menu) => {
+export const update = (obj: Menu | Resource) => {
   return defHttp.post({
     url: '/perm/menu/update',
     data: obj,

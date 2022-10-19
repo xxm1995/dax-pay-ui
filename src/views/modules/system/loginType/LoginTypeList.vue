@@ -73,7 +73,7 @@
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { STRING } from '/@/components/Bootx/Query/SuperQueryCode'
+  import { STRING } from '/@/components/Bootx/Query/Query'
   import { $ref } from 'vue/macros'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
 
