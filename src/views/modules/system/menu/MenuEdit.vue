@@ -40,7 +40,9 @@
         </a-form-item>
         <a-form-item name="component">
           <template #label>
-            <basic-title help-message="Layout 和 Iframe可以直接输入，自定义组件需要输入/src/views/下的全路径">组件</basic-title>
+            <basic-title help-message="Layout 和 Iframe可以直接输入，为空为在新页面打开访问地址，自定义组件需要输入/src/views/下的全路径">
+              组件
+            </basic-title>
           </template>
           <a-input v-model:value="form.component" :disabled="showable" placeholder="请输入组件名称" />
         </a-form-item>

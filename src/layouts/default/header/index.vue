@@ -29,7 +29,7 @@
 
       <FullScreen v-if="getShowFullScreen" :class="`${prefixCls}-action__item fullscreen-item`" />
 
-      <AppLocalePicker v-if="getShowLocalePicker" :reload="true" :showText="false" :class="`${prefixCls}-action__item`" />
+<!--      <AppLocalePicker v-if="getShowLocalePicker" :reload="true" :showText="false" :class="`${prefixCls}-action__item`" />-->
 
       <UserDropDown :theme="getHeaderTheme" />
 
@@ -73,7 +73,7 @@
       LayoutBreadcrumb,
       LayoutMenu,
       UserDropDown,
-      AppLocalePicker,
+      // AppLocalePicker,
       FullScreen,
       Notify,
       AppSearch,
