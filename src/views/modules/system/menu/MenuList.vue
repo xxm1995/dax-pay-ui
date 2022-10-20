@@ -71,7 +71,7 @@
             <a href="javascript:" @click="resourcePage(row)">权限资源</a>
             <a-divider type="vertical" />
             <a-dropdown>
-              <a class="ant-dropdown-link"> 更多 </a>
+              <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
               <template #overlay>
                 <a-menu>
                   <a-menu-item>

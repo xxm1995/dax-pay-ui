@@ -9,7 +9,7 @@
           <a-space>
             <a-button type="primary" @click="add">新建</a-button>
             <a-dropdown v-if="batchOperateFlag">
-              <a-button>批量操作 <icon icon="ant-design:down-outlined" /></a-button>
+              <a-button pre-icon="ant-design:down-outlined">批量操作</a-button>
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
@@ -25,7 +25,7 @@
               </template>
             </a-dropdown>
             <a-popconfirm title="是否同步系统请求资源" @confirm="sync()" okText="是" cancelText="否">
-              <a-button><icon icon="ant-design:sync-outlined" />同步系统资源</a-button>
+              <a-button pre-icon="ant-design:sync-outlined">同步系统资源</a-button>
             </a-popconfirm>
           </a-space>
         </template>

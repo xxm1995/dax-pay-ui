@@ -47,3 +47,12 @@ export interface BeforeMiniState {
   menuMode?: MenuModeEnum
   menuType?: MenuTypeEnum
 }
+
+/**
+ * 字典
+ */
+export interface Dict {
+  dictCode: string
+  code: string
+  name: string
+}

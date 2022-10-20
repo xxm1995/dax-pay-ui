@@ -12,24 +12,28 @@
       <a-form-item label="主键" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
-      <a-form-item label="参数名称" name="name">
-        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入参数名称" />
+      <a-form-item label="任务名称" name="name">
+        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入任务名称" />
       </a-form-item>
-      <a-form-item label="参数键名" name="paramKey">
-        <a-input v-model:value="form.paramKey" :disabled="showable" placeholder="请输入参数键名" />
+      <a-form-item label="任务类名" name="jobClassName">
+        <a-input v-model:value="form.jobClassName" :disabled="showable" placeholder="请输入任务类名" />
       </a-form-item>
-      <a-form-item label="参数值" name="value">
-        <a-input v-model:value="form.value" :disabled="showable" placeholder="请输入参数值" />
+      <a-form-item label="cron表达式" name="cron">
+        <a-input placeholder="请选择cron表达式" v-model:value="form.cron" disabled>
+          <template #addonAfter>
+            <a class="open-btn" :disabled="showable ? 'disabled' : null" @click="showConfigModal">
+              <icon icon="ant-design:setting-outlined" />
+              <span>选择</span>
+            </a>
+          </template>
+        </a-input>
       </a-form-item>
-      <a-form-item label="参数类型" name="type">
-        <a-select
-          allowClear
-          :options="paramTypeList"
-          style="width: 220px"
-          :disabled="showable"
-          v-model:value="form.type"
-          placeholder="请选择状态"
-        />
+      <a-form-item label="参数" name="parameter">
+        <a-textarea v-model:value="form.parameter" :disabled="showable" placeholder="请输入参数" />
+      </a-form-item>
+      <a-form-item label="状态" name="state" v-if="showable">
+        <a-tag v-if="form.state === 1" color="green">运行</a-tag>
+        <a-tag v-else color="red">停止</a-tag>
       </a-form-item>
       <a-form-item label="备注" name="remark">
         <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
@@ -41,19 +45,20 @@
         <a-button v-if="!showable" key="forward" :loading="confirmLoading" type="primary" @click="handleOk">保存</a-button>
       </a-space>
     </template>
+    <easy-cron ref="easyCron" :value="form.cron" @ok="cronOk" />
   </basic-modal>
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, reactive } from 'vue'
+  import { nextTick, reactive, unref } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, existsByKey, existsByKeyNotId, SystemParam } from './SystemParam.api'
+  import { add, get, update, QuartzJob, judgeJobClass } from './QuartzJob.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
-  import { BasicModal } from '/@/components/Modal'
-  import { useValidate } from '/@/hooks/bootx/useValidate'
-  import { useDict } from '/@/hooks/bootx/useDict'
+  import { BasicModal, useModal } from '/@/components/Modal'
+  import Icon from '/@/components/Icon/src/Icon.vue'
+  import EasyCron from '/@/components/EasyCron/EasyCron.vue'
 
   const {
     initFormModel,
@@ -69,32 +74,29 @@
     showable,
     formEditType,
   } = useFormEdit()
-  const { existsByServer } = useValidate()
-  const { dictDropDownNumber } = useDict()
+  const [registerModal, { openModal }] = useModal()
 
   // 表单
   const formRef = $ref<FormInstance>()
   let form = $ref({
     id: null,
     name: '',
-    paramKey: '',
-    value: '',
-    type: 1,
-    internal: false,
+    jobClassName: '',
+    cron: '',
+    parameter: '',
+    state: 1,
     remark: '',
-  } as SystemParam)
-  // 参数类型
-  let paramTypeList = dictDropDownNumber('ParamType')
+  } as QuartzJob)
   // 校验
   const rules = reactive({
-    name: [{ required: true, message: '参数名称必填', trigger: ['blur', 'change'] }],
-    paramKey: [
-      { required: true, message: '参数键名必填', trigger: ['blur', 'change'] },
-      { validator: validateKey, trigger: 'blur' },
+    name: [{ required: true, message: '请输入任务名称' }],
+    jobClassName: [
+      { required: true, message: '请输入任务类名' },
+      { validator: validateJobClass, trigger: 'blur' },
     ],
-    value: [{ required: true, message: '参数内容必填', trigger: ['blur', 'change'] }],
-    type: [{ required: true, message: '参数类型必填', trigger: ['blur', 'change'] }],
+    cron: [{ required: true, message: '请输入或选择cron' }],
   } as Record<string, Rule[]>)
+  const easyCron = $ref<any>()
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
@@ -136,10 +138,22 @@
       formRef.resetFields()
     })
   }
-  // 校验key值
-  async function validateKey() {
-    const { paramKey, id } = form
-    return existsByServer(paramKey, id, formEditType.value, existsByKey, existsByKeyNotId, '该Key已存在')
+  function showConfigModal() {
+    easyCron.showConfigModal()
+  }
+
+  function cronOk(cron) {
+    form.cron = unref(cron)
+    formRef.validateFields('cron')
+  }
+
+  async function validateJobClass() {
+    const { jobClassName } = form
+    if (!jobClassName) {
+      return Promise.resolve()
+    }
+    const res = await judgeJobClass(jobClassName)
+    return res.data ? Promise.reject(res.data) : Promise.resolve()
   }
   defineExpose({
     init,

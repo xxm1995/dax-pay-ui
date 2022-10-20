@@ -8,6 +8,8 @@ import {
   Popconfirm,
   Select,
   SelectOption,
+  Tabs,
+  Checkbox,
   Switch,
   Tree,
   TreeSelect,
@@ -37,6 +39,8 @@ export function registerGlobComp(app: App) {
   app.use(Layout)
   app.use(InputNumber)
   app.use(Tag)
+  app.use(Tabs)
+  app.use(Checkbox)
   app.use(Space)
   app.use(Modal)
   app.use(Drawer)

@@ -15,7 +15,11 @@
         <vxe-column type="seq" width="60" />
         <vxe-column field="code" title="编码" />
         <vxe-column field="name" title="名称" />
-        <vxe-column field="groupTag" title="分类标签" />
+        <vxe-column field="groupTag" title="分类标签">
+          <template #default="{ row }">
+            <a-tag color="green">{{ row.groupTag || '空' }}</a-tag>
+          </template>
+        </vxe-column>
         <vxe-column field="remark" title="备注" />
         <vxe-column field="createTime" title="创建时间" />
         <vxe-column fixed="right" width="220" :showOverflow="false" title="操作">

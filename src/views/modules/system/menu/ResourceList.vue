@@ -7,7 +7,7 @@
     width="60%"
     placement="right"
     :closable="true"
-    @close="handleCancel"
+    @close="visible = false"
   >
     <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: init }">
       <template #buttons>
@@ -94,10 +94,6 @@
     del(record.id).then(() => queryPage())
   }
 
-  // 关闭
-  function handleCancel() {
-    visible = false
-  }
   defineExpose({
     init,
   })

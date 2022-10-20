@@ -8,6 +8,7 @@ import { useUserStoreWithOut } from '/@/store/modules/user'
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
 
 import { RootRoute } from '/@/router/routes'
+import { useDictStoreWithOut } from '/@/store/modules/dict'
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN
 
@@ -22,18 +23,18 @@ const whitePathList: PageEnum[] = [LOGIN_PATH]
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut()
   const permissionStore = usePermissionStoreWithOut()
+  const useDictStore = useDictStoreWithOut()
   router.beforeEach(async (to, from, next) => {
-    if (
-      from.path === ROOT_PATH &&
-      to.path === PageEnum.BASE_HOME
-      &&
-      // TODO 没有用户首页配置这个字段
-      userStore.getUserInfo.homePath &&
-      userStore.getUserInfo.homePath !== PageEnum.BASE_HOME
-    ) {
-      next(userStore.getUserInfo.homePath)
-      return
-    }
+    // if (
+    //   from.path === ROOT_PATH &&
+    //   to.path === PageEnum.BASE_HOME &&
+    //   // TODO 没有用户首页配置这个字段
+    //   userStore.getUserInfo.homePath &&
+    //   userStore.getUserInfo.homePath !== PageEnum.BASE_HOME
+    // ) {
+    //   next(userStore.getUserInfo.homePath)
+    //   return
+    // }
 
     const token = userStore.getToken
 
@@ -77,12 +78,8 @@ export function createPermissionGuard(router: Router) {
     }
 
     // Jump to the 404 page after processing the login
-    if (
-      from.path === LOGIN_PATH &&
-      to.name === PAGE_NOT_FOUND_ROUTE.name &&
-      to.fullPath !== (userStore.getUserInfo.homePath || PageEnum.BASE_HOME)
-    ) {
-      next(userStore.getUserInfo.homePath || PageEnum.BASE_HOME)
+    if (from.path === LOGIN_PATH && to.name === PAGE_NOT_FOUND_ROUTE.name && to.fullPath !== PageEnum.BASE_HOME) {
+      next(PageEnum.BASE_HOME)
       return
     }
 
@@ -100,10 +97,14 @@ export function createPermissionGuard(router: Router) {
       next()
       return
     }
-    //TODO 添加 websocket连接. 字典信息缓存
+    //TODO 添加 websocket连接.
     console.log(`路由守卫`)
+
     // 重载菜单
     const routes = await permissionStore.buildRoutesAction()
+
+    // 初始化字典
+    await useDictStore.initDict()
 
     routes.forEach((route) => {
       router.addRoute(route as unknown as RouteRecordRaw)

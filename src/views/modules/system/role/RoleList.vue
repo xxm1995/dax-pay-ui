@@ -32,7 +32,7 @@
             </a-popconfirm>
             <a-divider type="vertical" />
             <a-dropdown>
-              <a class="ant-dropdown-link"> 授权 <Icon icon="ant-design:down-outlined" :size="12" /> </a>
+              <a> 授权 <Icon icon="ant-design:down-outlined" :size="12" /> </a>
               <template #overlay>
                 <a-menu>
                   <a-menu-item>

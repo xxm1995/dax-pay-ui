@@ -1,4 +1,6 @@
 // 数字
+import { LabeledValueType } from 'ant-design-vue/lib/vc-tree-select/TreeSelect'
+
 export const NUMBER = 'number'
 // 字符串
 export const STRING = 'string'
@@ -23,12 +25,14 @@ export interface QueryField {
   placeholder?: string
   // 字段名称
   field: string
+  // 栅格宽度
+  md: number
   // 显示名称
   name: string
   // 精度
   precision?: number | null
   // 查询列表
-  selectList?: Array<unknown> | null
+  selectList?: LabeledValueType[] | null
   // 时间格式化
   format?: string | null
 }
