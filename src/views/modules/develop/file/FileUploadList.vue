@@ -7,7 +7,7 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
         <template #buttons>
           <a-space>
-            <a-button type="primary" preIcon="ant-design:upload-outlined" @click="add">上传</a-button>
+            <a-button type="primary" preIcon="ant-design:upload-outlined" @click="upload">上传</a-button>
           </a-space>
         </template>
       </vxe-toolbar>
@@ -34,20 +34,17 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
-      <file-upload-edit ref="fileUploadEdit" @ok="queryPage" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue'
+  import { onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { del, page } from './FileUpload.api'
+  import { page } from './FileUpload.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import FileUploadEdit from './FileUploadEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
-  import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
   import { getFileDownloadUrl, getFilePreviewUrl } from '/@/api/common/fileUpload'
@@ -80,6 +77,10 @@
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
+  }
+  // 上传
+  function upload(){
+
   }
   // 查看
   function show(record) {

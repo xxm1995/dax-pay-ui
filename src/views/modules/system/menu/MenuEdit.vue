@@ -1,5 +1,5 @@
 <template>
-  <a-drawer :title="title" width="50%" :mask-closable="showable" @close="handleCancel" :visible="visible" :confirmLoading="confirmLoading">
+  <basic-drawer showFooter v-bind="$attrs" width="50%" :title="title" :mask-closable="showable" :visible="visible" @close="handleCancel">
     <a-spin :spinning="confirmLoading">
       <a-form ref="formRef" class="small-from-item" :model="form" :rules="rules" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-form-item name="id" :hidden="true">
@@ -66,13 +66,13 @@
         </a-form-item>
       </a-form>
     </a-spin>
-    <div class="drawer-button">
+    <template #footer>
       <a-space>
         <a-button key="cancel" @click="handleCancel">取消</a-button>
         <a-button v-if="!showable" key="forward" :loading="confirmLoading" type="primary" @click="handleOk">保存</a-button>
       </a-space>
-    </div>
-  </a-drawer>
+    </template>
+  </basic-drawer>
 </template>
 
 <script lang="ts" setup>
@@ -83,10 +83,9 @@
   import { add, get, Menu, menuTree, update } from '/@/views/modules/system/menu/Menu.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { treeDataTranslate } from '/@/utils/dataUtil'
-  import Icon from '/@/components/Icon/src/Icon.vue'
   import IconPicker from '/@/components/Icon/src/IconPicker.vue'
-  import CollapseContainer from '/@/components/Container/src/collapse/CollapseContainer.vue'
   import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
+  import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
 
   const { initFormModel, handleCancel, search, labelCol, wrapperCol, title, confirmLoading, visible, editable, showable, formEditType } =
     useFormEdit()

@@ -1,11 +1,12 @@
 <template>
-  <a-drawer
-    :title="title"
+  <basic-drawer
+    showFooter
+    v-bind="$attrs"
     :width="modalWidth"
-    :visible="visible"
+    :title="title"
     :mask-closable="showable"
+    :visible="visible"
     @close="handleCancel"
-    :confirmLoading="confirmLoading"
   >
     <a-spin :spinning="confirmLoading">
       <a-form class="small-from-item" ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
@@ -59,13 +60,13 @@
         </a-form-item>
       </a-form>
     </a-spin>
-    <div class="drawer-button">
+    <template #footer>
       <a-space>
         <a-button key="cancel" @click="handleCancel">取消</a-button>
         <a-button v-if="!showable" key="forward" :loading="confirmLoading" type="primary" @click="handleOk">保存</a-button>
       </a-space>
-    </div>
-  </a-drawer>
+    </template>
+  </basic-drawer>
 </template>
 
 <script lang="ts" setup>
@@ -76,6 +77,7 @@
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { $ref } from 'vue/macros'
   import { useValidate } from '/@/hooks/bootx/useValidate'
+  import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   const { existsByServer } = useValidate()
 
   const {

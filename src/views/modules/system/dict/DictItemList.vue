@@ -1,14 +1,6 @@
 <template>
-  <a-drawer
-    forceRender
-    title="字典列表"
-    :visible="visible"
-    :maskClosable="true"
-    width="60%"
-    placement="right"
-    :closable="true"
-    @close="visible = false"
-  >
+  < forceRender :visible="visible" :maskClosable="true" width="60%" placement="right" :closable="true" @close="visible = false" >
+  <basic-drawer showFooter v-bind="$attrs" title="字典列表" width="60%" :visible="visible" @close="visible = false">
     <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
       <template #buttons>
         <a-space>
@@ -48,7 +40,7 @@
       @page-change="handleTableChange"
     />
     <dict-item-edit ref="dictItemEdit" @ok="queryPage" />
-  </a-drawer>
+  </basic-drawer>
 </template>
 
 <script lang="ts" setup>
@@ -62,6 +54,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
   import { Dict } from '/@/views/modules/system/dict/Dict.api'
+  import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
