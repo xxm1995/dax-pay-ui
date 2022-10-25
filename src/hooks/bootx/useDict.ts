@@ -1,4 +1,5 @@
 import { useDictStoreWithOut } from '/@/store/modules/dict'
+import { LabeledValue } from 'ant-design-vue/lib/select'
 
 const useDictStore = useDictStoreWithOut()
 
@@ -44,7 +45,7 @@ export function dictItemsNumber(dictCode: string) {
 /**
  * 获取字典下拉框数据列表
  */
-function dictDropDown(dictCode: string) {
+function dictDropDown(dictCode: string): LabeledValue[] {
   const list = useDictStore.getDict
   return list
     .filter((dict) => dictCode === dict.dictCode)
@@ -55,7 +56,7 @@ function dictDropDown(dictCode: string) {
 /**
  * 获取字典下拉框数据列表
  */
-function dictDropDownNumber(dictCode: string) {
+function dictDropDownNumber(dictCode: string): LabeledValue[] {
   const list = useDictStore.getDict
   return list
     .filter((dict) => dictCode === dict.dictCode)

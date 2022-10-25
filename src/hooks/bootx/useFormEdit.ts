@@ -53,6 +53,15 @@ export default function () {
     return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
   }
 
+  // 判断脱敏参数是否被修改的参数, 未修改返回空值
+  function diffForm(rawForm, editForm, ...keys) {
+    const form = {}
+    for (const key of keys) {
+      form[key] = rawForm[key] === editForm[key] ? undefined : editForm[key]
+    }
+    return form
+  }
+
   return {
     model,
     labelCol,
@@ -68,5 +77,6 @@ export default function () {
     initFormModel,
     handleCancel,
     search,
+    diffForm,
   }
 }

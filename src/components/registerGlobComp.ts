@@ -9,6 +9,7 @@ import {
   Select,
   SelectOption,
   Tabs,
+  Upload,
   Checkbox,
   Switch,
   Tree,
@@ -40,6 +41,7 @@ export function registerGlobComp(app: App) {
   app.use(InputNumber)
   app.use(Tag)
   app.use(Tabs)
+  app.use(Upload)
   app.use(Checkbox)
   app.use(Space)
   app.use(Modal)

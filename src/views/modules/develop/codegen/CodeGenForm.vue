@@ -1,5 +1,14 @@
 <template>
-  <a-drawer title="代码生成参数配置" width="50%" :visible="visible" :destroyOnClose="true" :maskClosable="false" @close="handleCancel">
+  <basic-drawer
+    showFooter
+    v-bind="$attrs"
+    title="代码生成参数配置"
+    width="40%"
+    :destroyOnClose="true"
+    :maskClosable="false"
+    :visible="visible"
+    @close="handleCancel"
+  >
     <a-form ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
       <a-form-item label="功能模块名称" name="module">
         <a-input-group compact>
@@ -48,11 +57,11 @@
         </a-form-item>
       </template>
     </a-form>
-    <div class="drawer-button">
+    <template #footer>
       <a-button key="cancel" @click="handleCancel">取消</a-button>
       <a-button key="forward" type="primary" :disabled="!genPackFlag" @click="handleOk">生成</a-button>
-    </div>
-  </a-drawer>
+    </template>
+  </basic-drawer>
 </template>
 
 <script lang="ts" setup>
@@ -61,6 +70,7 @@
   import { nextTick } from 'vue'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { FormInstance } from 'ant-design-vue/lib/form'
+  import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
 
   const { labelCol, wrapperCol, visible } = useFormEdit()
 

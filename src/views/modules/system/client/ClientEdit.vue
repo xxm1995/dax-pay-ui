@@ -2,8 +2,8 @@
   <basic-drawer
     showFooter
     v-bind="$attrs"
-    :width="modalWidth"
     :title="title"
+    :width="modalWidth"
     :mask-closable="showable"
     :visible="visible"
     @close="handleCancel"

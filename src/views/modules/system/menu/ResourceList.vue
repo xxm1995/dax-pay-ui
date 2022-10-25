@@ -1,12 +1,11 @@
 <template>
-  <a-drawer
+  <basic-drawer
     forceRender
+    v-bind="$attrs"
     title="权限资源列表"
-    :visible="visible"
-    :maskClosable="true"
     width="60%"
-    placement="right"
-    :closable="true"
+    :maskClosable="false"
+    :visible="visible"
     @close="visible = false"
   >
     <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: init }">
@@ -41,7 +40,7 @@
       </vxe-column>
     </vxe-table>
     <resource-edit ref="resourceEdit" @ok="queryPage" />
-  </a-drawer>
+  </basic-drawer>
 </template>
 
 <script lang="ts" setup>
@@ -52,6 +51,7 @@
   import { $ref } from 'vue/macros'
   import { del, Menu, Resource, resourceList } from '/@/views/modules/system/menu/Menu.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
+  import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
 
   // 使用hooks
   const { pagination, pages, model, loading } = useTablePage(queryPage)

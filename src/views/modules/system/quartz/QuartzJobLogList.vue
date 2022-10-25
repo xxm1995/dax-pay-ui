@@ -9,6 +9,16 @@
     :closable="true"
     @close="visible = false"
   >
+    <basic-drawer
+      forceRender
+      v-bind="$attrs"
+      title="任务执行日志"
+      width="60%"
+      :maskClosable="false"
+      :visible="visible"
+      @close="visible = false"
+    >
+
     <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
@@ -49,6 +59,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
   import { QuartzJob } from './QuartzJob.api'
+  import BasicDrawer from "/@/components/Drawer/src/BasicDrawer.vue";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)

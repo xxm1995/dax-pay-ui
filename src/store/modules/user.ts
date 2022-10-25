@@ -57,7 +57,7 @@ export const useUserStore = defineStore({
     },
   },
   actions: {
-    // token信心
+    // token信息
     setToken(info: string | undefined) {
       this.token = info ? info : '' // for null or undefined value
       setAuthCache(TOKEN_KEY, info)

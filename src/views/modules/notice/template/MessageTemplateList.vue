@@ -6,30 +6,32 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
         <template #buttons>
-          <a-upload
-            name="file"
-            :multiple="false"
-            :action="uploadAction"
-            :headers="tokenHeader"
-            :showUploadList="false"
-            @change="handleChange"
-          >
-            <a-button preIcon="ant-design:cloud-upload-outlined" type="primary"> 文件上传 </a-button>
-          </a-upload>
+          <a-space>
+            <a-button type="primary" @click="add">新建</a-button>
+          </a-space>
         </template>
       </vxe-toolbar>
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
-        <vxe-column field="fileName" title="文件名称" />
-        <vxe-column field="fileSuffix" title="文件后缀" />
-        <vxe-column field="fileType" title="文件类型" />
-        <vxe-column field="fileSize" title="文件大小" />
+        <vxe-column field="code" title="编码" />
+        <vxe-column field="name" title="名称" />
+        <vxe-column field="data" title="模板数据" />
+        <vxe-column field="type" title="模板类型" />
+        <vxe-column field="remark" title="备注" />
         <vxe-column field="createTime" title="创建时间" />
         <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
           <template #default="{ row }">
-            <a href="javascript:" @click="show(row)">查看</a>
+            <span>
+              <a href="javascript:" @click="show(row)">查看</a>
+            </span>
             <a-divider type="vertical" />
-            <a href="javascript:" @click="down(row)">下载</a>
+            <span>
+              <a href="javascript:" @click="edit(row)">编辑</a>
+            </span>
+            <a-divider type="vertical" />
+            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
+              <a href="javascript:" style="color: red">删除</a>
+            </a-popconfirm>
           </template>
         </vxe-column>
       </vxe-table>
@@ -41,34 +43,33 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
+      <message-template-edit ref="messageTemplateEdit" @ok="queryPage" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { computed, onMounted } from 'vue'
+  import { onMounted, ref } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page } from './FileUpload.api'
+  import { del, page } from './MessageTemplate.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
+  import MessageTemplateEdit from './MessageTemplateEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
+  import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
-  import { getFileDownloadUrl, getFilePreviewUrl } from '/@/api/common/fileUpload'
-  import { useUserStoreWithOut } from '/@/store/modules/user'
-  import { getAppEnvConfig } from '/@/utils/env'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
-  const { notification, createMessage } = useMessage()
-  const useUserStore = useUserStoreWithOut()
-  const { VITE_GLOB_API_URL } = getAppEnvConfig()
+  const { notification, createMessage, createConfirm } = useMessage()
 
   // 查询条件
   const fields = [] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
+  const messageTemplateEdit = $ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -76,33 +77,6 @@
   })
   function vxeBind() {
     xTable.connect(xToolbar)
-  }
-
-  // 上传地址
-  const uploadAction = computed(() => {
-    return VITE_GLOB_API_URL + '/file/upload'
-  })
-
-  // 请求头消息
-  const tokenHeader = computed(() => {
-    // 从 localstorage 获取 token
-    const token = useUserStore.getToken
-    return {
-      AccessToken: token,
-    }
-  })
-  // 上传完成回调
-  function handleChange(info) {
-    if (info.file.status === 'done') {
-      if (!info.file.response.code) {
-        queryPage()
-        createMessage.success(`${info.file.name} 上传成功!`)
-      } else {
-        createMessage.error(`${info.file.response.msg}`)
-      }
-    } else if (info.file.status === 'error') {
-      createMessage.error('上传失败')
-    }
   }
 
   // 分页查询
@@ -115,19 +89,25 @@
       pageQueryResHandel(data)
     })
   }
-  // 上传
-  function upload() {}
+  // 新增
+  function add() {
+    messageTemplateEdit.init(null, FormEditType.Add)
+  }
+  // 编辑
+  function edit(record) {
+    messageTemplateEdit.init(record.id, FormEditType.Edit)
+  }
   // 查看
   function show(record) {
-    getFilePreviewUrl(record.id).then((res) => {
-      window.open(res.data)
-    })
+    messageTemplateEdit.init(record.id, FormEditType.Show)
   }
-  // 下载
-  function down(record) {
-    getFileDownloadUrl(record.id).then((res) => {
-      window.open(res.data)
+
+  // 删除
+  function remove(record) {
+    del(record.id).then(() => {
+      createMessage.success('删除成功')
     })
+    queryPage()
   }
 </script>
 
