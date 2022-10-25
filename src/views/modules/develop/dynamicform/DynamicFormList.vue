@@ -129,7 +129,7 @@
 
   // 设计
   function design(record) {}
-  // 设计
+  // 预览
   function preview(record) {}
 
   // 删除

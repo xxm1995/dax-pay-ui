@@ -19,7 +19,7 @@
         <vxe-column field="type" title="模板类型" />
         <vxe-column field="remark" title="备注" />
         <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="160" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
               <a href="javascript:" @click="show(row)">查看</a>
@@ -29,9 +29,19 @@
               <a href="javascript:" @click="edit(row)">编辑</a>
             </span>
             <a-divider type="vertical" />
-            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-              <a href="javascript:" style="color: red">删除</a>
-            </a-popconfirm>
+            <a-dropdown>
+              <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /></a>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item>
+                    <a href="javascript:" @click="render(row)">测试</a>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a href="javascript:" @click="remove(row)" style="color: red">删除</a>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
           </template>
         </vxe-column>
       </vxe-table>
@@ -44,6 +54,7 @@
         @page-change="handleTableChange"
       />
       <message-template-edit ref="messageTemplateEdit" @ok="queryPage" />
+      <template-render ref="templateRender" />
     </div>
   </div>
 </template>
@@ -58,18 +69,24 @@
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { QueryField } from '/@/components/Bootx/Query/Query'
+  import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
+  import Icon from '/@/components/Icon/src/Icon.vue'
+  import TemplateRender from './TemplateRender.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
 
   // 查询条件
-  const fields = [] as QueryField[]
+  const fields = [
+    { field: 'code', type: STRING, name: '编码', placeholder: '请输入编码' },
+    { field: 'name', type: STRING, name: '名称', placeholder: '请输入名称' },
+  ] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const messageTemplateEdit = $ref<any>()
+  const templateRender = $ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -101,13 +118,24 @@
   function show(record) {
     messageTemplateEdit.init(record.id, FormEditType.Show)
   }
+  // 渲染测试
+  function render(record) {
+    TemplateRender.init(record.id)
+  }
 
   // 删除
   function remove(record) {
-    del(record.id).then(() => {
-      createMessage.success('删除成功')
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '是否删除该表单',
+      onOk: () => {
+        del(record.id).then(() => {
+          notification.success({ message: '删除成功' })
+          queryPage()
+        })
+      },
     })
-    queryPage()
   }
 </script>
 

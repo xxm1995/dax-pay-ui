@@ -62,6 +62,21 @@ export const findAll = () => {
 }
 
 /**
+ * 编码是否被使用
+ */
+export const existsByCode = (code) => {
+  return defHttp.get<Result<boolean>>({
+    url: '/message/template/existsByCode',
+    params: { code },
+  })
+}
+export const existsByCodeNotId = (code, id) => {
+  return defHttp.get<Result<boolean>>({
+    url: '/message/template/existsByCodeNotId',
+    params: { code, id },
+  })
+}
+/**
  * 消息模板
  */
 export interface MessageTemplate extends BaseEntity {

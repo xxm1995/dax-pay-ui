@@ -8,7 +8,15 @@
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-form class="small-from-item" ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+    <a-form
+      class="small-from-item"
+      ref="formRef"
+      :model="form"
+      :rules="rules"
+      :validate-trigger="['blur', 'change']"
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+    >
       <a-form-item label="主键" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
@@ -18,14 +26,21 @@
       <a-form-item label="名称" name="name">
         <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
       </a-form-item>
-      <a-form-item label="模板数据" name="data">
-        <a-input v-model:value="form.data" :disabled="showable" placeholder="请输入模板数据" />
-      </a-form-item>
       <a-form-item label="模板类型" name="type">
-        <a-input v-model:value="form.type" :disabled="showable" placeholder="请输入模板类型" />
+        <a-select
+          :disabled="showable"
+          :options="messageTemplateTypes"
+          allowClear
+          v-model:value="form.type"
+          style="width: 100%"
+          placeholder="选择消息模板类型"
+        />
+      </a-form-item>
+      <a-form-item label="模板数据" name="data">
+        <a-textarea :rows="4" v-model:value="form.data" :disabled="showable" placeholder="请输入模板数据" />
       </a-form-item>
       <a-form-item label="备注" name="remark">
-        <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
+        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -41,10 +56,13 @@
   import { nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, MessageTemplate } from './MessageTemplate.api'
+  import { add, get, update, existsByCode, existsByCodeNotId, MessageTemplate } from './MessageTemplate.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
+  import { useDict } from '/@/hooks/bootx/useDict'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
+  import { useValidate } from '/@/hooks/bootx/useValidate'
 
   const {
     initFormModel,
@@ -60,25 +78,40 @@
     showable,
     formEditType,
   } = useFormEdit()
+  const { dictDropDownNumber } = useDict()
+  const { existsByServer } = useValidate()
   // 表单
   const formRef = $ref<FormInstance>()
+  let messageTemplateTypes = $ref<LabeledValue[]>()
   let form = $ref({
     id: null,
-    code: null,
-    name: null,
-    data: null,
-    type: null,
-    remark: null,
+    code: '',
+    name: '',
+    data: '',
+    type: 0,
+    remark: '',
   } as MessageTemplate)
   // 校验
-  const rules = reactive({} as Record<string, Rule[]>)
+  const rules = reactive({
+    code: [
+      { required: true, message: '请输入模板编码' },
+      { validator: validateCode, trigger: 'blur' },
+    ],
+    name: [{ required: true, message: '请输入模板名称' }],
+    date: [{ required: true, message: '请数据模板数据' }],
+    type: [{ required: true, message: '请选择模板类型' }],
+  } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
   function init(id, editType: FormEditType) {
+    initData()
     initFormModel(id, editType)
     resetForm()
     getInfo(id, editType)
+  }
+  function initData() {
+    messageTemplateTypes = dictDropDownNumber('MessageTemplateCode')
   }
   // 获取信息
   function getInfo(id, editType: FormEditType) {
@@ -112,6 +145,11 @@
     nextTick(() => {
       formRef.resetFields()
     })
+  }
+  // 校验编码重复
+  async function validateCode() {
+    const { code, id } = form
+    return existsByServer(code, id, formEditType, existsByCode, existsByCodeNotId)
   }
   defineExpose({
     init,
