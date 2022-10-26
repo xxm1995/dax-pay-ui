@@ -14,6 +14,7 @@ import {
   Switch,
   Tree,
   TreeSelect,
+  Typography,
   Card,
   Form,
   Row,
@@ -52,6 +53,7 @@ export function registerGlobComp(app: App) {
   app.use(Divider)
   app.use(DatePicker)
   app.use(TimePicker)
+  app.use(Typography)
   app.use(Empty)
   app.use(Popconfirm)
   app.use(Select)
