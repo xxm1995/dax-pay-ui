@@ -62,6 +62,31 @@ export const findAll = () => {
 }
 
 /**
+ * 同步
+ */
+export function sync() {
+  return defHttp.post({
+    url: '/wechat/template/sync',
+  })
+}
+
+/**
+ * 编码是否存在
+ */
+export function existsByCode(code) {
+  return defHttp.get<Result<boolean>>({
+    url: '/wechat/template/existsByCode',
+    params: { code },
+  })
+}
+export function existsByCodeNotId(code, id) {
+  return defHttp.get<Result<boolean>>({
+    url: '/wechat/template/existsByCodeNotId',
+    params: { code, id },
+  })
+}
+
+/**
  * 微信消息模板
  */
 export interface WechatTemplate extends BaseEntity {

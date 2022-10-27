@@ -7,7 +7,7 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
         <template #buttons>
           <a-space>
-            <a-button type="primary" @click="add">新建</a-button>
+            <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
             <a-dropdown v-if="batchOperateFlag">
               <a-button pre-icon="ant-design:down-outlined">批量操作</a-button>
               <template #overlay>

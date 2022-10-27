@@ -7,7 +7,7 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
         <template #buttons>
           <a-space>
-            <a-button type="primary" @click="add">新建</a-button>
+            <a-button type="primary" pre-icon="ant-design:sync-outlined" @click="syncInfo">同步微信模板</a-button>
           </a-space>
         </template>
       </vxe-toolbar>
@@ -15,15 +15,12 @@
         <vxe-column type="seq" width="60" />
         <vxe-column field="name" title="名称" />
         <vxe-column field="code" title="编码" />
-        <vxe-column field="enable" title="是否启用" />
         <vxe-column field="templateId" title="模板ID" />
         <vxe-column field="title" title="模板标题" />
         <vxe-column field="primaryIndustry" title="模板所属行业的一级行业" />
         <vxe-column field="deputyIndustry" title="模板所属行业的二级行业" />
-        <vxe-column field="content" title="模板内容" />
-        <vxe-column field="example" title="示例" />
         <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="100" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
               <a href="javascript:" @click="show(row)">查看</a>
@@ -32,10 +29,6 @@
             <span>
               <a href="javascript:" @click="edit(row)">编辑</a>
             </span>
-            <a-divider type="vertical" />
-            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-              <a href="javascript:" style="color: red">删除</a>
-            </a-popconfirm>
           </template>
         </vxe-column>
       </vxe-table>
@@ -55,21 +48,25 @@
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
   import { $ref } from 'vue/macros'
-  import { del, page } from './WechatTemplate.api'
+  import { del, page, sync } from './WechatTemplate.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import WechatTemplateEdit from './WechatTemplateEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { QueryField } from '/@/components/Bootx/Query/Query'
+  import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
 
   // 查询条件
-  const fields = [] as QueryField[]
+  const fields = [
+    { field: 'code', type: STRING, name: '编码', placeholder: '请输入编码' },
+    { field: 'name', type: STRING, name: '名称', placeholder: '请输入名称' },
+    { field: 'templateId', type: STRING, name: '模板ID', placeholder: '请输入模板ID' },
+  ] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
@@ -93,10 +90,6 @@
       pageQueryResHandel(data)
     })
   }
-  // 新增
-  function add() {
-    wechatTemplateEdit.init(null, FormEditType.Add)
-  }
   // 编辑
   function edit(record) {
     wechatTemplateEdit.init(record.id, FormEditType.Edit)
@@ -112,6 +105,19 @@
       createMessage.success('删除成功')
     })
     queryPage()
+  }
+  // 同步
+  function syncInfo() {
+    createConfirm({
+      iconType: 'info',
+      title: '同步',
+      content: '是否同步消息模板',
+      onOk: () => {
+        sync().then(() => {
+          createMessage.info('开始同步微信消息模板')
+        })
+      },
+    })
   }
 </script>
 

@@ -10,7 +10,7 @@
   >
     <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: init }">
       <template #buttons>
-        <a-button type="primary" @click="add">新建</a-button>
+        <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
       </template>
     </vxe-toolbar>
     <vxe-table ref="xTable" row-id="id" :loading="loading" :data="tableData">

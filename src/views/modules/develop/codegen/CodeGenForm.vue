@@ -24,10 +24,22 @@
       </a-form-item>
       <a-form-item label="vue版本" name="vueVersion">
         <a-select v-model:value="form.vueVersion" :default-value="form.vueVersion" style="width: 100%" placeholder="选择vue版本">
-          <!--          <a-select-option key="v2">Vue2</a-select-option>-->
           <a-select-option key="v3">Vue3</a-select-option>
         </a-select>
       </a-form-item>
+      <a-form-item label="编辑窗类型" name="editType">
+        <a-select v-model:value="form.editType" :default-value="form.baseEntity" style="width: 100%" placeholder="选择基类">
+          <a-select-option key="modal">弹窗</a-select-option>
+          <a-select-option key="drawer">抽屉</a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="删除类型" name="deleteType">
+        <a-select v-model:value="form.deleteType" :default-value="form.baseEntity" style="width: 100%" placeholder="选择基类">
+          <a-select-option key="popconfirm">气泡确认</a-select-option>
+          <a-select-option key="confirm">弹窗确认</a-select-option>
+        </a-select>
+      </a-form-item>
+
       <a-form-item label="基类" name="baseEntity">
         <a-select v-model:value="form.baseEntity" :default-value="form.baseEntity" style="width: 100%" placeholder="选择基类">
           <a-select-option key="MpBaseEntity">MpBaseEntity</a-select-option>
@@ -82,6 +94,8 @@
     baseEntity: 'MpBaseEntity',
     vueVersion: 'v3',
     corePack: '',
+    editType: 'modal',
+    deleteType: 'popconfirm',
     paramPack: '',
     dtoPack: '',
     controllerPack: '',
