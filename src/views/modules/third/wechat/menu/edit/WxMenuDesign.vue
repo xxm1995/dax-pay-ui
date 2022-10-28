@@ -44,7 +44,7 @@
       </div>
     </div>
     <!-- 菜单信息编辑 -->
-    <wx-menu-detail-editor v-model:menu-detail="currentMenu" :menu-detail-type="currentMenuTyp" :showable="showable" @delete="delMenu" />
+    <wx-menu-detail-editor :menu-detail="currentMenu" :menu-detail-type="currentMenuTyp" :showable="showable" @delete="delMenu" />
   </div>
 </template>
 
@@ -71,9 +71,9 @@
   const { createConfirm } = useMessage()
 
   // 当前选中菜单的类型
-  let currentMenuTyp = $ref('')
+  let currentMenuTyp = $ref<string | null>('')
   // 当前选中(焦点所在)的菜单
-  let currentMenu = $ref({})
+  let currentMenu = $ref<object | null>({})
   // 当前选中菜单索引
   let currentMenuIndex = $ref(-1)
   // 当前选中子菜单索引
@@ -178,7 +178,7 @@
       content: '是否删除该菜单及包含的内容?',
       onOk: () => {
         // 主菜单
-        if ([MenuTypeMain, MenuTypeMainSubject].includes(currentMenuTyp)) {
+        if ([MenuTypeMain, MenuTypeMainSubject].includes(currentMenuTyp as string)) {
           // 如果有子菜单, 需要二次确认
           props.menu.buttons.splice(currentMenuIndex, 1)
           // 重新定位焦点

@@ -1,47 +1,65 @@
 <template>
   <LoginFormTitle v-show="getShow" class="enter-x" />
-  <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef" v-show="getShow" @keypress.enter="handleLogin">
-    <FormItem name="account" class="enter-x">
-      <Input size="large" v-model:value="formData.account" placeholder="账号" class="fix-auto-fill" />
-    </FormItem>
-    <FormItem name="password" class="enter-x">
-      <InputPassword size="large" visibilityToggle v-model:value="formData.password" placeholder="密码" />
-    </FormItem>
+  <a-form
+    class="p-4 enter-x"
+    :model="form"
+    :validate-trigger="['blur', 'change']"
+    :rules="rules"
+    ref="formRef"
+    v-show="getShow"
+    @keypress.enter="handleLogin"
+  >
+    <a-form-item name="account" class="enter-x">
+      <a-input size="large" v-model:value="form.account" placeholder="账号/手机号/邮箱" class="fix-auto-fill" />
+    </a-form-item>
+    <a-form-item name="password" class="enter-x">
+      <a-input-password size="large" visibilityToggle v-model:value="form.password" placeholder="密码" />
+    </a-form-item>
 
-    <ARow class="enter-x">
-      <ACol :span="12">
-        <FormItem>
+    <a-row :span="12" class="enter-x" v-if="loginType.captcha">
+      <a-col :span="16">
+        <a-form-item name="captcha" class="enter-x">
+          <a-input size="large" placeholder="验证码" v-model:value="form.captcha" style="min-width: 100px" />
+        </a-form-item>
+      </a-col>
+      <a-col :span="8" style="text-align: right">
+        <a-form-item :style="{ 'text-align': 'right', 'margin-left': '20px' }" class="enter-x">
+          <img style="margin-top: 2px" :src="captchaData" @click="getCaptcha" alt="验证码" />
+        </a-form-item>
+      </a-col>
+    </a-row>
+
+    <a-row class="enter-x">
+      <a-col :span="12">
+        <a-form-item>
           <!-- No logic, you need to deal with it yourself -->
-          <Checkbox v-model:checked="rememberMe" size="small"> 记住我 </Checkbox>
-        </FormItem>
-      </ACol>
-      <ACol :span="12">
-        <FormItem :style="{ 'text-align': 'right' }">
+          <a-checkbox v-model:checked="rememberMe" size="small"> 记住我 </a-checkbox>
+        </a-form-item>
+      </a-col>
+      <a-col :span="12">
+        <a-form-item :style="{ 'text-align': 'right' }">
           <!-- 没有逻辑，你需要自己处理 -->
-          <Button type="link" size="small" @click="setLoginState(LoginStateEnum.RESET_PASSWORD)"> 忘记密码? </Button>
-        </FormItem>
-      </ACol>
-    </ARow>
+          <a-button type="link" size="small" @click="setLoginState(LoginStateEnum.RESET_PASSWORD)"> 忘记密码? </a-button>
+        </a-form-item>
+      </a-col>
+    </a-row>
 
-    <FormItem class="enter-x">
-      <Button type="primary" size="large" block @click="handleLogin" :loading="loading"> 登录 </Button>
-      <!-- <Button size="large" class="mt-4 enter-x" block @click="handleRegister">
-        {{ t('sys.login.registerButton') }}
-      </Button> -->
-    </FormItem>
-    <ARow class="enter-x">
-      <ACol :md="8" :xs="24">
-        <Button block @click="setLoginState(LoginStateEnum.MOBILE)"> 手机登录 </Button>
-      </ACol>
-      <ACol :md="8" :xs="24" class="!my-2 !md:my-0 xs:mx-0 md:mx-2">
-        <Button block @click="setLoginState(LoginStateEnum.QR_CODE)"> 二维码登录 </Button>
-      </ACol>
-      <ACol :md="6" :xs="24">
-        <Button block @click="setLoginState(LoginStateEnum.REGISTER)"> 注册 </Button>
-      </ACol>
-    </ARow>
+    <a-form-item class="enter-x">
+      <a-button type="primary" size="large" block @click="handleLogin" :loading="loading"> 登录 </a-button>
+    </a-form-item>
+    <a-row class="enter-x">
+      <a-col :md="8" :xs="24">
+        <a-button block @click="setLoginState(LoginStateEnum.MOBILE)"> 手机登录 </a-button>
+      </a-col>
+      <a-col :md="8" :xs="24" class="!my-2 !md:my-0 xs:mx-0 md:mx-2">
+        <a-button block @click="setLoginState(LoginStateEnum.QR_CODE)"> 二维码登录 </a-button>
+      </a-col>
+      <a-col :md="6" :xs="24">
+        <a-button block @click="setLoginState(LoginStateEnum.REGISTER)"> 注册 </a-button>
+      </a-col>
+    </a-row>
 
-    <Divider class="enter-x">其他登录方式</Divider>
+    <a-divider class="enter-x">其他登录方式</a-divider>
 
     <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
       <GithubFilled />
@@ -50,81 +68,109 @@
       <GoogleCircleFilled />
       <TwitterCircleFilled />
     </div>
-  </Form>
+  </a-form>
 </template>
 <script lang="ts" setup>
-  import { reactive, ref, unref, computed } from 'vue'
+  import { reactive, unref, computed, onMounted } from 'vue'
 
-  import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue'
   import { GithubFilled, WechatFilled, AlipayCircleFilled, GoogleCircleFilled, TwitterCircleFilled } from '@ant-design/icons-vue'
   import LoginFormTitle from './LoginFormTitle.vue'
-
-  import { useI18n } from '/@/hooks/web/useI18n'
   import { useMessage } from '/@/hooks/web/useMessage'
-
   import { useUserStore } from '/@/store/modules/user'
-  import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin'
+  import { LoginStateEnum, useLoginState } from './useLogin'
   import { useDesign } from '/@/hooks/web/useDesign'
   import { getAppEnvConfig } from '/@/utils/env'
-  //import { onKeyStroke } from '@vueuse/core';
+  import { imgCaptcha } from '/@/api/common/Captcha'
+  import { $ref } from 'vue/macros'
+  import { findLoginTypeByCode, LoginType } from '/@/api/common/LoginAssist'
+  import { FormInstance, Rule } from 'ant-design-vue/lib/form'
+  import { LoginParams } from '/@/api/sys/model/userModel'
 
-  const ACol = Col
-  const ARow = Row
-  const FormItem = Form.Item
-  const InputPassword = Input.Password
-  const { t } = useI18n()
   const { notification, createErrorModal } = useMessage()
   const { prefixCls } = useDesign('login')
+  // 用户信息存储
   const userStore = useUserStore()
 
   const { setLoginState, getLoginState } = useLoginState()
-  const { getFormRules } = useFormRules()
 
-  const formRef = ref()
-  const loading = ref(false)
-  const rememberMe = ref(true)
+  const formRef = $ref<FormInstance>()
+  let loading = $ref(false)
+  let rememberMe = $ref(true)
 
-  const formData = reactive({
+  const form = reactive({
+    client: '',
     account: 'xxm1995',
     password: '123456',
+    loginType: 'password',
+    captchaKey: '',
+    captcha: '',
+  } as LoginParams)
+
+  let loginType = $ref<LoginType>({
+    captcha: false,
+    enable: true,
   })
 
-  const { validForm } = useFormValid(formRef)
-
-  //onKeyStroke('Enter', handleLogin);
+  const rules = computed(() => {
+    return {
+      account: [{ required: true, message: '请输入账号' }],
+      password: [{ required: true, message: '请输入密码' }],
+      captcha: [{ required: loginType.captcha, message: '请输入验证码' }],
+    } as Record<string, Rule[]>
+  })
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN)
 
-  async function handleLogin() {
-    const data = await validForm()
-    if (!data) return
-    const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
+  let captchaData = $ref<string>()
 
+  onMounted(() => {
+    init()
+  })
+
+  /**
+   * 初始化
+   */
+  function init() {
+    // 终端编码
+    const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
+    form.client = VITE_GLOB_APP_CLIENT
+    // 获取登录方式
+    findLoginTypeByCode(form.loginType).then(({ data }) => {
+      loginType = data
+      if (loginType && loginType.captcha && loginType.enable) {
+        getCaptcha()
+      }
+    })
+  }
+
+  /**
+   * 获取验证码
+   */
+  function getCaptcha() {
+    imgCaptcha().then(({ data }) => {
+      captchaData = data.captchaData
+      form.captchaKey = data.captchaKey
+    })
+  }
+
+  /**
+   * 登录处理
+   */
+  async function handleLogin() {
+    const data = await formRef.validate()
+    console.log(data)
     try {
-      loading.value = true
-      const token = await userStore.login({
-        client: VITE_GLOB_APP_CLIENT as string,
-        loginType: 'password',
-        password: data.password,
-        account: data.account,
-        captchaKey: data.captchaKey,
-        captcha: data.captcha,
-      })
+      loading = true
+      const token = await userStore.login(form)
       if (token) {
         notification.success({
-          message: t('sys.login.loginSuccessTitle'),
-          description: `${t('sys.login.loginSuccessDesc')}`,
+          message: '登录成功',
+          description: '欢迎回来',
           duration: 3,
         })
       }
-    } catch (error) {
-      createErrorModal({
-        title: t('sys.api.errorTip'),
-        content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
-        getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
-      })
     } finally {
-      loading.value = false
+      loading = false
     }
   }
 </script>

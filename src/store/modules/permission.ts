@@ -12,7 +12,12 @@ import projectSetting from '/@/settings/projectSetting'
 
 import { PermissionModeEnum } from '/@/enums/appEnum'
 
-import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
+import {
+  DASHBOARD,
+  ERROR_LOG_ROUTE,
+  PAGE_NOT_FOUND_ROUTE,
+  PROJECT_BASE
+} from "/@/router/routes/basic";
 
 import { filter } from '/@/utils/helper/treeHelper'
 
@@ -22,7 +27,6 @@ import { useMessage } from '/@/hooks/web/useMessage'
 import { PageEnum } from '/@/enums/pageEnum'
 import { getAppEnvConfig } from '/@/utils/env'
 import { PermMenu } from '/@/api/sys/model/menuModel'
-import dashboard from '/@/router/routes/modules/dashboard'
 
 interface PermissionState {
   // Permission code list
@@ -241,7 +245,8 @@ export const usePermissionStore = defineStore({
       }
 
       routes.push(ERROR_LOG_ROUTE)
-      routes.push(dashboard)
+      routes.push(DASHBOARD)
+      routes.push(PROJECT_BASE)
       patchHomeAffix(routes)
       return routes
     },

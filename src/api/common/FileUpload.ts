@@ -1,5 +1,5 @@
 import { defHttp } from '/@/utils/http/axios'
-import { Result } from "/#/axios";
+import { Result } from '/#/axios'
 
 /**
  * 获取文件预览地址

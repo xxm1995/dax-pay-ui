@@ -39,22 +39,16 @@
           <a-form-item label="消息内容" prop="url" v-if="editMediaFlag">
             <a-input placeholder="发送消息，（除文本消息）从素材库中选择" disabled v-model:value="menuDetail.mediaId">
               <template #addonAfter v-if="!showable">
-                <a v-if="!menuDetail.mediaId" @click="selectMedia" ::disabled="showable ? 'disabled' : null">选择素材</a>
-                <a href="javascript:" v-else :disabled="showable ? 'disabled' : null" @click="menuDetail.mediaId = ''" style="color: red"
-                  >清除</a
-                >
+                <a-button size="small" type="link" v-if="!menuDetail.mediaId" @click="selectMedia" :disabled="showable">选择素材</a-button>
+                <a-button size="small" type="link" danger v-else :disabled="showable" @click="menuDetail.mediaId = ''">清除</a-button>
               </template>
             </a-input>
           </a-form-item>
           <a-form-item label="图文文章" prop="url" disabled v-if="editArticleFlag">
             <a-input placeholder="从已发表文章列表中选择" disabled="" v-model:value="menuDetail.articleId">
               <template #addonAfter>
-                <a href="javascript:" v-if="!menuDetail.articleId" @click="selectArticle" :disabled="showable ? 'disabled' : null"
-                  >选择文章</a
-                >
-                <a href="javascript:" v-else :disabled="showable ? 'disabled' : null" @click="menuDetail.articleId = ''" style="color: red"
-                  >清除</a
-                >
+                <a-button size="small" type="link" v-if="!menuDetail.articleId" @click="selectArticle" :disabled="showable">选择文章</a-button>
+                <a-button size="small" type="link" danger v-else :disabled="showable" @click="menuDetail.articleId = ''">清除</a-button>
               </template>
             </a-input>
           </a-form-item>
@@ -68,8 +62,8 @@
 
 <script lang="ts" setup>
   import { MenuTypeMain, MenuTypeMainSubject, MenuTypeSubject } from './MenuType'
-  import WeChatMediaSelect from '/@/views/modules/third/wechat/media/WeChatMediaSelect.vue'
-  import WeChatArticleSelect from '/@/views/modules/third/wechat/article/WeChatArticleSelect.vue'
+  import WeChatMediaSelect from '/@/views/modules/third/wechat/media/WechatMediaSelect.vue'
+  import WeChatArticleSelect from '/@/views/modules/third/wechat/article/WechatArticleSelect.vue'
   import { $ref } from 'vue/macros'
   import { watch } from 'vue'
 
@@ -173,7 +167,7 @@
    * 选择文章
    */
   function selectArticle() {
-    weChatArticleSelect.init()
+    weChatArticleSelect.show()
   }
   function selectArticleCallback(articleId) {
     props.menuDetail.articleId = articleId

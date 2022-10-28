@@ -54,7 +54,7 @@
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
-  import { getFileDownloadUrl, getFilePreviewUrl } from '/@/api/common/fileUpload'
+  import { getFileDownloadUrl, getFilePreviewUrl } from '/@/api/common/FileUpload'
   import { useUserStoreWithOut } from '/@/store/modules/user'
   import { getAppEnvConfig } from '/@/utils/env'
 

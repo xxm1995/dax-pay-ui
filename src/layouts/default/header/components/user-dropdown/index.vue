@@ -11,8 +11,9 @@
 
     <template #overlay>
       <Menu @click="handleMenuClick">
-<!--        <MenuItem key="doc" text="文档" icon="ion:document-text-outline" v-if="getShowDoc" />-->
-<!--        <MenuDivider v-if="getShowDoc" />-->
+        <!--        <MenuItem key="doc" text="文档" icon="ion:document-text-outline" v-if="getShowDoc" />-->
+        <!--        <MenuDivider v-if="getShowDoc" />-->
+        <MenuItem key="setting" text="个人设置" icon="ant-design:setting-outlined" />
         <MenuItem v-if="getUseLockPage" key="lock" text="锁定屏幕" icon="ion:lock-closed-outline" />
         <MenuItem key="logout" text="退出系统" icon="ion:power-outline" />
       </Menu>
@@ -40,8 +41,10 @@
   import { openWindow } from '/@/utils'
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent'
+  import { router } from "/@/router";
+  import { PageEnum } from "/@/enums/pageEnum";
 
-  type MenuEvent = 'logout' | 'doc' | 'lock'
+  type MenuEvent = 'logout' | 'doc' | 'lock' | 'setting'
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -57,7 +60,7 @@
     },
     setup() {
       const { prefixCls } = useDesign('header-user-dropdown')
-      const { getShowDoc, getUseLockPage } = useHeaderSetting()
+      const { getUseLockPage } = useHeaderSetting()
       const userStore = useUserStore()
 
       // 用户信息
@@ -69,6 +72,10 @@
 
       function handleLock() {
         openModal(true)
+      }
+
+      function setting() {
+        router.push(PageEnum.ACCOUNT_SETTING)
       }
 
       //  login out
@@ -91,6 +98,9 @@
             break
           case 'lock':
             handleLock()
+            break
+          case 'setting':
+            setting()
             break
         }
       }

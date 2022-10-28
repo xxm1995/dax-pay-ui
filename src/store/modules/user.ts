@@ -149,11 +149,10 @@ export const useUserStore = defineStore({
      */
     confirmLoginOut() {
       const { createConfirm } = useMessage()
-      const { t } = useI18n()
       createConfirm({
         iconType: 'warning',
-        title: () => h('span', t('sys.app.logoutTip')),
-        content: () => h('span', t('sys.app.logoutMessage')),
+        title: () => h('span', '温馨提醒'),
+        content: () => h('span', '是否确认退出系统?'),
         onOk: async () => {
           await this.logout(true)
         },
