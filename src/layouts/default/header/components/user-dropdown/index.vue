@@ -1,5 +1,5 @@
 <template>
-  <Dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
+  <dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
     <span :class="[prefixCls, `${prefixCls}--${theme}`]" class="flex">
       <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" />
       <span :class="`${prefixCls}__info hidden md:block`">
@@ -11,110 +11,82 @@
 
     <template #overlay>
       <Menu @click="handleMenuClick">
-        <!--        <MenuItem key="doc" text="文档" icon="ion:document-text-outline" v-if="getShowDoc" />-->
-        <!--        <MenuDivider v-if="getShowDoc" />-->
-        <MenuItem key="setting" text="个人设置" icon="ant-design:setting-outlined" />
-        <MenuItem v-if="getUseLockPage" key="lock" text="锁定屏幕" icon="ion:lock-closed-outline" />
-        <MenuItem key="logout" text="退出系统" icon="ion:power-outline" />
+        <dropdown-menu-item key="setting" text="个人设置" icon="ant-design:setting-outlined" />
+        <dropdown-menu-item v-if="getUseLockPage" key="lock" text="锁定屏幕" icon="ion:lock-closed-outline" />
+        <dropdown-menu-item key="logout" text="退出系统" icon="ion:power-outline" />
       </Menu>
     </template>
-  </Dropdown>
-  <LockAction @register="register" />
+  </dropdown>
+  <lock-modal @register="register" />
 </template>
-<script lang="ts">
+<script lang="ts" setup>
   // components
   import { Dropdown, Menu } from 'ant-design-vue'
   import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface'
 
-  import { defineComponent, computed } from 'vue'
-
-  import { DOC_URL } from '/@/settings/siteSetting'
+  import { computed, onMounted } from 'vue'
 
   import { useUserStore } from '/@/store/modules/user'
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting'
-  import { useI18n } from '/@/hooks/web/useI18n'
   import { useDesign } from '/@/hooks/web/useDesign'
   import { useModal } from '/@/components/Modal'
 
   import headerImg from '/@/assets/images/header.jpg'
   import { propTypes } from '/@/utils/propTypes'
-  import { openWindow } from '/@/utils'
 
-  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent'
-  import { router } from "/@/router";
-  import { PageEnum } from "/@/enums/pageEnum";
+  import { router } from '/@/router'
+  import { PageEnum } from '/@/enums/pageEnum'
+  import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
+  import { $ref } from 'vue/macros'
+  import DropdownMenuItem from '/@/layouts/default/header/components/user-dropdown/DropMenuItem.vue'
+  import LockModal from '/@/layouts/default/header/components/lock/LockModal.vue'
 
-  type MenuEvent = 'logout' | 'doc' | 'lock' | 'setting'
-
-  export default defineComponent({
-    name: 'UserDropdown',
-    components: {
-      Dropdown,
-      Menu,
-      MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
-      // MenuDivider: Menu.Divider,
-      LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
-    },
-    props: {
-      theme: propTypes.oneOf(['dark', 'light']),
-    },
-    setup() {
-      const { prefixCls } = useDesign('header-user-dropdown')
-      const { getUseLockPage } = useHeaderSetting()
-      const userStore = useUserStore()
-
-      // 用户信息
-      const getUserInfo = computed(() => {
-        const { name = '', avatar } = userStore.getUserInfo || {}
-        return { name, avatar: headerImg }
-      })
-      const [register, { openModal }] = useModal()
-
-      function handleLock() {
-        openModal(true)
-      }
-
-      function setting() {
-        router.push(PageEnum.ACCOUNT_SETTING)
-      }
-
-      //  login out
-      function handleLoginOut() {
-        userStore.confirmLoginOut()
-      }
-
-      // open doc
-      function openDoc() {
-        openWindow(DOC_URL)
-      }
-
-      function handleMenuClick(e: MenuInfo) {
-        switch (e.key as MenuEvent) {
-          case 'logout':
-            handleLoginOut()
-            break
-          case 'doc':
-            openDoc()
-            break
-          case 'lock':
-            handleLock()
-            break
-          case 'setting':
-            setting()
-            break
-        }
-      }
-
-      return {
-        prefixCls,
-        getUserInfo,
-        handleMenuClick,
-        // getShowDoc,
-        register,
-        getUseLockPage,
-      }
-    },
+  defineProps({
+    theme: propTypes.oneOf(['dark', 'light']),
   })
+
+  type MenuEvent = 'logout' | 'lock' | 'setting'
+
+  const { prefixCls } = useDesign('header-user-dropdown')
+  const { getUseLockPage } = useHeaderSetting()
+  const userStore = useUserStore()
+
+  // 用户信息
+  const getUserInfo = computed(() => {
+    const { name = '', avatar } = userStore.getUserInfo || {}
+    return { name, avatar: avatar || headerImg }
+  })
+
+  const [register, { openModal }] = useModal()
+
+  // 锁定屏幕
+  function handleLock() {
+    openModal(true)
+  }
+
+  // 设置界面
+  function setting() {
+    router.push(PageEnum.ACCOUNT_SETTING)
+  }
+
+  //  退出
+  function handleLoginOut() {
+    userStore.confirmLoginOut()
+  }
+
+  function handleMenuClick(e: MenuInfo) {
+    switch (e.key as MenuEvent) {
+      case 'logout':
+        handleLoginOut()
+        break
+      case 'lock':
+        handleLock()
+        break
+      case 'setting':
+        setting()
+        break
+    }
+  }
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-header-user-dropdown';

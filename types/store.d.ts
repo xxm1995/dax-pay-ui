@@ -30,6 +30,9 @@ export interface ErrorLogInfo {
   time?: string
 }
 
+/**
+ * 用户信息
+ */
 export interface UserInfo {
   // 用户id
   userId: number
@@ -37,7 +40,7 @@ export interface UserInfo {
   name: string
   // 账号
   username: string
-  // 头像
+  // 头像图片地址
   avatar: string
 }
 

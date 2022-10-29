@@ -12,7 +12,7 @@ export const getFilePreviewUrl = (id) => {
 }
 
 /**
- * 获取文件地址前缀
+ * 获取文件预览地址前缀
  */
 export const getFilePreviewUrlPrefix = () => {
   return defHttp.get<Result<string>>({

@@ -16,6 +16,8 @@ import { RouteRecordRaw } from 'vue-router'
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
 import { isArray } from '/@/utils/is'
 import { h } from 'vue'
+import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
+import headerImg from "/@/assets/images/header.jpg";
 
 interface UserState {
   userInfo: Nullable<UserInfo>
@@ -124,6 +126,9 @@ export const useUserStore = defineStore({
     async getUserInfoAction() {
       if (!this.getToken) return null
       const { data: userInfo } = await getUserInfo()
+      // 设置头像
+      const { data: urlPrefix } = await getFilePreviewUrlPrefix()
+      userInfo.avatar = userInfo.avatar ? urlPrefix + userInfo.avatar : ''
       this.setUserInfo(userInfo)
       return userInfo
     },
