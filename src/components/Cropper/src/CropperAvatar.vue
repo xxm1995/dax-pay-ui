@@ -65,10 +65,15 @@
         },
       )
 
-      function handleUploadSuccess({ source }) {
+      /**
+       * 响应
+       * @param source 文件bold内容
+       * @param data 上传成功后的文件信息 见 UpdateFileInfo
+       */
+      function handleUploadSuccess({ source, data: { data } }) {
         sourceValue.value = source
-        emit('change', source)
-        createMessage.success(t('component.cropper.uploadSuccess'))
+        emit('change', data, source)
+        createMessage.success('上传成功')
       }
 
       expose({ openModal: openModal.bind(null, true), closeModal })

@@ -1,5 +1,5 @@
 <template>
-  <BasicModal :footer="null" :title="t('layout.header.lockScreen')" v-bind="$attrs" :class="prefixCls" @register="register">
+  <BasicModal :footer="null" title="锁定屏幕" v-bind="$attrs" :class="prefixCls" @register="register">
     <div :class="`${prefixCls}__entry`">
       <div :class="`${prefixCls}__header`">
         <img :src="avatar" :class="`${prefixCls}__header-img`" />
@@ -11,9 +11,7 @@
       <BasicForm @register="registerForm" />
 
       <div :class="`${prefixCls}__footer`">
-        <a-button type="primary" block class="mt-2" @click="handleLock">
-          {{ t('layout.header.lockScreenBtn') }}
-        </a-button>
+        <a-button type="primary" block class="mt-2" @click="handleLock"> 锁定 </a-button>
       </div>
     </div>
   </BasicModal>
@@ -46,7 +44,7 @@
         schemas: [
           {
             field: 'password',
-            label: t('layout.header.lockScreenPassword'),
+            label: '锁屏密码',
             colProps: {
               span: 24,
             },

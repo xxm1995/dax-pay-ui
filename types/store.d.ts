@@ -1,6 +1,5 @@
 import { ErrorTypeEnum } from '/@/enums/exceptionEnum'
 import { MenuModeEnum, MenuTypeEnum } from '/@/enums/menuEnum'
-import { RoleInfo } from '/@/api/sys/model/userModel'
 
 // Lock screen information
 export interface LockInfo {
@@ -40,7 +39,7 @@ export interface UserInfo {
   name: string
   // 账号
   username: string
-  // 头像图片地址
+  // 头像图片id
   avatar: string
 }
 

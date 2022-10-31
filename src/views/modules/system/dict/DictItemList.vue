@@ -1,6 +1,5 @@
 <template>
-  < forceRender :visible="visible" :maskClosable="true" width="60%" placement="right" :closable="true" @close="visible = false" >
-  <basic-drawer showFooter v-bind="$attrs" title="字典列表" width="60%" :visible="visible" @close="visible = false">
+  <basic-drawer forceRender showFooter v-bind="$attrs" title="字典列表" width="60%" :visible="visible" @close="visible = false">
     <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
       <template #buttons>
         <a-space>

@@ -14,10 +14,8 @@ import { router } from '/@/router'
 import { usePermissionStore } from '/@/store/modules/permission'
 import { RouteRecordRaw } from 'vue-router'
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
-import { isArray } from '/@/utils/is'
 import { h } from 'vue'
 import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
-import headerImg from "/@/assets/images/header.jpg";
 
 interface UserState {
   userInfo: Nullable<UserInfo>
@@ -68,6 +66,10 @@ export const useUserStore = defineStore({
       this.roleList = roleList
       setAuthCache(ROLES_KEY, roleList)
     },
+    /**
+     * 保存用户信息, 不要直接使用
+     * 使用 UserStoreUtil 中的包装方法来处理
+     */
     setUserInfo(info: UserInfo | null) {
       this.userInfo = info
       this.lastUpdateTime = new Date().getTime()
@@ -102,7 +104,7 @@ export const useUserStore = defineStore({
     async afterLoginAction(goHome?: boolean) {
       if (!this.getToken) return null
       // 获取用户信息
-      await this.getUserInfoAction()
+      await this.refreshUserInfoAction()
       const sessionTimeout = this.sessionTimeout
       // 超时
       if (sessionTimeout) {
@@ -122,18 +124,17 @@ export const useUserStore = defineStore({
         goHome && (await router.replace(PageEnum.BASE_HOME))
       }
     },
-    // 获取并存储用户信息
-    async getUserInfoAction() {
+    // 刷新登陆后用户信息
+    async refreshUserInfoAction() {
       if (!this.getToken) return null
       const { data: userInfo } = await getUserInfo()
       // 设置头像
       const { data: urlPrefix } = await getFilePreviewUrlPrefix()
       userInfo.avatar = userInfo.avatar ? urlPrefix + userInfo.avatar : ''
       this.setUserInfo(userInfo)
-      return userInfo
     },
     /**
-     * @description: logout
+     * 退出
      */
     async logout(goLogin = false) {
       if (this.getToken) {

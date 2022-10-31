@@ -9,16 +9,6 @@
     :closable="true"
     @close="visible = false"
   >
-    <basic-drawer
-      forceRender
-      v-bind="$attrs"
-      title="任务执行日志"
-      width="60%"
-      :maskClosable="false"
-      :visible="visible"
-      @close="visible = false"
-    >
-
     <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
@@ -49,17 +39,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, onMounted, ref } from 'vue'
+  import { nextTick } from 'vue'
   import { $ref } from 'vue/macros'
   import { del, page } from './QuartzJobLog.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
-  import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
   import { QuartzJob } from './QuartzJob.api'
-  import BasicDrawer from "/@/components/Drawer/src/BasicDrawer.vue";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
