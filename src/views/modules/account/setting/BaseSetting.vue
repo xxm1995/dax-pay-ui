@@ -94,7 +94,7 @@
   // 基础数据
   async function init() {
     confirmLoading = true
-    // 初始化菜单
+    // 初始化角色下拉菜单
     sexList = dictDropDownNumber('Sex')
 
     const { data: userInfo } = await getUserBaseInfo()
@@ -107,7 +107,6 @@
   }
   // 上传头像回调
   function updateAvatar(file: UpdateFileInfo) {
-    console.log(file)
     form.avatar = file.id
   }
   // 更新用户信息

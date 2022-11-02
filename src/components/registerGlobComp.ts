@@ -8,6 +8,7 @@ import {
   Popconfirm,
   Select,
   SelectOption,
+  List,
   Tabs,
   Upload,
   Checkbox,
@@ -44,6 +45,7 @@ export function registerGlobComp(app: App) {
   app.use(Tabs)
   app.use(Upload)
   app.use(Checkbox)
+  app.use(List)
   app.use(Space)
   app.use(Modal)
   app.use(Drawer)

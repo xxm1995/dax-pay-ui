@@ -21,11 +21,19 @@ export interface LoginParams {
  */
 export interface UserDetails {
   // 用户id
-  id: number
+  id?: number
   // 名称
-  name: string
+  name?: string
   // 账号
-  username: string
+  username?: string
+  // 手机号
+  phone?: string
+  // 邮箱
+  email?: string
+  // 是否管理员
+  admin?: boolean
+  // 终端id列表
+  clientIdList?: string[]
 }
 
 /**

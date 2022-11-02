@@ -48,6 +48,56 @@ export function updateBaseInfo(data) {
 }
 
 /**
+ * 修改密码
+ */
+export function updatePassword(password, newPassword) {
+  return defHttp.post({
+    url: '/user/updatePassword',
+    params: { password, newPassword },
+  })
+}
+
+/**
+ * 绑定手机
+ */
+export function bindPhone(phone, captcha) {
+  return defHttp.post({
+    url: '/user/bindPhone',
+    params: { phone, captcha },
+  })
+}
+
+/**
+ * 更新手机号
+ */
+export function updatePhone(obj) {
+  return defHttp.post({
+    url: '/user/updatePhone',
+    data: obj,
+  })
+}
+
+/**
+ * 绑定邮箱
+ */
+export function bindEmail(email, captcha) {
+  return defHttp.post({
+    url: '/user/bindEmail',
+    params: { email, captcha },
+  })
+}
+
+/**
+ * 更新邮箱
+ */
+export function updateEmail(obj) {
+  return defHttp.post({
+    url: '/user/updateEmail',
+    data: obj,
+  })
+}
+
+/**
  * 退出
  */
 export function doLogout() {
