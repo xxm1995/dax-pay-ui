@@ -104,7 +104,7 @@ export function sendCurrentEmailChangeCaptcha() {
  */
 export function validateCurrentEmailChangeCaptcha(captcha) {
   return defHttp.get<Result<boolean>>({
-    url: `/user/validateCurrentEmailChangeCaptcha`,
+    url: `/user/validateCurrentChangeEmailCaptcha`,
     params: { captcha },
   })
 }

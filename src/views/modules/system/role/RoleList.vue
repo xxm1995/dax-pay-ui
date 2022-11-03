@@ -75,7 +75,7 @@
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
-  const { notification } = useMessage()
+  const { createMessage } = useMessage()
 
   const roleEdit = ref()
   // 查询条件
@@ -123,7 +123,7 @@
   // 删除
   function remove(record) {
     del(record.id).then(() => {
-      notification.success({ message: '删除成功' })
+      createMessage.success('删除成功')
     })
     queryPage()
   }

@@ -65,7 +65,7 @@
     <password-edit ref="passwordEdit" @ok="init" />
     <phone-edit ref="phoneEdit" @ok="init" :phone="user.phone" />
     <phone-bind ref="phoneBind" @ok="init" />
-    <email-edit ref="emailEdit" @ok="init" />
+    <email-edit ref="emailEdit" @ok="init" :email="user.email" />
     <email-bind ref="emailBind" @ok="init" />
   </CollapseContainer>
 </template>
