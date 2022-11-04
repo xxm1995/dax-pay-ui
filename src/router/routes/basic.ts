@@ -111,7 +111,7 @@ export const PROJECT_BASE: AppRouteModule = {
     {
       path: '/account/setting',
       name: 'AccountSettingPage',
-      component: () => import('/@/views/modules/account/setting/index.vue'),
+      component: () => import('/@/views/account/setting/index.vue'),
       meta: {
         title: '个人设置',
       },

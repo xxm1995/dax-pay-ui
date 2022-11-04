@@ -1,5 +1,4 @@
 import { defHttp } from '/@/utils/http/axios'
-import { LoginParams, GetUserInfoModel, UserBaseInfo, UserDetails } from './model/userModel'
 import { Result } from '/#/axios'
 
 /**
@@ -74,7 +73,7 @@ export function validateCurrentPhoneChangeCaptcha(captcha) {
  * 发送更改手机号验证码
  */
 export function sendPhoneChangeCaptcha(phone) {
-  return defHttp.get<Result<boolean>>({
+  return defHttp.post<Result<boolean>>({
     url: `/user/sendPhoneChangeCaptcha`,
     params: { phone },
   })

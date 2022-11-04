@@ -1,7 +1,7 @@
 import { FormSchema } from '/@/components/Form'
 import BaseSetting from './BaseSetting.vue'
 import SecureSetting from '../security/SecureSetting.vue'
-import AccountBind from './AccountBind.vue'
+import AccountBind from '../bind/AccountBind.vue'
 import MsgNotify from './MsgNotify.vue'
 
 export interface ListItem {
@@ -37,7 +37,6 @@ export const settingList = [
   },
 ]
 
-// 账号绑定 list
 export const accountBindList: ListItem[] = [
   {
     key: '1',

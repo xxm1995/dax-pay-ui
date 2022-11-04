@@ -52,11 +52,11 @@
   import { useUserStore } from '/@/store/modules/user'
   import { $ref } from 'vue/macros'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
-  import { getUserBaseInfo, updateBaseInfo } from '/@/api/sys/user'
   import { getFilePreviewUrlPrefix, UpdateFileInfo, uploadFile } from '/@/api/common/FileUpload'
-  import { UserBaseInfo } from '/@/api/sys/model/userModel'
   import { useDict } from '/@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
+  import { UserBaseInfo } from '/@/views/account/accountModel'
+  import { getUserBaseInfo, updateBaseInfo } from '/@/views/account/account.api'
 
   const { createMessage, createConfirm } = useMessage()
   const userStore = useUserStore()
@@ -101,7 +101,7 @@
     // 设置头像
     const result = await getFilePreviewUrlPrefix()
     urlPrefix = result.data
-    avatar = userInfo.avatar ? urlPrefix + userInfo.avatar : ''
+    avatar = userInfo.avatar ? urlPrefix + userInfo.avatar : headerImg
     form = userInfo
     confirmLoading = false
   }

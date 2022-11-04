@@ -47,7 +47,9 @@
           <a-form-item label="图文文章" prop="url" disabled v-if="editArticleFlag">
             <a-input placeholder="从已发表文章列表中选择" disabled="" v-model:value="menuDetail.articleId">
               <template #addonAfter>
-                <a-button size="small" type="link" v-if="!menuDetail.articleId" @click="selectArticle" :disabled="showable">选择文章</a-button>
+                <a-button size="small" type="link" v-if="!menuDetail.articleId" @click="selectArticle" :disabled="showable"
+                  >选择文章</a-button
+                >
                 <a-button size="small" type="link" danger v-else :disabled="showable" @click="menuDetail.articleId = ''">清除</a-button>
               </template>
             </a-input>

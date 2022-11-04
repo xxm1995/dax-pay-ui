@@ -34,7 +34,7 @@
   import { nextTick, reactive } from 'vue'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import StrengthMeter from '/@/components/StrengthMeter/src/StrengthMeter.vue'
-  import { updatePassword } from '/@/api/sys/user'
+  import { updatePassword } from '/@/views/account/account.api'
 
   const { visible, confirmLoading, modalWidth, labelCol, wrapperCol, handleCancel } = useFormEdit()
 

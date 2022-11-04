@@ -72,14 +72,14 @@
 <script lang="ts" setup>
   import { CollapseContainer } from '/@/components/Container'
   import { $ref } from 'vue/macros'
-  import { UserDetails } from '/@/api/sys/model/userModel'
-  import { getUserSecurityInfo } from '/@/api/sys/user'
   import { onMounted } from 'vue'
   import PasswordEdit from './PasswordEdit.vue'
   import PhoneBind from './PhoneBind.vue'
   import EmailEdit from './EmailEdit.vue'
   import EmailBind from './EmailBind.vue'
   import PhoneEdit from './PhoneEdit.vue'
+  import { getUserSecurityInfo } from '/@/views/account/account.api'
+  import { UserDetails } from '/@/views/account/accountModel'
 
   let confirmLoading = $ref(false)
 

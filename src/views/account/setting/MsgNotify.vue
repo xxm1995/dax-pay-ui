@@ -20,7 +20,7 @@
 <script lang="ts">
   import { List, Switch } from 'ant-design-vue'
   import { defineComponent } from 'vue'
-  import { CollapseContainer } from '/@/components/Container/index'
+  import { CollapseContainer } from '/@/components/Container'
 
   import { msgNotifyList } from './data'
 

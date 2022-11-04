@@ -1,5 +1,5 @@
 <template>
-  <basic-modal v-bind="$attrs" :loading="confirmLoading" :width="640" title="密码修改" :visible="visible" @cancel="handleCancel">
+  <basic-modal v-bind="$attrs" :width="640" title="密码修改" :loading="confirmLoading" :visible="visible" @cancel="handleCancel">
     <a-spin :spinning="confirmLoading">
       <a-steps class="steps" :current="currentTab">
         <a-step title="验证手机" />
@@ -55,7 +55,7 @@
   } from '/@/api/sys/userAssist'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { validateMobile } from '/@/utils/validate'
-  import { updatePhone } from '/@/api/sys/user'
+  import { updatePhone } from '/@/views/account/account.api'
 
   const props = defineProps({
     phone: String,
@@ -124,7 +124,7 @@
       return Promise.resolve()
     }
     const { msg, result } = validateMobile(phone)
-    result ? Promise.resolve() : Promise.reject(msg)
+    return result ? Promise.resolve() : Promise.reject(msg)
   }
   /**
    * 后台校验手机号是否被使用
@@ -136,7 +136,7 @@
     }
     const { msg, result } = validateMobile(phone)
     // 手机号验证
-    if (result) {
+    if (!result) {
       return Promise.reject(msg)
     }
     const { data } = await existsPhone(phone)

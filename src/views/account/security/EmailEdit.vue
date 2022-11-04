@@ -48,7 +48,6 @@
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { validateEmail, validateMobile } from '/@/utils/validate'
-  import { updateEmail } from '/@/api/sys/user'
   import {
     existsEmail,
     sendCurrentEmailChangeCaptcha,
@@ -56,6 +55,7 @@
     validateCurrentEmailChangeCaptcha,
     validateEmailChangeCaptcha,
   } from '/@/api/sys/userAssist'
+  import { updateEmail } from '/@/views/account/account.api'
 
   const props = defineProps({
     email: String,
@@ -125,7 +125,7 @@
       return Promise.resolve()
     }
     const { msg, result } = validateEmail(email)
-    result ? Promise.resolve() : Promise.reject(msg)
+    return result ? Promise.resolve() : Promise.reject(msg)
   }
   /**
    * 后台校验邮箱是否被使用
@@ -137,7 +137,7 @@
     }
     const { msg, result } = validateMobile(email)
     // 邮箱验证
-    if (result) {
+    if (!result) {
       return Promise.reject(msg)
     }
     const { data } = await existsEmail(email)
