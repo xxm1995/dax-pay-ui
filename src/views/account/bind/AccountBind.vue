@@ -56,24 +56,25 @@
         </a-col>
       </a-row>
     </a-spin>
+    <we-chat-qr-bind ref="weChatQrBind" @bind="bindWeChatCallback" />
   </CollapseContainer>
 </template>
 <script lang="ts" setup>
-  import { List } from 'ant-design-vue'
-  import { defineComponent, onMounted } from 'vue'
+  import { onMounted } from 'vue'
   import { CollapseContainer } from '/@/components/Container'
-  import {} from 'OpenIdLoginType'
   import { $ref } from 'vue/macros'
   import { DING_TALK, WE_CHAT, WE_CHAT_OPEN, QQ, WE_COM } from '/@/views/login/third/OpenIdLoginType'
   import { bindThird, getThirdBindInfo, unbindThird } from '/@/views/account/account.api'
   import { UserThirdBindInfo } from '/@/views/account/accountModel'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { getAppEnvConfig } from "/@/utils/env";
+  import { getAppEnvConfig } from '/@/utils/env'
+  import WeChatQrBind from './WeChatQrBind.vue'
 
   const { createMessage, createConfirm } = useMessage()
 
   let loading = $ref(false)
   let currentLoginType = $ref()
+  let weChatQrBind = $ref<any>()
   let bindInfo = $ref({
     weChat: {},
     weChatOpen: {},
@@ -122,6 +123,27 @@
       ...data,
       loginType: currentLoginType,
     })
+      .then(() => {
+        createMessage.success('绑定成功')
+      })
+      .finally(() => {
+        init()
+      })
+  }
+
+  /**
+   * 微信公众平台绑定
+   */
+  function bindWeChat() {
+    weChatQrBind.init()
+  }
+
+  /**
+   * 微信绑定回调
+   */
+  function bindWeChatCallback(from) {
+    loading = true
+    bindThird(from)
       .then(() => {
         createMessage.success('绑定成功')
       })

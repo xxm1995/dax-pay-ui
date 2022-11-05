@@ -139,7 +139,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, onUnmounted } from 'vue'
+  import { onBeforeUnmount, onMounted, onUnmounted } from 'vue'
   import { getSystemInfo } from './SystemInfo.api'
   import { $ref } from 'vue/macros'
 
@@ -169,7 +169,7 @@
     })
   }
 
-  onUnmounted(() => {
+  onBeforeUnmount(() => {
     clearInterval(interval)
     interval = null
   })

@@ -86,7 +86,7 @@
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { LoginParams } from '/@/api/sys/model/userModel'
 
-  const { notification, createErrorModal } = useMessage()
+  const { notification } = useMessage()
   const { prefixCls } = useDesign('login')
   // 用户信息存储
   const userStore = useUserStore()
@@ -157,8 +157,8 @@
    * 登录处理
    */
   async function handleLogin() {
-    const data = await formRef.validate()
     try {
+      await formRef.validate()
       loading = true
       const token = await userStore.login(form)
       if (token) {

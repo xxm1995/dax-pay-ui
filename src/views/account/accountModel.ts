@@ -19,20 +19,6 @@ export interface UserDetails {
 }
 
 /**
- * 登录后用户信息
- */
-export interface GetUserInfoModel {
-  // 用户id
-  userId: number
-  // 名称
-  name: string
-  // 账号
-  username: string
-  // 头像
-  avatar: string
-}
-
-/**
  * 用户基础消息
  */
 export interface UserBaseInfo {

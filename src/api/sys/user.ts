@@ -1,16 +1,6 @@
 import { defHttp } from '/@/utils/http/axios'
-import { LoginParams, GetUserInfoModel } from './model/userModel'
+import { GetUserInfoModel } from './model/userModel'
 import { Result } from '/#/axios'
-
-/**
- * 登录接口 返回token
- */
-export function loginApi(params: LoginParams) {
-  return defHttp.post<Result<string>>({
-    url: '/token/login',
-    params,
-  })
-}
 
 /**
  * 登录后获取用户信息
@@ -20,8 +10,21 @@ export function getUserInfo() {
 }
 
 /**
- * 退出
+ * 注册
  */
-export function doLogout() {
-  return defHttp.post({ url: '/token/logout' })
+export function register(obj) {
+  return defHttp.post({
+    url: `/user/register`,
+    data: obj,
+  })
+}
+
+/**
+ * 重置密码
+ */
+export function forgetPasswordByPhone(obj) {
+  return defHttp.post({
+    url: `/user/forgetPasswordByPhone`,
+    data: obj,
+  })
 }

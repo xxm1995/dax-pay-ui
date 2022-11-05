@@ -28,9 +28,13 @@
           >
             <!--       账号密码登录     -->
             <LoginForm />
+            <!--      找回密码      -->
             <ForgetPasswordForm />
+            <!--      注册      -->
             <RegisterForm />
+            <!--      手机登录      -->
             <MobileForm />
+            <!--      扫码登录      -->
             <QrCodeForm />
           </div>
         </div>
@@ -43,8 +47,8 @@
   import { AppLogo } from '/@/components/Application'
   import { AppDarkModeToggle } from '/@/components/Application'
   import LoginForm from './LoginForm.vue'
-  import ForgetPasswordForm from './ForgetPasswordForm.vue'
-  import RegisterForm from './RegisterForm.vue'
+  import ForgetPasswordForm from './user/ForgetPasswordForm.vue'
+  import RegisterForm from './user/RegisterForm.vue'
   import MobileForm from './MobileForm.vue'
   import QrCodeForm from './QrCodeForm.vue'
   import { useGlobSetting } from '/@/hooks/setting'

@@ -98,12 +98,13 @@ export function createPermissionGuard(router: Router) {
       return
     }
     //TODO 添加 websocket连接.
-    console.log(`路由守卫`)
 
     // 重载菜单
+    console.log('重载菜单')
     const routes = await permissionStore.buildRoutesAction()
 
     // 初始化字典
+    console.log('初始化字典')
     await useDictStore.initDict()
 
     routes.forEach((route) => {

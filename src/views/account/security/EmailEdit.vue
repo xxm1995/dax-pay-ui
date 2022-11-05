@@ -5,30 +5,25 @@
         <a-step title="验证邮箱" />
         <a-step title="绑定新邮箱" />
       </a-steps>
-      <a-form ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="邮箱" v-show="currentTab === 0">
+      <a-form
+        ref="formRef"
+        :model="form"
+        :rules="rules"
+        :validate-trigger="['blur', 'change']"
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
+      >
+        <a-form-item label="邮箱" v-show="currentTab === 0" validateFirst>
           <span>{{ email }}</span>
         </a-form-item>
-        <a-form-item label="验证码" name="oldCaptcha" v-show="currentTab === 0">
-          <a-input :maxLength="8" placeholder="验证码" v-model:value="form.oldCaptcha">
-            <template #addonAfter>
-              <a-button size="small" type="link" :disabled="state.oldCaptcha" href="javascript:" @click="sendOldEmailCaptcha">
-                {{ (!state.oldCaptcha && '获取验证码') || '请等待 ' + (state.oldCaptchaTime + ' s') }}
-              </a-button>
-            </template>
-          </a-input>
+        <a-form-item validate-first label="验证码" name="oldCaptcha" v-show="currentTab === 0">
+          <count-down-input v-model:value="form.oldCaptcha" :send-code-api="sendOldEmailCaptcha" :count="120">获取验证码1</count-down-input>
         </a-form-item>
-        <a-form-item label="邮箱" name="email" v-show="currentTab === 1">
+        <a-form-item validate-first label="邮箱" name="email" v-show="currentTab === 1">
           <a-input v-model:value="form.email" placeholder="邮箱" />
         </a-form-item>
-        <a-form-item label="验证码" name="newCaptcha" v-show="currentTab === 1">
-          <a-input :maxLength="8" placeholder="验证码" v-model:value="form.newCaptcha">
-            <template #addonAfter>
-              <a-button size="small" type="link" :disabled="state.newCaptcha" href="javascript:" @click="sendNewEmailCaptcha">
-                {{ (!state.newCaptcha && '获取验证码') || '请等待 ' + (state.newCaptchaTime + ' s') }}
-              </a-button>
-            </template>
-          </a-input>
+        <a-form-item validate-first label="验证码" name="newCaptcha" v-show="currentTab === 1">
+          <count-down-input v-model:value="form.newCaptcha" :send-code-api="sendNewEmailCaptcha" :count="120">获取验证码1</count-down-input>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -44,7 +39,7 @@
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { $ref } from 'vue/macros'
-  import { computed, nextTick, reactive } from 'vue'
+  import { computed, nextTick } from 'vue'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { validateEmail, validateMobile } from '/@/utils/validate'
@@ -56,6 +51,7 @@
     validateEmailChangeCaptcha,
   } from '/@/api/sys/userAssist'
   import { updateEmail } from '/@/views/account/account.api'
+  import CountDownInput from '/@/components/CountDown/src/CountdownInput.vue'
 
   const props = defineProps({
     email: String,
@@ -74,7 +70,7 @@
     return {
       email: [
         { required: currentTab === 1, message: '请输入新邮箱!' },
-        { validator: validateEmailRule, trigger: 'change' },
+        { validator: validateEmailRule },
         { validator: validateNewEmail, trigger: 'blur' },
       ],
       oldCaptcha: [
@@ -86,12 +82,6 @@
         { validator: validateNewCaptcha, trigger: 'blur' },
       ],
     } as Record<string, Rule[]>
-  })
-  const state = reactive({
-    oldCaptcha: false,
-    newCaptcha: false,
-    oldCaptchaTime: 120,
-    newCaptchaTime: 120,
   })
   const formRef = $ref<FormInstance>()
 
@@ -121,7 +111,7 @@
    */
   function validateEmailRule() {
     const { email } = form
-    if (currentTab !== 1 || !email) {
+    if (currentTab !== 1) {
       return Promise.resolve()
     }
     const { msg, result } = validateEmail(email)
@@ -135,11 +125,6 @@
     if (currentTab !== 1) {
       return Promise.resolve()
     }
-    const { msg, result } = validateMobile(email)
-    // 邮箱验证
-    if (!result) {
-      return Promise.reject(msg)
-    }
     const { data } = await existsEmail(email)
     return data ? Promise.reject('邮箱已被使用') : Promise.resolve()
   }
@@ -148,9 +133,6 @@
    */
   async function validateOldCaptcha() {
     const { oldCaptcha } = form
-    if (!oldCaptcha) {
-      return Promise.resolve()
-    }
     const { data } = await validateCurrentEmailChangeCaptcha(oldCaptcha)
     return data ? Promise.resolve() : Promise.reject('验证码错误')
   }
@@ -168,36 +150,30 @@
   /**
    *  发送验证码 旧
    */
-  function sendOldEmailCaptcha() {
-    sendCurrentEmailChangeCaptcha().then(() => {
-      createMessage.success('发送验证码成功')
-      state.oldCaptcha = true
-      const interval = window.setInterval(() => {
-        if (state.oldCaptchaTime-- <= 0) {
-          state.oldCaptchaTime = 120
-          state.oldCaptcha = false
-          window.clearInterval(interval)
-        }
-      }, 1000)
-    })
+  async function sendOldEmailCaptcha() {
+    try {
+      await sendCurrentEmailChangeCaptcha().then(() => {
+        createMessage.success('发送验证码成功')
+      })
+    } catch (e) {
+      return false
+    }
+    return true
   }
   /**
    * 发送验证码 新手机
    */
-  function sendNewEmailCaptcha() {
-    formRef.validateFields('email').then(async () => {
-      sendEmailChangeCaptcha(form.email).then(() => {
-        createMessage.success('发送验证码成功')
-        state.newCaptcha = true
-        const interval = window.setInterval(() => {
-          if (state.newCaptchaTime-- <= 0) {
-            state.newCaptchaTime = 120
-            state.newCaptcha = false
-            window.clearInterval(interval)
-          }
-        }, 1000)
+  async function sendNewEmailCaptcha() {
+    try {
+      await formRef.validateFields('email').then(async () => {
+        sendEmailChangeCaptcha(form.email).then(() => {
+          createMessage.success('发送验证码成功')
+        })
       })
-    })
+    } catch (e) {
+      return false
+    }
+    return true
   }
 
   /**

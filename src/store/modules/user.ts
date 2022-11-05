@@ -6,9 +6,8 @@ import { RoleEnum } from '/@/enums/roleEnum'
 import { PageEnum } from '/@/enums/pageEnum'
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum'
 import { getAuthCache, setAuthCache } from '/@/utils/auth'
-import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel'
-import { doLogout, getUserInfo, loginApi } from '/@/api/sys/user'
-import { useI18n } from '/@/hooks/web/useI18n'
+import { LoginParams } from '/@/api/sys/model/userModel'
+import { doLogout, login } from '/@/api/sys/login'
 import { useMessage } from '/@/hooks/web/useMessage'
 import { router } from '/@/router'
 import { usePermissionStore } from '/@/store/modules/permission'
@@ -16,6 +15,8 @@ import { RouteRecordRaw } from 'vue-router'
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
 import { h } from 'vue'
 import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
+// @ts-ignore
+import { getUserInfo } from '/@/api/sys/user'
 
 interface UserState {
   userInfo: Nullable<UserInfo>
@@ -89,7 +90,7 @@ export const useUserStore = defineStore({
      */
     async login(params: LoginParams) {
       try {
-        const { data: token } = await loginApi(params)
+        const { data: token } = await login(params)
         // 保存token
         this.setToken(token)
         await this.afterLoginAction(true)

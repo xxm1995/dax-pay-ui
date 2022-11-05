@@ -1,7 +1,7 @@
 <template>
   <template v-if="getShow">
-    <LoginFormTitle class="enter-x" />
-    <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
+    <login-form-title class="enter-x" />
+    <a-form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
       <FormItem name="account" class="enter-x">
         <Input size="large" v-model:value="formData.account" :placeholder="t('sys.login.userName')" />
       </FormItem>
@@ -21,16 +21,16 @@
           {{ t('sys.login.backSignIn') }}
         </Button>
       </FormItem>
-    </Form>
+    </a-form>
   </template>
 </template>
 <script lang="ts" setup>
   import { reactive, ref, computed, unref } from 'vue'
-  import LoginFormTitle from './LoginFormTitle.vue'
+  import LoginFormTitle from '../LoginFormTitle.vue'
   import { Form, Input, Button } from 'ant-design-vue'
   import { CountdownInput } from '/@/components/CountDown'
   import { useI18n } from '/@/hooks/web/useI18n'
-  import { useLoginState, useFormRules, LoginStateEnum } from './useLogin'
+  import { useLoginState, useFormRules, LoginStateEnum } from '../useLogin'
 
   const FormItem = Form.Item
   const { t } = useI18n()

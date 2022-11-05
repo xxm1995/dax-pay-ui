@@ -53,7 +53,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref, Ref, onMounted } from 'vue'
+  import { ref, Ref, onMounted, onBeforeUnmount } from 'vue'
   import { useECharts } from '/@/hooks/web/useECharts'
   import { getRedisInfo } from '/@/views/modules/monitor/redis/RedisInfoMonitor.api'
   import { $ref } from 'vue/macros'
@@ -126,6 +126,11 @@
     interval = setInterval(() => {
       getInfo()
     }, 1000 * 5)
+  })
+
+  onBeforeUnmount(() => {
+    clearInterval(interval)
+    interval = null
   })
 
   /**

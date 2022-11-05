@@ -17,7 +17,7 @@ export const useDictStore = defineStore({
     },
   },
   actions: {
-    async initDict() {
+    initDict() {
       findAll().then(({ data }) => {
         this.dict = data.map((o) => {
           return {

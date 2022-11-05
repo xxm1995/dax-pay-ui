@@ -1,9 +1,9 @@
 <template>
   <basic-modal
+    title="邮箱绑定"
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="640"
-    title="邮箱绑定"
     :visible="visible"
     @ok="handleOk"
     @cancel="handleCancel"
@@ -17,10 +17,11 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-item label="邮箱号" name="email">
+        <a-form-item validateFirst label="邮箱号" name="email">
           <a-input v-model:value="form.email" placeholder="邮箱" />
         </a-form-item>
-        <a-form-item label="验证码" name="captcha">
+        <a-form-item validateFirst label="验证码" name="captcha">
+          <count-down-input v-model:value="form.captcha" :send-code-api="sendEmailCaptcha" :count="120">获取验证码</count-down-input>
           <a-input :maxLength="8" placeholder="验证码" v-model:value="form.captcha">
             <template #addonAfter>
               <a-button size="small" type="link" :disabled="state.newCaptcha" href="javascript:" @click="sendEmailCaptcha">
@@ -44,6 +45,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { validateEmail } from '/@/utils/validate'
   import { bindEmail } from '/@/views/account/account.api'
+  import CountDownInput from "/@/components/CountDown/src/CountdownInput.vue";
 
   const emits = defineEmits(['ok'])
   const { visible, confirmLoading, modalWidth, labelCol, wrapperCol, handleCancel } = useFormEdit()
@@ -95,9 +97,6 @@
    */
   function validateEmailRule() {
     const { email } = form
-    if (!email) {
-      return Promise.resolve()
-    }
     const { msg, result } = validateEmail(email)
     return result ? Promise.resolve() : Promise.reject(msg)
   }
@@ -106,14 +105,6 @@
    */
   async function validateBindEmail() {
     const { email } = form
-    if (!email) {
-      return Promise.resolve()
-    }
-    const { msg, result } = validateEmail(email)
-    // 邮箱号验证
-    if (!result) {
-      return Promise.reject(msg)
-    }
     const { data } = await existsEmail(email)
     return data ? Promise.reject('邮箱已被使用') : Promise.resolve()
   }
@@ -122,9 +113,6 @@
    */
   async function validateCaptcha() {
     const { captcha } = form
-    if (!captcha) {
-      return Promise.resolve()
-    }
     const { data } = await validateEmailChangeCaptcha(form.email, captcha)
     return data ? Promise.resolve() : Promise.reject('验证码错误')
   }

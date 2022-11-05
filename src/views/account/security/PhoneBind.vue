@@ -11,6 +11,7 @@
     <a-spin :spinning="confirmLoading">
       <a-form
         ref="formRef"
+        validateFirst
         :model="form"
         :rules="rules"
         :validate-trigger="['blur', 'change']"
@@ -21,13 +22,7 @@
           <a-input v-model:value="form.phone" placeholder="手机号" />
         </a-form-item>
         <a-form-item label="验证码" name="captcha">
-          <a-input :maxLength="8" placeholder="验证码" v-model:value="form.captcha">
-            <template #addonAfter>
-              <a-button size="small" type="link" :disabled="state.captcha" href="javascript:" @click="sendPhoneCaptcha">
-                {{ (!state.captcha && '获取验证码') || '请等待 ' + (state.captchaTime + ' s') }}
-              </a-button>
-            </template>
-          </a-input>
+          <count-down-input v-model:value="form.captcha" :send-code-api="sendPhoneCaptcha" :count="120">获取验证码</count-down-input>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -44,6 +39,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { validateMobile } from '/@/utils/validate'
   import { bindPhone } from '/@/views/account/account.api'
+  import CountDownInput from '/@/components/CountDown/src/CountdownInput.vue'
 
   const emits = defineEmits(['ok'])
   const { visible, confirmLoading, modalWidth, labelCol, wrapperCol, handleCancel } = useFormEdit()
@@ -64,10 +60,6 @@
     ],
   } as Record<string, Rule[]>
 
-  const state = reactive({
-    captcha: false,
-    captchaTime: 120,
-  })
   const formRef = $ref<FormInstance>()
   function init() {
     visible.value = true
@@ -94,9 +86,6 @@
    */
   function validatePhone() {
     const { phone } = form
-    if (!phone) {
-      return Promise.resolve()
-    }
     const { msg, result } = validateMobile(phone)
     return result ? Promise.resolve() : Promise.reject(msg)
   }
@@ -105,14 +94,6 @@
    */
   async function validateBindPhone() {
     const { phone } = form
-    if (!phone) {
-      return Promise.resolve()
-    }
-    const { msg, result } = validateMobile(phone)
-    // 手机号验证
-    if (!result) {
-      return Promise.reject(msg)
-    }
     const { data } = await existsPhone(phone)
     return data ? Promise.reject('手机号已被使用') : Promise.resolve()
   }
@@ -121,29 +102,23 @@
    */
   async function validateCaptcha() {
     const { captcha } = form
-    if (!captcha) {
-      return Promise.resolve()
-    }
     const { data } = await validatePhoneChangeCaptcha(form.phone, captcha)
     return data ? Promise.resolve() : Promise.reject('验证码错误')
   }
   /**
    * 发送验证码 绑定邮箱
    */
-  function sendPhoneCaptcha() {
-    formRef.validateFields('phone').then(async () => {
-      sendPhoneChangeCaptcha(form.phone).then(() => {
-        createMessage.success('发送验证码成功')
-        state.captcha = true
-        const interval = window.setInterval(() => {
-          if (state.captchaTime-- <= 0) {
-            state.captchaTime = 120
-            state.captcha = false
-            window.clearInterval(interval)
-          }
-        }, 1000)
+  async function sendPhoneCaptcha() {
+    try {
+      await formRef.validateFields('phone').then(async () => {
+        sendPhoneChangeCaptcha(form.phone).then(() => {
+          createMessage.success('发送验证码成功')
+        })
       })
-    })
+    } catch (e) {
+      return false
+    }
+    return true
   }
   defineExpose({ init })
 </script>

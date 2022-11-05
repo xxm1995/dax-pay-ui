@@ -2,6 +2,7 @@
   <basic-modal v-bind="$attrs" :loading="confirmLoading" :width="640" title="密码修改" :visible="visible" @cancel="handleCancel">
     <a-form
       ref="formRef"
+      validateFirst
       :validate-trigger="['blur', 'change']"
       :model="form"
       :rules="rules"
