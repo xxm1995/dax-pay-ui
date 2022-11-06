@@ -31,7 +31,7 @@
   </template>
 </template>
 <script lang="ts" setup>
-  import { reactive, ref, unref, computed, onMounted } from 'vue'
+  import { reactive, ref, unref, computed, onMounted, watch } from 'vue'
   import LoginFormTitle from '../LoginFormTitle.vue'
   import { StrengthMeter } from '/@/components/StrengthMeter'
   import { useLoginState, LoginStateEnum } from '../useLogin'
@@ -43,7 +43,19 @@
   import { useMessage } from '/@/hooks/web/useMessage'
 
   const { handleBackLogin, getLoginState } = useLoginState()
-  const getShow = computed(() => unref(getLoginState) === LoginStateEnum.REGISTER)
+  const getShow = computed(() => {
+    const f = unref(getLoginState) === LoginStateEnum.REGISTER
+    if (f) {
+      getCaptcha()
+    }
+    return f
+  })
+  watch(
+    () => getShow,
+    (value) => {
+      console.log(value)
+    },
+  )
 
   const { createMessage } = useMessage()
 
@@ -65,10 +77,6 @@
     confirmPassword: [{ required: true, message: '请重新输入登录密码!' }, { validator: compareToFirstPassword }],
     captcha: [{ required: true, message: '请输入验证码!' }],
   } as Record<string, Rule[]>
-
-  onMounted(() => {
-    getCaptcha()
-  })
 
   /**
    * 获取验证码

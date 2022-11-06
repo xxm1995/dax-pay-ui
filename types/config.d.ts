@@ -149,15 +149,15 @@ export interface GlobConfig {
   shortName: string
 }
 export interface GlobEnvConfig {
-  // Site title
+  // 项目名称
   VITE_GLOB_APP_TITLE: string
-  // Service interface url
+  // 接口地址
   VITE_GLOB_API_URL: string
-  // Service interface url prefix
+  // 接口前缀
   VITE_GLOB_API_URL_PREFIX?: string
   // Project abbreviation
   VITE_GLOB_APP_SHORT_NAME: string
-  // Upload url
+  // 上传接口
   VITE_GLOB_UPLOAD_URL?: string
   // 终端类型
   VITE_GLOB_APP_CLIENT: string
