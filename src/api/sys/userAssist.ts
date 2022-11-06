@@ -158,3 +158,13 @@ export function findUsernameByPhoneCaptcha(phone, captcha) {
     params: { phone, captcha },
   })
 }
+
+/**
+ * 发送短信登录验证码
+ */
+export function sendLoginSmsCode(phone) {
+  return defHttp.post<Result>({
+    url: `/auth/sendSmsCaptcha`,
+    params: { phone },
+  })
+}

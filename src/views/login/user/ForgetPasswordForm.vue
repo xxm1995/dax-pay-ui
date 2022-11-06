@@ -82,8 +82,7 @@
    * 校验手机号
    */
   function validatePhone() {
-    const { phone } = form
-    const { msg, result } = validateMobile(phone)
+    const { msg, result } = validateMobile(form.phone)
     return result ? Promise.resolve() : Promise.reject(msg)
   }
 

@@ -1,5 +1,4 @@
 import type { UserInfo } from '/#/store'
-import type { ErrorMessageMode } from '/#/axios'
 import { defineStore } from 'pinia'
 import { store } from '/@/store'
 import { RoleEnum } from '/@/enums/roleEnum'

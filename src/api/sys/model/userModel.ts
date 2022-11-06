@@ -3,17 +3,17 @@
  */
 export interface LoginParams {
   // 账号/手机号/邮箱
-  account: string
+  account?: string
   // 密码
-  password: string
+  password?: string
   // 终端
   client: string
   // 登录方式
   loginType: string
   // 验证码key
-  captchaKey: string
+  captchaKey?: string
   // 验证码
-  captcha: string
+  captcha?: string
 }
 
 /**
