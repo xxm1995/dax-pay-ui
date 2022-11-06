@@ -1,12 +1,12 @@
 <template>
   <template v-if="getShow">
-    <LoginFormTitle class="enter-x" />
-    <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
+    <login-form-title class="enter-x" />
+    <a-form class="p-4 enter-x" :model="form" :rules="getFormRules" ref="formRef">
       <FormItem name="mobile" class="enter-x">
-        <Input size="large" v-model:value="formData.mobile" placeholder="手机号码" class="fix-auto-fill" />
+        <Input size="large" v-model:value="form.mobile" placeholder="手机号码" class="fix-auto-fill" />
       </FormItem>
       <FormItem name="sms" class="enter-x">
-        <CountdownInput size="large" class="fix-auto-fill" v-model:value="formData.sms" placeholder="短信验证码" />
+        <CountdownInput size="large" class="fix-auto-fill" v-model:value="form.sms" placeholder="短信验证码" />
       </FormItem>
 
       <FormItem class="enter-x">
@@ -17,7 +17,7 @@
           {{ t('sys.login.backSignIn') }}
         </Button>
       </FormItem>
-    </Form>
+    </a-form>
   </template>
 </template>
 <script lang="ts" setup>
@@ -27,16 +27,19 @@
   import LoginFormTitle from './LoginFormTitle.vue'
   import { useI18n } from '/@/hooks/web/useI18n'
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin'
+  import { $ref } from 'vue/macros'
+  import { FormInstance } from 'ant-design-vue/lib/form'
 
   const FormItem = Form.Item
   const { t } = useI18n()
   const { handleBackLogin, getLoginState } = useLoginState()
   const { getFormRules } = useFormRules()
 
-  const formRef = ref()
-  const loading = ref(false)
+  const formRef = $ref<FormInstance>()
+  const loading = $ref(false)
+  const currentTab = $ref(0)
 
-  const formData = reactive({
+  const form = reactive({
     mobile: '',
     sms: '',
   })

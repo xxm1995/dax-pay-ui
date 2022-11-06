@@ -132,7 +132,7 @@ export function validateEmailChangeCaptcha(email, captcha) {
  * 发送找回密码手机验证码
  */
 export function sendPhoneForgetCaptcha(phone) {
-  return defHttp.post({
+  return defHttp.post<Result>({
     url: `/user/sendPhoneForgetCaptcha`,
     method: 'post',
     params: { phone },
@@ -153,7 +153,7 @@ export function validatePhoneForgetCaptcha(phone, captcha) {
  * 根据手机验证码查询账号
  */
 export function findUsernameByPhoneCaptcha(phone, captcha) {
-  return defHttp.get<Result<boolean>>({
+  return defHttp.get<Result<string>>({
     url: `/user/findUsernameByPhoneCaptcha`,
     params: { phone, captcha },
   })

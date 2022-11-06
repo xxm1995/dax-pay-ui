@@ -13,10 +13,10 @@
         <a-input-password v-model:value="form.oldPassword" placeholder="请输入原密码" />
       </a-form-item>
       <a-form-item label="新密码" name="newPassword">
-        <strength-meter v-model:value="form.newPassword" placeholder="请输入新的登录密码" />
+        <strength-meter v-model:value="form.newPassword" placeholder="请输入新的登录密码" @change="validateNewPassword" />
       </a-form-item>
       <a-form-item label="重复密码" name="confirmPassword">
-        <a-input-password v-model:value="form.confirmPassword" placeholder="请输入重复新密码" />
+        <a-input-password v-model:value="form.confirmPassword" placeholder="请重复输入新密码" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -48,10 +48,7 @@
   })
   const rules = reactive({
     oldPassword: [{ required: true, message: '请输入原密码!' }],
-    newPassword: [
-      { required: true, message: '请输入新密码!' },
-      { validator: validateNewPassword, trigger: 'change' },
-    ],
+    newPassword: [{ required: true, message: '请输入新密码!' }],
     confirmPassword: [{ required: true, message: '请重新输入新密码!' }, { validator: validateConfirmPassword }],
   } as Record<string, Rule[]>)
   const formRef = $ref<FormInstance>()
@@ -65,11 +62,9 @@
 
   // 验证新密码
   function validateNewPassword() {
-    const { newPassword } = form
-    if (newPassword && confirmDirty) {
+    if (confirmDirty) {
       formRef.validateFields('confirmPassword')
     }
-    return Promise.resolve()
   }
   // 验证确认密码
   function validateConfirmPassword() {

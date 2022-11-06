@@ -79,7 +79,7 @@
       ],
       newCaptcha: [
         { required: currentTab === 1, message: '请输入验证码!' },
-        { validator: validateNewCaptcha, trigger: 'blur' },
+        { validator: currentTab === 1 ? validateNewCaptcha : null, trigger: 'blur' },
       ],
     } as Record<string, Rule[]>
   })

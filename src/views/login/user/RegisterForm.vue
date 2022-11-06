@@ -7,7 +7,7 @@
           <a-input class="fix-auto-fill" size="large" v-model:value="form.username" placeholder="账号" />
         </a-form-item>
         <a-form-item validate-first name="password" class="enter-x">
-          <strength-meter size="large" v-model:value="form.password" placeholder="密码" />
+          <strength-meter size="large" v-model:value="form.password" placeholder="密码" @change="validateToNextPassword" />
         </a-form-item>
         <a-form-item validate-first name="confirmPassword" class="enter-x">
           <a-input-password size="large" visibilityToggle v-model:value="form.confirmPassword" placeholder="确认密码" />
@@ -61,10 +61,7 @@
 
   const rules = {
     username: [{ required: true, message: '请输入登录账号!' }, { validator: checkUsername }],
-    password: [
-      { required: true, message: '请输入登录密码!' },
-      { validator: validateToNextPassword, trigger: 'change' },
-    ],
+    password: [{ required: true, message: '请输入登录密码!' }],
     confirmPassword: [{ required: true, message: '请重新输入登录密码!' }, { validator: compareToFirstPassword }],
     captcha: [{ required: true, message: '请输入验证码!' }],
   } as Record<string, Rule[]>
@@ -96,7 +93,6 @@
     if (confirmDirty) {
       formRef.validateFields(['confirmPassword'])
     }
-    return Promise.resolve()
   }
   function compareToFirstPassword() {
     if (form.confirmPassword !== form.password) {
@@ -111,7 +107,7 @@
    * 注册
    */
   async function handleSubmit() {
-    await formRef.validate()
+    await formRef.validate().catch()
     loading = true
     try {
       await register(form).then(() => {
