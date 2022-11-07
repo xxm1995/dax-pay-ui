@@ -12,22 +12,14 @@
       <a-form-item label="主键" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
-      <a-form-item label="编码" name="code">
-        <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
-      </a-form-item>
       <a-form-item label="名称" name="name">
         <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
       </a-form-item>
+      <a-form-item label="编码" name="code">
+        <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
+      </a-form-item>
       <a-form-item label="类型" name="type">
-        <a-select :disabled="!addable" v-model:value="form.type" style="width: 100%" placeholder="选择支付方式">
-          <a-select-option :value="1">自身数据</a-select-option>
-          <a-select-option :value="2">用户范围</a-select-option>
-          <a-select-option :value="3">部门范围</a-select-option>
-          <a-select-option :value="4">部门和用户范围</a-select-option>
-          <a-select-option :value="5">全部数据</a-select-option>
-          <a-select-option :value="6">所在部门</a-select-option>
-          <a-select-option :value="7">所在及下级部门</a-select-option>
-        </a-select>
+        <a-select :disabled="!addable" :options="dataScopeTypes" v-model:value="form.type" style="width: 100%" placeholder="选择支付方式" />
       </a-form-item>
       <a-form-item label="说明" name="remark">
         <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入说明" />
@@ -50,9 +42,12 @@
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
-  import { STRING } from '/@/components/Bootx/Query/Query'
   import { useValidate } from '/@/hooks/bootx/useValidate'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
+  import { useDict } from '/@/hooks/bootx/useDict'
 
+  const { existsByServer } = useValidate()
+  const { dictDropDownNumber } = useDict()
   const {
     initFormModel,
     handleCancel,
@@ -68,7 +63,7 @@
     showable,
     formEditType,
   } = useFormEdit()
-  const { existsByServer } = useValidate()
+  let dataScopeTypes = $ref<LabeledValue[]>([])
   // 表单
   const formRef = $ref<FormInstance>()
   let form = $ref({
@@ -94,6 +89,7 @@
   const emits = defineEmits(['ok'])
   // 入口
   function init(id, editType: FormEditType) {
+    dataScopeTypes = dictDropDownNumber('DataScopePerm')
     initFormModel(id, editType)
     resetForm()
     getInfo(id, editType)

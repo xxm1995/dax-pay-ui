@@ -94,6 +94,56 @@ export function existsByNameNotId(name: string, id) {
 }
 
 /**
+ * 获取关联部门id
+ */
+export function getDeptIds(id) {
+  return defHttp.get<Result<string[]>>({
+    url: '/data/scope/getDeptIds',
+    params: { id },
+  })
+}
+
+/**
+ * 保存关联部门
+ */
+export function saveDeptAssign(obj) {
+  return defHttp.post({
+    url: '/data/scope/saveDeptAssign',
+    data: obj,
+  })
+}
+
+/**
+ * 获取关联的用户列表
+ */
+export function findUsersByDataScopeId(id) {
+  return defHttp.get<Result<DataScopeUser[]>>({
+    url: '/data/scope/findUsersByDataScopeId',
+    params: { id },
+  })
+}
+
+/**
+ * 保存关联用户权限
+ */
+export function saveUserAssign(obj) {
+  return defHttp.post({
+    url: '/data/scope/saveUserAssign',
+    data: obj,
+  })
+}
+
+/**
+ * 批量删除关联用户权限
+ */
+export function deleteBatchUserAssign(obj) {
+  return defHttp.delete({
+    url: '/data/scope/deleteUserAssigns',
+    data: obj,
+  })
+}
+
+/**
  * 数据范围权限
  */
 export interface DataScope extends BaseEntity {
@@ -105,4 +155,16 @@ export interface DataScope extends BaseEntity {
   type: number
   // 说明
   remark: string
+}
+
+/**
+ * 用户数据范围权限详细信息
+ */
+export interface DataScopeUser extends BaseEntity {
+  //用户id
+  userId: string
+  //用户名称
+  name: string
+  //用户账号
+  username: string
 }

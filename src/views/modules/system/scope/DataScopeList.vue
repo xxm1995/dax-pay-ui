@@ -15,10 +15,14 @@
         <vxe-column type="seq" width="60" />
         <vxe-column field="code" title="编码" />
         <vxe-column field="name" title="名称" />
-        <vxe-column field="type" title="类型" />
+        <vxe-column field="type" title="类型">
+          <template #default="{ row }">
+            {{ dictConvert('DataScopePerm', row.type) }}
+          </template>
+        </vxe-column>
         <vxe-column field="remark" title="说明" />
         <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="210" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
               <a href="javascript:" @click="show(row)">查看</a>
@@ -31,6 +35,22 @@
             <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
               <a href="javascript:" style="color: red">删除</a>
             </a-popconfirm>
+            <template v-if="[2, 3, 4].includes(row.type)">
+              <a-divider type="vertical" />
+              <a-dropdown>
+                <a class="ant-dropdown-link"> 关联 <icon icon="ant-design:down-outlined" :size="12" /> </a>
+                <template #overlay>
+                  <a-menu>
+                    <a-menu-item :disabled="![2, 4].includes(row.type)">
+                      <a :disabled="![2, 4].includes(row.type) ? true : null" href="javascript:" @click="handleUserScope(row)">关联用户</a>
+                    </a-menu-item>
+                    <a-menu-item :disabled="![3, 4].includes(row.type)">
+                      <a href="javascript:" :disabled="![3, 4].includes(row.type) ? true : null" @click="handleDeptScope(row)">关联部门</a>
+                    </a-menu-item>
+                  </a-menu>
+                </template>
+              </a-dropdown>
+            </template>
           </template>
         </vxe-column>
       </vxe-table>
@@ -43,6 +63,8 @@
         @page-change="handleTableChange"
       />
       <data-scope-edit ref="dataScopeEdit" @ok="queryPage" />
+      <dept-scope-modal ref="deptScopeModal" />
+      <user-scope-modal ref="userScopeModal" />
     </div>
   </div>
 </template>
@@ -58,10 +80,15 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { STRING } from '/@/components/Bootx/Query/Query'
+  import { useDict } from '/@/hooks/bootx/useDict'
+  import DeptScopeModal from './DeptScopeModal.vue'
+  import UserScopeModal from './UserScopeModal.vue'
+  import Icon from '/@/components/Icon/src/Icon.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage } = useMessage()
+  const { dictConvert } = useDict()
 
   // 查询条件
   const fields = [
@@ -72,6 +99,8 @@
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const dataScopeEdit = $ref<any>()
+  const deptScopeModal = $ref<any>()
+  const userScopeModal = $ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -102,6 +131,14 @@
   // 查看
   function show(record) {
     dataScopeEdit.init(record.id, FormEditType.Show)
+  }
+  // 用户范围
+  function handleUserScope(record) {
+    userScopeModal.init(record.id)
+  }
+  // 部门范围
+  function handleDeptScope(record) {
+    deptScopeModal.init(record.id)
   }
 
   // 删除
