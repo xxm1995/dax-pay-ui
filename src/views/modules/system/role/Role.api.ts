@@ -33,6 +33,26 @@ export const add = (obj: Role) => {
 }
 
 /**
+ * 保存 角色分配菜单关系
+ */
+export function saveRoleMenu(obj) {
+  return defHttp.post({
+    url: `/role/menu/save`,
+    data: obj,
+  })
+}
+
+/**
+ * 保存 角色请求权限关系
+ */
+export function saveRolePath(obj) {
+  return defHttp.post({
+    url: `/role/path/save`,
+    data: obj,
+  })
+}
+
+/**
  * 更新
  */
 export const update = (obj: Role) => {
@@ -92,6 +112,35 @@ export const existsByNameNotId = (name: string, id) => {
 export const findAll = () => {
   return defHttp.get<Result<Array<Role>>>({
     url: '/role/findAll',
+  })
+}
+
+/**
+ * 根据用户获取拥有的权限
+ */
+export function findPermissionIdsByRole(roleId, clientCode) {
+  return defHttp.get<Result<string[]>>({
+    url: `/role/menu/findPermissionIdsByRole`,
+    params: { roleId, clientCode },
+  })
+}
+
+/**
+ * 根据用户id获取角色授权(请求权限列表)
+ */
+export function findPathsByUser() {
+  return defHttp.get<Result<string[]>>({
+    url: `/role/path/findPathsByUser`,
+  })
+}
+
+/**
+ * 根据角色id获取关联请求权限id
+ */
+export function findPathIdsByRole(roleId) {
+  return defHttp.get<Result>({
+    url: `/role/path/findIdsByRole`,
+    params: { roleId },
   })
 }
 

@@ -8,7 +8,7 @@
     :visible="visible"
     @close="visible = false"
   >
-    <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: init }">
+    <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: queryPage }">
       <template #buttons>
         <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
       </template>
@@ -30,7 +30,7 @@
             <a href="javascript:" @click="show(row)">查看</a>
           </span>
           <a-divider type="vertical" />
-          <a href="javascript:" :disabled="row.admin" @click="edit(row)">编辑</a>
+          <a href="javascript:" @click="edit(row)">编辑</a>
           <a-divider type="vertical" />
           <a-popconfirm title="是否删除该项" @confirm="remove(row)" okText="是" cancelText="否">
             <a href="javascript:" v-if="row.admin" disabled>删除</a>
@@ -76,13 +76,14 @@
 
   // 分页查询
   function queryPage() {
+    loading.value = true
     resourceList(menuInfo.id).then(({ data }) => {
       tableData = data
       loading.value = false
     })
   }
   function add() {
-    resourceEdit.init(null, FormEditType.Add, menuInfo.clientCode)
+    resourceEdit.init(null, FormEditType.Add, menuInfo.clientCode, menuInfo.id)
   }
   function edit(record: Menu) {
     resourceEdit.init(record.id, FormEditType.Edit, menuInfo.clientCode)

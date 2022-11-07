@@ -36,10 +36,10 @@
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
-                    <a href="javascript:" @click="handleRoleMenu(row)">菜单授权</a>
+                    <a href="javascript:" @click="handleRoleMenu(row)">菜单和权限码</a>
                   </a-menu-item>
                   <a-menu-item>
-                    <a href="javascript:" @click="handleRolePath(row)">请求授权</a>
+                    <a href="javascript:" @click="handleRolePath(row)">请求资源</a>
                   </a-menu-item>
                 </a-menu>
               </template>
@@ -56,6 +56,8 @@
         @page-change="handleTableChange"
       />
       <role-edit ref="roleEdit" @ok="queryPage" />
+      <role-menu-modal ref="roleMenuModal" />
+      <role-path-modal ref="rolePathModal" />
     </div>
   </div>
 </template>
@@ -72,12 +74,16 @@
   import { $ref } from 'vue/macros'
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import Icon from '/@/components/Icon/src/Icon.vue'
+  import RoleMenuModal from "./RoleMenuModal.vue";
+  import RolePathModal from "./RolePathModal.vue";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { createMessage } = useMessage()
 
-  const roleEdit = ref()
+  const roleEdit = $ref<any>()
+  const roleMenuModal = $ref<any>()
+  const rolePathModal = $ref<any>()
   // 查询条件
   const fields = [
     { field: 'code', type: STRING, name: '角色编号', placeholder: '请输入角色编码' },
@@ -106,20 +112,24 @@
   }
   // 新增
   function add() {
-    roleEdit.value.init(null, FormEditType.Add)
+    roleEdit.init(null, FormEditType.Add)
   }
   // 查看
   function edit(record) {
-    roleEdit.value.init(record.id, FormEditType.Edit)
+    roleEdit.init(record.id, FormEditType.Edit)
   }
   // 查看
   function show(record) {
-    roleEdit.value.init(record.id, FormEditType.Show)
+    roleEdit.init(record.id, FormEditType.Show)
   }
   // 菜单授权处理
-  function handleRoleMenu(record) {}
+  function handleRoleMenu(record) {
+    roleMenuModal.init(record.id)
+  }
   // 请求授权处理
-  function handleRolePath(record) {}
+  function handleRolePath(record) {
+    rolePathModal.init(record.id)
+  }
   // 删除
   function remove(record) {
     del(record.id).then(() => {

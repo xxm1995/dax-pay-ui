@@ -79,13 +79,24 @@ export const existsByPermCodeNotId = (permCode, id) => {
 }
 
 /**
+ * 菜单列表
+ * @param clientCode
+ */
+export function allMenuTree(clientCode) {
+  return defHttp.get<Result<MenuTree[]>>({
+    url: '/perm/menu/allTree',
+    params: { clientCode },
+  })
+}
+
+/**
  * 权限_菜单
  */
 export interface Menu extends BaseEntity {
   // 终端code
   clientCode?: string
   // 父id
-  parentId: number | null
+  parentId: number | null | string
   // 菜单名称
   title: string
   // 路由名称
@@ -118,6 +129,13 @@ export interface Menu extends BaseEntity {
   admin?: boolean
   // 描述
   remark?: string
+}
+
+/**
+ * 菜单树
+ */
+export interface MenuTree extends Menu {
+  children: []
 }
 
 /**

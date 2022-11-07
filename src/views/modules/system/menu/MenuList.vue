@@ -5,7 +5,7 @@
         <a-row :gutter="10">
           <a-col :md="6" :sm="24">
             <a-form-item label="终端">
-              <a-select v-model:value="clientCode" @change="init" :default-value="clientCode" style="width: 100%">
+              <a-select v-model:value="clientCode" @change="queryPage" :default-value="clientCode" style="width: 100%">
                 <a-select-option v-for="o in clients" :key="o.code">{{ o.name }}</a-select-option>
               </a-select>
             </a-form-item>
@@ -25,7 +25,7 @@
       </a-form>
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: init }">
+      <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: queryPage }">
         <template #buttons>
           <a-button type="primary" @click="add()"> 新建 </a-button>
           <a-button style="margin-left: 8px" @click="allTreeExpand(true)">展开所有</a-button>
@@ -90,7 +90,7 @@
           </template>
         </vxe-column>
       </vxe-table>
-      <menu-edit ref="menuEdit" @ok="init" />
+      <menu-edit ref="menuEdit" @ok="queryPage" />
       <resource-list ref="resourceList" />
     </div>
   </div>
@@ -127,7 +127,7 @@
   onMounted(() => {
     vxeBind()
     initClients()
-    init()
+    queryPage()
   })
 
   function vxeBind() {
@@ -139,7 +139,7 @@
     clients = data
   }
 
-  async function init() {
+  async function queryPage() {
     loading = true
     menuTree(clientCode).then((res) => {
       remoteTableData = res.data
@@ -175,7 +175,7 @@
       onOk: () => {
         del(record.id).then(() => {
           notification.success({ message: '删除成功' })
-          init()
+          queryPage()
         })
       },
     })
