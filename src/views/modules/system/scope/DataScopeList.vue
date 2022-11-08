@@ -81,7 +81,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import DeptScopeModal from './DeptScopeModal.vue'
+  import DeptScopeModal from './DeptScopeModalx.vue'
   import UserScopeModal from './UserScopeModal.vue'
   import Icon from '/@/components/Icon/src/Icon.vue'
 

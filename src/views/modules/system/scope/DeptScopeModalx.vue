@@ -1,35 +1,30 @@
 <template>
-  <basic-drawer forceRender v-bind="$attrs" title="用户范围权限分配" width="60%" :visible="visible" @close="visible = false">
+  <basic-drawer showFooter v-bind="$attrs" title="用户范围权限分配" width="40%" :visible="visible" @close="handleCancel">
     <a-spin :spinning="loading">
-      <a-input style="margin-bottom: 8px" placeholder="筛选" allowClear v-model="searchName" @change="search" />
-      <!--      <a-tree-->
-      <!--        :checkable="true"-->
-      <!--        :checkStrictly="true"-->
-      <!--        v-model:checkedKeys="checkedKeys"-->
-      <!--        v-model:expandedKeys="expandedKeys"-->
-      <!--        :auto-expand-parent="autoExpandParent"-->
-      <!--        :tree-data="treeData"-->
-      <!--        @check="onCheck"-->
-      <!--        @expand="onExpand"-->
-      <!--      >-->
-      <!--        <template #title="{ title }">-->
-      <!--          <span v-if="title.indexOf(searchName) > -1">-->
-      <!--            {{ title.substr(0, title.indexOf(searchName)) }}-->
-      <!--            <span style="color: #f50">{{ searchName }}</span>-->
-      <!--            {{ title.substr(title.indexOf(searchName) + searchName.length) }}-->
-      <!--          </span>-->
-      <!--          <span v-else>{{ title }}</span>-->
-      <!--        </template>-->
-      <!--      </a-tree>-->
+      <a-input style="margin-bottom: 8px" placeholder="筛选" allowClear v-model:vallue="searchName" @change="search" />
       <a-tree
+        ref="treeRef"
+        :checkable="true"
+        :checkStrictly="true"
+        v-model:checkedKeys="checkedKeys"
         v-model:expandedKeys="expandedKeys"
-        v-model:selectedKeys="checkedKeys"
-        checkable
+        :auto-expand-parent="autoExpandParent"
         :tree-data="treeData"
-      />
+        @check="onCheck"
+        @expand="onExpand"
+      >
+        <template #title="{ title }">
+          <span v-if="title.indexOf(searchName) > -1">
+            {{ title.substr(0, title.indexOf(searchName)) }}
+            <span style="color: #f50">{{ searchName }}</span>
+            {{ title.substr(title.indexOf(searchName) + searchName.length) }}
+          </span>
+          <span v-else>{{ title }}</span>
+        </template>
+      </a-tree>
     </a-spin>
     <template #footer>
-      <a-dropdown style="float: left" :trigger="['click']" placement="topCenter">
+      <a-dropdown :trigger="['click']">
         <template #overlay>
           <a-menu>
             <a-menu-item key="1" @click="checkALL">全部勾选</a-menu-item>
@@ -49,10 +44,10 @@
 <script lang="ts" setup>
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   import { $ref } from 'vue/macros'
-  import { tree } from '/@/views/modules/system/dept/Dept.api'
   import { getDeptIds, saveDeptAssign } from '/@/views/modules/system/scope/DataScope.api'
   import XEUtils from 'xe-utils'
   import { treeDataTranslate } from '/@/utils/dataUtil'
+  import { tree } from '/@/views/modules/system/dept/Dept.api'
 
   let loading = $ref(false)
   let visible = $ref(false)
@@ -65,17 +60,17 @@
   let autoExpandParent = $ref(false)
   let treeData = $ref<any[]>([])
   let treeList = $ref<any[]>([])
-  let aTree = $ref<any>([])
+  let treeRef = $ref<any>()
 
   // 入口
   async function init(id) {
     visible = true
     loading = true
     dataScopeId = id
+    expandedKeys = []
     // 权限树
     await tree().then(({ data }) => {
       treeData = treeDataTranslate(data, 'id', 'deptName')
-      console.log(treeData)
       generateTreeList(data)
     })
     // 当前用户已经分配的数据权限
