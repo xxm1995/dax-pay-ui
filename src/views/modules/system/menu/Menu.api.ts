@@ -135,7 +135,7 @@ export interface Menu extends BaseEntity {
  * 菜单树
  */
 export interface MenuTree extends Menu {
-  children: []
+  children: MenuTree[]
 }
 
 /**

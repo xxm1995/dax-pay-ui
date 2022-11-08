@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="m-3 p-3 pt-5 bg-white">
-      <a-form class="query" layout="inline">
+      <a-form class="page-query" layout="inline">
         <a-row :gutter="10">
           <a-col :md="6" :sm="24">
             <a-form-item label="终端">
@@ -211,13 +211,4 @@
   }
 </script>
 
-<style lang="less" scoped>
-  .query {
-    .ant-form-item {
-      margin-bottom: 8px;
-    }
-    .ant-row {
-      width: 100%;
-    }
-  }
-</style>
+<style lang="less" scoped></style>

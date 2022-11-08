@@ -15,6 +15,7 @@ export function treeDataTranslate(data, value = 'value', title = 'title', childr
       key: data[i][value],
       title: data[i][title],
       value: String(data[i][value]),
+      raw: data,
       children: [],
     } as Tree
     if (data[i][children] && data[i][children].length > 0) {
@@ -28,6 +29,8 @@ interface Tree {
   key: string
   title: string
   value: unknown
+  // 关联原始数据
+  raw: unknown
   children: undefined | unknown[] | null
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <a-form class="query" layout="inline">
+  <a-form class="page-query" layout="inline">
     <a-row :gutter="gutter">
       <query-item
         :key="i"
@@ -73,13 +73,4 @@
   }
 </script>
 
-<style lang="less" scoped>
-  .query {
-    .ant-form-item {
-      margin-bottom: 8px;
-    }
-    .ant-row {
-      width: 100%;
-    }
-  }
-</style>
+<style lang="less" scoped></style>
