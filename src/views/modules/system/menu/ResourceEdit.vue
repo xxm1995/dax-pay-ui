@@ -69,7 +69,7 @@
 
   // 入口
   function init(id, editType: FormEditType, clientCode, parentId) {
-    initFormModel(id, editType)
+    initFormModel(editType)
     resetForm()
     form.clientCode = clientCode
     console.log(parentId)

@@ -90,7 +90,7 @@
   // 入口
   function init(id, editType: FormEditType) {
     dataScopeTypes = dictDropDownNumber('DataScopePerm')
-    initFormModel(id, editType)
+    initFormModel(editType)
     resetForm()
     getInfo(id, editType)
   }

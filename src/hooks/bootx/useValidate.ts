@@ -12,8 +12,13 @@ async function existsByServer(value, id, formEditType, existsFun, existsNotIdFun
   return res.data ? Promise.reject(errMsg) : Promise.resolve()
 }
 
+async function nullValidate() {
+  return Promise.resolve()
+}
+
 export function useValidate() {
   return {
     existsByServer,
+    nullValidate,
   }
 }

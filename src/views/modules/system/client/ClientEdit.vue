@@ -111,7 +111,7 @@
 
   // 入口
   function init(id, editType: FormEditType) {
-    initFormModel(id, editType)
+    initFormModel(editType)
     resetForm()
     initLoginTypes()
     getInfo(id, editType)

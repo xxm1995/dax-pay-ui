@@ -122,7 +122,7 @@
   // 入口
   function init(id, editType: FormEditType, dept: Dept) {
     loadTree()
-    initFormModel(id, editType)
+    initFormModel(editType)
     resetForm()
     getInfo(id, editType, dept)
   }

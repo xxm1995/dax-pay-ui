@@ -106,7 +106,7 @@
   // 表单
   const formRef = $ref<FormInstance>()
   let rawForm
-  let form = $ref({
+  let form = $ref<MailConfig>({
     id: null,
     code: '',
     name: '',
@@ -118,7 +118,7 @@
     from: '',
     activity: 0,
     securityType: 1,
-  } as MailConfig)
+  })
 
   let securityTypes = $ref<LabeledValue[]>()
   // 校验
@@ -144,7 +144,7 @@
   // 入口
   function init(id, editType: FormEditType) {
     initData()
-    initFormModel(id, editType)
+    initFormModel(editType)
     resetForm()
     getInfo(id, editType)
   }
@@ -172,7 +172,7 @@
       if (formEditType.value === FormEditType.Add) {
         await add(form)
       } else if (formEditType.value === FormEditType.Edit) {
-        await update({ ...form, ...diffForm(rawForm, form, 'username', 'password') })
+        await update({ ...form, ...diffForm(rawForm, form, 'phone', 'email') })
       }
       confirmLoading.value = false
       handleCancel()

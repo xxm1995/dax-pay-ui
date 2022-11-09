@@ -100,7 +100,9 @@
         @page-change="handleTableChange"
       />
       <user-add ref="userAdd" @ok="queryPage" />
-<!--      <user-edit ref="userEdit" @ok="queryPage" />-->
+      <user-edit ref="userEdit" @ok="queryPage" />
+      <user-show ref="userShow" />
+      <user-role-assign ref="userRoleAssign" />
     </div>
   </div>
 </template>
@@ -109,15 +111,17 @@
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { onMounted, ref } from 'vue'
+  import { onMounted } from 'vue'
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { $ref } from 'vue/macros'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { lockUser, lockUserBatch, page, unlockUser, unlockUserBatch } from './User.api'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import Icon from '/@/components/Icon/src/Icon.vue'
-  import UserAdd from '/@/views/modules/system/user/UserAdd.vue'
-  import UserEdit from '/@/views/modules/system/user/UserEdit.vue'
+  import { Icon } from '/@/components/Icon'
+  import UserAdd from './UserAdd.vue'
+  import UserEdit from './UserEdit.vue'
+  import UserShow from './UserShow.vue'
+  import UserRoleAssign from './role/UserRoleAssign.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading, batchOperateFlag } =
@@ -213,21 +217,21 @@
   }
   // 分配角色
   function assignRoles(record) {
-    userRoleAssign.edit(record)
+    userRoleAssign.init(record)
   }
   // 批量分配角色
   function assignRolesBatch() {
     const userIds = xTable.getCheckboxRecords().map((o) => o.id)
-    userRoleAssignBatch.edit(userIds)
+    userRoleAssignBatch.init(userIds)
   }
   // 分配数据权限
   function assignDataScope(record) {
-    userDataScopeAssign.edit(record)
+    userDataScopeAssign.init(record)
   }
   // 批量分配数据权限
   function assignDataScopeBatch() {
     const userIds = xTable.getCheckboxRecords().map((o) => o.id)
-    userDataScopeAssignBatch.edit(userIds)
+    userDataScopeAssignBatch.init(userIds)
   }
   // 分配部门
   function assignDept(record) {
@@ -242,13 +246,14 @@
     userAdd.init()
   }
   function show(record) {
+    console.log('show')
     userShow.init(record.id)
   }
   function edit(record) {
     userEdit.init(record.id)
   }
   function resetPwd(record) {
-    resetPassword.init(record.id, 'edit')
+    resetPassword.init(record.id)
   }
 </script>
 

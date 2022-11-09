@@ -23,7 +23,7 @@ export default function () {
   // 状态
   const { labelCol, wrapperCol, title, modalWidth, confirmLoading, visible, editable, addable, showable, formEditType } = toRefs(model)
 
-  function initFormModel(record, editType: FormEditType, ...vars) {
+  function initFormModel(editType: FormEditType, ...vars) {
     formEditType.value = editType
     visible.value = true
     if (formEditType.value === FormEditType.Add) {
@@ -53,7 +53,7 @@ export default function () {
     return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
   }
 
-  // 判断脱敏参数是否被修改的参数, 未修改返回空值
+  // 判断脱敏参数是否被修改的参数, 未修改返回空值 rawForm 后端获取到的原始数据, editForm 修改后的数据, keys 字段名称
   function diffForm(rawForm, editForm, ...keys) {
     const form = {}
     for (const key of keys) {

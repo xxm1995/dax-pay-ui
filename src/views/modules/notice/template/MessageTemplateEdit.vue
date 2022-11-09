@@ -106,7 +106,7 @@
   // 入口
   function init(id, editType: FormEditType) {
     initData()
-    initFormModel(id, editType)
+    initFormModel(editType)
     resetForm()
     getInfo(id, editType)
   }

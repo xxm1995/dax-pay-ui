@@ -43,16 +43,6 @@ export function update(obj) {
 }
 
 /**
- * 删除
- */
-export function del(id) {
-  return defHttp.delete({
-    url: '/user/admin/delete',
-    params: { id },
-  })
-}
-
-/**
  * 查询全部
  */
 export function findAll() {
@@ -120,22 +110,22 @@ export interface UserInfo extends BaseEntity {
   // 账号
   username: string
   // 密码
-  password: string
+  password?: string
+  // 确认密码
+  confirmPassword?: string
   // 手机号
-  phone: string
+  phone?: string
   // 邮箱
-  email: string
+  email?: string
   // 关联终端
-  clientIds: string
-  clientIdList: string[]
-  // 头像
-  avatar: string
+  clientIds?: string
+  clientIdList?: string[]
   // 注册来源
-  source: string
+  source?: string
   // 是否超级管理员
-  admin: boolean
+  admin?: boolean
   // 注册时间
-  registerTime: string
+  registerTime?: string
   // 账号状态
-  status: number
+  status?: number
 }

@@ -86,7 +86,7 @@
   const emits = defineEmits(['ok'])
   // 入口
   function init(id, editType: FormEditType, dict: Dict) {
-    initFormModel(id, editType)
+    initFormModel(editType)
     resetForm()
     form.dictId = dict.id as number
     form.dictCode = dict.code

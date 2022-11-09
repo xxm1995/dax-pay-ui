@@ -68,7 +68,7 @@
   const emits = defineEmits(['ok'])
   // 入口
   function init(id, editType: FormEditType) {
-    initFormModel(id, editType)
+    initFormModel(editType)
     resetForm()
     getInfo(id, editType)
   }

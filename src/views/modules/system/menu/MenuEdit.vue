@@ -125,7 +125,7 @@
   // 入口
   function init(id, editType: FormEditType, clientCode, row) {
     initMenuTree(clientCode)
-    initFormModel(id, editType)
+    initFormModel(editType)
     resetForm()
     form.clientCode = clientCode
     getInfo(id, editType, row)

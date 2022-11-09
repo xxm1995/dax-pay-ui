@@ -4,7 +4,6 @@
     title="添加用户"
     v-bind="$attrs"
     :width="modalWidth"
-    :loading="confirmLoading"
     :visible="visible"
     :mask-closable="false"
     @ok="handleOk"
@@ -32,15 +31,15 @@
         <a-form-item label="确认密码" name="confirmPassword">
           <a-input-password v-model:value="form.confirmPassword" placeholder="请重新输入登录密码" />
         </a-form-item>
-        <a-form-item label="关联应用" name="appIdList">
+        <a-form-item label="关联应用" name="clientIdList">
           <a-select
             allowClear
             mode="multiple"
-            v-model:value="form.appIdList"
-            :default-value="form.appIdList"
+            v-model:value="form.clientIdList"
+            :default-value="form.clientIdList"
             :filter-option="search"
             :options="clients"
-            placeholder="请重新输入登录密码"
+            placeholder="请选择关联适用的终端"
           />
         </a-form-item>
         <a-form-item label="手机号" name="phone">
@@ -66,18 +65,18 @@
   import { existsEmail, existsPhone, existsUsername } from '/@/api/sys/userAssist'
   import { findAll as findClients } from '/@/views/modules/system/client/Client.api'
   import { dropdownTranslate } from '/@/utils/dataUtil'
-  import { add } from '/@/views/modules/system/user/User.api'
+  import { add, UserInfo } from './User.api'
   import { useMessage } from '/@/hooks/web/useMessage'
 
   const { initFormModel, handleCancel, search, labelCol, wrapperCol, modalWidth, confirmLoading, visible, formEditType } = useFormEdit()
   const { createMessage } = useMessage()
   const formRef = $ref<FormInstance>()
-  let form = $ref({
+  let form = $ref<UserInfo>({
     name: '',
     username: '',
     phone: '',
     email: '',
-    appIdList: [],
+    clientIdList: [],
     password: '',
     confirmPassword: '',
   })

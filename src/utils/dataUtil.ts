@@ -58,7 +58,7 @@ export function findOneByField(list: any[], fieldValue: object, fieldName: strin
  * @param labelName label名称
  * @param valueName 值名称
  */
-export function dropdownTranslate(list: any[], labelName = 'code', valueName = 'name') {
+export function dropdownTranslate(list: any[], labelName = 'name', valueName = 'code') {
   return unref(list)?.map((o) => {
     return {
       label: o[labelName],
