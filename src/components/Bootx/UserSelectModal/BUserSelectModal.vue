@@ -58,7 +58,7 @@
   import { $ref } from 'vue/macros'
   import { STRING } from '/@/components/Bootx/Query/Query'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import { page } from '/@/views/modules/system/user/UserInfo.api'
+  import { page } from '/@/views/modules/system/user/User.api'
 
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
 

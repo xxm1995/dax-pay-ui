@@ -25,7 +25,7 @@ export function get(id) {
 /**
  * 添加
  */
-export function add(obj: UserInfo) {
+export function add(obj) {
   return defHttp.post({
     url: '/user/admin/add',
     data: obj,
@@ -35,7 +35,7 @@ export function add(obj: UserInfo) {
 /**
  * 更新
  */
-export function update(obj: UserInfo) {
+export function update(obj) {
   return defHttp.post({
     url: '/user/admin/update',
     data: obj,
@@ -125,8 +125,9 @@ export interface UserInfo extends BaseEntity {
   phone: string
   // 邮箱
   email: string
-  // 关联终端ds
+  // 关联终端
   clientIds: string
+  clientIdList: string[]
   // 头像
   avatar: string
   // 注册来源

@@ -99,6 +99,8 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
+      <user-add ref="userAdd" @ok="queryPage" />
+<!--      <user-edit ref="userEdit" @ok="queryPage" />-->
     </div>
   </div>
 </template>
@@ -111,9 +113,11 @@
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { $ref } from 'vue/macros'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
-  import { lockUser, lockUserBatch, page, unlockUser, unlockUserBatch } from './UserInfo.api'
+  import { lockUser, lockUserBatch, page, unlockUser, unlockUserBatch } from './User.api'
   import { useDict } from '/@/hooks/bootx/useDict'
   import Icon from '/@/components/Icon/src/Icon.vue'
+  import UserAdd from '/@/views/modules/system/user/UserAdd.vue'
+  import UserEdit from '/@/views/modules/system/user/UserEdit.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading, batchOperateFlag } =
@@ -128,6 +132,16 @@
   ] as QueryField[]
   let xTable = $ref<VxeTableInstance>()
   let xToolbar = $ref<VxeToolbarInstance>()
+  let userAdd = $ref<any>()
+  let userEdit = $ref<any>()
+  let userShow = $ref<any>()
+  let userRoleAssign = $ref<any>()
+  let userRoleAssignBatch = $ref<any>()
+  let userDataScopeAssign = $ref<any>()
+  let userDataScopeAssignBatch = $ref<any>()
+  let userDeptAssign = $ref<any>()
+  let userDeptAssignBatch = $ref<any>()
+  let resetPassword = $ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -196,6 +210,45 @@
         queryPage()
       },
     })
+  }
+  // 分配角色
+  function assignRoles(record) {
+    userRoleAssign.edit(record)
+  }
+  // 批量分配角色
+  function assignRolesBatch() {
+    const userIds = xTable.getCheckboxRecords().map((o) => o.id)
+    userRoleAssignBatch.edit(userIds)
+  }
+  // 分配数据权限
+  function assignDataScope(record) {
+    userDataScopeAssign.edit(record)
+  }
+  // 批量分配数据权限
+  function assignDataScopeBatch() {
+    const userIds = xTable.getCheckboxRecords().map((o) => o.id)
+    userDataScopeAssignBatch.edit(userIds)
+  }
+  // 分配部门
+  function assignDept(record) {
+    userDeptAssign.init(record.id)
+  }
+  // 批量分配数据部门
+  function assignDeptBatch() {
+    const userIds = xTable.getCheckboxRecords().map((o) => o.id)
+    userDeptAssignBatch.init(userIds)
+  }
+  function add() {
+    userAdd.init()
+  }
+  function show(record) {
+    userShow.init(record.id)
+  }
+  function edit(record) {
+    userEdit.init(record.id)
+  }
+  function resetPwd(record) {
+    resetPassword.init(record.id, 'edit')
   }
 </script>
 

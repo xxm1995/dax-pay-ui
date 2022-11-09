@@ -1,4 +1,5 @@
 import { unref } from 'vue'
+import { LabeledValue } from 'ant-design-vue/lib/select'
 
 /**
  * 树形数据转换
@@ -9,13 +10,13 @@ import { unref } from 'vue'
  * @returns {*[]}
  */
 export function treeDataTranslate(data, value = 'value', title = 'title', children = 'children') {
-  const temp = [] as unknown[]
+  const temp = [] as Tree[]
   for (let i = 0; i < data.length; i++) {
     const p = {
       key: data[i][value],
       title: data[i][title],
       value: String(data[i][value]),
-      raw: data,
+      raw: data[i],
       children: [],
     } as Tree
     if (data[i][children] && data[i][children].length > 0) {
@@ -25,13 +26,13 @@ export function treeDataTranslate(data, value = 'value', title = 'title', childr
   }
   return temp
 }
-interface Tree {
+export interface Tree {
   key: string
   title: string
   value: unknown
   // 关联原始数据
   raw: unknown
-  children: undefined | unknown[] | null
+  children?: Tree[] | null
 }
 
 /**
@@ -57,11 +58,11 @@ export function findOneByField(list: any[], fieldValue: object, fieldName: strin
  * @param labelName label名称
  * @param valueName 值名称
  */
-export function dropdownTranslate(list: any[], labelName: string, valueName: string) {
+export function dropdownTranslate(list: any[], labelName = 'code', valueName = 'name') {
   return unref(list)?.map((o) => {
     return {
       label: o[labelName],
       value: o[valueName],
-    }
+    } as LabeledValue
   })
 }

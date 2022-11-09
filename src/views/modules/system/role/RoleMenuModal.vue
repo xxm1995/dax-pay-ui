@@ -12,7 +12,7 @@
         @check="onCheck"
         @expand="onExpand"
       >
-        <template #title="{ title }">
+        <template #title="{ title, raw }">
           <span v-if="title.toLowerCase().indexOf(searchName.toLowerCase()) > -1">
             {{ searchRenderStart(title, searchName) }}
             <span style="color: #f50">
@@ -21,6 +21,7 @@
             {{ searchRenderEnd(title, searchName) }}
           </span>
           <span v-else>{{ title }}</span>
+          <span v-show="raw.menuType === 2" style="color: #a63434"> (权限码)</span>
         </template>
       </a-tree>
     </a-spin>
@@ -53,7 +54,7 @@
   import { findAll as findClients, Client } from '/@/views/modules/system/client/Client.api'
   import { getAppEnvConfig } from '/@/utils/env'
   import { findPermissionIdsByRole, saveRoleMenu } from '/@/views/modules/system/role/Role.api'
-  import { treeDataTranslate } from '/@/utils/dataUtil'
+  import { Tree, treeDataTranslate } from '/@/utils/dataUtil'
   import XEUtils from 'xe-utils'
   import { allMenuTree, MenuTree } from '/@/views/modules/system/menu/Menu.api'
 
@@ -76,7 +77,7 @@
   let checkedKeys = $ref<string[]>([])
   let autoExpandParent = $ref(false)
   //菜单树信息
-  let treeData = $ref<MenuTree[]>([])
+  let treeData = $ref<Tree[]>([])
   let treeList = $ref<MenuTree[]>([])
 
   function init(id) {
@@ -99,7 +100,7 @@
     expandedKeys = []
     // 权限树
     await allMenuTree(clientCode).then((res) => {
-      treeData = treeDataTranslate(res.data, 'id', 'title') as MenuTree[]
+      treeData = treeDataTranslate(res.data, 'id', 'title')
       generateTreeList(res.data)
     })
     // 当前角色已经选择的
