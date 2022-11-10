@@ -10,6 +10,7 @@ import {
   SelectOption,
   List,
   Tabs,
+  Alert,
   Upload,
   Checkbox,
   Switch,
@@ -64,6 +65,7 @@ export function registerGlobComp(app: App) {
   app.use(Tree)
   app.use(TreeSelect)
   app.use(Card)
+  app.use(Alert)
   app.use(Menu)
   app.use(Tooltip)
   app.use(Descriptions)

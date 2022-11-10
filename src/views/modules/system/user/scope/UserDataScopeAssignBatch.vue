@@ -10,22 +10,21 @@
     @ok="handleOk"
   >
     <a-spin :spinning="confirmLoading">
+      <a-row>
+        <a-col span="16" offset="4">
+          <a-alert style="margin-bottom: 20px" message="注意！会清空用户原有分配的数据权限" banner closable />
+        </a-col>
+      </a-row>
       <a-form class="small-from-item" ref="formRef" :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="账号" name="account">
-          <a-input :disabled="true" v-model:value="userInfo.username" />
-        </a-form-item>
-        <a-form-item label="用户名称" name="name">
-          <a-input :disabled="true" v-model:value="userInfo.name" />
-        </a-form-item>
-        <a-form-item label="角色" name="roleIds">
+        <a-form-item label="数据权限" name="dataScopeId">
           <a-select
             allowClear
-            mode="multiple"
-            v-model:value="form.roleIds"
-            :options="roles"
-            :filter-option="search"
+            v-model:value="form.dataScopeId"
             style="width: 100%"
-            placeholder="选择角色"
+            :default-value="form.dataScopeId"
+            :filter-option="search"
+            :options="dataScopes"
+            placeholder="选择数据权限"
           />
         </a-form-item>
       </a-form>
@@ -34,59 +33,42 @@
 </template>
 
 <script lang="ts" setup>
+  import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { $ref } from 'vue/macros'
-  import { UserInfo } from '/@/views/modules/system/user/User.api'
-  import { nextTick } from 'vue'
-  import { LabeledValue } from 'ant-design-vue/lib/select'
   import { FormInstance } from 'ant-design-vue/lib/form'
-  import {
-    addUserDataScope,
-    addUserRole,
-    getRoleIds
-  } from "/@/views/modules/system/user/UserAssign.api";
-  import { findAll as roleList } from '/@/views/modules/system/role/Role.api'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
+  import { nextTick } from 'vue'
+  import { findAll as dataScopeList } from '/@/views/modules/system/scope/DataScope.api'
   import { dropdownTranslate } from '/@/utils/dataUtil'
-  import BasicModal from '/@/components/Modal/src/BasicModal.vue'
+  import { addUserDataScopeBatch } from '/@/views/modules/system/user/UserAssign.api'
 
   const { createMessage } = useMessage()
   const { initFormModel, handleCancel, search, labelCol, wrapperCol, modalWidth, confirmLoading, visible } = useFormEdit()
   let formRef = $ref<FormInstance>()
-  let userInfo = $ref<UserInfo>({
-    name: '',
-    username: '',
-  })
-  let roles = $ref<LabeledValue[]>([])
+  let dataScopes = $ref<LabeledValue[]>([])
   let form = $ref({
-    userId: '',
-    roleIds: [] as string[],
+    userIds: [],
+    dataScopeId: undefined as undefined | string,
   })
-
-  async function init(info: UserInfo) {
-    userInfo = info
+  async function init(ids) {
     visible.value = true
     confirmLoading.value = true
     await nextTick(() => {
       formRef.resetFields()
     })
-    form.userId = info.id as string
-    // 获取角色列表
-    await roleList().then(({ data }) => {
-      roles = dropdownTranslate(data, 'name', 'id')
-    })
-
-    // 获取角色信息
-    await getRoleIds(userInfo.id).then(({ data }) => {
-      form.roleIds = data
+    form.userIds = ids
+    // 获取数据权限列表
+    await dataScopeList().then(({ data }) => {
+      dataScopes = dropdownTranslate(data, 'name', 'id')
     })
     confirmLoading.value = false
   }
-
   function handleOk() {
     formRef.validate().then(async () => {
       confirmLoading.value = true
-      await addUserDataScope(form)
+      await addUserDataScopeBatch(form)
       createMessage.success('保存成功')
       confirmLoading.value = false
       visible.value = false

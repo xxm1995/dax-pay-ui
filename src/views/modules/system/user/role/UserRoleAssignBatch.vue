@@ -1,7 +1,7 @@
 <template>
   <basic-modal
     v-bind="$attrs"
-    title="用户角色分配"
+    title="用户角色批量分配"
     :width="modalWidth"
     :visible="visible"
     :confirmLoading="confirmLoading"
@@ -10,13 +10,12 @@
     @ok="handleOk"
   >
     <a-spin :spinning="confirmLoading">
+      <a-row>
+        <a-col span="16" offset="5">
+          <a-alert style="margin-bottom: 20px" message="注意！会清空用户原有分配的角色" banner closable />
+        </a-col>
+      </a-row>
       <a-form class="small-from-item" ref="formRef" :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="账号" name="account">
-          <a-input :disabled="true" v-model:value="userInfo.username" />
-        </a-form-item>
-        <a-form-item label="用户名称" name="name">
-          <a-input :disabled="true" v-model:value="userInfo.name" />
-        </a-form-item>
         <a-form-item label="角色" name="roleIds">
           <a-select
             allowClear
@@ -34,64 +33,51 @@
 </template>
 
 <script lang="ts" setup>
+  import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { $ref } from 'vue/macros'
-  import { UserInfo } from '/@/views/modules/system/user/User.api'
-  import { nextTick } from 'vue'
-  import { LabeledValue } from 'ant-design-vue/lib/select'
   import { FormInstance } from 'ant-design-vue/lib/form'
-  import {
-    addUserDataScope,
-    addUserRole,
-    getRoleIds
-  } from "/@/views/modules/system/user/UserAssign.api";
+  import { LabeledValue } from 'ant-design-vue/lib/select'
   import { findAll as roleList } from '/@/views/modules/system/role/Role.api'
   import { dropdownTranslate } from '/@/utils/dataUtil'
-  import BasicModal from '/@/components/Modal/src/BasicModal.vue'
-
+  import { nextTick } from 'vue'
+  import { addUserRoleBatch } from '/@/views/modules/system/user/UserAssign.api'
   const { createMessage } = useMessage()
   const { initFormModel, handleCancel, search, labelCol, wrapperCol, modalWidth, confirmLoading, visible } = useFormEdit()
-  let formRef = $ref<FormInstance>()
-  let userInfo = $ref<UserInfo>({
-    name: '',
-    username: '',
-  })
+
+  const formRef = $ref<FormInstance>()
   let roles = $ref<LabeledValue[]>([])
+
   let form = $ref({
-    userId: '',
+    userIds: [] as string[],
     roleIds: [] as string[],
   })
 
-  async function init(info: UserInfo) {
-    userInfo = info
+  async function init(ids) {
     visible.value = true
     confirmLoading.value = true
     await nextTick(() => {
       formRef.resetFields()
     })
-    form.userId = info.id as string
     // 获取角色列表
     await roleList().then(({ data }) => {
       roles = dropdownTranslate(data, 'name', 'id')
     })
-
-    // 获取角色信息
-    await getRoleIds(userInfo.id).then(({ data }) => {
-      form.roleIds = data
-    })
+    form.userIds = ids
     confirmLoading.value = false
   }
 
   function handleOk() {
     formRef.validate().then(async () => {
       confirmLoading.value = true
-      await addUserDataScope(form)
-      createMessage.success('保存成功')
+      await addUserRoleBatch(form)
+      createMessage.success('批量分配角色成功')
       confirmLoading.value = false
       visible.value = false
     })
   }
+
   defineExpose({ init })
 </script>
 

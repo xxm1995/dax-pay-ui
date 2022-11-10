@@ -35,7 +35,7 @@
           <a-tag color="green" v-for="o in clientList" :key="o.id">{{ o.name }}</a-tag>
         </a-form-item>
         <a-form-item label="数据权限">
-          <a-tag color="green" v-for="o in dataScopes" :key="o.id">{{ o.name }}</a-tag>
+          <a-tag color="green" v-show="dataScope.name">{{ dataScope.name }}</a-tag>
         </a-form-item>
         <a-form-item label="部门列表">
           <a-tag color="green" v-for="o in deptList" :key="o.id">{{ o.deptName }}</a-tag>
@@ -55,7 +55,7 @@
   import { Client, findAll } from '/@/views/modules/system/client/Client.api'
   import { Role } from '/@/views/modules/system/role/Role.api'
   import { get, UserInfo } from '/@/views/modules/system/user/User.api'
-  import { getDataScopes, getDeptList, getRoles } from '/@/views/modules/system/user/UserAssign.api'
+  import { getDataScopeByUser, getDeptList, getRoles } from '/@/views/modules/system/user/UserAssign.api'
   import { DataScope } from '/@/views/modules/system/scope/DataScope.api'
   import { Dept } from '/@/views/modules/system/dept/Dept.api'
   import { useDict } from '/@/hooks/bootx/useDict'
@@ -71,7 +71,7 @@
   let roles = $ref<Role[]>([])
   let clients = $ref<Client[]>([])
   let clientList = $ref<Client[]>([])
-  let dataScopes = $ref<DataScope[]>([])
+  let dataScope = $ref<DataScope>({})
   let deptList = $ref<Dept[]>([])
 
   async function init(id) {
@@ -87,8 +87,8 @@
     await getDeptList(id).then((res) => {
       deptList = res.data
     })
-    await getDataScopes(id).then((res) => {
-      dataScopes = res.data
+    await getDataScopeByUser(id).then((res) => {
+      dataScope = res.data
     })
     confirmLoading.value = false
   }

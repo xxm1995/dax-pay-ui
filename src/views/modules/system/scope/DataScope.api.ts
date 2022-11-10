@@ -148,13 +148,13 @@ export function deleteBatchUserAssign(obj) {
  */
 export interface DataScope extends BaseEntity {
   // 编码
-  code: string
+  code?: string
   // 名称
-  name: string
+  name?: string
   // 类型
-  type: number
+  type?: number
   // 说明
-  remark: string
+  remark?: string
 }
 
 /**

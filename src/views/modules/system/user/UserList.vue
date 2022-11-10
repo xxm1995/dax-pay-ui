@@ -103,6 +103,11 @@
       <user-edit ref="userEdit" @ok="queryPage" />
       <user-show ref="userShow" />
       <user-role-assign ref="userRoleAssign" />
+      <user-role-assign-batch ref="userRoleAssignBatch" />
+      <user-data-scope-assign ref="userDataScopeAssign" />
+      <user-data-scope-assign-batch ref="userDataScopeAssignBatch" />
+      <user-dept-assign ref="userDeptAssign" />
+      <user-dept-assign-batch ref="userDeptAssignBatch" />
     </div>
   </div>
 </template>
@@ -122,6 +127,11 @@
   import UserEdit from './UserEdit.vue'
   import UserShow from './UserShow.vue'
   import UserRoleAssign from './role/UserRoleAssign.vue'
+  import UserRoleAssignBatch from './role/UserRoleAssignBatch.vue'
+  import UserDataScopeAssign from './scope/UserDataScopeAssign.vue'
+  import UserDataScopeAssignBatch from './scope/UserDataScopeAssignBatch.vue'
+  import UserDeptAssign from './dept/UserDeptAssign.vue'
+  import UserDeptAssignBatch from './dept/UserDeptAssignBatch.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading, batchOperateFlag } =
@@ -237,7 +247,7 @@
   function assignDept(record) {
     userDeptAssign.init(record.id)
   }
-  // 批量分配数据部门
+  // 批量分配部门
   function assignDeptBatch() {
     const userIds = xTable.getCheckboxRecords().map((o) => o.id)
     userDeptAssignBatch.init(userIds)
@@ -246,7 +256,6 @@
     userAdd.init()
   }
   function show(record) {
-    console.log('show')
     userShow.init(record.id)
   }
   function edit(record) {

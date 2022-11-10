@@ -88,9 +88,9 @@ export function addUserRoleBatch(data) {
 /**
  * 获取用户拥有数据权限id集合
  */
-export function findDataScopeIdsByUser(id) {
-  return defHttp.get<Result<string[]>>({
-    url: `/user/data/scope/findIdsByUser`,
+export function getDataScopeIdByUser(id) {
+  return defHttp.get<Result<string>>({
+    url: `/user/data/scope/findDataScopeIdByUser`,
     params: { id },
   })
 }
@@ -98,9 +98,9 @@ export function findDataScopeIdsByUser(id) {
 /**
  * 获取用户拥有数据权限集合
  */
-export function getDataScopes(id) {
-  return defHttp.get<Result<DataScope[]>>({
-    url: `/user/data/scope/findAllByUser`,
+export function getDataScopeByUser(id) {
+  return defHttp.get<Result<DataScope>>({
+    url: `/user/data/scope/findDataScopeByUser`,
     params: { id },
   })
 }

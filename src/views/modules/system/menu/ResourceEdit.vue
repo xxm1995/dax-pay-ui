@@ -72,7 +72,6 @@
     initFormModel(editType)
     resetForm()
     form.clientCode = clientCode
-    console.log(parentId)
     form.parentId = parentId
     getInfo(id, editType)
   }
