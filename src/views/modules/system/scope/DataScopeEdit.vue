@@ -49,7 +49,7 @@
   const { existsByServer } = useValidate()
   const { dictDropDownNumber } = useDict()
   const {
-    initFormModel,
+    initFormEditType,
     handleCancel,
     search,
     labelCol,
@@ -90,7 +90,7 @@
   // 入口
   function init(id, editType: FormEditType) {
     dataScopeTypes = dictDropDownNumber('DataScopePerm')
-    initFormModel(editType)
+    initFormEditType(editType)
     resetForm()
     getInfo(id, editType)
   }

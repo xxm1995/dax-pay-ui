@@ -68,7 +68,7 @@
   import { add, UserInfo } from './User.api'
   import { useMessage } from '/@/hooks/web/useMessage'
 
-  const { initFormModel, handleCancel, search, labelCol, wrapperCol, modalWidth, confirmLoading, visible, formEditType } = useFormEdit()
+  const { initFormEditType, handleCancel, search, labelCol, wrapperCol, modalWidth, confirmLoading, visible, formEditType } = useFormEdit()
   const { createMessage } = useMessage()
   const formRef = $ref<FormInstance>()
   let form = $ref<UserInfo>({

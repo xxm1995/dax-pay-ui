@@ -2,24 +2,41 @@
   <basic-modal
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="modalWidth"
     :title="title"
+    :width="modalWidth"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-form class="small-from-item" ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+    <a-form
+      class="small-from-item"
+      ref="formRef"
+      :model="form"
+      :rules="rules"
+      :validate-trigger="['blur', 'change']"
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+    >
       <a-form-item label="主键" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
-      <a-form-item label="数据名称" name="dataName">
-        <a-input v-model:value="form.dataName" :disabled="showable" placeholder="请输入数据名称" />
+      <a-form-item label="机器人编码" name="code">
+        <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编号" />
       </a-form-item>
-      <a-form-item label="数据主键" name="dataId">
-        <a-input v-model:value="form.dataId" :disabled="showable" placeholder="请输入数据主键" />
+      <a-form-item label="名称" name="name">
+        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
       </a-form-item>
-      <a-form-item label="数据内容" name="dataContent">
-        <a-input v-model:value="form.dataContent" :disabled="showable" placeholder="请输入数据内容" />
+      <a-form-item label="AccessToken" name="accessToken">
+        <a-input v-model:value="form.accessToken" :disabled="showable" placeholder="请输入钉钉机器人访问token" />
+      </a-form-item>
+      <a-form-item label="是否开启验签" name="enableSignatureCheck">
+        <a-switch checked-children="开" un-checked-children="关" v-model:checked="form.enableSignatureCheck" :disabled="showable" />
+      </a-form-item>
+      <a-form-item label="钉钉机器人私钥" name="signSecret">
+        <a-input v-model:value="form.signSecret" :disabled="showable" placeholder="请输入钉钉机器人私钥" />
+      </a-form-item>
+      <a-form-item label="备注" name="remark">
+        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -35,15 +52,16 @@
   import { nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, DataVersionLog } from './DataVersionLog.api'
+  import { add, get, update, existsByCode, existsByCodeNotId, DingRobotConfig } from './DingRobotConfig.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
-
+  import { useValidate } from '/@/hooks/bootx/useValidate'
   const {
     initFormEditType,
     handleCancel,
     search,
+    diffForm,
     labelCol,
     wrapperCol,
     modalWidth,
@@ -54,16 +72,28 @@
     showable,
     formEditType,
   } = useFormEdit()
+  const { existsByServer } = useValidate()
   // 表单
   const formRef = $ref<FormInstance>()
   let form = $ref({
     id: null,
-    dataName: null,
-    dataId: null,
-    dataContent: null,
-  } as DataVersionLog)
+    name: '',
+    code: '',
+    accessToken: '',
+    enableSignatureCheck: true,
+    signSecret: '',
+    remark: '',
+  } as DingRobotConfig)
+  let rawForm
   // 校验
-  const rules = reactive({} as Record<string, Rule[]>)
+  const rules = reactive({
+    code: [
+      { required: true, message: '请输入钉钉机器人编码' },
+      { validator: validateCode, trigger: 'blur' },
+    ],
+    name: [{ required: true, message: '请输入钉钉机器人名称' }],
+    accessToken: [{ required: true, message: '请输入AccessToken' }],
+  } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
@@ -77,6 +107,7 @@
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
       confirmLoading.value = true
       get(id).then(({ data }) => {
+        rawForm = { ...data }
         form = data
         confirmLoading.value = false
       })
@@ -91,15 +122,19 @@
       if (formEditType.value === FormEditType.Add) {
         await add(form)
       } else if (formEditType.value === FormEditType.Edit) {
-        await update(form)
+        await update({ ...form, ...diffForm(rawForm, form, 'accessToken', 'signSecret') })
       }
       confirmLoading.value = false
       handleCancel()
       emits('ok')
     })
   }
-
-  // 重置表单的校验
+  // 校验
+  function validateCode() {
+    const { code, id } = form
+    return existsByServer(code, id, formEditType, existsByCode, existsByCodeNotId)
+  }
+  // 重置表单
   function resetForm() {
     nextTick(() => {
       formRef.resetFields()

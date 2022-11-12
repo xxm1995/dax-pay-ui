@@ -49,7 +49,7 @@
   import { useValidate } from '/@/hooks/bootx/useValidate'
 
   const {
-    initFormModel,
+    initFormEditType,
     handleCancel,
     search,
     labelCol,
@@ -86,7 +86,7 @@
   const emits = defineEmits(['ok'])
   // 入口
   function init(id, editType: FormEditType, dict: Dict) {
-    initFormModel(editType)
+    initFormEditType(editType)
     resetForm()
     form.dictId = dict.id as number
     form.dictCode = dict.code

@@ -86,7 +86,7 @@
   import { useValidate } from '/@/hooks/bootx/useValidate'
 
   const {
-    initFormModel,
+    initFormEditType,
     handleCancel,
     search,
     diffForm,
@@ -144,7 +144,7 @@
   // 入口
   function init(id, editType: FormEditType) {
     initData()
-    initFormModel(editType)
+    initFormEditType(editType)
     resetForm()
     getInfo(id, editType)
   }

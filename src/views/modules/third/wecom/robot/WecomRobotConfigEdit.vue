@@ -30,7 +30,7 @@
         <a-input v-model:value="form.webhookKey" :disabled="showable" placeholder="请输入webhook地址的key值" />
       </a-form-item>
       <a-form-item label="备注" name="remark">
-        <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
+        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -46,16 +46,16 @@
   import { nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, WecomRobotConfig } from './WecomRobotConfig.api'
+  import { add, existsByCode, existsByCodeNotId, get, update, WecomRobotConfig } from './WecomRobotConfig.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
-  import { existsByPermCode, existsByPermCodeNotId } from '/@/views/modules/system/menu/Menu.api'
   import { useValidate } from '/@/hooks/bootx/useValidate'
   const {
-    initFormModel,
+    initFormEditType,
     handleCancel,
     search,
+    diffForm,
     labelCol,
     wrapperCol,
     modalWidth,
@@ -77,6 +77,7 @@
     webhookKey: '',
     remark: '',
   } as WecomRobotConfig)
+  let rawForm
   // 校验
   const rules = reactive({
     code: [
@@ -90,7 +91,7 @@
   const emits = defineEmits(['ok'])
   // 入口
   function init(id, editType: FormEditType) {
-    initFormModel(id, editType)
+    initFormEditType(editType)
     resetForm()
     getInfo(id, editType)
   }
@@ -99,6 +100,7 @@
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
       confirmLoading.value = true
       get(id).then(({ data }) => {
+        rawForm = { ...data }
         form = data
         confirmLoading.value = false
       })
@@ -113,7 +115,7 @@
       if (formEditType.value === FormEditType.Add) {
         await add(form)
       } else if (formEditType.value === FormEditType.Edit) {
-        await update(form)
+        await update({ ...form, ...diffForm(rawForm, form, 'webhookKey') })
       }
       confirmLoading.value = false
       handleCancel()
@@ -130,7 +132,7 @@
   // 校验
   function validateCode() {
     const { code, id } = form
-    return existsByServer(code, id, formEditType, existsByPermCode, existsByPermCodeNotId)
+    return existsByServer(code, id, formEditType, existsByCode, existsByCodeNotId)
   }
   defineExpose({
     init,

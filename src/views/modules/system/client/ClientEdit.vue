@@ -68,7 +68,7 @@
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
 
   const {
-    initFormModel,
+    initFormEditType,
     handleCancel,
     search,
     labelCol,
@@ -111,7 +111,7 @@
 
   // 入口
   function init(id, editType: FormEditType) {
-    initFormModel(editType)
+    initFormEditType(editType)
     resetForm()
     initLoginTypes()
     getInfo(id, editType)

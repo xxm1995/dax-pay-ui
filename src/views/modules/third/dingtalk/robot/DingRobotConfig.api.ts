@@ -6,8 +6,8 @@ import { BaseEntity } from '/#/web'
  * 分页
  */
 export function page(params) {
-  return defHttp.get<Result<PageResult<WecomRobotConfig>>>({
-    url: '/wecom/robot/config/page',
+  return defHttp.get<Result<PageResult<DingRobotConfig>>>({
+    url: '/ding/robot/config/page',
     params,
   })
 }
@@ -16,8 +16,8 @@ export function page(params) {
  * 查询全部
  */
 export function findAll() {
-  return defHttp.get<Result<WecomRobotConfig[]>>({
-    url: '/wecom/robot/config/findAll',
+  return defHttp.get<Result<DingRobotConfig[]>>({
+    url: '/ding/robot/config/findAll',
   })
 }
 
@@ -25,8 +25,8 @@ export function findAll() {
  * 获取单条
  */
 export function get(id) {
-  return defHttp.get<Result<WecomRobotConfig>>({
-    url: '/wecom/robot/config/findById',
+  return defHttp.get<Result<DingRobotConfig>>({
+    url: '/ding/robot/config/findById',
     params: { id },
   })
 }
@@ -34,9 +34,9 @@ export function get(id) {
 /**
  * 添加
  */
-export function add(obj: WecomRobotConfig) {
+export function add(obj: DingRobotConfig) {
   return defHttp.post({
-    url: '/wecom/robot/config/add',
+    url: '/ding/robot/config/add',
     data: obj,
   })
 }
@@ -44,9 +44,9 @@ export function add(obj: WecomRobotConfig) {
 /**
  * 更新
  */
-export function update(obj: WecomRobotConfig) {
+export function update(obj: DingRobotConfig) {
   return defHttp.post({
-    url: '/wecom/robot/config/update',
+    url: '/ding/robot/config/update',
     data: obj,
   })
 }
@@ -56,7 +56,7 @@ export function update(obj: WecomRobotConfig) {
  */
 export function del(id) {
   return defHttp.delete({
-    url: '/wecom/robot/config/delete',
+    url: '/ding/robot/config/delete',
     params: { id },
   })
 }
@@ -66,28 +66,33 @@ export function del(id) {
  */
 export function existsByCode(code) {
   return defHttp.get<Result<boolean>>({
-    url: '/wecom/robot/config/existsByCode',
-    method: 'GET',
+    url: '/ding/robot/config/existsByCode',
     params: { code },
   })
 }
+
 export function existsByCodeNotId(code, id) {
   return defHttp.get<Result<boolean>>({
-    url: '/wecom/robot/config/existsByCodeNotId',
+    url: '/ding/robot/config/existsByCodeNotId',
+    method: 'GET',
     params: { code, id },
   })
 }
 
 /**
- * 企业微信机器人配置
+ * 钉钉机器人配置
  */
-export interface WecomRobotConfig extends BaseEntity {
+export interface DingRobotConfig extends BaseEntity {
   // 名称
   name: string
   // 编号
   code: string
-  // webhook地址的key值
-  webhookKey: string
+  // 钉钉机器人访问token
+  accessToken: string
+  // 是否开启验签
+  enableSignatureCheck: boolean
+  // 钉钉机器人私钥
+  signSecret: string
   // 备注
   remark: string
 }

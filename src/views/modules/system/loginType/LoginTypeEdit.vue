@@ -81,7 +81,7 @@
   const { existsByServer } = useValidate()
 
   const {
-    initFormModel,
+    initFormEditType,
     handleCancel,
     search,
     labelCol,
@@ -124,7 +124,7 @@
 
   // 入口
   function init(id, editType: FormEditType) {
-    initFormModel(editType)
+    initFormEditType(editType)
     resetForm()
     getInfo(id, editType)
   }

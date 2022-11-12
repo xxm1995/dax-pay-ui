@@ -82,7 +82,7 @@
   import { validateMobile } from '/@/utils/validate'
   import { treeDataTranslate } from '/@/utils/dataUtil'
   const {
-    initFormModel,
+    initFormEditType,
     handleCancel,
     search,
     labelCol,
@@ -122,7 +122,7 @@
   // 入口
   function init(id, editType: FormEditType, dept: Dept) {
     loadTree()
-    initFormModel(editType)
+    initFormEditType(editType)
     resetForm()
     getInfo(id, editType, dept)
   }

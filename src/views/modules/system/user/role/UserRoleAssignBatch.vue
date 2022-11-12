@@ -44,7 +44,7 @@
   import { nextTick } from 'vue'
   import { addUserRoleBatch } from '/@/views/modules/system/user/UserAssign.api'
   const { createMessage } = useMessage()
-  const { initFormModel, handleCancel, search, labelCol, wrapperCol, modalWidth, confirmLoading, visible } = useFormEdit()
+  const { initFormEditType, handleCancel, search, labelCol, wrapperCol, modalWidth, confirmLoading, visible } = useFormEdit()
 
   const formRef = $ref<FormInstance>()
   let roles = $ref<LabeledValue[]>([])

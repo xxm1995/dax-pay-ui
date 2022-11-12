@@ -51,7 +51,7 @@
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
 
   const { createMessage } = useMessage()
-  const { initFormModel, handleCancel, search, labelCol, wrapperCol, modalWidth, confirmLoading, visible } = useFormEdit()
+  const { initFormEditType, handleCancel, search, labelCol, wrapperCol, modalWidth, confirmLoading, visible } = useFormEdit()
   let formRef = $ref<FormInstance>()
   let userInfo = $ref<UserInfo>({
     name: '',

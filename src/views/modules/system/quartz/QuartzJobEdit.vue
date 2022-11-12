@@ -61,7 +61,7 @@
   import EasyCron from '/@/components/EasyCron/EasyCron.vue'
 
   const {
-    initFormModel,
+    initFormEditType,
     handleCancel,
     search,
     labelCol,
@@ -101,7 +101,7 @@
   const emits = defineEmits(['ok'])
   // 入口
   function init(id, editType: FormEditType) {
-    initFormModel(editType)
+    initFormEditType(editType)
     resetForm()
     getInfo(id, editType)
   }

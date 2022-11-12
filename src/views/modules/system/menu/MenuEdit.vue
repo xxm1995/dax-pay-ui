@@ -87,7 +87,7 @@
   import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
 
-  const { initFormModel, handleCancel, search, labelCol, wrapperCol, title, confirmLoading, visible, editable, showable, formEditType } =
+  const { initFormEditType, handleCancel, search, labelCol, wrapperCol, title, confirmLoading, visible, editable, showable, formEditType } =
     useFormEdit()
 
   let form = $ref({
@@ -125,7 +125,7 @@
   // 入口
   function init(id, editType: FormEditType, clientCode, row) {
     initMenuTree(clientCode)
-    initFormModel(editType)
+    initFormEditType(editType)
     resetForm()
     form.clientCode = clientCode
     getInfo(id, editType, row)

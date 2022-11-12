@@ -45,7 +45,7 @@
   import { addUserDataScopeBatch } from '/@/views/modules/system/user/UserAssign.api'
 
   const { createMessage } = useMessage()
-  const { initFormModel, handleCancel, search, labelCol, wrapperCol, modalWidth, confirmLoading, visible } = useFormEdit()
+  const { initFormEditType, handleCancel, search, labelCol, wrapperCol, modalWidth, confirmLoading, visible } = useFormEdit()
   let formRef = $ref<FormInstance>()
   let dataScopes = $ref<LabeledValue[]>([])
   let form = $ref({

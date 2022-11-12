@@ -44,7 +44,7 @@
 
   const emits = defineEmits(['ok'])
 
-  const { initFormModel, handleCancel, search, labelCol, wrapperCol, title, confirmLoading, visible, editable, showable, formEditType } =
+  const { initFormEditType, handleCancel, search, labelCol, wrapperCol, title, confirmLoading, visible, editable, showable, formEditType } =
     useFormEdit()
   const { existsByServer } = useValidate()
 
@@ -69,7 +69,7 @@
 
   // 入口
   function init(id, editType: FormEditType, clientCode, parentId) {
-    initFormModel(editType)
+    initFormEditType(editType)
     resetForm()
     form.clientCode = clientCode
     form.parentId = parentId

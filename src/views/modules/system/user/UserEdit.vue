@@ -61,7 +61,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { useValidate } from '/@/hooks/bootx/useValidate'
 
-  const { initFormModel, handleCancel, diffForm, search, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, formEditType } =
+  const { initFormEditType, handleCancel, diffForm, search, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, formEditType } =
     useFormEdit()
   const { createMessage } = useMessage()
   const { nullValidate } = useValidate()

@@ -23,7 +23,7 @@ export default function () {
   // 状态
   const { labelCol, wrapperCol, title, modalWidth, confirmLoading, visible, editable, addable, showable, formEditType } = toRefs(model)
 
-  function initFormModel(editType: FormEditType, ...vars) {
+  function initFormEditType(editType: FormEditType) {
     formEditType.value = editType
     visible.value = true
     if (formEditType.value === FormEditType.Add) {
@@ -74,7 +74,7 @@ export default function () {
     addable,
     showable,
     formEditType,
-    initFormModel,
+    initFormEditType,
     handleCancel,
     search,
     diffForm,

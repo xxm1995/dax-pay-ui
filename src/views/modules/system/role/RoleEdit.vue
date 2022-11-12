@@ -33,7 +33,7 @@
   import { BasicModal } from '/@/components/Modal'
   import { useValidate } from '/@/hooks/bootx/useValidate'
 
-  const { initFormModel, handleCancel, search, labelCol, wrapperCol, title, confirmLoading, visible, editable, showable, formEditType } =
+  const { initFormEditType, handleCancel, search, labelCol, wrapperCol, title, confirmLoading, visible, editable, showable, formEditType } =
     useFormEdit()
   const { existsByServer } = useValidate()
 
@@ -60,7 +60,7 @@
   const emits = defineEmits(['ok'])
   // 入口
   function init(id, editType: FormEditType) {
-    initFormModel(editType)
+    initFormEditType(editType)
     resetForm()
     getInfo(id, editType)
   }
