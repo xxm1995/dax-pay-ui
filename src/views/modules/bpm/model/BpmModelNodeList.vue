@@ -36,9 +36,9 @@
         <template #default="{ row }">
           <a href="javascript:" @click="show(row)">查看</a>
           <a-divider type="vertical" />
-          <a href="javascript:" :disabled="modelPublish" @click="edit(row)">编辑</a>
+          <a-link :disabled="modelPublish" @click="edit(row)">编辑</a-link>
           <a-divider type="vertical" />
-          <a href="javascript:" :disabled="modelPublish" @click="remove(row)" :style="{ color: modelPublish ? '' : 'red' }">删除</a>
+          <a-link :disabled="modelPublish" @click="remove(row)" :style="{ color: modelPublish ? '' : 'red' }">删除</a-link>
         </template>
       </vxe-column>
     </vxe-table>
