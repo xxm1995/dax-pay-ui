@@ -1,5 +1,7 @@
 import type { App } from 'vue'
 import { Button } from './Button'
+import { Link } from './Link'
+import { Icon } from './Icon'
 import {
   Layout,
   Input,
@@ -40,6 +42,8 @@ import {
 export function registerGlobComp(app: App) {
   app.use(Input)
   app.use(Button)
+  app.use(Link)
+  app.use(Icon)
   app.use(Layout)
   app.use(InputNumber)
   app.use(Tag)

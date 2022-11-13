@@ -67,14 +67,12 @@ export const findAll = () => {
 export const existsByCode = (code: string) => {
   return defHttp.get<Result<boolean>>({
     url: '/loginType/existsByCode',
-    method: 'GET',
     params: { code },
   })
 }
 export const existsByCodeNotId = (code: string, id) => {
   return defHttp.get<Result<boolean>>({
     url: '/loginType/existsByCodeNotId',
-    method: 'GET',
     params: { code, id },
   })
 }

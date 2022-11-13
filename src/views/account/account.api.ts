@@ -86,7 +86,6 @@ export function updateEmail(obj) {
 export function getThirdBindInfo() {
   return defHttp.get<Result<UserThirdBindInfo>>({
     url: `/user/third/getThirdBindInfo`,
-    method: 'get',
   })
 }
 

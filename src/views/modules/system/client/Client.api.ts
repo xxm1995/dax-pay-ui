@@ -74,7 +74,6 @@ export const existsByCode = (code: string) => {
 export const existsByCodeNotId = (code: string, id) => {
   return defHttp.get<Result<boolean>>({
     url: '/client/existsByCodeNotId',
-    method: 'GET',
     params: { code, id },
   })
 }

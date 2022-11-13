@@ -96,7 +96,6 @@ export function unlockUser(userId) {
 export function unlockUserBatch(userIds) {
   return defHttp.post({
     url: '/user/admin/unlockBatch',
-    method: 'POST',
     data: userIds,
   })
 }

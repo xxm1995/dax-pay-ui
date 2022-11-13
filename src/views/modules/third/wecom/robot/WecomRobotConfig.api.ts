@@ -67,7 +67,6 @@ export function del(id) {
 export function existsByCode(code) {
   return defHttp.get<Result<boolean>>({
     url: '/wecom/robot/config/existsByCode',
-    method: 'GET',
     params: { code },
   })
 }

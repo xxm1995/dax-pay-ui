@@ -194,4 +194,8 @@
   })
 </script>
 
-<style scoped></style>
+<style lang="less" scoped>
+  .vben-basic-title {
+    font-size: 14px;
+  }
+</style>

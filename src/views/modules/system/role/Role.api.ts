@@ -78,14 +78,12 @@ export const del = (id) => {
 export const existsByCode = (code: string) => {
   return defHttp.get<Result<boolean>>({
     url: '/role/existsByCode',
-    method: 'GET',
     params: { code },
   })
 }
 export const existsByCodeNotId = (code: string, id) => {
   return defHttp.get<Result<boolean>>({
     url: '/role/existsByCodeNotId',
-    method: 'GET',
     params: { code, id },
   })
 }

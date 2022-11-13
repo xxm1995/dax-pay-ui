@@ -7,7 +7,6 @@ import { Result } from '/#/axios'
 export function existsUsername(username) {
   return defHttp.get<Result<boolean>>({
     url: `/user/existsUsername`,
-    method: 'get',
     params: { username },
   })
 }

@@ -74,7 +74,6 @@ export function existsByCode(code) {
 export function existsByCodeNotId(code, id) {
   return defHttp.get<Result<boolean>>({
     url: '/ding/robot/config/existsByCodeNotId',
-    method: 'GET',
     params: { code, id },
   })
 }
