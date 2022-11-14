@@ -21,8 +21,9 @@
       </template>
     </vxe-toolbar>
     <vxe-table
-      :height="350"
+      row-id="id"
       ref="xTable"
+      :height="350"
       :checkbox-config="checkboxConfig"
       :radio-config="radioConfig"
       :loading="loading"
@@ -68,7 +69,7 @@
     // 是否是查询看状态
     multiple: boolean
     // 宽度
-    width: number | string
+    width?: number | string
   }
   const props = withDefaults(defineProps<Props>(), {
     title: '选择用户',
@@ -76,6 +77,8 @@
     width: 640,
   })
   const emits = defineEmits(['ok'])
+
+  let callbackVariable
 
   let visible = $ref(false)
   let selectUserIds = $ref<string[]>([])
@@ -105,9 +108,11 @@
   /**
    * 调用 初始化
    * @param param 已经选中的用户ID或ID集合
+   * @param variable 回调原样带回的参数
    */
-  function init(param) {
+  function init(param, ...variable) {
     visible = true
+    callbackVariable = variable
     if (props.multiple) {
       selectUserIds = param || selectUserIds
     } else {
@@ -151,7 +156,7 @@
     const checkUsers = xTable.getCheckboxRecords()
     const users = reserveUsers.concat(checkUsers)
     const userIds = users.map((res) => res.id)
-    emits('ok', userIds, users)
+    emits('ok', userIds, users, ...callbackVariable)
   }
 
   /**
@@ -162,7 +167,7 @@
   function radioCallback() {
     const user = xTable.getRadioRecord()
     const userId = user?.id
-    emits('ok', userId, user)
+    emits('ok', userId, user, ...callbackVariable)
   }
   /**
    * 关闭

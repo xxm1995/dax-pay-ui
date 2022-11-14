@@ -28,15 +28,13 @@
       :loading="loading"
       :data="pagination.records"
     >
-      <vxe-column v-if="multiple" type="checkbox" width="40" />
-      <vxe-column v-if="!multiple" type="radio" width="40" />
+      <vxe-column v-if="multiple" type="checkbox" width="50" />
+      <vxe-column v-if="!multiple" type="radio" width="50" />
       <vxe-column field="name" title="角色名称" />
       <vxe-column field="code" title="角色编码" />
     </vxe-table>
     <vxe-pager
-      border
       row-id="id"
-      size="medium"
       :height="350"
       :loading="loading"
       :current-page="pagination.current"
@@ -68,7 +66,7 @@
     // 是否是查询看状态
     multiple: boolean
     // 宽度
-    width: number | string
+    width?: number | string
   }
   const props = withDefaults(defineProps<Props>(), {
     title: '选择角色',

@@ -58,6 +58,7 @@
           :options="assignTypeList"
           style="width: 100%"
           placeholder="选择处理人分配类型"
+          @change="assignTypeChange"
         />
       </a-form-item>
       <a-form-item label="分配用户" name="assignShow" v-if="[USER_GROUP, USER].includes(form.assignType)">
@@ -119,6 +120,8 @@
   } from '/@/views/modules/bpm/model/BpmModelNodeCode'
   import BUserSelectModal from '/@/components/Bootx/UserSelectModal/BUserSelectModal.vue'
   import BRoleSelectModal from '/@/components/Bootx/RoleSelectModal/BRoleSelectModal.vue'
+  import { UserInfo } from '/@/views/modules/system/user/User.api'
+  import { Role } from '/@/views/modules/system/role/Role.api'
   const {
     initFormEditType,
     handleCancel,
@@ -133,6 +136,10 @@
     showable,
     formEditType,
   } = useFormEdit()
+
+  const userSelectModal = $ref<any>()
+  const roleSelectModal = $ref<any>()
+
   const assignTypeList = computed(() => {
     if (form.multi) {
       return [SPONSOR_OPTION, SELECT_OPTION, USER_GROUP_OPTION, ROLE_OPTION, DEPT_LEADER_OPTION, DEPT_MEMBER_OPTION]
@@ -209,6 +216,50 @@
     nextTick(() => {
       formRef.resetFields()
     })
+  }
+  /**
+   * 开启选择用户界面
+   */
+  function selectUserShow() {
+    userSelectModal.init()
+  }
+  /**
+   * 选中用户回调
+   */
+  function selectUser(userId, userInfo: UserInfo | UserInfo[]) {
+    form.assignRaw = userId
+    if (form.multi) {
+      form.assignShow = (userInfo as UserInfo[]).map((o) => o.name).join(',')
+    } else {
+      form.assignShow = (userInfo as UserInfo)?.name
+    }
+    formRef.validateFields(['assignShow'])
+  }
+  /**
+   * 选择角色
+   */
+  function selectRoleShow() {
+    roleSelectModal.init()
+  }
+
+  /**
+   * 选中角色回调
+   */
+  function selectRole(roleId, roleInfo: Role | Role[]) {
+    form.assignRaw = roleId
+    if (form.multi) {
+      form.assignShow = (roleInfo as Role[]).map((o) => o.name).join(',')
+    } else {
+      form.assignShow = (roleInfo as Role)?.name
+    }
+    formRef.validateFields(['assignShow'])
+  }
+  /**
+   * 分配类型改变时, 清空分配数据信息
+   */
+  function assignTypeChange() {
+    form.assignRaw = undefined
+    form.assignShow = undefined
   }
   defineExpose({
     init,
