@@ -28,10 +28,10 @@
       :loading="loading"
       :data="pagination.records"
     >
-      <vxe-column v-if="multiple" type="checkbox" width="50" />
-      <vxe-column v-if="!multiple" type="radio" width="50" />
-      <vxe-column field="name" title="用户名称" />
-      <vxe-column field="username" title="用户账号" />
+      <vxe-column v-if="multiple" type="checkbox" width="40" />
+      <vxe-column v-if="!multiple" type="radio" width="40" />
+      <vxe-column field="name" title="角色名称" />
+      <vxe-column field="code" title="角色编码" />
     </vxe-table>
     <vxe-pager
       border
@@ -52,13 +52,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { BasicModal } from '/@/components/Modal'
-  import BQuery from '/@/components/Bootx/Query/BQuery.vue'
-  import { computed } from 'vue'
+  import useTablePage from '/@/hooks/bootx/useTablePage'
+  import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import { $ref } from 'vue/macros'
   import { STRING } from '/@/components/Bootx/Query/Query'
-  import useTablePage from '/@/hooks/bootx/useTablePage'
-  import { page } from '/@/views/modules/system/user/User.api'
+  import { computed } from 'vue'
+  import { page } from '/@/views/modules/system/role/Role.api'
+  import BQuery from '/@/components/Bootx/Query/BQuery.vue'
 
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
 
@@ -71,19 +71,19 @@
     width: number | string
   }
   const props = withDefaults(defineProps<Props>(), {
-    title: '选择用户',
+    title: '选择角色',
     multiple: false,
     width: 640,
   })
   const emits = defineEmits(['ok'])
 
   let visible = $ref(false)
-  let selectUserIds = $ref<string[]>([])
-  let selectUserId = $ref<string>()
+  let selectRoleIds = $ref<string[]>([])
+  let selectRoleId = $ref<string>()
   let xTable = $ref<any>()
   const fields = [
-    { field: 'name', type: STRING, name: '账号', placeholder: '输入用户名称' },
-    { field: 'username', type: STRING, name: '账号', placeholder: '输入用户账号' },
+    { field: 'name', type: STRING, name: '名称', placeholder: '请输入角色名称' },
+    { field: 'code', type: STRING, name: '编号', placeholder: '请输入角色编号' },
   ]
   const checkboxConfig = computed(() => {
     return props.multiple
@@ -97,7 +97,7 @@
     return !props.multiple
       ? {
           reserve: true,
-          checkRowKey: selectUserId,
+          checkRowKey: selectRoleId,
         }
       : {}
   })
@@ -109,12 +109,13 @@
   function init(param) {
     visible = true
     if (props.multiple) {
-      selectUserIds = param || selectUserIds
+      selectRoleIds = param || selectRoleId
     } else {
-      selectUserId = param || selectUserId
+      selectRoleId = param || selectRoleId
     }
     queryPage()
   }
+
   /**
    * 查询
    */
@@ -180,7 +181,6 @@
 </script>
 <script lang="ts">
   import { defineComponent } from 'vue'
-
   export default defineComponent({
     name: 'BUserSelectModal',
   })

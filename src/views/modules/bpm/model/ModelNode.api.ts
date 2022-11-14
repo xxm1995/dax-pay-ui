@@ -87,39 +87,39 @@ export function getNextNodes(defId, nodeId) {
  */
 export interface BpmModelNode extends BaseEntity {
   // 关联模型id
-  modelId: string
+  modelId?: string
   // 流程定义id
-  defId: string
+  defId?: string
   // 流程key
-  defKey: string
+  defKey?: string
   // 任务节点id
-  nodeId: string
+  nodeId?: string
   // 任务节点名称
-  nodeName: string
+  nodeName?: string
   // 是否多任务
-  multi: boolean
+  multi?: boolean
   // 是否串签
-  sequential: boolean
+  sequential?: boolean
   // 是否是或签
-  orSign: boolean
+  orSign?: boolean
   // 是否比例通过
-  ratioPass: boolean
+  ratioPass?: boolean
   // 通过比例
-  passRatio: number
+  passRatio?: number
   // 是否允许驳回
-  reject: boolean
+  reject?: boolean
   // 是否允许回退
-  back: boolean
+  back?: boolean
   // 是否允许取回
-  retrieve: boolean
+  retrieve?: boolean
   // 是否跳过当前节点
-  skip: boolean
+  skip?: boolean
   // 关联表单
-  formId: string
+  formId?: string
   // 分配类型
-  assignType: string
+  assignType?: string
   // 分配的原始数据
-  assignRaw: string
+  assignRaw?: string
   // 分配的数据的展示
-  assignShow: string
+  assignShow?: string
 }

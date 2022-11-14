@@ -58,7 +58,7 @@
                     <a-link :disabled="row.publish !== UNPUBLISHED" @click="publishModel(row)">发布</a-link>
                   </a-menu-item>
                   <a-menu-item>
-                    <a @click="copy(row)">复制</a>
+                    <a-link @click="copyModel(row)">复制</a-link>
                   </a-menu-item>
                   <a-menu-item>
                     <a-link danger :disabled="row.publish === PUBLISHED" @click="remove(row)">删除</a-link>

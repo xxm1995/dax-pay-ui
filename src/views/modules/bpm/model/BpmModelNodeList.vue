@@ -25,7 +25,7 @@
           <template v-else> 无 </template>
         </template>
       </vxe-column>
-      <vxe-column field="assignType" title="跳过当前节点">
+      <vxe-column field="skip" title="跳过当前节点">
         <template #default="{ row }">{{ row.skip ? '是' : '否' }}</template>
       </vxe-column>
       <vxe-column field="assignType" title="人员分配类型">
@@ -79,6 +79,7 @@
   }
 
   function query() {
+    loading = true
     listByModelId(model.id).then(({ data }) => {
       tableData = data
       loading = false

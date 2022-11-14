@@ -63,7 +63,23 @@
       <a-form-item label="分配用户" name="assignShow" v-if="[USER_GROUP, USER].includes(form.assignType)">
         <a-input v-model:value="form.assignShow" placeholder="请选择用户" disabled>
           <template #addonAfter>
-            <a href="javascript:" :disabled="showable" @click="selectUserShow">选择用户</a>
+            <a-link :disabled="showable" @click="selectUserShow">选择用户</a-link>
+          </template>
+        </a-input>
+      </a-form-item>
+      <a-form-item label="分配角色" prop="assignShow" v-if="[ROLE].includes(form.assignType)">
+        <template #label>
+          <apan>
+            分配角色
+            <a-tooltip v-if="!form.multi">
+              <template #title>如果角色关联多个用户只会从中随机抽选一个</template>
+              <icon icon="ant-design:question-circle-outlined" />
+            </a-tooltip>
+          </apan>
+        </template>
+        <a-input v-model:value="form.assignShow" placeholder="请选择角色" disabled>
+          <template #addonAfter>
+            <a-link :disabled="showable" @click="selectRoleShow">选择角色</a-link>
           </template>
         </a-input>
       </a-form-item>
@@ -99,8 +115,10 @@
     USER_OPTION,
     USER_GROUP,
     USER,
+    ROLE,
   } from '/@/views/modules/bpm/model/BpmModelNodeCode'
   import BUserSelectModal from '/@/components/Bootx/UserSelectModal/BUserSelectModal.vue'
+  import BRoleSelectModal from '/@/components/Bootx/RoleSelectModal/BRoleSelectModal.vue'
   const {
     initFormEditType,
     handleCancel,
@@ -126,24 +144,17 @@
   const formRef = $ref<FormInstance>()
   let form = $ref({
     id: null,
-    modelId: null,
-    defId: null,
-    defKey: null,
-    nodeId: null,
-    nodeName: null,
-    multi: null,
-    sequential: null,
-    orSign: null,
-    ratioPass: null,
-    passRatio: null,
-    reject: null,
-    back: null,
-    retrieve: null,
-    skip: null,
-    formId: null,
-    assignType: null,
-    assignRaw: null,
-    assignShow: null,
+    nodeId: '',
+    nodeName: '',
+    multi: false,
+    sequential: false,
+    orSign: undefined,
+    ratioPass: undefined,
+    passRatio: undefined,
+    skip: false,
+    assignType: undefined,
+    assignRaw: '',
+    assignShow: '',
   } as BpmModelNode)
   // 校验
   const rules = computed(() => {
