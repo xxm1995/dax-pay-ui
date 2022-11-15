@@ -4,23 +4,29 @@
       <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: queryPage }" />
+      <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: queryPage }">
+        <template #buttons>
+          <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="modelShow">发起流程</a-button>
+        </template>
+      </vxe-toolbar>
       <vxe-table ref="xTable" row-id="id" :loading="loading" :data="pagination.records">
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="instanceName" title="业务标题" />
-        <vxe-column field="defName" title="流程名称" />
-        <vxe-column field="nodeName" title="环节" />
-        <vxe-column field="taskId" title="任务id" />
-        <vxe-column field="instanceId" title="流程id" />
+        <vxe-column field="name" title="标题" />
+        <vxe-column field="defMame" title="流程名称" />
+        <vxe-column field="instanceId" title="实例ID" />
         <vxe-column field="startUserName" title="发起人" />
-        <vxe-column field="startTime" title="任务开始时间" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column field="state" title="状态">
           <template #default="{ row }">
-            <a-link @click="handle(row)">办理</a-link>
-            <!--          <a-divider type="vertical"/>-->
-            <!--          <a href="javascript:" @click="reject(row)">驳回</a>-->
+            {{ dictConvert('BpmInstanceState', row.state) }}
+          </template>
+        </vxe-column>
+        <vxe-column field="startTime" title="开始时间" />
+        <vxe-column field="endTime" title="结束时间" />
+        <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
+          <template #default="{ row }">
+            <a href="javascript:" @click="show(row)">查看</a>
             <a-divider type="vertical" />
-            <a-link @click="assigneeShow(row)">委派</a-link>
+            <a href="javascript:" :disabled="row.state !== 'running'" @click="close(row)">取消</a>
           </template>
         </vxe-column>
       </vxe-table>
@@ -34,7 +40,6 @@
         @page-change="handleTableChange"
       />
     </div>
-    <b-user-select-modal ref="userSelectModal" @ok="assigneeCallback" title="选择委派的用户" :multiple="false" />
   </div>
 </template>
 
@@ -46,13 +51,13 @@
   import { $ref } from 'vue/macros'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { onMounted } from 'vue'
-  import { assignee, pageByTodoAdmin } from './Task.api'
-  import BUserSelectModal from '/@/components/Bootx/UserSelectModal/BUserSelectModal.vue'
+  import { useDict } from '/@/hooks/bootx/useDict'
+  import { pageMyApply } from '/@/views/modules/bpm/instance/Instance.api'
 
   const { handleTableChange, resetQueryParams, pageQueryResHandel, pagination, pages, model, loading } = useTablePage(queryPage)
   const { createMessage, createConfirm } = useMessage()
+  const { dictConvert } = useDict()
 
-  const userSelectModal = $ref<any>()
   // 查询条件
   const fields = [
     { field: 'code', type: STRING, name: '流程编号', placeholder: '请输入流程编号' },
@@ -70,33 +75,15 @@
 
   function queryPage() {
     loading.value = true
-    pageByTodoAdmin({
+    pageMyApply({
       ...model.queryParam,
       ...pages,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
   }
-  /**
-   * 处理任务
-   */
-  function handle(record) {}
-  /**
-   * 委派
-   */
-  function assigneeShow(record) {
-    userSelectModal.init(null, record.taskId)
-  }
-  /**
-   * 委派 选择用户后回调
-   */
-  function assigneeCallback(userId, user, taskId) {
-    loading.value = true
-    assignee(taskId, userId).then(() => {
-      createMessage.success(`任务以委派给 [${user.name}] 处理`)
-      queryPage()
-    })
-  }
+  // 创建流程时的弹窗
+  function modelShow() {}
 </script>
 
 <style scoped></style>

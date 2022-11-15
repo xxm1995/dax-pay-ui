@@ -14,13 +14,11 @@
         <vxe-column field="instanceId" title="流程id" />
         <vxe-column field="startUserName" title="发起人" />
         <vxe-column field="startTime" title="任务开始时间" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
           <template #default="{ row }">
-            <a-link @click="handle(row)">办理</a-link>
-            <!--          <a-divider type="vertical"/>-->
-            <!--          <a href="javascript:" @click="reject(row)">驳回</a>-->
+            <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-            <a-link @click="assigneeShow(row)">委派</a-link>
+            <a-link disabled @click="retrieveTask(row)">取回</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -34,25 +32,23 @@
         @page-change="handleTableChange"
       />
     </div>
-    <b-user-select-modal ref="userSelectModal" @ok="assigneeCallback" title="选择委派的用户" :multiple="false" />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import BQuery from '/@/components/Bootx/Query/BQuery.vue'
+  import ALink from '/@/components/Link/Link.vue'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { $ref } from 'vue/macros'
+  import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { onMounted } from 'vue'
-  import { assignee, pageByTodoAdmin } from './Task.api'
-  import BUserSelectModal from '/@/components/Bootx/UserSelectModal/BUserSelectModal.vue'
+  import BQuery from '/@/components/Bootx/Query/BQuery.vue'
+  import { pageMyDone } from '/@/views/modules/bpm/task/Task.api'
 
   const { handleTableChange, resetQueryParams, pageQueryResHandel, pagination, pages, model, loading } = useTablePage(queryPage)
   const { createMessage, createConfirm } = useMessage()
 
-  const userSelectModal = $ref<any>()
   // 查询条件
   const fields = [
     { field: 'code', type: STRING, name: '流程编号', placeholder: '请输入流程编号' },
@@ -70,31 +66,24 @@
 
   function queryPage() {
     loading.value = true
-    pageByTodoAdmin({
+    pageMyDone({
       ...model.queryParam,
       ...pages,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
   }
-  /**
-   * 处理任务
-   */
-  function handle(record) {}
-  /**
-   * 委派
-   */
-  function assigneeShow(record) {
-    userSelectModal.init(null, record.taskId)
-  }
-  /**
-   * 委派 选择用户后回调
-   */
-  function assigneeCallback(userId, user, taskId) {
-    loading.value = true
-    assignee(taskId, userId).then(() => {
-      createMessage.success(`任务以委派给 [${user.name}] 处理`)
-      queryPage()
+
+  function retrieveTask(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '确实要取回当前任务!',
+      onOk: () => {
+        loading.value = true
+        createMessage.success('取回成功')
+        queryPage()
+      },
     })
   }
 </script>
