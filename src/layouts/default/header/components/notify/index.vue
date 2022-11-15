@@ -1,91 +1,105 @@
 <template>
   <div :class="prefixCls">
-    <Popover title="" trigger="click" :overlayClassName="`${prefixCls}__overlay`">
-      <Badge :count="count" dot :numberStyle="numberStyle">
+    <a-popover
+      v-model:visible="visible"
+      trigger="click"
+      overlayClassName="header-notice-wrapper"
+      @visibleChange="visibleChange"
+      :overlayStyle="{ width: '300px' }"
+    >
+      <a-badge :count="notReadMsgCount" dot>
         <BellOutlined />
-      </Badge>
+      </a-badge>
       <template #content>
-        <Tabs>
-          <template v-for="item in listData" :key="item.key">
-            <TabPane>
-              <template #tab>
-                {{ item.name }}
-                <span v-if="item.list.length !== 0">({{ item.list.length }})</span>
-              </template>
-              <!-- 绑定title-click事件的通知列表中标题是“可点击”的-->
-              <NoticeList :list="item.list" v-if="item.key === '1'" @title-click="onNoticeClick" />
-              <NoticeList :list="item.list" v-else />
-            </TabPane>
-          </template>
-        </Tabs>
+        <a-spin :spinning="loading">
+          <a-list>
+            <a-list-item v-for="o in notReadMsgList" :key="o.id">
+              <a href="javascript:" @click="showMessage(o)">
+                <a-list-item-meta :description="o.senderTime">
+                  <template #title>
+                    <a-tag color="red">未读</a-tag>
+                    <a-typography-text :ellipsis="{ tooltip: o.title }" :content="o.title" />
+                  </template>
+                </a-list-item-meta>
+              </a>
+              <span>{{ o.senderName }}</span>
+            </a-list-item>
+          </a-list>
+          <div style="margin-top: 5px; text-align: center">
+            <a-button @click="toSiteMessage" type="dashed" block>查看更多</a-button>
+          </div>
+        </a-spin>
       </template>
-    </Popover>
+    </a-popover>
   </div>
 </template>
-<script lang="ts">
-  import { computed, defineComponent, ref } from 'vue'
-  import { Popover, Tabs, Badge } from 'ant-design-vue'
+<script lang="ts" setup>
+  import { onMounted, ref } from 'vue'
   import { BellOutlined } from '@ant-design/icons-vue'
   import { tabListData, ListItem } from './data'
-  import NoticeList from './NoticeList.vue'
   import { useDesign } from '/@/hooks/web/useDesign'
   import { useMessage } from '/@/hooks/web/useMessage'
+  import { $ref } from 'vue/macros'
+  import { countByReceiveNotRead, pageByReceive } from '/@/layouts/default/header/components/notify/SiteMessage.api'
 
-  export default defineComponent({
-    components: { Popover, BellOutlined, Tabs, TabPane: Tabs.TabPane, Badge, NoticeList },
-    setup() {
-      const { prefixCls } = useDesign('header-notify')
-      const { createMessage } = useMessage()
-      const listData = ref(tabListData)
+  const { prefixCls } = useDesign('header-notify')
+  const { createMessage } = useMessage()
+  const listData = ref(tabListData)
 
-      const count = computed(() => {
-        let count = 0
-        for (let i = 0; i < tabListData.length; i++) {
-          count += tabListData[i].list.length
-        }
-        return count
-      })
-
-      function onNoticeClick(record: ListItem) {
-        createMessage.success('你点击了通知，ID=' + record.id)
-        // 可以直接将其标记为已读（为标题添加删除线）,此处演示的代码会切换删除线状态
-        record.titleDelete = !record.titleDelete
-      }
-
-      return {
-        prefixCls,
-        listData,
-        count,
-        onNoticeClick,
-        numberStyle: {},
-      }
-    },
+  let loading = $ref(false)
+  let visible = $ref(false)
+  // 未读消息数量
+  let notReadMsgCount = $ref(0)
+  let notReadMsgList = $ref<any>([])
+  onMounted(() => {
+    receivedCount()
   })
+
+  // 查询当前用户的未读消息数量
+  function receivedCount() {
+    countByReceiveNotRead().then(({ data }) => {
+      notReadMsgCount = data
+    })
+  }
+
+  // 打开列表页
+  function fetchNotice() {
+    loading = false
+    pageByReceive({
+      current: 1,
+      size: 3,
+      haveRead: false,
+    }).then(({ data }) => {
+      notReadMsgList = data.records
+      loading = false
+    })
+  }
+
+  // 变化回调
+  function visibleChange() {
+    if (visible) {
+      fetchNotice()
+    }
+  }
+
+  // 跳转到站内信界面
+  function toSiteMessage() {}
+
+  // 查看我的消息
+  function showMessage(message) {}
+  function onNoticeClick(record: ListItem) {
+    createMessage.success('你点击了通知，ID=' + record.id)
+    // 可以直接将其标记为已读（为标题添加删除线）,此处演示的代码会切换删除线状态
+    record.titleDelete = !record.titleDelete
+  }
 </script>
 <style lang="less">
-  @prefix-cls: ~'@{namespace}-header-notify';
+  .header-notice {
+    display: inline-block;
+    transition: all 0.3s;
 
-  .@{prefix-cls} {
-    padding-top: 2px;
-
-    &__overlay {
-      max-width: 360px;
-    }
-
-    .ant-tabs-content {
-      width: 300px;
-    }
-
-    .ant-badge {
-      font-size: 18px;
-
-      .ant-badge-multiple-words {
-        padding: 0 4px;
-      }
-
-      svg {
-        width: 0.9em;
-      }
+    span {
+      vertical-align: initial;
     }
   }
 </style>
