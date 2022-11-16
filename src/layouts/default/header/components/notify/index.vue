@@ -14,14 +14,14 @@
         <a-spin :spinning="loading">
           <a-list>
             <a-list-item v-for="o in notReadMsgList" :key="o.id">
-              <a href="javascript:" @click="showMessage(o)">
-                <a-list-item-meta :description="o.senderTime">
-                  <template #title>
+              <a-list-item-meta :description="o.senderTime">
+                <template #title>
+                  <a @click="showMessage(o)">
                     <a-tag color="red">未读</a-tag>
-                    <a-typography-text :ellipsis="{ tooltip: o.title }" :content="o.title" />
-                  </template>
-                </a-list-item-meta>
-              </a>
+                    <a-typography-text style="width: 150px" :ellipsis="{ tooltip: o.title }" :content="o.title" />
+                  </a>
+                </template>
+              </a-list-item-meta>
               <span>{{ o.senderName }}</span>
             </a-list-item>
           </a-list>
@@ -31,20 +31,24 @@
         </a-spin>
       </template>
     </a-popover>
+    <notice-icon-reader ref="noticeIconReader" />
   </div>
 </template>
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue'
+  import { onMounted } from 'vue'
   import { BellOutlined } from '@ant-design/icons-vue'
-  import { tabListData, ListItem } from './data'
   import { useDesign } from '/@/hooks/web/useDesign'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'
   import { countByReceiveNotRead, pageByReceive } from '/@/layouts/default/header/components/notify/SiteMessage.api'
+  import { router } from '/@/router'
+  import { PageEnum } from '/@/enums/pageEnum'
+  import NoticeIconReader from '/@/layouts/default/header/components/notify/NoticeIconReader.vue'
 
   const { prefixCls } = useDesign('header-notify')
   const { createMessage } = useMessage()
-  const listData = ref(tabListData)
+
+  const noticeIconReader = $ref<any>()
 
   let loading = $ref(false)
   let visible = $ref(false)
@@ -83,23 +87,18 @@
   }
 
   // 跳转到站内信界面
-  function toSiteMessage() {}
+  function toSiteMessage() {
+    visible = false
+    router.push(PageEnum.SITE_MESSAGE)
+  }
 
   // 查看我的消息
-  function showMessage(message) {}
-  function onNoticeClick(record: ListItem) {
-    createMessage.success('你点击了通知，ID=' + record.id)
-    // 可以直接将其标记为已读（为标题添加删除线）,此处演示的代码会切换删除线状态
-    record.titleDelete = !record.titleDelete
+  function showMessage(message) {
+    visible = false
+    if (!message.haveRead) {
+
+    }
+    noticeIconReader.init(message)
   }
 </script>
-<style lang="less">
-  .header-notice {
-    display: inline-block;
-    transition: all 0.3s;
-
-    span {
-      vertical-align: initial;
-    }
-  }
-</style>
+<style lang="less"></style>

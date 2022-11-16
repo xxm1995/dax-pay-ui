@@ -20,11 +20,10 @@
   <lock-modal @register="register" />
 </template>
 <script lang="ts" setup>
-  // components
   import { Dropdown, Menu } from 'ant-design-vue'
   import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface'
 
-  import { computed, onMounted } from 'vue'
+  import { computed } from 'vue'
 
   import { useUserStore } from '/@/store/modules/user'
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting'
@@ -36,8 +35,6 @@
 
   import { router } from '/@/router'
   import { PageEnum } from '/@/enums/pageEnum'
-  import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
-  import { $ref } from 'vue/macros'
   import DropdownMenuItem from '/@/layouts/default/header/components/user-dropdown/DropMenuItem.vue'
   import LockModal from '/@/layouts/default/header/components/lock/LockModal.vue'
 
