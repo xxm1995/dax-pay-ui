@@ -1,11 +1,21 @@
 import { defHttp } from '/@/utils/http/axios'
-import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
+import { PageResult, Result } from '/#/axios'
+
+/**
+ * 接收站内信消息分页查询
+ */
+export function pageByReceive(params) {
+  return defHttp.get<Result<PageResult<SiteMessage>>>({
+    url: '/site/message/pageByReceive',
+    params: params,
+  })
+}
 
 /**
  * 分页
  */
-export const page = (params) => {
+export const pageBySender = (params) => {
   return defHttp.get<Result<PageResult<SiteMessage>>>({
     url: '/site/message/pageBySender',
     params,
@@ -23,21 +33,11 @@ export const get = (id) => {
 }
 
 /**
- * 添加
+ * 添加或更新
  */
-export const add = (obj: SiteMessage) => {
+export const saveOrUpdate = (obj: SiteMessage) => {
   return defHttp.post({
-    url: '/site/message/add',
-    data: obj,
-  })
-}
-
-/**
- * 更新
- */
-export const update = (obj: SiteMessage) => {
-  return defHttp.post({
-    url: '/site/message/update',
+    url: '/site/message/saveOrUpdate',
     data: obj,
   })
 }
@@ -86,21 +86,21 @@ export function send(id) {
  */
 export interface SiteMessage extends BaseEntity {
   // 消息标题
-  title: string
+  title?: string
   // 消息内容
-  content: string
+  content?: string
   // 发送者id
-  senderId: number
+  senderId?: string
   // 发送者姓名
-  senderName: string
+  senderName?: string
   // 发送时间
-  senderTime: string
+  senderTime?: string
   // 消息类型
-  receiveType: string
+  receiveType?: string
   // 发布状态
-  sendState: string
+  sendState?: string
   // 截至有效期
-  efficientTime: string
+  efficientTime?: string | null
   // 撤回时间
-  cancelTime: string
+  cancelTime?: string
 }

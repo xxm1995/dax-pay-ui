@@ -30,7 +30,7 @@
         </vxe-column>
         <vxe-column field="senderTime" title="发送时间" />
         <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
               <a href="javascript:" @click="show(row)">查看</a>
@@ -69,6 +69,7 @@
         @page-change="handleTableChange"
       />
       <site-message-edit ref="siteMessageEdit" @ok="queryPage" />
+      <notice-reader ref="noticeReader" />
     </div>
   </div>
 </template>
@@ -76,7 +77,7 @@
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
   import { $ref } from 'vue/macros'
-  import { cancel, del, page, send } from './SiteMessage.api'
+  import { cancel, del, pageBySender, send } from '../SiteMessage.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import SiteMessageEdit from './SiteMessageEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -85,6 +86,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
+  import NoticeReader from '/@/layouts/default/header/components/notify/NoticeReader.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -93,6 +95,7 @@
   // 查询条件
   const fields = [] as QueryField[]
 
+  const noticeReader = $ref<any>()
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const siteMessageEdit = $ref<any>()
@@ -108,7 +111,7 @@
   // 分页查询
   function queryPage() {
     loading.value = true
-    page({
+    pageBySender({
       ...model.queryParam,
       ...pages,
     }).then(({ data }) => {
@@ -125,7 +128,7 @@
   }
   // 查看
   function show(record) {
-    siteMessageEdit.init(record.id, FormEditType.Show)
+    noticeReader.init(record)
   }
 
   // 删除

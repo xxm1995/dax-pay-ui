@@ -31,7 +31,7 @@
         </a-spin>
       </template>
     </a-popover>
-    <notice-icon-reader ref="noticeIconReader" />
+    <notice-reader ref="noticeIconReader" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -43,7 +43,7 @@
   import { countByReceiveNotRead, pageByReceive } from '/@/layouts/default/header/components/notify/SiteMessage.api'
   import { router } from '/@/router'
   import { PageEnum } from '/@/enums/pageEnum'
-  import NoticeIconReader from '/@/layouts/default/header/components/notify/NoticeIconReader.vue'
+  import NoticeReader from '/@/layouts/default/header/components/notify/NoticeReader.vue'
 
   const { prefixCls } = useDesign('header-notify')
   const { createMessage } = useMessage()

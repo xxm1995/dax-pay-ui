@@ -22,16 +22,23 @@
 <script lang="ts" setup>
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import { $ref } from 'vue/macros'
+  import { SiteMessage } from '/@/views/modules/notice/site/SiteMessage.api'
+  import { findById } from './SiteMessage.api'
 
   const modalWidth = $ref('60%')
   let visible = $ref(false)
   let confirmLoading = $ref(false)
-  let message = $ref({})
+  let message = $ref<SiteMessage>({})
 
   // 初始化 显示信息内容
   function init(messageInfo) {
     visible = true
+    confirmLoading = true
     message = messageInfo
+    findById(messageInfo.id).then(({ data }) => {
+      message = data
+      confirmLoading = false
+    })
   }
 
   function handleCancel() {

@@ -1,51 +1,33 @@
 <template>
   <basic-modal
     v-bind="$attrs"
+    width="60%"
+    title="发布系统通知消息"
     :loading="confirmLoading"
-    :width="modalWidth"
-    :title="title"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-form
-      class="small-from-item"
-      ref="formRef"
-      :validate-trigger="['blur', 'change']"
-      :model="form"
-      :rules="rules"
-      :label-col="labelCol"
-      :wrapper-col="wrapperCol"
-    >
-      <a-form-item label="主键" :hidden="true">
-        <a-input v-model:value="form.id" :disabled="showable" />
+    <a-form layout="vertical" ref="formRef" :validate-trigger="['blur', 'change']" :model="form" :rules="rules">
+      <a-form-item label="标题" name="title">
+        <a-input v-model:value="form.title" placeholder="请输入标题" />
       </a-form-item>
-      <a-form-item label="消息标题" name="title">
-        <a-input v-model:value="form.title" :disabled="showable" placeholder="请输入消息标题" />
+      <a-form-item ref="content" label="内容" name="content">
+        <div style="border: 1px solid #ccc">
+          <a-form-item-rest>
+            <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="{}" mode="simple" />
+          </a-form-item-rest>
+          <Editor
+            style="height: 300px; max-height: 650px"
+            v-model="form.content"
+            :defaultConfig="{ placeholder: '请输入内容...' }"
+            mode="simple"
+            @onCreated="handleCreated"
+          />
+        </div>
       </a-form-item>
-      <a-form-item label="消息内容" name="content">
-        <a-input v-model:value="form.content" :disabled="showable" placeholder="请输入消息内容" />
-      </a-form-item>
-      <a-form-item label="发送者id" name="senderId">
-        <a-input v-model:value="form.senderId" :disabled="showable" placeholder="请输入发送者id" />
-      </a-form-item>
-      <a-form-item label="发送者姓名" name="senderName">
-        <a-input v-model:value="form.senderName" :disabled="showable" placeholder="请输入发送者姓名" />
-      </a-form-item>
-      <a-form-item label="发送时间" name="senderTime">
-        <a-input v-model:value="form.senderTime" :disabled="showable" placeholder="请输入发送时间" />
-      </a-form-item>
-      <a-form-item label="消息类型" name="receiveType">
-        <a-input v-model:value="form.receiveType" :disabled="showable" placeholder="请输入消息类型" />
-      </a-form-item>
-      <a-form-item label="发布状态" name="sendState">
-        <a-input v-model:value="form.sendState" :disabled="showable" placeholder="请输入发布状态" />
-      </a-form-item>
-      <a-form-item label="截至有效期" name="efficientTime">
-        <a-input v-model:value="form.efficientTime" :disabled="showable" placeholder="请输入截至有效期" />
-      </a-form-item>
-      <a-form-item label="撤回时间" name="cancelTime">
-        <a-input v-model:value="form.cancelTime" :disabled="showable" placeholder="请输入撤回时间" />
+      <a-form-item label="截止有效期" name="efficientTime">
+        <a-date-picker style="width: 100%" placeholder="请选择消息截止有效期" valueFormat="YYYY-MM-DD" v-model:value="form.efficientTime" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -58,13 +40,17 @@
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, reactive } from 'vue'
+  import '@wangeditor/editor/dist/css/style.css' // 引入 css
+  import { nextTick, onBeforeUnmount, reactive, shallowRef } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, SiteMessage } from './SiteMessage.api'
+  import { saveOrUpdate, get } from '../SiteMessage.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
+  import { SiteMessage } from '/@/views/modules/notice/site/SiteMessage.api'
+  import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+  import XEUtils from 'xe-utils'
 
   const {
     initFormEditType,
@@ -80,24 +66,31 @@
     showable,
     formEditType,
   } = useFormEdit()
+
+  // 编辑器实例，必须用 shallowRef
+  const editorRef = shallowRef()
   // 表单
   const formRef = $ref<FormInstance>()
-  let form = $ref({
-    id: null,
-    title: null,
-    content: null,
-    senderId: null,
-    senderName: null,
-    senderTime: null,
-    receiveType: null,
-    sendState: null,
+  let form = $ref<SiteMessage>({
+    title: '',
+    content: '',
     efficientTime: null,
-    cancelTime: null,
-  } as SiteMessage)
+    receiveType: 'all',
+  })
   // 校验
-  const rules = reactive({} as Record<string, Rule[]>)
+  const rules = reactive({
+    title: [{ required: true, message: '标题不可为空!' }],
+    content: [{ required: true, message: '内容不可为空!' }],
+    efficientTime: [{ required: true, message: '截止有效期不可为空!' }],
+  } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
+
+  // 记录 editor 实例，重要！
+  const handleCreated = (editor) => {
+    editorRef.value = editor
+  }
+
   // 入口
   function init(id, editType: FormEditType) {
     initFormEditType(editType)
@@ -114,17 +107,14 @@
       })
     } else {
       confirmLoading.value = false
+      form.efficientTime = XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
     }
   }
   // 保存
   function handleOk() {
     formRef.validate().then(async () => {
       confirmLoading.value = true
-      if (formEditType.value === FormEditType.Add) {
-        await add(form)
-      } else if (formEditType.value === FormEditType.Edit) {
-        await update(form)
-      }
+      await saveOrUpdate(form)
       confirmLoading.value = false
       handleCancel()
       emits('ok')
@@ -137,6 +127,12 @@
       formRef.resetFields()
     })
   }
+  // 组件销毁时，也及时销毁编辑器
+  onBeforeUnmount(() => {
+    const editor = editorRef.value
+    if (editor == null) return
+    editor.destroy()
+  })
   defineExpose({
     init,
   })

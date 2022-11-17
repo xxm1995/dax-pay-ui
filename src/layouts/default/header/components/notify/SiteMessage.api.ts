@@ -1,6 +1,6 @@
 import { defHttp } from '/@/utils/http/axios'
-import { BaseEntity } from '/#/web'
 import { PageResult, Result } from '/#/axios'
+import { SiteMessage } from '/@/views/modules/notice/site/SiteMessage.api'
 
 /**
  * 未读消息数量
@@ -15,8 +15,18 @@ export function countByReceiveNotRead() {
  * 接收站内信消息分页查询
  */
 export function pageByReceive(params) {
-  return defHttp.get<Result<PageResult>>({
+  return defHttp.get<Result<PageResult<SiteMessage>>>({
     url: '/site/message/pageByReceive',
     params: params,
+  })
+}
+
+/**
+ * 查看消息
+ */
+export function findById(id) {
+  return defHttp.get<Result<SiteMessage>>({
+    url: '/site/message/findById',
+    params: { id },
   })
 }
