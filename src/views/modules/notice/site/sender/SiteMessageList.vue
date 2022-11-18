@@ -7,7 +7,7 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
         <template #buttons>
           <a-space>
-            <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
+            <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">发布消息</a-button>
           </a-space>
         </template>
       </vxe-toolbar>
