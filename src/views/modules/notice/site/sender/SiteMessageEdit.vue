@@ -1,5 +1,6 @@
 <template>
   <basic-modal
+    defaultFullscreen
     v-bind="$attrs"
     width="60%"
     title="发布系统通知消息"
@@ -107,11 +108,13 @@
       })
     } else {
       confirmLoading.value = false
-      form.efficientTime = XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+      const date = XEUtils.getWhatDay(new Date(), 30)
+      form.efficientTime = XEUtils.toDateString(date, 'yyyy-MM-dd')
     }
   }
   // 保存
   function handleOk() {
+    console.log(form.efficientTime)
     formRef.validate().then(async () => {
       confirmLoading.value = true
       await saveOrUpdate(form)

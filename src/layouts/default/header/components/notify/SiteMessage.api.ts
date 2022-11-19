@@ -30,3 +30,13 @@ export function findById(id) {
     params: { id },
   })
 }
+
+/**
+ * 标记为已读
+ */
+export function read(id) {
+  return defHttp.post({
+    url: '/site/message/read',
+    params: { id },
+  })
+}

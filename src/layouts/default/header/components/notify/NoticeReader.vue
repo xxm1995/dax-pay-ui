@@ -11,7 +11,7 @@
     <a-card class="daily-article" :loading="confirmLoading">
       <a-card-meta :title="message.title" :description="'发布人：' + message.senderName + ' 发布时间： ' + message.senderTime" />
       <a-divider />
-      <span v-html="message.content" class="article-content"></span>
+      <div class="editor-content-view" v-html="message.content"></div>
     </a-card>
     <template #footer>
       <a-button key="cancel" @click="handleCancel">取消</a-button>
@@ -23,7 +23,7 @@
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import { $ref } from 'vue/macros'
   import { SiteMessage } from '/@/views/modules/notice/site/SiteMessage.api'
-  import { findById } from './SiteMessage.api'
+  import { findById, read } from './SiteMessage.api'
 
   const modalWidth = $ref('60%')
   let visible = $ref(false)
@@ -37,6 +37,7 @@
     message = messageInfo
     findById(messageInfo.id).then(({ data }) => {
       message = data
+      read(messageInfo.id)
       confirmLoading = false
     })
   }

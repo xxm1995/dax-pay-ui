@@ -141,6 +141,7 @@
 
   //发送
   function sendMessage(record) {
+    loading.value = true
     send(record.id).then(() => {
       createMessage.success('发送成功')
       queryPage()
