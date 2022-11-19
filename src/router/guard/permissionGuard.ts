@@ -8,7 +8,7 @@ import { useUserStoreWithOut } from '/@/store/modules/user'
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
 
 import { RootRoute } from '/@/router/routes'
-import { useDictStoreWithOut } from '/@/store/modules/dict'
+// import { useDictStoreWithOut } from '/@/store/modules/dict'
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN
 
@@ -23,7 +23,7 @@ const whitePathList: PageEnum[] = [LOGIN_PATH]
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut()
   const permissionStore = usePermissionStoreWithOut()
-  const useDictStore = useDictStoreWithOut()
+  // const useDictStore = useDictStoreWithOut()
   router.beforeEach(async (to, from, next) => {
     // if (
     //   from.path === ROOT_PATH &&
@@ -103,9 +103,9 @@ export function createPermissionGuard(router: Router) {
     console.log('重载菜单')
     const routes = await permissionStore.buildRoutesAction()
 
-    // 初始化字典
-    console.log('初始化字典')
-    await useDictStore.initDict()
+    // 初始化字典 改到项目加载的时候进行初始化
+    // console.log('初始化字典')
+    // await useDictStore.initDict()
 
     routes.forEach((route) => {
       router.addRoute(route as unknown as RouteRecordRaw)

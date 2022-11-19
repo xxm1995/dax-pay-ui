@@ -34,3 +34,6 @@ export const useDictStore = defineStore({
 export function useDictStoreWithOut() {
   return useDictStore(store)
 }
+
+// 初始化字典
+useDictStoreWithOut().initDict()

@@ -1,13 +1,13 @@
-import { useDictStoreWithOut } from '/@/store/modules/dict'
+import { useDictStore } from '/@/store/modules/dict'
 import { LabeledValue } from 'ant-design-vue/lib/select'
 
-const useDictStore = useDictStoreWithOut()
+const dictStore = useDictStore()
 
 /**
  * 字典项转换
  */
 function dictConvert(dictCode: string, code) {
-  const dictList = useDictStore.getDict
+  const dictList = dictStore.getDict
   const item = dictList.filter((dict) => {
     return dictCode === dict.dictCode && dict.code === String(code)
   })
@@ -22,7 +22,7 @@ function dictConvert(dictCode: string, code) {
  * 获取字典项列表
  */
 export function dictItems(dictCode: string) {
-  const dictList = useDictStore.getDict
+  const dictList = dictStore.getDict
   return dictList
     .filter((dict) => dictCode === dict.dictCode)
     .map((item) => {
@@ -34,7 +34,7 @@ export function dictItems(dictCode: string) {
  * 获取字典项列表(code值为数字)
  */
 export function dictItemsNumber(dictCode: string) {
-  const dictList = useDictStore.getDict
+  const dictList = dictStore.getDict
   return dictList
     .filter((dict) => dictCode === dict.dictCode)
     .map((item) => {
@@ -46,7 +46,7 @@ export function dictItemsNumber(dictCode: string) {
  * 获取字典下拉框数据列表
  */
 function dictDropDown(dictCode: string): LabeledValue[] {
-  const list = useDictStore.getDict
+  const list = dictStore.getDict
   return list
     .filter((dict) => dictCode === dict.dictCode)
     .map((o) => {
@@ -57,7 +57,7 @@ function dictDropDown(dictCode: string): LabeledValue[] {
  * 获取字典下拉框数据列表
  */
 function dictDropDownNumber(dictCode: string): LabeledValue[] {
-  const list = useDictStore.getDict
+  const list = dictStore.getDict
   return list
     .filter((dict) => dictCode === dict.dictCode)
     .map((o) => {
