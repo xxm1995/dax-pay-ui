@@ -26,7 +26,7 @@
             </a-list-item>
           </a-list>
           <div style="margin-top: 5px; text-align: center">
-            <a-button @click="toSiteMessage" type="dashed" block>查看更多</a-button>
+            <a-button @click="toSiteMessage" type="dashed" block>查看{{ num }}更多</a-button>
           </div>
         </a-spin>
       </template>
@@ -35,15 +35,18 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { onMounted } from 'vue'
+  import { computed, onMounted } from 'vue'
   import { BellOutlined } from '@ant-design/icons-vue'
   import { useDesign } from '/@/hooks/web/useDesign'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'
-  import { countByReceiveNotRead, pageByReceive } from '/@/layouts/default/header/components/notify/SiteMessage.api'
+  import { pageByReceive } from '/@/layouts/default/header/components/notify/SiteMessage.api'
   import { router } from '/@/router'
   import { PageEnum } from '/@/enums/pageEnum'
   import NoticeReader from '/@/layouts/default/header/components/notify/NoticeReader.vue'
+  import { useSiteMessageStore } from './SiteMessage.store'
+
+  const siteMessageStore = useSiteMessageStore()
 
   const { prefixCls } = useDesign('header-notify')
   const { createMessage } = useMessage()
@@ -53,18 +56,11 @@
   let loading = $ref(false)
   let visible = $ref(false)
   // 未读消息数量
-  let notReadMsgCount = $ref(0)
+  let notReadMsgCount = computed(() => siteMessageStore.notReadCount)
   let notReadMsgList = $ref<any>([])
   onMounted(() => {
-    receivedCount()
+    siteMessageStore.updateNotReadCount()
   })
-
-  // 查询当前用户的未读消息数量
-  function receivedCount() {
-    countByReceiveNotRead().then(({ data }) => {
-      notReadMsgCount = data
-    })
-  }
 
   // 打开列表页
   function fetchNotice() {
@@ -95,9 +91,6 @@
   // 查看我的消息
   function showMessage(message) {
     visible = false
-    if (!message.haveRead) {
-
-    }
     noticeIconReader.init(message)
   }
 </script>

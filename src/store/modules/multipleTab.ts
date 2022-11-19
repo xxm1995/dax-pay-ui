@@ -13,7 +13,6 @@ import { getRawRoute } from '/@/utils'
 import { MULTIPLE_TABS_KEY } from '/@/enums/cacheEnum'
 
 import projectSetting from '/@/settings/projectSetting'
-import { useUserStore } from '/@/store/modules/user'
 
 export interface MultipleTabState {
   cacheTabList: Set<string>

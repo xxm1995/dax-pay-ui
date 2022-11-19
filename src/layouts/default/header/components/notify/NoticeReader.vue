@@ -24,6 +24,9 @@
   import { $ref } from 'vue/macros'
   import { SiteMessage } from '/@/views/modules/notice/site/SiteMessage.api'
   import { findById, read } from './SiteMessage.api'
+  import { useSiteMessageStore } from '/@/layouts/default/header/components/notify/SiteMessage.store'
+
+  const siteMessageStore = useSiteMessageStore()
 
   const modalWidth = $ref('60%')
   let visible = $ref(false)
@@ -37,7 +40,7 @@
     message = messageInfo
     findById(messageInfo.id).then(({ data }) => {
       message = data
-      read(messageInfo.id)
+      read(messageInfo.id).then(() => siteMessageStore.updateNotReadCount())
       confirmLoading = false
     })
   }
