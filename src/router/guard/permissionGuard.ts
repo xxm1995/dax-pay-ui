@@ -8,6 +8,7 @@ import { useUserStoreWithOut } from '/@/store/modules/user'
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
 
 import { RootRoute } from '/@/router/routes'
+import { initWebSocket } from "/@/logics/websocket/UserGlobalWebSocker";
 // import { useDictStoreWithOut } from '/@/store/modules/dict'
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN
@@ -97,15 +98,12 @@ export function createPermissionGuard(router: Router) {
       next()
       return
     }
-    //TODO 添加 websocket连接.
+    // 初始化 websocket连接.
+    initWebSocket()
 
     // 重载菜单
     console.log('重载菜单')
     const routes = await permissionStore.buildRoutesAction()
-
-    // 初始化字典 改到项目加载的时候进行初始化
-    // console.log('初始化字典')
-    // await useDictStore.initDict()
 
     routes.forEach((route) => {
       router.addRoute(route as unknown as RouteRecordRaw)

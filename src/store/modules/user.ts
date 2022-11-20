@@ -16,6 +16,7 @@ import { h } from 'vue'
 import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
 // @ts-ignore
 import { getUserInfo } from '/@/api/sys/user'
+import { closeWebSocket, initWebSocket } from "/@/logics/websocket/UserGlobalWebSocker";
 
 interface UserState {
   userInfo: Nullable<UserInfo>
@@ -103,7 +104,7 @@ export const useUserStore = defineStore({
      */
     async afterLoginAction(goHome?: boolean) {
       if (!this.getToken) return null
-      // 获取用户信息
+      // 刷新登陆后用户信息
       await this.refreshUserInfoAction()
       const sessionTimeout = this.sessionTimeout
       // 超时
@@ -121,6 +122,8 @@ export const useUserStore = defineStore({
           router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw)
           permissionStore.setDynamicAddedRoute(true)
         }
+        // 初始化 websocket连接.
+        initWebSocket()
         goHome && (await router.replace(PageEnum.BASE_HOME))
       }
     },
@@ -147,6 +150,7 @@ export const useUserStore = defineStore({
       this.setToken(undefined)
       this.setSessionTimeout(false)
       this.setUserInfo(null)
+      closeWebSocket()
       goLogin && router.push(PageEnum.BASE_LOGIN)
     },
 

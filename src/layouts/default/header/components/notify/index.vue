@@ -7,7 +7,7 @@
       @visibleChange="visibleChange"
       :overlayStyle="{ width: '300px' }"
     >
-      <a-badge :count="notReadMsgCount" dot>
+      <a-badge :count="notReadMsgCount">
         <BellOutlined />
       </a-badge>
       <template #content>
@@ -26,7 +26,7 @@
             </a-list-item>
           </a-list>
           <div style="margin-top: 5px; text-align: center">
-            <a-button @click="toSiteMessage" type="dashed" block>查看{{ num }}更多</a-button>
+            <a-button @click="toSiteMessage" type="dashed" block>查看更多</a-button>
           </div>
         </a-spin>
       </template>
@@ -94,4 +94,9 @@
     noticeIconReader.init(message)
   }
 </script>
-<style lang="less"></style>
+<style lang="less">
+  .ant-badge-count {
+    top: 14px;
+    right: 6px;
+  }
+</style>

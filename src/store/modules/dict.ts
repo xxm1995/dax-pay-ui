@@ -26,6 +26,7 @@ export const useDictStore = defineStore({
             name: o.name,
           } as Dict
         })
+        console.log('初始化字典')
       })
     },
   },

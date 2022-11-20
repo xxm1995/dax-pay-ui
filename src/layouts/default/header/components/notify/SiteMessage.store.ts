@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { store } from '/@/store'
 import { countByReceiveNotRead } from './SiteMessage.api'
+import { listenerEvent } from '/@/logics/websocket/WebsocketNotice'
+import { WsListenerEnum } from '/@/enums/wsNoticeEnum'
 
 export const useSiteMessageStore = defineStore({
   id: 'SiteMessageStore',
@@ -20,3 +22,7 @@ export const useSiteMessageStore = defineStore({
 export function useSiteMessageStoreWithOut() {
   return useSiteMessageStore(store)
 }
+// 监听 通知消息更新
+listenerEvent(WsListenerEnum.NOTICE_MESSAGE_UPDATE, (event) => {
+  useSiteMessageStoreWithOut().updateNotReadCount()
+})
