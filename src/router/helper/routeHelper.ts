@@ -24,17 +24,11 @@ function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
   if (!routes) return
   routes.forEach((item) => {
     const { component, name } = item
-    // 是否外部打开 TODO 后面需要处理下
-    if (item.targetOutside) {
-      item.component = null
-    } else {
-      // 内部打开, 开是否是 Iframe 方式
-      if ((item.component as string).toUpperCase() === 'IFRAME') {
-        // item.meta.frameSrc = item.iframeUrl
-        item.meta.frameSrc = 'https://vvbin.cn/doc-next/'
-      }
+    // 内部打开, 是否是 Iframe 方式, redirect配置作为内部打开的地址
+    if ((item.component as string).toUpperCase() === 'IFRAME') {
+      item.meta.frameSrc = item.redirect
+      item.redirect = undefined
     }
-
     const { children } = item
     // 组件替换
     if (component) {

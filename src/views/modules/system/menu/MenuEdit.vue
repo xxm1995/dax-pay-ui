@@ -46,7 +46,10 @@
           </template>
           <a-input v-model:value="form.component" :disabled="showable" placeholder="请输入组件名称" />
         </a-form-item>
-        <a-form-item label="默认跳转地址(重定向)" name="redirect">
+        <a-form-item name="redirect">
+          <template #label>
+            <basic-title help-message="组件是Iframe的情况下，此配置为内嵌页面中请求地址"> 默认跳转地址(重定向) </basic-title>
+          </template>
           <a-input v-model:value="form.redirect" :disabled="showable" placeholder="请输入重定向" />
         </a-form-item>
         <a-form-item label="菜单图标" name="icon">
