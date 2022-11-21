@@ -38,7 +38,7 @@
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
-                    <a href="javascript:" @click="render(row)">测试</a>
+                    <a href="javascript:" @click="render(row)">渲染测试</a>
                   </a-menu-item>
                   <a-menu-item>
                     <a href="javascript:" @click="remove(row)" style="color: red">删除</a>
@@ -125,7 +125,7 @@
   }
   // 渲染测试
   function render(record) {
-    TemplateRender.init(record.id)
+    templateRender.init(record)
   }
 
   // 删除

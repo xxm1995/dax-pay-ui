@@ -76,18 +76,30 @@ export const existsByCodeNotId = (code, id) => {
     params: { code, id },
   })
 }
+
+/**
+ * 渲染
+ */
+export function render(code, paramMap) {
+  return defHttp.post<Result<string>>({
+    url: '/message/template/rendering',
+    params: { code },
+    data: { ...paramMap },
+  })
+}
+
 /**
  * 消息模板
  */
 export interface MessageTemplate extends BaseEntity {
   // 编码
-  code: string
+  code?: string
   // 名称
-  name: string
+  name?: string
   // 模板数据
-  data: string
+  data?: string
   // 模板类型
-  type: number
+  type?: number
   // 备注
-  remark: string
+  remark?: string
 }

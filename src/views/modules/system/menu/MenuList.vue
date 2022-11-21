@@ -34,10 +34,9 @@
       </vxe-toolbar>
       <vxe-table
         resizable
-        :stripe="false"
-        show-overflow
-        border="inner"
         ref="xTable"
+        border="inner"
+        :stripe="false"
         :loading="loading"
         :tree-config="{ children: 'children' }"
         :data="tableData"

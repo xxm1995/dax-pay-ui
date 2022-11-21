@@ -34,7 +34,6 @@
         </template>
       </vxe-toolbar>
       <vxe-table
-        show-overflow
         ref="xTable"
         size="medium"
         @checkbox-all="selectAllEvent"

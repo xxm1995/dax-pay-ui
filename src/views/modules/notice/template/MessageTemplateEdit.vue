@@ -1,5 +1,6 @@
 <template>
   <basic-modal
+    defaultFullscreen
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="modalWidth"
@@ -8,15 +9,7 @@
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-form
-      class="small-from-item"
-      ref="formRef"
-      :model="form"
-      :rules="rules"
-      :validate-trigger="['blur', 'change']"
-      :label-col="labelCol"
-      :wrapper-col="wrapperCol"
-    >
+    <a-form layout="vertical" ref="formRef" :validate-trigger="['blur', 'change']" :model="form" :rules="rules">
       <a-form-item label="主键" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
@@ -36,8 +29,10 @@
           placeholder="选择消息模板类型"
         />
       </a-form-item>
-      <a-form-item label="模板数据" name="data">
-        <a-textarea :rows="4" v-model:value="form.data" :disabled="showable" placeholder="请输入模板数据" />
+      <a-form-item label="模板内容" name="data">
+        <div style="border: 1px solid #ccc">
+          <code-editor style="height: 400px" v-model:value="form.data" :mode="MODE.HTML" />
+        </div>
       </a-form-item>
       <a-form-item label="备注" name="remark">
         <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
@@ -63,6 +58,8 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { useValidate } from '/@/hooks/bootx/useValidate'
+  import CodeEditor from '/@/components/CodeEditor/src/CodeEditor.vue'
+  import { MODE } from '/@/components/CodeEditor'
 
   const {
     initFormEditType,
@@ -83,14 +80,14 @@
   // 表单
   const formRef = $ref<FormInstance>()
   let messageTemplateTypes = $ref<LabeledValue[]>()
-  let form = $ref({
+  let form = $ref<MessageTemplate>({
     id: null,
     code: '',
     name: '',
     data: '',
     type: 0,
     remark: '',
-  } as MessageTemplate)
+  })
   // 校验
   const rules = reactive({
     code: [
