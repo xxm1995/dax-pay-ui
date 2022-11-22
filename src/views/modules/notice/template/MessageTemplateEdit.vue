@@ -1,6 +1,5 @@
 <template>
   <basic-modal
-    defaultFullscreen
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="modalWidth"

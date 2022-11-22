@@ -1,15 +1,6 @@
 import { PageResult } from '/#/axios'
 
 /**
- * 分页属性
- */
-export interface Pagination {
-  size: number
-  current: number
-  total: number
-}
-
-/**
  * 分页参数
  */
 export interface PageParam {
@@ -35,5 +26,13 @@ export interface TablePageModel<T = any> {
  * 基础实体对象
  */
 export interface BaseEntity {
-  id?: number | string | null | undefined
+  id?: number | string | null
+}
+
+/**
+ * 键值对对象
+ */
+export interface KeyValue {
+  key: string
+  value: string
 }

@@ -1,20 +1,15 @@
 <template>
-  <basic-modal
-    defaultFullscreen
-    v-bind="$attrs"
-    width="60%"
-    title="渲染测试"
-    :loading="confirmLoading"
-    :visible="visible"
-    @cancel="handleCancel"
-  >
+  <basic-modal v-bind="$attrs" width="60%" title="渲染测试" :loading="confirmLoading" :visible="visible" @cancel="handleCancel">
     <a-form ref="formRef" layout="vertical">
       <a-form-item label="模板名称">
         <a-input v-model:value="templateInfo.name" disabled />
       </a-form-item>
+      <a-form-item label="模板数据">
+        <code-editor style="height: 100px" readonly v-model:value="templateInfo.data" :mode="MODE.HTML" />
+      </a-form-item>
       <a-form-item label="测试参数(json格式)">
         <div style="border: 1px solid #ccc">
-          <code-editor style="height: 250px" v-model:value="param" :mode="MODE.JSON" />
+          <code-editor style="height: 150px" v-model:value="param" :mode="MODE.JSON" />
         </div>
       </a-form-item>
       <a-form-item label="渲染内容">
