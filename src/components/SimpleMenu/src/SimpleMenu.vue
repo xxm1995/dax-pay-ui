@@ -24,7 +24,7 @@
   import { propTypes } from '/@/utils/propTypes'
   import { REDIRECT_NAME } from '/@/router/constant'
   import { useRouter } from 'vue-router'
-  import { isFunction, isUrl } from '/@/utils/is'
+  import { isFunction, isOutsideUrl, isUrl } from "/@/utils/is";
   import { openWindow } from '/@/utils'
 
   import { useOpenKeys } from './useOpenKeys'
@@ -116,9 +116,14 @@
         setOpenKeys(path)
       }
 
+      /**
+       * 点击菜单
+       */
       async function handleSelect(key: string) {
-        if (isUrl(key)) {
-          openWindow(key)
+        // 判断是否需要通过外部打开
+        const path = isOutsideUrl(key)
+        if (path) {
+          openWindow(path)
           return
         }
         const { beforeClickFn } = props

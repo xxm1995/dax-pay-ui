@@ -29,18 +29,24 @@
             <basic-title
               helpMessage="此处名称应和vue组件的name属性保持一致。
               路由名称不能重复，主要用于路由缓存功能。
-              如果路由名称和vue组件的name属性不一致，则会导致路由缓存失效。"
+              如果路由名称和vue组件的name属性不一致，则会导致路由缓存失效。不填则随机自动生成"
               >路由名称</basic-title
             >
           </template>
           <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入路由名称" />
         </a-form-item>
-        <a-form-item label="访问路径" name="path">
+        <a-form-item name="path">
+          <template #label>
+            <basic-title
+              helpMessage="输入网址或以outside://开头会的路径从外部打开页面，请求路径后添加?onlytab=1&__full__参数后，只显示显示标签页内容，"
+              >访问路径</basic-title
+            >
+          </template>
           <a-input v-model:value="form.path" :disabled="showable" placeholder="请输入访问路径" />
         </a-form-item>
         <a-form-item name="component">
           <template #label>
-            <basic-title help-message="Layout 和 Iframe可以直接输入，为空为在新页面打开访问地址，自定义组件需要输入/src/views/下的全路径">
+            <basic-title help-message="Layout 和 Iframe可以直接输入，新页面打开访问地址为空不填写，自定义组件需要输入/src/views/下的全路径">
               组件
             </basic-title>
           </template>
@@ -115,7 +121,7 @@
     return {
       parentId: [{ required: form.menuType === 1, message: '请选择父级菜单', trigger: ['blur', 'change'] }],
       title: [{ required: true, message: '请输入菜单名称', trigger: ['blur', 'change'] }],
-      name: [{ required: true, message: '请输入路由名称', trigger: ['blur', 'change'] }],
+      // name: [{ required: true, message: '请输入路由名称', trigger: ['blur', 'change'] }],
       path: [{ required: true, message: '请输入菜单路径', trigger: ['blur', 'change'] }],
       url: [{ required: true, message: '请输入菜单路径', trigger: ['blur', 'change'] }],
     } as Record<string, Rule[]>

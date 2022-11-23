@@ -19,6 +19,7 @@ function handleError(e: Error) {
 export function useGo(_router?: Router) {
   const { push, replace } = _router || useRouter()
   function go(opt: RouteLocationRawEx = PageEnum.BASE_HOME, isReplace = false) {
+    // console.log(opt,isReplace)
     if (!opt) {
       return
     }

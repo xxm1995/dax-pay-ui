@@ -5,6 +5,7 @@ import { getParentLayout, LAYOUT, EXCEPTION_COMPONENT } from '/@/router/constant
 import { cloneDeep, omit } from 'lodash-es'
 import { warn } from '/@/utils/log'
 import { createRouter, createWebHashHistory } from 'vue-router'
+import XEUtils from 'xe-utils'
 
 const IFRAME = () => import('/@/views/sys/iframe/FrameBlank.vue')
 
@@ -24,6 +25,10 @@ function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
   if (!routes) return
   routes.forEach((item) => {
     const { component, name } = item
+    // 名称为空就随机生成
+    if (!item.name) {
+      item.name = String(XEUtils.random(1, 999999))
+    }
     // 内部打开, 是否是 Iframe 方式, redirect配置作为内部打开的地址
     if ((item.component as string).toUpperCase() === 'IFRAME') {
       item.meta.frameSrc = item.redirect

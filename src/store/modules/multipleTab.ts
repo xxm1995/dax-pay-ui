@@ -28,7 +28,6 @@ function handleGotoPage(router: Router) {
 
 const getToTarget = (tabItem: RouteLocationNormalized) => {
   const { params, path, query } = tabItem
-  console.log(123)
   return {
     params: params || {},
     path,

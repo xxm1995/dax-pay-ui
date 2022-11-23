@@ -119,7 +119,7 @@ const setting: ProjectConfig = {
 
   // 多标签配置
   multiTabsSetting: {
-    // 缓存
+    // 缓存 自动还原原来已打开的标签
     cache: false,
     // Turn on
     show: true,

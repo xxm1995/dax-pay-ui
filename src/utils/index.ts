@@ -15,6 +15,7 @@ export function getPopupContainer(node?: HTMLElement): HTMLElement {
 
 /**
  * Add the object as a parameter to the URL
+ * 将对象作为参数添加到URL
  * @param baseUrl url
  * @param obj
  * @returns {string}

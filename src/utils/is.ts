@@ -1,3 +1,5 @@
+import { router } from '/@/router'
+
 const toString = Object.prototype.toString
 
 export function is(val: unknown, type: string) {
@@ -96,4 +98,21 @@ export function isUrl(path: string): boolean {
   const reg =
     /^(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?(\/#\/)?(?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/
   return reg.test(path)
+}
+
+/**
+ * 是否从外部打开的链接
+ * @return 打开的地址, 为空字符则说明无法打开
+ */
+export function isOutsideUrl(path: string): string {
+  if (isUrl(path)) {
+    return path
+  }
+  if (path.startsWith('outside://')) {
+    // 转换成项目内路由地址
+    const routerPath = path.substring(11)
+    const to = router.resolve(routerPath)
+    return to.href
+  }
+  return ''
 }

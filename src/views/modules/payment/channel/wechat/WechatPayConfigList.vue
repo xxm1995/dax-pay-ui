@@ -14,14 +14,13 @@
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
         <vxe-column field="name" title="名称" />
-        <vxe-column field="appId" title="商户appId" />
-        <vxe-column field="authType" title="认证方式">
-          <template #default="{ row }">
-            <a-tag v-show="row.authType === 1">公钥</a-tag>
-            <a-tag v-show="row.authType === 2">证书</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="signType" title="签名类型" />
+        <vxe-column field="mchId" title="商户号" />
+        <vxe-column field="appId" title="应用编号" />
+        <!--      <vxe-column field="apiVersion" title="API版本" >-->
+        <!--        <template v-slot="{row}">-->
+        <!--          {{ dictConvert('wechatApiVersion',row.apiVersion) }}-->
+        <!--        </template>-->
+        <!--      </vxe-column>-->
         <vxe-column field="sandbox" title="沙箱">
           <template #default="{ row }">
             <a-tag v-if="row.sandbox">是</a-tag>
@@ -34,11 +33,17 @@
             <a-tag color="red" v-else>未启用</a-tag>
           </template>
         </vxe-column>
+        <vxe-column field="createTime" title="创建时间" />
+        <vxe-column field="createTime" title="创建时间" />
         <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">
           <template #default="{ row }">
-            <a-link @click="show(row)">查看</a-link>
+            <span>
+              <a-link @click="show(row)">查看</a-link>
+            </span>
             <a-divider type="vertical" />
-            <a-link @click="edit(row)">编辑</a-link>
+            <span>
+              <a-link @click="edit(row)">编辑</a-link>
+            </span>
             <a-divider type="vertical" />
             <a-dropdown>
               <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /></a>
@@ -49,7 +54,7 @@
                     <a-link v-else danger @click="clear(row)">停用</a-link>
                   </a-menu-item>
                   <a-menu-item>
-                    <a-link @click="remove(row)" style="color: red">删除</a-link>
+                    <a-link danger @click="remove(row)">删除</a-link>
                   </a-menu-item>
                 </a-menu>
               </template>
@@ -65,37 +70,36 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
-      <alipay-config-edit ref="alipayConfigEdit" @ok="queryPage" />
+      <wechat-pay-config-edit ref="wechatPayConfigEdit" @ok="queryPage" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted } from 'vue'
+  import { onMounted, ref } from 'vue'
   import { $ref } from 'vue/macros'
-  import { clearActivity, del, page, setUpActivity } from './AlipayConfig.api'
+  import { del, page, clearActivity, setUpActivity } from './WechatPayConfig.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import AlipayConfigEdit from './AlipayConfigEdit.vue'
+  import WechatPayConfigEdit from './WechatPayConfigEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { QueryField } from '/@/components/Bootx/Query/Query'
-  import ALink from '/@/components/Link/Link.vue'
-
+  import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
 
   // 查询条件
   const fields = [
-    { field: 'name', type: 'string', name: '名称', placeholder: '请输入名称' },
-    { field: 'appId', type: 'string', name: 'AppId', placeholder: '请输入AppId' },
+    { field: 'name', type: STRING, name: '名称', placeholder: '请输入名称' },
+    { field: 'appId', type: STRING, name: 'AppId', placeholder: '请输入AppId' },
+    { field: 'mchId', type: STRING, name: '商户号', placeholder: '请输入商户号' },
   ] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
-  const alipayConfigEdit = $ref<any>()
+  const wechatPayConfigEdit = $ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -117,15 +121,15 @@
   }
   // 新增
   function add() {
-    alipayConfigEdit.init(null, FormEditType.Add)
+    wechatPayConfigEdit.init(null, FormEditType.Add)
   }
   // 编辑
   function edit(record) {
-    alipayConfigEdit.init(record.id, FormEditType.Edit)
+    wechatPayConfigEdit.init(record.id, FormEditType.Edit)
   }
   // 查看
   function show(record) {
-    alipayConfigEdit.init(record.id, FormEditType.Show)
+    wechatPayConfigEdit.init(record.id, FormEditType.Show)
   }
 
   // 删除
