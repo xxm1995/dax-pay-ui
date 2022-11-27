@@ -60,19 +60,21 @@
 
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
 
-  interface Props {
-    // 名称
-    title: string
-    // 是否是查询看状态
-    multiple: boolean
-    // 宽度
-    width?: number | string
-  }
-  const props = withDefaults(defineProps<Props>(), {
-    title: '选择角色',
-    multiple: false,
-    width: 640,
-  })
+  const props = withDefaults(
+    defineProps<{
+      // 名称
+      title: string
+      // 是否是查询看状态
+      multiple: boolean
+      // 宽度
+      width?: number | string
+    }>(),
+    {
+      title: '选择角色',
+      multiple: false,
+      width: 640,
+    },
+  )
   const emits = defineEmits(['ok'])
 
   let visible = $ref(false)

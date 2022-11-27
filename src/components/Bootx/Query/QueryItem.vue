@@ -86,6 +86,7 @@
       md: 6,
     },
   )
+
   function query() {
     emits('enterQuery')
   }
