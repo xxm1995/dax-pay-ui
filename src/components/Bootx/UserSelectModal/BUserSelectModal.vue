@@ -83,7 +83,7 @@
   let visible = $ref(false)
   let selectUserIds = $ref<string[]>([])
   let selectUserId = $ref<string>()
-  let xTable = $ref<any>()
+  const xTable = $ref<any>()
   const fields = [
     { field: 'name', type: STRING, name: '账号', placeholder: '输入用户名称' },
     { field: 'username', type: STRING, name: '账号', placeholder: '输入用户账号' },

@@ -114,7 +114,7 @@
   }
   // 保存
   function handleOk() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       confirmLoading.value = true
       await saveOrUpdate(form)
       confirmLoading.value = false

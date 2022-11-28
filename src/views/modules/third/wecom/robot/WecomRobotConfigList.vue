@@ -79,7 +79,7 @@
     queryPage()
   })
   function vxeBind() {
-    xTable.connect(xToolbar)
+    xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
   // 分页查询

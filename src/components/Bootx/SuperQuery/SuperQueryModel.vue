@@ -22,7 +22,7 @@
               </a-popconfirm>
             </a-col>
           </a-row>
-          <super-query-item :query-params="queryParams" :fields="fields" />
+          <super-query-item v-model:query-params="queryParams" :fields="fields" />
         </div>
       </a-form>
     </a-spin>
@@ -34,6 +34,7 @@
   import SuperQueryItem from '/@/components/Bootx/SuperQuery/SuperQueryItem.vue'
   import { $ref } from 'vue/macros'
   import { QueryField, QueryParam } from '/@/components/Bootx/Query/Query'
+  import { watch } from "vue";
 
   interface Props {
     fields: QueryField[]
@@ -79,7 +80,7 @@
     queryParams.splice(index, 1)
   }
 
-  defineExpose({ show })
+  defineExpose({ show, handleReset })
 </script>
 
 <style scoped></style>

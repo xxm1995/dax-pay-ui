@@ -107,14 +107,14 @@
   const bpmModelEdit = $ref<any>()
   const bpmModelNodeList = $ref<any>()
   const bpmModeler = $ref<any>()
-  let xTable = $ref<VxeTableInstance>()
-  let xToolbar = $ref<VxeToolbarInstance>()
+  const xTable = $ref<VxeTableInstance>()
+  const xToolbar = $ref<VxeToolbarInstance>()
   onMounted(() => {
     vxeBind()
     queryPage()
   })
   function vxeBind() {
-    xTable.connect(xToolbar)
+    xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
   // 分页查询

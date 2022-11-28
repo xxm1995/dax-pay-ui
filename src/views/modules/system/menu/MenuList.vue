@@ -118,8 +118,8 @@
   let clients = $ref([] as Client[])
   let remoteTableData = $ref([] as Menu[])
   let tableData = $ref([] as Menu[])
-  let xTable: VxeTableInstance = $ref()
-  let xToolbar: VxeToolbarInstance = $ref()
+  const xTable: VxeTableInstance = $ref()
+  const xToolbar: VxeToolbarInstance = $ref()
   let menuEdit: any = $ref()
   let resourceList: any = $ref()
 
@@ -130,7 +130,7 @@
   })
 
   function vxeBind() {
-    xTable.connect(xToolbar)
+    xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
   async function initClients() {

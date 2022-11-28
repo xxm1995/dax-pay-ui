@@ -1,7 +1,13 @@
 <template>
-  <a-input disabled :style="{ width }" :placeholder="t('component.icon.placeholder')" :class="prefixCls" v-model:value="currentSelect">
+  <a-input
+    :disabled="disabled"
+    :style="{ width }"
+    :placeholder="t('component.icon.placeholder')"
+    :class="prefixCls"
+    v-model:value="currentSelect"
+  >
     <template #addonAfter>
-      <a-popover placement="bottomLeft" trigger="click" v-model="visible" :overlayClassName="`${prefixCls}-popover`">
+      <a-popover :disabled="disabled" placement="bottomLeft" trigger="click" v-model="visible" :overlayClassName="`${prefixCls}-popover`">
         <template #title>
           <div class="flex justify-between">
             <a-input :placeholder="t('component.icon.search')" @change="debounceHandleSearchChange" allowClear />
@@ -84,6 +90,7 @@
 
   const props = defineProps({
     value: propTypes.string,
+    disabled: propTypes.bool.def(true),
     width: propTypes.string.def('100%'),
     pageSize: propTypes.number.def(140),
     copy: propTypes.bool.def(false),

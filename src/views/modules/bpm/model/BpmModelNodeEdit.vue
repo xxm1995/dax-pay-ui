@@ -198,7 +198,7 @@
   }
   // 保存
   function handleOk() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       confirmLoading.value = true
       if (formEditType.value === FormEditType.Add) {
         await add(form)
@@ -233,7 +233,7 @@
     } else {
       form.assignShow = (userInfo as UserInfo)?.name
     }
-    formRef.validateFields(['assignShow'])
+    formRef?.validateFields(['assignShow'])
   }
   /**
    * 选择角色
@@ -252,7 +252,7 @@
     } else {
       form.assignShow = (roleInfo as Role)?.name
     }
-    formRef.validateFields(['assignShow'])
+    formRef?.validateFields(['assignShow'])
   }
   /**
    * 分配类型改变时, 清空分配数据信息

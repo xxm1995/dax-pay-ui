@@ -77,7 +77,7 @@
    */
   async function getCaptcha() {
     try {
-      await formRef.validateFields('phone')
+      await formRef?.validateFields('phone')
       const { code } = await sendLoginSmsCode(form.phone)
       if (code) {
         return false
@@ -95,7 +95,7 @@
    */
   async function handleOk() {
     try {
-      await formRef.validate()
+      await formRef?.validate()
       loading = true
       const token = await userStore.login(form as LoginParams)
       if (token) {

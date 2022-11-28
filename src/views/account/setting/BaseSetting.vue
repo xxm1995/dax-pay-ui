@@ -111,7 +111,7 @@
   }
   // 更新用户信息
   async function handleOk() {
-    await formRef.validate()
+    await formRef?.validate()
     createConfirm({
       iconType: 'warning',
       title: '警告',

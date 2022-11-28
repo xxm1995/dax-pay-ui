@@ -118,7 +118,7 @@
   }
 
   function handleOk() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       confirmLoading.value = true
       await add(form)
       createMessage.success('添加用户成功')
@@ -140,7 +140,7 @@
    */
   function validateToNextPassword() {
     if (confirmDirty) {
-      formRef.validateFields(['confirmPassword'])
+      formRef?.validateFields(['confirmPassword'])
     }
   }
   function compareToFirstPassword() {

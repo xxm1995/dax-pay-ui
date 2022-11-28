@@ -69,7 +69,7 @@
   const dictItemEdit = $ref<any>()
 
   nextTick(() => {
-    xTable.connect(xToolbar)
+    xTable?.connect(xToolbar as VxeToolbarInstance)
   })
 
   function init(dict) {

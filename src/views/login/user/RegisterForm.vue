@@ -99,7 +99,7 @@
    */
   function validateToNextPassword() {
     if (confirmDirty) {
-      formRef.validateFields(['confirmPassword'])
+      formRef?.validateFields(['confirmPassword'])
     }
   }
   function compareToFirstPassword() {
@@ -115,7 +115,7 @@
    * 注册
    */
   async function handleSubmit() {
-    await formRef.validate().catch()
+    await formRef?.validate().catch()
     loading = true
     try {
       await register(form).then(() => {

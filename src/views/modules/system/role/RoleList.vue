@@ -89,15 +89,15 @@
     { field: 'code', type: STRING, name: '角色编号', placeholder: '请输入角色编码' },
     { field: 'name', type: STRING, name: '角色名称', placeholder: '请输入角色名称' },
   ] as QueryField[]
-  let xTable = $ref<VxeTableInstance>()
-  let xToolbar = $ref<VxeToolbarInstance>()
+  const xTable = $ref<VxeTableInstance>()
+  const xToolbar = $ref<VxeToolbarInstance>()
 
   onMounted(() => {
     vxeBind()
     queryPage()
   })
   function vxeBind() {
-    xTable.connect(xToolbar)
+    xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
   // 分页查询

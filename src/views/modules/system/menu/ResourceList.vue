@@ -60,12 +60,12 @@
   let menuInfo = $ref<Menu>()
   let visible = $ref(false)
 
-  let xTable: VxeTableInstance = $ref()
-  let xToolbar: VxeToolbarInstance = $ref()
+  const xTable: VxeTableInstance = $ref()
+  const xToolbar: VxeToolbarInstance = $ref()
   let resourceEdit: any = $ref()
 
   nextTick(() => {
-    xTable.connect(xToolbar)
+    xTable?.connect(xToolbar as VxeToolbarInstance)
   })
 
   function init(menu) {

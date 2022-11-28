@@ -117,7 +117,7 @@
   }
   // 保存
   function handleOk() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       confirmLoading.value = true
       if (formEditType.value === FormEditType.Add) {
         await add(form)

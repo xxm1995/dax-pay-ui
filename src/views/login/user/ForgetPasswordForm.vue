@@ -99,7 +99,7 @@
    */
   function validateToNextPassword() {
     if (confirmDirty) {
-      formRef.validateFields(['confirmPassword'])
+      formRef?.validateFields(['confirmPassword'])
     }
   }
   function compareToFirstPassword() {
@@ -116,7 +116,7 @@
    */
   async function sendCaptcha() {
     try {
-      await formRef.validateFields(['phone'])
+      await formRef?.validateFields(['phone'])
       const { code } = await sendPhoneForgetCaptcha(form.phone)
       if (!code) {
         createMessage.success('发送验证码成功')
@@ -141,7 +141,7 @@
    * 下一步
    */
   function nextStep() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       loading = true
       await getUsernameByCaptcha()
       currentTab = 1
@@ -153,7 +153,7 @@
    * 提交
    */
   async function handleOk() {
-    await formRef.validate()
+    await formRef?.validate()
     loading = true
     forgetPasswordByPhone({
       phone: form.phone,

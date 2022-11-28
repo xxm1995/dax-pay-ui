@@ -15,8 +15,6 @@ export const DATE_TIME = 'date_time'
 // 列表
 export const LIST = 'list'
 
-//
-
 /**
  * 查询属性
  */
@@ -32,7 +30,7 @@ export interface QueryField {
   // 显示名称
   name?: string
   // 精度
-  precision?: number | null
+  precision?: number
   // 查询列表
   selectList?: LabeledValueType[] | null
   // 时间格式化
@@ -47,10 +45,12 @@ export interface QueryParam {
   or?: 'true' | 'false'
   // 参数名称
   paramName?: string
-  // 格式化 主要用于时间
+  // 格式化 主要用于时间格式化
   format?: string
+  // 精度
+  precision?: number
   // 比较类型
-  compareType?: string
+  compareType?: 'eq' | 'ne' | 'like' | 'like_left' | 'like_right' | 'not_like' | 'gt' | 'ge' | 'lt' | 'le' | 'is_null' | 'not_null'
   // 参数类型
   paramType?: string
   // 参数值

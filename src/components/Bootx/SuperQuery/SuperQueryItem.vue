@@ -1,96 +1,119 @@
 <template>
   <div>
-    <a-row type="flex" style="margin-top: 10px" :gutter="16" v-for="(queryParam, index) in queryParams" :key="index">
-      <a-col :span="3">
-        <a-select v-model:value="queryParam.or">
-          <a-select-option value="false">且</a-select-option>
-          <a-select-option value="true">或</a-select-option>
-        </a-select>
-      </a-col>
-      <a-col :span="6">
-        <a-select
-          placeholder="选择查询字段"
-          v-model:value="queryParam.paramName"
-          @change="(value) => fieldChange(value, index, queryParam)"
-        >
-          <a-select-option v-for="o in fields" :key="o.field" :value="o.field"> {{ o.name }}</a-select-option>
-        </a-select>
-      </a-col>
-      <a-col :span="4">
-        <a-select placeholder="选择匹配规则" v-model:value="queryParam.compareType">
-          <a-select-option v-for="o in compareTypeList" :key="o.type" :value="o.type"> {{ o.name }}</a-select-option>
-        </a-select>
-      </a-col>
-      <!-- 查询值输入 -->
-      <a-col :span="8">
-        <!-- 判断条件是否是判空 -->
-        <a-input disabled v-if="['is_null', 'not_null'].includes(queryParam.compareType)" value="空" />
-        <!-- 文本输入 -->
-        <a-input v-else-if="paramTypeJudge(index, STRING)" placeholder="请输入查询值" v-model:value="queryParam.paramValue" />
-        <!-- 数字输入 -->
-        <a-input-number
-          style="width: 100%"
-          v-else-if="paramTypeJudge(index, NUMBER)"
-          placeholder="请输入查询值"
-          :precision="queryParam.precision ? queryParam.precision : 0"
-          v-model:value="queryParam.paramValue"
-        />
-        <!-- 布尔 -->
-        <a-radio-group v-else-if="paramTypeJudge(index, BOOLEAN)" v-model:value="queryParam.paramValue">
-          <a-radio :value="true">是</a-radio>
-          <a-radio :value="false">否</a-radio>
-        </a-radio-group>
-        <!-- 列表 -->
-        <a-select
-          v-else-if="paramTypeJudge(index, LIST)"
-          placeholder="请选择查询值"
-          v-model:value="queryParam.paramValue"
-          :options="getSelectData(index)"
-        />
-        <!-- 日期 -->
-        <a-date-picker
-          v-else-if="paramTypeJudge(index, DATE)"
-          placeholder="请选择日期"
-          :valueFormat="queryParam.format ? queryParam.format : 'YYYY-MM-DD'"
-          v-model:value="queryParam.paramValue"
-        />
-        <!-- 时间 -->
-        <a-time-picker
-          v-else-if="paramTypeJudge(index, TIME)"
-          placeholder="请选择时间"
-          :valueFormat="queryParam.format ? queryParam.format : 'HH:mm:ss'"
-          v-model:value="queryParam.paramValue"
-        />
-        <!-- 日期时间 -->
-        <a-date-picker
-          showTime
-          v-else-if="paramTypeJudge(index, DATE_TIME)"
-          placeholder="请选择日期时间"
-          :valueFormat="queryParam.format ? queryParam.format : 'YYYY-MM-DD HH:mm:ss'"
-          v-model:value="queryParam.paramValue"
-        />
-        <!-- 默认文本输入 -->
-        <a-input v-else placeholder="请输入查询值" v-model:value="queryParam.paramValue" />
-      </a-col>
-      <a-col :span="3">
-        <a-button @click="handleAddNested(queryParam)" pre-icon="ant-design:plus" />&nbsp;
-        <a-button @click="handleDel(index)" pre-icon="ant-design:minus" />
-      </a-col>
-      <a-col v-if="queryParam.nestedParams" :span="1" />
-      <a-col v-if="queryParam.nestedParams" :span="23">
-        <super-query-item :fields="fields" v-model="queryParam.nestedParams" />
-      </a-col>
-    </a-row>
+    <template v-if="params?.length">
+      <a-row type="flex" style="margin-top: 10px" :gutter="16" v-for="(param, index) in params" :key="index">
+        <a-col :span="3">
+          <a-select v-model:value="param.or" class="w-full">
+            <a-select-option value="false">且</a-select-option>
+            <a-select-option value="true">或</a-select-option>
+          </a-select>
+        </a-col>
+        <a-col :span="6">
+          <a-select
+            class="w-full"
+            placeholder="选择查询字段"
+            v-model:value="param.paramName"
+            @change="(value) => fieldChange(value, index, param)"
+          >
+            <a-select-option v-for="o in fields" :key="o.field" :value="o.field"> {{ o.name }}</a-select-option>
+          </a-select>
+        </a-col>
+        <a-col :span="3">
+          <a-select placeholder="选择匹配规则" v-model:value="param.compareType" class="w-full">
+            <a-select-option v-for="o in compareTypeList" :key="o.type" :value="o.type"> {{ o.name }}</a-select-option>
+          </a-select>
+        </a-col>
+        <!-- 查询值输入 -->
+        <a-col :span="8">
+          <!-- 判断条件是否是判空 -->
+          <a-input class="w-full" disabled v-if="['is_null', 'not_null'].includes(param.compareType)" value="空" />
+          <!-- 文本输入 -->
+          <a-input class="w-full" v-else-if="paramTypeJudge(index, STRING)" placeholder="请输入查询值" v-model:value="param.paramValue" />
+          <!-- 数字输入 -->
+          <a-input-number
+            class="w-full"
+            v-else-if="paramTypeJudge(index, NUMBER)"
+            placeholder="请输入查询值"
+            :precision="param.precision ? param.precision : 0"
+            v-model:value="param.paramValue"
+          />
+          <!-- 布尔 -->
+          <a-radio-group v-else-if="paramTypeJudge(index, BOOLEAN)" v-model:value="param.paramValue">
+            <a-radio :value="true">是</a-radio>
+            <a-radio :value="false">否</a-radio>
+          </a-radio-group>
+          <!-- 列表 -->
+          <a-select
+            class="w-full"
+            v-else-if="paramTypeJudge(index, LIST)"
+            placeholder="请选择查询值"
+            v-model:value="param.paramValue"
+            :options="getSelectData(index)"
+          />
+          <!-- 日期 -->
+          <a-date-picker
+            class="w-full"
+            v-else-if="paramTypeJudge(index, DATE)"
+            placeholder="请选择日期"
+            :valueFormat="param.format ? param.format : 'YYYY-MM-DD'"
+            v-model:value="param.paramValue"
+          />
+          <!-- 时间 -->
+          <a-time-picker
+            class="w-full"
+            v-else-if="paramTypeJudge(index, TIME)"
+            placeholder="请选择时间"
+            :valueFormat="param.format ? param.format : 'HH:mm:ss'"
+            v-model:value="param.paramValue"
+          />
+          <!-- 日期时间 -->
+          <a-date-picker
+            showTime
+            class="w-full"
+            v-else-if="paramTypeJudge(index, DATE_TIME)"
+            placeholder="请选择日期时间"
+            :valueFormat="param.format ? param.format : 'YYYY-MM-DD HH:mm:ss'"
+            v-model:value="param.paramValue"
+          />
+          <!-- 默认文本输入 -->
+          <a-input class="w-full" v-else placeholder="请输入查询值" v-model:value="param.paramValue" />
+        </a-col>
+        <a-col :span="4">
+          <a-button @click="handleAddNested(param)" pre-icon="ant-design:plus" />&nbsp;
+          <a-button @click="handleDel(index)" pre-icon="ant-design:minus" />
+        </a-col>
+        <a-col v-if="param.nestedParams" :span="1" />
+        <a-col v-if="param.nestedParams" :span="23">
+          <super-query-item :fields="fields" :query-params="param.nestedParams" />
+        </a-col>
+      </a-row>
+    </template>
+    <a-empty description="查询条件为空" v-else />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { NUMBER, STRING, BOOLEAN, DATE, TIME, DATE_TIME, LIST, QueryField, QueryParam } from '/@/components/Bootx/Query/Query'
+  import { $ref } from 'vue/macros'
+  import { watch, watchEffect } from 'vue'
   interface Props {
     fields: QueryField[]
     queryParams: QueryParam[]
   }
   const props = withDefaults(defineProps<Props>(), {})
+  const emit = defineEmits(['change', 'update:queryParams'])
+  let params = $ref<QueryParam[]>([])
+
+  watchEffect(() => {
+    params = props.queryParams
+  })
+  // 虽然有没有这个都不影响, 但这是官方的写法, 留着吧
+  watch(
+    () => params,
+    (v) => {
+      emit('update:queryParams', v)
+    },
+  )
 
   const compareTypeList = [
     { type: 'eq', name: '等于' },
@@ -106,8 +129,8 @@
     { type: 'is_null', name: '为空' },
     { type: 'not_null', name: '不为空' },
   ]
-  // 字段缓存
-  let fieldTemps: any = []
+  // 页面中查询字段对应的字段属性相关信息的存储, 顺序与查询条件参数一致
+  let fieldTemps = $ref<QueryField[]>([])
 
   // 添加子查询条件
   function handleAddNested(item: QueryParam) {
@@ -119,9 +142,10 @@
       or: 'false',
     })
   }
+
   // 删除
   function handleDel(index) {
-    props.queryParams.splice(index, 1)
+    params.splice(index, 1)
     fieldTemps.splice(index, 1)
   }
   // 变更查询字段
@@ -133,7 +157,7 @@
       queryParam.paramValue = undefined
     }
   }
-  // 输入类型切换判断
+  // 输入类型判断
   function paramTypeJudge(index, types) {
     const field = fieldTemps[index]
     for (const argument of arguments) {
@@ -145,7 +169,7 @@
   }
   // 获取下拉选择的数据
   function getSelectData(index) {
-    return fieldTemps[index].list || []
+    return fieldTemps[index].selectList || []
   }
 </script>
 

@@ -38,7 +38,7 @@
         <a-form-item name="path">
           <template #label>
             <basic-title
-              helpMessage="输入网址或以outside://开头会的路径从外部打开页面，请求路径后添加?onlytab=1&__full__参数后，只显示显示标签页内容，"
+              helpMessage="输入网址或以outside://开头会的路径从外部打开页面，请求路径后添加?onlytab=1&__full__参数后，只显示显示标签页内容"
               >访问路径</basic-title
             >
           </template>
@@ -54,12 +54,12 @@
         </a-form-item>
         <a-form-item name="redirect">
           <template #label>
-            <basic-title help-message="组件是Iframe的情况下，此配置为内嵌页面中请求地址"> 默认跳转地址(重定向) </basic-title>
+            <basic-title help-message="组件是Iframe的情况下，此配置为内嵌页面中请求地址"> 默认跳转地址 </basic-title>
           </template>
-          <a-input v-model:value="form.redirect" :disabled="showable" placeholder="请输入重定向" />
+          <a-input v-model:value="form.redirect" :disabled="showable" placeholder="请输入跳转地址(重定向)" />
         </a-form-item>
         <a-form-item label="菜单图标" name="icon">
-          <icon-picker v-model:value="form.icon" />
+          <icon-picker v-model:value="form.icon" :disabled="showable" />
         </a-form-item>
         <a-form-item label="排序" name="sortNo">
           <a-input-number placeholder="请输入菜单排序，可以是小数" :disabled="showable" v-model:value="form.sortNo" style="width: 200px" />
@@ -126,8 +126,8 @@
       url: [{ required: true, message: '请输入菜单路径', trigger: ['blur', 'change'] }],
     } as Record<string, Rule[]>
   })
-  let treeData: unknown[] = $ref()
-  const formRef: FormInstance = $ref()
+  let treeData = $ref<any[]>()
+  const formRef = $ref<FormInstance>()
 
   // 事件
   const emits = defineEmits(['ok'])
@@ -179,7 +179,7 @@
   }
   // 保存
   function handleOk() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       confirmLoading.value = true
       if ([FormEditType.Add, FormEditType.Other].includes(formEditType.value)) {
         await add(form)

@@ -66,7 +66,7 @@
     confirmLoading.value = false
   }
   function handleOk() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       confirmLoading.value = true
       await addUserDataScopeBatch(form)
       createMessage.success('保存成功')

@@ -73,7 +73,7 @@
   const xToolbar = $ref<VxeToolbarInstance>()
 
   nextTick(() => {
-    xTable.connect(xToolbar)
+    xTable?.connect(xToolbar as VxeToolbarInstance)
   })
 
   function init(quartzJob) {

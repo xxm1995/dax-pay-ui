@@ -71,7 +71,7 @@
    * 保存
    */
   function handleOk() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       confirmLoading.value = true
       bindPhone(form.phone, form.captcha).then(() => {
         confirmLoading.value = false
@@ -110,7 +110,7 @@
    */
   async function sendPhoneCaptcha() {
     try {
-      await formRef.validateFields('phone').then(async () => {
+      await formRef?.validateFields('phone').then(async () => {
         sendPhoneChangeCaptcha(form.phone).then(() => {
           createMessage.success('发送验证码成功')
         })

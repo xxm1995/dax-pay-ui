@@ -1,17 +1,19 @@
 <template>
   <span>
-    <a-tooltip v-if="queryState">
-      <template #title>
-        <span>查询条件生效</span>
-        <a-divider type="vertical" />
-        <a href="javascript:" @click="supperQueryReset">清空</a>
-      </template>
-      <a-button style="margin-left: 8px" @click="supperQueryShow">
-        <icon icon="ant-design:appstore" theme="twoTone" spin />
-        <span>查询中...</span>
-      </a-button>
-    </a-tooltip>
-    <a-button v-else style="margin-left: 8px" @click="supperQueryShow">{{ buttonTitle }}</a-button>
+    <slot name="button">
+      <a-tooltip v-if="queryState">
+        <template #title>
+          <span>查询条件生效</span>
+          <a-divider type="vertical" />
+          <a href="javascript:" @click="supperQueryReset">清空</a>
+        </template>
+        <a-button style="margin-left: 8px" @click="supperQueryShow">
+          <icon icon="ant-design:appstore" theme="twoTone" spin />
+          <span>查询中...</span>
+        </a-button>
+      </a-tooltip>
+      <a-button v-else style="margin-left: 8px" @click="supperQueryShow">{{ buttonTitle }}</a-button>
+    </slot>
     <super-query-model ref="superQueryModal" :fields="fields" :width="width" :modelTitle="modelTitle" @ok="handleOk" />
   </span>
 </template>
@@ -23,24 +25,29 @@
   import { QueryField } from '/@/components/Bootx/Query/Query'
 
   // const{queryState=false,buttonTitle='超级查询',modelTitle,width} = defineProps<Props>()
-  const props = withDefaults(defineProps<{
-    queryState: boolean
-    // 字段
-    fields: QueryField[]
-    // 按钮标题
-    buttonTitle?: string
-    // 标题名称
-    modelTitle?: string
-    width?: number
-  }>(), {
-    // 是否在进行查询
-    queryState: false,
-    // 按钮标题
-    buttonTitle: '超级查询',
-    // 标题名称
-    modelTitle: '超级查询器',
-    width: 740,
-  })
+  const props = withDefaults(
+    defineProps<{
+      queryState: boolean
+      // 字段
+      fields: QueryField[]
+      // 按钮标题
+      buttonTitle?: string
+      // 按钮图标
+      buttonIcon?: string
+      // 标题名称
+      modelTitle?: string
+      width?: number
+    }>(),
+    {
+      // 是否在进行查询
+      queryState: false,
+      // 按钮标题
+      buttonTitle: '超级查询',
+      // 标题名称
+      modelTitle: '超级查询器',
+      width: 840,
+    },
+  )
 
   const emits = defineEmits(['reset', 'query'])
 
@@ -63,6 +70,7 @@
       createMessage.warning('不能查询空条件')
     }
   }
+  defineExpose({ supperQueryReset, supperQueryShow })
 </script>
 
 <style scoped></style>

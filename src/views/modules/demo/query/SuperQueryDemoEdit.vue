@@ -1,42 +1,48 @@
 <template>
   <basic-modal
     v-bind="$attrs"
-    :width="modalWidth"
     :loading="confirmLoading"
     :title="title"
+    :width="modalWidth"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-form class="small-from-item" ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+    <a-form
+      class="small-from-item"
+      ref="formRef"
+      :model="form"
+      :rules="rules"
+      :validate-trigger="['blur', 'change']"
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+    >
       <a-form-item label="主键" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
-      <a-form-item label="请求路径" name="path">
-        <a-input v-model:value="form.path" :disabled="showable" placeholder="请输入请求路径" />
+      <a-form-item label="名称" name="name">
+        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
       </a-form-item>
-      <a-form-item label="请求类型" name="requestType">
-        <a-select v-model:value="form.requestType" :disabled="showable || form.generate">
-          <a-select-option value="GET">GET</a-select-option>
-          <a-select-option value="POST">POST</a-select-option>
-          <a-select-option value="DELETE">DELETE</a-select-option>
-          <a-select-option value="PUT">PUT</a-select-option>
-        </a-select>
+      <a-form-item label="年龄" name="age">
+        <a-input v-model:value="form.age" :disabled="showable" placeholder="请输入年龄" />
       </a-form-item>
-      <a-form-item label="权限名称" name="name">
-        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入权限名称" />
+      <a-form-item label="是否vip" name="vip">
+        <a-input v-model:value="form.vip" :disabled="showable" placeholder="请输入是否vip" />
       </a-form-item>
-      <a-form-item label="权限标识" name="code">
-        <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入权限标识" />
+      <a-form-item label="生日" name="birthday">
+        <a-input v-model:value="form.birthday" :disabled="showable" placeholder="请输入生日" />
       </a-form-item>
-      <a-form-item label="分组名称" name="groupName">
-        <a-input v-model:value="form.groupName" :disabled="showable" placeholder="请输入分组名称" />
+      <a-form-item label="上班时间" name="workTime">
+        <a-input v-model:value="form.workTime" :disabled="showable" placeholder="请输入上班时间" />
       </a-form-item>
-      <a-form-item label="启用鉴权" name="enable">
-        <a-switch checked-children="开" un-checked-children="关" v-model:checked="form.enable" :disabled="showable" />
+      <a-form-item label="注册时间" name="registrationTime">
+        <a-input v-model:value="form.registrationTime" :disabled="showable" placeholder="请输入注册时间" />
       </a-form-item>
-      <a-form-item label="描述" name="remark">
-        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入描述" />
+      <a-form-item label="政治面貌" name="political">
+        <a-input v-model:value="form.political" :disabled="showable" placeholder="请输入政治面貌" />
+      </a-form-item>
+      <a-form-item label="备注" name="remark">
+        <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -52,11 +58,10 @@
   import { nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, PermPath } from './PermPath.api'
+  import { add, get, update, SuperQuery } from './SuperQueryDemo.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
-
   const {
     initFormEditType,
     handleCancel,
@@ -75,23 +80,17 @@
   const formRef = $ref<FormInstance>()
   let form = $ref({
     id: null,
-    code: '',
-    name: '',
-    requestType: 'GET',
-    path: '',
-    groupName: '',
-    enable: true,
-    generate: false,
-    remark: '',
-  } as PermPath)
+    name: null,
+    age: null,
+    vip: null,
+    birthday: null,
+    workTime: null,
+    registrationTime: null,
+    political: null,
+    remark: null,
+  } as SuperQuery)
   // 校验
-  const rules = reactive({
-    code: [{ required: true, message: '请求权限编码必填', trigger: ['blur', 'change'] }],
-    name: [{ required: true, message: '请求权限名称必填', trigger: ['blur', 'change'] }],
-    requestType: [{ required: true, message: '请求类型必填', trigger: ['blur', 'change'] }],
-    path: [{ required: true, message: '请求路径必填', trigger: ['blur', 'change'] }],
-    enable: [{ required: true, message: '启用鉴权必选', trigger: ['blur', 'change'] }],
-  } as Record<string, Rule[]>)
+  const rules = reactive({} as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
@@ -127,7 +126,7 @@
     })
   }
 
-  // 重置表单的校验
+  // 重置表单
   function resetForm() {
     nextTick(() => {
       formRef.resetFields()

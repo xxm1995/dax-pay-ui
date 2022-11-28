@@ -121,7 +121,7 @@
 
   // 保存
   function handleOk() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       confirmLoading.value = true
       await update({ ...form, ...diffForm(rawForm, form, 'username', 'password') })
       createMessage.success('用户更改成功')

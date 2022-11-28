@@ -63,14 +63,14 @@
     { field: 'code', type: STRING, name: '流程编号', placeholder: '请输入流程编号' },
     { field: 'code', type: STRING, name: '流程名称', placeholder: '请输入流程名称' },
   ] as QueryField[]
-  let xTable = $ref<VxeTableInstance>()
-  let xToolbar = $ref<VxeToolbarInstance>()
+  const xTable = $ref<VxeTableInstance>()
+  const xToolbar = $ref<VxeToolbarInstance>()
   onMounted(() => {
     vxeBind()
     queryPage()
   })
   function vxeBind() {
-    xTable.connect(xToolbar)
+    xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
   function queryPage() {

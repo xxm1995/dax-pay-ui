@@ -80,7 +80,7 @@
   }
 
   function handleOk() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       confirmLoading.value = true
       await addUserRole(form)
       createMessage.success('保存成功')

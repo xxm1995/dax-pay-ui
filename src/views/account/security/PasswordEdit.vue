@@ -63,7 +63,7 @@
   // 验证新密码
   function validateNewPassword() {
     if (confirmDirty) {
-      formRef.validateFields('confirmPassword')
+      formRef?.validateFields('confirmPassword')
     }
   }
   // 验证确认密码
@@ -81,7 +81,7 @@
   }
   // 保存
   function handleOk() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       confirmLoading.value = true
       await updatePassword(form.oldPassword, form.newPassword)
       confirmLoading.value = false

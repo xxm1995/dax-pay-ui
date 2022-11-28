@@ -143,8 +143,8 @@
     { field: 'username', type: STRING, name: '账号', placeholder: '请输入要查询的账号' },
     { field: 'name', type: STRING, name: '姓名', placeholder: '请输入要查询的姓名' },
   ] as QueryField[]
-  let xTable = $ref<VxeTableInstance>()
-  let xToolbar = $ref<VxeToolbarInstance>()
+  const xTable = $ref<VxeTableInstance>()
+  const xToolbar = $ref<VxeToolbarInstance>()
   let userAdd = $ref<any>()
   let userEdit = $ref<any>()
   let userShow = $ref<any>()
@@ -161,7 +161,7 @@
     queryPage()
   })
   function vxeBind() {
-    xTable.connect(xToolbar)
+    xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
   // 分页查询

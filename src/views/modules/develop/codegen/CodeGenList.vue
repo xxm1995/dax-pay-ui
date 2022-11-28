@@ -50,8 +50,8 @@
     { field: 'tableComment', type: STRING, name: '描述', placeholder: '请输入表描述' },
   ] as QueryField[]
 
-  let xTable = $ref<VxeTableInstance>()
-  let xToolbar = $ref<VxeToolbarInstance>()
+  const xTable = $ref<VxeTableInstance>()
+  const xToolbar = $ref<VxeToolbarInstance>()
   let codeGenForm = $ref<any>()
 
   onMounted(() => {
@@ -59,7 +59,7 @@
     queryPage()
   })
   function vxeBind() {
-    xTable.connect(xToolbar)
+    xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
   // 分页查询

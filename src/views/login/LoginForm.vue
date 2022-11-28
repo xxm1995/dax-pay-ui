@@ -155,7 +155,7 @@
    */
   async function handleLogin() {
     try {
-      await formRef.validate()
+      await formRef?.validate()
       loading = true
       const token = await userStore.login(form)
       if (token) {

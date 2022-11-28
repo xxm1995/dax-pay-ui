@@ -120,7 +120,7 @@
   }
   // 确定
   function handleOk() {
-    formRef.validate().then(() => {
+    formRef?.validate().then(() => {
       emits(genType, form)
     })
   }

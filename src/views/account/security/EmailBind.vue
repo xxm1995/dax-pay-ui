@@ -82,7 +82,7 @@
    * 保存
    */
   function handleOk() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       confirmLoading.value = true
       bindEmail(form.email, form.captcha).then(() => {
         confirmLoading.value = false
@@ -120,7 +120,7 @@
    * 发送验证码 绑定邮箱
    */
   function sendEmailCaptcha() {
-    formRef.validateFields('email').then(async () => {
+    formRef?.validateFields('email').then(async () => {
       sendEmailChangeCaptcha(form.email).then(() => {
         createMessage.success('发送验证码成功')
         state.captcha = true

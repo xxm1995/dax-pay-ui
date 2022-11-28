@@ -84,8 +84,8 @@
     { field: 'code', formType: STRING, name: '编码', placeholder: '请输入登录方式编码' },
     { field: 'name', formType: STRING, name: '名称', placeholder: '请输入登录方式名称' },
   ]
-  let xTable: VxeTableInstance = $ref()
-  let xToolbar: VxeToolbarInstance = $ref()
+  const xTable: VxeTableInstance = $ref()
+  const xToolbar: VxeToolbarInstance = $ref()
   const loginTypeEdit: any = $ref()
 
   onMounted(() => {
@@ -94,7 +94,7 @@
   })
 
   function vxeBind() {
-    xTable.connect(xToolbar)
+    xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
   // 分页查询

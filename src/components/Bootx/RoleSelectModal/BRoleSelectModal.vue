@@ -80,7 +80,7 @@
   let visible = $ref(false)
   let selectRoleIds = $ref<string[]>([])
   let selectRoleId = $ref<string>()
-  let xTable = $ref<any>()
+  const xTable = $ref<any>()
   const fields = [
     { field: 'name', type: STRING, name: '名称', placeholder: '请输入角色名称' },
     { field: 'code', type: STRING, name: '编号', placeholder: '请输入角色编号' },

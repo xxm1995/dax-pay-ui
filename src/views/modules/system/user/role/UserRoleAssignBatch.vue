@@ -69,7 +69,7 @@
   }
 
   function handleOk() {
-    formRef.validate().then(async () => {
+    formRef?.validate().then(async () => {
       confirmLoading.value = true
       await addUserRoleBatch(form)
       createMessage.success('批量分配角色成功')
