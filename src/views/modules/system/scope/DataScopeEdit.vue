@@ -124,7 +124,7 @@
   // 重置表单的校验
   function resetForm() {
     nextTick(() => {
-      formRef.resetFields()
+      formRef?.resetFields()
     })
   }
   async function validateCode() {

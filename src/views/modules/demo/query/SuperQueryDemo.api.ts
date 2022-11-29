@@ -88,7 +88,7 @@ export interface SuperQuery extends BaseEntity {
   // 注册时间
   registrationTime?: string
   // 政治面貌
-  political?: string
+  political?: number
   // 备注
   remark?: string
 }

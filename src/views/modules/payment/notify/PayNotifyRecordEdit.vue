@@ -2,26 +2,43 @@
   <basic-modal
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="modalWidth"
     :title="title"
+    :width="modalWidth"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-form class="small-from-item" ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-      <a-form-item label="主键" :hidden="true">
-        <a-input v-model:value="form.id" :disabled="showable" />
-      </a-form-item>
-      <a-form-item label="表单名称" name="name">
-        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入表单名称" />
-      </a-form-item>
-      <a-form-item label="表单编码" name="code">
-        <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入表单键名" />
-      </a-form-item>
-      <a-form-item label="备注" name="remark">
-        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
-      </a-form-item>
-    </a-form>
+      <a-form
+        class="small-from-item"
+        ref="formRef"
+        :model="form"
+        :rules="rules"
+        :validate-trigger="['blur', 'change']"
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
+      >
+        <a-form-item label="主键" :hidden="true">
+          <a-input v-model:value="form.id" :disabled="showable" />
+        </a-form-item>
+        <a-form-item label="支付号" name="paymentId">
+          <a-input v-model:value="form.paymentId" :disabled="showable" placeholder="请输入支付号" />
+        </a-form-item>
+        <a-form-item label="通知消息" name="notifyInfo">
+          <a-input v-model:value="form.notifyInfo" :disabled="showable" placeholder="请输入通知消息" />
+        </a-form-item>
+        <a-form-item label="支付通道" name="payChannel">
+          <a-input v-model:value="form.payChannel" :disabled="showable" placeholder="请输入支付通道" />
+        </a-form-item>
+        <a-form-item label="处理状态" name="status">
+          <a-input v-model:value="form.status" :disabled="showable" placeholder="请输入处理状态" />
+        </a-form-item>
+        <a-form-item label="提示信息" name="msg">
+          <a-input v-model:value="form.msg" :disabled="showable" placeholder="请输入提示信息" />
+        </a-form-item>
+        <a-form-item label="回调时间" name="notifyTime">
+          <a-input v-model:value="form.notifyTime" :disabled="showable" placeholder="请输入回调时间" />
+        </a-form-item>
+      </a-form>
     <template #footer>
       <a-space>
         <a-button key="cancel" @click="handleCancel">取消</a-button>
@@ -35,12 +52,10 @@
   import { nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, existsByCode, existsByCodeNotId, DynamicForm } from './DynamicForm.api'
+  import { add, get, update, PayNotifyRecord } from './PayNotifyRecord.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
-  import { useValidate } from '/@/hooks/bootx/useValidate'
-
   const {
     initFormEditType,
     handleCancel,
@@ -55,24 +70,19 @@
     showable,
     formEditType,
   } = useFormEdit()
-
-  const { existsByServer } = useValidate()
   // 表单
   const formRef = $ref<FormInstance>()
-  let form = $ref({
+  let form = $ref<PayNotifyRecord>({
     id: null,
-    code: '',
-    name: '',
-    remark: '',
-  } as DynamicForm)
+    paymentId: null,
+    notifyInfo: null,
+    payChannel: null,
+    status: null,
+    msg: null,
+    notifyTime: null,
+  })
   // 校验
-  const rules = reactive({
-    code: [
-      { required: true, message: '请输入表单编码', trigger: ['blur', 'change'] },
-      { required: true, validator: validateCode, trigger: 'blur' },
-    ],
-    name: [{ required: true, message: '请输入表单名称', trigger: ['blur', 'change'] }],
-  } as Record<string, Rule[]>)
+  const rules = reactive({} as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
@@ -108,16 +118,11 @@
     })
   }
 
-  // 重置表单的校验
+  // 重置表单
   function resetForm() {
     nextTick(() => {
-      formRef?.resetFields()
+      formRef.resetFields()
     })
-  }
-  // 校验编码重复
-  async function validateCode() {
-    const { code, id } = form
-    return existsByServer(code, id, formEditType, existsByCode, existsByCodeNotId)
   }
   defineExpose({
     init,

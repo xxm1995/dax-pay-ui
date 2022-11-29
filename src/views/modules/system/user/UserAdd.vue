@@ -113,7 +113,7 @@
     visible.value = true
     confirmLoading.value = false
     nextTick(() => {
-      formRef.resetFields()
+      formRef?.resetFields()
     })
   }
 

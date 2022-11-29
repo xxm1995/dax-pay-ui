@@ -1,0 +1,130 @@
+<template>
+  <div>
+    <div class="m-3 p-3 pt-5 bg-white">
+      <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
+    </div>
+    <div class="m-3 p-3 bg-white">
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
+        <template #buttons>
+          <a-space>
+            <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
+          </a-space>
+        </template>
+      </vxe-toolbar>
+      <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
+        <vxe-column type="seq" title="序号" width="60" />
+        <vxe-column field="businessId" title="业务ID" />
+        <vxe-column field="title" title="标题" />
+        <vxe-column field="amount" title="金额" sortable />
+        <vxe-column field="refundableBalance" title="可退余额" sortable />
+        <vxe-column field="payStatus" title="支付状态" sortable>
+          <template #default="{ row }">
+            {{ dictConvert('PayStatus', row.payStatus) }}
+          </template>
+        </vxe-column>
+        <vxe-column field="asyncPayMode" title="是否是异步支付">
+          <template #default="{ row }">
+            {{ row.asyncPayMode ? '是' : '否' }}
+          </template>
+        </vxe-column>
+        <vxe-column field="asyncPayChannel" title="异步支付方式">
+          <template #default="{ row }">
+            {{ dictConvert('PayChannel', row.asyncPayChannel) }}
+          </template>
+        </vxe-column>
+        <vxe-column field="createTime" title="创建时间" sortable />
+        <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
+          <template #default="{ row }">
+            <span>
+              <a-link @click="show(row)">查看</a-link>
+            </span>
+            <a-divider type="vertical" />
+            <span>
+              <a-link @click="edit(row)">编辑</a-link>
+            </span>
+            <a-divider type="vertical" />
+            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
+              <a-link danger>删除</a-link>
+            </a-popconfirm>
+          </template>
+        </vxe-column>
+      </vxe-table>
+      <vxe-pager
+        size="medium"
+        :loading="loading"
+        :current-page="pagination.current"
+        :page-size="pagination.size"
+        :total="pagination.total"
+        @page-change="handleTableChange"
+      />
+      <payment-edit ref="paymentEdit" @ok="queryPage" />
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+  import { onMounted } from 'vue'
+  import { $ref } from 'vue/macros'
+  import { del, page } from './Payment.api'
+  import useTablePage from '/@/hooks/bootx/useTablePage'
+  import PaymentEdit from './PaymentEdit.vue'
+  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+  import BQuery from '/@/components/Bootx/Query/BQuery.vue'
+  import { FormEditType } from '/@/enums/formTypeEnum'
+  import { useMessage } from '/@/hooks/web/useMessage'
+  import { QueryField } from '/@/components/Bootx/Query/Query'
+  import { useDict } from "/@/hooks/bootx/useDict";
+
+  // 使用hooks
+  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
+  const { notification, createMessage, createConfirm } = useMessage()
+  const { dictConvert } = useDict()
+
+  // 查询条件
+  const fields = [] as QueryField[]
+
+  const xTable = $ref<VxeTableInstance>()
+  const xToolbar = $ref<VxeToolbarInstance>()
+  const paymentEdit = $ref<any>()
+
+  onMounted(() => {
+    vxeBind()
+    queryPage()
+  })
+  function vxeBind() {
+    xTable?.connect(xToolbar as VxeToolbarInstance)
+  }
+
+  // 分页查询
+  function queryPage() {
+    loading.value = true
+    page({
+      ...model.queryParam,
+      ...pages,
+    }).then(({ data }) => {
+      pageQueryResHandel(data)
+    })
+  }
+  // 新增
+  function add() {
+    paymentEdit.init(null, FormEditType.Add)
+  }
+  // 编辑
+  function edit(record) {
+    paymentEdit.init(record.id, FormEditType.Edit)
+  }
+  // 查看
+  function show(record) {
+    paymentEdit.init(record.id, FormEditType.Show)
+  }
+
+  // 删除
+  function remove(record) {
+    del(record.id).then(() => {
+      createMessage.success('删除成功')
+      queryPage()
+    })
+  }
+</script>
+
+<style lang="less" scoped></style>

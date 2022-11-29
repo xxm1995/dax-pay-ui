@@ -122,7 +122,7 @@
         createMessage.success('注册成功')
         handleBackLogin()
       })
-      formRef.resetFields()
+      formRef?.resetFields()
     } finally {
       loading = false
     }

@@ -58,7 +58,7 @@
     visible.value = true
     confirmLoading.value = true
     await nextTick(() => {
-      formRef.resetFields()
+      formRef?.resetFields()
     })
     // 获取角色列表
     await roleList().then(({ data }) => {

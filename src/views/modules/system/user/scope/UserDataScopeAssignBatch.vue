@@ -56,7 +56,7 @@
     visible.value = true
     confirmLoading.value = true
     await nextTick(() => {
-      formRef.resetFields()
+      formRef?.resetFields()
     })
     form.userIds = ids
     // 获取数据权限列表

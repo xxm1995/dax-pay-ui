@@ -57,12 +57,15 @@
   import { getFileDownloadUrl, getFilePreviewUrl } from '/@/api/common/FileUpload'
   import { useUserStoreWithOut } from '/@/store/modules/user'
   import { getAppEnvConfig } from '/@/utils/env'
+  import { useUpload } from '/@/hooks/bootx/useUpload'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage } = useMessage()
   const useUserStore = useUserStoreWithOut()
   const { VITE_GLOB_API_URL } = getAppEnvConfig()
+
+  const { tokenHeader, uploadAction } = useUpload('/file/upload')
 
   // 查询条件
   const fields = [] as QueryField[]
@@ -78,19 +81,6 @@
     xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
-  // 上传地址
-  const uploadAction = computed(() => {
-    return VITE_GLOB_API_URL + '/file/upload'
-  })
-
-  // 请求头消息
-  const tokenHeader = computed(() => {
-    // 从 localstorage 获取 token
-    const token = useUserStore.getToken
-    return {
-      AccessToken: token,
-    }
-  })
   // 上传完成回调
   function handleChange(info) {
     if (info.file.status === 'done') {

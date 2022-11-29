@@ -8,12 +8,12 @@ export function useUpload(uploadUrl: string) {
   /**
    * 从 localstorage 获取 token
    */
-  function tokenHeader() {
+  const tokenHeader = computed(() => {
     const token = useUserStore.getToken
     return {
       AccessToken: token,
     }
-  }
+  })
   /**
    * 上传地址
    */

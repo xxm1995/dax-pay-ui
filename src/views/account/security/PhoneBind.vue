@@ -64,7 +64,7 @@
   function init() {
     visible.value = true
     nextTick(() => {
-      formRef.resetFields()
+      formRef?.resetFields()
     })
   }
   /**

@@ -162,7 +162,7 @@
     }).then(() => {
       loading = false
       createMessage.success('密码修改成功')
-      formRef.resetFields()
+      formRef?.resetFields()
       currentTab = 0
       handleBackLogin()
     })

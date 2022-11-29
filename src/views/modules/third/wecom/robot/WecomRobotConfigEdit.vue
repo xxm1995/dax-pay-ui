@@ -126,7 +126,7 @@
   // 重置表单
   function resetForm() {
     nextTick(() => {
-      formRef.resetFields()
+      formRef?.resetFields()
     })
   }
   // 校验

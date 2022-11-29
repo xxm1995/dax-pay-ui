@@ -24,63 +24,80 @@
         <a-form-item label="名称" name="name">
           <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
         </a-form-item>
-        <a-form-item label="微信应用AppId" name="appId">
-          <a-input v-model:value="form.appId" :disabled="showable" placeholder="请输入微信应用AppId" />
-        </a-form-item>
         <a-form-item label="商户号" name="mchId">
           <a-input v-model:value="form.mchId" :disabled="showable" placeholder="请输入商户号" />
         </a-form-item>
-        <a-form-item label="服务商应用编号" name="apiVersion">
-          <a-input v-model:value="form.apiVersion" :disabled="showable" placeholder="请输入服务商应用编号" />
+        <a-form-item label="应用编号" name="appId">
+          <a-input v-model:value="form.appId" :disabled="showable" placeholder="请输入微信应用AppId" />
         </a-form-item>
-        <a-form-item label="商户平台「API安全」中的 APIv2 密钥" name="apiKeyV2">
-          <a-input v-model:value="form.apiKeyV2" :disabled="showable" placeholder="请输入商户平台「API安全」中的 APIv2 密钥" />
-        </a-form-item>
-        <a-form-item label="商户平台「API安全」中的 APIv3 密钥" name="apiKeyV3">
-          <a-input v-model:value="form.apiKeyV3" :disabled="showable" placeholder="请输入商户平台「API安全」中的 APIv3 密钥" />
-        </a-form-item>
-        <a-form-item label="APPID对应的接口密码，用于获取接口调用凭证access_token时使用" name="appSecret">
-          <a-input
-            v-model:value="form.appSecret"
-            :disabled="showable"
-            placeholder="请输入APPID对应的接口密码，用于获取接口调用凭证access_token时使用"
-          />
-        </a-form-item>
-        <a-form-item label="p12的文件id" name="p12">
-          <a-input v-model:value="form.p12" :disabled="showable" placeholder="请输入p12的文件id" />
-        </a-form-item>
-        <a-form-item label="API 证书中的 cert.pem" name="certPem">
-          <a-input v-model:value="form.certPem" :disabled="showable" placeholder="请输入API 证书中的 cert.pem" />
-        </a-form-item>
-        <a-form-item label="API 证书中的 key.pem" name="keyPem">
-          <a-input v-model:value="form.keyPem" :disabled="showable" placeholder="请输入API 证书中的 key.pem" />
-        </a-form-item>
-        <a-form-item label="应用域名，回调中会使用此参数" name="domain">
-          <a-input v-model:value="form.domain" :disabled="showable" placeholder="请输入应用域名，回调中会使用此参数" />
-        </a-form-item>
-        <a-form-item label="服务器异步通知页面路径" name="notifyUrl">
-          <a-input v-model:value="form.notifyUrl" :disabled="showable" placeholder="请输入服务器异步通知页面路径" />
-        </a-form-item>
-        <a-form-item label="页面跳转同步通知页面路径" name="returnUrl">
-          <a-input v-model:value="form.returnUrl" :disabled="showable" placeholder="请输入页面跳转同步通知页面路径" />
-        </a-form-item>
-        <a-form-item label="支持的支付类型" name="payWays">
-          <a-input v-model:value="form.payWays" :disabled="showable" placeholder="请输入支持的支付类型" />
-        </a-form-item>
-        <a-form-item label="是否沙箱环境" name="sandbox">
-          <a-input v-model:value="form.sandbox" :disabled="showable" placeholder="请输入是否沙箱环境" />
+        <a-form-item label="AppSecret" name="appSecret">
+          <a-input v-model:value="form.appSecret" :disabled="showable" placeholder="APPID对应的接口密码，用于获取接口调用凭证时使用" />
         </a-form-item>
         <a-form-item label="超时配置" name="expireTime">
-          <a-input v-model:value="form.expireTime" :disabled="showable" placeholder="请输入超时配置" />
+          <a-input-number :min="1" :max="12000" :step="1" :disabled="showable" v-model:value="form.expireTime" />
         </a-form-item>
-        <a-form-item label="是否启用" name="activity">
-          <a-input v-model:value="form.activity" :disabled="showable" placeholder="请输入是否启用" />
+        <a-form-item label="支持支付方式" name="payWayList">
+          <a-select
+            allowClear
+            mode="multiple"
+            :disabled="showable"
+            :options="payWayList"
+            v-model:value="form.payWayList"
+            style="width: 100%"
+            placeholder="选择支付方式"
+          />
         </a-form-item>
-        <a-form-item label="状态" name="state">
-          <a-input v-model:value="form.state" :disabled="showable" placeholder="请输入状态" />
+        <a-form-item label="是否沙箱环境" name="sandbox">
+          <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.sandbox" :disabled="showable" />
+        </a-form-item>
+        <a-form-item label="是否启用" v-show="showable" name="activity">
+          <a-tag>{{ form.activity ? '启用' : '未启用' }}</a-tag>
+        </a-form-item>
+        <a-form-item label="p12证书" name="p12">
+          <a-upload
+            v-if="!form.p12"
+            :disabled="showable"
+            name="file"
+            :multiple="false"
+            :action="uploadAction"
+            :headers="tokenHeader"
+            :showUploadList="false"
+            @change="handleChange"
+          >
+            <a-button type="primary" preIcon="carbon:cloud-upload"> p12证书上传 </a-button>
+          </a-upload>
+          <a-input v-else v-model:value="form.p12" disabled>
+            <template #addonAfter v-if="!showable">
+              <a-tooltip>
+                <template #title> 删除上传的证书文件 </template>
+                <icon @click="form.p12 = null" icon="ant-design:close-circle-outlined" :size="20" />
+              </a-tooltip>
+            </template>
+          </a-input>
+        </a-form-item>
+        <a-form-item label="APIv2密钥" name="apiKeyV2">
+          <a-textarea :disabled="showable" v-model:value="form.apiKeyV2" placeholder="请输入APIv2密钥" />
+        </a-form-item>
+        <a-form-item label="APIv3密钥" name="apiKeyV3">
+          <a-textarea :disabled="showable" v-model:value="form.apiKeyV3" placeholder="请输入APIv3密钥" />
+        </a-form-item>
+        <a-form-item label="证书(cert.pem)" name="certPem">
+          <a-textarea :disabled="showable" v-model:value="form.certPem" placeholder="请填入证书内容" />
+        </a-form-item>
+        <a-form-item label="私钥(key.pem)" name="keyPem">
+          <a-input v-model:value="form.keyPem" :disabled="showable" placeholder="请填入私钥内容" />
+        </a-form-item>
+        <a-form-item label="异步通知UR" name="notifyUrl">
+          <a-input v-model:value="form.notifyUrl" :disabled="showable" placeholder="请输入服务器异步通知页面路径" />
+        </a-form-item>
+        <a-form-item label="同步通知URL" name="returnUrl">
+          <a-input v-model:value="form.returnUrl" :disabled="showable" placeholder="请输入页面跳转同步通知页面路径" />
+        </a-form-item>
+        <a-form-item label="应用域名" name="domain">
+          <a-input v-model:value="form.domain" :disabled="showable" placeholder="请输入应用域名，回调中会使用此参数" />
         </a-form-item>
         <a-form-item label="备注" name="remark">
-          <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
+          <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -97,10 +114,15 @@
   import { computed, nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, WechatPayConfig } from './WechatPayConfig.api'
+  import { add, get, update, findPayWayList, WechatPayConfig } from './WechatPayConfig.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicDrawer } from '/@/components/Drawer'
+  import { KeyValue } from '/#/web'
+  import Icon from '/@/components/Icon/src/Icon.vue'
+  import { useUpload } from '/@/hooks/bootx/useUpload'
+  import { useMessage } from '/@/hooks/web/useMessage'
+
   const {
     initFormEditType,
     handleCancel,
@@ -116,6 +138,9 @@
     showable,
     formEditType,
   } = useFormEdit()
+  const { tokenHeader, uploadAction } = useUpload('/file/upload')
+  const { createMessage } = useMessage()
+
   // 表单
   const formRef = $ref<FormInstance>()
   let rawForm
@@ -158,10 +183,17 @@
       payWayList: [{ required: true, message: '请选择支持的支付类型' }],
     } as Record<string, Rule[]>
   })
+
+  let payWayList = $ref<KeyValue[]>([])
+
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
   function init(id, editType: FormEditType) {
+    findPayWayList().then(({ data }) => {
+      payWayList = data
+      console.log(payWayList)
+    })
     initFormEditType(editType)
     resetForm()
     getInfo(id, editType)
@@ -186,7 +218,7 @@
       if (formEditType.value === FormEditType.Add) {
         await add(form)
       } else if (formEditType.value === FormEditType.Edit) {
-        await update({ ...form, ...diffForm(rawForm, form, 'phone', 'email') })
+        await update({ ...form, ...diffForm(rawForm, form, 'mchId', 'appId', 'appSecret', 'apiKeyV2', 'apiKeyV3', 'keyPem', 'certPem') })
       }
       confirmLoading.value = false
       handleCancel()
@@ -197,8 +229,25 @@
   // 重置表单
   function resetForm() {
     nextTick(() => {
-      formRef.resetFields()
+      formRef?.resetFields()
     })
+  }
+  /**
+   * 文件上传
+   */
+  function handleChange(info) {
+    // 上传完毕
+    if (info.file.status === 'done') {
+      const res = info.file.response
+      if (!res.code) {
+        form.p12 = res.data.id
+        createMessage.success(`${info.file.name} 上传成功!`)
+      } else {
+        createMessage.error(`${res.msg}`)
+      }
+    } else if (info.file.status === 'error') {
+      createMessage.error('上传失败')
+    }
   }
   defineExpose({
     init,

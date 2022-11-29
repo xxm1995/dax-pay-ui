@@ -24,25 +24,22 @@
         <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
       </a-form-item>
       <a-form-item label="年龄" name="age">
-        <a-input v-model:value="form.age" :disabled="showable" placeholder="请输入年龄" />
+        <a-input-number v-model:value="form.age" :disabled="showable" :precision="0" />
       </a-form-item>
       <a-form-item label="是否vip" name="vip">
-        <a-input v-model:value="form.vip" :disabled="showable" placeholder="请输入是否vip" />
+        <a-switch :disabled="showable" checkedChildren="是" unCheckedChildren="否" v-model:checked="form.vip" />
       </a-form-item>
       <a-form-item label="生日" name="birthday">
-        <a-input v-model:value="form.birthday" :disabled="showable" placeholder="请输入生日" />
+        <a-date-picker placeholder="请选择日期" valueFormat="YYYY-MM-DD" :disabled="showable" v-model:value="form.birthday" />
       </a-form-item>
       <a-form-item label="上班时间" name="workTime">
-        <a-input v-model:value="form.workTime" :disabled="showable" placeholder="请输入上班时间" />
-      </a-form-item>
-      <a-form-item label="注册时间" name="registrationTime">
-        <a-input v-model:value="form.registrationTime" :disabled="showable" placeholder="请输入注册时间" />
+        <a-time-picker placeholder="请选择时间" valueFormat="HH:mm:ss" :disabled="showable" v-model:value="form.workTime" />
       </a-form-item>
       <a-form-item label="政治面貌" name="political">
-        <a-input v-model:value="form.political" :disabled="showable" placeholder="请输入政治面貌" />
+        <a-select v-model:value="form.political" :disabled="showable" :options="politicalList" placeholder="请选择政治面貌" />
       </a-form-item>
       <a-form-item label="备注" name="remark">
-        <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
+        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -62,6 +59,7 @@
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
+  import { useDict } from '/@/hooks/bootx/useDict'
   const {
     initFormEditType,
     handleCancel,
@@ -76,21 +74,33 @@
     showable,
     formEditType,
   } = useFormEdit()
+
+  const { dictDropDownNumber } = useDict()
   // 表单
   const formRef = $ref<FormInstance>()
-  let form = $ref({
+  let form = $ref<SuperQuery>({
     id: null,
-    name: null,
-    age: null,
-    vip: null,
-    birthday: null,
-    workTime: null,
-    registrationTime: null,
-    political: null,
-    remark: null,
-  } as SuperQuery)
+    name: '',
+    age: 18,
+    vip: true,
+    birthday: '',
+    workTime: '',
+    registrationTime: '',
+    political: 13,
+    remark: '',
+  })
   // 校验
-  const rules = reactive({} as Record<string, Rule[]>)
+  const rules = reactive({
+    name: [{ required: true, message: '请输入名称' }],
+    age: [{ required: true, message: '请输入年龄' }],
+    vip: [{ required: true, message: '请选择是否vip' }],
+    birthday: [{ required: true, message: '请选择出生日期' }],
+    workTime: [{ required: true, message: '请选择工作时间' }],
+    political: [{ required: true, message: '请选择政治面貌' }],
+  } as Record<string, Rule[]>)
+
+  const politicalList = $ref(dictDropDownNumber('Political'))
+
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
@@ -129,7 +139,7 @@
   // 重置表单
   function resetForm() {
     nextTick(() => {
-      formRef.resetFields()
+      formRef?.resetFields()
     })
   }
   defineExpose({

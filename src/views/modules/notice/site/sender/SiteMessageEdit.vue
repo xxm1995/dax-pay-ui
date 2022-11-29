@@ -126,7 +126,7 @@
   // 重置表单的校验
   function resetForm() {
     nextTick(() => {
-      formRef.resetFields()
+      formRef?.resetFields()
     })
   }
   // 组件销毁时，也及时销毁编辑器

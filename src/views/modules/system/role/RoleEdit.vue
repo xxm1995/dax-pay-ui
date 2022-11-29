@@ -93,7 +93,7 @@
 
   // 重置表单的校验
   function resetForm() {
-    nextTick(() => formRef.resetFields())
+    nextTick(() => formRef?.resetFields())
   }
   async function validateCode() {
     const { code, id } = form

@@ -110,7 +110,7 @@
     visible.value = true
     confirmLoading.value = true
     nextTick(() => {
-      formRef.resetFields()
+      formRef?.resetFields()
     })
     get(id).then(({ data }) => {
       rawForm = { ...data }
