@@ -13,50 +13,11 @@ export function page(params) {
 }
 
 /**
- * 查询全部
- */
-export function findAll() {
-  return defHttp.get<Result<RefundRecord[]>>({
-    url: '/pay/refund/findAll',
-  })
-}
-
-/**
  * 获取单条
  */
 export function get(id) {
   return defHttp.get<Result<RefundRecord>>({
     url: '/pay/refund/findById',
-    params: { id },
-  })
-}
-
-/**
- * 添加
- */
-export function add(obj: RefundRecord) {
-  return defHttp.post({
-    url: '/pay/refund/add',
-    data: obj,
-  })
-}
-
-/**
- * 更新
- */
-export function update(obj: RefundRecord) {
-  return defHttp.post({
-    url: '/pay/refund/update',
-    data: obj,
-  })
-}
-
-/**
- * 删除
- */
-export function del(id) {
-  return defHttp.delete({
-    url: '/pay/refund/delete',
     params: { id },
   })
 }
@@ -80,7 +41,7 @@ export interface RefundRecord extends BaseEntity {
   // 剩余可退款金额
   refundableBalance?: number
   // 可退款信息
-  refundableInfo?: string
+  refundableInfo?: RefundableInfo[]
   // 退款状态
   refundStatus?: number
   // 支付时间
@@ -91,4 +52,14 @@ export interface RefundRecord extends BaseEntity {
   errorCode?: string
   // 错误信息
   errorMsg?: string
+}
+
+/**
+ * 可退款信息
+ */
+export interface RefundableInfo {
+  // 支付通道
+  payChannel?: number
+  // 金额
+  amount?: number
 }

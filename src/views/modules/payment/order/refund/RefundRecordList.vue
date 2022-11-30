@@ -4,13 +4,7 @@
       <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
-        <template #buttons>
-          <a-space>
-            <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
-          </a-space>
-        </template>
-      </vxe-toolbar>
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" title="序号" width="60" />
         <vxe-column field="paymentId" title="支付记录单号">
@@ -30,19 +24,11 @@
             <a-tag>{{ row.refundStatus ? '成功' : '失败' }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
               <a-link @click="show(row)">查看</a-link>
             </span>
-            <a-divider type="vertical" />
-            <span>
-              <a-link @click="edit(row)">编辑</a-link>
-            </span>
-            <a-divider type="vertical" />
-            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-              <a-link danger>删除</a-link>
-            </a-popconfirm>
           </template>
         </vxe-column>
       </vxe-table>
@@ -55,6 +41,7 @@
         @page-change="handleTableChange"
       />
       <refund-record-edit ref="refundRecordEdit" @ok="queryPage" />
+      <payment-info ref="paymentInfo" />
     </div>
   </div>
 </template>
@@ -62,15 +49,16 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { del, page } from './RefundRecord.api'
+  import { page } from './RefundRecord.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import RefundRecordEdit from './RefundRecordEdit.vue'
+  import RefundRecordEdit from './RefundRecordInfo.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { QueryField } from '/@/components/Bootx/Query/Query'
+  import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
+  import PaymentInfo from '/@/views/modules/payment/order/payment/PaymentInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -78,11 +66,16 @@
   const { dictConvert } = useDict()
 
   // 查询条件
-  const fields = [] as QueryField[]
+  const fields = [
+    { field: 'paymentId', type: STRING, name: '支付单号', placeholder: '请输入支付单号' },
+    { field: 'businessId', type: STRING, name: '业务ID', placeholder: '请输入业务ID' },
+    { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
+  ] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const refundRecordEdit = $ref<any>()
+  const paymentInfo = $ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -102,25 +95,13 @@
       pageQueryResHandel(data)
     })
   }
-  // 新增
-  function add() {
-    refundRecordEdit.init(null, FormEditType.Add)
-  }
-  // 编辑
-  function edit(record) {
-    refundRecordEdit.init(record.id, FormEditType.Edit)
-  }
   // 查看
   function show(record) {
     refundRecordEdit.init(record.id, FormEditType.Show)
   }
 
-  // 删除
-  function remove(record) {
-    del(record.id).then(() => {
-      createMessage.success('删除成功')
-      queryPage()
-    })
+  function showPayment(paymentId) {
+    paymentInfo.init(paymentId, 'show')
   }
 </script>
 

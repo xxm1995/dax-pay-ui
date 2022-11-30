@@ -1,6 +1,7 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
+import { RefundableInfo } from '/@/views/modules/payment/order/refund/RefundRecord.api'
 
 /**
  * 分页
@@ -32,32 +33,13 @@ export function get(id) {
 }
 
 /**
- * 添加
+ * 超级查询
  */
-export function add(obj: Payment) {
-  return defHttp.post({
-    url: '/payment/add',
-    data: obj,
-  })
-}
-
-/**
- * 更新
- */
-export function update(obj: Payment) {
-  return defHttp.post({
-    url: '/payment/update',
-    data: obj,
-  })
-}
-
-/**
- * 删除
- */
-export function del(id) {
-  return defHttp.delete({
-    url: '/payment/delete',
-    params: { id },
+export function superPage(params, queryParams) {
+  return defHttp.post<Result<PageResult<Payment>>>({
+    url: '/payment/superPage',
+    params: params,
+    data: queryParams,
   })
 }
 
@@ -90,13 +72,27 @@ export interface Payment extends BaseEntity {
   // 异步支付方式
   asyncPayChannel?: number
   // 支付通道信息列表
-  payChannelInfo?: string
+  payChannelInfo?: PayChannelInfo[]
   // 可退款信息
-  refundableInfo?: string
+  refundableInfo?: RefundableInfo[]
   // 支付时间
   payTime?: string
   // 过期时间
   expiredTime?: string
   // 客户ip
   clientIp?: string
+}
+
+/**
+ * 支付通道信息
+ */
+export interface PayChannelInfo {
+  // 支付通道
+  payChannel?: number
+  // 支付方式
+  payWay?: number
+  // 金额
+  amount?: number
+  // 扩展参数的json字符串
+  extraParamsJson?: string
 }

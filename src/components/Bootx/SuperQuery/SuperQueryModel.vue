@@ -75,11 +75,6 @@
   function handleReset() {
     queryParams = []
   }
-  // 删除
-  function handleDel(index) {
-    queryParams.splice(index, 1)
-  }
-
   defineExpose({ show, handleReset })
 </script>
 
