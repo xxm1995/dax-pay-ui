@@ -63,22 +63,22 @@
         return unref(statusMapRef).get(unref(getStatus)) as MapValue
       })
 
-      const backLoginI18n = t('sys.exception.backLogin')
-      const backHomeI18n = t('sys.exception.backHome')
+      const backLoginI18n = '返回登录'
+      const backHomeI18n = '返回首页'
 
       unref(statusMapRef).set(ExceptionEnum.PAGE_NOT_ACCESS, {
         title: '403',
         status: `${ExceptionEnum.PAGE_NOT_ACCESS}`,
-        subTitle: t('sys.exception.subTitle403'),
-        btnText: props.full ? backLoginI18n : backHomeI18n,
+        subTitle: '抱歉，您无权访问此页面。',
+        btnText: props.full ? '返回登录' : '返回首页',
         handler: () => (props.full ? go(PageEnum.BASE_LOGIN) : go()),
       })
 
       unref(statusMapRef).set(ExceptionEnum.PAGE_NOT_FOUND, {
         title: '404',
         status: `${ExceptionEnum.PAGE_NOT_FOUND}`,
-        subTitle: t('sys.exception.subTitle404'),
-        btnText: props.full ? backLoginI18n : backHomeI18n,
+        subTitle: '抱歉，您访问的页面不存在。',
+        btnText: props.full ? '返回登录' : '返回首页',
         handler: () => (props.full ? go(PageEnum.BASE_LOGIN) : go()),
       })
 

@@ -182,7 +182,7 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   export default defineComponent({
-    name: 'BUserSelectModal',
+    name: 'BRoleSelectModal',
   })
 </script>
 <style scoped></style>

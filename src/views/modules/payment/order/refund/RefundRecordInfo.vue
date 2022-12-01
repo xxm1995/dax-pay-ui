@@ -8,7 +8,7 @@
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-descriptions title="" :column="{ md: 1, sm: 1, xs: 1 }">
+    <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
       <a-descriptions-item label="付款记录ID">
         {{ form.paymentId }}
       </a-descriptions-item>
