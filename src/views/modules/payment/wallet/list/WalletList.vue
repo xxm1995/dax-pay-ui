@@ -57,7 +57,8 @@
         @page-change="handleTableChange"
       />
       <wallet-info ref="walletInfo" />
-      <b-user-select-modal ref="userSelectModal" multiple @ok="createBatchWallet" />
+      <wallet-log-list ref="walletLogList" />
+      <b-user-select-modal ref="userSelectModal" multiple :data-source="pageByNotWallet" @ok="createBatchWallet" />
     </div>
   </div>
 </template>
@@ -65,7 +66,7 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { createWalletBatch, del, lock, page, unlock } from './Wallet.api'
+  import { createWalletBatch, del, lock, page, pageByNotWallet, unlock } from './Wallet.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import WalletInfo from './WalletInfo.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -73,8 +74,8 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import BUserSelectModal from "/@/components/Bootx/UserSelectModal/BUserSelectModal.vue";
-
+  import BUserSelectModal from '/@/components/Bootx/UserSelectModal/BUserSelectModal.vue'
+  import WalletLogList from "/@/views/modules/payment/wallet/list/WalletLogList.vue";
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()

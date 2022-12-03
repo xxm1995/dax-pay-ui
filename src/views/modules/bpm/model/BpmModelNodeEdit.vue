@@ -99,7 +99,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, nextTick, reactive } from 'vue'
+  import { computed, nextTick } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { add, get, update, BpmModelNode } from './ModelNode.api'

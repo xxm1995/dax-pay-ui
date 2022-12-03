@@ -70,11 +70,14 @@
     multiple: boolean
     // 宽度
     width?: number | string
+    // 数据源
+    dataSource?: Function
   }
   const props = withDefaults(defineProps<Props>(), {
     title: '选择用户',
     multiple: false,
     width: 640,
+    dataSource: page,
   })
   const emits = defineEmits(['ok'])
 
@@ -125,12 +128,14 @@
    */
   function queryPage() {
     loading.value = true
-    page({
-      ...model.queryParam,
-      ...pages,
-    }).then(({ data }) => {
-      pageQueryResHandel(data)
-    })
+    props
+      .dataSource({
+        ...model.queryParam,
+        ...pages,
+      })
+      .then(({ data }) => {
+        pageQueryResHandel(data)
+      })
   }
   /**
    * 选中确定回调

@@ -13,6 +13,16 @@ export function page(params) {
 }
 
 /**
+ * 分页(未开通钱包的用户)
+ */
+export function pageByNotWallet(params) {
+  return defHttp.get<Result<PageResult<Wallet>>>({
+    url: '/wallet/pageByNotWallet',
+    params: params,
+  })
+}
+
+/**
  * 查询全部
  */
 export function findAll() {

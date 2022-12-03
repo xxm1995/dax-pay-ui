@@ -60,23 +60,23 @@
 
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
 
-  const props = withDefaults(
-    defineProps<{
-      // 名称
-      title: string
-      // 是否是查询看状态
-      multiple: boolean
-      // 宽度
-      width?: number | string
-    }>(),
-    {
-      title: '选择角色',
-      multiple: false,
-      width: 640,
-    },
-  )
-  const emits = defineEmits(['ok'])
+  const {
+    title = '选择角色',
+    multiple = false,
+    width = 640,
+    dataSource = page,
+  } = defineProps<{
+    // 名称
+    title: string
+    // 是否是查询看状态
+    multiple: boolean
+    // 宽度
+    width?: number | string
+    // 数据源
+    dataSource?: Function
+  }>()
 
+  const emits = defineEmits(['ok'])
   let visible = $ref(false)
   let selectRoleIds = $ref<string[]>([])
   let selectRoleId = $ref<string>()
@@ -86,7 +86,7 @@
     { field: 'code', type: STRING, name: '编号', placeholder: '请输入角色编号' },
   ]
   const checkboxConfig = computed(() => {
-    return props.multiple
+    return multiple
       ? {
           reserve: true,
           checkMethod: banCheckbox,
@@ -94,7 +94,7 @@
       : {}
   })
   const radioConfig = computed(() => {
-    return !props.multiple
+    return !multiple
       ? {
           reserve: true,
           checkRowKey: selectRoleId,
@@ -108,7 +108,7 @@
    */
   function init(param) {
     visible = true
-    if (props.multiple) {
+    if (multiple) {
       selectRoleIds = param || selectRoleId
     } else {
       selectRoleId = param || selectRoleId
@@ -121,7 +121,7 @@
    */
   function queryPage() {
     loading.value = true
-    page({
+    dataSource({
       ...model.queryParam,
       ...pages,
     }).then(({ data }) => {
@@ -132,7 +132,7 @@
    * 选中确定回调
    */
   function handleOk() {
-    if (props.multiple) {
+    if (multiple) {
       checkboxCallback()
     } else {
       radioCallback()
@@ -175,7 +175,7 @@
    * 禁止选中的行 复选
    */
   function banCheckbox({ row }) {
-    return !selectUserIds.includes(row.id)
+    return !selectRoleIds.includes(row.id)
   }
   defineExpose({ init })
 </script>

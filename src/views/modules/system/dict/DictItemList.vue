@@ -57,7 +57,7 @@
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
-  const { notification, createWarningModal, createMessage } = useMessage()
+  const { notification, createMessage } = useMessage()
 
   // 查询条件
   const fields = [] as QueryField[]
@@ -84,7 +84,7 @@
     page({
       ...model.queryParam,
       ...pages,
-      dictId: dictInfo.id,
+      dictId: dictInfo?.id,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
