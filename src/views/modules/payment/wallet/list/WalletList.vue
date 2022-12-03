@@ -33,11 +33,11 @@
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
-                    <a-link @click="showLog(row.id)">钱包日志</a-link>
-                  </a-menu-item>
-                  <a-menu-item>
                     <a-link danger v-if="row.status === 1" @click="lockConfirm(row.id, true)">锁定钱包</a-link>
                     <a-link v-if="row.status === 2" @click="lockConfirm(row.id, false)">解锁钱包</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link @click="showLog(row.id)">钱包日志</a-link>
                   </a-menu-item>
                   <a-menu-item>
                     <a-link @click="recharge(row.id)">金额变动</a-link>
@@ -57,6 +57,7 @@
         @page-change="handleTableChange"
       />
       <wallet-info ref="walletInfo" />
+      <wallet-changer ref="walletChanger" @ok="queryPage" />
       <wallet-log-list ref="walletLogList" />
       <b-user-select-modal ref="userSelectModal" multiple :data-source="pageByNotWallet" @ok="createBatchWallet" />
     </div>
@@ -75,7 +76,8 @@
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
   import BUserSelectModal from '/@/components/Bootx/UserSelectModal/BUserSelectModal.vue'
-  import WalletLogList from "/@/views/modules/payment/wallet/list/WalletLogList.vue";
+  import WalletLogList from './WalletLogList.vue'
+  import WalletChanger from './WalletChanger.vue'
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()

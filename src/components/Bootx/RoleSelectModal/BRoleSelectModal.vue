@@ -67,9 +67,9 @@
     dataSource = page,
   } = defineProps<{
     // 名称
-    title: string
+    title?: string
     // 是否是查询看状态
-    multiple: boolean
+    multiple?: boolean
     // 宽度
     width?: number | string
     // 数据源
