@@ -7,13 +7,9 @@ import { useUserStoreWithOut } from '/@/store/modules/user'
 
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
 
-import { RootRoute } from '/@/router/routes'
 import { initWebSocket } from "/@/logics/websocket/UserGlobalWebSocker";
-// import { useDictStoreWithOut } from '/@/store/modules/dict'
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN
-
-const ROOT_PATH = RootRoute.path
 
 const whitePathList: PageEnum[] = [LOGIN_PATH]
 
@@ -24,18 +20,7 @@ const whitePathList: PageEnum[] = [LOGIN_PATH]
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut()
   const permissionStore = usePermissionStoreWithOut()
-  // const useDictStore = useDictStoreWithOut()
   router.beforeEach(async (to, from, next) => {
-    // if (
-    //   from.path === ROOT_PATH &&
-    //   to.path === PageEnum.BASE_HOME &&
-    //   // TODO 没有用户首页配置这个字段
-    //   userStore.getUserInfo.homePath &&
-    //   userStore.getUserInfo.homePath !== PageEnum.BASE_HOME
-    // ) {
-    //   next(userStore.getUserInfo.homePath)
-    //   return
-    // }
 
     const token = userStore.getToken
 
@@ -55,9 +40,10 @@ export function createPermissionGuard(router: Router) {
       return
     }
 
-    // token does not exist
+    // token 不存在
     if (!token) {
-      // You can access without permission. You need to set the routing meta.ignoreAuth to true
+      // 您可以在未经许可的情况下访问。您需要将路由元.忽略身份验证设置为 true
+      console.log(to)
       if (to.meta.ignoreAuth) {
         next()
         return
@@ -106,7 +92,11 @@ export function createPermissionGuard(router: Router) {
     const routes = await permissionStore.buildRoutesAction()
 
     routes.forEach((route) => {
-      router.addRoute(route as unknown as RouteRecordRaw)
+      try {
+        router.addRoute(route as unknown as RouteRecordRaw)
+      } catch (e) {
+        console.error(e)
+      }
     })
 
     router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw)

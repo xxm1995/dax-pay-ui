@@ -2,17 +2,10 @@ import type { AppRouteRecordRaw, Menu } from '/@/router/types'
 
 import { defineStore } from 'pinia'
 import { store } from '/@/store'
-import { useUserStore } from './user'
-import { useAppStoreWithOut } from './app'
-import { toRaw } from 'vue'
 import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper'
 import { transformRouteToMenu } from '/@/router/helper/menuHelper'
 
-import projectSetting from '/@/settings/projectSetting'
-
-import { PermissionModeEnum } from '/@/enums/appEnum'
-
-import { DASHBOARD, ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE, PROJECT_BASE } from '/@/router/routes/basic'
+import { DASHBOARD, ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
 
 import { filter } from '/@/utils/helper/treeHelper'
 
@@ -22,18 +15,15 @@ import { useMessage } from '/@/hooks/web/useMessage'
 import { PageEnum } from '/@/enums/pageEnum'
 import { getAppEnvConfig } from '/@/utils/env'
 import { PermMenu } from '/@/api/sys/model/menuModel'
+import { PROJECT_BASE } from "/@/router/routes/project";
 
 interface PermissionState {
-  // Permission code list
   // 权限代码列表
   permCodeList: string[] | number[]
-  // Whether the route has been dynamically added
   // 路由是否动态添加
   isDynamicAddedRoute: boolean
-  // To trigger a menu update
   // 触发菜单更新
   lastBuildMenuTime: number
-  // Backstage menu list
   // 后台菜单列表
   backMenuList: Menu[]
   // 菜单列表
@@ -45,16 +35,12 @@ export const usePermissionStore = defineStore({
   state: (): PermissionState => ({
     // 权限代码列表
     permCodeList: [],
-    // Whether the route has been dynamically added
     // 路由是否动态添加
     isDynamicAddedRoute: false,
-    // To trigger a menu update
     // 触发菜单更新
     lastBuildMenuTime: 0,
-    // Backstage menu list
     // 后台菜单列表
     backMenuList: [],
-    // menu List
     // 菜单列表
     frontMenuList: [],
   }),
@@ -115,7 +101,7 @@ export const usePermissionStore = defineStore({
     },
 
     /**
-     * 转换权限菜单为系统中的菜单
+     * 转换路由为系统中的菜单
      */
     convertMenus(permMenus: PermMenu[]): AppRouteRecordRaw[] {
       return permMenus?.map((o) => {
@@ -143,26 +129,11 @@ export const usePermissionStore = defineStore({
     },
 
     /**
-     * 构建路由
+     * 构建路由  后端控制
      */
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
-      const userStore = useUserStore()
-      const appStore = useAppStoreWithOut()
-
+      // 路由
       let routes: AppRouteRecordRaw[] = []
-      const roleList = toRaw(userStore.getRoleList) || []
-      const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig
-
-      // 路由过滤器 在 函数filter 作为回调传入遍历使用 (无用了)
-      const routeFilter = (route: AppRouteRecordRaw) => {
-        const { meta } = route
-        // 抽出角色
-        const { roles } = meta || {}
-        if (!roles) return true
-        // 进行角色权限判断
-        return roleList.some((role) => roles.includes(role))
-      }
-
       const routeRemoveIgnoreFilter = (route: AppRouteRecordRaw) => {
         const { meta } = route
         // ignoreRoute 为true 则路由仅用于菜单生成，不会在实际的路由表中出现
@@ -176,7 +147,7 @@ export const usePermissionStore = defineStore({
        * */
       const patchHomeAffix = (routes: AppRouteRecordRaw[]) => {
         if (!routes || routes.length === 0) return
-        // let homePath: string = userStore.getUserInfo.homePath || PageEnum.BASE_HOME
+        // 主页路径
         let homePath: string = PageEnum.BASE_HOME
 
         function patcher(routes: AppRouteRecordRaw[], parentPath = '') {
@@ -204,52 +175,47 @@ export const usePermissionStore = defineStore({
         return
       }
 
-      switch (permissionMode) {
-        // 后端控制 现在在用的方案
-        case PermissionModeEnum.BACK:
-          const { createMessage } = useMessage()
+      const { createMessage } = useMessage()
 
-          createMessage.loading({
-            content: '菜单加载中...',
-            duration: 1,
-          })
+      createMessage.loading({
+        content: '菜单加载中...',
+        duration: 1,
+      })
 
-          let routeList: AppRouteRecordRaw[] = []
+      let routeList: AppRouteRecordRaw[] = []
 
-          // 获取菜单和权限码
-          try {
-            const permMenus = await this.changeMenuAndPermCode()
-            // 将 后端获取的菜单转换为系统中的菜单格式
-            routeList = this.convertMenus(permMenus)
-          } catch (error) {
-            console.error(error)
-          }
-
-          // 动态引入组件
-          routeList = transformObjToRoute(routeList)
-          //  后台路由到菜单结构
-          const backMenuList = transformRouteToMenu(routeList)
-          this.setBackMenuList(backMenuList)
-          // 删除 meta.ignoreRoute 项
-          routeList = filter(routeList, routeRemoveIgnoreFilter)
-          routeList = routeList.filter(routeRemoveIgnoreFilter)
-
-          routeList = flatMultiLevelRoutes(routeList)
-          routes = [PAGE_NOT_FOUND_ROUTE, ...routeList]
-          break
+      // 获取菜单和权限码
+      try {
+        const permMenus = await this.changeMenuAndPermCode()
+        // 将 后端获取的菜单转换为系统中的菜单格式
+        routeList = this.convertMenus(permMenus)
+      } catch (error) {
+        console.error(error)
       }
 
+      // 动态引入组件
+      routeList = transformObjToRoute(routeList)
+      //  后台路由到菜单结构
+      const backMenuList = transformRouteToMenu(routeList)
+      this.setBackMenuList(backMenuList)
+      // 删除 meta.ignoreRoute 项
+      routeList = filter(routeList, routeRemoveIgnoreFilter)
+      routeList = routeList.filter(routeRemoveIgnoreFilter)
+
+      routeList = flatMultiLevelRoutes(routeList)
+      routes = [PAGE_NOT_FOUND_ROUTE, ...routeList]
+
+      // 添加更多配置的路由菜单
       routes.push(ERROR_LOG_ROUTE)
       routes.push(DASHBOARD)
-      routes.push(PROJECT_BASE)
+      routes.push(...PROJECT_BASE)
       patchHomeAffix(routes)
       return routes
     },
   },
 })
 
-// Need to be used outside the setup
-// 需要在设置之外使用
+// 在设置之外使用
 export function usePermissionStoreWithOut() {
   return usePermissionStore(store)
 }

@@ -3,7 +3,9 @@ import { t } from '/@/hooks/web/useI18n'
 import { REDIRECT_NAME, LAYOUT, EXCEPTION_COMPONENT, PAGE_NOT_FOUND_NAME } from '/@/router/constant'
 import { AppRouteModule } from '/@/router/types'
 
-// 404 on a page
+/**
+ * 40x 系列路由
+ */
 export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
   path: '/:path(.*)*',
   name: PAGE_NOT_FOUND_NAME,
@@ -27,6 +29,9 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
   ],
 }
 
+/**
+ * 重定向路由
+ */
 export const REDIRECT_ROUTE: AppRouteRecordRaw = {
   path: '/redirect',
   component: LAYOUT,
@@ -49,6 +54,9 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
   ],
 }
 
+/**
+ * 错误日志路由
+ */
 export const ERROR_LOG_ROUTE: AppRouteRecordRaw = {
   path: '/error-log',
   name: 'ErrorLog',
@@ -73,6 +81,9 @@ export const ERROR_LOG_ROUTE: AppRouteRecordRaw = {
   ],
 }
 
+/**
+ * 登陆后的首页
+ */
 export const DASHBOARD: AppRouteModule = {
   path: '/dashboard',
   name: 'Dashboard',
@@ -91,29 +102,6 @@ export const DASHBOARD: AppRouteModule = {
       meta: {
         // affix: true,
         title: '分析页',
-      },
-    },
-  ],
-}
-
-/**
- * 基础
- */
-export const PROJECT_BASE: AppRouteModule = {
-  path: '/base',
-  name: 'PROJECT_BASE',
-  component: LAYOUT,
-  redirect: '',
-  meta: {
-    title: '基础路由',
-  },
-  children: [
-    {
-      path: '/account/setting',
-      name: 'AccountSettingPage',
-      component: () => import('/@/views/account/setting/index.vue'),
-      meta: {
-        title: '个人设置',
       },
     },
   ],

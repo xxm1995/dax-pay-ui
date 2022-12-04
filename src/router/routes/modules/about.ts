@@ -20,7 +20,7 @@ const about: AppRouteModule = {
       name: 'AboutPage',
       component: () => import('/@/views/sys/about/index.vue'),
       meta: {
-        title: t('routes.dashboard.about'),
+        title: '关于',
         icon: 'simple-icons:about-dot-me',
         hideMenu: true,
       },

@@ -1,8 +1,11 @@
 // github repo url
-export const GITHUB_URL = 'https://github.com/anncwb/vue-vben-admin'
+export const GITHUB_URL = 'https://github.com/xxm1995/bootx-platform'
 
-// vue-vben-admin-next-doc
-export const DOC_URL = 'https://vvbin.cn/doc-next/'
+// gitee repo url
+export const GITEE_URL = 'https://gitee.com/bootx/bootx-platform'
 
-// site url
-export const SITE_URL = 'https://vvbin.cn/next/'
+// 文档地址
+export const DOC_URL = 'https://gitee.com/bootx/bootx-platform'
+
+// 预览地址
+export const SITE_URL = 'http://v3.platform.bootx.cn/'

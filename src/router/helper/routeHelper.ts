@@ -4,7 +4,7 @@ import type { Router, RouteRecordNormalized } from 'vue-router'
 import { getParentLayout, LAYOUT, EXCEPTION_COMPONENT } from '/@/router/constant'
 import { cloneDeep, omit } from 'lodash-es'
 import { warn } from '/@/utils/log'
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import XEUtils from 'xe-utils'
 
 const IFRAME = () => import('/@/views/sys/iframe/FrameBlank.vue')
@@ -130,11 +130,10 @@ export function flatMultiLevelRoutes(routeModules: AppRouteModule[]) {
 // Routing level upgrade
 // 路由等级提升
 function promoteRouteLevel(routeModule: AppRouteModule) {
-  // Use vue-router to splice menus
   // 使用vue-router拼接菜单
   // createRouter 创建一个可以被 Vue 应用程序使用的路由实例
   let router: Router | null = createRouter({
-    routes: [routeModule],
+    routes: [routeModule as RouteRecordRaw],
     history: createWebHashHistory(),
   })
   // getRoutes： 获取所有 路由记录的完整列表。

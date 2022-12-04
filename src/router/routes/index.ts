@@ -17,9 +17,9 @@ Object.keys(modules).forEach((key) => {
   routeModuleList.push(...modList)
 })
 
-export const asyncRoutes = [PAGE_NOT_FOUND_ROUTE, ...routeModuleList]
-
-// 根路由
+/**
+ * 根路由
+ */
 export const RootRoute: AppRouteRecordRaw = {
   path: '/',
   name: 'Root',
@@ -29,6 +29,9 @@ export const RootRoute: AppRouteRecordRaw = {
   },
 }
 
+/**
+ * 登录路由
+ */
 export const LoginRoute: AppRouteRecordRaw = {
   path: '/login',
   name: 'Login',
@@ -38,6 +41,5 @@ export const LoginRoute: AppRouteRecordRaw = {
   },
 }
 
-// Basic routing without permission
-// 未经许可的基本路由
+// 无需鉴权的基本路由
 export const basicRoutes = [LoginRoute, RootRoute, ...mainOutRoutes, REDIRECT_ROUTE, PAGE_NOT_FOUND_ROUTE]

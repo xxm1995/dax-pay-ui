@@ -110,7 +110,7 @@ export function isOutsideUrl(path: string): string {
   }
   if (path.startsWith('outside://')) {
     // 转换成项目内路由地址
-    const routerPath = path.substring(11)
+    const routerPath = path.substring(10)
     const to = router.resolve(routerPath)
     return to.href
   }
