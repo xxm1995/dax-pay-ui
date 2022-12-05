@@ -95,9 +95,9 @@
           </div>
         </a-spin>
       </div>
-      <!--  条码支付弹框-->
+      <!--  扫码弹出窗口  -->
       <cashier-qr-code ref="cashierQrCode" @cancel="handleCancel" />
-      <!--   扫码弹出窗口   -->
+      <!--  条码支付弹框-->
       <cashier-bar-code ref="cashierBarCode" @cancel="handleCancel" @ok="barPay" />
     </div>
   </div>
@@ -106,12 +106,13 @@
 <script lang="ts" setup>
   import CashierQrCode from './CashierQrCode.vue'
   import CashierBarCode from './CashierBarCode.vue'
-  import { createAggregatePay, findByParamKey, findStatusByBusinessId, singlePay } from './Cashier.api'
+  import { createAggregatePay, findStatusByBusinessId, singlePay } from './Cashier.api'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'
   import { onMounted, onUnmounted } from 'vue'
   import QrCode from '/@/components/Qrcode/src/Qrcode.vue'
   import { useIntervalFn } from '@vueuse/core'
+  import { findByParamKey } from '/@/api/common/Parameter'
 
   const { createMessage } = useMessage()
 
@@ -165,19 +166,23 @@
   let payMoneyShow = false
 
   // 检查支付状态
-  const { pause, resume } = useIntervalFn(() => {
-    findStatusByBusinessId(businessId).then((res) => {
-      // 成功
-      if (res.data === 1) {
-        createMessage.success('支付成功')
-        handleCancel()
-      }
-      if ([2, 3].includes(res.data)) {
-        createMessage.error('支付失败')
-        handleCancel()
-      }
-    })
-  }, 1000 * 3)
+  const { pause, resume } = useIntervalFn(
+    () => {
+      findStatusByBusinessId(businessId).then((res) => {
+        // 成功
+        if (res.data === 1) {
+          createMessage.success('支付成功')
+          handleCancel()
+        }
+        if ([2, 3].includes(res.data)) {
+          createMessage.error('支付失败')
+          handleCancel()
+        }
+      })
+    },
+    1000 * 3,
+    { immediate: false },
+  )
 
   // 支付金额变动
   function payMoneyValueChange(e) {

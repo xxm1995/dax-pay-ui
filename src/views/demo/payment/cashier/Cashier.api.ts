@@ -1,4 +1,5 @@
 import { defHttp } from '/@/utils/http/axios'
+import { Result } from '/#/axios'
 
 /**
  * 单独支付
@@ -34,12 +35,10 @@ export function findStatusByBusinessId(businessId) {
 }
 
 /**
- * 根据键名获取键值
+ * 获取用户钱包
  */
-export function findByParamKey(key) {
-  return defHttp.get({
-    url: `/system/param/findByParamKey`,
-    method: 'GET',
-    params: { key },
+export function findWalletByUser() {
+  return defHttp.get<Result<any>>({
+    url: '/wallet/findByUser',
   })
 }

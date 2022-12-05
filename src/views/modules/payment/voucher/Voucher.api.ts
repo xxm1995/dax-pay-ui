@@ -62,6 +62,16 @@ export function del(id) {
 }
 
 /**
+ * 详情
+ */
+export function findByCardNo(cardNo) {
+  return defHttp.get<Result<Voucher>>({
+    url: '/voucher/findByCardNo',
+    params: { cardNo },
+  })
+}
+
+/**
  * 锁定
  */
 export function lock(id) {
