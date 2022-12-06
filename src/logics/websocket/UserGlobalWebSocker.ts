@@ -6,16 +6,17 @@ import { useUserStoreWithOut } from '/@/store/modules/user'
 import { EVENT_NOTICE, NOTIFICATION_ERROR, NOTIFICATION_INFO, NOTIFICATION_WARN } from '/@/logics/websocket/WebSockerType'
 import { publishWsEvent } from '/@/logics/websocket/WebsocketNotice'
 import { useMessage } from '/@/hooks/web/useMessage'
+import { findByParamKey } from '/@/api/common/Parameter'
 
 const { notification } = useMessage()
 
 // websocket关闭
 let wsClose: WebSocket['close']
 
-export function initWebSocket() {
+export async function initWebSocket() {
   const userStore = useUserStoreWithOut()
   const token = userStore.getToken
-  const wsUrl = 'ws://localhost:9999'
+  const { data: wsUrl } = await findByParamKey('WebsocketServerUrl')
   const serverUrl = `${wsUrl}/ws/user?AccessToken=${token}`
 
   const { close } = useWebSocket(serverUrl, {
