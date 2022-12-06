@@ -1,4 +1,4 @@
-<!--<template>-->
+<template>
 <!--  <a-card :bordered="false">-->
 <!--    <a-spin :spinning="loading">-->
 <!--      <div>-->
@@ -64,7 +64,7 @@
 <!--      </a-spin>-->
 <!--    </a-modal>-->
 <!--  </a-card>-->
-<!--</template>-->
+</template>
 
 <!--<script>-->
 <!--import VueQr from 'vue-qr'-->

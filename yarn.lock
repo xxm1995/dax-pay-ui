@@ -9808,7 +9808,7 @@ vue-json-pretty@^2.0.6:
   resolved "https://registry.npmmirror.com/vue-json-pretty/-/vue-json-pretty-2.1.1.tgz#f03202b76141930ab27fdbcb56b242b4d6478079"
   integrity sha512-zl/gWr/zeQU4mUozlBxGu/9ebR/tYywty5VGu8FcHTJwOu9se4OwlPZELruwnzvHODfUOh8rUirSgNTHmLZXVw==
 
-vue-router@^4.1.6:
+vue-router@^4.0.16:
   version "4.1.6"
   resolved "https://registry.npmmirror.com/vue-router/-/vue-router-4.1.6.tgz#b70303737e12b4814578d21d68d21618469375a1"
   integrity sha512-DYWYwsG6xNPmLq/FmZn8Ip+qrhFEzA14EI12MsMgVxvHFDYvlr4NXpVF5hrRH1wVcDP8fGi5F4rxuJSl8/r+EQ==
@@ -9829,7 +9829,7 @@ vue-types@^3.0.0:
   dependencies:
     is-plain-object "3.0.1"
 
-vue-types@^4.2.1:
+vue-types@^4.1.1:
   version "4.2.1"
   resolved "https://registry.npmmirror.com/vue-types/-/vue-types-4.2.1.tgz#f8f7e5fb42d4a6acda6d92c9736b510e5534c753"
   integrity sha512-DNQZmJuOvovLUIp0BENRkdnZHbI0V4e2mNvjAZOAXKD56YGvRchtUYOXA/XqTxdv7Ng5SJLZqRKRpAhm5NLaPQ==
