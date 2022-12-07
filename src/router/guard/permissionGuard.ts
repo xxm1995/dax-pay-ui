@@ -42,8 +42,7 @@ export function createPermissionGuard(router: Router) {
 
     // token 不存在
     if (!token) {
-      // 您可以在未经许可的情况下访问。您需要将路由元.忽略身份验证设置为 true
-      console.log(to)
+      // 您可以在未经许可的情况下访问。您需要将路由meta中的 忽略身份验证设置为 true
       if (to.meta.ignoreAuth) {
         next()
         return

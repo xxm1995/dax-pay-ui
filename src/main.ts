@@ -16,6 +16,13 @@ import { setupI18n } from '/@/locales/setupI18n'
 import { registerGlobComp } from '/@/components/registerGlobComp'
 import { useTable } from '/@/components/VxeTable'
 
+import { isDevMode } from './utils/env'
+
+// 加快开发模式的加载速度, 去了这句开发模式的暗黑主题会有问题
+if (isDevMode()) {
+  import('ant-design-vue/es/style')
+}
+
 async function bootstrap() {
   const app = createApp(App)
 
