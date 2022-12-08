@@ -1,8 +1,47 @@
 <template>
   <basic-modal v-bind="$attrs" :loading="confirmLoading" width="50%" title="查看" :visible="visible" @cancel="visible = false">
-    <description :column="2" :data="data" :schema="schema" />
+    <a-descriptions title="" :column="{ md: 2, sm: 1, xs: 1 }">
+      <a-descriptions-item label="操作人员账号">
+        {{ data.username }}
+      </a-descriptions-item>
+      <a-descriptions-item label="操作模块">
+        {{ data.title }}
+      </a-descriptions-item>
+      <a-descriptions-item label="业务类型">
+        {{ dictConvert('LogBusinessType', data.businessType) }}
+      </a-descriptions-item>
+      <a-descriptions-item label="请求方式">
+        {{ data.requestMethod }}
+      </a-descriptions-item>
+      <a-descriptions-item label="请求url">
+        {{ data.operateUrl }}
+      </a-descriptions-item>
+      <a-descriptions-item label="操作方法">
+        {{ data.method }}
+      </a-descriptions-item>
+      <a-descriptions-item label="操作ip">
+        {{ data.operateIp }}
+      </a-descriptions-item>
+      <a-descriptions-item label="操作状态">
+        {{ data.success ? '成功' : '失败' }}
+      </a-descriptions-item>
+      <a-descriptions-item label="提示消息">
+        {{ data.errorMsg }}
+      </a-descriptions-item>
+      <a-descriptions-item label="请求参数">
+        {{ data.operateParam }}
+      </a-descriptions-item>
+      <a-descriptions-item label="响应参数">
+        {{ data.operateReturn }}
+      </a-descriptions-item>
+      <a-descriptions-item label="操作时间">
+        {{ data.operateTime }}
+      </a-descriptions-item>
+    </a-descriptions>
     <template #footer>
-      <a-button key="cancel" @click="visible = false">取消</a-button>
+      <a-space>
+        <a-button key="cancel" @click="visible=false">取消</a-button>
+      </a-space>
     </template>
   </basic-modal>
 </template>
@@ -17,7 +56,7 @@
 
   const { dictConvert } = useDict()
 
-  let data = $ref<OperateLog>()
+  let data = $ref<OperateLog>({})
   let visible = $ref(false)
   let confirmLoading = $ref(false)
   let schema = [

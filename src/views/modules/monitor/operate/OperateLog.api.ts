@@ -27,31 +27,31 @@ export const get = (id) => {
  */
 export interface OperateLog extends BaseEntity {
   // 操作模块
-  title: string
+  title?: string
   // 操作人员id
-  operateId: number
+  operateId?: number
   // 操作人员账号
-  username: string
+  username?: string
   // 业务类型
-  businessType: string
+  businessType?: string
   // 请求方法
-  method: string
+  method?: string
   // 请求方式
-  requestMethod: string
+  requestMethod?: string
   // 请求url
-  operateUrl: string
+  operateUrl?: string
   // 操作ip
-  operateIp: string
+  operateIp?: string
   // 操作地点
-  operateLocation: string
+  operateLocation?: string
   // 请求参数
-  operateParam: string
+  operateParam?: string
   // 返回参数
-  operateReturn: string
+  operateReturn?: string
   // 是否成功
-  success: boolean
+  success?: boolean
   // 错误提示
-  errorMsg: string
+  errorMsg?: string
   // 操作时间
-  operateTime: string
+  operateTime?: string
 }

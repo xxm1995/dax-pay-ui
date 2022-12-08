@@ -24,6 +24,16 @@ export function createAggregatePay(obj) {
 }
 
 /**
+ * 组合支付
+ */
+export function combinationPay (obj) {
+  return defHttp.post({
+    url: '/cashier/combinationPay',
+    data: obj
+  })
+}
+
+/**
  * 根据业务ID获取支付状态
  */
 export function findStatusByBusinessId(businessId) {

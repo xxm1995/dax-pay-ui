@@ -3,13 +3,13 @@
     <a-spin :spinning="loading">
       <div>
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-          <a-form-item label="支付方式" name="payChannel">
-            <a-radio-group v-model:value="form.payChannel" button-style="solid">
-              <a-radio-button v-for="o in payChannel" :value="o.code" :key="o.code"> {{ o.name }} </a-radio-button>
+          <a-form-item label="异步支付方式" name="payChannel">
+            <a-radio-group v-model:value="form.payChannel" :default-value="1" button-style="solid">
+              <a-radio-button v-for="o in payChannel" :value="o.code" :key="o.code"> {{ o.label }} </a-radio-button>
             </a-radio-group>
           </a-form-item>
           <a-form-item label="订单编号" name="businessId">
-            <a-input v-model:value="form.businessId">
+            <a-input v-model:value="form.businessId" @search="genOrderNo">
               <template #addonAfter>
                 <a-button type="link" size="small" @click="genOrderNo"> 生成订单号 </a-button>
               </template>
@@ -18,17 +18,17 @@
           <a-form-item label="订单名称" name="title">
             <a-input v-model:value="form.title" />
           </a-form-item>
-          <a-form-item label="金额" name="amount">
-            <a-input-number :precision="2" :min="0.01" v-model:value="form.amount" />
-            <template v-if="form.payChannel === 5" #help>
+          <a-form-item label="异步支付金额" name="asyncAmount">
+            <a-input-number :precision="2" v-model:value="form.asyncAmount" />
+          </a-form-item>
+          <a-form-item label="钱包支付" name="walletAmount">
+            <a-input-number :precision="2" v-model:value="form.walletAmount" />
+            <template #help>
               <span>钱包余额：{{ wallet.balance }}</span>
             </template>
           </a-form-item>
-          <a-form-item label="储值卡" name="voucherNo" v-if="form.payChannel === 6">
-            <a-input v-model:value="form.voucherNo" @blur="getVoucher" />
-            <template #help>
-              <span>储值卡面值：{{ voucher.faceValue }} 余额：{{ voucher.balance }}</span>
-            </template>
+          <a-form-item label="现金支付" name="cashAmount">
+            <a-input-number :precision="2" v-model:value="form.cashAmount" />
           </a-form-item>
         </a-form>
       </div>
@@ -43,12 +43,12 @@
 
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
-  import { computed, onMounted } from 'vue'
-  import { findStatusByBusinessId, findWalletByUser, singlePay } from '/@/views/demo/payment/cashier/Cashier.api'
+  import { combinationPay, findStatusByBusinessId, findWalletByUser } from '/@/views/demo/payment/cashier/Cashier.api'
+  import { Voucher } from '/@/views/modules/payment/voucher/Voucher.api'
+  import { useMessage } from '/@/hooks/web/useMessage'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { useIntervalFn } from '@vueuse/core'
-  import { useMessage } from '/@/hooks/web/useMessage'
-  import { findByCardNo, Voucher } from '/@/views/modules/payment/voucher/Voucher.api'
+  import { onMounted } from 'vue'
   import CashierQrCode from './CashierQrCode.vue'
 
   const { createMessage } = useMessage()
@@ -63,11 +63,8 @@
     sm: { span: 13 },
   }
   const payChannel = [
-    { code: 1, name: '支付宝' },
-    { code: 2, name: '微信' },
-    // { code: 3, name: '云闪付' },
-    { code: 5, name: '钱包' },
-    { code: 6, name: '储值卡' },
+    { code: 1, label: '支付宝' },
+    { code: 2, label: '微信' },
   ]
   let loading = $ref(false)
   let visible = $ref(false)
@@ -77,18 +74,16 @@
     payChannel: 1,
     payWay: 4,
     businessId: '',
-    voucherNo: '',
     title: '测试支付订单',
-    // 二维码支付方式
-    amount: 0.01,
+    asyncAmount: null,
+    walletAmount: null,
+    cashAmount: null,
   })
   const rules = {
     payChannel: [{ required: true, message: '不可为空' }],
     businessId: [{ required: true, message: '不可为空' }],
     title: [{ required: true, message: '不可为空' }],
     payWay: [{ required: true, message: '不可为空' }],
-    amount: [{ required: true, message: '不可为空' }],
-    voucherNo: [{ required: true, message: '不可为空' }],
   }
 
   // 检查支付状态
@@ -114,47 +109,45 @@
     init()
   })
 
-  // 初始化
   function init() {
-    // 获取钱包
-    findWalletByUser().then((res) => {
-      wallet = res.data
+    findWalletByUser().then(({ data }) => {
+      wallet = data
     })
     genOrderNo()
   }
-
   // 生成订单号
   function genOrderNo() {
     form.businessId = 'P' + new Date().getTime()
   }
 
-  // 发起支付
   function pay() {
     formRef?.validate().then(async () => {
       loading = true
-      const { data } = await singlePay(form).finally(() => (loading = false))
-
-      // 是否异步支付
+      // 组装支付参数
+      const payModeList = [
+        { payChannel: form.payChannel, payWay: form.payWay, amount: form.asyncAmount },
+        { payChannel: 4, amount: form.cashAmount },
+        { payChannel: 5, amount: form.walletAmount },
+      ]
+      // 异步
+      const { data } = await combinationPay({
+        title: form.title,
+        businessId: form.businessId,
+        payModeList: payModeList,
+      }).finally(() => (loading = false))
+      // 同步还是异步支付
       if (data.asyncPayMode) {
         if (data.payChannel === 1) {
           cashierQrCode.init(data.asyncPayInfo.payBody, '请使用支付宝"扫一扫"扫码支付')
         } else {
           cashierQrCode.init(data.asyncPayInfo.payBody, '请使用微信"扫一扫"扫码支付')
         }
+        loading = false
         resume()
       } else {
         createMessage.success('支付成功')
-        pause()
       }
     })
-  }
-  // 获取储值卡信息
-  function getVoucher() {
-    if (form.voucherNo) {
-      findByCardNo(form.voucherNo).then(({ data }) => {
-        voucher = data
-      })
-    }
   }
 
   function handleCancel() {
@@ -165,5 +158,4 @@
   }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
