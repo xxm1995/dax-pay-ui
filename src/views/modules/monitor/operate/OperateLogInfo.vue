@@ -40,7 +40,7 @@
     </a-descriptions>
     <template #footer>
       <a-space>
-        <a-button key="cancel" @click="visible=false">取消</a-button>
+        <a-button key="cancel" @click="visible = false">取消</a-button>
       </a-space>
     </template>
   </basic-modal>

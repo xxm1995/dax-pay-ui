@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { findAll } from '/@/views/modules/system/dict/DictItem.api'
+import { findAllByEnable } from '/@/views/modules/system/dict/DictItem.api'
 import { Dict } from '/#/store'
 import { store } from '/@/store'
 
@@ -18,7 +18,7 @@ export const useDictStore = defineStore({
   },
   actions: {
     initDict() {
-      findAll().then(({ data }) => {
+      findAllByEnable().then(({ data }) => {
         this.dict = data.map((o) => {
           return {
             dictCode: o.dictCode,

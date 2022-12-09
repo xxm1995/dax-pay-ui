@@ -85,6 +85,8 @@ export interface Dict extends BaseEntity {
   code: string
   // 名称
   name: string
+  // 是否启用
+  enable?: boolean
   // 分类标签
   groupTag: string
   // 备注

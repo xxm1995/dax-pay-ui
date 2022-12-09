@@ -24,6 +24,9 @@
       <a-form-item label="排序" name="sortNo">
         <a-input-number v-model:value="form.sortNo" :disabled="showable" placeholder="请输入排序" />
       </a-form-item>
+      <a-form-item label="是否启用" name="enable">
+        <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.enable" :disabled="showable" />
+      </a-form-item>
       <a-form-item label="备注" name="remark">
         <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>

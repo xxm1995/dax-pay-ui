@@ -60,6 +60,14 @@ export const findAll = () => {
     url: '/dict/item/findAll',
   })
 }
+/**
+ * 查询全部已经启用
+ */
+export const findAllByEnable = () => {
+  return defHttp.get<Result<Array<DictItem>>>({
+    url: '/dict/item/findAllByEnable',
+  })
+}
 
 /**
  * 编码是否存在
@@ -82,15 +90,17 @@ export function existsByCodeNotId(code, id) {
  */
 export interface DictItem extends BaseEntity {
   // 字典id
-  dictId: number | null
+  dictId?: number | null
   // 字典code
-  dictCode: string | null
+  dictCode?: string | null
   // 字典项code
-  code: string
+  code?: string
   // 字典项名称
-  name: string
+  name?: string
+  // 是否启用
+  enable?: boolean
   // 排序
-  sortNo: number
+  sortNo?: number
   // 备注
-  remark: string
+  remark?: string
 }
