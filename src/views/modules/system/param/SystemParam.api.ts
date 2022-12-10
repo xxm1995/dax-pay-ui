@@ -81,15 +81,17 @@ export const existsByKeyNotId = (key: string, id) => {
  */
 export interface SystemParam extends BaseEntity {
   // 参数名称
-  name: string
+  name?: string
   // 参数键名
-  paramKey: string
+  paramKey?: string
   // 参数值
-  value: string
+  value?: string
   // 参数类型
-  type: number
+  type?: number
+  // 是否启用
+  enable?: boolean
   // 内置参数
-  internal: boolean
+  internal?: boolean
   // 备注
-  remark: string
+  remark?: string
 }
