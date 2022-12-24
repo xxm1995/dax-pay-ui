@@ -17,6 +17,8 @@ export async function initWebSocket() {
   const userStore = useUserStoreWithOut()
   const token = userStore.getToken
   const { data: wsUrl } = await findByParamKey('WebsocketServerUrl')
+  // TODO 判断token是否有效
+
   const serverUrl = `${wsUrl}/ws/user?AccessToken=${token}`
 
   const { close } = useWebSocket(serverUrl, {
