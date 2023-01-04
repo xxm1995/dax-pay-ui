@@ -41,11 +41,7 @@
   import { nextTick } from 'vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { FormInstance } from 'ant-design-vue/lib/form'
-  import {
-    addUserDataScope,
-    addUserRole,
-    getRoleIds
-  } from "/@/views/modules/system/user/UserAssign.api";
+  import { addUserRole, getRoleIds } from '/@/views/modules/system/user/UserAssign.api'
   import { findAll as roleList } from '/@/views/modules/system/role/Role.api'
   import { dropdownTranslate } from '/@/utils/dataUtil'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
@@ -86,7 +82,7 @@
   function handleOk() {
     formRef?.validate().then(async () => {
       confirmLoading.value = true
-      await addUserDataScope(form)
+      await addUserRole(form)
       createMessage.success('保存成功')
       confirmLoading.value = false
       visible.value = false
