@@ -56,7 +56,7 @@
   import { findPermissionIdsByRole, saveRoleMenu } from '/@/views/modules/system/role/Role.api'
   import { Tree, treeDataTranslate } from '/@/utils/dataUtil'
   import XEUtils from 'xe-utils'
-  import { allMenuTree, MenuTree } from '/@/views/modules/system/menu/Menu.api'
+  import { allTree, MenuTree } from '/@/views/modules/system/menu/Menu.api'
 
   const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
 
@@ -99,7 +99,7 @@
     searchName = ''
     expandedKeys = []
     // 权限树
-    await allMenuTree(clientCode).then((res) => {
+    await allTree(clientCode).then((res) => {
       treeData = treeDataTranslate(res.data, 'id', 'title')
       generateTreeList(res.data)
     })

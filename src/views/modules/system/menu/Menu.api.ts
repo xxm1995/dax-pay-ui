@@ -79,10 +79,10 @@ export const existsByPermCodeNotId = (permCode, id) => {
 }
 
 /**
- * 菜单列表
+ * 菜单和权限码树
  * @param clientCode
  */
-export function allMenuTree(clientCode) {
+export function allTree(clientCode) {
   return defHttp.get<Result<MenuTree[]>>({
     url: '/perm/menu/allTree',
     params: { clientCode },
@@ -139,7 +139,7 @@ export interface MenuTree extends Menu {
 }
 
 /**
- * 权限_资源(码)
+ * 权限码_资源
  */
 export interface Resource extends BaseEntity {
   // 菜单权限编码

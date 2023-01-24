@@ -10,7 +10,7 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="8" :sm="24">
+          <a-col :md="6" :sm="24">
             <a-form-item label="查询">
               <a-input-search
                 v-model:value="searchName"
@@ -20,6 +20,17 @@
                 placeholder="请输入菜单名称、路由名称、请求路径或组件名称"
               />
             </a-form-item>
+          </a-col>
+          <a-col :md="4" :sm="24">
+            <a-form-item label="同时显示权限码">
+              <a-radio-group v-model:value="showPermCode">
+                <a-radio :value="true">是</a-radio>
+                <a-radio :value="false">否</a-radio>
+              </a-radio-group>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="24">
+            <a-button type="primary" @click="queryPage">查询</a-button>
           </a-col>
         </a-row>
       </a-form>
@@ -55,42 +66,45 @@
         <vxe-column field="component" title="组件" />
         <vxe-column field="icon" title="图标">
           <template #default="{ row }">
-            <div v-if="row.icon !== ''">
+            <div v-if="row.icon">
               <icon :icon="row.icon" />
             </div>
           </template>
         </vxe-column>
-        <vxe-column title="操作" fixed="right" width="240" :showOverflow="false">
+        <vxe-column title="操作" fixed="right" width="220" :showOverflow="false">
           <template #default="{ row }">
             <a href="javascript:" @click="show(row)">查看</a>
-            <a-divider type="vertical" />
-            <a href="javascript:" v-if="!row.admin" @click="edit(row)">编辑</a>
-            <a href="javascript:" v-else disabled>编辑</a>
-            <a-divider type="vertical" />
-            <a href="javascript:" @click="resourcePage(row)">权限资源</a>
-            <a-divider type="vertical" />
-            <a-dropdown>
-              <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
-              <template #overlay>
-                <a-menu>
-                  <a-menu-item>
-                    <a @click="addChildren(row)">添加下级</a>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a @click="copy(row.id)">复制</a>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a href="javascript:" v-if="!row.admin" @click="remove(row)" style="color: red">删除</a>
-                    <a href="javascript:" v-else disabled>删除</a>
-                  </a-menu-item>
-                </a-menu>
-              </template>
-            </a-dropdown>
+            <template v-if="String(row.menuType) !== '2'">
+              <a-divider type="vertical" />
+              <a href="javascript:" v-if="!row.admin" @click="edit(row)">编辑</a>
+              <a href="javascript:" v-else disabled>编辑</a>
+              <a-divider type="vertical" />
+              <a href="javascript:" @click="resourcePage(row)">权限码</a>
+              <a-divider type="vertical" />
+              <a-dropdown>
+                <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
+                <template #overlay>
+                  <a-menu>
+                    <a-menu-item>
+                      <a @click="addChildren(row)">添加下级</a>
+                    </a-menu-item>
+                    <a-menu-item>
+                      <a @click="copy(row.id)">复制</a>
+                    </a-menu-item>
+                    <a-menu-item>
+                      <a href="javascript:" v-if="!row.admin" @click="remove(row)" style="color: red">删除</a>
+                      <a href="javascript:" v-else disabled>删除</a>
+                    </a-menu-item>
+                  </a-menu>
+                </template>
+              </a-dropdown>
+            </template>
           </template>
         </vxe-column>
       </vxe-table>
       <menu-edit ref="menuEdit" @ok="queryPage" />
       <resource-list ref="resourceList" />
+      <resource-edit ref="resourceEdit" />
     </div>
   </div>
 </template>
@@ -101,16 +115,18 @@
   import { nextTick, onMounted } from 'vue'
   import { Client, findAll } from '/@/views/modules/system/client/Client.api'
   import XEUtils from 'xe-utils'
-  import { menuTree, Menu, del } from './Menu.api'
+  import { menuTree, Menu, del, allTree } from './Menu.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import MenuEdit from './MenuEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import ResourceList from './ResourceList.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import Icon from '/@/components/Icon'
+  import ResourceEdit from './ResourceEdit.vue'
 
   const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
   const { createConfirm, notification } = useMessage()
+  let showPermCode = $ref(false)
   let clientCode = $ref(VITE_GLOB_APP_CLIENT)
   let searchName = $ref()
   let loading = $ref(false)
@@ -118,10 +134,11 @@
   let clients = $ref([] as Client[])
   let remoteTableData = $ref([] as Menu[])
   let tableData = $ref([] as Menu[])
-  const xTable: VxeTableInstance = $ref()
-  const xToolbar: VxeToolbarInstance = $ref()
-  let menuEdit: any = $ref()
-  let resourceList: any = $ref()
+  const xTable = $ref<VxeTableInstance>()
+  const xToolbar = $ref<VxeToolbarInstance>()
+  let menuEdit = $ref<any>()
+  let resourceList = $ref<any>()
+  let resourceEdit = $ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -140,11 +157,15 @@
 
   async function queryPage() {
     loading = true
-    menuTree(clientCode).then((res) => {
-      remoteTableData = res.data
-      search()
-      loading = false
-    })
+    if (showPermCode) {
+      const { data } = await allTree(clientCode)
+      remoteTableData = data
+    } else {
+      const { data } = await menuTree(clientCode)
+      remoteTableData = data
+    }
+    search()
+    loading = false
   }
 
   function add() {
@@ -154,7 +175,11 @@
     menuEdit.init(record.id, FormEditType.Edit, clientCode)
   }
   function show(record: Menu) {
-    menuEdit.init(record.id, FormEditType.Show, clientCode)
+    if (String(record.menuType) === '2') {
+      resourceEdit.init(record.id, FormEditType.Show)
+    } else {
+      menuEdit.init(record.id, FormEditType.Show, clientCode)
+    }
   }
   function addChildren(row) {
     menuEdit.init(null, FormEditType.Other, clientCode, row)
@@ -196,7 +221,7 @@
       tableData = remoteTableData
     }
     nextTick(() => {
-      xTable.setAllTreeExpand(treeExpand)
+      xTable?.setAllTreeExpand(treeExpand)
     })
   }
   /**
@@ -204,7 +229,7 @@
    */
   function allTreeExpand(value) {
     nextTick(() => {
-      xTable.setAllTreeExpand(treeExpand)
+      xTable?.setAllTreeExpand(treeExpand)
     })
     treeExpand = value
   }

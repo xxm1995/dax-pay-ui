@@ -54,6 +54,7 @@
     title: '',
     permCode: '',
     effect: true,
+    clientCode: '',
     menuType: 2,
     sortNo: 0,
     remark: '',
@@ -65,7 +66,7 @@
       { validator: validateCode, trigger: 'blur' },
     ],
   } as Record<string, Rule[]>
-  const formRef: FormInstance = $ref()
+  const formRef = $ref<FormInstance>()
 
   // 入口
   function init(id, editType: FormEditType, clientCode, parentId) {
