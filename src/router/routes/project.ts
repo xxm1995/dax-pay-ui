@@ -36,15 +36,15 @@ export const OUTSIDE: AppRouteModule = {
   name: 'PROJECT_OUTSIDE',
   meta: { title: '' },
   children: [
-    {
-      path: '/main-out',
-      name: 'MainOut',
-      component: () => import('/@/views/demo/main-out/index.vue'),
-      meta: {
-        title: 'MainOut',
-        ignoreAuth: true,
-      },
-    },
+    // {
+    //   path: '/main-out',
+    //   name: 'MainOut',
+    //   component: () => import('/@/views/demo/main-out/index.vue'),
+    //   meta: {
+    //     title: 'MainOut',
+    //     ignoreAuth: true,
+    //   },
+    // },
     {
       path: '/cashier',
       name: 'cashier',
