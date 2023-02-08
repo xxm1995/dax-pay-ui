@@ -11,34 +11,38 @@ export function findAllProvince() {
 }
 
 /**
- * 获取省市二级联动列表
+ * 获取省市二级联动
  */
 export function findAllProvinceAndCity() {
   return defHttp.get<Result<Region[]>>({
     url: '/china/region/findAllProvinceAndCity',
   })
 }
-
 /**
- * 获取省市三级联动列表
+ * 获取省市区三级联动
  */
 export function findAllProvinceAndCityAndArea() {
   return defHttp.get<Result<Region[]>>({
     url: '/china/region/findAllProvinceAndCityAndArea',
   })
 }
+/**
+ * 获取省市二级联动
+ */
+export function findAllRegionByParentCode(parentCode: string) {
+  return defHttp.get<Result<Region[]>>({
+    url: '/china/region/findAllRegionByParentCode',
+    params: { parentCode },
+  })
+}
 
 /**
- * 区域表
+ * 区域
  */
 export interface Region {
-  // 区划id
-  id?: number
-  // 区域名称
-  name?: string
-  // 上级区划id
-  pid?: number
-  // 区划级别
-  level?: 1 | 2 | 3 | 4
-  children?: Region[]
+  code: string
+  name: string
+  level: 1 | 2 | 3 | 4 | 5
+  isLeaf?: boolean
+  children: Region[]
 }

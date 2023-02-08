@@ -19,16 +19,16 @@
             <a-input v-model:value="form.title" />
           </a-form-item>
           <a-form-item label="异步支付金额" name="asyncAmount">
-            <a-input-number :precision="2" v-model:value="form.asyncAmount" />
+            <a-input-number placeholder="请输入金额" :precision="2" v-model:value="form.asyncAmount" />
           </a-form-item>
           <a-form-item label="钱包支付" name="walletAmount">
-            <a-input-number :precision="2" v-model:value="form.walletAmount" />
+            <a-input-number placeholder="请输入金额" :precision="2" v-model:value="form.walletAmount" />
             <template #help>
               <span>钱包余额：{{ wallet.balance }}</span>
             </template>
           </a-form-item>
           <a-form-item label="现金支付" name="cashAmount">
-            <a-input-number :precision="2" v-model:value="form.cashAmount" />
+            <a-input-number placeholder="请输入金额" :precision="2" v-model:value="form.cashAmount" />
           </a-form-item>
         </a-form>
       </div>

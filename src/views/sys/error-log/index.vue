@@ -75,7 +75,7 @@
   )
   const { createMessage } = useMessage()
   if (import.meta.env.DEV) {
-    createMessage.info(t('sys.errorLog.enableMessage'))
+    createMessage.info('只在`/src/settings/projectSetting.ts` 内的useErrorHandle=true时生效')
   }
   // 查看详情
   function handleDetail(row: ErrorLogInfo) {

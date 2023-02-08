@@ -22,7 +22,7 @@ export async function initWebSocket() {
   const serverUrl = `${wsUrl}/ws/user?AccessToken=${token}`
 
   const { close } = useWebSocket(serverUrl, {
-    autoReconnect: false,
+    autoReconnect: true,
     heartbeat: true,
     onMessage: onMessage,
     onConnected: () => {
@@ -43,8 +43,7 @@ export async function initWebSocket() {
  */
 function onMessage(ws: WebSocket, event: MessageEvent) {
   const res = JSON.parse(event.data)
-
-  if ([NOTIFICATION_INFO, NOTIFICATION_INFO, NOTIFICATION_ERROR].includes(res.type)) {
+  if ([NOTIFICATION_INFO, NOTIFICATION_WARN, NOTIFICATION_ERROR].includes(res.type)) {
     wsNotification(res)
   } else if ([EVENT_NOTICE].includes(res.type)) {
     wsEventNotice(res)
