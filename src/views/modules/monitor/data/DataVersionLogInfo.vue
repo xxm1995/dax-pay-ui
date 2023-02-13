@@ -25,7 +25,7 @@
         <a-descriptions-item label="数据内容">
           <json-preview :data="JSON.parse(form.dataContent || '{}')" />
         </a-descriptions-item>
-        <a-descriptions-item label="变动内容">
+        <a-descriptions-item label="变动前内容">
           <json-preview :data="JSON.parse(form.changeContent || '{}')" />
         </a-descriptions-item>
       </a-descriptions>
