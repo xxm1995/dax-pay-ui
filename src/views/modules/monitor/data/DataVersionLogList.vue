@@ -4,32 +4,19 @@
       <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
-        <template #buttons>
-          <a-space>
-            <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
-          </a-space>
-        </template>
-      </vxe-toolbar>
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
+        <vxe-column field="tableName" title="表名称" />
         <vxe-column field="dataName" title="数据名称" />
         <vxe-column field="dataId" title="数据主键" />
-        <vxe-column field="dataContent" title="数据内容" />
+        <vxe-column field="version" title="数据版本" />
         <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
               <a href="javascript:" @click="show(row)">查看</a>
             </span>
-            <a-divider type="vertical" />
-            <span>
-              <a href="javascript:" @click="edit(row)">编辑</a>
-            </span>
-            <a-divider type="vertical" />
-            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-              <a href="javascript:" style="color: red">删除</a>
-            </a-popconfirm>
           </template>
         </vxe-column>
       </vxe-table>
@@ -47,23 +34,27 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue'
+  import { onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { del, page } from './DataVersionLog.api'
+  import { page } from './DataVersionLog.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import DataVersionLogEdit from './DataVersionLogEdit.vue'
+  import DataVersionLogEdit from './DataVersionLogInfo.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
-  import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { QueryField } from '/@/components/Bootx/Query/Query'
+  import { NUMBER, QueryField, STRING } from '/@/components/Bootx/Query/Query'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage } = useMessage()
 
   // 查询条件
-  const fields = [] as QueryField[]
+  const fields = [
+    { field: 'dataName', type: STRING, name: '数据名称', placeholder: '请输入数据名称' },
+    { field: 'tableName', type: STRING, name: '表名称', placeholder: '请输入表名称' },
+    { field: 'dataId', type: STRING, name: '数据主键', placeholder: '请输入数据主键' },
+    { field: 'version', type: NUMBER, name: '数据版本', placeholder: '请输入数据版本' },
+  ] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
@@ -87,25 +78,9 @@
       pageQueryResHandel(data)
     })
   }
-  // 新增
-  function add() {
-    dataVersionLogEdit.init(null, FormEditType.Add)
-  }
-  // 查看
-  function edit(record) {
-    dataVersionLogEdit.init(record.id, FormEditType.Edit)
-  }
   // 查看
   function show(record) {
-    dataVersionLogEdit.init(record.id, FormEditType.Show)
-  }
-
-  // 删除
-  function remove(record) {
-    del(record.id).then(() => {
-      createMessage.success('删除成功')
-    })
-    queryPage()
+    dataVersionLogEdit.init(record.id)
   }
 </script>
 
