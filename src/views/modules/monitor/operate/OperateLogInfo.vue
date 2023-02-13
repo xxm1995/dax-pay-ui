@@ -50,7 +50,6 @@
   import { $ref } from 'vue/macros'
   import { get, OperateLog } from './OperateLog.api'
   import { BasicModal } from '/@/components/Modal'
-  import Description from '/@/components/Description/src/Description.vue'
   import { DescItem } from '/@/components/Description'
   import { useDict } from '/@/hooks/bootx/useDict'
 

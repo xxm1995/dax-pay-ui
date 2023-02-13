@@ -23,36 +23,6 @@ export const get = (id) => {
 }
 
 /**
- * 添加
- */
-export const add = (obj: DataVersionLog) => {
-  return defHttp.post({
-    url: '/log/dataVersion/add',
-    data: obj,
-  })
-}
-
-/**
- * 更新
- */
-export const update = (obj: DataVersionLog) => {
-  return defHttp.post({
-    url: '/log/dataVersion/update',
-    data: obj,
-  })
-}
-
-/**
- * 删除
- */
-export const del = (id) => {
-  return defHttp.delete({
-    url: '/log/dataVersion/delete',
-    params: { id },
-  })
-}
-
-/**
  * 查询全部
  */
 export const findAll = () => {
@@ -65,10 +35,16 @@ export const findAll = () => {
  * 数据版本日志
  */
 export interface DataVersionLog extends BaseEntity {
+  // 表名称
+  tableName?: string
   // 数据名称
-  dataName: string
+  dataName?: string
   // 数据主键
-  dataId: string
+  dataId?: string
   // 数据内容
-  dataContent: string
+  dataContent?: string
+  // 本次变动的数据内容
+  changeContent?: string
+  // 数据版本
+  version?: number
 }
