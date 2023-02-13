@@ -17,14 +17,11 @@
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
     >
-      <a-form-item label="主键" :hidden="true">
+      <a-form-item label="主键" name="id" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
       <a-form-item label="名称" name="name">
         <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
-      </a-form-item>
-      <a-form-item label="创建者名称" name="creatorName">
-        <a-input v-model:value="form.creatorName" :disabled="showable" placeholder="请输入创建者名称" />
       </a-form-item>
       <a-form-item label="说明" name="remark">
         <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入说明" />
