@@ -45,7 +45,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { validateEmail } from '/@/utils/validate'
   import { bindEmail } from '/@/views/account/account.api'
-  import CountDownInput from "/@/components/CountDown/src/CountdownInput.vue";
+  import CountDownInput from '/@/components/CountDown/src/CountdownInput.vue'
 
   const emits = defineEmits(['ok'])
   const { visible, confirmLoading, modalWidth, labelCol, wrapperCol, handleCancel } = useFormEdit()
