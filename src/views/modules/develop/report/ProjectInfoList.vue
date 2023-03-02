@@ -13,26 +13,55 @@
       </vxe-toolbar>
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
+        <vxe-column field="id" title="大屏代码" />
         <vxe-column field="name" title="项目名称" />
-        <vxe-column field="state" title="发布状态" />
-        <vxe-column field="content" title="报表内容" />
-        <vxe-column field="remark" title="备注" />
-        <vxe-column field="indexImage" title="预览图片id" />
-        <vxe-column field="edit" title="是否在编辑中" />
-        <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column field="state" title="发布状态">
           <template #default="{ row }">
-            <span>
-              <a-link @click="show(row)">查看</a-link>
-            </span>
-            <a-divider type="vertical" />
+            <a-tag v-if="row.state" color="green">已发布</a-tag>
+            <a-tag v-else color="red">未发布</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="edit" title="编辑状态">
+          <template #default="{ row }">
+            <a-tag v-if="row.edit" color="green">编辑中</a-tag>
+            <a-tag v-else color="red">未编辑</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="remark" title="备注" />
+        <vxe-column field="createTime" title="创建时间" />
+        <vxe-column fixed="right" width="220" :showOverflow="false" title="操作">
+          <template #default="{ row }">
             <span>
               <a-link @click="edit(row)">编辑</a-link>
             </span>
             <a-divider type="vertical" />
-            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-              <a-link danger>删除</a-link>
-            </a-popconfirm>
+            <span>
+              <a-link @click="design(row)">设计</a-link>
+            </span>
+            <a-divider type="vertical" />
+            <span>
+              <a-link @click="preview(row)">预览</a-link>
+            </span>
+            <a-divider type="vertical" />
+            <a-dropdown>
+              <a class="ant-dropdown-link"> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item>
+                    <a-link @click="copyInfo(row)">复制</a-link>
+                  </a-menu-item>
+                  <a-menu-item v-if="row.state === -1">
+                    <a-link danger @click="publishInfo(row)">发布</a-link>
+                  </a-menu-item>
+                  <a-menu-item v-if="row.state === 1">
+                    <a-link danger @click="unPublishInfo(row)">取消发布</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link danger>删除</a-link>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
           </template>
         </vxe-column>
       </vxe-table>
@@ -52,7 +81,7 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { del, page } from './ProjectInfo.api'
+  import { copy, del, getGoViewUrl, page, publish, unPublish } from './ProjectInfo.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import ProjectInfoEdit from './ProjectInfoEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -66,20 +95,31 @@
   const { notification, createMessage, createConfirm } = useMessage()
 
   // 查询条件
-  const fields = [] as QueryField[]
+  const fields = [
+    { field: 'projectId', name: '大屏代码', placeholder: '请输入大屏代码' },
+    { field: 'name', name: '项目名称', placeholder: '请输入项目名称' },
+  ] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const projectInfoEdit = $ref<any>()
+  let goViewUrl = $ref('')
 
   onMounted(() => {
+    initGoViewUrl()
     vxeBind()
     queryPage()
   })
+
   function vxeBind() {
     xTable?.connect(xToolbar as VxeToolbarInstance)
   }
-
+  // 初始化GoView地址
+  function initGoViewUrl() {
+    getGoViewUrl().then(({ data }) => {
+      goViewUrl = data
+    })
+  }
   // 分页查询
   function queryPage() {
     loading.value = true
@@ -98,18 +138,74 @@
   function edit(record) {
     projectInfoEdit.init(record.id, FormEditType.Edit)
   }
-  // 查看
-  function show(record) {
-    projectInfoEdit.init(record.id, FormEditType.Show)
+  // 预览
+  function preview(record) {
+    open(`${goViewUrl}/#/chart/preview/${record.id}`, '_blank')
   }
-
+  // 设计
+  function design(record) {
+    open(`${goViewUrl}/#/chart/home/${record.id}`, '_blank')
+  }
+  // 复制
+  function copyInfo(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '复制',
+      content: '是否复制大屏',
+      onOk: () => {
+        loading.value = true
+        copy(record.id).then((_) => {
+          createMessage.success('复制成功')
+          queryPage()
+        })
+      },
+    })
+  }
+  // 发布
+  function publishInfo(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '发布',
+      content: '发布大屏',
+      onOk: () => {
+        loading.value = true
+        publish(record.id).then((_) => {
+          createMessage.success('发布成功')
+          queryPage()
+        })
+      },
+    })
+  }
+  // 取消发布
+  function unPublishInfo(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '取消发布',
+      content: '是否取消发布大屏',
+      onOk: () => {
+        loading.value = true
+        unPublish(record.id).then((_) => {
+          createMessage.success('取消发布成功')
+          queryPage()
+        })
+      },
+    })
+  }
   // 删除
   function remove(record) {
-    del(record.id).then(() => {
-      createMessage.success('删除成功')
-      queryPage()
+    createConfirm({
+      iconType: 'warning',
+      title: '删除',
+      content: '是否删除大屏',
+      onOk: () => {
+        loading.value = true
+        del(record.id).then((_) => {
+          createMessage.success('删除成功')
+          queryPage()
+        })
+      },
     })
-    }
+  }
 </script>
 
 <style lang="less" scoped></style>
