@@ -13,21 +13,21 @@ export function page(params) {
 }
 
 /**
- * 查询全部
- */
-export function findAll() {
-  return defHttp.get<Result<ProjectInfo[]>>({
-    url: '/goview/admin/findAll',
-  })
-}
-
-/**
  * 获取单条
  */
 export function get(id) {
   return defHttp.get<Result<ProjectInfo>>({
     url: '/goview/admin/findById',
     params: { id },
+  })
+}
+
+/**
+ * 获取GoView的地址
+ */
+export function getGoViewUrl() {
+  return defHttp.get<Result<string>>({
+    url: '/goview/admin/getGoViewUrl',
   })
 }
 
@@ -52,11 +52,41 @@ export function update(obj: ProjectInfo) {
 }
 
 /**
+ * 发布
+ */
+export function publish(id) {
+  return defHttp.post<Result>({
+    url: '/goview/admin/publish',
+    params: { id },
+  })
+}
+
+/**
+ * 取消发布
+ */
+export function unPublish(id) {
+  return defHttp.post<Result>({
+    url: '/goview/admin/unPublish',
+    params: { id },
+  })
+}
+
+/**
  * 删除
  */
 export function del(id) {
   return defHttp.delete({
     url: '/goview/admin/delete',
+    params: { id },
+  })
+}
+
+/**
+ * 复制
+ */
+export function copy(id) {
+  return defHttp.delete({
+    url: '/goview/admin/copy',
     params: { id },
   })
 }
@@ -69,8 +99,6 @@ export interface ProjectInfo extends BaseEntity {
   name?: string
   // 发布状态
   state?: number
-  // 报表内容
-  content?: string
   // 备注
   remark?: string
   // 预览图片id

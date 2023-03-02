@@ -8,37 +8,25 @@
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-      <a-form
-        class="small-from-item"
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        :validate-trigger="['blur', 'change']"
-        :label-col="labelCol"
-        :wrapper-col="wrapperCol"
-      >
-        <a-form-item label="主键" :hidden="true">
-          <a-input v-model:value="form.id" :disabled="showable" />
-        </a-form-item>
-        <a-form-item label="项目名称" name="name">
-          <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入项目名称" />
-        </a-form-item>
-        <a-form-item label="发布状态" name="state">
-          <a-input v-model:value="form.state" :disabled="showable" placeholder="请输入发布状态" />
-        </a-form-item>
-        <a-form-item label="报表内容" name="content">
-          <a-input v-model:value="form.content" :disabled="showable" placeholder="请输入报表内容" />
-        </a-form-item>
-        <a-form-item label="备注" name="remark">
-          <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
-        </a-form-item>
-        <a-form-item label="预览图片id" name="indexImage">
-          <a-input v-model:value="form.indexImage" :disabled="showable" placeholder="请输入预览图片id" />
-        </a-form-item>
-        <a-form-item label="是否在编辑中" name="edit">
-          <a-input v-model:value="form.edit" :disabled="showable" placeholder="请输入是否在编辑中" />
-        </a-form-item>
-      </a-form>
+    <a-form
+      class="small-from-item"
+      ref="formRef"
+      :model="form"
+      :rules="rules"
+      :validate-trigger="['blur', 'change']"
+      :label-col="labelCol"
+      :wrapper-col="wrapperCol"
+    >
+      <a-form-item label="主键" :hidden="true">
+        <a-input v-model:value="form.id" :disabled="showable" />
+      </a-form-item>
+      <a-form-item label="项目名称" name="name">
+        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入项目名称" />
+      </a-form-item>
+      <a-form-item label="备注" name="remark">
+        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
+      </a-form-item>
+    </a-form>
     <template #footer>
       <a-space>
         <a-button key="cancel" @click="handleCancel">取消</a-button>
@@ -74,15 +62,12 @@
   const formRef = $ref<FormInstance>()
   let form = $ref<ProjectInfo>({
     id: null,
-    name: null,
-    state: null,
-    content: null,
-    remark: null,
-    indexImage: null,
-    edit: null,
+    name: '',
   })
   // 校验
-  const rules = reactive({} as Record<string, Rule[]>)
+  const rules = reactive({
+    name: [{ required: true, message: '请输入大屏的名称' }],
+  } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
