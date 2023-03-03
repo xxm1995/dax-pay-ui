@@ -8,6 +8,7 @@
         <template #buttons>
           <a-space>
             <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
+            <a-button pre-icon="ant-design:sync-outlined" @click="loginGoView">一键登录大屏</a-button>
           </a-space>
         </template>
       </vxe-toolbar>
@@ -17,7 +18,7 @@
         <vxe-column field="name" title="项目名称" />
         <vxe-column field="state" title="发布状态">
           <template #default="{ row }">
-            <a-tag v-if="row.state" color="green">已发布</a-tag>
+            <a-tag v-if="row.state === 1" color="green">已发布</a-tag>
             <a-tag v-else color="red">未发布</a-tag>
           </template>
         </vxe-column>
@@ -51,13 +52,13 @@
                     <a-link @click="copyInfo(row)">复制</a-link>
                   </a-menu-item>
                   <a-menu-item v-if="row.state === -1">
-                    <a-link danger @click="publishInfo(row)">发布</a-link>
+                    <a-link @click="publishInfo(row)">发布</a-link>
                   </a-menu-item>
                   <a-menu-item v-if="row.state === 1">
-                    <a-link danger @click="unPublishInfo(row)">取消发布</a-link>
+                    <a-link @click="unPublishInfo(row)">取消发布</a-link>
                   </a-menu-item>
                   <a-menu-item>
-                    <a-link danger>删除</a-link>
+                    <a-link danger :disabled="row.state === 1" @click="remove(row)">删除</a-link>
                   </a-menu-item>
                 </a-menu>
               </template>
@@ -89,10 +90,12 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
+  import { useUserStoreWithOut } from '/@/store/modules/user'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
+  const useUserStore = useUserStoreWithOut()
 
   // 查询条件
   const fields = [
@@ -203,6 +206,19 @@
           createMessage.success('删除成功')
           queryPage()
         })
+      },
+    })
+  }
+  // 一键登录GoView平台
+  function loginGoView() {
+    createConfirm({
+      iconType: 'info',
+      title: '一键登录',
+      content: '是否一键登录可视化大屏平台',
+      okText: '登录',
+      onOk: () => {
+        const token = useUserStore.getToken
+        createMessage.info('等待下一个版本实装')
       },
     })
   }
