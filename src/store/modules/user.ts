@@ -16,7 +16,7 @@ import { h } from 'vue'
 import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
 // @ts-ignore
 import { getUserInfo } from '/@/api/sys/user'
-import { closeWebSocket, initWebSocket } from "/@/logics/websocket/UserGlobalWebSocker";
+import { closeWebSocket, initWebSocket } from '/@/logics/websocket/UserGlobalWebSocker'
 
 interface UserState {
   userInfo: Nullable<UserInfo>
