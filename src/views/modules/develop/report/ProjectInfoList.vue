@@ -52,7 +52,7 @@
                     <a-link @click="copyInfo(row)">复制</a-link>
                   </a-menu-item>
                   <a-menu-item v-if="row.edit">
-                    <a-link @click="enableEdit(row)">应用编辑</a-link>
+                    <a-link @click="enableEdit(row)">保存编辑</a-link>
                   </a-menu-item>
                   <a-menu-item v-if="row.edit">
                     <a-link @click="resetEdit(row)">重置编辑</a-link>
@@ -204,8 +204,8 @@
   function enableEdit(record) {
     createConfirm({
       iconType: 'info',
-      title: '应用编辑数据',
-      content: '是否应用编辑中的信息，确定后发布的数据将会更新',
+      title: '保存编辑',
+      content: '是否保存编辑中的信息，保存后发布的数据将会更新',
       onOk: () => {
         loading.value = true
         enableEditContent(record.id).then((_) => {
@@ -220,7 +220,7 @@
     createConfirm({
       iconType: 'info',
       title: '重置编辑',
-      content: '是否重置编辑中的信息，确定后编辑的内容将会恢复为当前已发布的内容',
+      content: '是否重置编辑中的信息，确定后编辑的内容将会恢复为之前保存的内容',
       onOk: () => {
         loading.value = true
         resetEditContent(record.id).then((_) => {
