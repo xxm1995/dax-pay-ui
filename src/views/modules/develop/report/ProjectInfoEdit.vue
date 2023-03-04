@@ -23,8 +23,11 @@
       <a-form-item label="项目名称" name="name">
         <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入项目名称" />
       </a-form-item>
+      <a-form-item label="是否启用" name="enable">
+        <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.enable" :disabled="showable" />
+      </a-form-item>
       <a-form-item label="备注" name="remark">
-        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
+        <a-textarea :rows="3" v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>
     </a-form>
     <template #footer>

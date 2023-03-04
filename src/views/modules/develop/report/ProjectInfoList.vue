@@ -24,8 +24,8 @@
         </vxe-column>
         <vxe-column field="edit" title="编辑状态">
           <template #default="{ row }">
-            <a-tag v-if="row.edit" color="green">编辑中</a-tag>
-            <a-tag v-else color="red">未编辑</a-tag>
+            <a-tag v-if="row.edit" color="red">编辑中</a-tag>
+            <a-tag v-else color="green">未编辑</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="remark" title="备注" />
@@ -50,6 +50,12 @@
                 <a-menu>
                   <a-menu-item>
                     <a-link @click="copyInfo(row)">复制</a-link>
+                  </a-menu-item>
+                  <a-menu-item v-if="row.edit">
+                    <a-link @click="enableEdit(row)">应用编辑</a-link>
+                  </a-menu-item>
+                  <a-menu-item v-if="row.edit">
+                    <a-link @click="resetEdit(row)">重置编辑</a-link>
                   </a-menu-item>
                   <a-menu-item v-if="row.state === -1">
                     <a-link @click="publishInfo(row)">发布</a-link>
@@ -82,7 +88,7 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { copy, del, getGoViewUrl, page, publish, unPublish } from './ProjectInfo.api'
+  import { copy, del, enableEditContent, getGoViewUrl, page, publish, resetEditContent, unPublish } from './ProjectInfo.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import ProjectInfoEdit from './ProjectInfoEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -189,6 +195,36 @@
         loading.value = true
         unPublish(record.id).then((_) => {
           createMessage.success('取消发布成功')
+          queryPage()
+        })
+      },
+    })
+  }
+  // 应用编辑中的信息
+  function enableEdit(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '应用编辑数据',
+      content: '是否应用编辑中的信息，确定后发布的数据将会更新',
+      onOk: () => {
+        loading.value = true
+        enableEditContent(record.id).then((_) => {
+          createMessage.success('更新成功')
+          queryPage()
+        })
+      },
+    })
+  }
+  // 重置编辑中的信息
+  function resetEdit(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '重置编辑',
+      content: '是否重置编辑中的信息，确定后编辑的内容将会恢复为当前已发布的内容',
+      onOk: () => {
+        loading.value = true
+        resetEditContent(record.id).then((_) => {
+          createMessage.success('重置成功')
           queryPage()
         })
       },
