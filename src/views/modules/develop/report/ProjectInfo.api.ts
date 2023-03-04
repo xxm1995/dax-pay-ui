@@ -72,11 +72,21 @@ export function unPublish(id) {
 }
 
 /**
- * 删除
+ * 应用编辑中的信息
  */
-export function del(id) {
-  return defHttp.delete({
-    url: '/goview/admin/delete',
+export function enableEditContent(id) {
+  return defHttp.post<Result>({
+    url: '/goview/admin/enableEditContent',
+    params: { id },
+  })
+}
+
+/**
+ * 重置编辑中的信息
+ */
+export function resetEditContent(id) {
+  return defHttp.post<Result>({
+    url: '/goview/admin/resetEditContent',
     params: { id },
   })
 }
@@ -85,8 +95,18 @@ export function del(id) {
  * 复制
  */
 export function copy(id) {
-  return defHttp.delete({
+  return defHttp.post({
     url: '/goview/admin/copy',
+    params: { id },
+  })
+}
+
+/**
+ * 删除
+ */
+export function del(id) {
+  return defHttp.delete({
+    url: '/goview/admin/delete',
     params: { id },
   })
 }
