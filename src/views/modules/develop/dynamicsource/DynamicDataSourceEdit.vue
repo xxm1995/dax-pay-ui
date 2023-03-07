@@ -1,62 +1,62 @@
 <template>
-  <basic-modal
+  <basic-drawer
+    showFooter
     v-bind="$attrs"
-    :loading="confirmLoading"
-    :width="modalWidth"
-    :title="title"
+    title="数据源管理"
+    width="40%"
+    :destroyOnClose="true"
+    :maskClosable="false"
     :visible="visible"
-    :mask-closable="showable"
-    @cancel="handleCancel"
+    @close="handleCancel"
   >
     <a-form class="small-from-item" ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
       <a-form-item label="主键" name="id" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
-      <a-form-item label="数据源编码" name="code">
+      <a-form-item label="编码" name="code">
         <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入数据源编码" />
       </a-form-item>
-      <a-form-item label="数据源名称" name="name">
+      <a-form-item label="名称" name="name">
         <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入数据源名称" />
       </a-form-item>
-      <a-form-item label="数据库类型" name="databaseType">
+      <a-form-item label="类型" name="databaseType">
         <a-input v-model:value="form.databaseType" :disabled="showable" placeholder="请输入数据库类型" />
       </a-form-item>
       <a-form-item label="驱动类" name="dbDriver">
         <a-input v-model:value="form.dbDriver" :disabled="showable" placeholder="请输入驱动类" />
       </a-form-item>
-      <a-form-item label="数据库地址" name="dbUrl">
+      <a-form-item label="地址" name="dbUrl">
         <a-input v-model:value="form.dbUrl" :disabled="showable" placeholder="请输入数据库地址" />
-      </a-form-item>
-      <a-form-item label="数据库名称" name="dbName">
-        <a-input v-model:value="form.dbName" :disabled="showable" placeholder="请输入数据库名称" />
       </a-form-item>
       <a-form-item label="用户名" name="dbUsername">
         <a-input v-model:value="form.dbUsername" :disabled="showable" placeholder="请输入用户名" />
       </a-form-item>
       <a-form-item label="密码" name="dbPassword">
-        <a-input v-model:value="form.dbPassword" :disabled="showable" placeholder="请输入密码" />
+        <a-input-password v-model:value="form.dbPassword" :disabled="showable" placeholder="请输入密码" />
       </a-form-item>
       <a-form-item label="备注" name="remark">
-        <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
+        <a-textarea :rows="2" v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>
     </a-form>
     <template #footer>
       <a-space>
         <a-button key="cancel" @click="handleCancel">取消</a-button>
+        <a-button v-if="!showable" preIcon="ant-design:api-outlined" @click="testConnectionInfo">测试连接</a-button>
         <a-button v-if="!showable" key="forward" :loading="confirmLoading" type="primary" @click="handleOk">保存</a-button>
       </a-space>
     </template>
-  </basic-modal>
+  </basic-drawer>
 </template>
 
 <script lang="ts" setup>
   import { nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, DynamicDataSource } from './DynamicDataSource.api'
+  import { add, get, update, DynamicDataSource, testConnection } from './DynamicDataSource.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
-  import { BasicModal } from '/@/components/Modal'
+  import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
+  import { useMessage } from '/@/hooks/web/useMessage'
 
   const {
     initFormEditType,
@@ -72,22 +72,30 @@
     showable,
     formEditType,
   } = useFormEdit()
+  const { createMessage } = useMessage()
   // 表单
   const formRef = $ref<FormInstance>()
-  let form = $ref({
+  let form = $ref<DynamicDataSource>({
     id: null,
-    code: null,
-    name: null,
-    databaseType: null,
-    dbDriver: null,
-    dbUrl: null,
-    dbName: null,
-    dbUsername: null,
-    dbPassword: null,
-    remark: null,
-  } as DynamicDataSource)
+    code: '',
+    name: '',
+    databaseType: '',
+    dbDriver: '',
+    dbUrl: '',
+    dbUsername: '',
+    dbPassword: '',
+    remark: '',
+  })
   // 校验
-  const rules = reactive({} as Record<string, Rule[]>)
+  const rules = reactive({
+    code: [{ required: true, message: '编码不可为空' }],
+    name: [{ required: true, message: '名称不可为空' }],
+    databaseType: [{ required: true, message: '请选择数据库类型' }],
+    dbDriver: [{ required: true, message: '驱动不可为空' }],
+    dbUrl: [{ required: true, message: '数据源地址不可为空' }],
+    dbUsername: [{ required: true, message: '用户名不可为空' }],
+    dbPassword: [{ required: true, message: '密码不可为空' }],
+  } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
@@ -108,6 +116,18 @@
       confirmLoading.value = false
     }
   }
+  // 测试连接
+  function testConnectionInfo() {
+    formRef?.validateFields(['dbDriver', 'dbUrl', 'dbUsername', 'dbPassword']).then(async () => {
+      const { data } = await testConnection(form)
+      if (data) {
+        createMessage.warn(data)
+      } else {
+        createMessage.success('连接成功')
+      }
+    })
+  }
+
   // 保存
   function handleOk() {
     formRef?.validate().then(async () => {

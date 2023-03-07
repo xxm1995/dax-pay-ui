@@ -43,6 +43,16 @@ export const update = (obj: DynamicDataSource) => {
 }
 
 /**
+ * 测试连接
+ */
+export const testConnection = (obj: DynamicDataSource) => {
+  return defHttp.post<Result<string>>({
+    url: '/dynamic/source/testConnection',
+    data: obj,
+  })
+}
+
+/**
  * 删除
  */
 export const del = (id) => {
@@ -66,21 +76,19 @@ export const findAll = () => {
  */
 export interface DynamicDataSource extends BaseEntity {
   // 数据源编码
-  code: string
+  code?: string
   // 数据源名称
-  name: string
+  name?: string
   // 数据库类型
-  databaseType: string
+  databaseType?: string
   // 驱动类
-  dbDriver: string
-  // 数据库地址
-  dbUrl: string
-  // 数据库名称
-  dbName: string
+  dbDriver?: string
+  // 数据源地址
+  dbUrl?: string
   // 用户名
-  dbUsername: string
+  dbUsername?: string
   // 密码
-  dbPassword: string
+  dbPassword?: string
   // 备注
-  remark: string
+  remark?: string
 }

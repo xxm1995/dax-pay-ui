@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="m-3 p-3 pt-5 bg-white">
-      <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
+      <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" :default-item-count="3" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
@@ -17,7 +17,8 @@
         <vxe-column field="name" title="名称" />
         <vxe-column field="databaseType" title="类型" />
         <vxe-column field="dbDriver" title="驱动类" />
-        <vxe-column field="dbName" title="数据库名称" />
+        <vxe-column field="dbUrl" title="连接地址" />
+        <vxe-column field="dbUsername" title="用户名" />
         <vxe-column field="remark" title="备注" />
         <vxe-column field="createTime" title="创建时间" />
         <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
@@ -69,6 +70,17 @@
   const fields = [
     { field: 'code', type: 'string', name: '编码', placeholder: '请输入编码' },
     { field: 'name', type: 'string', name: '名称', placeholder: '请输入名称' },
+    {
+      field: 'databaseType',
+      type: 'list',
+      name: '数据库类型',
+      selectList: [
+        { key: 'mysql', value: 'MySQL' },
+        { key: 'oracle', value: 'Oracle' },
+        { key: 'mssql', value: 'SQLServer' },
+      ],
+      placeholder: '请选择数据库类型',
+    },
   ] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()
