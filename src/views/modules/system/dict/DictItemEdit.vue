@@ -74,6 +74,7 @@
     dictCode: null,
     code: '',
     name: '',
+    enable: true,
     sortNo: 0,
     remark: '',
   } as DictItem)

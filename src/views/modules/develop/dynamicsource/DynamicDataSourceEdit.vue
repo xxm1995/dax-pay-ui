@@ -14,13 +14,13 @@
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
       <a-form-item label="编码" name="code">
-        <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入数据源编码" />
+        <a-input validateFirst v-model:value="form.code" :disabled="showable" placeholder="请输入数据源编码" />
       </a-form-item>
       <a-form-item label="名称" name="name">
         <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入数据源名称" />
       </a-form-item>
-      <a-form-item label="类型" name="databaseType">
-        <a-input v-model:value="form.databaseType" :disabled="showable" placeholder="请输入数据库类型" />
+      <a-form-item label="数据库类型" name="databaseType">
+        <a-select v-model:value="form.databaseType" :options="databaseTypes" @change="changeDatabaseType" placeholder="请选择数据库类型" />
       </a-form-item>
       <a-form-item label="驱动类" name="dbDriver">
         <a-input v-model:value="form.dbDriver" :disabled="showable" placeholder="请输入驱动类" />
@@ -52,11 +52,22 @@
   import { nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, DynamicDataSource, testConnection } from './DynamicDataSource.api'
+  import {
+    add,
+    get,
+    update,
+    DynamicDataSource,
+    testConnection,
+    existsByCode,
+    existsByCodeNotId,
+    databaseTypes,
+    databaseTypeMap,
+  } from './DynamicDataSource.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
+  import { useValidate } from '/@/hooks/bootx/useValidate'
 
   const {
     initFormEditType,
@@ -73,13 +84,15 @@
     formEditType,
   } = useFormEdit()
   const { createMessage } = useMessage()
+  const { existsByServer } = useValidate()
+
   // 表单
   const formRef = $ref<FormInstance>()
+
   let form = $ref<DynamicDataSource>({
     id: null,
     code: '',
     name: '',
-    databaseType: '',
     dbDriver: '',
     dbUrl: '',
     dbUsername: '',
@@ -88,7 +101,10 @@
   })
   // 校验
   const rules = reactive({
-    code: [{ required: true, message: '编码不可为空' }],
+    code: [
+      { required: true, message: '编码不可为空' },
+      { validator: validateCode, trigger: 'blur' },
+    ],
     name: [{ required: true, message: '名称不可为空' }],
     databaseType: [{ required: true, message: '请选择数据库类型' }],
     dbDriver: [{ required: true, message: '驱动不可为空' }],
@@ -103,6 +119,11 @@
     initFormEditType(editType)
     resetForm()
     getInfo(id, editType)
+  }
+  // 编码更新
+  function validateCode() {
+    const { code, id } = form
+    return existsByServer(code, id, formEditType, existsByCode, existsByCodeNotId)
   }
   // 获取信息
   function getInfo(id, editType: FormEditType) {
@@ -127,7 +148,12 @@
       }
     })
   }
-
+  // 数据源类型变换回调
+  function changeDatabaseType() {
+    const e = form.databaseType as string
+    form.dbDriver = databaseTypeMap[e]?.dbDriver
+    form.dbUrl = databaseTypeMap[e]?.dbUrl
+  }
   // 保存
   function handleOk() {
     formRef?.validate().then(async () => {

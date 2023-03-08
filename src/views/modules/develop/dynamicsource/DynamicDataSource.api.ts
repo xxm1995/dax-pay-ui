@@ -1,6 +1,7 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
+import { LabeledValue } from 'ant-design-vue/lib/select'
 
 /**
  * 分页
@@ -53,6 +54,55 @@ export const testConnection = (obj: DynamicDataSource) => {
 }
 
 /**
+ * 测试连接
+ */
+export const testConnectionById = (id) => {
+  return defHttp.get<Result<string>>({
+    url: '/dynamic/source/testConnectionById',
+    params: { id },
+  })
+}
+
+/**
+ * 根据id进行添加到连接池中
+ */
+export const addDynamicDataSourceById = (id) => {
+  return defHttp.post<Result<string>>({
+    url: '/dynamic/source/addDynamicDataSourceById',
+    params: { id },
+  })
+}
+
+/**
+ * 判断编码是否被使用
+ */
+export const existsByCode = (id) => {
+  return defHttp.post<Result<boolean>>({
+    url: '/dynamic/source/existsByCode',
+    params: { id },
+  })
+}
+
+/**
+ * 判断编码是否被使用
+ */
+export const existsByCodeNotId = (id, code) => {
+  return defHttp.post<Result<boolean>>({
+    url: '/dynamic/source/existsByCodeNotId',
+    params: { id, code },
+  })
+}
+/**
+ * 判断是否已经添加到连接池中
+ */
+export const existsByDataSourceKey = (code) => {
+  return defHttp.get<Result<boolean>>({
+    url: '/dynamic/source/existsByDataSourceKey',
+    params: { code },
+  })
+}
+
+/**
  * 删除
  */
 export const del = (id) => {
@@ -91,4 +141,33 @@ export interface DynamicDataSource extends BaseEntity {
   dbPassword?: string
   // 备注
   remark?: string
+}
+
+/**
+ * 数据类型列表
+ */
+export const databaseTypes = [
+  { value: 'mysql', label: 'MySQL' },
+  { value: 'oracle', label: 'Oracle' },
+  { value: 'mssql', label: 'SQLServer' },
+] as LabeledValue[]
+
+/**
+ * 数据类型关联信息列表
+ */
+export // 数据列表
+const databaseTypeMap = {
+  mysql: {
+    dbDriver: 'com.mysql.cj.jdbc.Driver',
+    dbUrl:
+      'jdbc:mysql://127.0.0.1:3306/bootx?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai',
+  },
+  oracle: {
+    dbDriver: 'oracle.jdbc.OracleDriver',
+    dbUrl: 'jdbc:oracle:thin:@127.0.0.1:1521:BOOTX',
+  },
+  mssql: {
+    dbDriver: 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
+    dbUrl: 'jdbc:mysql://127.0.0.1:3306/bootx?characterEncoding=UTF-8&useUnicode=true&useSSL=false',
+  },
 }

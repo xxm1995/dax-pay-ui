@@ -15,25 +15,38 @@
         <vxe-column type="seq" width="60" />
         <vxe-column field="code" title="编码" />
         <vxe-column field="name" title="名称" />
-        <vxe-column field="databaseType" title="类型" />
+        <vxe-column field="databaseType" title="数据库类型">
+          <template #default="{ row }">
+            <a-tag> {{ dictConvert('DatabaseType', row.databaseType) }} </a-tag>
+          </template>
+        </vxe-column>
         <vxe-column field="dbDriver" title="驱动类" />
         <vxe-column field="dbUrl" title="连接地址" />
         <vxe-column field="dbUsername" title="用户名" />
         <vxe-column field="remark" title="备注" />
         <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="160" :showOverflow="false" title="操作">
           <template #default="{ row }">
-            <span>
-              <a href="javascript:" @click="show(row)">查看</a>
-            </span>
+            <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-            <span>
-              <a href="javascript:" @click="edit(row)">编辑</a>
-            </span>
+            <a-link @click="edit(row)">编辑</a-link>
             <a-divider type="vertical" />
-            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-              <a href="javascript:" style="color: red">删除</a>
-            </a-popconfirm>
+            <a-dropdown>
+              <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item>
+                    <a-link @click="testConnectionInfo(row)">测试连接</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link @click="addDynamicDataSource(row)">应用</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link danger @click="remove(row)">删除</a-link>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
           </template>
         </vxe-column>
       </vxe-table>
@@ -53,7 +66,7 @@
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
   import { $ref } from 'vue/macros'
-  import { del, page } from './DynamicDataSource.api'
+  import { addDynamicDataSourceById, databaseTypes, del, existsByDataSourceKey, page, testConnectionById } from './DynamicDataSource.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import DynamicDataSourceEdit from './DynamicDataSourceEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -61,11 +74,11 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
-
+  import { useDict } from '/@/hooks/bootx/useDict'
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
-
+  const { dictConvert } = useDict()
   // 查询条件
   const fields = [
     { field: 'code', type: 'string', name: '编码', placeholder: '请输入编码' },
@@ -74,11 +87,7 @@
       field: 'databaseType',
       type: 'list',
       name: '数据库类型',
-      selectList: [
-        { key: 'mysql', value: 'MySQL' },
-        { key: 'oracle', value: 'Oracle' },
-        { key: 'mssql', value: 'SQLServer' },
-      ],
+      selectList: databaseTypes,
       placeholder: '请选择数据库类型',
     },
   ] as QueryField[]
@@ -117,13 +126,58 @@
   function show(record) {
     dynamicDataSourceEdit.init(record.id, FormEditType.Show)
   }
-
+  // 测试连接
+  async function testConnectionInfo(record) {
+    const { data } = await testConnectionById(record.id)
+    if (data) {
+      createMessage.warn(data)
+    } else {
+      createMessage.success('连接成功')
+    }
+  }
+  // 应用到系统中
+  async function addDynamicDataSource(record) {
+    const { data } = await existsByDataSourceKey(record.code)
+    if (data) {
+      createConfirm({
+        iconType: 'warning',
+        title: '重新添加',
+        content: '该数据源配置已经应用，是否进行更新',
+        onOk: () => {
+          loading.value = true
+          addDynamicDataSourceById(record.id).then(() => {
+            createMessage.success('更新成功')
+          })
+        },
+      })
+    } else {
+      createConfirm({
+        iconType: 'warning',
+        title: '添加',
+        content: '是否将该数据源配置应用到系统中',
+        onOk: () => {
+          loading.value = true
+          addDynamicDataSourceById(record.id).then(() => {
+            createMessage.success('应用成功')
+          })
+        },
+      })
+    }
+  }
   // 删除
   function remove(record) {
-    del(record.id).then(() => {
-      createMessage.success('删除成功')
+    createConfirm({
+      iconType: 'warning',
+      title: '删除',
+      content: '是否删除流程模型',
+      onOk: () => {
+        loading.value = true
+        del(record.id).then(() => {
+          createMessage.success('删除成功')
+          queryPage()
+        })
+      },
     })
-    queryPage()
   }
 </script>
 

@@ -25,7 +25,7 @@
         <a-input v-model:value="form.groupTag" :disabled="showable" placeholder="请输入分类标签" />
       </a-form-item>
       <a-form-item label="备注" name="remark">
-        <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
+        <a-textarea :rows="3" v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -68,6 +68,7 @@
     id: null,
     code: '',
     name: '',
+    enable: true,
     groupTag: '',
     remark: '',
   } as Dict)
