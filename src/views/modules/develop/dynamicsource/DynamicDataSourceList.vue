@@ -144,7 +144,6 @@
         title: '重新添加',
         content: '该数据源配置已经应用，是否进行更新',
         onOk: () => {
-          loading.value = true
           addDynamicDataSourceById(record.id).then(() => {
             createMessage.success('更新成功')
           })
@@ -156,7 +155,6 @@
         title: '添加',
         content: '是否将该数据源配置应用到系统中',
         onOk: () => {
-          loading.value = true
           addDynamicDataSourceById(record.id).then(() => {
             createMessage.success('应用成功')
           })

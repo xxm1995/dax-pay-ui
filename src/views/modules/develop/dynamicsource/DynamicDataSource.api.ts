@@ -77,7 +77,7 @@ export const addDynamicDataSourceById = (id) => {
  * 判断编码是否被使用
  */
 export const existsByCode = (id) => {
-  return defHttp.post<Result<boolean>>({
+  return defHttp.get<Result<boolean>>({
     url: '/dynamic/source/existsByCode',
     params: { id },
   })
@@ -86,8 +86,8 @@ export const existsByCode = (id) => {
 /**
  * 判断编码是否被使用
  */
-export const existsByCodeNotId = (id, code) => {
-  return defHttp.post<Result<boolean>>({
+export const existsByCodeNotId = (code, id) => {
+  return defHttp.get<Result<boolean>>({
     url: '/dynamic/source/existsByCodeNotId',
     params: { id, code },
   })
