@@ -1,6 +1,6 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
-import { BaseEntity } from '/#/web'
+import { BaseEntity, KeyValue } from "/#/web";
 import { LabeledValue } from 'ant-design-vue/lib/select'
 
 /**
@@ -118,6 +118,25 @@ export const del = (id) => {
 export const findAll = () => {
   return defHttp.get<Result<Array<DynamicDataSource>>>({
     url: '/dynamic/source/findAll',
+  })
+}
+
+/**
+ * 查询当前数据源列表
+ */
+export const findAllDataSource = () => {
+  return defHttp.get<Result<KeyValue[]>>({
+    url: '/dynamic/source/findAllDataSource',
+  })
+}
+
+/**
+ * 从数据源列表中删除指定数据源
+ */
+export const removeDataSourceByKey = (key) => {
+  return defHttp.delete({
+    url: '/dynamic/source/removeDataSourceByKey',
+    params: { key },
   })
 }
 

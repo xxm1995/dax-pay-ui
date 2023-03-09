@@ -8,6 +8,7 @@
         <template #buttons>
           <a-space>
             <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
+            <a-button @click="showDatabaseList">数据源列表</a-button>
           </a-space>
         </template>
       </vxe-toolbar>
@@ -59,12 +60,13 @@
         @page-change="handleTableChange"
       />
       <dynamic-data-source-edit ref="dynamicDataSourceEdit" @ok="queryPage" />
+      <data-source-list ref="dataSourceList" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue'
+  import { onMounted } from 'vue'
   import { $ref } from 'vue/macros'
   import { addDynamicDataSourceById, databaseTypes, del, existsByDataSourceKey, page, testConnectionById } from './DynamicDataSource.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
@@ -75,6 +77,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
+  import DataSourceList from './DataSourceList.vue'
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
@@ -95,6 +98,7 @@
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const dynamicDataSourceEdit = $ref<any>()
+  const dataSourceList = $ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -125,6 +129,10 @@
   // 查看
   function show(record) {
     dynamicDataSourceEdit.init(record.id, FormEditType.Show)
+  }
+  // 查看
+  function showDatabaseList() {
+    dataSourceList.show()
   }
   // 测试连接
   async function testConnectionInfo(record) {

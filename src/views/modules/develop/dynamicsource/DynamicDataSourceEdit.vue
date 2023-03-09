@@ -20,7 +20,13 @@
         <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入数据源名称" />
       </a-form-item>
       <a-form-item label="数据库类型" name="databaseType">
-        <a-select v-model:value="form.databaseType" :options="databaseTypes" @change="changeDatabaseType" placeholder="请选择数据库类型" />
+        <a-select
+          v-model:value="form.databaseType"
+          :disabled="showable"
+          :options="databaseTypes"
+          @change="changeDatabaseType"
+          placeholder="请选择数据库类型"
+        />
       </a-form-item>
       <a-form-item label="驱动类" name="dbDriver">
         <a-input v-model:value="form.dbDriver" :disabled="showable" placeholder="请输入驱动类" />
