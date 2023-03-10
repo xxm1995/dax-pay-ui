@@ -1,6 +1,6 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
-import { BaseEntity, KeyValue } from "/#/web";
+import { BaseEntity, KeyValue } from '/#/web'
 import { LabeledValue } from 'ant-design-vue/lib/select'
 
 /**

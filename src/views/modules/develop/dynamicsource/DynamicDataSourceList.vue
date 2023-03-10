@@ -130,7 +130,7 @@
   function show(record) {
     dynamicDataSourceEdit.init(record.id, FormEditType.Show)
   }
-  // 查看
+  // 查看数据源列表
   function showDatabaseList() {
     dataSourceList.show()
   }

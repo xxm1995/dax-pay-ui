@@ -47,7 +47,7 @@
     <template #footer>
       <a-space>
         <a-button key="cancel" @click="handleCancel">取消</a-button>
-        <a-button v-if="!showable" preIcon="ant-design:api-outlined" @click="testConnectionInfo">测试连接</a-button>
+        <a-button v-if="addable" preIcon="ant-design:api-outlined" @click="testConnectionInfo">测试连接</a-button>
         <a-button v-if="!showable" key="forward" :loading="confirmLoading" type="primary" @click="handleOk">保存</a-button>
       </a-space>
     </template>
@@ -79,12 +79,14 @@
     initFormEditType,
     handleCancel,
     search,
+    diffForm,
     labelCol,
     wrapperCol,
     modalWidth,
     title,
     confirmLoading,
     visible,
+    addable,
     editable,
     showable,
     formEditType,
@@ -99,12 +101,14 @@
     id: null,
     code: '',
     name: '',
+    databaseType: undefined,
     dbDriver: '',
     dbUrl: '',
     dbUsername: '',
     dbPassword: '',
     remark: '',
   })
+  let rawForm
   // 校验
   const rules = reactive({
     code: [
@@ -137,6 +141,7 @@
       confirmLoading.value = true
       get(id).then(({ data }) => {
         form = data
+        rawForm = { ...data }
         confirmLoading.value = false
       })
     } else {
@@ -167,7 +172,7 @@
       if (formEditType.value === FormEditType.Add) {
         await add(form)
       } else if (formEditType.value === FormEditType.Edit) {
-        await update(form)
+        await update({ ...form, ...diffForm(rawForm, form, 'webhookKey') })
       }
       confirmLoading.value = false
       handleCancel()

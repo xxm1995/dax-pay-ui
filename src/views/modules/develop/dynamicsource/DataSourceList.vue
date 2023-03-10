@@ -6,9 +6,7 @@
       <vxe-column field="key" title="数据源" />
       <vxe-column fixed="right" width="50" :showOverflow="false" title="操作">
         <template #default="{ row }">
-          <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-            <a-link danger>删除</a-link>
-          </a-popconfirm>
+          <a-link danger @click="remove(row)">删除</a-link>
         </template>
       </vxe-column>
     </vxe-table>
@@ -44,7 +42,7 @@
   function remove(record) {
     createConfirm({
       iconType: 'warning',
-      title: '重新添加',
+      title: '移除',
       content: '是否将该数据源从系统中移除',
       onOk: () => {
         removeDataSourceByKey(record.key).then(() => {
