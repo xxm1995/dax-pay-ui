@@ -4,7 +4,7 @@ import { query as domQuery } from 'min-dom'
 /**
  * 添加箭头
  */
-export function addArrow () {
+export function addArrow() {
   const todo = svgCreate('marker')
   // 追加箭头svg元素 通过
   svgAttr(todo, {
@@ -14,12 +14,12 @@ export function addArrow () {
     refY: '10',
     markerWidth: '10',
     markerHeight: '10',
-    orient: 'auto'
+    orient: 'auto',
   })
   const todoPath = svgCreate('path')
   svgAttr(todoPath, {
     d: 'M 1 5 L 11 10 L 1 15 Z',
-    class: 'highlight-todo-arrow'
+    class: 'highlight-todo-arrow',
   })
   svgAppend(todo, todoPath)
   // 追加箭头svg元素 通过
@@ -31,12 +31,12 @@ export function addArrow () {
     refY: '10',
     markerWidth: '10',
     markerHeight: '10',
-    orient: 'auto'
+    orient: 'auto',
   })
   const passPath = svgCreate('path')
   svgAttr(passPath, {
     d: 'M 1 5 L 11 10 L 1 15 Z',
-    class: 'highlight-pass-arrow'
+    class: 'highlight-pass-arrow',
   })
   svgAppend(pass, passPath)
 
@@ -49,12 +49,12 @@ export function addArrow () {
     refY: '10',
     markerWidth: '10',
     markerHeight: '10',
-    orient: 'auto'
+    orient: 'auto',
   })
   const rejectPath = svgCreate('path')
   svgAttr(rejectPath, {
     d: 'M 1 5 L 11 10 L 1 15 Z',
-    class: 'highlight-reject-arrow'
+    class: 'highlight-reject-arrow',
   })
   svgAppend(reject, rejectPath)
 
@@ -67,12 +67,12 @@ export function addArrow () {
     refY: '10',
     markerWidth: '10',
     markerHeight: '10',
-    orient: 'auto'
+    orient: 'auto',
   })
   const cancelPath = svgCreate('path')
   svgAttr(cancelPath, {
     d: 'M 1 5 L 11 10 L 1 15 Z',
-    class: 'highlight-cancel-arrow'
+    class: 'highlight-cancel-arrow',
   })
   svgAppend(cancel, cancelPath)
 

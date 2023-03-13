@@ -1,7 +1,7 @@
 import { defHttp } from '/@/utils/http/axios'
 import { BaseEntity } from '/#/web'
 import { PageResult, Result } from '/#/axios'
-import { BpmModelNode } from '/@/views/modules/bpm/model/ModelNode.api'
+import { BpmModelNode } from '/@/views/modules/bpm/model/node/ModelNode.api'
 
 /**
  * 分页

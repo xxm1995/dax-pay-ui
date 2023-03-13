@@ -81,6 +81,7 @@
     </div>
     <bpm-model-edit ref="bpmModelEdit" @ok="queryPage" />
     <bpm-model-node-list ref="bpmModelNodeList" />
+    <bpm-modeler ref="bpmModeler" />
   </div>
 </template>
 
@@ -93,11 +94,12 @@
   import { copy, del, page, publish, verifyModel } from '/@/views/modules/bpm/model/Model.api'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import { PUBLISHED, UNPUBLISHED } from './BpmModelNodeCode'
+  import { PUBLISHED, UNPUBLISHED } from './node/BpmModelNodeCode'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import BpmModelEdit from './BpmModelEdit.vue'
-  import BpmModelNodeList from './BpmModelNodeList.vue'
+  import BpmModelNodeList from './node/BpmModelNodeList.vue'
+  import BpmModeler from './BpmModeler.vue'
 
   const { handleTableChange, resetQueryParams, pageQueryResHandel, pagination, pages, model, loading } = useTablePage(queryPage)
   const { dictConvert } = useDict()

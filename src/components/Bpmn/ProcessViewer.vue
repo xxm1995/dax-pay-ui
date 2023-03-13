@@ -3,18 +3,18 @@
     <a-layout style="height: 100%">
       <a-layout style="align-items: stretch">
         <div ref="canvas" class="canvas" :style="{ minHeight: height + 'px' }"></div>
-        <a-drawer :visible="drawerVisible" title="流程信息" :width="450" placement="right" :closable="true" @close="drawerVisible = false">
-          <a-timeline>
-            <a-timeline-item v-for="o in currentTaskList" :key="o.id">
-              <p>开始时间: {{ o.startTime }}</p>
-              <p>状态：{{ stateNameConvert(o.state) }}</p>
-              <p>处理结果：{{ dictConvert('BpmTaskResult', o.result) }}</p>
-              <p>处理人: {{ o.userName }}</p>
-              <p>结束时间: {{ o.endTime ? o.endTime : '' }}</p>
-              <p>审批意见：{{ o.reason ? o.reason : '' }}</p>
-            </a-timeline-item>
-          </a-timeline>
-        </a-drawer>
+<!--        <a-drawer :visible="drawerVisible" title="流程信息" :width="450" placement="right" :closable="true" @close="drawerVisible = false">-->
+<!--          <a-timeline>-->
+<!--            <a-timeline-item v-for="o in currentTaskList" :key="o.id">-->
+<!--              <p>开始时间: {{ o.startTime }}</p>-->
+<!--              <p>状态：{{ stateNameConvert(o.state) }}</p>-->
+<!--              <p>处理结果：{{ dictConvert('BpmTaskResult', o.result) }}</p>-->
+<!--              <p>处理人: {{ o.userName }}</p>-->
+<!--              <p>结束时间: {{ o.endTime ? o.endTime : '' }}</p>-->
+<!--              <p>审批意见：{{ o.reason ? o.reason : '' }}</p>-->
+<!--            </a-timeline-item>-->
+<!--          </a-timeline>-->
+<!--        </a-drawer>-->
         <a-layout-sider
           class="sider"
           style="
@@ -37,7 +37,11 @@
   import Modeler from 'bpmn-js/lib/Modeler'
   // 引入flowable的节点文件
   import flowableModdle from './flowable/flowable.json'
+
   import { addArrow } from './processViewerUtils'
+  import { useDict } from '/@/hooks/bootx/useDict'
+
+  const { dictConvert } = useDict()
 
   export default {
     name: 'WorkflowBpmnModeler',
@@ -88,24 +92,26 @@
        * 生成实例
        */
       initModeler() {
+        console.log(this.$refs.canvas)
         this.modeler = new Modeler({
           container: this.$refs.canvas,
           additionalModules: [
             {
               translate: ['value', customTranslate],
-              paletteProvider: ['value', ''], // 禁用/清空左侧工具栏
-              labelEditingProvider: ['value', ''], // 禁用节点编辑
-              contextPadProvider: ['value', ''], // 禁用图形菜单
-              bendpoints: ['value', {}], // 禁用连线拖动
+              // paletteProvider: ['value', ''], // 禁用/清空左侧工具栏
+              // labelEditingProvider: ['value', ''], // 禁用节点编辑
+              // contextPadProvider: ['value', ''], // 禁用图形菜单
+              // bendpoints: ['value', {}], // 禁用连线拖动
               // zoomScroll: ['value', ''], // 禁用滚动
               // moveCanvas: ['value', ''], // 禁用拖动整个流程图
               move: ['value', ''], // 禁用单个图形拖动
             },
           ],
-          moddleExtensions: {
-            flowable: flowableModdle,
-          },
+          // moddleExtensions: {
+          //   flowable: flowableModdle,
+          // },
         })
+        console.log(this.modeler)
       },
       /**
        * 创建流程图
@@ -282,9 +288,6 @@
       stateNameConvert(state) {
         return dictConvert('BpmTaskState', state)
       },
-      dictConvert(dictCode, code) {
-        return dictConvert(dictCode, code)
-      },
     },
   }
 </script>
@@ -293,10 +296,10 @@
   // Font class
   @import './icon/iconfont.css';
   /*左边工具栏以及编辑节点的样式*/
-  @import '~bpmn-js/dist/assets/diagram-js.css';
-  @import '~bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
-  @import '~bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
-  @import '~bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
+  @import 'bpmn-js/dist/assets/diagram-js.css';
+  @import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
+  @import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
+  @import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 
   @import './css/ProcessViewerHighlight.less';
   .view-mode {

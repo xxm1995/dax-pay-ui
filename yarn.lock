@@ -1324,24 +1324,6 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@logicflow/core@^1.1.13", "@logicflow/core@^1.1.21":
-  version "1.1.21"
-  resolved "https://registry.npmmirror.com/@logicflow/core/-/core-1.1.21.tgz#80f3651a9559e7bf90631814f5cd3fe61e543e7a"
-  integrity sha512-LfFnHV009HhozPSWyFlLwsIsEXniFtjJKHGxQVxzRDwKqsgBOUBwyCTbDgejTIc4fw0zaINYhG5YRFSPGsDzWQ==
-  dependencies:
-    "@types/mousetrap" "^1.6.4"
-    mousetrap "^1.6.5"
-    preact "^10.4.8"
-
-"@logicflow/extension@^1.1.13":
-  version "1.1.21"
-  resolved "https://registry.npmmirror.com/@logicflow/extension/-/extension-1.1.21.tgz#efa91c2fe6712568270e222ff7b73859caf09d45"
-  integrity sha512-jUrChV89BC7QsyejGt3tIWX9/EGI/Rh+LFsht0OZDafgabk4D99D3J8Glg1UC/unh9dOUNDoD3Hs3xaO8gDBzg==
-  dependencies:
-    "@logicflow/core" "^1.1.21"
-    ids "^1.0.0"
-    preact "^10.4.8"
-
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmmirror.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"
@@ -1749,11 +1731,6 @@
   version "1.0.6"
   resolved "https://registry.npmmirror.com/@types/mockjs/-/mockjs-1.0.6.tgz#dafdd5de65156f7aa63eab4e29fa3d532cd95609"
   integrity sha512-Yu5YlqbYZyqsd6LjO4e8ONJDN9pTSnciHDcRP4teNOh/au2b8helFhgRx+3w8xsTFEnwr9jtfTVJbAx+eYmlHA==
-
-"@types/mousetrap@^1.6.4":
-  version "1.6.9"
-  resolved "https://registry.npmmirror.com/@types/mousetrap/-/mousetrap-1.6.9.tgz#f1ef9adbd1eac3466f21b6988b1c82c633a45340"
-  integrity sha512-HUAiN65VsRXyFCTicolwb5+I7FM6f72zjMWr+ajGk+YTvzBgXqa2A5U7d+rtsouAkunJ5U4Sb5lNJjo9w+nmXg==
 
 "@types/node@*", "@types/node@>=12":
   version "18.0.3"
@@ -3106,11 +3083,6 @@ chardet@^0.7.0:
   version "0.7.0"
   resolved "https://registry.npmmirror.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
-
-china-area-data@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.npmmirror.com/china-area-data/-/china-area-data-5.0.1.tgz#7943b83a0619f033bb5893da80cb46e52e44be66"
-  integrity sha512-BQDPpiv5Nn+018ekcJK2oSD9PAD+E1bvXB0wgabc//dFVS/KvRqCgg0QOEUt3vBkx9XzB5a9BmkJCEZDBxVjVw==
 
 "chokidar@>=3.0.0 <4.0.0", chokidar@^3.5.2:
   version "3.5.3"
@@ -7126,11 +7098,6 @@ modify-values@^1.0.0:
   resolved "https://registry.npmmirror.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
 
-mousetrap@^1.6.5:
-  version "1.6.5"
-  resolved "https://registry.npmmirror.com/mousetrap/-/mousetrap-1.6.5.tgz#8a766d8c272b08393d5f56074e0b5ec183485bf9"
-  integrity sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==
-
 mozjpeg@^7.0.0:
   version "7.1.1"
   resolved "https://registry.npmmirror.com/mozjpeg/-/mozjpeg-7.1.1.tgz#dfb61953536e66fcabd4ae795e7a312d42a51f18"
@@ -7942,11 +7909,6 @@ posthtml@^0.9.2:
   dependencies:
     posthtml-parser "^0.2.0"
     posthtml-render "^1.0.5"
-
-preact@^10.4.8:
-  version "10.9.0"
-  resolved "https://registry.npmmirror.com/preact/-/preact-10.9.0.tgz#69b282b26926b66481c9ae3450cf68610fee29ff"
-  integrity sha512-jO6/OvCRL+OT8gst/+Q2ir7dMybZAX8ioP02Zmzh3BkQMHLyqZSujvxbUriXvHi8qmhcHKC2Gwbog6Kt+YTh+Q==
 
 preact@^10.5.13:
   version "10.11.3"
