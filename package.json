@@ -43,7 +43,7 @@
     "@zxcvbn-ts/core": "^2.0.1",
     "ant-design-vue": "^3.2.15",
     "axios": "^0.26.1",
-    "bpmn-js": "^10.3.0",
+    "bpmn-js": "^11.5.0",
     "codemirror": "^5.65.3",
     "cron-parser": "^4.6.0",
     "cropperjs": "^1.5.12",

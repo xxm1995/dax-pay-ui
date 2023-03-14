@@ -70,13 +70,13 @@
       </a-form-item>
       <a-form-item label="分配角色" prop="assignShow" v-if="[ROLE].includes(form.assignType)">
         <template #label>
-          <apan>
+          <span>
             分配角色
             <a-tooltip v-if="!form.multi">
               <template #title>如果角色关联多个用户只会从中随机抽选一个</template>
               <icon icon="ant-design:question-circle-outlined" />
             </a-tooltip>
-          </apan>
+          </span>
         </template>
         <a-input v-model:value="form.assignShow" placeholder="请选择角色" disabled>
           <template #addonAfter>

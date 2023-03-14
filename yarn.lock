@@ -974,6 +974,14 @@
     "@babel/helper-validator-identifier" "^7.18.6"
     to-fast-properties "^2.0.0"
 
+"@bpmn-io/diagram-js-ui@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.npmmirror.com/@bpmn-io/diagram-js-ui/-/diagram-js-ui-0.2.2.tgz#f182476e820641901c10d0079dcfe7b5b022b9f6"
+  integrity sha512-IgOIxOwoqsFB2mMPdXtcbPVPjdYkZ3huW7ipowYLhg5jdRGHlBronQ+LER+lfWro6sPtzEsw7qX8D8Yq9M2S5g==
+  dependencies:
+    htm "^3.1.1"
+    preact "^10.11.2"
+
 "@commitlint/cli@^16.2.3":
   version "16.3.0"
   resolved "https://registry.npmmirror.com/@commitlint/cli/-/cli-16.3.0.tgz#5689f5c2abbb7880d5ff13329251e5648a784b16"
@@ -2792,26 +2800,25 @@ boolbase@^1.0.0:
   resolved "https://registry.npmmirror.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==
 
-bpmn-js@^10.3.0:
-  version "10.3.0"
-  resolved "https://registry.npmmirror.com/bpmn-js/-/bpmn-js-10.3.0.tgz#631f8f35f6fce4e78b6025ec325a8eb7ccf9aad8"
-  integrity sha512-6tO5SHt5YyxgX9lRAAwYNmtSum4ZAekP6S0kdDlmh2ztDRAjUZaq7n1Q1ORzTddpngviRZyf5ssP1ZqjE6CgUQ==
+bpmn-js@^11.5.0:
+  version "11.5.0"
+  resolved "https://registry.npmmirror.com/bpmn-js/-/bpmn-js-11.5.0.tgz#0f8a896637a3335173c1734e52d40ed8b5abf651"
+  integrity sha512-Bdj53UvfiDtGE1wmiBmpgjl5RMLhCGV/C841dyC+t4kBHj7vApAeeHs2Qiycj390HO4B2U8UDROLT7yjdXEEUA==
   dependencies:
     bpmn-moddle "^8.0.0"
-    css.escape "^1.5.1"
-    diagram-js "^10.0.0"
+    diagram-js "^11.9.1"
     diagram-js-direct-editing "^2.0.0"
     ids "^1.0.0"
     inherits-browser "^0.1.0"
     min-dash "^4.0.0"
-    min-dom "^4.0.2"
+    min-dom "^4.0.3"
     object-refs "^0.3.0"
     tiny-svg "^3.0.0"
 
 bpmn-moddle@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.npmmirror.com/bpmn-moddle/-/bpmn-moddle-8.0.0.tgz#bb6da18f78bb4ec5abe1b5b995c950d16548e3e4"
-  integrity sha512-mHmtIVzUyZcPMKKl/REq151gYxEtZxvivKnIEp/RtuRm8SOgxAK58uYBkP+jQQBy6XudwObRTH0pwyeKLALWrA==
+  version "8.0.1"
+  resolved "https://registry.npmmirror.com/bpmn-moddle/-/bpmn-moddle-8.0.1.tgz#ba8a009fbd354fb521a11a1dd1417655a9d2ec02"
+  integrity sha512-mwZcrWhi52+JH5Oq58WwKYcUxQ1ZMiDQuzt1bpqiqEEFFnQLqCgtLwEXQuDXFmAuQPdMAghyPzqdOZQqIQVesw==
   dependencies:
     min-dash "^4.0.0"
     moddle "^6.0.0"
@@ -3196,6 +3203,11 @@ clone@^2.1.1:
   resolved "https://registry.npmmirror.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
   integrity sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==
 
+clsx@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.npmmirror.com/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
+  integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
+
 codemirror@^5.65.3:
   version "5.65.6"
   resolved "https://registry.npmmirror.com/codemirror/-/codemirror-5.65.6.tgz#fc313797331cbeb3bcab0652d1ec9d0f40c23ab5"
@@ -3286,10 +3298,10 @@ component-emitter@^1.2.1:
   resolved "https://registry.npmmirror.com/component-emitter/-/component-emitter-1.3.0.tgz#16e4070fba8ae29b679f2215853ee181ab2eabc0"
   integrity sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==
 
-component-event@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.npmmirror.com/component-event/-/component-event-0.1.4.tgz#3de78fc28782381787e24bf2a7c536bf0142c9b4"
-  integrity sha512-GMwOG8MnUHP1l8DZx1ztFO0SJTFnIzZnBDkXAj8RM2ntV2A6ALlDxgbMY1Fvxlg6WPQ+5IM/a6vg4PEYbjg/Rw==
+component-event@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.npmmirror.com/component-event/-/component-event-0.2.1.tgz#8262d2be886c999ad4b85ed3e0dfb3b3e98ca9d3"
+  integrity sha512-wGA++isMqiDq1jPYeyv2as/Bt/u+3iLW0rEa+8NQ82jAv3TgqMiCM+B2SaBdn2DfLilLjjq736YcezihRYhfxw==
 
 compute-scroll-into-view@^1.0.17:
   version "1.0.17"
@@ -3688,11 +3700,6 @@ css-what@^6.0.1:
   resolved "https://registry.npmmirror.com/css-what/-/css-what-6.1.0.tgz#fb5effcf76f1ddea2c81bdfaa4de44e79bac70f4"
   integrity sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==
 
-css.escape@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.npmmirror.com/css.escape/-/css.escape-1.5.1.tgz#42e27d4fa04ae32f931a4b4d4191fa9cddee97cb"
-  integrity sha512-YUifsXXuknHlUsmlgyY0PKzgPOr7/FjCePfHNt0jxm83wHZi44VDMQ7/fGNkjY3/jV1MC+1CmZbaHzugyeRtpg==
-
 cssesc@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmmirror.com/cssesc/-/cssesc-3.0.0.tgz#37741919903b868565e1c09ea747445cd18983ee"
@@ -3923,13 +3930,14 @@ diagram-js-direct-editing@^2.0.0:
     min-dash "^4.0.0"
     min-dom "^4.0.2"
 
-diagram-js@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.npmmirror.com/diagram-js/-/diagram-js-10.0.0.tgz#0209283c819eda86f9bdddca9266cc5fd910a650"
-  integrity sha512-VtZof5MLwVpHjTznfS7B1rQxYtpJ1Gyzse7Aan22QgMhD8FDpm0nXcIblkB//05vFJUljJfp9etNujJtmU1yvA==
+diagram-js@^11.9.1:
+  version "11.11.0"
+  resolved "https://registry.npmmirror.com/diagram-js/-/diagram-js-11.11.0.tgz#2c44aebc5197eca43df8394598b2faabcdff1692"
+  integrity sha512-+GJ6NPCihQBOqLKAjrXE+bQNYIhFjrCQgYHfPb22OcrYJ9k6vkTfJfG5PsyJ9P/AEIrXwTnrJAff/iKU1RgfAA==
   dependencies:
-    css.escape "^1.5.1"
-    didi "^9.0.0"
+    "@bpmn-io/diagram-js-ui" "^0.2.2"
+    clsx "^1.2.1"
+    didi "^9.0.2"
     hammerjs "^2.0.1"
     inherits-browser "^0.1.0"
     min-dash "^4.0.0"
@@ -3938,10 +3946,10 @@ diagram-js@^10.0.0:
     path-intersection "^2.2.1"
     tiny-svg "^3.0.0"
 
-didi@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.npmmirror.com/didi/-/didi-9.0.0.tgz#f127477d098a60329a80638333924c15291f8496"
-  integrity sha512-bOZ7WAah3t8TxKV81pbIivHjWyABot49YXG1M3QztnUlZDHz3MRNJ1nZO87JbqrkqNI/2GR4ncHfXdGIP9LX+w==
+didi@^9.0.2:
+  version "9.0.2"
+  resolved "https://registry.npmmirror.com/didi/-/didi-9.0.2.tgz#e49a80aa281b5672e45519ba1980d7fba2e32cfb"
+  integrity sha512-q2+aj+lnJcUweV7A9pdUrwFr4LHVmRPwTmQLtHPFz4aT7IBoryN6Iy+jmFku+oIzr5ebBkvtBCOb87+dJhb7bg==
 
 diff-match-patch@^1.0.5:
   version "1.0.5"
@@ -5640,6 +5648,11 @@ hosted-git-info@^4.0.0, hosted-git-info@^4.0.1:
   dependencies:
     lru-cache "^6.0.0"
 
+htm@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.npmmirror.com/htm/-/htm-3.1.1.tgz#49266582be0dc66ed2235d5ea892307cc0c24b78"
+  integrity sha512-983Vyg8NwUE7JkZ6NmOqpCZ+sh1bKv2iYTlUkzlWmA5JD2acKoxd4KVxbMmxX/85mtfdnDmTFoNKcg5DGAvxNQ==
+
 html-minifier-terser@^6.1.0:
   version "6.1.0"
   resolved "https://registry.npmmirror.com/html-minifier-terser/-/html-minifier-terser-6.1.0.tgz#bfc818934cc07918f6b3669f5774ecdfd48f32ab"
@@ -7020,12 +7033,12 @@ min-dash@^4.0.0:
   resolved "https://registry.npmmirror.com/min-dash/-/min-dash-4.0.0.tgz#4a1afec4c4d70f510b6e241d0550493d4ac0f161"
   integrity sha512-piIvVJ/nxuA4+LpnYIzF6oCtRvdtDvQJteSC+H768H2UvPKFKIt5oiJnUVtr0ZdchneXTcvUZ91vIrvWVIN0AA==
 
-min-dom@^4.0.2:
-  version "4.0.3"
-  resolved "https://registry.npmmirror.com/min-dom/-/min-dom-4.0.3.tgz#659aa6017bb2eae5a22bfe62d4a7fb87248da3fa"
-  integrity sha512-5zQyCMe8rtGiDIRjfGeqnF2YPJ7OAPFdJQeC7MakHais3dh4VG4PV2a0FacziKTzJjYK5qnPKm2sq1wSXB1wTQ==
+min-dom@^4.0.2, min-dom@^4.0.3:
+  version "4.1.0"
+  resolved "https://registry.npmmirror.com/min-dom/-/min-dom-4.1.0.tgz#ecbf9a2d0412ffe4ddc14253d65d15b47b6b4bf8"
+  integrity sha512-1lj1EyoSwY/UmTeT/hhPiZTsq+vK9D+8FAJ/53iK5jT1otkG9rJTixSKdjmTieEvdfES+sKbbTptzaQJhnacjA==
   dependencies:
-    component-event "^0.1.4"
+    component-event "^0.2.1"
     domify "^1.4.1"
     min-dash "^4.0.0"
 
@@ -7078,18 +7091,18 @@ mockjs@^1.1.0:
     commander "*"
 
 moddle-xml@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.npmmirror.com/moddle-xml/-/moddle-xml-10.0.0.tgz#7b0815982b375ece4338258ec86bc6be4f05ed7b"
-  integrity sha512-e5qG0uC9ebHXInLEKW9pZNqcAK7ALCOKmcLw8jmepBPY9BiUZFi+8Th/Cydog3S1rrUXyyo0pqaHaCvc1zt6VA==
+  version "10.1.0"
+  resolved "https://registry.npmmirror.com/moddle-xml/-/moddle-xml-10.1.0.tgz#8c2a1b73c73cc8915182d5374857c43ba482c7a5"
+  integrity sha512-erWckwLt+dYskewKXJso9u+aAZ5172lOiYxSOqKCPTy7L/xmqH1PoeoA7eVC7oJTt3PqF5TkZzUmbjGH6soQBg==
   dependencies:
     min-dash "^4.0.0"
     moddle "^6.0.0"
     saxen "^8.1.2"
 
 moddle@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/moddle/-/moddle-6.0.0.tgz#ccfae6936430e8294a98619bcbefbf1950eeaaa4"
-  integrity sha512-dHYSJpGV0R0X8cJeWWUnE0VqCA0SFP0jZYQtO23EdsBk+MpAgSpdhXadYR6WbHElKroB6XTbifpsWro26UlP6Q==
+  version "6.2.1"
+  resolved "https://registry.npmmirror.com/moddle/-/moddle-6.2.1.tgz#822163908b96b81f5f086441a558198feec735aa"
+  integrity sha512-rBT4P19k9wKOerFHNJQugw25CK6DK5m4lVZGac7godbWNPsbJgr1K4GJ+pqM1ErbRYxljXCTDgPhJLoDWE4wwQ==
   dependencies:
     min-dash "^4.0.0"
 
@@ -7909,6 +7922,11 @@ posthtml@^0.9.2:
   dependencies:
     posthtml-parser "^0.2.0"
     posthtml-render "^1.0.5"
+
+preact@^10.11.2:
+  version "10.13.1"
+  resolved "https://registry.npmmirror.com/preact/-/preact-10.13.1.tgz#d220bd8771b8fa197680d4917f3cefc5eed88720"
+  integrity sha512-KyoXVDU5OqTpG9LXlB3+y639JAGzl8JSBXLn1J9HTSB3gbKcuInga7bZnXLlxmK94ntTs1EFeZp0lrja2AuBYQ==
 
 preact@^10.5.13:
   version "10.11.3"

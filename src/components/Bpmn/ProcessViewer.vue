@@ -3,18 +3,18 @@
     <a-layout style="height: 100%">
       <a-layout style="align-items: stretch">
         <div ref="canvas" class="canvas" :style="{ minHeight: height + 'px' }"></div>
-<!--        <a-drawer :visible="drawerVisible" title="流程信息" :width="450" placement="right" :closable="true" @close="drawerVisible = false">-->
-<!--          <a-timeline>-->
-<!--            <a-timeline-item v-for="o in currentTaskList" :key="o.id">-->
-<!--              <p>开始时间: {{ o.startTime }}</p>-->
-<!--              <p>状态：{{ stateNameConvert(o.state) }}</p>-->
-<!--              <p>处理结果：{{ dictConvert('BpmTaskResult', o.result) }}</p>-->
-<!--              <p>处理人: {{ o.userName }}</p>-->
-<!--              <p>结束时间: {{ o.endTime ? o.endTime : '' }}</p>-->
-<!--              <p>审批意见：{{ o.reason ? o.reason : '' }}</p>-->
-<!--            </a-timeline-item>-->
-<!--          </a-timeline>-->
-<!--        </a-drawer>-->
+        <!--        <a-drawer :visible="drawerVisible" title="流程信息" :width="450" placement="right" :closable="true" @close="drawerVisible = false">-->
+        <!--          <a-timeline>-->
+        <!--            <a-timeline-item v-for="o in currentTaskList" :key="o.id">-->
+        <!--              <p>开始时间: {{ o.startTime }}</p>-->
+        <!--              <p>状态：{{ stateNameConvert(o.state) }}</p>-->
+        <!--              <p>处理结果：{{ dictConvert('BpmTaskResult', o.result) }}</p>-->
+        <!--              <p>处理人: {{ o.userName }}</p>-->
+        <!--              <p>结束时间: {{ o.endTime ? o.endTime : '' }}</p>-->
+        <!--              <p>审批意见：{{ o.reason ? o.reason : '' }}</p>-->
+        <!--            </a-timeline-item>-->
+        <!--          </a-timeline>-->
+        <!--        </a-drawer>-->
         <a-layout-sider
           class="sider"
           style="
@@ -64,20 +64,35 @@
         element: null,
         drawerVisible: false,
         currentTaskList: [],
+        cs: 1,
       }
     },
     watch: {
-      xml: function (val) {
+      cs(val) {
+        if (val) {
+        }
+      },
+      xml: {
+        handler(newQuestion) {
+          // 在组件实例创建时会立即调用
+          console.log(newQuestion)
+          this.createDiagram()
+        },
+      },
+      // xml(val) {
+      //   console.log(1)
+      //   if (val) {
+      //     this.createDiagram()
+      //   }
+      // },
+      flowNodeList(val) {
+        console.log(2)
         if (val) {
           this.createDiagram()
         }
       },
-      flowNodeList: function (val) {
-        if (val) {
-          this.createDiagram()
-        }
-      },
-      nodeTaskList: function (val) {
+      nodeTaskList(val) {
+        console.log(3)
         if (val) {
           this.createDiagram()
         }
@@ -86,32 +101,33 @@
     mounted() {
       this.initModeler()
       this.initEventBind()
+      setInterval(() => {
+        this.cs++
+      }, 2000)
     },
     methods: {
       /**
        * 生成实例
        */
       initModeler() {
-        console.log(this.$refs.canvas)
         this.modeler = new Modeler({
           container: this.$refs.canvas,
           additionalModules: [
             {
               translate: ['value', customTranslate],
-              // paletteProvider: ['value', ''], // 禁用/清空左侧工具栏
-              // labelEditingProvider: ['value', ''], // 禁用节点编辑
-              // contextPadProvider: ['value', ''], // 禁用图形菜单
-              // bendpoints: ['value', {}], // 禁用连线拖动
-              // zoomScroll: ['value', ''], // 禁用滚动
-              // moveCanvas: ['value', ''], // 禁用拖动整个流程图
+              paletteProvider: ['value', ''], // 禁用/清空左侧工具栏
+              labelEditingProvider: ['value', ''], // 禁用节点编辑
+              contextPadProvider: ['value', ''], // 禁用图形菜单
+              bendpoints: ['value', {}], // 禁用连线拖动
+              zoomScroll: ['value', ''], // 禁用滚动
+              moveCanvas: ['value', ''], // 禁用拖动整个流程图
               move: ['value', ''], // 禁用单个图形拖动
             },
           ],
-          // moddleExtensions: {
-          //   flowable: flowableModdle,
-          // },
+          moddleExtensions: {
+            flowable: flowableModdle,
+          },
         })
-        console.log(this.modeler)
       },
       /**
        * 创建流程图
