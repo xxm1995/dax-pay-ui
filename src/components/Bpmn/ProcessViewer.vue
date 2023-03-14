@@ -31,7 +31,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
   // 汉化
   import customTranslate from './common/customTranslate'
   import Modeler from 'bpmn-js/lib/Modeler'
@@ -40,271 +40,265 @@
 
   import { addArrow } from './processViewerUtils'
   import { useDict } from '/@/hooks/bootx/useDict'
+  import { $ref } from 'vue/macros'
+  import { onMounted, watch } from 'vue'
 
   const { dictConvert } = useDict()
-
-  export default {
-    name: 'WorkflowBpmnModeler',
-    props: {
+  const props = withDefaults(
+    defineProps<{
       // bpmn流程图
-      xml: { type: String, default: '' },
+      xml: string
       // 实例
-      instance: { type: Object, default: () => {} },
+      instance: any
       // 执行流程节点
-      flowNodeList: { type: Array, default: () => [] },
+      flowNodeList: any
       // 节点流程任务组
-      nodeTaskList: { type: Object, default: () => {} },
+      nodeTaskList: any
       // 画布高度
-      height: { type: Number, default: 650 },
+      height: number
+    }>(),
+    {
+      xml: '',
+      instance: {},
+      flowNodeList: [],
+      nodeTaskList: {},
+      height: 650,
     },
-    data() {
-      return {
-        modeler: null,
-        zoom: 1,
-        element: null,
-        drawerVisible: false,
-        currentTaskList: [],
-        cs: 1,
-      }
+  )
+
+  let canvas = $ref()
+
+  let modeler = $ref<any>()
+  let zoom = $ref(1)
+  let element = $ref(null)
+  let drawerVisible = $ref(false)
+  let currentTaskList = $ref([])
+
+  let elementOverlayIds = $ref<any>()
+  let overlays = $ref<any>()
+
+  watch(
+    () => props.xml,
+    (newVal, oldVal) => {
+      console.log(newVal)
+      createDiagram()
     },
-    watch: {
-      cs(val) {
-        if (val) {
-        }
-      },
-      xml: {
-        handler(newQuestion) {
-          // 在组件实例创建时会立即调用
-          console.log(newQuestion)
-          this.createDiagram()
+  )
+  watch(
+    () => props.flowNodeList,
+    (newVal, oldVal) => {
+      console.log(props.xml)
+      createDiagram()
+    }
+  )
+  watch(
+    () => props.nodeTaskList,
+    (newVal, oldVal) => createDiagram(),
+  )
+
+  onMounted(() => {
+    initModeler()
+    initEventBind()
+  })
+
+  /**
+   * 生成实例
+   */
+  function initModeler() {
+    modeler = new Modeler({
+      container: canvas,
+      additionalModules: [
+        {
+          translate: ['value', customTranslate],
+          paletteProvider: ['value', ''], // 禁用/清空左侧工具栏
+          labelEditingProvider: ['value', ''], // 禁用节点编辑
+          contextPadProvider: ['value', ''], // 禁用图形菜单
+          bendpoints: ['value', {}], // 禁用连线拖动
+          // zoomScroll: ['value', ''], // 禁用滚动
+          // moveCanvas: ['value', ''], // 禁用拖动整个流程图
+          move: ['value', ''], // 禁用单个图形拖动
         },
+      ],
+      moddleExtensions: {
+        flowable: flowableModdle,
       },
-      // xml(val) {
-      //   console.log(1)
-      //   if (val) {
-      //     this.createDiagram()
-      //   }
-      // },
-      flowNodeList(val) {
-        console.log(2)
-        if (val) {
-          this.createDiagram()
-        }
-      },
-      nodeTaskList(val) {
-        console.log(3)
-        if (val) {
-          this.createDiagram()
-        }
-      },
-    },
-    mounted() {
-      this.initModeler()
-      this.initEventBind()
-      setInterval(() => {
-        this.cs++
-      }, 2000)
-    },
-    methods: {
-      /**
-       * 生成实例
-       */
-      initModeler() {
-        this.modeler = new Modeler({
-          container: this.$refs.canvas,
-          additionalModules: [
-            {
-              translate: ['value', customTranslate],
-              paletteProvider: ['value', ''], // 禁用/清空左侧工具栏
-              labelEditingProvider: ['value', ''], // 禁用节点编辑
-              contextPadProvider: ['value', ''], // 禁用图形菜单
-              bendpoints: ['value', {}], // 禁用连线拖动
-              zoomScroll: ['value', ''], // 禁用滚动
-              moveCanvas: ['value', ''], // 禁用拖动整个流程图
-              move: ['value', ''], // 禁用单个图形拖动
-            },
-          ],
-          moddleExtensions: {
-            flowable: flowableModdle,
-          },
-        })
-      },
-      /**
-       * 创建流程图
-       */
-      async createDiagram() {
-        if (!this.xml) {
-          return
-        }
-        // 将字符串转换成图显示出来
-        const data = this.xml.replace(/<!\[CDATA\[(.+?)]]>/g, function (match, str) {
-          return str.replace(/</g, '&lt;')
-        })
-        await this.modeler.importXML(data)
-        this.initSvg()
-        this.fillColor()
-        this.fitViewport()
-      },
+    })
+  }
 
-      /**
-       * 给节点绑定事件 信息显示处理,
-       */
-      initEventBind() {
-        const eventBus = this.modeler.get('eventBus')
-        // 注册需要的监听事件
-        const types = ['bpmn:UserTask', 'bpmn:StartEvent', 'bpmn:EndEvent']
-        eventBus.on('element.hover', (eventObj) => {
-          const element = eventObj ? eventObj.element : null
-          if (types.includes(element.type)) {
-            this.elementHover(element)
-          }
-        })
-        eventBus.on('element.out', (eventObj) => {
-          const element = eventObj ? eventObj.element : null
-          if (types.includes(element.type)) {
-            this.elementOut(element)
-          }
-        })
-        eventBus.on('element.click', (eventObj) => {
-          const element = eventObj ? eventObj.element : null
-          if (element.type === 'bpmn:UserTask') {
-            this.elementClick(element)
-          }
-        })
-      },
-      /**
-       *  流程图的元素被 hover
-       */
-      elementHover(element) {
-        this.element = element
-        !this.elementOverlayIds && (this.elementOverlayIds = {})
-        !this.overlays && (this.overlays = this.modeler.get('overlays'))
+  /**
+   * 创建流程图
+   */
+  async function createDiagram() {
+    console.log(123)
+    if (!props.xml) {
+      return
+    }
+    // 将字符串转换成图显示出来
+    const data = props.xml.replace(/<!\[CDATA\[(.+?)]]>/g, function (match, str) {
+      return str.replace(/</g, '&lt;')
+    })
+    await modeler?.importXML(data)
+    initSvg()
+    fillColor()
+    fitViewport()
+  }
+  /**
+   * 给节点绑定事件 信息显示处理,
+   */
+  function initEventBind() {
+    const eventBus = modeler.get('eventBus')
+    // 注册需要的监听事件
+    const types = ['bpmn:UserTask', 'bpmn:StartEvent', 'bpmn:EndEvent']
+    eventBus.on('element.hover', (eventObj) => {
+      const element = eventObj ? eventObj.element : null
+      if (types.includes(element.type)) {
+        elementHover(element)
+      }
+    })
+    eventBus.on('element.out', (eventObj) => {
+      const element = eventObj ? eventObj.element : null
+      if (types.includes(element.type)) {
+        elementOut(element)
+      }
+    })
+    eventBus.on('element.click', (eventObj) => {
+      const element = eventObj ? eventObj.element : null
+      if (element.type === 'bpmn:UserTask') {
+        elementClick(element)
+      }
+    })
+  }
+  /**
+   *  流程图的元素被 hover
+   */
+  function elementHover(e) {
+    element = e
+    !elementOverlayIds && (elementOverlayIds = {})
+    !overlays && (overlays = modeler.get('overlays'))
 
-        let html = ''
-        if (element.type === 'bpmn:StartEvent') {
-          html = `<span>发起人：${this.instance.startUserName}</span>
-                  <span>发起时间：${this.instance.startTime}</span>`
-        }
-        if (element.type === 'bpmn:UserTask') {
-          const tasks = this.nodeTaskList[element.id]
-          if (tasks) {
-            const task = tasks[0]
-            if (task) {
-              html += `<span>执行人：${task.userName}</span>
-                  <span>状态：${this.stateNameConvert(task.state)}</span>
+    let html = ''
+    if (e.type === 'bpmn:StartEvent') {
+      html = `<span>发起人：${props.instance.startUserName}</span>
+                  <span>发起时间：${props.instance.startTime}</span>`
+    }
+    if (e.type === 'bpmn:UserTask') {
+      const tasks = props.nodeTaskList[e.id]
+      if (tasks) {
+        const task = tasks[0]
+        if (task) {
+          html += `<span>执行人：${task.userName}</span>
+                  <span>状态：${stateNameConvert(task.state)}</span>
                   <span>处理结果：${dictConvert('BpmTaskResult', task.result)}</span>
                   <span>结束时间：${task.endTime ? task.endTime : ''}</span>
                   <span>审批意见：${task.reason ? task.reason : ''}</span>`
-            }
-            if (tasks[1]) {
-              html += `</br>
+        }
+        if (tasks[1]) {
+          html += `</br>
             <span>点击查看更多...</span>`
-            }
-          } else {
-            return
-          }
         }
-        if (element.type === 'bpmn:EndEvent') {
-          // 判断节点是否结束
-          if (!this.instance.endTime) {
-            return
-          }
-          html = `<span>结束时间：${this.instance.endTime}</span>`
-        }
-        this.elementOverlayIds[element.id] = this.overlays.add(element, {
-          position: { left: -50, bottom: 10 },
-          html: `<div class="element-overlays">${html}</div>`,
-        })
-      },
-      /**
-       * 流程图的元素被 out
-       */
-      elementOut(element) {
-        this.overlays.remove({ element })
-        this.elementOverlayIds[element.id] = null
-      },
-      /**
-       * 点击事件
-       */
-      elementClick(element) {
-        this.currentTaskList = this.nodeTaskList[element.id]
-        if (this.currentTaskList) {
-          this.drawerVisible = true
-        }
-      },
-      /**
-       * 处理SVG元素
-       */
-      initSvg() {
-        // 添加完成箭头
-        addArrow()
-      },
-
-      /**
-       * 染色
-       */
-      fillColor() {
-        const canvas = this.modeler.get('canvas')
-        this.modeler._definitions.rootElements[0].flowElements.forEach((n) => {
-          const state = this.getNodeTaskState(n)
-          if (['pass', 'skip'].includes(state)) {
-            canvas.addMarker(n.id, 'highlight')
-          } else if (state === 'running') {
-            canvas.addMarker(n.id, 'highlight-todo')
-          } else if (state === 'reject') {
-            canvas.addMarker(n.id, 'highlight-reject')
-          } else if (['back', 'cancel', 'retrieve'].includes(state)) {
-            canvas.addMarker(n.id, 'highlight-cancel')
-          } else {
-            // 其他状态不进行处理
-          }
-        })
-      },
-      /**
-       * 让图能自适应屏幕
-       */
-      fitViewport() {
-        this.zoom = this.modeler.get('canvas').zoom('fit-viewport')
-        const bbox = document.querySelector('.flow-containers .viewport').getBBox()
-        const currentViewbox = this.modeler.get('canvas').viewbox()
-        const elementMid = {
-          x: bbox.x + bbox.width / 2 - 65,
-          y: bbox.y + bbox.height / 2,
-        }
-        this.modeler.get('canvas').viewbox({
-          x: elementMid.x - currentViewbox.width / 2,
-          y: elementMid.y - currentViewbox.height / 2,
-          width: currentViewbox.width,
-          height: currentViewbox.height,
-        })
-        this.zoom = (bbox.width / currentViewbox.width) * 1.8
-      },
-      /**
-       * 获取节点的任务状态
-       */
-      getNodeTaskState(node) {
-        if (this.nodeTaskList) {
-          const tasks = this.nodeTaskList[node.id]
-          if (!tasks) {
-            // 处理非用户任务节点
-            return this.flowNodeList.find((m) => m.activityId === node.id) ? 'pass' : ''
-          }
-          // 是否是多个
-          if (tasks?.length > 1) {
-            // 判断是否有执行中状态
-            return tasks.find((t) => t.state === 'running') ? 'running' : tasks[0].state
-          } else {
-            return tasks[0].state
-          }
-        }
-      },
-      /**
-       * 任务状态翻译
-       */
-      stateNameConvert(state) {
-        return dictConvert('BpmTaskState', state)
-      },
-    },
+      } else {
+        return
+      }
+    }
+    if (e.type === 'bpmn:EndEvent') {
+      // 判断节点是否结束
+      if (!props.instance.endTime) {
+        return
+      }
+      html = `<span>结束时间：${props.instance.endTime}</span>`
+    }
+    elementOverlayIds[e.id] = overlays.add(e, {
+      position: { left: -50, bottom: 10 },
+      html: `<div class="element-overlays">${html}</div>`,
+    })
+  }
+  /**
+   * 流程图的元素被 out
+   */
+  function elementOut(element) {
+    console.log(element)
+    overlays.remove({ element })
+    elementOverlayIds[element.id] = null
+  }
+  /**
+   * 点击事件
+   */
+  function elementClick(element) {
+    currentTaskList = props.nodeTaskList[element.id]
+    if (currentTaskList) {
+      drawerVisible = true
+    }
+  }
+  /**
+   * 处理SVG元素
+   */
+  function initSvg() {
+    // 添加完成箭头
+    addArrow()
+  }
+  /**
+   * 染色
+   */
+  function fillColor() {
+    const canvas = modeler.get('canvas')
+    modeler._definitions.rootElements[0].flowElements.forEach((n) => {
+      const state = getNodeTaskState(n)
+      if (['pass', 'skip'].includes(state)) {
+        canvas.addMarker(n.id, 'highlight')
+      } else if (state === 'running') {
+        canvas.addMarker(n.id, 'highlight-todo')
+      } else if (state === 'reject') {
+        canvas.addMarker(n.id, 'highlight-reject')
+      } else if (['back', 'cancel', 'retrieve'].includes(state)) {
+        canvas.addMarker(n.id, 'highlight-cancel')
+      } else {
+        // 其他状态不进行处理
+      }
+    })
+  }
+  /**
+   * 让图能自适应屏幕
+   */
+  function fitViewport() {
+    zoom = modeler.get('canvas').zoom('fit-viewport')
+    const bbox = document.querySelector('.flow-containers .viewport').getBBox()
+    const currentViewbox = modeler.get('canvas').viewbox()
+    const elementMid = {
+      x: bbox.x + bbox.width / 2 - 65,
+      y: bbox.y + bbox.height / 2,
+    }
+    modeler.get('canvas').viewbox({
+      x: elementMid.x - currentViewbox.width / 2,
+      y: elementMid.y - currentViewbox.height / 2,
+      width: currentViewbox.width,
+      height: currentViewbox.height,
+    })
+    zoom = (bbox.width / currentViewbox.width) * 1.8
+  }
+  /**
+   * 获取节点的任务状态
+   */
+  function getNodeTaskState(node) {
+    if (props.nodeTaskList) {
+      const tasks = props.nodeTaskList[node.id]
+      if (!tasks) {
+        // 处理非用户任务节点
+        return props.flowNodeList.find((m) => m.activityId === node.id) ? 'pass' : ''
+      }
+      // 是否是多个
+      if (tasks?.length > 1) {
+        // 判断是否有执行中状态
+        return tasks.find((t) => t.state === 'running') ? 'running' : tasks[0].state
+      } else {
+        return tasks[0].state
+      }
+    }
+  }
+  /**
+   * 任务状态翻译
+   */
+  function stateNameConvert(state) {
+    return dictConvert('BpmTaskState', state)
   }
 </script>
 
