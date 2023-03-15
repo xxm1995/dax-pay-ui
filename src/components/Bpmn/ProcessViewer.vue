@@ -2,19 +2,19 @@
   <div class="flow-containers view-mode" style="height: 100%">
     <a-layout style="height: 100%">
       <a-layout style="align-items: stretch">
-        <div ref="canvas" class="canvas" :style="{ minHeight: height + 'px' }"></div>
-        <!--        <a-drawer :visible="drawerVisible" title="流程信息" :width="450" placement="right" :closable="true" @close="drawerVisible = false">-->
-        <!--          <a-timeline>-->
-        <!--            <a-timeline-item v-for="o in currentTaskList" :key="o.id">-->
-        <!--              <p>开始时间: {{ o.startTime }}</p>-->
-        <!--              <p>状态：{{ stateNameConvert(o.state) }}</p>-->
-        <!--              <p>处理结果：{{ dictConvert('BpmTaskResult', o.result) }}</p>-->
-        <!--              <p>处理人: {{ o.userName }}</p>-->
-        <!--              <p>结束时间: {{ o.endTime ? o.endTime : '' }}</p>-->
-        <!--              <p>审批意见：{{ o.reason ? o.reason : '' }}</p>-->
-        <!--            </a-timeline-item>-->
-        <!--          </a-timeline>-->
-        <!--        </a-drawer>-->
+        <div ref="canvas" id="canvas" class="canvas" :style="{ minHeight: height + 'px' }"></div>
+        <a-drawer :visible="drawerVisible" title="流程信息" :width="450" placement="right" :closable="true" @close="drawerVisible = false">
+          <a-timeline>
+            <a-timeline-item v-for="o in currentTaskList" :key="o.id">
+              <p>开始时间: {{ o.startTime }}</p>
+              <p>状态：{{ stateNameConvert(o.state) }}</p>
+              <p>处理结果：{{ dictConvert('BpmTaskResult', o.result) }}</p>
+              <p>处理人: {{ o.userName }}</p>
+              <p>结束时间: {{ o.endTime ? o.endTime : '' }}</p>
+              <p>审批意见：{{ o.reason ? o.reason : '' }}</p>
+            </a-timeline-item>
+          </a-timeline>
+        </a-drawer>
         <a-layout-sider
           class="sider"
           style="
@@ -32,6 +32,11 @@
 </template>
 
 <script lang="ts" setup>
+  import 'bpmn-js/dist/assets/diagram-js.css' // 左边工具栏以及编辑节点的样式
+  import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'
+  import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css'
+  import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css'
+
   // 汉化
   import customTranslate from './common/customTranslate'
   import Modeler from 'bpmn-js/lib/Modeler'
@@ -41,7 +46,7 @@
   import { addArrow } from './processViewerUtils'
   import { useDict } from '/@/hooks/bootx/useDict'
   import { $ref } from 'vue/macros'
-  import { onMounted, watch } from 'vue'
+  import { nextTick, onMounted, watch, watchEffect } from 'vue'
 
   const { dictConvert } = useDict()
   const props = withDefaults(
@@ -74,54 +79,41 @@
   let drawerVisible = $ref(false)
   let currentTaskList = $ref([])
 
-  let elementOverlayIds = $ref<any>()
-  let overlays = $ref<any>()
+  // 流程相关变量, 不需要进行响应式
+  let elementOverlayIds
+  let overlays
 
-  watch(
-    () => props.xml,
-    (newVal, oldVal) => {
-      console.log(newVal)
-      createDiagram()
-    },
-  )
-  watch(
-    () => props.flowNodeList,
-    (newVal, oldVal) => {
-      console.log(props.xml)
-      createDiagram()
-    }
-  )
-  watch(
-    () => props.nodeTaskList,
-    (newVal, oldVal) => createDiagram(),
-  )
-
-  onMounted(() => {
+  watchEffect(() => {
     initModeler()
-    initEventBind()
   })
 
   /**
    * 生成实例
    */
   function initModeler() {
-    modeler = new Modeler({
-      container: canvas,
-      additionalModules: [
-        {
-          translate: ['value', customTranslate],
-          paletteProvider: ['value', ''], // 禁用/清空左侧工具栏
-          labelEditingProvider: ['value', ''], // 禁用节点编辑
-          contextPadProvider: ['value', ''], // 禁用图形菜单
-          bendpoints: ['value', {}], // 禁用连线拖动
-          // zoomScroll: ['value', ''], // 禁用滚动
-          // moveCanvas: ['value', ''], // 禁用拖动整个流程图
-          move: ['value', ''], // 禁用单个图形拖动
+    nextTick(async () => {
+      modeler = new Modeler({
+        container: '#canvas',
+        propertiesPanel: {},
+        additionalModules: [
+          {
+            translate: ['value', customTranslate],
+            paletteProvider: ['value', ''], // 禁用/清空左侧工具栏
+            labelEditingProvider: ['value', ''], // 禁用节点编辑
+            contextPadProvider: ['value', ''], // 禁用图形菜单
+            AppendContextPadProvider: ['value', ''],
+            bendpoints: ['value', {}], // 禁用连线拖动
+            // zoomScroll: ['value', ''], // 禁用滚动
+            // moveCanvas: ['value', ''], // 禁用拖动整个流程图
+            move: ['value', ''], // 禁用单个图形拖动
+          },
+        ],
+        moddleExtensions: {
+          flowable: flowableModdle,
         },
-      ],
-      moddleExtensions: {
-        flowable: flowableModdle,
-      },
+      })
+      await createDiagram()
+      initEventBind()
     })
   }
 
@@ -129,15 +121,15 @@
    * 创建流程图
    */
   async function createDiagram() {
-    console.log(123)
-    if (!props.xml) {
+    // modeler需要初始化完毕且已经有 xml 参数后才进行渲染
+    if (!props.xml || !modeler) {
       return
     }
     // 将字符串转换成图显示出来
     const data = props.xml.replace(/<!\[CDATA\[(.+?)]]>/g, function (match, str) {
       return str.replace(/</g, '&lt;')
     })
-    await modeler?.importXML(data)
+    await modeler.importXML(data)
     initSvg()
     fillColor()
     fitViewport()
@@ -184,6 +176,7 @@
     if (e.type === 'bpmn:UserTask') {
       const tasks = props.nodeTaskList[e.id]
       if (tasks) {
+        // 显示第一条任务信息
         const task = tasks[0]
         if (task) {
           html += `<span>执行人：${task.userName}</span>
@@ -192,6 +185,7 @@
                   <span>结束时间：${task.endTime ? task.endTime : ''}</span>
                   <span>审批意见：${task.reason ? task.reason : ''}</span>`
         }
+        // 多次处理会提示点击查看详情
         if (tasks[1]) {
           html += `</br>
             <span>点击查看更多...</span>`
@@ -216,7 +210,6 @@
    * 流程图的元素被 out
    */
   function elementOut(element) {
-    console.log(element)
     overlays.remove({ element })
     elementOverlayIds[element.id] = null
   }
@@ -305,23 +298,22 @@
 <style lang="less" scoped>
   // Font class
   @import './icon/iconfont.css';
-  /*左边工具栏以及编辑节点的样式*/
-  @import 'bpmn-js/dist/assets/diagram-js.css';
-  @import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
-  @import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
-  @import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
-
   @import './css/ProcessViewerHighlight.less';
+
   .view-mode {
     .ant-layout-header,
     .ant-layout-sider,
-    /deep/.djs-palette,
-    /deep/.bjs-powered-by {
+    :deep(.djs-palette),
+    :deep(.bjs-powered-by) {
+      ///deep/.djs-palette,
+      ///deep/.bjs-powered-by {
       display: none;
     }
   }
   // 信息显示框
-  /deep/.element-overlays {
+  :deep(.element-overlays) {
+    ///deep/.element-overlays {
+    display: grid;
     box-sizing: border-box;
     padding: 8px;
     background: rgba(0, 0, 0, 0.6);
@@ -359,14 +351,17 @@
     }
   }
 
-  /deep/ .ant-layout-sider:hover {
+  :deep(.ant-layout-sider:hover) {
+    ///deep/.ant-layout-sider:hover {
     background: #0a97ce25 !important;
   }
 
-  /deep/ .ant-layout-sider {
+  :deep(.ant-layout-sider) {
+    ///deep/.ant-layout-sider {
     z-index: 2;
   }
 
+  //:deep(.djs-container) {
   /deep/ .djs-container {
     background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImEiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgMTBoNDBNMTAgMHY0ME0wIDIwaDQwTTIwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBmaWxsPSJub25lIiBzdHJva2U9IiNlMGUwZTAiIG9wYWNpdHk9Ii4yIi8+PHBhdGggZD0iTTQwIDBIMHY0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+)
       repeat !important;

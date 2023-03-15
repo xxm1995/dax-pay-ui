@@ -1,3 +1,4 @@
+//  @ts-nocheck
 import type { App } from 'vue'
 import { Button } from './Button'
 import { Link } from './Link'
@@ -27,6 +28,7 @@ import {
   Col,
   Modal,
   Dropdown,
+  Timeline,
   Radio,
   Steps,
   Spin,
@@ -64,6 +66,7 @@ export function registerGlobComp(app: App) {
   app.use(Divider)
   app.use(DatePicker)
   app.use(TimePicker)
+  app.use(Timeline)
   app.use(Typography)
   app.use(Empty)
   app.use(Popconfirm)

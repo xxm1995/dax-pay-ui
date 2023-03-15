@@ -8,6 +8,7 @@
       :flow-node-list="flowNodeList"
       :xml="bpmModel.modelEditorXml"
     />
+<!--    <process-design/>-->
   </basic-modal>
 </template>
 

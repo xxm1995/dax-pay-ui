@@ -2,6 +2,11 @@ import 'virtual:windi-base.css'
 import 'virtual:windi-components.css'
 import '/@/design/index.less'
 import 'virtual:windi-utilities.css'
+// 工作流编辑器语句
+// import 'bpmn-js/dist/assets/diagram-js.css'
+// import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'
+// import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css'
+// import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css'
 // Register icon sprite
 import 'virtual:svg-icons-register'
 import App from './App.vue'
