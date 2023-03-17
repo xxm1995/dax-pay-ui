@@ -134,7 +134,7 @@
   import Modeler from 'bpmn-js/lib/Modeler'
   import panel from './PropertyPanel'
   import BpmData from './BpmData'
-  import getInitStr from './flowable/init'
+  import getInitStr from './flowable/designData'
   // 引入flowable的节点文件
   import flowableModdle from './flowable/flowable.json'
 

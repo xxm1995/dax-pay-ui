@@ -81,7 +81,9 @@
   /**
    * 查看详情
    */
-  function show(record) {}
+  function show(record) {
+
+  }
   /**
    * 作废流程
    */

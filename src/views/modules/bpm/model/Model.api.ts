@@ -117,7 +117,7 @@ export function copy(id) {
  */
 export interface BpmModel extends BaseEntity {
   // 名称
-  name: string
+  name?: string
   // 流程类型
   modelType?: string
   // 关联表单

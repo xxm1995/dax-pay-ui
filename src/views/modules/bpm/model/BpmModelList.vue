@@ -142,7 +142,7 @@
    * 流程图设计
    */
   function bpmnEdit(record, isView) {
-    bpmModeler.init(record.id, isView)
+    bpmModeler.design(record.id, isView)
   }
   /**
    * 任务节点列表
@@ -198,6 +198,10 @@
       },
     })
   }
+
+  /**
+   * 校验
+   */
   function verifyBpmModel(record) {
     verifyModel(record.id).then(() => {
       createMessage.success('校验通过')
