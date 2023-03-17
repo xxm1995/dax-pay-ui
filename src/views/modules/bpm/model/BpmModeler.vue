@@ -1,6 +1,6 @@
 <template>
   <vxe-modal fullscreen v-model="visible" :title="title" destroy-on-close :show-header="isView" :esc-closable="isView" :show-footer="false">
-    <process-design ref="processDesign" :xml="bpmModel.modelEditorXml" :is-edit="isEdit" @save="save" @cancel="cancel" />
+    <process-design ref="processDesign" @save="save" @cancel="cancel" />
   </vxe-modal>
 </template>
 
@@ -12,6 +12,8 @@
   import { PUBLISHED } from '/@/views/modules/bpm/model/node/BpmModelNodeCode'
 
   const { createConfirm, createMessage } = useMessage()
+
+  let processDesign = $ref<any>()
 
   let visible = $ref<boolean>(false)
   let isEdit = $ref<boolean>(true)
@@ -27,7 +29,7 @@
       bpmModel = res.data
       isEdit = bpmModel.publish !== PUBLISHED
       title = `查看 ${bpmModel.name} 流程图`
-      // confirmLoading = false
+      processDesign.renderer(bpmModel.modelEditorXml, isEdit, isView)
     })
   }
 
@@ -51,6 +53,7 @@
    * 关闭
    */
   function cancel() {
+    console.log(isEdit)
     if (isEdit) {
       createConfirm({
         iconType: 'info',
@@ -58,12 +61,18 @@
         content: '关闭后后将不对编辑的内容进行保存!',
         okText: '关闭',
         onOk: () => {
-          visible = false
+          reset()
         },
       })
     } else {
-      visible = false
+      reset()
     }
+  }
+
+  function reset() {
+    visible = false
+    // isEdit = false
+    // isView = false
   }
 
   defineExpose({

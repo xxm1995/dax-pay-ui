@@ -1,8 +1,8 @@
 <template>
-  <div class="flow-containers" style="height: 100%" :class="{ 'view-mode': isView }">
+  <div class="flow-containers" style="height: 100%">
     <a-layout style="height: 100%">
       <a-layout-header theme="light" style="border-bottom: 1px solid rgb(218 218 218); height: auto; background-color: #fff">
-        <div v-if="isView" style="display: flex; padding: 5px 0px; justify-content: space-between">
+        <div v-if="!isView" style="display: flex; padding: 5px 0px; justify-content: space-between">
           <a-space>
             <a-upload v-if="isEdit" name="file" action="" accept=".bpmn,.xml" :showUploadList="false" :beforeUpload="openBpmn">
               <a-tooltip effect="dark" title="打开" placement="bottom">
@@ -77,7 +77,7 @@
 
   import Modeler from 'bpmn-js/lib/Modeler'
 
-  import { nextTick, onMounted, watch, watchEffect } from 'vue'
+  import { computed, nextTick, onMounted, watch, watchEffect } from 'vue'
   import customTranslate from '/@/components/Bpmn/common/customTranslate'
   import { $ref } from 'vue/macros'
   import Icon from '/@/components/Icon'
@@ -91,23 +91,22 @@
   const emit = defineEmits(['save', 'cancel'])
   const { createConfirm } = useMessage()
 
-  interface Props {
-    // 是否编辑状态
-    isEdit?: boolean
-    // 是否预览状态
-    isView?: boolean
-    // bpmn 文件内容
-    xml?: string
-  }
-  const props = withDefaults(defineProps<Props>(), {
-    isEdit: true,
-    isView: false,
-    xml: '',
-  })
+  // interface Props {
+  //   // 是否编辑状态
+  //   isEdit?: boolean
+  //   // 是否预览状态
+  //   isView?: boolean
+  //   // bpmn 文件内容
+  //   xml?: string
+  // }
+  // const props = withDefaults(defineProps<Props>(), {
+  //   isEdit: true,
+  //   isView: false,
+  //   xml: '',
+  // })
 
-  watch(props, () => {
-    init()
-  })
+  let isEdit = $ref<boolean>(false)
+  let isView = $ref<boolean>(true)
 
   // 实例
   let modeler
@@ -140,20 +139,21 @@
   ]
 
   /**
-   * 初始化
+   * 渲染函数
    */
-  function init() {
+  function renderer(xml: string, edit: boolean, view: boolean) {
     nextTick(async () => {
-      const xml = props.xml || getInitBpmnData()
-      const additionalModule = props.isEdit && !props.isView ? isEditModules : notEditModules
-      console.log(props.isEdit, props.isView)
+      isEdit = edit
+      isView = view
+      const xmlData = xml || getInitBpmnData()
+      const additionalModule = edit && !view ? isEditModules : notEditModules
       modeler = new Modeler({
         container: '#canvas',
         propertiesPanel: {},
         additionalModules: additionalModule,
         moddleExtensions: {},
       })
-      await createNewDiagram(xml)
+      await createNewDiagram(xmlData)
     })
   }
 
@@ -283,7 +283,7 @@
   function adjustPalette() {
     try {
       // 获取 bpmn 设计器实例
-      const djsPalette = canvas.children[0].children[1].children[4]
+      const djsPalette = document.querySelector('.djs-palette .open')
       if (!djsPalette) {
         return
       }
@@ -344,7 +344,7 @@
       return str.replace(/</g, '&lt;')
     })
     await modeler.importXML(data)
-    await adjustPalette()
+    adjustPalette()
     fitViewport()
   }
   /**
@@ -372,6 +372,10 @@
     a.click()
     window.URL.revokeObjectURL(url)
   }
+
+  defineExpose({
+    renderer,
+  })
 </script>
 
 <style lang="less" scoped>
