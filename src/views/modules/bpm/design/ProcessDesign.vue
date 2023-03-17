@@ -278,64 +278,6 @@
     modeler.get('canvas').zoom(zoom)
   }
   /**
-   * 调整左侧工具栏排版
-   */
-  function adjustPalette() {
-    try {
-      // 获取 bpmn 设计器实例
-      const djsPalette = document.querySelector('.djs-palette .open')
-      if (!djsPalette) {
-        return
-      }
-      const djsPalStyle = {
-        width: '130px',
-        padding: '5px',
-        background: 'white',
-        left: '20px',
-        borderRadius: 0,
-      }
-      for (let key in djsPalStyle) {
-        djsPalette.style[key] = djsPalStyle[key]
-      }
-      const palette = djsPalette.children[0]
-      const allGroups = palette.children
-      // 是否隐藏工具栏
-      if (!paletteToolShow) {
-        allGroups[0].style['display'] = 'none'
-      }
-
-      // 修改控件样式
-      for (const gKey in allGroups) {
-        const group = allGroups[gKey]
-        for (const cKey in group.children) {
-          const control = group.children[cKey]
-          const controlStyle = {
-            display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            width: '100%',
-            padding: '5px',
-          }
-          if (control.className && control.dataset && control.className.indexOf('entry') !== -1) {
-            const controlProps = new BpmData().getControl(control.dataset.action)
-            control.innerHTML = `<div style='font-size: 14px;font-weight:500;margin-left:15px;'>${controlProps['title']}</div>`
-            for (let csKey in controlStyle) {
-              control.style[csKey] = controlStyle[csKey]
-            }
-
-            // 过滤扩展栏
-            // if (paletteFilters.indexOf(control.dataset.action) !== -1) {
-            //   control.style['display'] = 'none'
-            //   continue
-            // }
-          }
-        }
-      }
-    } catch (e) {
-      console.error(e)
-    }
-  }
-  /**
    * 创建新画布
    */
   async function createNewDiagram(data) {
@@ -344,7 +286,6 @@
       return str.replace(/</g, '&lt;')
     })
     await modeler.importXML(data)
-    adjustPalette()
     fitViewport()
   }
   /**

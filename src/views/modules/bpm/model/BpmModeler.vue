@@ -53,7 +53,6 @@
    * 关闭
    */
   function cancel() {
-    console.log(isEdit)
     if (isEdit) {
       createConfirm({
         iconType: 'info',
