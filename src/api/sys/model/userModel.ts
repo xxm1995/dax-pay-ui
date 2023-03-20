@@ -14,6 +14,8 @@ export interface LoginParams {
   captchaKey?: string
   // 验证码
   captcha?: string
+  // 授权码登录
+  authCode?: string
 }
 
 /**

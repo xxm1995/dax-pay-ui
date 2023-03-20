@@ -9,6 +9,7 @@
         <a-form-item name="smsCaptcha" class="enter-x">
           <count-down-input
             :send-code-api="getCaptcha"
+            :count="120"
             size="large"
             class="fix-auto-fill"
             v-model:value="form.smsCaptcha"

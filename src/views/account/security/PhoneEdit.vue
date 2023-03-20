@@ -61,7 +61,7 @@
   const emits = defineEmits(['ok'])
   const { visible, confirmLoading, modalWidth, labelCol, wrapperCol, handleCancel } = useFormEdit()
   const { createMessage, createConfirm } = useMessage()
-  let currentTab = $ref(1)
+  let currentTab = $ref(0)
   let form = $ref({
     phone: '',
     oldCaptcha: '',

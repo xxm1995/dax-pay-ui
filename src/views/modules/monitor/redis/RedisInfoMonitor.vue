@@ -57,6 +57,7 @@
   import { useECharts } from '/@/hooks/web/useECharts'
   import { getRedisInfo } from '/@/views/modules/monitor/redis/RedisInfoMonitor.api'
   import { $ref } from 'vue/macros'
+  import { useIntervalFn } from '@vueuse/core'
 
   const commandStatsChartRef = ref<HTMLDivElement | null>(null)
   const commandStatsChart = useECharts(commandStatsChartRef as Ref<HTMLDivElement>, 'light')
@@ -121,16 +122,23 @@
     })
   }
 
+  /**
+   * 定时任务
+   */
+  const { pause, resume } = useIntervalFn(() => getInfo(), 1000 * 5, { immediate: true })
+
+  /**
+   * 加载页面
+   */
   onMounted(() => {
-    getInfo()
-    interval = setInterval(() => {
-      getInfo()
-    }, 1000 * 5)
+    resume()
   })
 
+  /**
+   * 卸载页面
+   */
   onBeforeUnmount(() => {
-    clearInterval(interval)
-    interval = null
+    pause()
   })
 
   /**

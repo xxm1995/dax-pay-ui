@@ -22,13 +22,6 @@
         </a-form-item>
         <a-form-item validateFirst label="验证码" name="captcha">
           <count-down-input v-model:value="form.captcha" :send-code-api="sendEmailCaptcha" :count="120">获取验证码</count-down-input>
-          <a-input :maxLength="8" placeholder="验证码" v-model:value="form.captcha">
-            <template #addonAfter>
-              <a-button size="small" type="link" :disabled="state.newCaptcha" href="javascript:" @click="sendEmailCaptcha">
-                {{ (!state.captcha && '获取验证码') || '请等待 ' + (state.captchaTime + ' s') }}
-              </a-button>
-            </template>
-          </a-input>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -46,11 +39,11 @@
   import { validateEmail } from '/@/utils/validate'
   import { bindEmail } from '/@/views/account/account.api'
   import CountDownInput from '/@/components/CountDown/src/CountdownInput.vue'
+  import { useIntervalFn } from '@vueuse/core'
 
   const emits = defineEmits(['ok'])
   const { visible, confirmLoading, modalWidth, labelCol, wrapperCol, handleCancel } = useFormEdit()
   const { createMessage, createConfirm } = useMessage()
-  let currentTab = $ref(0)
   let form = $ref({
     email: '',
     captcha: '',
@@ -72,6 +65,10 @@
     captchaTime: 120,
   })
   const formRef = $ref<FormInstance>()
+
+  /**
+   * 初始化
+   */
   function init() {
     visible.value = true
     nextTick(() => {
@@ -124,13 +121,6 @@
       sendEmailChangeCaptcha(form.email).then(() => {
         createMessage.success('发送验证码成功')
         state.captcha = true
-        const interval = window.setInterval(() => {
-          if (state.captchaTime-- <= 0) {
-            state.captchaTime = 120
-            state.captcha = false
-            window.clearInterval(interval)
-          }
-        }, 1000)
       })
     })
   }

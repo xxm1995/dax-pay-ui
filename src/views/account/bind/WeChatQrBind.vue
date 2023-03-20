@@ -22,6 +22,7 @@
   import { applyQrCode, getQrStatus } from '/@/api/sys/login'
   import { onBeforeUnmount, reactive } from 'vue'
   import { WE_CHAT } from '/@/views/login/third/OpenIdLoginType'
+  import { useIntervalFn } from '@vueuse/core'
 
   let visible = $ref(false)
   let loading = $ref(false)
@@ -35,6 +36,23 @@
     loginType: WE_CHAT,
     authCode: '',
   })
+
+  // 检查绑定的定时任务
+  const { pause, resume } = useIntervalFn(
+    () => {
+      getQrStatus(form.authCode).then(({ data }) => {
+        // 成功 进行绑定
+        if (data === 'ok') {
+          bindWeChat()
+        } else if (data === 'expired') {
+          pause()
+          getApplyQrCode()
+        }
+      })
+    },
+    1000 * 3,
+    { immediate: false },
+  )
 
   function init() {
     visible = true
@@ -58,18 +76,7 @@
    * 定时查询扫码情况
    */
   function checkQrScanStatus() {
-    interval = setInterval(() => {
-      getQrStatus(form.authCode).then(({ data }) => {
-        // 成功 进行绑定
-        if (data === 'ok') {
-          bindWeChat()
-        } else if (data === 'expired') {
-          clearInterval(interval)
-          interval = null
-          getApplyQrCode()
-        }
-      })
-    }, 1000)
+    resume()
   }
 
   /**
@@ -86,8 +93,7 @@
    * 关闭
    */
   function handleCancel() {
-    clearInterval(interval)
-    interval = null
+    pause()
     visible = false
   }
   onBeforeUnmount(() => {

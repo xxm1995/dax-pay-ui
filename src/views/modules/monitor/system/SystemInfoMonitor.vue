@@ -142,6 +142,7 @@
   import { onBeforeUnmount, onMounted, onUnmounted } from 'vue'
   import { getSystemInfo } from './SystemInfo.api'
   import { $ref } from 'vue/macros'
+  import { useIntervalFn } from '@vueuse/core'
 
   let interval: any = null
   let loading = $ref(false)
@@ -151,11 +152,10 @@
   let sysDiskInfos = $ref({})
   let hardwareInfo = $ref({})
 
+  const { pause, resume } = useIntervalFn(() => getSysInfo(), 1000 * 5, { immediate: true })
+
   onMounted(() => {
-    getSysInfo()
-    interval = setInterval(() => {
-      getSysInfo()
-    }, 1000 * 5)
+    resume()
   })
 
   function getSysInfo() {
@@ -170,8 +170,7 @@
   }
 
   onBeforeUnmount(() => {
-    clearInterval(interval)
-    interval = null
+    pause()
   })
 </script>
 

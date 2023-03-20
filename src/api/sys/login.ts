@@ -16,7 +16,7 @@ export function login(params: LoginParams) {
  * 获取微信扫码登录二维码
  */
 export function applyQrCode() {
-  return defHttp.get<Result<WeChatLoginQrCode>>({
+  return defHttp.post<Result<WeChatLoginQrCode>>({
     url: `/token/wechat/qr/applyQrCode`,
   })
 }

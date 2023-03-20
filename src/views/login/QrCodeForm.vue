@@ -2,26 +2,91 @@
   <template v-if="getShow">
     <LoginFormTitle class="enter-x" />
     <div class="enter-x min-w-64 min-h-64">
-      <QrCode :value="qrCodeUrl" class="enter-x flex justify-center xl:justify-start" :width="280" />
-      <Divider class="enter-x">{{ t('sys.login.scanSign') }}</Divider>
-      <Button size="large" block class="mt-4 enter-x" @click="handleBackLogin">
-        {{ t('sys.login.backSignIn') }}
-      </Button>
+      <qr-code value="qrCodeUrl" class="enter-x flex justify-center xl:justify-start" :width="280" />
+      <Divider class="enter-x">请使用微信扫码</Divider>
+      <Button size="large" block class="mt-4 enter-x" @click="handleBackLogin"> 返回 </Button>
     </div>
   </template>
 </template>
 <script lang="ts" setup>
-  import { computed, unref } from 'vue'
+  import { computed, onMounted, unref, watch, watchEffect } from 'vue'
   import LoginFormTitle from './LoginFormTitle.vue'
   import { Button, Divider } from 'ant-design-vue'
   import { QrCode } from '/@/components/Qrcode'
-  import { useI18n } from '/@/hooks/web/useI18n'
   import { useLoginState, LoginStateEnum } from './useLogin'
+  import { $ref } from 'vue/macros'
+  import { applyQrCode, getQrStatus } from '/@/api/sys/login'
+  import { useIntervalFn } from '@vueuse/core'
+  import { getAppEnvConfig } from '/@/utils/env'
+  import { useMessage } from '/@/hooks/web/useMessage'
+  import { useUserStore } from '/@/store/modules/user'
 
-  const qrCodeUrl = 'https://vvbin.cn/next/login'
-
-  const { t } = useI18n()
   const { handleBackLogin, getLoginState } = useLoginState()
 
-  const getShow = computed(() => unref(getLoginState) === LoginStateEnum.QR_CODE)
+  const { createMessage } = useMessage()
+  const { notification } = useMessage()
+  const userStore = useUserStore()
+
+  const getShow = computed(() => {
+    const flag = unref(getLoginState) === LoginStateEnum.QR_CODE
+    flag ? getQrCode() : pause()
+    return flag
+  })
+
+  const { pause, resume } = useIntervalFn(() => checkQrScanStatus(), 1000 * 5, { immediate: false })
+
+  let qrCodeUrl = $ref('请稍等')
+  // true可以获取, false不可以获取
+  let getQrFlag = $ref(true)
+  let loading = $ref(false)
+  let client = $ref<string>('')
+  let loginType = $ref('weChat')
+  let authCode = $ref<string>()
+
+  onMounted(() => {
+    // 终端编码
+    const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
+    client = VITE_GLOB_APP_CLIENT
+  })
+
+  // 获取扫码链接
+  function getQrCode() {
+    if (getQrFlag) {
+      loading = true
+      applyQrCode().then(({ data }) => {
+        authCode = data.qrCodeKey
+        qrCodeUrl = data.qrCodeUrl
+        loading = false
+        getQrFlag = false
+        console.log(444)
+        resume()
+      })
+    }
+  }
+  /**
+   * 检查登录状态
+   */
+  function checkQrScanStatus() {
+    console.log(123)
+    getQrStatus(authCode).then(async ({ data }) => {
+      // 成功 进行登录
+      if (data === 'ok') {
+        resume()
+        const token = await userStore.login({
+          client: client,
+          loginType: loginType,
+        })
+        if (token) {
+          notification.success({
+            message: '登录成功',
+            description: '欢迎回来',
+            duration: 3,
+          })
+        }
+      } else if (data === 'expired') {
+        getQrFlag = true
+        applyQrCode()
+      }
+    })
+  }
 </script>
