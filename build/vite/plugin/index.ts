@@ -15,6 +15,7 @@ import { configVisualizerConfig } from './visualizer'
 import { configThemePlugin } from './theme'
 import { configImageminPlugin } from './imagemin'
 import { configSvgIconsPlugin } from './svgSprite'
+import reactivityTransform from '@vue-macros/reactivity-transform/vite'
 
 export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
   const { VITE_USE_IMAGEMIN, VITE_USE_MOCK, VITE_LEGACY, VITE_BUILD_COMPRESS, VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE } = viteEnv
@@ -22,8 +23,8 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
   const vitePlugins: (PluginOption | PluginOption[])[] = [
     // have to
     vue({
-      // 响应式变量
-      reactivityTransform: true,
+      // 响应式变量 TODO 3.3+ 废弃, 迁移到 Vue Macros Reactivity Transform。
+      // reactivityTransform: true,
     }),
     // have to
     vueJsx(),
@@ -60,6 +61,9 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
 
   // vite-plugin-theme
   vitePlugins.push(configThemePlugin(isBuild))
+
+  // Vue Macros Reactivity Transform 响应式变量
+  vitePlugins.push(reactivityTransform())
 
   // The following plugins only work in the production environment
   if (isBuild) {

@@ -33,7 +33,7 @@
 
 <script lang="ts" setup>
   import '@wangeditor/editor/dist/css/style.css' // 引入 css
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import { validateEmail } from '/@/utils/validate'
   import { nextTick, onBeforeUnmount, shallowRef } from 'vue'
   import { Editor, Toolbar } from '@wangeditor/editor-for-vue'

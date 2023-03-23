@@ -62,7 +62,7 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { CollapseContainer } from '/@/components/Container'
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import { DING_TALK, WE_CHAT, WE_CHAT_OPEN, QQ, WE_COM } from '/@/views/login/third/OpenIdLoginType'
   import { bindThird, getThirdBindInfo, unbindThird } from '/@/views/account/account.api'
   import { UserThirdBindInfo } from '/@/views/account/accountModel'

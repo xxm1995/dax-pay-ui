@@ -14,7 +14,7 @@
 <script lang="ts" setup>
   import '@wangeditor/editor/dist/css/style.css' // 引入 css
   import { onBeforeUnmount, shallowRef } from 'vue'
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 
   // 编辑器实例，必须用 shallowRef

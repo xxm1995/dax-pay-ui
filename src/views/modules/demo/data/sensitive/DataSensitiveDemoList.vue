@@ -49,7 +49,7 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import { del, page } from './DataSensitiveDemo.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import DataSensitiveDemoEdit from './DataSensitiveDemoEdit.vue'

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import ProcessDesign from '/@/views/modules/bpm/design/ProcessDesign.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { BpmModel, get, uploadBpmn } from './Model.api'

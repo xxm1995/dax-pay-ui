@@ -100,7 +100,7 @@
 
 <script lang="ts" setup>
   import { computed, nextTick } from 'vue'
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { add, get, update, BpmModelNode } from './ModelNode.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'

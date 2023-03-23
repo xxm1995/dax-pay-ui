@@ -50,7 +50,7 @@
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import { BpmModel } from '../Model.api'
   import { PUBLISHED } from '/@/views/modules/bpm/model/node/BpmModelNodeCode'
   import { BpmModelNode, del, listByModelId, sync } from './ModelNode.api'

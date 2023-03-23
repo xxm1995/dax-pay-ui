@@ -58,6 +58,48 @@
           <div id="canvas" ref="canvas" class="canvas"></div>
         </a-layout-content>
       </a-layout>
+      <a-layout-sider
+        style="background: #fff; min-width: 40px; width: 40px; max-width: 40px; border-left: 1px solid #eeeeee; box-shadow: 0 0 8px #cccccc"
+      >
+        <div style="width: 100%; text-align: center" @click="panelVisible = true">
+          <i class="iconfont icon-left-graph" style="font-size: 32px" v-if="panelExist"></i>
+        </div>
+        <a-drawer
+          width="400px"
+          placement="right"
+          :closable="false"
+          :visible="panelVisible && panelExist"
+          :get-container="false"
+          :wrap-style="{ position: 'absolute' }"
+        >
+          <template #title>
+            <i class="iconfont icon-right-graph" style="font-size: 32px" @click="panelVisible = false"></i><span>{{ panelTitle }}</span>
+          </template>
+          <panel
+            v-if="modeler"
+            ref="panel"
+            :filters="panelFilters"
+            :modeler="modeler"
+            :users="users"
+            :groups="groups"
+            :categories="categories"
+            :categories-fields="categoriesFields"
+            :associate-form-config="associateFormConfig"
+            :associate-form-data-options="associateFormDataOptions"
+            :assignee-data-source="assigneeDataSource"
+            :due-date-data-source="dueDateDataSource"
+            :follow-up-date-data-source="followUpDateDataSource"
+            :initiator-data-source="initiatorDataSource"
+            :skip-expression-data-source="skipExpressionDataSource"
+            :condition-expression-data-source="conditionExpressionDataSource"
+            :candidate-user-data-source="candidateUserDataSource"
+            :candidate-group-data-source="candidateGroupDataSource"
+            @showForm="showAssociateForm"
+            @createForm="createAssociateForm"
+            @change="handlePanelChange"
+          />
+        </a-drawer>
+      </a-layout-sider>
     </a-layout>
     <!--  xml预览  -->
     <basic-modal v-bind="$attrs" width="60%" title="XML" :visible="codeVisible" @cancel="codeVisible = false">
@@ -75,244 +117,42 @@
   import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css'
   import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css'
 
-  import Modeler from 'bpmn-js/lib/Modeler'
-
-  import { computed, nextTick, onMounted, watch, watchEffect } from 'vue'
-  import customTranslate from '/@/components/Bpmn/common/customTranslate'
-  import { $ref } from 'vue/macros'
+  import { ref } from 'vue'
   import Icon from '/@/components/Icon'
-  import BpmData from '/@/components/Bpmn/BpmData'
-  import { useMessage } from '/@/hooks/web/useMessage'
-  import { getInitBpmnData } from '/@/components/Bpmn/flowable/designData'
   import CodeEditor from '/@/components/CodeEditor/src/CodeEditor.vue'
   import { MODE } from '/@/components/CodeEditor'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
+  import useProcessDesign from '/@/views/modules/bpm/design/useProcessDesign'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
 
+  // 挂载元素
+  let canvas = ref<any>()
   const emit = defineEmits(['save', 'cancel'])
-  const { createConfirm } = useMessage()
 
-  // interface Props {
-  //   // 是否编辑状态
-  //   isEdit?: boolean
-  //   // 是否预览状态
-  //   isView?: boolean
-  //   // bpmn 文件内容
-  //   xml?: string
-  // }
-  // const props = withDefaults(defineProps<Props>(), {
-  //   isEdit: true,
-  //   isView: false,
-  //   xml: '',
-  // })
+  const {
+    modeler,
+    isEdit,
+    isView,
+    codeVisible,
+    xmlCode,
+    zoom,
+    renderer,
+    undo,
+    redo,
+    showXML,
+    saveXML,
+    downXML,
+    downImg,
+    openBpmn,
+    downloadFile,
+    cancel,
+    fitViewport,
+    zoomViewport,
+    clearDiagram,
+  } = useProcessDesign('#canvas', emit)
 
-  let isEdit = $ref<boolean>(false)
-  let isView = $ref<boolean>(true)
-
-  // 实例
-  let modeler
-  let canvas = $ref<any>()
-  // 工具配置栏
-  let paletteToolShow = $ref(true)
-  // xml代码预览
-  let codeVisible = $ref(false)
-  let xmlCode = $ref('')
-  // let paletteFilters = $ref<any>([])
-
-  // 缩放
-  let zoom = $ref(1)
-  // 编辑时参数
-  const isEditModules = [
-    {
-      translate: ['value', customTranslate], // 翻译
-    },
-  ]
-  // 查看时参数
-  const notEditModules = [
-    {
-      translate: ['value', customTranslate], // 翻译
-      paletteProvider: ['value', ''], // 禁用/清空左侧工具栏
-      labelEditingProvider: ['value', ''], // 禁用节点编辑
-      contextPadProvider: ['value', ''], // 禁用图形菜单
-      bendpoints: ['value', {}], // 禁用连线拖动
-      move: ['value', ''], // 禁用单个图形拖动
-    },
-  ]
-
-  /**
-   * 渲染函数
-   */
-  function renderer(xml: string, edit: boolean, view: boolean) {
-    nextTick(async () => {
-      isEdit = edit
-      isView = view
-      const xmlData = xml || getInitBpmnData()
-      const additionalModule = edit && !view ? isEditModules : notEditModules
-      modeler = new Modeler({
-        container: '#canvas',
-        propertiesPanel: {},
-        additionalModules: additionalModule,
-        moddleExtensions: {},
-      })
-      await createNewDiagram(xmlData)
-    })
-  }
-
-  /**
-   * 获取流程元素
-   */
-  function getProcessElement() {
-    const rootElements = modeler.getDefinitions().rootElements
-    for (let i = 0; i < rootElements.length; i++) {
-      if (rootElements[i].$type === 'bpmn:Process') return rootElements[i]
-    }
-  }
-
-  /**
-   * 撤消
-   */
-  function undo() {
-    modeler.get('commandStack').undo()
-  }
-  /**
-   * 重做
-   */
-  function redo() {
-    modeler.get('commandStack').redo()
-  }
-
-  /**
-   * 查看 bpmn.xml
-   */
-  async function showXML() {
-    xmlCode = await downXML(false)
-    codeVisible = true
-  }
-  /**
-   * 下载 bpmn.xml
-   */
-  async function downXML(download = false) {
-    try {
-      const { xml } = await modeler.saveXML({ format: true })
-      if (download) {
-        downloadFile(`${getProcessElement().name}.bpmn20.xml`, xml, 'application/xml')
-      }
-      return xml
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  /**
-   * 下载图片
-   */
-  async function downImg(type = 'svg', download = false) {
-    try {
-      const { svg } = await modeler.saveSVG({ format: true })
-      if (download) {
-        downloadFile(getProcessElement().name, svg, 'image/svg+xml')
-      }
-      return svg
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  /**
-   * 保存
-   */
-  async function saveXML() {
-    const xml = await downXML()
-    emit('save', xml)
-  }
-
-  /**
-   * 关闭
-   */
-  function cancel() {
-    emit('cancel')
-  }
-
-  /**
-   * 打开 bpmn.xml 文件
-   */
-  function openBpmn(file) {
-    const reader = new FileReader()
-    reader.readAsText(file, 'utf-8')
-    reader.onload = () => {
-      createNewDiagram(reader.result)
-    }
-    return false
-  }
-  /**
-   * 新建画布
-   */
-  function newDiagram() {
-    createNewDiagram(getInitBpmnData())
-  }
-  /**
-   * 让图能自适应屏幕
-   */
-  function fitViewport() {
-    zoom = modeler.get('canvas').zoom('fit-viewport')
-    // @ts-ignore
-    const bbox = document.querySelector('.flow-containers .viewport').getBBox()
-    const currentViewBox = modeler.get('canvas').viewbox()
-    const elementMid = {
-      x: bbox.x + bbox.width / 2 - 65,
-      y: bbox.y + bbox.height / 2,
-    }
-    modeler.get('canvas').viewbox({
-      x: elementMid.x - currentViewBox.width / 2,
-      y: elementMid.y - currentViewBox.height / 2,
-      width: currentViewBox.width,
-      height: currentViewBox.height,
-    })
-    zoom = (bbox.width / currentViewBox.width) * 1.8
-  }
-  /**
-   * 放大缩小
-   */
-  function zoomViewport(zoomIn = true) {
-    zoom = modeler.get('canvas').zoom()
-    zoom += zoomIn ? 0.1 : -0.1
-    modeler.get('canvas').zoom(zoom)
-  }
-  /**
-   * 创建新画布
-   */
-  async function createNewDiagram(data) {
-    // 将字符串转换成图显示出来
-    data = data.replace(/<!\[CDATA\[(.+?)]]>/g, function (match, str) {
-      return str.replace(/</g, '&lt;')
-    })
-    await modeler.importXML(data)
-    fitViewport()
-  }
-  /**
-   * 清除画布
-   */
-  function clearDiagram() {
-    createConfirm({
-      iconType: 'info',
-      title: '警告',
-      content: '是否要清空画布!',
-      onOk: () => {
-        newDiagram()
-      },
-    })
-  }
-
-  /**
-   * 下载文件
-   */
-  function downloadFile(filename, data, type) {
-    const a = document.createElement('a')
-    const url = window.URL.createObjectURL(new Blob([data], { type: type }))
-    a.href = url
-    a.download = filename
-    a.click()
-    window.URL.revokeObjectURL(url)
-  }
+  let panelVisible = $ref(false)
+  let panelExist = $ref(false)
 
   defineExpose({
     renderer,

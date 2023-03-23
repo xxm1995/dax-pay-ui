@@ -34,7 +34,7 @@
 <script lang="ts" setup>
   import { Cascader } from 'ant-design-vue'
   import { findAllProvinceAndCity, findAllProvinceAndCityAndArea, findAllRegionByParentCode, Region } from '/@/api/common/ChinaRegion.api'
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import { onMounted } from 'vue'
   import { DefaultOptionType } from 'ant-design-vue/es/vc-cascader'
   import { cloneDeep } from 'lodash-es'

@@ -48,7 +48,7 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import { del, page } from './DataPermDemo.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import DataPermDemoEdit from './DataPermDemoEdit.vue'

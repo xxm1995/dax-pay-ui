@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
 
   let visible = $ref(false)
   let loading = $ref(false)

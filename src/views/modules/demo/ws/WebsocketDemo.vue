@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import { useWebSocket } from '@vueuse/core'
   import { findByParamKey } from '/@/api/common/Parameter'
   import { useUserStore } from '/@/store/modules/user'

@@ -22,7 +22,7 @@
 <script lang="ts" setup>
   import { useMessage } from '/@/hooks/web/useMessage'
   import { sendKeyExpired, sendRabbitMsg, sendRedisMsg } from './MqDemo.api'
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
 
   const { createMessage } = useMessage()
 

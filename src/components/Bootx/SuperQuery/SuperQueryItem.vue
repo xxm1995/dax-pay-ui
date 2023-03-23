@@ -94,7 +94,7 @@
 
 <script lang="ts" setup>
   import { NUMBER, STRING, BOOLEAN, DATE, TIME, DATE_TIME, LIST, QueryField, QueryParam } from '/@/components/Bootx/Query/Query'
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import { watch, watchEffect } from 'vue'
   interface Props {
     fields: QueryField[]

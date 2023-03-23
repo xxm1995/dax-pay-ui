@@ -35,7 +35,7 @@
   import CodeGenForm from './CodeGenForm.vue'
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { onMounted } from 'vue'
   import { codeGenPreview, genCodeZip, page } from './CodeGen.api'

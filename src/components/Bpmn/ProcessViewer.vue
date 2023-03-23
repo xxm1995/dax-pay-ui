@@ -45,7 +45,7 @@
 
   import { addArrow } from './processViewerUtils'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import { $ref } from 'vue/macros'
+  import { $ref } from '@vue-macros/reactivity-transform/macros'
   import { nextTick, onMounted, watch, watchEffect } from 'vue'
 
   const { dictConvert } = useDict()
