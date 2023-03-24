@@ -20,30 +20,38 @@ export default function <T>(queryPageCallback: CallableFunction) {
   const loading = ref(false)
   // 批量操作标识
   const batchOperateFlag = ref(false)
-  // 高级查询条件生效状态
+  // 超级查询条件生效状态
   const superQueryFlag = ref(false)
 
   // 不可以被重新赋值, 否则会失去绑定
   const { pages, pagination } = model
-  // 普通查询
+  /**
+   * 普通查询
+   */
   function query() {
     superQueryFlag.value = false
     batchOperateFlag.value = false
     resetPage()
     queryPageCallback()
   }
-  // 表格翻页或变动
+  /**
+   * 表格翻页或变动
+   */
   function handleTableChange({ currentPage, pageSize }) {
     batchOperateFlag.value = false
     pages.current = currentPage
     pages.size = pageSize
     queryPageCallback()
   }
-  // 重置当前页数
+  /**
+   * 重置当前页数
+   */
   function resetPage() {
     pages.current = 1
   }
-  // 分页查询返回结果处理
+  /**
+   * 分页查询返回结果处理
+   */
   function pageQueryResHandel(res: PageResult) {
     pagination.current = Number(res.current)
     pagination.size = Number(res.size)
@@ -51,17 +59,23 @@ export default function <T>(queryPageCallback: CallableFunction) {
     pagination.records = res.records
     loading.value = false
   }
-  // 重置查询
+  /**
+   * 重置查询
+   */
   function resetQuery() {
     resetQueryParams()
     queryPageCallback()
   }
-  // 重置查询参数
+  /**
+   * 重置查询参数
+   */
   function resetQueryParams() {
     superQueryFlag.value = false
     model.queryParam = {}
   }
-  // ok按钮
+  /**
+   * ok按钮
+   */
   function handleOk() {
     queryPageCallback()
   }

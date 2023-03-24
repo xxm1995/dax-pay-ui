@@ -118,7 +118,7 @@
     USER,
     ROLE,
   } from '/@/views/modules/bpm/model/node/BpmModelNodeCode'
-  import BUserSelectModal from '/@/components/Bootx/UserSelectModal/BUserSelectModal.vue'
+  import BUserSelectModal from '/@/components/Bootx/UserSelectModal'
   import BRoleSelectModal from '/@/components/Bootx/RoleSelectModal/BRoleSelectModal.vue'
   import { UserInfo } from '/@/views/modules/system/user/User.api'
   import { Role } from '/@/views/modules/system/role/Role.api'

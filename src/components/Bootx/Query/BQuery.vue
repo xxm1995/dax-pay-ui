@@ -29,29 +29,32 @@
   import QueryItem from './QueryItem.vue'
   import { ref } from 'vue'
   import { DownOutlined, UpOutlined } from '@ant-design/icons-vue'
+  import { QueryField, QueryParam } from './Query'
   // 切换搜索条件展开状态
   let toggleSearchStatus = ref(false)
 
-  const props = defineProps({
-    fields: {
-      type: Array,
-      default: () => {
-        return []
-      },
+  const props = withDefaults(
+    defineProps<{
+      // 字段
+      fields: QueryField[]
+      // 查询条件
+      queryParams: QueryParam[]
+      // 默认展示几个
+      defaultItemCount?: number
+      // 所占栅格宽度
+      defaultItemMd?: number
+      // 禁用查询
+      disabledQuery?: boolean
+      // gutter
+      gutter?: number
+    }>(),
+    {
+      defaultItemCount: 2,
+      defaultItemMd: 6,
+      disabledQuery: false,
+      gutter: 10,
     },
-    // 查询条件
-    queryParams: {
-      type: Object,
-      required: true,
-    },
-    // 默认展示几个
-    defaultItemCount: { type: Number, default: 2 },
-    // 所占栅格宽度
-    defaultItemMd: { type: Number, default: 6 },
-    // 禁用查询
-    disabledQuery: { type: Boolean, default: false },
-    gutter: { type: Number, default: 10 },
-  })
+  )
   const emits = defineEmits(['update:modelValue', 'query', 'reset'])
   /**
    * 查询

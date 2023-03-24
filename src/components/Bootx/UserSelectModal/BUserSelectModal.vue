@@ -66,7 +66,7 @@
   interface Props {
     // 名称
     title?: string
-    // 是否是查询看状态
+    // 是否允许多选
     multiple?: boolean
     // 宽度
     width?: number | string

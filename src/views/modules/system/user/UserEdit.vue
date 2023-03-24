@@ -61,10 +61,20 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { useValidate } from '/@/hooks/bootx/useValidate'
 
-  const { initFormEditType, handleCancel, diffForm, search, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, formEditType } =
-    useFormEdit()
+  const {
+    initFormEditType,
+    handleCancel,
+    diffForm,
+    search,
+    labelCol,
+    wrapperCol,
+    modalWidth,
+    title,
+    confirmLoading,
+    visible,
+    formEditType,
+  } = useFormEdit()
   const { createMessage } = useMessage()
-  const { nullValidate } = useValidate()
 
   const formRef = $ref<FormInstance>()
   let form = $ref<UserInfo>({
@@ -86,8 +96,7 @@
         { required: true, message: '请输入账号' },
         { validator: checkUsername, trigger: 'blur' },
       ],
-      phone: rawForm.phone !== form.phone ? [
-        { validator: validatePhone }, { validator: validateBindPhone, trigger: 'blur' }] : [],
+      phone: rawForm.phone !== form.phone ? [{ validator: validatePhone }, { validator: validateBindPhone, trigger: 'blur' }] : [],
       email: rawForm.email !== form.email ? [{ validator: validateEmailRule }, { validator: validateBindEmail, trigger: 'blur' }] : [],
     } as Record<string, Rule[]>
   })

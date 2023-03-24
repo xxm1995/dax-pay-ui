@@ -8,7 +8,7 @@
           <a href="javascript:" @click="supperQueryReset">清空</a>
         </template>
         <a-button style="margin-left: 8px" @click="supperQueryShow">
-          <icon icon="ant-design:appstore" theme="twoTone" spin />
+          <icon :icon="buttonIcon" theme="twoTone" spin />
           <span>查询中...</span>
         </a-button>
       </a-tooltip>
@@ -27,6 +27,7 @@
   // const{queryState=false,buttonTitle='超级查询',modelTitle,width} = defineProps<Props>()
   const props = withDefaults(
     defineProps<{
+      // 查询状态
       queryState: boolean
       // 字段
       fields: QueryField[]
@@ -36,15 +37,19 @@
       buttonIcon?: string
       // 标题名称
       modelTitle?: string
+      // 宽度
       width?: number
     }>(),
     {
-      // 是否在进行查询
+      // 查询状态, 是否在进行查询
       queryState: false,
       // 按钮标题
       buttonTitle: '超级查询',
+      // 按钮图标
+      buttonIcon: 'ant-design:appstore',
       // 标题名称
       modelTitle: '超级查询器',
+      // 宽度
       width: 840,
     },
   )
