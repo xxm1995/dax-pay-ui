@@ -98,7 +98,7 @@
   import { watch, watchEffect } from 'vue'
   interface Props {
     fields: QueryField[]
-    queryParams: QueryParam[]
+    queryParams: object
   }
   const props = withDefaults(defineProps<Props>(), {})
   const emit = defineEmits(['change', 'update:queryParams'])

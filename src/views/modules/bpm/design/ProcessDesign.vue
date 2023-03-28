@@ -2,7 +2,7 @@
   <div class="flow-containers" style="height: 100%">
     <a-layout style="height: 100%">
       <a-layout-header theme="light" style="border-bottom: 1px solid rgb(218 218 218); height: auto; background-color: #fff">
-        <div v-if="!isView" style="display: flex; padding: 5px 0px; justify-content: space-between">
+        <div v-if="!isView" style="display: flex; padding: 5px 0; justify-content: space-between">
           <a-space>
             <a-upload v-if="isEdit" name="file" action="" accept=".bpmn,.xml" :showUploadList="false" :beforeUpload="openBpmn">
               <a-tooltip effect="dark" title="打开" placement="bottom">
@@ -57,49 +57,29 @@
         <a-layout-content style="padding: 0; margin-top: 10px">
           <div id="canvas" ref="canvas" class="canvas"></div>
         </a-layout-content>
+        <!--     属性配置栏     -->
+        <a-layout-sider class="sider">
+          <div style="width: 100%; text-align: center" v-if="!panelVisible" @click="panelVisible = true">
+            <i class="iconfont icon-left-graph" style="font-size: 32px"></i>
+          </div>
+          <a-drawer
+            width="400px"
+            placement="right"
+            v-show="panelVisible"
+            :visible="panelVisible"
+            :closable="false"
+            :get-container="false"
+            :style="{ position: 'absolute' }"
+            @close="panelVisible = false"
+          >
+            <template #title>
+              <i class="iconfont icon-right-graph" style="font-size: 24px" @click="panelVisible = false"></i><span>{{ panelTitle }}</span>
+            </template>
+            <div>234234234</div>
+            <process-panel />
+          </a-drawer>
+        </a-layout-sider>
       </a-layout>
-      <a-layout-sider
-        style="background: #fff; min-width: 40px; width: 40px; max-width: 40px; border-left: 1px solid #eeeeee; box-shadow: 0 0 8px #cccccc"
-      >
-        <div style="width: 100%; text-align: center" @click="panelVisible = true">
-          <i class="iconfont icon-left-graph" style="font-size: 32px" v-if="panelExist"></i>
-        </div>
-        <a-drawer
-          width="400px"
-          placement="right"
-          :closable="false"
-          :visible="panelVisible && panelExist"
-          :get-container="false"
-          :wrap-style="{ position: 'absolute' }"
-        >
-          <template #title>
-            <i class="iconfont icon-right-graph" style="font-size: 32px" @click="panelVisible = false"></i><span>{{ panelTitle }}</span>
-          </template>
-          <panel
-            v-if="modeler"
-            ref="panel"
-            :filters="panelFilters"
-            :modeler="modeler"
-            :users="users"
-            :groups="groups"
-            :categories="categories"
-            :categories-fields="categoriesFields"
-            :associate-form-config="associateFormConfig"
-            :associate-form-data-options="associateFormDataOptions"
-            :assignee-data-source="assigneeDataSource"
-            :due-date-data-source="dueDateDataSource"
-            :follow-up-date-data-source="followUpDateDataSource"
-            :initiator-data-source="initiatorDataSource"
-            :skip-expression-data-source="skipExpressionDataSource"
-            :condition-expression-data-source="conditionExpressionDataSource"
-            :candidate-user-data-source="candidateUserDataSource"
-            :candidate-group-data-source="candidateGroupDataSource"
-            @showForm="showAssociateForm"
-            @createForm="createAssociateForm"
-            @change="handlePanelChange"
-          />
-        </a-drawer>
-      </a-layout-sider>
     </a-layout>
     <!--  xml预览  -->
     <basic-modal v-bind="$attrs" width="60%" title="XML" :visible="codeVisible" @cancel="codeVisible = false">
@@ -112,18 +92,23 @@
 </template>
 
 <script lang="ts" setup>
-  import 'bpmn-js/dist/assets/diagram-js.css' // 左边工具栏以及编辑节点的样式
+  // 左边工具栏以及编辑节点的样式
+  import 'bpmn-js/dist/assets/diagram-js.css'
   import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'
   import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css'
   import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css'
 
+  import '/@/components/Bpmn/icon/iconfont.css'
+
   import { ref } from 'vue'
   import Icon from '/@/components/Icon'
   import CodeEditor from '/@/components/CodeEditor/src/CodeEditor.vue'
+  import ProcessPanel from './ProcessPanel.vue'
   import { MODE } from '/@/components/CodeEditor'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import useProcessDesign from '/@/views/modules/bpm/design/useProcessDesign'
   import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
 
   // 挂载元素
   let canvas = ref<any>()
@@ -151,8 +136,9 @@
     clearDiagram,
   } = useProcessDesign('#canvas', emit)
 
+  // 是否显示右侧编辑栏
   let panelVisible = $ref(false)
-  let panelExist = $ref(false)
+  let panelTitle = $ref('属性配置栏')
 
   defineExpose({
     renderer,
@@ -163,6 +149,15 @@
   .canvas {
     width: 100%;
     height: 100%;
+  }
+  // 不知哪边的重写了这边的宽度
+  .sider {
+    background: #fff;
+    min-width: 40px !important;
+    width: 40px !important;
+    max-width: 40px !important;
+    border-left: 1px solid #eeeeee;
+    box-shadow: 0 0 8px #cccccc;
   }
   .view-mode {
     .ant-layout-header,

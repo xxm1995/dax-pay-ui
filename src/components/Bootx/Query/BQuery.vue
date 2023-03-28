@@ -38,7 +38,7 @@
       // 字段
       fields: QueryField[]
       // 查询条件
-      queryParams: QueryParam[]
+      queryParams: object
       // 默认展示几个
       defaultItemCount?: number
       // 所占栅格宽度
