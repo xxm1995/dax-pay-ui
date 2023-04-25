@@ -30,7 +30,7 @@
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   import { $ref } from '@vue-macros/reactivity-transform/macros'
   import { DataScopeUser, deleteBatchUserAssign, findUsersByDataScopeId, saveUserAssign } from '/@/views/modules/system/scope/DataScope.api'
-  import { BUserSelectModal } from '/@/components/Bootx/UserSelectModal/BUserSelectModal.vue'
+  import BUserSelectModal from '/@/components/Bootx/UserSelectModal/BUserSelectModal.vue'
   import { VxeTableInstance } from 'vxe-table'
 
   let loading = $ref(false)
@@ -57,7 +57,7 @@
   }
   // 多选变动事件
   function checkboxChange() {
-    selectIds = xTable.getCheckboxRecords().map((res) => res.id)
+    selectIds = xTable?.getCheckboxRecords().map((res) => res.id) as string[]
   }
   // 选中用户, 进行保存
   function selectUser(userIds) {

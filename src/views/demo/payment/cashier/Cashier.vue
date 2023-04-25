@@ -145,14 +145,14 @@
     { img: new URL('./imgs/wechat/wx_bar.svg', import.meta.url), title: '微信条码', payInfo: { payChannel: 2, payWay: 5 } },
     // { img: new URL('./imgs/wechat/wx_jsapi.svg', import.meta.url), title: '公众号/小程序', payInfo: { payChannel: 2, payWay: 23 } }
   ])
-  let aggregationPayList = [
+  let aggregationPayList = $ref([
     {
       img: new URL('./imgs/qr/qr_cashier.svg', import.meta.url).href,
       title: '聚合扫码(用户扫商家)',
       payInfo: { payChannel: 99, payWay: 4 },
     },
     { img: new URL('./imgs/qr/auto_bar.svg', import.meta.url).href, title: '聚合条码(商家扫用户)', payInfo: { payChannel: 99, payWay: 5 } },
-  ]
+  ])
   let payMoneyList = [
     // 支付金额列表
     { label: '0.01', value: 0.01 },
@@ -274,6 +274,7 @@
   }
   // 当前选择的支付类型
   function handleActive(payInfo) {
+    console.log(payInfo)
     currentActive = payInfo
   }
   // 关闭
