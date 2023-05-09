@@ -54,7 +54,7 @@
                     <a href="javascript:" @click="startJob(row)">启动</a>
                   </a-menu-item>
                   <a-menu-item v-if="row.state === 1">
-                    <a href="javascript:" @click="startJob(row)" style="color: red">停止</a>
+                    <a href="javascript:" @click="stopJob(row)" style="color: red">停止</a>
                   </a-menu-item>
                 </a-menu>
               </template>
@@ -155,15 +155,15 @@
   function remove(record) {
     del(record.id).then(() => {
       createMessage.success('删除成功')
+      queryPage()
     })
-    queryPage()
   }
   // 开始
   function startJob(record) {
     createConfirm({
       iconType: 'warning',
       title: '警告',
-      content: '是否停止定时任务',
+      content: '是否开始该定时任务',
       onOk: () => {
         start(record.id).then(() => {
           createMessage.success('启动成功')
@@ -177,7 +177,7 @@
     createConfirm({
       iconType: 'warning',
       title: '警告',
-      content: '是否删除该条数据',
+      content: '是否停止该定时任务',
       onOk: () => {
         stop(record.id).then(() => {
           createMessage.success('停止成功')
