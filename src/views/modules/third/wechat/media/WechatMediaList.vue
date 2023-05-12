@@ -11,7 +11,7 @@
       </a-form>
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
           <a-upload
             name="file"

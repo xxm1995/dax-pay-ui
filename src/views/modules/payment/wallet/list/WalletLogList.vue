@@ -1,6 +1,6 @@
 <template>
   <basic-drawer forceRender showFooter v-bind="$attrs" title="钱包日志列表" width="60%" :visible="visible" @close="visible = false">
-    <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }" />
+    <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
       <vxe-column type="seq" title="序号" width="60" />
       <vxe-column field="type" title="类型">

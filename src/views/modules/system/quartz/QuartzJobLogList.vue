@@ -10,7 +10,7 @@
     @close="visible = false"
   >
     <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
-    <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }" />
+    <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
       <vxe-column type="seq" width="60" />
       <vxe-column field="handlerName" title="处理器名称" />
@@ -92,6 +92,7 @@
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
+    return Promise.resolve()
   }
 
   // 删除

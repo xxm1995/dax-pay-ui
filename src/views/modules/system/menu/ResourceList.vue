@@ -8,7 +8,7 @@
     :visible="visible"
     @close="visible = false"
   >
-    <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: queryPage }">
+    <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ queryMethod: queryPage }">
       <template #buttons>
         <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
       </template>

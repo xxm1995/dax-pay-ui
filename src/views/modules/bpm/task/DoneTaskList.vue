@@ -4,7 +4,7 @@
       <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: queryPage }" />
+      <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ queryMethod: queryPage }" />
       <vxe-table ref="xTable" row-id="id" :loading="loading" :data="pagination.records">
         <vxe-column type="seq" title="序号" width="60" />
         <vxe-column field="instanceName" title="业务标题" />
@@ -72,6 +72,7 @@
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
+    return Promise.resolve()
   }
 
   function retrieveTask(record) {

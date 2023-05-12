@@ -1,6 +1,6 @@
 <template>
   <basic-drawer forceRender showFooter v-bind="$attrs" title="字典列表" width="60%" :visible="visible" @close="visible = false">
-    <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
+    <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
       <template #buttons>
         <a-space>
           <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>

@@ -4,7 +4,7 @@
       <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }" />
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" title="序号" width="60" />
         <vxe-column field="paymentId" title="支付记录单号">
@@ -94,6 +94,7 @@
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
+    return Promise.resolve()
   }
   // 查看
   function show(record) {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }">
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
           <a-space>
             <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
@@ -87,6 +87,7 @@
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
+    return Promise.resolve()
   }
   // 新增
   function add() {

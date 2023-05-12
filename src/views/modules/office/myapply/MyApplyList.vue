@@ -4,7 +4,7 @@
       <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: queryPage }">
+      <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
           <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="modelShow">发起流程</a-button>
         </template>

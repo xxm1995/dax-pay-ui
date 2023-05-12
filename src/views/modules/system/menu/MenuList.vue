@@ -36,7 +36,7 @@
       </a-form>
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ query: queryPage }">
+      <vxe-toolbar ref="xToolbar" custom zoom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
           <a-button type="primary" @click="add()"> 新建 </a-button>
           <a-button style="margin-left: 8px" @click="allTreeExpand(true)">展开所有</a-button>

@@ -127,6 +127,7 @@
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
+    return Promise.resolve()
   }
   /**
    * 选中确定回调
