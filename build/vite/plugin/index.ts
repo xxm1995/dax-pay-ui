@@ -23,8 +23,8 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
   const vitePlugins: (PluginOption | PluginOption[])[] = [
     // have to
     vue({
-      // 响应式变量 TODO 3.3+ 废弃, 迁移到 Vue Macros Reactivity Transform。
-      // reactivityTransform: true,
+      // 响应式变量 TODO 3.4+ 删除, 迁移到 Vue Macros Reactivity Transform。
+      reactivityTransform: true,
     }),
     // have to
     vueJsx(),

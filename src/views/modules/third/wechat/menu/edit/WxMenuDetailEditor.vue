@@ -66,7 +66,7 @@
   import { MenuTypeMain, MenuTypeMainSubject, MenuTypeSubject } from './MenuType'
   import WeChatMediaSelect from '/@/views/modules/third/wechat/media/WechatMediaSelect.vue'
   import WeChatArticleSelect from '/@/views/modules/third/wechat/article/WechatArticleSelect.vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { watch } from 'vue'
 
   interface Props {

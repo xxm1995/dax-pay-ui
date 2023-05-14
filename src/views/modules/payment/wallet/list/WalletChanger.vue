@@ -37,7 +37,7 @@
 <script lang="ts" setup>
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { nextTick } from 'vue'
   import { changerBalance } from '/@/views/modules/payment/wallet/list/Wallet.api'

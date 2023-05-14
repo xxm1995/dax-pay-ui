@@ -52,7 +52,7 @@
 <script lang="ts" setup>
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { STRING } from '/@/components/Bootx/Query/Query'
   import { computed } from 'vue'
   import { page } from '/@/views/modules/system/role/Role.api'

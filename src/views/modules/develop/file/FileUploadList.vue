@@ -47,7 +47,7 @@
 
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { page } from './FileUpload.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'

@@ -47,7 +47,7 @@
 
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { del, page, sync } from './WechatTemplate.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import WechatTemplateEdit from './WechatTemplateEdit.vue'

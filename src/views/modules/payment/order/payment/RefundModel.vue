@@ -22,7 +22,7 @@
 
 <script lang="ts" setup>
   import { get } from '/@/views/modules/payment/order/payment/Payment.api'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { useDict } from '/@/hooks/bootx/useDict'
   import { refund } from '/@/api/common/Pay'

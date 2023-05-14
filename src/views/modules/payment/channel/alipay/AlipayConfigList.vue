@@ -72,7 +72,7 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { clearActivity, del, page, setUpActivity } from './AlipayConfig.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import AlipayConfigEdit from './AlipayConfigEdit.vue'

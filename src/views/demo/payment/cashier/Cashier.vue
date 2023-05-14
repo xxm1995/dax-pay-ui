@@ -108,7 +108,7 @@
   import CashierBarCode from './CashierBarCode.vue'
   import { createAggregatePay, findStatusByBusinessId, singlePay } from './Cashier.api'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { onMounted, onUnmounted } from 'vue'
   import QrCode from '/@/components/Qrcode/src/Qrcode.vue'
   import { useIntervalFn } from '@vueuse/core'

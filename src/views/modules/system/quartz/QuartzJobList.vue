@@ -78,7 +78,7 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { del, execute, page, start, stop, syncJobStatus } from './QuartzJob.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import QuartzJobEdit from './QuartzJobEdit.vue'

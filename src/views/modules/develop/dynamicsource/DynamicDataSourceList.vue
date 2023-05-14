@@ -67,7 +67,7 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { addDynamicDataSourceById, databaseTypes, del, existsByDataSourceKey, page, testConnectionById } from './DynamicDataSource.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import DynamicDataSourceEdit from './DynamicDataSourceEdit.vue'

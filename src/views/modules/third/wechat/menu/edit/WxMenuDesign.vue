@@ -52,7 +52,7 @@
   import './menu.less'
   import { MenuTypeMain, MenuTypeMainSubject, MenuTypeSubject } from './MenuType'
   import WxMenuDetailEditor from './WxMenuDetailEditor.vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { unref } from 'vue'
   interface Props {

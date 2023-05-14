@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
   import { nextTick, reactive } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { add, get, update, existsByCode, existsByCodeNotId, existsByName, existsByNameNotId, Role } from './Role.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'

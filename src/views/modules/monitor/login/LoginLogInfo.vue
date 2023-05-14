@@ -10,7 +10,7 @@
 <script lang="ts" setup>
   import { Description } from '/@/components/Description'
   import { Client } from '/@/views/modules/system/client/Client.api'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { get, LoginLog } from './LoginLog.api'
   import { DescItem } from '/@/components/Description'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'

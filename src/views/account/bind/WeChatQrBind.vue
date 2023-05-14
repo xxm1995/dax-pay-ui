@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { QrCode } from '/@/components/Qrcode'
   import { applyQrCode, getQrStatus } from '/@/api/sys/login'
   import { onBeforeUnmount, reactive } from 'vue'

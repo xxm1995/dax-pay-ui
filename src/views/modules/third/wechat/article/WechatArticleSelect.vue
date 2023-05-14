@@ -33,7 +33,7 @@
 
 <script lang="ts" setup>
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { page } from '/@/views/modules/third/wechat/article/WechatArticleSelect.api'
   import { useMessage } from '/@/hooks/web/useMessage'

@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { computed, onMounted } from 'vue'
   import { findStatusByBusinessId, findWalletByUser, singlePay } from '/@/views/demo/payment/cashier/Cashier.api'
   import { FormInstance } from 'ant-design-vue/lib/form'

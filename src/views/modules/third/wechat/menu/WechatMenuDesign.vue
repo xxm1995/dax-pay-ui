@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
   import WxMenuDesign from '/@/views/modules/third/wechat/menu/edit/WxMenuDesign.vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { get, update } from '/@/views/modules/third/wechat/menu/WechatMenu.api'

@@ -80,7 +80,7 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { clearMenu, del, importMenu, page, publish } from './WechatMenu.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import WechatMenuEdit from './WechatMenuEdit.vue'

@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { combinationPay, findStatusByBusinessId, findWalletByUser } from '/@/views/demo/payment/cashier/Cashier.api'
   import { Voucher } from '/@/views/modules/payment/voucher/Voucher.api'
   import { useMessage } from '/@/hooks/web/useMessage'

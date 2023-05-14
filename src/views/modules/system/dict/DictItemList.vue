@@ -50,7 +50,7 @@
 
 <script lang="ts" setup>
   import { nextTick, onMounted, ref } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { del, page } from './DictItem.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import DictItemEdit from './DictItemEdit.vue'

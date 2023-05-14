@@ -34,7 +34,7 @@
   import { reactive, computed, unref } from 'vue'
   import LoginFormTitle from '../LoginFormTitle.vue'
   import { useLoginState, LoginStateEnum } from '../useLogin'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { findUsernameByPhoneCaptcha, sendPhoneForgetCaptcha, validatePhoneForgetCaptcha } from '/@/api/sys/userAssist'
   import CountDownInput from '/@/components/CountDown/src/CountdownInput.vue'

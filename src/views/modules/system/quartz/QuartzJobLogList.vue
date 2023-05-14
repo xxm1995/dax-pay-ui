@@ -40,7 +40,7 @@
 
 <script lang="ts" setup>
   import { nextTick } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { del, page } from './QuartzJobLog.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'

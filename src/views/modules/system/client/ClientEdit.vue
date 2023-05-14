@@ -63,7 +63,7 @@
   import { FormInstance, Rule, useForm } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { findAll, LoginType } from '/@/views/modules/system/loginType/LoginType.api'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { useValidate } from '/@/hooks/bootx/useValidate'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
 

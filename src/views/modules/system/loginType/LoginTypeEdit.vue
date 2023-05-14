@@ -75,7 +75,7 @@
   import { add, LoginType, get, existsByCode, existsByCodeNotId, update, PASSWORD, OPEN_ID } from './LoginType.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { useValidate } from '/@/hooks/bootx/useValidate'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   const { existsByServer } = useValidate()

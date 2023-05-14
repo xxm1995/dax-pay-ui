@@ -43,7 +43,7 @@
 
 <script lang="ts" setup>
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { getDeptIds, saveDeptAssign } from '/@/views/modules/system/scope/DataScope.api'
   import XEUtils from 'xe-utils'
   import { treeDataTranslate } from '/@/utils/dataUtil'

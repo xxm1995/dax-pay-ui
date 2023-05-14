@@ -65,7 +65,7 @@
 
 <script lang="ts" setup>
   import { computed, onMounted, reactive, ref } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { pageFile, deleteFile } from './WechatMedia.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'

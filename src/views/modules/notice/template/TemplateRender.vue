@@ -31,7 +31,7 @@
 <script lang="ts" setup>
   import CodeEditor from '/@/components/CodeEditor/src/CodeEditor.vue'
   import { MODE } from '/@/components/CodeEditor'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { get, MessageTemplate, render } from '/@/views/modules/notice/template/MessageTemplate.api'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import { useMessage } from '/@/hooks/web/useMessage'

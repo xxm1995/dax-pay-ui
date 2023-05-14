@@ -50,7 +50,7 @@
   import { CropperAvatar } from '/@/components/Cropper'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { useUserStore } from '/@/store/modules/user'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { getFilePreviewUrlPrefix, UpdateFileInfo, uploadFile } from '/@/api/common/FileUpload'
   import { useDict } from '/@/hooks/bootx/useDict'

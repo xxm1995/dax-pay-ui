@@ -87,7 +87,7 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { page, superPage } from './Payment.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import PaymentInfo from './PaymentInfo.vue'

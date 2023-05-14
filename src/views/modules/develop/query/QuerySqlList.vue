@@ -57,7 +57,7 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { del, page } from './QuerySql.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import QuerySqlEdit from './QuerySqlEdit.vue'

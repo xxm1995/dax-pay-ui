@@ -75,7 +75,7 @@
 
 <script lang="ts" setup>
   import { nextTick, onMounted } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { del, DeptTree, tree } from './Dept.api'
   import DeptEdit from './DeptEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'

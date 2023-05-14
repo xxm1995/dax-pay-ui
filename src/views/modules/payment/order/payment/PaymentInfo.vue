@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { get, Payment } from './Payment.api'
   import { FormInstance } from 'ant-design-vue/lib/form'

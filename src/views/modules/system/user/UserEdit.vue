@@ -49,7 +49,7 @@
 <script lang="ts" setup>
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { computed, nextTick, onMounted, reactive } from 'vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'

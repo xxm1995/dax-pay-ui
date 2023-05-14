@@ -26,7 +26,7 @@
   import { reactive, computed, unref, onMounted } from 'vue'
   import LoginFormTitle from './LoginFormTitle.vue'
   import { useLoginState, LoginStateEnum } from './useLogin'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import CountDownInput from '/@/components/CountDown/src/CountdownInput.vue'
   import { useMessage } from '/@/hooks/web/useMessage'

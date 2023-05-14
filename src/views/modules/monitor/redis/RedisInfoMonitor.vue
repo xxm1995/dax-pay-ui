@@ -56,7 +56,7 @@
   import { ref, Ref, onMounted, onBeforeUnmount } from 'vue'
   import { useECharts } from '/@/hooks/web/useECharts'
   import { getRedisInfo } from '/@/views/modules/monitor/redis/RedisInfoMonitor.api'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { useIntervalFn } from '@vueuse/core'
 
   const commandStatsChartRef = ref<HTMLDivElement | null>(null)

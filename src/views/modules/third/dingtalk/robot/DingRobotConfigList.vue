@@ -56,7 +56,7 @@
 
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { del, page } from './DingRobotConfig.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import DingRobotConfigEdit from './DingRobotConfigEdit.vue'

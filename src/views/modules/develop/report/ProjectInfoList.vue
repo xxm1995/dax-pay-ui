@@ -87,7 +87,7 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { copy, del, enableEditContent, getGoViewUrl, page, publish, resetEditContent, unPublish } from './ProjectInfo.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import ProjectInfoEdit from './ProjectInfoEdit.vue'

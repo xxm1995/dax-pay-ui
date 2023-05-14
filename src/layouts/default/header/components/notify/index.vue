@@ -39,7 +39,7 @@
   import { BellOutlined } from '@ant-design/icons-vue'
   import { useDesign } from '/@/hooks/web/useDesign'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { pageByReceive } from '/@/layouts/default/header/components/notify/SiteMessage.api'
   import { router } from '/@/router'
   import { PageEnum } from '/@/enums/pageEnum'

@@ -38,7 +38,7 @@
 <script lang="ts" setup>
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { computed, nextTick } from 'vue'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { useMessage } from '/@/hooks/web/useMessage'

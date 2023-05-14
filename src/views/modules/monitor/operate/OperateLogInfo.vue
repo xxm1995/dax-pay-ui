@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { get, OperateLog } from './OperateLog.api'
   import { BasicModal } from '/@/components/Modal'
   import { DescItem } from '/@/components/Description'

@@ -67,7 +67,7 @@
 
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { del, page } from './DynamicForm.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import DynamicFormEdit from './DynamicFormEdit.vue'

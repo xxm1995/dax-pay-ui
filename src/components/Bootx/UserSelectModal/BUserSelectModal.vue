@@ -56,7 +56,7 @@
   import { BasicModal } from '/@/components/Modal'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { computed } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { STRING } from '/@/components/Bootx/Query/Query'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { page } from '/@/views/modules/system/user/User.api'

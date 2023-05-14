@@ -71,7 +71,7 @@
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import Icon from '/@/components/Icon/src/Icon.vue'
   import RoleMenuModal from "./RoleMenuModal.vue";

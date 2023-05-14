@@ -87,7 +87,7 @@
 <script lang="ts" setup>
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { computed, nextTick } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { add, get, Menu, menuTree, update } from '/@/views/modules/system/menu/Menu.api'
   import { FormEditType } from '/@/enums/formTypeEnum'

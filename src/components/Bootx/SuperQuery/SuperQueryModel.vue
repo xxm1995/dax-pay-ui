@@ -32,7 +32,7 @@
 <script lang="ts" setup>
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import SuperQueryItem from '/@/components/Bootx/SuperQuery/SuperQueryItem.vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { QueryField, QueryParam } from '/@/components/Bootx/Query/Query'
   import { watch } from "vue";
 

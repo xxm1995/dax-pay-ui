@@ -89,7 +89,7 @@
 
 <script lang="ts" setup>
   import { nextTick, onMounted } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { del, delBatch, batchUpdateEnable, page, syncSystem } from './PermPath.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import PermPathEdit from './PermPathEdit.vue'

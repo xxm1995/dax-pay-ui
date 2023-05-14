@@ -66,7 +66,7 @@
 
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { createWalletBatch, del, lock, page, pageByNotWallet, unlock } from './Wallet.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import WalletInfo from './WalletInfo.vue'

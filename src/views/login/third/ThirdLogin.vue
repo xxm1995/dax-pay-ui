@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
   import { DingdingOutlined, WechatFilled, createFromIconfontCN } from '@ant-design/icons-vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { getAppEnvConfig } from '/@/utils/env'
   import { useUserStore } from '/@/store/modules/user'
   import { LoginParams } from '/@/api/sys/model/userModel'

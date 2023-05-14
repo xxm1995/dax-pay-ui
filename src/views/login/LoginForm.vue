@@ -76,7 +76,7 @@
   import { useDesign } from '/@/hooks/web/useDesign'
   import { getAppEnvConfig } from '/@/utils/env'
   import { imgCaptcha } from '/@/api/common/Captcha'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { findLoginTypeByCode, LoginType } from '/@/api/common/LoginAssist'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { LoginParams } from '/@/api/sys/model/userModel'

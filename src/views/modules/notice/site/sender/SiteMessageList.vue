@@ -76,7 +76,7 @@
 
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { cancel, del, pageBySender, send } from '../SiteMessage.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import SiteMessageEdit from './SiteMessageEdit.vue'

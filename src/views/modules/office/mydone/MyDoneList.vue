@@ -39,7 +39,7 @@
   import ALink from '/@/components/Link/Link.vue'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { onMounted } from 'vue'

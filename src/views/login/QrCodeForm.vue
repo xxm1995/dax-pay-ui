@@ -16,7 +16,7 @@
   import { Button, Divider } from 'ant-design-vue'
   import { QrCode } from '/@/components/Qrcode'
   import { useLoginState, LoginStateEnum } from './useLogin'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { applyQrCode, getQrStatus } from '/@/api/sys/login'
   import { useDebounceFn, useIntervalFn } from '@vueuse/core'
   import { getAppEnvConfig } from '/@/utils/env'

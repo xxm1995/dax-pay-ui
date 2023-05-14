@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { useMessage } from '/@/hooks/web/useMessage'
   import SuperQueryModel from './SuperQueryModel.vue'
   import { QueryField } from '/@/components/Bootx/Query/Query'

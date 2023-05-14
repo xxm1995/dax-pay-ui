@@ -50,7 +50,7 @@
 
 <script lang="ts" setup>
   import { BasicDrawer } from '/@/components/Drawer'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { findAll as findClients, Client } from '/@/views/modules/system/client/Client.api'
   import { getAppEnvConfig } from '/@/utils/env'
   import { findPermissionIdsByRole, saveRoleMenu } from '/@/views/modules/system/role/Role.api'

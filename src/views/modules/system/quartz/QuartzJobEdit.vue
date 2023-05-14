@@ -51,7 +51,7 @@
 
 <script lang="ts" setup>
   import { nextTick, reactive, unref } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { add, get, update, QuartzJob, judgeJobClass } from './QuartzJob.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'

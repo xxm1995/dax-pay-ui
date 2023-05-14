@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { VxeTableInstance } from 'vxe-table'
   import { findPathIdsByRole, findPathsByUser, saveRoleMenu, saveRolePath } from "./Role.api";
   import XEUtils from 'xe-utils'

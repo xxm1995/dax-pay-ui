@@ -78,7 +78,7 @@
 
 <script lang="ts" setup>
   import { getTableGenParam } from './CodeGen.api'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { nextTick } from 'vue'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { FormInstance } from 'ant-design-vue/lib/form'

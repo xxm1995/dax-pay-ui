@@ -71,7 +71,7 @@
 </template>
 <script lang="ts" setup>
   import { CollapseContainer } from '/@/components/Container'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { onMounted } from 'vue'
   import PasswordEdit from './PasswordEdit.vue'
   import PhoneBind from './PhoneBind.vue'

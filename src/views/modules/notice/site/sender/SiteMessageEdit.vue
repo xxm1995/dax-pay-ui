@@ -43,7 +43,7 @@
 <script lang="ts" setup>
   import '@wangeditor/editor/dist/css/style.css' // 引入 css
   import { nextTick, onBeforeUnmount, reactive, shallowRef } from 'vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { saveOrUpdate, get } from '../SiteMessage.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'

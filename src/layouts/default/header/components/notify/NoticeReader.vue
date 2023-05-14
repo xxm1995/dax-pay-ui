@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { SiteMessage } from '/@/views/modules/notice/site/SiteMessage.api'
   import { findById, read } from './SiteMessage.api'
   import { useSiteMessageStore } from '/@/layouts/default/header/components/notify/SiteMessage.store'

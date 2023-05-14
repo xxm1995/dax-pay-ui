@@ -117,7 +117,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { onMounted } from 'vue'
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { lockUser, lockUserBatch, page, unlockUser, unlockUserBatch } from './User.api'
   import { useDict } from '/@/hooks/bootx/useDict'

@@ -45,7 +45,7 @@
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { pageFile } from './WechatMedia.api'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { reactive } from 'vue'
   import { useDict } from '/@/hooks/bootx/useDict'

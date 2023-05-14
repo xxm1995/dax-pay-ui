@@ -36,7 +36,7 @@
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { findAll as roleList } from '/@/views/modules/system/role/Role.api'

@@ -48,7 +48,7 @@
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { nextTick, onMounted } from 'vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { del, Menu, Resource, resourceList } from '/@/views/modules/system/menu/Menu.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'

@@ -111,7 +111,7 @@
 
 <script lang="ts" setup>
   import { getAppEnvConfig } from '/@/utils/env'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { nextTick, onMounted } from 'vue'
   import { Client, findAll } from '/@/views/modules/system/client/Client.api'
   import XEUtils from 'xe-utils'

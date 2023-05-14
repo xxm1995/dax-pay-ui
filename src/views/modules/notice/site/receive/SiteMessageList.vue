@@ -47,7 +47,7 @@
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { onMounted } from 'vue'
   import { pageByReceive } from '/@/views/modules/notice/site/SiteMessage.api'

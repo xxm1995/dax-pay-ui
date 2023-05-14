@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { findAllDataSource, removeDataSourceByKey } from './DynamicDataSource.api'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { KeyValue } from '/#/web'

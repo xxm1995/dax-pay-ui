@@ -36,7 +36,7 @@
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { nextTick } from 'vue'
   import { add, existsByPermCode, existsByPermCodeNotId, get, Resource, update } from './Menu.api'
   import { BasicModal } from '/@/components/Modal/'

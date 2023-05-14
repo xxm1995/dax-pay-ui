@@ -11,7 +11,7 @@
 
 <script lang="ts" setup>
   import QrCode from '/@/components/Qrcode/src/Qrcode.vue'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
 
   let visible = $ref(false)
   let icon = $ref('')

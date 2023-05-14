@@ -36,7 +36,7 @@
 <script lang="ts" setup>
   import { useMessage } from '/@/hooks/web/useMessage'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { UserInfo } from '/@/views/modules/system/user/User.api'
   import { LabeledValue } from 'ant-design-vue/lib/select'

@@ -141,7 +141,7 @@
 <script lang="ts" setup>
   import { onBeforeUnmount, onMounted, onUnmounted } from 'vue'
   import { getSystemInfo } from './SystemInfo.api'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { useIntervalFn } from '@vueuse/core'
 
   let interval: any = null

@@ -35,7 +35,7 @@
   import LoginFormTitle from '../LoginFormTitle.vue'
   import { StrengthMeter } from '/@/components/StrengthMeter'
   import { useLoginState, LoginStateEnum } from '../useLogin'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { imgCaptcha } from '/@/api/common/Captcha'
   import { existsUsername } from '/@/api/sys/userAssist'

@@ -32,7 +32,7 @@
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
-  import { $ref } from '@vue-macros/reactivity-transform/macros'
+  import { $ref } from 'vue/macros'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { nextTick } from 'vue'
   import { pageByWalletId } from '/@/views/modules/payment/wallet/list/WalletLog.api'
