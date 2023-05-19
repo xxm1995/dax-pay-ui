@@ -87,7 +87,7 @@
   const { labelCol, wrapperCol, visible } = useFormEdit()
 
   const form = $ref({
-    basePack: 'cn.bootx',
+    basePack: 'cn.bootx.platform.daxpay',
     module: '',
     tableName: '',
     entityName: '',
