@@ -18,6 +18,9 @@
       <a-form-item label="参数键名" name="paramKey">
         <a-input v-model:value="form.paramKey" :disabled="showable" placeholder="请输入参数键名" />
       </a-form-item>
+      <a-form-item label="参数值" name="value">
+        <a-input v-model:value="form.value" :disabled="showable" placeholder="请输入参数值" />
+      </a-form-item>
       <a-form-item label="参数类型" name="type">
         <a-select
           allowClear
@@ -35,7 +38,7 @@
         <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.internal" disabled />
       </a-form-item>
       <a-form-item label="备注" name="remark">
-        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
+        <a-textarea :rows="3" v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>
     </a-form>
     <template #footer>

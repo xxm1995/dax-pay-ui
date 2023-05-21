@@ -77,8 +77,8 @@ export interface MerchantInfo extends BaseEntity {
   contactName?: string
   // 联系人手机号
   contactTel?: string
-  // 是否停用
-  deactivate?: string
+  // 状态
+  state?: string
   // 商户备注
   remark?: string
 }

@@ -1,12 +1,12 @@
 <template>
-  <basic-modal
+  <basic-drawer
+    showFooter
     v-bind="$attrs"
-    :loading="confirmLoading"
-    :title="title"
     :width="modalWidth"
+    :title="title"
     :visible="visible"
     :mask-closable="showable"
-    @cancel="handleCancel"
+    @close="handleCancel"
   >
     <a-form
       class="small-from-item"
@@ -29,20 +29,27 @@
       <a-form-item label="商户简称" name="mchShortName">
         <a-input v-model:value="form.mchShortName" :disabled="showable" placeholder="请输入商户简称" />
       </a-form-item>
-      <a-form-item label="类型" name="type">
-        <a-input v-model:value="form.type" :disabled="showable" placeholder="请输入类型" />
-      </a-form-item>
       <a-form-item label="联系人姓名" name="contactName">
         <a-input v-model:value="form.contactName" :disabled="showable" placeholder="请输入联系人姓名" />
       </a-form-item>
       <a-form-item label="联系人手机号" name="contactTel">
         <a-input v-model:value="form.contactTel" :disabled="showable" placeholder="请输入联系人手机号" />
       </a-form-item>
-      <a-form-item label="是否停用" name="deactivate">
-        <a-input v-model:value="form.deactivate" :disabled="showable" placeholder="请输入是否停用" />
+      <a-form-item label="商户状态" name="state">
+        <a-select
+          placeholder="请选择商户状态"
+          style="width: 100%"
+          v-model:value="form.state"
+          :disabled="showable"
+          :options="[
+            { label: '启用', value: 'enable' },
+            { label: '停用', value: 'disable' },
+          ]"
+          allow-clear
+        />
       </a-form-item>
       <a-form-item label="商户备注" name="remark">
-        <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入商户备注" />
+        <a-textarea :row="3" v-model:value="form.remark" :disabled="showable" placeholder="请输入商户备注" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -51,7 +58,7 @@
         <a-button v-if="!showable" key="forward" :loading="confirmLoading" type="primary" @click="handleOk">保存</a-button>
       </a-space>
     </template>
-  </basic-modal>
+  </basic-drawer>
 </template>
 
 <script lang="ts" setup>
@@ -61,7 +68,7 @@
   import { add, get, update, MerchantInfo } from './MerchantInfo.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
-  import { BasicModal } from '/@/components/Modal'
+  import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   const {
     initFormEditType,
     handleCancel,
@@ -86,11 +93,17 @@
     type: '',
     contactName: '',
     contactTel: '',
-    deactivate: '',
+    state: undefined,
     remark: '',
   })
   // 校验
-  const rules = reactive({} as Record<string, Rule[]>)
+  const rules = reactive({
+    mchName: [{ required: true, message: '商户名称不可为空' }],
+    mchShortName: [{ required: true, message: '商户简称不可为空' }],
+    contactName: [{ required: true, message: '联系人姓名不可为空' }],
+    contactTel: [{ required: true, message: '联系人手机号不可为空' }],
+    state: [{ required: true, message: '商户状态不可为空' }],
+  } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
   // 入口

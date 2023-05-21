@@ -1,7 +1,14 @@
 <template>
   <div>
     <div class="m-3 p-3 pt-5 bg-white">
-      <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
+      <b-query
+        :default-item-md="6"
+        :default-item-count="3"
+        :query-params="model.queryParam"
+        :fields="fields"
+        @query="queryPage"
+        @reset="resetQueryParams"
+      />
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
@@ -15,11 +22,13 @@
         <vxe-column type="seq" width="60" />
         <vxe-column field="mchNo" title="商户号" />
         <vxe-column field="mchName" title="商户名称" />
+        <vxe-column field="contactTel" title="手机号" />
         <vxe-column field="mchShortName" title="商户简称" />
-        <vxe-column field="type" title="类型" />
-        <vxe-column field="contactName" title="联系人姓名" />
-        <vxe-column field="contactTel" title="联系人手机号" />
-        <vxe-column field="deactivate" title="是否停用" />
+        <vxe-column field="state" title="商户状态">
+          <template #default="{ row }">
+            <a-tag>{{ row.state === 'enable' ? '启用' : '停用' }}</a-tag>
+          </template>
+        </vxe-column>
         <vxe-column field="remark" title="商户备注" />
         <vxe-column field="createTime" title="创建时间" />
         <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
@@ -32,7 +41,7 @@
               <a-link @click="edit(row)">编辑</a-link>
             </span>
             <a-divider type="vertical" />
-            <a-link danger @click="remove(row)" >删除</a-link>
+            <a-link danger @click="remove(row)">删除</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -66,7 +75,20 @@
   const { notification, createMessage, createConfirm } = useMessage()
 
   // 查询条件
-  const fields = [] as QueryField[]
+  const fields = [
+    { field: 'mchNo', name: '商户号' },
+    { field: 'mchName', name: '商户名称' },
+    { field: 'contactTel', name: '手机号' },
+    {
+      field: 'state',
+      name: '商户状态',
+      type: 'list',
+      selectList: [
+        { label: '启用', value: 'enable' },
+        { label: '停用', value: 'disable' },
+      ],
+    },
+  ] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
@@ -117,7 +139,7 @@
         })
       },
     })
-    }
+  }
 </script>
 
 <style lang="less" scoped></style>
