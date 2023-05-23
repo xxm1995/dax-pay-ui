@@ -7,7 +7,7 @@ import { BaseEntity } from '/#/web'
  */
 export function page(params) {
   return defHttp.get<Result<PageResult<MchApplication>>>({
-    url: '/merchant/page',
+    url: '/mch/app/page',
     params,
   })
 }
@@ -17,7 +17,7 @@ export function page(params) {
  */
 export function findAll() {
   return defHttp.get<Result<MchApplication[]>>({
-    url: '/merchant/findAll',
+    url: '/mch/app/findAll',
   })
 }
 
@@ -26,7 +26,7 @@ export function findAll() {
  */
 export function get(id) {
   return defHttp.get<Result<MchApplication>>({
-    url: '/merchant/findById',
+    url: '/mch/app/findById',
     params: { id },
   })
 }
@@ -36,7 +36,7 @@ export function get(id) {
  */
 export function add(obj: MchApplication) {
   return defHttp.post({
-    url: '/merchant/add',
+    url: '/mch/app/add',
     data: obj,
   })
 }
@@ -46,7 +46,7 @@ export function add(obj: MchApplication) {
  */
 export function update(obj: MchApplication) {
   return defHttp.post({
-    url: '/merchant/update',
+    url: '/mch/app/update',
     data: obj,
   })
 }
@@ -56,7 +56,7 @@ export function update(obj: MchApplication) {
  */
 export function del(id) {
   return defHttp.delete({
-    url: '/merchant/delete',
+    url: '/mch/app/delete',
     params: { id },
   })
 }

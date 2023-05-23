@@ -21,20 +21,29 @@
         <a-form-item label="主键" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="应用编码" name="appNo">
-          <a-input v-model:value="form.appNo" :disabled="showable" placeholder="请输入应用编码" />
+        <a-form-item label="应用编码" v-show="editable || showable" name="appNo">
+          <a-input v-model:value="form.appNo" disabled placeholder="请输入应用编码" />
+        </a-form-item>
+        <a-form-item label="商户" name="mchNo">
+          <a-select allow-clear :options="mchList" :disabled="mchNo || showable" v-model:value="form.mchNo" placeholder="请选择商户" />
         </a-form-item>
         <a-form-item label="名称" name="name">
           <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
         </a-form-item>
-        <a-form-item label="商户号" name="mchNo">
-          <a-input v-model:value="form.mchNo" :disabled="showable" placeholder="请输入商户号" />
-        </a-form-item>
-        <a-form-item label="状态类型" name="state">
-          <a-input v-model:value="form.state" :disabled="showable" placeholder="请输入状态类型" />
+        <a-form-item label="应用状态" name="state">
+          <a-select
+            placeholder="请选择应用状态"
+            style="width: 100%"
+            v-model:value="form.state"
+            :disabled="showable"
+            :options="[
+              { label: '启用', value: 'enable' },
+              { label: '停用', value: 'disable' },
+            ]"
+          />
         </a-form-item>
         <a-form-item label="备注" name="remark">
-          <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
+          <a-textarea :row="3" v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -55,6 +64,9 @@
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicDrawer } from '/@/components/Drawer'
+  import { dropdown } from '/@/views/modules/payment/merchant/MerchantInfo.api'
+  import { dropdownTranslate } from '/@/utils/dataUtil'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
   const {
     initFormEditType,
     handleCancel,
@@ -73,22 +85,44 @@
   const formRef = $ref<FormInstance>()
   let form = $ref<MchApplication>({
     id: null,
-    appNo: null,
-    name: null,
-    mchNo: null,
-    state: null,
-    remark: null,
+    appNo: '',
+    name: '',
+    mchNo: undefined,
+    state: undefined,
+    remark: '',
   })
+  let mchList = $ref<LabeledValue[]>([])
+  let mchNo = $ref<string>()
+
   // 校验
-  const rules = reactive({} as Record<string, Rule[]>)
+  const rules = reactive({
+    name: [{ required: true, message: '请输入应用名称' }],
+    mchNo: [{ required: true, message: '请选择商户' }],
+    state: [{ required: true, message: '请选择状态' }],
+  } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  function init(id, editType: FormEditType) {
+  function init(id, editType: FormEditType, mchNo) {
     initFormEditType(editType)
     resetForm()
+    initData(mchNo)
     getInfo(id, editType)
   }
+  /**
+   * 初始化
+   */
+  function initData(mchNoValue) {
+    if (mchNoValue) {
+      mchNo = mchNoValue
+      form.mchNo = mchNoValue
+    }
+    // 列表
+    dropdown().then(({ data }) => {
+      mchList = dropdownTranslate(data, 'value', 'key')
+    })
+  }
+
   // 获取信息
   function getInfo(id, editType: FormEditType) {
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {

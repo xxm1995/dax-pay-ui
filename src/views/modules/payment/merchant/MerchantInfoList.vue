@@ -45,7 +45,9 @@
               <a-link @click="showApps(row)">应用列表</a-link>
             </span>
             <a-divider type="vertical" />
-            <a-link danger @click="remove(row)">删除</a-link>
+            <span>
+              <a-link danger @click="remove(row)">删除</a-link>
+            </span>
           </template>
         </vxe-column>
       </vxe-table>
@@ -73,11 +75,12 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
-  import { router } from '/@/router'
+  import { useRouter } from 'vue-router'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
+  const { push } = useRouter()
 
   // 查询条件
   const fields = [
@@ -130,9 +133,9 @@
   function show(record) {
     merchantInfoEdit.init(record.id, FormEditType.Show)
   }
-  // 查看
+  // 查看应用列表
   function showApps(record) {
-    router.push({})
+    push({ name: 'MchApplicationList', query: { mchNo: record.mchNo } })
   }
 
   // 删除
