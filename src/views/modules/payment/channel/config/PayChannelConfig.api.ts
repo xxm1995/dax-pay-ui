@@ -62,6 +62,23 @@ export function del(id) {
 }
 
 /**
+ * 编码是否被使用
+ */
+export const existsByCode = (code: string) => {
+  return defHttp.get<Result<boolean>>({
+    url: '/channel/existsByCode',
+    params: { code },
+  })
+}
+export const existsByCodeNotId = (code: string, id) => {
+  return defHttp.get<Result<boolean>>({
+    url: '/channel/existsByCodeNotId',
+    params: { code, id },
+  })
+}
+
+
+/**
  * 支付通道配置
  */
 export interface PayChannelConfig extends BaseEntity {
@@ -69,6 +86,8 @@ export interface PayChannelConfig extends BaseEntity {
   code?: string
   // 支付通道名称
   name?: string
+  // 排序
+  sortNo?: number
   // 图片
   image?: string
 }

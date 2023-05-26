@@ -6,6 +6,7 @@ import { Icon } from './Icon'
 import {
   Layout,
   Input,
+  Image,
   Badge,
   Popover,
   InputNumber,
@@ -48,6 +49,7 @@ export function registerGlobComp(app: App) {
   app.use(Button)
   app.use(Link)
   app.use(Icon)
+  app.use(Image)
   app.use(Layout)
   app.use(InputNumber)
   app.use(Tag)

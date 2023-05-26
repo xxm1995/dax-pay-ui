@@ -72,7 +72,7 @@
   import { useTabs } from '/@/hooks/web/useTabs'
   import { useTitle } from '@vueuse/core'
   import ALink from '/@/components/Link/Link.vue'
-  import PayConfig from './PayConfig.vue'
+  import PayConfig from './MchAppPayConfigList.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, pagination, pages, model, loading, superQueryFlag } = useTablePage(queryPage)
@@ -169,7 +169,7 @@
   }
   // 支付配置
   function config(record) {
-    payConfig.show(record.appNo)
+    payConfig.show(record)
   }
 
   // 删除

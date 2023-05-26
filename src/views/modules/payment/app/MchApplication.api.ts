@@ -22,6 +22,16 @@ export function findAll() {
 }
 
 /**
+ * 关联支付配置列表
+ */
+export function findAllConfig(appId) {
+  return defHttp.get<Result<MchAppPayConfigResult[]>>({
+    url: '/mch/app/findAllConfig',
+    params: { appId },
+  })
+}
+
+/**
  * 获取单条
  */
 export function get(id) {
@@ -75,4 +85,22 @@ export interface MchApplication extends BaseEntity {
   state?: string
   // 备注
   remark?: string
+}
+
+/**
+ * 支付通道配置
+ */
+export interface MchAppPayConfigResult {
+  // 支付通道编码
+  channelCode: string
+  // 支付通道名称
+  channelName: string
+  // 状态
+  state: string
+  // 排序
+  sortNo: number
+  // 图片
+  img: string
+  // 关联配置ID
+  configId: string
 }

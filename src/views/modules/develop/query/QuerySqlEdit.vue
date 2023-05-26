@@ -18,7 +18,7 @@
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
     >
-      <a-form-item label="主键" :hidden="true">
+      <a-form-item label="主键" name="id" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
       <a-form-item label="数据源ID" name="databaseId">
