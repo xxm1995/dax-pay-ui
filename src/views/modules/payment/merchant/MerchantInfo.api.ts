@@ -74,11 +74,11 @@ export function del(id) {
  */
 export interface MerchantInfo extends BaseEntity {
   // 商户号
-  mchNo?: string
+  code?: string
   // 商户名称
-  mchName?: string
+  name?: string
   // 商户简称
-  mchShortName?: string
+  shortName?: string
   // 类型
   type?: string
   // 联系人姓名

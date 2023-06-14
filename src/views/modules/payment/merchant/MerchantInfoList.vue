@@ -20,13 +20,13 @@
       </vxe-toolbar>
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
-        <vxe-column field="mchNo" title="商户号" />
-        <vxe-column field="mchName" title="商户名称" />
+        <vxe-column field="code" title="商户号" />
+        <vxe-column field="name" title="商户名称" />
         <vxe-column field="contactTel" title="手机号" />
-        <vxe-column field="mchShortName" title="商户简称" />
+        <vxe-column field="shortName" title="商户简称" />
         <vxe-column field="state" title="商户状态">
           <template #default="{ row }">
-            <a-tag>{{ row.state === 'enable' ? '启用' : '停用' }}</a-tag>
+            <a-tag>{{ dictConvert('MchAndAppCode', row.state) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="remark" title="商户备注" />
@@ -76,11 +76,14 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
   import { useRouter } from 'vue-router'
+  import { useDict } from '/@/hooks/bootx/useDict'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
   const { push } = useRouter()
+
+  const { dictConvert } = useDict()
 
   // 查询条件
   const fields = [
@@ -135,7 +138,7 @@
   }
   // 查看应用列表
   function showApps(record) {
-    push({ name: 'MchApplicationList', query: { mchNo: record.mchNo } })
+    push({ name: 'MchApplicationList', query: { mchCode: record.code } })
   }
 
   // 删除

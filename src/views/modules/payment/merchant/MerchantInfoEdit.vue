@@ -21,14 +21,14 @@
         <a-form-item label="主键" name="id" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
-        <a-form-item v-if="editable || showable" label="商户号" name="mchNo">
-          <a-input disabled v-model:value="form.mchNo" placeholder="请输入商户号" />
+        <a-form-item v-if="editable || showable" label="商户号" name="code">
+          <a-input disabled v-model:value="form.code" placeholder="请输入商户号" />
         </a-form-item>
-        <a-form-item label="商户名称" name="mchName">
-          <a-input v-model:value="form.mchName" :disabled="showable" placeholder="请输入商户名称" />
+        <a-form-item label="商户名称" name="name">
+          <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入商户名称" />
         </a-form-item>
-        <a-form-item label="商户简称" name="mchShortName">
-          <a-input v-model:value="form.mchShortName" :disabled="showable" placeholder="请输入商户简称" />
+        <a-form-item label="商户简称" name="shortName">
+          <a-input v-model:value="form.shortName" :disabled="showable" placeholder="请输入商户简称" />
         </a-form-item>
         <a-form-item label="联系人姓名" name="contactName">
           <a-input v-model:value="form.contactName" :disabled="showable" placeholder="请输入联系人姓名" />
@@ -42,10 +42,7 @@
             style="width: 100%"
             v-model:value="form.state"
             :disabled="showable"
-            :options="[
-              { label: '启用', value: 'enable' },
-              { label: '停用', value: 'disable' },
-            ]"
+            :options="dictDropDown('MchAndAppCode')"
             allow-clear
           />
         </a-form-item>
@@ -71,6 +68,7 @@
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
+  import { useDict } from '/@/hooks/bootx/useDict'
   const {
     initFormEditType,
     handleCancel,
@@ -85,13 +83,16 @@
     showable,
     formEditType,
   } = useFormEdit()
+
+  const { dictDropDown } = useDict()
+
   // 表单
   const formRef = $ref<FormInstance>()
   let form = $ref<MerchantInfo>({
     id: null,
-    mchNo: '',
-    mchName: '',
-    mchShortName: '',
+    code: '',
+    name: '',
+    shortName: '',
     type: '',
     contactName: '',
     contactTel: '',
@@ -100,9 +101,9 @@
   })
   // 校验
   const rules = reactive({
-    mchName: [{ required: true, message: '商户名称不可为空' }],
-    mchShortName: [{ required: true, message: '商户简称不可为空' }],
-    contactName: [{ required: true, message: '联系人姓名不可为空' }],
+    code: [{ required: true, message: '商户名称不可为空' }],
+    name: [{ required: true, message: '商户简称不可为空' }],
+    shortName: [{ required: true, message: '联系人姓名不可为空' }],
     contactTel: [{ required: true, message: '联系人手机号不可为空' }],
     state: [{ required: true, message: '商户状态不可为空' }],
   } as Record<string, Rule[]>)

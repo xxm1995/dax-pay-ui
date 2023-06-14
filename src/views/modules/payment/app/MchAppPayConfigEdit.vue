@@ -1,20 +1,18 @@
 <template>
-    <AlipayConfigEdit v-if="currentComponent === AlipayConfigEdit"/>
-    <WechatPayConfigEdit v-else-if="currentComponent === AlipayConfigEdit"/>
+  <mch-app-alipay-config-edit ref="alipay" />
 </template>
 <script setup lang="ts">
-  import { BasicDrawer } from '/@/components/Drawer'
   import { $ref } from 'vue/macros'
-  import AlipayConfigEdit from '/@/views/modules/payment/channel/alipay/AlipayConfigEdit.vue'
   import WechatPayConfigEdit from '/@/views/modules/payment/channel/wechat/WechatPayConfigEdit.vue'
   import { MchAppPayConfigResult } from '/@/views/modules/payment/app/MchApplication.api'
+  import MchAppAlipayConfigEdit from '/@/views/modules/payment/channel/alipay/MchAppAlipayConfigEdit.vue'
 
-  let currentComponent = $ref<any>()
-  let config = $ref<MchAppPayConfigResult>({ channelName: '配置' } as MchAppPayConfigResult)
-  let visible = $ref(false)
+  let alipay = $ref<any>()
+
+  let component = $ref<any>()
 
   const map = {
-    ali_pay: 'AlipayConfigEdit',
+    ali_pay: alipay,
     wechat_pay: 'WechatPayConfigEdit',
     union_pay: null,
     cash_pay: null,
@@ -26,16 +24,16 @@
    * 打开
    */
   function show(record: MchAppPayConfigResult) {
-    config = record
-    visible = true
-    currentComponent = map[record.channelCode]
+    component = map[record.channelCode]
+    console.log(123)
+    console.log(component)
+    component.init(record)
   }
 
   /**
    * 关闭
    */
   function handleCancel() {
-    visible = false
   }
 
   defineExpose({ show })

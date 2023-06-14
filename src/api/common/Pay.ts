@@ -5,7 +5,7 @@ import { defHttp } from '/@/utils/http/axios'
  */
 export function cancelByPaymentId(paymentId) {
   return defHttp.post({
-    url: '/uni_pay/cancelByPaymentId',
+    url: '/uniPay/cancelByPaymentId',
     params: { paymentId },
   })
 }
@@ -15,7 +15,7 @@ export function cancelByPaymentId(paymentId) {
  */
 export function refund(obj) {
   return defHttp.post({
-    url: '/uni_pay/refund',
+    url: '/uniPay/refund',
     data: obj,
   })
 }
@@ -25,7 +25,7 @@ export function refund(obj) {
  */
 export function syncByBusinessId(businessId) {
   return defHttp.post({
-    url: '/uni_pay/syncByBusinessId',
+    url: '/uniPay/syncByBusinessId',
     method: 'POST',
     params: { businessId },
   })

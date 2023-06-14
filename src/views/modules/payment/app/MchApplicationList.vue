@@ -13,16 +13,16 @@
       </vxe-toolbar>
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
-        <vxe-column field="appNo" title="应用编码">
+        <vxe-column field="code" title="应用编码">
           <template #default="{ row }">
-            <a-link @click="show(row)">{{ row.appNo }}</a-link>
+            <a-link @click="show(row)">{{ row.code }}</a-link>
           </template>
         </vxe-column>
         <vxe-column field="name" title="名称" />
-        <vxe-column field="mchNo" title="商户号" />
+        <vxe-column field="mchCode" title="商户号" />
         <vxe-column field="state" title="状态">
           <template #default="{ row }">
-            <a-tag>{{ row.state === 'enable' ? '启用' : '停用' }}</a-tag>
+            <a-tag>{{ dictConvert('MchAndAppCode', row.state) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="remark" title="备注" />
@@ -52,7 +52,7 @@
         @page-change="handleTableChange"
       />
       <mch-application-edit ref="mchApplicationEdit" @ok="queryPage" />
-      <pay-config ref="payConfig" />
+      <mch-app-pay-config-list ref="mchAppPayConfigList" />
     </div>
   </div>
 </template>
@@ -63,6 +63,7 @@
   import { del, page } from './MchApplication.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import MchApplicationEdit from './MchApplicationEdit.vue'
+  import MchAppPayConfigList from './mchAppPayConfigList.vue'
   import { VxeTableInstance, VxeToolbarInstance, VxeTable, VxeColumn, VxePager, VxeToolbar } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
@@ -72,19 +73,20 @@
   import { useTabs } from '/@/hooks/web/useTabs'
   import { useTitle } from '@vueuse/core'
   import ALink from '/@/components/Link/Link.vue'
-  import PayConfig from './MchAppPayConfigList.vue'
+  import { useDict } from '/@/hooks/bootx/useDict'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, pagination, pages, model, loading, superQueryFlag } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
   const route = useRoute()
+  const { dictConvert } = useDict()
   const { setTitle } = useTabs()
 
-  let mchNo = $ref<string>()
+  let mchCode = $ref<string>()
 
   // 查询条件
   const fields = computed<QueryField[]>(() => [
-    { field: 'mchNo', name: '商户号', placeholder: '请输入商户号', disable: !!mchNo },
+    { field: 'mchCode', name: '商户号', placeholder: '请输入商户号', disable: !!mchCode },
     { field: 'appId', name: 'APPID', placeholder: '请输入应用APPID' },
     { field: 'name', name: '名称', placeholder: '请输入应用名称' },
   ])
@@ -92,7 +94,7 @@
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const mchApplicationEdit = $ref<any>()
-  const payConfig = $ref<any>()
+  const mchAppPayConfigList = $ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -100,7 +102,7 @@
     queryPage()
   })
   onActivated(() => {
-    if (mchNo) {
+    if (mchCode) {
       setupTitle()
     }
   })
@@ -116,8 +118,8 @@
    * 初始化数据
    */
   function initData() {
-    mchNo = route.query.mchNo as string
-    model.queryParam['mchNo'] = mchNo
+    mchCode = route.query.mchCode as string
+    model.queryParam['mchCode'] = mchCode
     setupTitle()
   }
 
@@ -125,11 +127,11 @@
    * 设置标题
    */
   function setupTitle() {
-    if (mchNo) {
+    if (mchCode) {
       // 标签标题
-      setTitle(`商户应用(${mchNo})`)
+      setTitle(`商户应用(${mchCode})`)
       // 浏览器标题
-      useTitle(`商户 ${mchNo} 的应用列表`)
+      useTitle(`商户 ${mchCode} 的应用列表`)
     }
   }
 
@@ -139,7 +141,7 @@
   function resetQueryParams() {
     superQueryFlag.value = false
     model.queryParam = {
-      mchNo,
+      mchCode: mchCode,
     }
   }
 
@@ -157,7 +159,7 @@
   }
   // 新增
   function add() {
-    mchApplicationEdit.init(null, FormEditType.Add, mchNo)
+    mchApplicationEdit.init(null, FormEditType.Add, mchCode)
   }
   // 编辑
   function edit(record) {
@@ -169,7 +171,7 @@
   }
   // 支付配置
   function config(record) {
-    payConfig.show(record)
+    mchAppPayConfigList.show(record)
   }
 
   // 删除

@@ -24,8 +24,8 @@
         <a-form-item label="应用编码" v-show="editable || showable" name="appNo">
           <a-input v-model:value="form.appNo" disabled placeholder="请输入应用编码" />
         </a-form-item>
-        <a-form-item label="商户" name="mchNo">
-          <a-select allow-clear :options="mchList" :disabled="mchNo || showable" v-model:value="form.mchNo" placeholder="请选择商户" />
+        <a-form-item label="商户" name="mchCode">
+          <a-select allow-clear :options="mchList" :disabled="mchCode || showable" v-model:value="form.mchCode" placeholder="请选择商户" />
         </a-form-item>
         <a-form-item label="名称" name="name">
           <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
@@ -36,10 +36,7 @@
             style="width: 100%"
             v-model:value="form.state"
             :disabled="showable"
-            :options="[
-              { label: '启用', value: 'enable' },
-              { label: '停用', value: 'disable' },
-            ]"
+            :options="dictDropDown('MchAndAppCode')"
           />
         </a-form-item>
         <a-form-item label="备注" name="remark">
@@ -67,6 +64,7 @@
   import { dropdown } from '/@/views/modules/payment/merchant/MerchantInfo.api'
   import { dropdownTranslate } from '/@/utils/dataUtil'
   import { LabeledValue } from 'ant-design-vue/lib/select'
+  import { useDict } from '/@/hooks/bootx/useDict'
   const {
     initFormEditType,
     handleCancel,
@@ -81,18 +79,21 @@
     showable,
     formEditType,
   } = useFormEdit()
+
+  const { dictDropDown } = useDict()
+
   // 表单
   const formRef = $ref<FormInstance>()
   let form = $ref<MchApplication>({
     id: null,
-    appNo: '',
+    code: '',
     name: '',
-    mchNo: undefined,
+    mchCode: undefined,
     state: undefined,
     remark: '',
   })
   let mchList = $ref<LabeledValue[]>([])
-  let mchNo = $ref<string>()
+  let mchCode = $ref<string>()
 
   // 校验
   const rules = reactive({
@@ -103,19 +104,19 @@
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  function init(id, editType: FormEditType, mchNo) {
+  function init(id, editType: FormEditType, mchCode) {
     initFormEditType(editType)
     resetForm()
-    initData(mchNo)
+    initData(mchCode)
     getInfo(id, editType)
   }
   /**
    * 初始化
    */
-  function initData(mchNoValue) {
-    if (mchNoValue) {
-      mchNo = mchNoValue
-      form.mchNo = mchNoValue
+  function initData(mchCodeValue) {
+    if (mchCodeValue) {
+      mchCode = mchCodeValue
+      form.mchCode = mchCodeValue
     }
     // 列表
     dropdown().then(({ data }) => {

@@ -76,11 +76,11 @@ export function del(id) {
  */
 export interface MchApplication extends BaseEntity {
   // 应用编码
-  appNo?: string
+  code?: string
   // 名称
   name?: string
   // 商户号
-  mchNo?: string
+  mchCode?: string
   // 状态类型
   state?: string
   // 备注
