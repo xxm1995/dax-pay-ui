@@ -8,11 +8,11 @@
           <a href="javascript:" @click="supperQueryReset">清空</a>
         </template>
         <a-button style="margin-left: 8px" @click="supperQueryShow">
-          <icon :icon="buttonIcon" theme="twoTone" spin />
+          <icon :icon="queryIcon" theme="twoTone" spin />
           <span>查询中...</span>
         </a-button>
       </a-tooltip>
-      <a-button v-else style="margin-left: 8px" @click="supperQueryShow">{{ buttonTitle }}</a-button>
+      <a-button :pre-icon="buttonIcon" v-else style="margin-left: 8px" @click="supperQueryShow">{{ buttonTitle }}</a-button>
     </slot>
     <super-query-model ref="superQueryModal" :fields="fields" :width="width" :modelTitle="modelTitle" @ok="handleOk" />
   </span>
@@ -23,8 +23,8 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import SuperQueryModel from './SuperQueryModel.vue'
   import { QueryField } from '/@/components/Bootx/Query/Query'
+  import Icon from '/@/components/Icon/src/Icon.vue'
 
-  // const{queryState=false,buttonTitle='超级查询',modelTitle,width} = defineProps<Props>()
   const props = withDefaults(
     defineProps<{
       // 查询状态
@@ -33,6 +33,8 @@
       fields: QueryField[]
       // 按钮标题
       buttonTitle?: string
+      // 查询按钮图标
+      queryIcon?: string
       // 按钮图标
       buttonIcon?: string
       // 标题名称
@@ -45,8 +47,10 @@
       queryState: false,
       // 按钮标题
       buttonTitle: '超级查询',
+      // 查询按钮图标
+      queryIcon: 'ant-design:appstore',
       // 按钮图标
-      buttonIcon: 'ant-design:appstore',
+      buttonIcon: 'ant-design:search-outlined',
       // 标题名称
       modelTitle: '超级查询器',
       // 宽度

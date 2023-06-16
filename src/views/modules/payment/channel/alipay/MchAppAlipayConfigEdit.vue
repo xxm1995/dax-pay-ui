@@ -1,13 +1,5 @@
 <template>
-  <basic-drawer
-    showFooter
-    v-bind="$attrs"
-    :title="title"
-    :width="modalWidth"
-    :visible="visible"
-    :maskClosable="false"
-    @close="handleCancel"
-  >
+  <basic-drawer showFooter v-bind="$attrs" width="60%" :title="title" :visible="visible" :maskClosable="false" @close="handleCancel">
     <a-spin :spinning="confirmLoading">
       <a-form
         class="small-from-item"
@@ -75,19 +67,19 @@
           </a-select>
         </a-form-item>
         <a-form-item v-show="form.authType === 1" label="支付宝公钥" name="alipayPublicKey">
-          <a-textarea v-model:value="form.alipayPublicKey" :disabled="showable" placeholder="请输入支付宝公钥" />
+          <a-textarea :rows="5" v-model:value="form.alipayPublicKey" :disabled="showable" placeholder="请输入支付宝公钥" />
         </a-form-item>
         <a-form-item v-show="form.authType === 2" label="应用公钥证书" name="appCert">
-          <a-textarea v-model:value="form.appCert" :disabled="showable" placeholder="请输入应用公钥证书内容" />
+          <a-textarea :rows="5" v-model:value="form.appCert" :disabled="showable" placeholder="请输入应用公钥证书内容" />
         </a-form-item>
         <a-form-item v-show="form.authType === 2" label="支付宝公钥证书" name="alipayCert">
-          <a-textarea v-model:value="form.alipayCert" :disabled="showable" placeholder="请输入支付宝公钥证书内容" />
+          <a-textarea :rows="5" v-model:value="form.alipayCert" :disabled="showable" placeholder="请输入支付宝公钥证书内容" />
         </a-form-item>
         <a-form-item v-show="form.authType === 2" label="支付宝CA根证书" name="alipayRootCert">
-          <a-textarea v-model:value="form.alipayRootCert" :disabled="showable" placeholder="请输入支付宝CA根证书" />
+          <a-textarea :rows="5" v-model:value="form.alipayRootCert" :disabled="showable" placeholder="请输入支付宝CA根证书" />
         </a-form-item>
         <a-form-item label="应用私钥" name="privateKey">
-          <a-textarea v-model:value="form.privateKey" :disabled="showable" placeholder="请输入应用私钥" />
+          <a-textarea :rows="5" v-model:value="form.privateKey" :disabled="showable" placeholder="请输入应用私钥" />
         </a-form-item>
         <a-form-item label="备注" name="remark">
           <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
@@ -112,7 +104,7 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicDrawer } from '/@/components/Drawer'
   import { KeyValue } from '/#/web'
-  import { MchAppPayConfigResult } from "/@/views/modules/payment/app/MchApplication.api";
+  import { MchAppPayConfigResult } from '/@/views/modules/payment/app/MchApplication.api'
   const {
     initFormEditType,
     handleCancel,
@@ -128,9 +120,10 @@
     showable,
     formEditType,
   } = useFormEdit()
-  // 表单
+
   const formRef = $ref<FormInstance>()
 
+  let editType = $ref<FormEditType>()
   let payWayList = $ref<KeyValue[]>([])
   let form = $ref({
     name: '',
@@ -178,13 +171,16 @@
     findPayWayList().then(({ data }) => {
       payWayList = data
     })
+    editType = record.configId ? FormEditType.Edit : FormEditType.Add
     initFormEditType(editType)
     resetForm()
-    getInfo(id, editType)
+    form.mchCode = record.mchCode
+    form.mchAppCode = record.mchAppCode
+    getInfo(record.configId, editType)
   }
   // 获取信息
   function getInfo(id, editType: FormEditType) {
-    if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
+    if ([FormEditType.Edit].includes(editType)) {
       confirmLoading.value = true
       get(id).then(({ data }) => {
         rawForm = { ...data }

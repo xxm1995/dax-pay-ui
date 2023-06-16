@@ -87,8 +87,8 @@
 
   // 查询条件
   const fields = [
-    { field: 'mchNo', name: '商户号' },
-    { field: 'mchName', name: '商户名称' },
+    { field: 'code', name: '商户号' },
+    { field: 'name', name: '商户名称' },
     { field: 'contactTel', name: '手机号' },
     {
       field: 'state',

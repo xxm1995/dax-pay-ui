@@ -5,17 +5,21 @@
         <template #renderItem="{ item }">
           <a-card hoverable style="width: 200px; margin-bottom: 50px" @click="setting(item)">
             <template #cover>
-              <a-image :preview="false" :src="urlPrefix + item.img" :fallback="fallbackImg" />
+              <a-image :preview="false" :src="urlPrefix + String(item?.img)" :fallback="fallbackImg" />
             </template>
             <a-card-meta :title="item.channelName">
               <template #description>
-                <template v-if="item.state === 'enable'">
+                <template v-if="item.state === 'normal'">
                   <a-badge dot color="green" />
                   <span style="color: green">已启用</span>
                 </template>
-                <template v-else-if="item.state === 'disable'">
+                <template v-else-if="item.state === 'banned'">
                   <a-badge dot color="red" />
-                  <span style="color: red">未启用</span>
+                  <span style="color: red">封禁</span>
+                </template>
+                <template v-else-if="item.state === 'forbidden'">
+                  <a-badge dot color="red" />
+                  <span style="color: red">停用</span>
                 </template>
                 <template v-else>
                   <a-badge dot color="grey" />
@@ -27,7 +31,7 @@
         </template>
       </a-list>
     </a-spin>
-    <mch-app-pay-config-edit ref="mchAppPayConfigEdit" />
+    <mch-app-pay-config-edit ref="mchAppPayConfigEdit" @ok="initData" />
     <template #footer>
       <a-button key="cancel" @click="handleCancel">关闭</a-button>
     </template>
@@ -43,7 +47,6 @@
 
   let confirmLoading = $ref(false)
   let visible = $ref(false)
-  let loading = $ref(false)
   let mchApp = $ref<MchApplication>()
   let appConfigs = $ref<MchAppPayConfigResult[]>([])
   let urlPrefix = $ref<string>()
@@ -57,21 +60,20 @@
    */
   function show(mchApplication) {
     visible = true
-    initData()
     mchApp = mchApplication
+    initData()
   }
 
   /**
    * 初始化数据
    */
   async function initData() {
-    loading = true
-    const configResults = await findAllConfig(mchApp?.id)
+    confirmLoading = true
+    const configResults = await findAllConfig(mchApp?.code)
     appConfigs = configResults.data
-
     const urlPrefixResult = await getFilePreviewUrlPrefix()
     urlPrefix = urlPrefixResult.data
-    loading = false
+    confirmLoading = false
   }
 
   /**
@@ -82,9 +84,11 @@
   }
 
   /**
-   * 设置
+   * 打开支付设置界面
    */
-  function setting(record) {
+  function setting(record: MchAppPayConfigResult) {
+    record.mchCode = mchApp?.mchCode as string
+    record.mchAppCode = mchApp?.code as string
     mchAppPayConfigEdit.show(record)
   }
 

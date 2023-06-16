@@ -96,6 +96,10 @@ export function clearActivity(id) {
 export interface AlipayConfig extends BaseEntity {
   // 名称
   name?: string
+  // 商户编码
+  mchCode?: string
+  // 商户应用编码
+  mchAppCode?: string
   // 支付宝商户appId
   appId?: string
   // 服务器异步通知页面路径

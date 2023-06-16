@@ -24,10 +24,10 @@ export function findAll() {
 /**
  * 关联支付配置列表
  */
-export function findAllConfig(appId) {
+export function findAllConfig(appCode) {
   return defHttp.get<Result<MchAppPayConfigResult[]>>({
     url: '/mch/app/findAllConfig',
-    params: { appId },
+    params: { appCode },
   })
 }
 
@@ -103,4 +103,8 @@ export interface MchAppPayConfigResult {
   img: string
   // 关联配置ID
   configId: string
+  // 商户编码
+  mchCode: string
+  // 商户App编码
+  mchAppCode: string
 }

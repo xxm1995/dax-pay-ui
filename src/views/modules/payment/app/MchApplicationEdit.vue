@@ -21,11 +21,11 @@
         <a-form-item label="主键" name="id" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="应用编码" v-show="editable || showable" name="appNo">
-          <a-input v-model:value="form.appNo" disabled placeholder="请输入应用编码" />
+        <a-form-item label="应用编码" v-show="editable || showable" name="code">
+          <a-input v-model:value="form.code" disabled />
         </a-form-item>
         <a-form-item label="商户" name="mchCode">
-          <a-select allow-clear :options="mchList" :disabled="mchCode || showable" v-model:value="form.mchCode" placeholder="请选择商户" />
+          <a-select allow-clear :options="mchList" :disabled="!addable || mchCode" v-model:value="form.mchCode" placeholder="请选择商户" />
         </a-form-item>
         <a-form-item label="名称" name="name">
           <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
@@ -75,6 +75,7 @@
     title,
     confirmLoading,
     visible,
+    addable,
     editable,
     showable,
     formEditType,
@@ -86,7 +87,7 @@
   const formRef = $ref<FormInstance>()
   let form = $ref<MchApplication>({
     id: null,
-    code: '',
+    code: undefined,
     name: '',
     mchCode: undefined,
     state: undefined,
@@ -98,7 +99,7 @@
   // 校验
   const rules = reactive({
     name: [{ required: true, message: '请输入应用名称' }],
-    mchNo: [{ required: true, message: '请选择商户' }],
+    mchCode: [{ required: true, message: '请选择商户' }],
     state: [{ required: true, message: '请选择状态' }],
   } as Record<string, Rule[]>)
   // 事件

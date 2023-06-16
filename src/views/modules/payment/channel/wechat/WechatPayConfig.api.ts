@@ -96,6 +96,10 @@ export function clearActivity(id) {
 export interface WechatPayConfig extends BaseEntity {
   // 名称
   name?: string
+  // 商户编码
+  mchCode?: string
+  // 商户应用编码
+  mchAppCode?: string
   // 微信应用AppId
   appId?: string
   // 商户号
@@ -131,7 +135,7 @@ export interface WechatPayConfig extends BaseEntity {
   // 是否启用
   activity?: boolean
   // 状态
-  state?: number
+  state?: string
   // 备注
   remark?: string
 }
