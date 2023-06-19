@@ -19,7 +19,6 @@
    * 打开
    */
   function show(record: MchAppPayConfigResult) {
-    console.log(record)
     switch (record.channelCode) {
       case 'ali_pay': {
         alipay.init(record)

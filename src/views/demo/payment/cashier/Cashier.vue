@@ -113,11 +113,17 @@
   import QrCode from '/@/components/Qrcode/src/Qrcode.vue'
   import { useIntervalFn } from '@vueuse/core'
   import { findByParamKey } from '/@/api/common/Parameter'
+  import { payChannelEnum } from '/@/enums/payChannelEnum'
+  import { payWayEnum } from '/@/enums/payWayEnum'
 
   const { createMessage } = useMessage()
 
   const cashierQrCode = $ref<any>()
   const cashierBarCode = $ref<any>()
+
+  // 商户和通道
+  let mchCode = $ref<string>()
+  let mchAppCode = $ref<string>()
 
   // 业务单号
   let businessId = $ref('')
@@ -135,23 +141,50 @@
     payWay: null,
   })
   let AliPayList = $ref([
-    { img: new URL('./imgs/ali/ali_qr.svg', import.meta.url).href, title: '支付宝二维码', payInfo: { payChannel: 1, payWay: 4 } },
-    { img: new URL('./imgs/ali/ali_bar.svg', import.meta.url).href, title: '支付宝条码', payInfo: { payChannel: 1, payWay: 5 } },
-    { img: new URL('./imgs/ali/ali_pc.svg', import.meta.url).href, title: '支付宝PC网站', payInfo: { payChannel: 1, payWay: 3 } },
-    { img: new URL('./imgs/ali/ali_wap.svg', import.meta.url).href, title: '支付宝wap支付', payInfo: { payChannel: 1, payWay: 1 } },
+    {
+      img: new URL('./imgs/ali/ali_qr.svg', import.meta.url).href,
+      title: '支付宝二维码',
+      payInfo: { payChannel: payChannelEnum.ALI, payWay: payWayEnum.QRCODE },
+    },
+    {
+      img: new URL('./imgs/ali/ali_bar.svg', import.meta.url).href,
+      title: '支付宝条码',
+      payInfo: { payChannel: payChannelEnum.ALI, payWay: payWayEnum.BARCODE },
+    },
+    {
+      img: new URL('./imgs/ali/ali_pc.svg', import.meta.url).href,
+      title: '支付宝PC网站',
+      payInfo: { payChannel: payChannelEnum.ALI, payWay: payWayEnum.WEB },
+    },
+    {
+      img: new URL('./imgs/ali/ali_wap.svg', import.meta.url).href,
+      title: '支付宝wap支付',
+      payInfo: { payChannel: payChannelEnum.ALI, payWay: payWayEnum.WAP },
+    },
   ])
   let WxPayList = $ref([
-    { img: new URL('./imgs/wechat/wx_native.svg', import.meta.url), title: '微信二维码', payInfo: { payChannel: 2, payWay: 4 } },
-    { img: new URL('./imgs/wechat/wx_bar.svg', import.meta.url), title: '微信条码', payInfo: { payChannel: 2, payWay: 5 } },
-    // { img: new URL('./imgs/wechat/wx_jsapi.svg', import.meta.url), title: '公众号/小程序', payInfo: { payChannel: 2, payWay: 23 } }
+    {
+      img: new URL('./imgs/wechat/wx_native.svg', import.meta.url),
+      title: '微信二维码',
+      payInfo: { payChannel: payChannelEnum.WECHAT, payWay: payWayEnum.QRCODE },
+    },
+    {
+      img: new URL('./imgs/wechat/wx_bar.svg', import.meta.url),
+      title: '微信条码',
+      payInfo: { payChannel: payChannelEnum.WECHAT, payWay: payWayEnum.BARCODE },
+    },
   ])
   let aggregationPayList = $ref([
     {
       img: new URL('./imgs/qr/qr_cashier.svg', import.meta.url).href,
       title: '聚合扫码(用户扫商家)',
-      payInfo: { payChannel: 99, payWay: 4 },
+      payInfo: { payChannel: payChannelEnum.AGGREGATION, payWay: payWayEnum.QRCODE },
     },
-    { img: new URL('./imgs/qr/auto_bar.svg', import.meta.url).href, title: '聚合条码(商家扫用户)', payInfo: { payChannel: 99, payWay: 5 } },
+    {
+      img: new URL('./imgs/qr/auto_bar.svg', import.meta.url).href,
+      title: '聚合条码(商家扫用户)',
+      payInfo: { payChannel: payChannelEnum.AGGREGATION, payWay: payWayEnum.BARCODE },
+    },
   ])
   let payMoneyList = [
     // 支付金额列表
@@ -184,7 +217,19 @@
     { immediate: false },
   )
 
-  // 支付金额变动
+  /**
+   * 初始化业务数据
+   */
+  async function initData() {
+    // 获取业务编码
+    refreshBusinessId()
+    // 获取商户和应用编码
+    mchCode = (await findByParamKey('CashierMchCode')).data
+    mchAppCode = (await findByParamKey('CashierMchAppCode')).data
+  }
+  /**
+   * 支付金额变动
+   */
   function payMoneyValueChange(e) {
     totalMoney = null
     if (e.target.value === '6') {
@@ -194,26 +239,30 @@
       payMoneyShow = false
     }
   }
-  // 发起支付
+  /**
+   * 发起支付
+   */
   function pay() {
     const { payChannel, payWay } = currentActive
     // 聚合扫码
-    if (payChannel === 99 && payWay === 4) {
+    if (payChannel === payChannelEnum.AGGREGATION && payWay === payWayEnum.QRCODE) {
       aggregationQr()
-    } else if (payChannel === 99 && payWay === 5) {
+    } else if (payChannel === payChannelEnum.AGGREGATION && payWay === payWayEnum.BARCODE) {
       // 聚合条码
       cashierBarCode.init('请输入支付宝、微信条码')
     } else {
       // 普通支付
       // 付款码
-      if (payWay === 5) {
-        cashierBarCode.init(payChannel === 1 ? '请输入支付宝条码' : '请输入微信条码')
+      if (payWay === payWayEnum.BARCODE) {
+        cashierBarCode.init(payChannel === payChannelEnum.ALI ? '请输入支付宝条码' : '请输入微信条码')
       } else {
         qrPay(payChannel, payWay)
       }
     }
   }
-  // 扫码支付
+  /**
+   * 扫码支付
+   */
   async function qrPay(payChannel, payWay) {
     const param = {
       businessId: businessId,
@@ -221,15 +270,17 @@
       title: title,
       payChannel,
       payWay,
+      mchCode,
+      mchAppCode,
     }
     // 接受结果
     loading = true
     const { data } = await singlePay(param).catch(() => (loading = false))
     loading = false
     // pc支付
-    if ([1, 3].includes(payWay)) {
+    if ([payWayEnum.WAP, payWayEnum.WEB].includes(payWay)) {
       window.open(data.asyncPayInfo.payBody)
-    } else if (payChannel === 1) {
+    } else if (payChannel === payChannelEnum.ALI) {
       cashierQrCode.init(data.asyncPayInfo.payBody, '请使用支付宝"扫一扫"扫码支付')
       resume()
     } else {
@@ -237,23 +288,29 @@
       resume()
     }
   }
-  // 聚合扫码
+  /**
+   * 聚合扫码
+   */
   async function aggregationQr() {
     const param = {
       businessId: businessId,
       amount: totalMoney,
       title: title,
+      mchCode,
+      mchAppCode,
     }
     // 获取聚合支付的地址
     const { data: cashierAggregateUrl } = await findByParamKey('CashierAggregateUrl')
     // 获取聚合支付的标识key
     const { data: qrKey } = await createAggregatePay(param)
     // 发起支付
-    const qrUrl = `${cashierAggregateUrl}/cashier/aggregatePay?key=${qrKey}`
+    const qrUrl = `${cashierAggregateUrl}/cashier/aggregatePay/${mchAppCode}?key=${qrKey}`
     cashierQrCode.init(qrUrl, '请使用支付宝或微信"扫一扫"扫码支付')
     resume()
   }
-  // 条码支付
+  /**
+   * 条码支付
+   */
   function barPay(authCode) {
     const { payChannel, payWay } = currentActive
     const param = {
@@ -263,21 +320,28 @@
       authCode,
       payChannel,
       payWay,
+      mchCode,
+      mchAppCode,
     }
     singlePay(param).then(() => {
       resume()
     })
   }
-  // 生成业务id
+  /**
+   * 生成业务id
+   */
   function refreshBusinessId() {
     businessId = 'P' + new Date().getTime()
   }
-  // 当前选择的支付类型
+  /**
+   * 当前选择的支付类型
+   */
   function handleActive(payInfo) {
-    console.log(payInfo)
     currentActive = payInfo
   }
-  // 关闭
+  /**
+   * 关闭
+   */
   function handleCancel() {
     cashierQrCode.handleClose()
     cashierBarCode.handleClose()
@@ -285,9 +349,15 @@
     pause()
   }
 
+  /**
+   * 入口
+   */
   onMounted(() => {
-    refreshBusinessId()
+    initData()
   })
+  /**
+   * 出口
+   */
   onUnmounted(() => {
     handleCancel()
   })

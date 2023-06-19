@@ -50,6 +50,7 @@
   import { useIntervalFn } from '@vueuse/core'
   import { onMounted } from 'vue'
   import CashierQrCode from './CashierQrCode.vue'
+  import { Wallet } from "/@/views/modules/payment/wallet/list/Wallet.api";
 
   const { createMessage } = useMessage()
 
@@ -68,7 +69,7 @@
   ]
   let loading = $ref(false)
   let visible = $ref(false)
-  let wallet = $ref({ balance: 0 })
+  let wallet = $ref<Wallet>({ balance: 0 })
   let voucher = $ref<Voucher>({})
   let form = $ref({
     payChannel: 1,

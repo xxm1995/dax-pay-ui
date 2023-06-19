@@ -101,9 +101,9 @@ export interface WechatPayConfig extends BaseEntity {
   // 商户应用编码
   mchAppCode?: string
   // 微信应用AppId
-  appId?: string
-  // 商户号
-  mchId?: string
+  wxAppId?: string
+  // 微信商户号
+  wxMchId?: string
   // 服务商应用编号
   apiVersion?: string
   // 商户平台「API安全」中的 APIv2 密钥

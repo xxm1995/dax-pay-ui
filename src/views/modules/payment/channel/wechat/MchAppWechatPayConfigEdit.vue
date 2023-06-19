@@ -13,14 +13,11 @@
         <a-form-item label="主键" name="id" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="名称" name="name">
-          <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
+        <a-form-item label="商户号" name="wxMchId">
+          <a-input v-model:value="form.wxMchId" :disabled="showable" placeholder="请输入商户号" />
         </a-form-item>
-        <a-form-item label="商户号" name="mchId">
-          <a-input v-model:value="form.mchId" :disabled="showable" placeholder="请输入商户号" />
-        </a-form-item>
-        <a-form-item label="应用编号" name="appId">
-          <a-input v-model:value="form.appId" :disabled="showable" placeholder="请输入微信应用AppId" />
+        <a-form-item label="应用编号" name="wxAppId">
+          <a-input v-model:value="form.wxAppId" :disabled="showable" placeholder="请输入微信应用AppId" />
         </a-form-item>
         <a-form-item label="AppSecret" name="appSecret">
           <a-input v-model:value="form.appSecret" :disabled="showable" placeholder="APPID对应的接口密码，用于获取接口调用凭证时使用" />
@@ -86,7 +83,7 @@
           <a-textarea :rows="5" :disabled="showable" v-model:value="form.certPem" placeholder="请填入证书内容" />
         </a-form-item>
         <a-form-item label="私钥(key.pem)" name="keyPem">
-          <a-input v-model:value="form.keyPem" :disabled="showable" placeholder="请填入私钥内容" />
+          <a-textarea :rows="5" v-model:value="form.keyPem" :disabled="showable" placeholder="请填入私钥内容" />
         </a-form-item>
         <a-form-item label="备注" name="remark">
           <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
@@ -103,18 +100,19 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, nextTick, reactive } from 'vue'
+  import { computed, nextTick } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { add, get, update, findPayWayList, WechatPayConfig } from './WechatPayConfig.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicDrawer } from '/@/components/Drawer'
-  import { KeyValue } from '/#/web'
   import Icon from '/@/components/Icon/src/Icon.vue'
   import { useUpload } from '/@/hooks/bootx/useUpload'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { MchAppPayConfigResult } from '/@/views/modules/payment/app/MchApplication.api'
+  import { dropdownTranslate } from '/@/utils/dataUtil'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
 
   const {
     initFormEditType,
@@ -141,9 +139,8 @@
   let rawForm
   let form = $ref<WechatPayConfig>({
     id: null,
-    name: '',
-    mchId: '',
-    appId: '',
+    wxMchId: '',
+    wxAppId: '',
     appSecret: '',
     apiVersion: 'api_v2',
     p12: null,
@@ -162,7 +159,6 @@
   // 校验
   const rules = computed(() => {
     return {
-      name: [{ required: true, message: '请输入配置名称' }],
       mchId: [{ required: true, message: '请输入商户号' }],
       appId: [{ required: true, message: '请输入应用编号' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
@@ -176,15 +172,14 @@
     } as Record<string, Rule[]>
   })
 
-  let payWayList = $ref<KeyValue[]>([])
+  let payWayList = $ref<LabeledValue[]>([])
 
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
   function init(record: MchAppPayConfigResult) {
     findPayWayList().then(({ data }) => {
-      payWayList = data
-      console.log(payWayList)
+      payWayList = dropdownTranslate(data, 'value', 'key')
     })
     editType = record.configId ? FormEditType.Edit : FormEditType.Add
     initFormEditType(editType)

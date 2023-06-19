@@ -98,6 +98,7 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import { cancelByPaymentId, syncByBusinessId } from '/@/api/common/Pay'
   import BSuperQuery from '/@/components/Bootx/SuperQuery/BSuperQuery.vue'
+  import { VxePager, VxeTable, VxeToolbar } from "../../../../../../dist/assets/index.669df1fd";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQuery, resetQueryParams, pagination, pages, model, loading, superQueryFlag } =

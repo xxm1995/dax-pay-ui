@@ -13,9 +13,6 @@
         <a-form-item label="主键" name="id" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="名称" name="name">
-          <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
-        </a-form-item>
         <a-form-item label="AppId" name="appId">
           <a-input v-model:value="form.appId" :disabled="showable" placeholder="请输入支付宝商户AppId" />
         </a-form-item>
@@ -105,6 +102,8 @@
   import { BasicDrawer } from '/@/components/Drawer'
   import { KeyValue } from '/#/web'
   import { MchAppPayConfigResult } from '/@/views/modules/payment/app/MchApplication.api'
+  import { dropdownTranslate } from '/@/utils/dataUtil'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
   const {
     initFormEditType,
     handleCancel,
@@ -124,9 +123,9 @@
   const formRef = $ref<FormInstance>()
 
   let editType = $ref<FormEditType>()
-  let payWayList = $ref<KeyValue[]>([])
+  let payWayList = $ref<LabeledValue[]>([])
   let form = $ref({
-    name: '',
+    // name: '',
     appId: '',
     notifyUrl: '',
     returnUrl: '',
@@ -147,7 +146,7 @@
   // 校验
   const rules = computed(() => {
     return {
-      name: [{ required: true, message: '请输入配置名称' }],
+      // name: [{ required: true, message: '请输入配置名称' }],
       appId: [{ required: true, message: '请输入AppId' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
       returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],
@@ -169,7 +168,7 @@
   // 入口
   function init(record: MchAppPayConfigResult) {
     findPayWayList().then(({ data }) => {
-      payWayList = data
+      payWayList = dropdownTranslate(data, 'value', 'key')
     })
     editType = record.configId ? FormEditType.Edit : FormEditType.Add
     initFormEditType(editType)
