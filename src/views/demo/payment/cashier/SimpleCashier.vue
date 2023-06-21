@@ -20,11 +20,8 @@
           </a-form-item>
           <a-form-item label="金额" name="amount">
             <a-input-number :precision="2" :min="0.01" v-model:value="form.amount" />
-            <template v-if="form.payChannel === 5" #help>
-              <span>钱包余额：{{ wallet.balance }}</span>
-            </template>
           </a-form-item>
-          <a-form-item label="储值卡" name="voucherNo" v-if="form.payChannel === 6">
+          <a-form-item label="储值卡" name="voucherNo" v-if="form.payChannel === payChannelEnum.VOUCHER">
             <a-input v-model:value="form.voucherNo" @blur="getVoucher" />
             <template #help>
               <span>储值卡面值：{{ voucher.faceValue }} 余额：{{ voucher.balance }}</span>
@@ -43,13 +40,17 @@
 
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
-  import { computed, onMounted } from 'vue'
+  import { onMounted } from 'vue'
   import { findStatusByBusinessId, findWalletByUser, singlePay } from '/@/views/demo/payment/cashier/Cashier.api'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { useIntervalFn } from '@vueuse/core'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { findByCardNo, Voucher } from '/@/views/modules/payment/voucher/Voucher.api'
   import CashierQrCode from './CashierQrCode.vue'
+  import { payChannelEnum } from '/@/enums/payment/payChannelEnum'
+  import { findByParamKey } from '/@/api/common/Parameter'
+  import { payWayEnum } from '/@/enums/payment/payWayEnum'
+  import { PayStatus } from "/@/enums/payment/PayStatus";
 
   const { createMessage } = useMessage()
 
@@ -62,25 +63,28 @@
   const wrapperCol = {
     sm: { span: 13 },
   }
+
   const payChannel = [
-    { code: 1, name: '支付宝' },
-    { code: 2, name: '微信' },
+    { code: payChannelEnum.ALI, name: '支付宝' },
+    { code: payChannelEnum.WECHAT, name: '微信' },
     // { code: 3, name: '云闪付' },
-    { code: 5, name: '钱包' },
-    { code: 6, name: '储值卡' },
+    // { code: 5, name: '钱包' },
+    { code: payChannelEnum.VOUCHER, name: '储值卡' },
   ]
   let loading = $ref(false)
   let visible = $ref(false)
-  let wallet = $ref({ balance: 0 })
+  // let wallet = $ref({ balance: 0 })
   let voucher = $ref<Voucher>({})
   let form = $ref({
-    payChannel: 1,
-    payWay: 4,
+    payChannel: payChannelEnum.ALI,
+    payWay: payWayEnum.QRCODE,
     businessId: '',
     voucherNo: '',
     title: '测试支付订单',
     // 二维码支付方式
     amount: 0.01,
+    mchCode: '',
+    mchAppCode: '',
   })
   const rules = {
     payChannel: [{ required: true, message: '不可为空' }],
@@ -96,11 +100,11 @@
     () => {
       findStatusByBusinessId(form.businessId).then((res) => {
         // 成功
-        if (res.data === 1) {
+        if (res.data === PayStatus.TRADE_SUCCESS) {
           createMessage.success('支付成功')
           handleCancel()
         }
-        if ([2, 3].includes(res.data)) {
+        if ([PayStatus.TRADE_FAIL, PayStatus.TRADE_CANCEL].includes(res.data)) {
           createMessage.error('支付失败')
           handleCancel()
         }
@@ -111,16 +115,21 @@
   )
 
   onMounted(() => {
-    init()
+    initData()
   })
 
-  // 初始化
-  function init() {
+  /**
+   * 初始化数据
+   */
+  async function initData() {
     // 获取钱包
-    findWalletByUser().then((res) => {
-      wallet = res.data
-    })
+    // findWalletByUser().then((res) => {
+    //   wallet = res.data
+    // })
     genOrderNo()
+    // 获取商户和应用编码
+    form.mchCode = (await findByParamKey('CashierMchCode')).data
+    form.mchAppCode = (await findByParamKey('CashierMchAppCode')).data
   }
 
   // 生成订单号
@@ -136,7 +145,8 @@
 
       // 是否异步支付
       if (data.asyncPayMode) {
-        if (data.payChannel === 1) {
+        console.log(data.asyncPayChannel)
+        if (data.asyncPayChannel === payChannelEnum.ALI) {
           cashierQrCode.init(data.asyncPayInfo.payBody, '请使用支付宝"扫一扫"扫码支付')
         } else {
           cashierQrCode.init(data.asyncPayInfo.payBody, '请使用微信"扫一扫"扫码支付')
@@ -165,5 +175,4 @@
   }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

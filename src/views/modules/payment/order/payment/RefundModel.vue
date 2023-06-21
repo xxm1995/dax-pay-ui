@@ -8,15 +8,19 @@
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-spin :spinning="confirmLoading">
-      <a-form ref="formRef" :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <template :key="o.payChannel" v-for="o in form.refundModeParams">
-          <a-form-item :label="dictConvert('PayChannel', o.payChannel)" name="name">
-            <a-input-number :min="0.01" :max="o.amount" :precision="2" v-model:value="o.amount" />
-          </a-form-item>
-        </template>
-      </a-form>
-    </a-spin>
+    <a-form ref="formRef" :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
+      <template :key="o.payChannel" v-for="o in form.refundModeParams">
+        <a-form-item :label="dictConvert('PayChannel', o.payChannel)" name="name">
+          <a-input-number :min="0.01" :max="o.amount" :precision="2" v-model:value="o.amount" />
+        </a-form-item>
+      </template>
+    </a-form>
+    <template #footer>
+      <a-space>
+        <a-button key="cancel" @click="handleCancel">取消</a-button>
+        <a-button key="forward" :loading="confirmLoading" type="primary" @click="handleOk">确定</a-button>
+      </a-space>
+    </template>
   </basic-modal>
 </template>
 
@@ -66,6 +70,10 @@
       confirmLoading.value = false
     })
   }
+
+  /**
+   * 退款
+   */
   function handleOk() {
     createConfirm({
       iconType: 'warning',
@@ -80,7 +88,6 @@
         })
       },
     })
-    confirmLoading.value = true
   }
   defineExpose({ init })
 </script>

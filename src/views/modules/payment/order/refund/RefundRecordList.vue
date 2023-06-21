@@ -21,7 +21,7 @@
         <vxe-column field="refundTime" title="退款时间" />
         <vxe-column field="refundStatus" title="状态">
           <template #default="{ row }">
-            <a-tag>{{ row.refundStatus ? '成功' : '失败' }}</a-tag>
+            <a-tag>{{ dictConvert('PayRefundProcess', row.refundStatus) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">

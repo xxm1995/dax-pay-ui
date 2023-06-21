@@ -1,5 +1,6 @@
 import { defHttp } from '/@/utils/http/axios'
 import { Result } from '/#/axios'
+import { PayStatus } from "/@/enums/payment/PayStatus";
 
 /**
  * 单独支付
@@ -36,8 +37,8 @@ export function combinationPay (obj) {
 /**
  * 根据业务ID获取支付状态
  */
-export function findStatusByBusinessId(businessId) {
-  return defHttp.get({
+export function findStatusByBusinessId(businessId){
+  return defHttp.get<Result<PayStatus>>({
     url: '/payment/findStatusByBusinessId',
     method: 'GET',
     params: { businessId },

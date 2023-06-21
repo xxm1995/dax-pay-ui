@@ -69,6 +69,8 @@ export interface Payment extends BaseEntity {
   payTypeInfo?: string
   // 是否是异步支付
   asyncPayMode?: boolean
+  // 是否是组合支付
+  combinationPayMode?: boolean
   // 异步支付方式
   asyncPayChannel?: number
   // 支付通道信息列表

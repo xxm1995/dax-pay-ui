@@ -20,7 +20,7 @@
           <json-preview :data="JSON.parse(form.notifyInfo || '{}')" />
         </a-descriptions-item>
         <a-descriptions-item label="状态">
-          {{ form.status === 1 ? '成功' : '失败' }}
+          {{ dictConvert('PayNotifyProcess', form.status) }}
         </a-descriptions-item>
         <a-descriptions-item label="提示消息">
           {{ form.msg }}

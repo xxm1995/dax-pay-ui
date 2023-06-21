@@ -8,7 +8,7 @@
         <template #buttons>
           <a-space>
             <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
-            <a-button pre-icon="ant-design:sync-outlined" @click="syncJobStatus">状态同步</a-button>
+            <a-button pre-icon="ant-design:sync-outlined" @click="sync">状态同步</a-button>
           </a-space>
         </template>
       </vxe-toolbar>
@@ -204,6 +204,7 @@
   // 同步任务状态
   function sync() {
     syncJobStatus().then(() => {
+      queryPage()
       createMessage.success('任务状态同步成功')
     })
   }

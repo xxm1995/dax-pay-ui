@@ -35,9 +35,14 @@
             {{ dictConvert('PayStatus', row.payStatus) }}
           </template>
         </vxe-column>
-        <vxe-column field="asyncPayMode" title="是否是异步支付">
+        <vxe-column field="asyncPayMode" title="异步支付">
           <template #default="{ row }">
             {{ row.asyncPayMode ? '是' : '否' }}
+          </template>
+        </vxe-column>
+        <vxe-column field="combinationPayMode" title="组合支付">
+          <template #default="{ row }">
+            {{ row.combinationPayMode ? '是' : '否' }}
           </template>
         </vxe-column>
         <vxe-column field="asyncPayChannel" title="异步支付方式">
@@ -59,10 +64,12 @@
                   <a-menu-item>
                     <a-link @click="sync(row)">刷新信息</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="[0].includes(row.payStatus)">
-                    <a-link @click="remove(row)" danger>关闭</a-link>
+                  <a-menu-item v-if="[PayStatus.TRADE_PROGRESS].includes(row.payStatus)">
+                    <a-link @click="cancel(row)" danger>关闭</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="[1, 4].includes(row.payStatus) && row.refundableBalance > 0">
+                  <a-menu-item
+                    v-if="[PayStatus.TRADE_SUCCESS, PayStatus.TRADE_REFUNDING].includes(row.payStatus) && row.refundableBalance > 0"
+                  >
                     <a-link @click="refund(row)" danger>退款</a-link>
                   </a-menu-item>
                 </a-menu>
@@ -91,14 +98,16 @@
   import { page, superPage } from './Payment.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import PaymentInfo from './PaymentInfo.vue'
-  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+  import RefundModel from './RefundModel.vue'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { BOOLEAN, DATE_TIME, LIST, NUMBER, QueryField, QueryParam, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
   import { cancelByPaymentId, syncByBusinessId } from '/@/api/common/Pay'
   import BSuperQuery from '/@/components/Bootx/SuperQuery/BSuperQuery.vue'
-  import { VxePager, VxeTable, VxeToolbar } from "../../../../../../dist/assets/index.669df1fd";
+  import { VxeTableInstance, VxeToolbarInstance, VxePager, VxeTable, VxeToolbar } from 'vxe-table'
+  import ALink from '/@/components/Link/Link.vue'
+  import { PayStatus } from '/@/enums/payment/PayStatus'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQuery, resetQueryParams, pagination, pages, model, loading, superQueryFlag } =
@@ -118,7 +127,7 @@
   const queryFields = [
     { field: 'id', name: '支付ID', type: STRING },
     { field: 'businessId', name: '业务ID', type: STRING },
-    { field: 'mchCode', type: STRING, name: '商户编码'},
+    { field: 'mchCode', type: STRING, name: '商户编码' },
     { field: 'mchAppCode', type: STRING, name: '应用号编码' },
     { field: 'userId', name: '用户ID', type: STRING },
     { field: 'title', name: '标题', type: STRING },
@@ -157,7 +166,9 @@
     }
   }
 
-  // 分页查询
+  /**
+   * 分页查询
+   */
   function queryPage() {
     loading.value = true
     page({
@@ -169,18 +180,24 @@
     })
   }
 
-  // 排序条件变动
+  /**
+   * 排序条件变动
+   */
   function sortChange({ order, property }) {
     sortParam.sortField = order ? property : null
     sortParam.asc = order === 'asc'
     init()
   }
-  // 超级查询条件变动
+  /**
+   * 超级查询条件变动
+   */
   function changeSuperQuery(queryParams) {
     superQueryParam = queryParams
     superQuery()
   }
-  // 超级查询
+  /**
+   * 超级查询
+   */
   function superQuery() {
     superQueryFlag.value = true
     loading.value = true
@@ -192,12 +209,16 @@
     })
   }
 
-  // 查看
+  /**
+   * 查看
+   */
   function show(record) {
     paymentInfo.init(record.id)
   }
 
-  // 同步信息
+  /**
+   * 同步信息
+   */
   function sync(record) {
     loading.value = true
     syncByBusinessId(record.businessId).then(() => {
@@ -205,7 +226,9 @@
       queryPage()
     })
   }
-  // 关闭支付
+  /**
+   * 关闭支付
+   */
   function cancel(record) {
     createConfirm({
       iconType: 'warning',

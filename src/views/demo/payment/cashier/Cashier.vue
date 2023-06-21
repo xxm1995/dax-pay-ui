@@ -113,15 +113,16 @@
   import QrCode from '/@/components/Qrcode/src/Qrcode.vue'
   import { useIntervalFn } from '@vueuse/core'
   import { findByParamKey } from '/@/api/common/Parameter'
-  import { payChannelEnum } from '/@/enums/payChannelEnum'
-  import { payWayEnum } from '/@/enums/payWayEnum'
+  import { payChannelEnum } from '/@/enums/payment/payChannelEnum'
+  import { payWayEnum } from '/@/enums/payment/payWayEnum'
+  import { PayStatus } from '/@/enums/payment/PayStatus'
 
   const { createMessage } = useMessage()
 
   const cashierQrCode = $ref<any>()
   const cashierBarCode = $ref<any>()
 
-  // 商户和通道
+  // 商户和应用编码
   let mchCode = $ref<string>()
   let mchAppCode = $ref<string>()
 
@@ -203,11 +204,11 @@
     () => {
       findStatusByBusinessId(businessId).then((res) => {
         // 成功
-        if (res.data === 1) {
+        if (res.data === PayStatus.TRADE_SUCCESS) {
           createMessage.success('支付成功')
           handleCancel()
         }
-        if ([2, 3].includes(res.data)) {
+        if ([PayStatus.TRADE_FAIL, PayStatus.TRADE_CANCEL].includes(res.data)) {
           createMessage.error('支付失败')
           handleCancel()
         }
@@ -304,7 +305,7 @@
     // 获取聚合支付的标识key
     const { data: qrKey } = await createAggregatePay(param)
     // 发起支付
-    const qrUrl = `${cashierAggregateUrl}/cashier/aggregatePay/${mchAppCode}?key=${qrKey}`
+    const qrUrl = `${cashierAggregateUrl}/cashier/aggregatePay/${mchCode}/${mchAppCode}?key=${qrKey}`
     cashierQrCode.init(qrUrl, '请使用支付宝或微信"扫一扫"扫码支付')
     resume()
   }

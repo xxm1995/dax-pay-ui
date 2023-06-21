@@ -28,8 +28,11 @@
         <a-descriptions-item label="支付状态">
           {{ dictConvert('PayStatus', form.payStatus) }}
         </a-descriptions-item>
-        <a-descriptions-item label="是否是异步支付">
+        <a-descriptions-item label="异步支付">
           {{ form.asyncPayMode ? '是' : '否' }}
+        </a-descriptions-item>
+        <a-descriptions-item label="组合支付">
+          {{ form.combinationPayMode ? '是' : '否' }}
         </a-descriptions-item>
         <a-descriptions-item label="异步支付方式">
           {{ dictConvert('PayChannel', form.asyncPayChannel) }}

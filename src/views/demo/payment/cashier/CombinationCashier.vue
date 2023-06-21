@@ -21,12 +21,12 @@
           <a-form-item label="异步支付金额" name="asyncAmount">
             <a-input-number placeholder="请输入金额" :precision="2" v-model:value="form.asyncAmount" />
           </a-form-item>
-          <a-form-item label="钱包支付" name="walletAmount">
-            <a-input-number placeholder="请输入金额" :precision="2" v-model:value="form.walletAmount" />
-            <template #help>
-              <span>钱包余额：{{ wallet.balance }}</span>
-            </template>
-          </a-form-item>
+          <!--          <a-form-item label="钱包支付" name="walletAmount">-->
+          <!--            <a-input-number placeholder="请输入金额" :precision="2" v-model:value="form.walletAmount" />-->
+          <!--            <template #help>-->
+          <!--              <span>钱包余额：{{ wallet.balance }}</span>-->
+          <!--            </template>-->
+          <!--          </a-form-item>-->
           <a-form-item label="现金支付" name="cashAmount">
             <a-input-number placeholder="请输入金额" :precision="2" v-model:value="form.cashAmount" />
           </a-form-item>
@@ -50,7 +50,11 @@
   import { useIntervalFn } from '@vueuse/core'
   import { onMounted } from 'vue'
   import CashierQrCode from './CashierQrCode.vue'
-  import { Wallet } from "/@/views/modules/payment/wallet/list/Wallet.api";
+  import { Wallet } from '/@/views/modules/payment/wallet/list/Wallet.api'
+  import { payChannelEnum } from '/@/enums/payment/payChannelEnum'
+  import { payWayEnum } from '/@/enums/payment/payWayEnum'
+  import { findByParamKey } from '/@/api/common/Parameter'
+  import { PayStatus } from '/@/enums/payment/PayStatus'
 
   const { createMessage } = useMessage()
 
@@ -64,27 +68,29 @@
     sm: { span: 13 },
   }
   const payChannel = [
-    { code: 1, label: '支付宝' },
-    { code: 2, label: '微信' },
+    { code: payChannelEnum.ALI, label: '支付宝' },
+    { code: payChannelEnum.WECHAT, label: '微信' },
   ]
   let loading = $ref(false)
   let visible = $ref(false)
-  let wallet = $ref<Wallet>({ balance: 0 })
+  // let wallet = $ref<Wallet>({ balance: 0 })
   let voucher = $ref<Voucher>({})
   let form = $ref({
-    payChannel: 1,
-    payWay: 4,
+    payChannel: payChannelEnum.ALI,
+    payWay: payWayEnum.QRCODE,
     businessId: '',
     title: '测试支付订单',
     asyncAmount: null,
-    walletAmount: null,
+    // walletAmount: null,
     cashAmount: null,
+    mchCode: '',
+    mchAppCode: '',
   })
   const rules = {
-    payChannel: [{ required: true, message: '不可为空' }],
-    businessId: [{ required: true, message: '不可为空' }],
-    title: [{ required: true, message: '不可为空' }],
-    payWay: [{ required: true, message: '不可为空' }],
+    payChannel: [{ required: true, message: '支付通道不可为空' }],
+    businessId: [{ required: true, message: '业务ID不可为空' }],
+    title: [{ required: true, message: '标题不可为空' }],
+    payWay: [{ required: true, message: '支付方式不可为空' }],
   }
 
   // 检查支付状态
@@ -92,11 +98,11 @@
     () => {
       findStatusByBusinessId(form.businessId).then((res) => {
         // 成功
-        if (res.data === 1) {
+        if (res.data === PayStatus.TRADE_SUCCESS) {
           createMessage.success('支付成功')
           handleCancel()
         }
-        if ([2, 3].includes(res.data)) {
+        if ([PayStatus.TRADE_FAIL, PayStatus.TRADE_CANCEL].includes(res.data)) {
           createMessage.error('支付失败')
           handleCancel()
         }
@@ -110,11 +116,18 @@
     init()
   })
 
-  function init() {
-    findWalletByUser().then(({ data }) => {
-      wallet = data
-    })
+  /**
+   * 初始化数据
+   */
+  async function init() {
+    // findWalletByUser().then(({ data }) => {
+    //   wallet = data
+    // })
     genOrderNo()
+
+    // 获取商户和应用编码
+    form.mchCode = (await findByParamKey('CashierMchCode')).data
+    form.mchAppCode = (await findByParamKey('CashierMchAppCode')).data
   }
   // 生成订单号
   function genOrderNo() {
@@ -125,16 +138,18 @@
     formRef?.validate().then(async () => {
       loading = true
       // 组装支付参数
-      const payModeList = [
+      const payWayList = [
         { payChannel: form.payChannel, payWay: form.payWay, amount: form.asyncAmount },
-        { payChannel: 4, amount: form.cashAmount },
-        { payChannel: 5, amount: form.walletAmount },
+        { payChannel: payChannelEnum.CASH, payWay: payWayEnum.NORMAL, amount: form.cashAmount },
+        // { payChannel: 5, amount: form.walletAmount },
       ]
       // 异步
       const { data } = await combinationPay({
         title: form.title,
         businessId: form.businessId,
-        payModeList: payModeList,
+        payWayList: payWayList,
+        mchCode: form.mchCode,
+        mchAppCode: form.mchAppCode,
       }).finally(() => (loading = false))
       // 同步还是异步支付
       if (data.asyncPayMode) {

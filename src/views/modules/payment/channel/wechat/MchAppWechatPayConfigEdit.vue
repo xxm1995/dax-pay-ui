@@ -159,8 +159,9 @@
   // 校验
   const rules = computed(() => {
     return {
-      mchId: [{ required: true, message: '请输入商户号' }],
-      appId: [{ required: true, message: '请输入应用编号' }],
+      wxMchId: [{ required: true, message: '请输入商户号' }],
+      wxAppId: [{ required: true, message: '请输入应用编号' }],
+      appSecret: [{ required: true, message: '请输入AppSecret' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
       returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],
       domain: [{ required: true, message: '请输入请求应用域名' }],
@@ -208,7 +209,10 @@
       if (formEditType.value === FormEditType.Add) {
         await add(form)
       } else if (formEditType.value === FormEditType.Edit) {
-        await update({ ...form, ...diffForm(rawForm, form, 'mchId', 'appId', 'appSecret', 'apiKeyV2', 'apiKeyV3', 'keyPem', 'certPem') })
+        await update({
+          ...form,
+          ...diffForm(rawForm, form, 'wxMchId', 'wxAppId', 'appSecret', 'apiKeyV2', 'apiKeyV3', 'keyPem', 'certPem'),
+        })
       }
       confirmLoading.value = false
       handleCancel()
