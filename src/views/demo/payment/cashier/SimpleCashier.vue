@@ -19,7 +19,10 @@
             <a-input v-model:value="form.title" />
           </a-form-item>
           <a-form-item label="金额" name="amount">
-            <a-input-number :precision="2" :min="0.01" v-model:value="form.amount" />
+            <a-input-number :precision="2" :min="0.01" v-model:value="form.amount"/>
+            <template v-if="form.payChannel === payChannelEnum.WALLET" #help>
+              <span>钱包余额：{{ wallet.balance }}</span>
+            </template>
           </a-form-item>
           <a-form-item label="储值卡" name="voucherNo" v-if="form.payChannel === payChannelEnum.VOUCHER">
             <a-input v-model:value="form.voucherNo" @blur="getVoucher" />
@@ -50,7 +53,7 @@
   import { payChannelEnum } from '/@/enums/payment/payChannelEnum'
   import { findByParamKey } from '/@/api/common/Parameter'
   import { payWayEnum } from '/@/enums/payment/payWayEnum'
-  import { PayStatus } from "/@/enums/payment/PayStatus";
+  import { PayStatus } from '/@/enums/payment/PayStatus'
 
   const { createMessage } = useMessage()
 
@@ -68,12 +71,12 @@
     { code: payChannelEnum.ALI, name: '支付宝' },
     { code: payChannelEnum.WECHAT, name: '微信' },
     // { code: 3, name: '云闪付' },
-    // { code: 5, name: '钱包' },
+    { code: payChannelEnum.WALLET, name: '钱包' },
     { code: payChannelEnum.VOUCHER, name: '储值卡' },
   ]
   let loading = $ref(false)
   let visible = $ref(false)
-  // let wallet = $ref({ balance: 0 })
+  let wallet = $ref({ balance: 0 })
   let voucher = $ref<Voucher>({})
   let form = $ref({
     payChannel: payChannelEnum.ALI,
@@ -123,9 +126,9 @@
    */
   async function initData() {
     // 获取钱包
-    // findWalletByUser().then((res) => {
-    //   wallet = res.data
-    // })
+    findWalletByUser().then((res) => {
+      wallet = res.data
+    })
     genOrderNo()
     // 获取商户和应用编码
     form.mchCode = (await findByParamKey('CashierMchCode')).data
