@@ -1,12 +1,5 @@
 <template>
-  <basic-modal
-    v-bind="$attrs"
-    :loading="confirmLoading"
-    :title="title"
-    :width="modalWidth"
-    :visible="visible"
-    @cancel="handleCancel"
-  >
+  <basic-modal v-bind="$attrs" :loading="confirmLoading" :title="title" :width="modalWidth" :visible="visible" @cancel="handleCancel">
     <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
       <a-descriptions-item label="钱包ID">
         {{ form.id }}
@@ -20,6 +13,9 @@
       <a-descriptions-item label="钱包余额">
         {{ form.balance }}
       </a-descriptions-item>
+      <a-descriptions-item label="预冻结额度">
+        {{ form.freezeBalance }}
+      </a-descriptions-item>
       <a-descriptions-item label="状态">
         {{ dictConvert('WalletStatus', form.status) }}
       </a-descriptions-item>
@@ -31,22 +27,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, getWalletInfo, update, Wallet } from "./Wallet.api";
+  import { add, get, getWalletInfo, update, Wallet } from '../Wallet.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
-  const {
-    initFormEditType,
-    handleCancel,
-    modalWidth,
-    title,
-    confirmLoading,
-    visible,
-  } = useFormEdit()
+  const { initFormEditType, handleCancel, modalWidth, title, confirmLoading, visible } = useFormEdit()
   const { dictConvert } = useDict()
 
   // 表单
@@ -55,7 +43,8 @@
     id: null,
     userId: '',
     balance: 0,
-    status: 0,
+    freezeBalance: 0,
+    status: undefined,
     userName: '',
   })
   // 入口

@@ -101,10 +101,10 @@
   })
   // 校验
   const rules = reactive({
-    code: [{ required: true, message: '商户名称不可为空' }],
-    name: [{ required: true, message: '商户简称不可为空' }],
-    shortName: [{ required: true, message: '联系人姓名不可为空' }],
+    name: [{ required: true, message: '商户名称不可为空' }],
+    shortName: [{ required: true, message: '商户简称不可为空' }],
     contactTel: [{ required: true, message: '联系人手机号不可为空' }],
+    contactName: [{ required: true, message: '联系人姓名不可为空' }],
     state: [{ required: true, message: '商户状态不可为空' }],
   } as Record<string, Rule[]>)
   // 事件

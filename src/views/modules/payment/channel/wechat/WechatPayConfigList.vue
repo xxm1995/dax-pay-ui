@@ -34,7 +34,6 @@
           </template>
         </vxe-column>
         <vxe-column field="createTime" title="创建时间" />
-        <vxe-column field="createTime" title="创建时间" />
         <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>

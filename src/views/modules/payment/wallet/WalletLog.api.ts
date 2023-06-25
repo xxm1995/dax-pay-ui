@@ -1,6 +1,7 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
+import { WalletOperationEnum } from '/@/enums/payment/walletEnum'
 
 /**
  * 分页
@@ -31,7 +32,7 @@ export interface WalletLog extends BaseEntity {
   // 用户id
   userId?: string
   // 类型
-  type?: number
+  type?: string
   // 交易记录ID
   paymentId?: string
   // 操作终端ip
@@ -41,7 +42,7 @@ export interface WalletLog extends BaseEntity {
   // 业务ID
   businessId?: string
   // 操作源
-  operationSource?: number
+  operationSource?: WalletOperationEnum
   // 金额
   amount?: number
 }

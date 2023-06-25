@@ -9,23 +9,23 @@
             </a-radio-group>
           </a-form-item>
           <a-form-item label="订单编号" name="businessId">
-            <a-input v-model:value="form.businessId">
+            <a-input v-model:value="form.businessId" placeholder="请输入订单编号">
               <template #addonAfter>
                 <a-button type="link" size="small" @click="genOrderNo"> 生成订单号 </a-button>
               </template>
             </a-input>
           </a-form-item>
           <a-form-item label="订单名称" name="title">
-            <a-input v-model:value="form.title" />
+            <a-input v-model:value="form.title" placeholder="请输入金额" />
           </a-form-item>
           <a-form-item label="金额" name="amount">
-            <a-input-number :precision="2" :min="0.01" v-model:value="form.amount"/>
+            <a-input-number :precision="2" :min="0.01" v-model:value="form.amount" placeholder="请输入金额" />
             <template v-if="form.payChannel === payChannelEnum.WALLET" #help>
               <span>钱包余额：{{ wallet.balance }}</span>
             </template>
           </a-form-item>
           <a-form-item label="储值卡" name="voucherNo" v-if="form.payChannel === payChannelEnum.VOUCHER">
-            <a-input v-model:value="form.voucherNo" @blur="getVoucher" />
+            <a-input v-model:value="form.voucherNo" @blur="getVoucher" placeholder="请输入储值卡号" />
             <template #help>
               <span>储值卡面值：{{ voucher.faceValue }} 余额：{{ voucher.balance }}</span>
             </template>
@@ -44,7 +44,7 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import { onMounted } from 'vue'
-  import { findStatusByBusinessId, findWalletByUser, singlePay } from '/@/views/demo/payment/cashier/Cashier.api'
+  import { findStatusByBusinessId, singlePay } from '/@/views/demo/payment/cashier/Cashier.api'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { useIntervalFn } from '@vueuse/core'
   import { useMessage } from '/@/hooks/web/useMessage'
@@ -54,6 +54,7 @@
   import { findByParamKey } from '/@/api/common/Parameter'
   import { payWayEnum } from '/@/enums/payment/payWayEnum'
   import { PayStatus } from '/@/enums/payment/PayStatus'
+  import { findByUser as findWalletByUser, Wallet } from '/@/views/modules/payment/wallet/Wallet.api'
 
   const { createMessage } = useMessage()
 
@@ -76,12 +77,13 @@
   ]
   let loading = $ref(false)
   let visible = $ref(false)
-  let wallet = $ref({ balance: 0 })
+  let wallet = $ref<Wallet>({ balance: 0 })
   let voucher = $ref<Voucher>({})
   let form = $ref({
     payChannel: payChannelEnum.ALI,
     payWay: payWayEnum.QRCODE,
     businessId: '',
+    walletId: '',
     voucherNo: '',
     title: '测试支付订单',
     // 二维码支付方式
@@ -125,22 +127,36 @@
    * 初始化数据
    */
   async function initData() {
-    // 获取钱包
-    findWalletByUser().then((res) => {
-      wallet = res.data
-    })
+    // 生成订单号
     genOrderNo()
+    // 初始化钱包信息
+    initWallet()
     // 获取商户和应用编码
     form.mchCode = (await findByParamKey('CashierMchCode')).data
     form.mchAppCode = (await findByParamKey('CashierMchAppCode')).data
   }
 
-  // 生成订单号
+  /**
+   * 初始化钱包信息
+   */
+  function initWallet() {
+    // 获取钱包
+    findWalletByUser().then((res) => {
+      wallet = res.data
+      form.walletId = wallet.id as string
+    })
+  }
+
+  /**
+   * 生成订单号
+   */
   function genOrderNo() {
     form.businessId = 'P' + new Date().getTime()
   }
 
-  // 发起支付
+  /**
+   * 发起支付
+   */
   function pay() {
     formRef?.validate().then(async () => {
       loading = true
@@ -157,11 +173,15 @@
         resume()
       } else {
         createMessage.success('支付成功')
+        initWallet()
+        genOrderNo()
         pause()
       }
     })
   }
-  // 获取储值卡信息
+  /**
+   * 获取储值卡信息
+   */
   function getVoucher() {
     if (form.voucherNo) {
       findByCardNo(form.voucherNo).then(({ data }) => {
@@ -170,6 +190,9 @@
     }
   }
 
+  /**
+   * 关闭扫码弹窗
+   */
   function handleCancel() {
     cashierQrCode.handleClose()
     loading = false

@@ -122,6 +122,15 @@ export function changerBalance(obj) {
 }
 
 /**
+ * 根据用户查询钱包
+ */
+export function findByUser() {
+  return defHttp.get({
+    url: '/wallet/findByUser',
+  })
+}
+
+/**
  * 钱包
  */
 export interface Wallet extends BaseEntity {
@@ -131,6 +140,8 @@ export interface Wallet extends BaseEntity {
   userName?: string
   // 余额
   balance?: number
+  // 预冻结额度
+  freezeBalance?: number
   // 状态
-  status?: number
+  status?: string
 }

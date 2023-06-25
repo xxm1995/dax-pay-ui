@@ -14,7 +14,11 @@
           {{ dictConvert('WalletLogOperation', row.operationSource) }}
         </template>
       </vxe-column>
+      <vxe-column field="createTime" title="操作时间" />
       <vxe-column field="remark" title="备注" />
+      <template #footer>
+        <a-button key="cancel" @click="handleCancel">取消</a-button>
+      </template>
     </vxe-table>
     <vxe-pager
       size="medium"
@@ -35,7 +39,7 @@
   import { $ref } from 'vue/macros'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { nextTick } from 'vue'
-  import { pageByWalletId } from '/@/views/modules/payment/wallet/list/WalletLog.api'
+  import { pageByWalletId } from '/@/views/modules/payment/wallet/WalletLog.api'
   import { useDict } from '/@/hooks/bootx/useDict'
 
   // 使用hooks

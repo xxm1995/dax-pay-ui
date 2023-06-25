@@ -16,6 +16,7 @@
         <vxe-column field="userId" title="用户ID" />
         <vxe-column field="id" title="钱包ID" />
         <vxe-column field="balance" title="余额" />
+        <vxe-column field="freezeBalance" title="冻结额度" />
         <vxe-column field="payStatus" title="状态">
           <template #default="{ row }">
             {{ dictConvert('WalletStatus', row.status) }}
@@ -34,7 +35,7 @@
                 <a-menu>
                   <a-menu-item>
                     <a-link danger v-if="row.status === 1" @click="lockConfirm(row.id, true)">锁定钱包</a-link>
-                    <a-link v-if="row.status === 2" @click="lockConfirm(row.id, false)">解锁钱包</a-link>
+                    <a-link v-if="row.status === WalletEnum.FORBIDDEN" @click="lockConfirm(row.id, false)">解锁钱包</a-link>
                   </a-menu-item>
                   <a-menu-item>
                     <a-link @click="showLog(row.id)">钱包日志</a-link>
@@ -67,7 +68,7 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { createWalletBatch, del, lock, page, pageByNotWallet, unlock } from './Wallet.api'
+  import { createWalletBatch, del, lock, page, pageByNotWallet, unlock } from '../Wallet.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import WalletInfo from './WalletInfo.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -78,6 +79,7 @@
   import BUserSelectModal from '/@/components/Bootx/UserSelectModal/BUserSelectModal.vue'
   import WalletLogList from './WalletLogList.vue'
   import WalletChanger from './WalletChanger.vue'
+  import { WalletEnum } from '/@/enums/payment/walletEnum'
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()

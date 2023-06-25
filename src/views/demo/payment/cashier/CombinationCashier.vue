@@ -50,7 +50,7 @@
   import { useIntervalFn } from '@vueuse/core'
   import { onMounted } from 'vue'
   import CashierQrCode from './CashierQrCode.vue'
-  import { Wallet } from '/@/views/modules/payment/wallet/list/Wallet.api'
+  import { Wallet } from '/src/views/modules/payment/wallet/Wallet.api'
   import { payChannelEnum } from '/@/enums/payment/payChannelEnum'
   import { payWayEnum } from '/@/enums/payment/payWayEnum'
   import { findByParamKey } from '/@/api/common/Parameter'

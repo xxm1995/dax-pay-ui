@@ -40,7 +40,7 @@
   import { $ref } from 'vue/macros'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { nextTick } from 'vue'
-  import { changerBalance } from '/@/views/modules/payment/wallet/list/Wallet.api'
+  import { changerBalance } from '/@/views/modules/payment/wallet/Wallet.api'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
 
   const { handleCancel, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, editable, showable, formEditType } = useFormEdit()
