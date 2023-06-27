@@ -38,7 +38,7 @@
         />
       </a-form-item>
       <a-form-item label="有效期" name="enduring">
-        <a-switch checkedChildren="长期" unCheckedChildren="期限" v-model:value="form.enduring" />
+        <a-switch checkedChildren="长期" unCheckedChildren="期限" v-model:checked="form.enduring" />
       </a-form-item>
       <a-form-item label="有效期" name="enduring" v-if="!form.enduring">
         <a-range-picker valueFormat="YYYY-MM-DD" @change="changeTime" />
@@ -95,16 +95,19 @@
 
   function init() {
     visible.value = true
-    confirmLoading.value = true
+    // confirmLoading.value = true
     resetForm()
   }
 
   // 时间范围变动
-  function changeTime (_, times) {
-    form.startTime = times[0] + ' 00:00:00' as any
-    form.endTime = times[1] + ' 23:59:59' as any
+  function changeTime(_, times) {
+    form.startTime = (times[0] + ' 00:00:00') as any
+    form.endTime = (times[1] + ' 23:59:59') as any
   }
 
+  /**
+   * 生成储值卡
+   */
   function handleOk() {
     formRef?.validate().then(async () => {
       confirmLoading.value = true

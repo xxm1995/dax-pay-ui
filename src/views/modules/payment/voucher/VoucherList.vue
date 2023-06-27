@@ -62,7 +62,7 @@
         @page-change="handleTableChange"
       />
       <voucher-info ref="voucherInfo" />
-      <voucher-generation ref="voucherGeneration" />
+      <voucher-generation ref="voucherGeneration" @ok="queryPage" />
     </div>
   </div>
 </template>

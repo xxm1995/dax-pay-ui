@@ -7,7 +7,7 @@ import { BaseEntity } from '/#/web'
  */
 export function page(params) {
   return defHttp.get<Result<PageResult<Wallet>>>({
-    url: '/wallet/page',
+    url: '/wallet/admin/page',
     params,
   })
 }
@@ -17,7 +17,7 @@ export function page(params) {
  */
 export function pageByNotWallet(params) {
   return defHttp.get<Result<PageResult<Wallet>>>({
-    url: '/wallet/pageByNotWallet',
+    url: '/wallet/admin/pageByNotWallet',
     params: params,
   })
 }
@@ -27,7 +27,7 @@ export function pageByNotWallet(params) {
  */
 export function findAll() {
   return defHttp.get<Result<Wallet[]>>({
-    url: '/wallet/findAll',
+    url: '/wallet/admin/findAll',
   })
 }
 
@@ -36,7 +36,7 @@ export function findAll() {
  */
 export function get(id) {
   return defHttp.get<Result<Wallet>>({
-    url: '/wallet/findById',
+    url: '/wallet/admin/findById',
     params: { id },
   })
 }
@@ -46,7 +46,7 @@ export function get(id) {
  */
 export function add(obj: Wallet) {
   return defHttp.post({
-    url: '/wallet/add',
+    url: '/wallet/admin/add',
     data: obj,
   })
 }
@@ -56,7 +56,7 @@ export function add(obj: Wallet) {
  */
 export function update(obj: Wallet) {
   return defHttp.post({
-    url: '/wallet/update',
+    url: '/wallet/admin/update',
     data: obj,
   })
 }
@@ -66,7 +66,7 @@ export function update(obj: Wallet) {
  */
 export function del(id) {
   return defHttp.delete({
-    url: '/wallet/delete',
+    url: '/wallet/admin/delete',
     params: { id },
   })
 }
@@ -76,7 +76,7 @@ export function del(id) {
  */
 export function getWalletInfo(walletId) {
   return defHttp.get<Result<Wallet>>({
-    url: '/wallet/getWalletInfo',
+    url: '/wallet/admin/getWalletInfo',
     params: { walletId },
   })
 }
@@ -86,7 +86,7 @@ export function getWalletInfo(walletId) {
  */
 export function createWalletBatch(obj) {
   return defHttp.post({
-    url: '/wallet/createWalletBatch',
+    url: '/wallet/admin/createWalletBatch',
     data: obj,
   })
 }
@@ -96,7 +96,7 @@ export function createWalletBatch(obj) {
  */
 export function lock(walletId) {
   return defHttp.post({
-    url: '/wallet/lock',
+    url: '/wallet/admin/lock',
     params: { walletId },
   })
 }
@@ -106,7 +106,7 @@ export function lock(walletId) {
  */
 export function unlock(walletId) {
   return defHttp.post({
-    url: '/wallet/unlock',
+    url: '/wallet/admin/unlock',
     params: { walletId },
   })
 }
@@ -116,17 +116,26 @@ export function unlock(walletId) {
  */
 export function changerBalance(obj) {
   return defHttp.post({
-    url: '/wallet/changerBalance',
+    url: '/wallet/admin/changerBalance',
     data: obj,
   })
 }
 
 /**
- * 根据用户查询钱包
+ * 查询用户钱包
  */
 export function findByUser() {
-  return defHttp.get({
+  return defHttp.get<Result<Wallet>>({
     url: '/wallet/findByUser',
+  })
+}
+
+/**
+ * 开通钱包
+ */
+export function createWallet() {
+  return defHttp.post<Result<void>>({
+    url: '/wallet/createWallet',
   })
 }
 

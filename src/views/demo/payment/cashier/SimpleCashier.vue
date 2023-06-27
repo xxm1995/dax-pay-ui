@@ -83,7 +83,6 @@
     payChannel: payChannelEnum.ALI,
     payWay: payWayEnum.QRCODE,
     businessId: '',
-    walletId: '',
     voucherNo: '',
     title: '测试支付订单',
     // 二维码支付方式
@@ -143,7 +142,6 @@
     // 获取钱包
     findWalletByUser().then((res) => {
       wallet = res.data
-      form.walletId = wallet.id as string
     })
   }
 
@@ -175,6 +173,7 @@
         createMessage.success('支付成功')
         initWallet()
         genOrderNo()
+        getVoucher()
         pause()
       }
     })
@@ -197,6 +196,7 @@
     cashierQrCode.handleClose()
     loading = false
     genOrderNo()
+    getVoucher()
     pause()
   }
 </script>
