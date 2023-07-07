@@ -48,7 +48,7 @@
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { useIntervalFn } from '@vueuse/core'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { findByCardNo, Voucher } from '/@/views/modules/payment/voucher/Voucher.api'
+  import { getAndJudgeVoucher, Voucher } from '/@/views/modules/payment/voucher/Voucher.api'
   import CashierQrCode from './CashierQrCode.vue'
   import { payChannelEnum } from '/@/enums/payment/payChannelEnum'
   import { findByParamKey } from '/@/api/common/Parameter'
@@ -183,7 +183,7 @@
    */
   function getVoucher() {
     if (form.voucherNo) {
-      findByCardNo(form.voucherNo).then(({ data }) => {
+      getAndJudgeVoucher(form.voucherNo).then(({ data }) => {
         voucher = data
       })
     }

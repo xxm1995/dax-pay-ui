@@ -45,8 +45,8 @@
       </a-form-item>
       <a-form-item label="默认状态" name="status">
         <a-radio-group v-model:value="form.status">
-          <a-radio :value="1">启用</a-radio>
-          <a-radio :value="2">停用</a-radio>
+          <a-radio :value="VoucherEnum.STATUS_NORMAL">启用</a-radio>
+          <a-radio :value="VoucherEnum.STATUS_FORBIDDEN">停用</a-radio>
         </a-radio-group>
       </a-form-item>
     </a-form>
@@ -65,6 +65,7 @@
   import { computed, nextTick } from 'vue'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import { generationBatch } from '/@/views/modules/payment/voucher/Voucher.api'
+  import { VoucherEnum } from '/@/enums/payment/voucherEnum'
 
   const { handleCancel, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, editable, showable, formEditType } = useFormEdit()
   const { createMessage } = useMessage()
@@ -78,7 +79,7 @@
     enduring: true,
     startTime: null,
     endTime: null,
-    status: 1,
+    status: VoucherEnum.STATUS_NORMAL,
   })
 
   const rules = computed<Record<string, Rule[]>>(() => {
@@ -95,8 +96,8 @@
 
   function init() {
     visible.value = true
-    // confirmLoading.value = true
     resetForm()
+    confirmLoading.value = false
   }
 
   // 时间范围变动
@@ -118,6 +119,7 @@
       }
       await generationBatch(form)
       visible.value = false
+      confirmLoading.value = false
       emits('ok')
     })
   }

@@ -64,9 +64,9 @@ export function del(id) {
 /**
  * 详情
  */
-export function findByCardNo(cardNo) {
+export function getAndJudgeVoucher(cardNo) {
   return defHttp.get<Result<Voucher>>({
-    url: '/voucher/findByCardNo',
+    url: '/voucher/getAndJudgeVoucher',
     params: { cardNo },
   })
 }
@@ -120,5 +120,5 @@ export interface Voucher extends BaseEntity {
   // 结束时间
   endTime?: string
   // 状态
-  status?: number
+  status?: string
 }

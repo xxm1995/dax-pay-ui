@@ -41,12 +41,12 @@
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
-                    <a-link danger v-if="row.status === 1" @click="lockConfirm(row.id, true)">停用</a-link>
-                    <a-link v-if="row.status === 2" @click="lockConfirm(row.id, false)">启用</a-link>
+                    <a-link @click="showLogs(row.id)">日志</a-link>
                   </a-menu-item>
-                  <!--                <a-menu-item>-->
-                  <!--                  <a-link>金额变动</a-link>-->
-                  <!--                </a-menu-item>-->
+                  <a-menu-item>
+                    <a-link danger v-if="row.status === 'normal'" @click="lockConfirm(row.id, true)">停用</a-link>
+                    <a-link v-if="row.status === 'forbidden'" @click="lockConfirm(row.id, false)">启用</a-link>
+                  </a-menu-item>
                 </a-menu>
               </template>
             </a-dropdown>

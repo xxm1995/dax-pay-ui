@@ -24,6 +24,9 @@
       <a-descriptions-item label="有效期">
         {{ form.enduring ? '长期' : '期限' }}
       </a-descriptions-item>
+      <a-descriptions-item label="状态">
+        {{ form.status === VoucherEnum.STATUS_NORMAL ? '正常' : '停用' }}
+      </a-descriptions-item>
       <a-descriptions-item label="开始时间">
         {{ form.startTime }}
       </a-descriptions-item>
@@ -43,6 +46,7 @@
   import { get, Voucher } from './Voucher.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
+  import { VoucherEnum } from "../../../../enums/payment/voucherEnum";
   const { handleCancel, modalWidth, confirmLoading, visible } = useFormEdit()
   // 表单
   const formRef = $ref<FormInstance>()
@@ -55,7 +59,7 @@
     enduring: true,
     startTime: '',
     endTime: '',
-    status: 0,
+    status: undefined,
   })
   // 入口
   function init(id) {
