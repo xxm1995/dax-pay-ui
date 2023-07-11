@@ -109,7 +109,7 @@ export interface AlipayConfig extends BaseEntity {
   // 请求网关地址
   serverUrl?: string
   // 认证方式
-  authType?: number
+  authType?: string
   // 签名类型
   signType?: string
   // 支付宝公钥

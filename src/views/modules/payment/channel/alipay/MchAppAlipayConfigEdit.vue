@@ -54,8 +54,8 @@
         </a-form-item>
         <a-form-item label="认证方式" name="authType">
           <a-select allowClear :disabled="showable" v-model:value="form.authType" style="width: 100%" placeholder="选择认证方式">
-            <a-select-option :key="1">公钥模式</a-select-option>
-            <a-select-option :key="2">证书模式</a-select-option>
+            <a-select-option key="key">公钥模式</a-select-option>
+            <a-select-option key="cart">证书模式</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item label="签名类型" name="signType">
@@ -63,17 +63,76 @@
             <a-select-option key="RSA2">RSA2秘钥</a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item v-show="form.authType === 1" label="支付宝公钥" name="alipayPublicKey">
+        <a-form-item v-show="form.authType === 'key'" label="支付宝公钥" name="alipayPublicKey">
           <a-textarea :rows="5" v-model:value="form.alipayPublicKey" :disabled="showable" placeholder="请输入支付宝公钥" />
         </a-form-item>
-        <a-form-item v-show="form.authType === 2" label="应用公钥证书" name="appCert">
-          <a-textarea :rows="5" v-model:value="form.appCert" :disabled="showable" placeholder="请输入应用公钥证书内容" />
+        <a-form-item v-show="form.authType === 'cart'" label="应用公钥证书" name="appCert">
+          <a-upload
+            v-if="!form.appCert"
+            :disabled="showable"
+            name="file"
+            :multiple="false"
+            :action="uploadAction"
+            :headers="tokenHeader"
+            :showUploadList="false"
+            @change="(info) => handleChange(info, 'appCert')"
+          >
+            <a-button type="primary" preIcon="carbon:cloud-upload"> 应用证书上传 </a-button>
+          </a-upload>
+          <a-input v-else defaultValue="apiclient_cert" disabled>
+            <template #addonAfter v-if="!showable">
+              <a-tooltip>
+                <template #title> 删除上传的证书文件 </template>
+                <icon @click="form.appCert = ''" icon="ant-design:close-circle-outlined" :size="20" />
+              </a-tooltip>
+            </template>
+          </a-input>
         </a-form-item>
-        <a-form-item v-show="form.authType === 2" label="支付宝公钥证书" name="alipayCert">
-          <a-textarea :rows="5" v-model:value="form.alipayCert" :disabled="showable" placeholder="请输入支付宝公钥证书内容" />
+        <a-form-item v-show="form.authType === 'cart'" label="支付宝公钥证书" name="alipayCert">
+          <!--          <a-textarea :rows="5" v-model:value="form.alipayCert" :disabled="showable" placeholder="请输入支付宝公钥证书内容" />-->
+          <a-upload
+            v-if="!form.alipayCert"
+            :disabled="showable"
+            name="file"
+            :multiple="false"
+            :action="uploadAction"
+            :headers="tokenHeader"
+            :showUploadList="false"
+            @change="(info) => handleChange(info, 'alipayCert')"
+          >
+            <a-button type="primary" preIcon="carbon:cloud-upload"> 公钥证书上传 </a-button>
+          </a-upload>
+          <a-input v-else defaultValue="alipay.cert" disabled>
+            <template #addonAfter v-if="!showable">
+              <a-tooltip>
+                <template #title> 删除上传的证书文件 </template>
+                <icon @click="form.alipayCert = ''" icon="ant-design:close-circle-outlined" :size="20" />
+              </a-tooltip>
+            </template>
+          </a-input>
         </a-form-item>
-        <a-form-item v-show="form.authType === 2" label="支付宝CA根证书" name="alipayRootCert">
-          <a-textarea :rows="5" v-model:value="form.alipayRootCert" :disabled="showable" placeholder="请输入支付宝CA根证书" />
+        <a-form-item v-show="form.authType === 'cart'" label="支付宝CA根证书" name="alipayRootCert">
+          <!--          <a-textarea :rows="5" v-model:value="form.alipayRootCert" :disabled="showable" placeholder="请输入支付宝CA根证书" />-->
+          <a-upload
+            v-if="!form.alipayRootCert"
+            :disabled="showable"
+            name="file"
+            :multiple="false"
+            :action="uploadAction"
+            :headers="tokenHeader"
+            :showUploadList="false"
+            @change="(info) => handleChange(info, 'alipayRootCert')"
+          >
+            <a-button type="primary" preIcon="carbon:cloud-upload"> CA根证书上传 </a-button>
+          </a-upload>
+          <a-input v-else defaultValue="alipayRootCert" disabled>
+            <template #addonAfter v-if="!showable">
+              <a-tooltip>
+                <template #title> 删除上传的证书文件 </template>
+                <icon @click="form.alipayRootCert = ''" icon="ant-design:close-circle-outlined" :size="20" />
+              </a-tooltip>
+            </template>
+          </a-input>
         </a-form-item>
         <a-form-item label="应用私钥" name="privateKey">
           <a-textarea :rows="5" v-model:value="form.privateKey" :disabled="showable" placeholder="请输入应用私钥" />
@@ -100,10 +159,12 @@
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicDrawer } from '/@/components/Drawer'
-  import { KeyValue } from '/#/web'
   import { MchAppPayConfigResult } from '/@/views/modules/payment/app/MchApplication.api'
   import { dropdownTranslate } from '/@/utils/dataUtil'
   import { LabeledValue } from 'ant-design-vue/lib/select'
+  import { useUpload } from '/@/hooks/bootx/useUpload'
+  import { useMessage } from '/@/hooks/web/useMessage'
+  import Icon from '/@/components/Icon/src/Icon.vue'
   const {
     initFormEditType,
     handleCancel,
@@ -119,6 +180,9 @@
     showable,
     formEditType,
   } = useFormEdit()
+  // 文件上传
+  const { tokenHeader, uploadAction } = useUpload('/alipay/toBase64')
+  const { createMessage } = useMessage()
 
   const formRef = $ref<FormInstance>()
 
@@ -130,7 +194,7 @@
     notifyUrl: '',
     returnUrl: '',
     serverUrl: '',
-    authType: 1,
+    authType: 'key',
     signType: 'RSA2',
     alipayPublicKey: '',
     appCert: '',
@@ -153,10 +217,10 @@
       serverUrl: [{ required: true, message: '请输入请求网关地址' }],
       authType: [{ required: true, message: '请选择认证方式' }],
       signType: [{ required: true, message: '请选择加密类型' }],
-      alipayPublicKey: [{ required: form.authType === 1, message: '请输入支付宝公钥' }],
-      appCert: [{ required: form.authType === 2, message: '请输入应用证书' }],
-      alipayCert: [{ required: form.authType === 2, message: '请输入支付宝证书' }],
-      alipayRootCert: [{ required: form.authType === 2, message: '请输入支付宝CA根证书' }],
+      alipayPublicKey: [{ required: form.authType === 'key', message: '请输入支付宝公钥' }],
+      appCert: [{ required: form.authType === 'cart', message: '请输入应用证书' }],
+      alipayCert: [{ required: form.authType === 'cart', message: '请输入支付宝证书' }],
+      alipayRootCert: [{ required: form.authType === 'cart', message: '请输入支付宝CA根证书' }],
       privateKey: [{ required: true, message: '请输入支付私钥' }],
       sandbox: [{ required: true, message: '请选择是否为沙箱环境' }],
       expireTime: [{ required: true, message: '请输入默认超时配置' }],
@@ -206,6 +270,23 @@
       handleCancel()
       emits('ok')
     })
+  }
+  /**
+   * 文件上传
+   */
+  function handleChange(info, fieldName) {
+    // 上传完毕
+    if (info.file.status === 'done') {
+      const res = info.file.response
+      if (!res.code) {
+        form[fieldName] = res.data
+        createMessage.success(`${info.file.name} 上传成功!`)
+      } else {
+        createMessage.error(`${res.msg}`)
+      }
+    } else if (info.file.status === 'error') {
+      createMessage.error('上传失败')
+    }
   }
 
   // 重置表单

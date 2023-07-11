@@ -60,30 +60,68 @@
             :action="uploadAction"
             :headers="tokenHeader"
             :showUploadList="false"
-            @change="handleChange"
+            @change="(info) => handleChange(info, 'p12')"
           >
             <a-button type="primary" preIcon="carbon:cloud-upload"> p12证书上传 </a-button>
           </a-upload>
-          <a-input v-else v-model:value="form.p12" disabled>
+          <a-input v-else defaultValue="apiclient_cert.p12" disabled>
             <template #addonAfter v-if="!showable">
               <a-tooltip>
                 <template #title> 删除上传的证书文件 </template>
-                <icon @click="form.p12 = null" icon="ant-design:close-circle-outlined" :size="20" />
+                <icon @click="form.p12 = ''" icon="ant-design:close-circle-outlined" :size="20" />
+              </a-tooltip>
+            </template>
+          </a-input>
+        </a-form-item>
+        <a-form-item label="证书(cert.pem)" name="certPem">
+          <a-upload
+            v-if="!form.certPem"
+            :disabled="showable"
+            name="file"
+            :multiple="false"
+            :action="uploadAction"
+            :headers="tokenHeader"
+            :showUploadList="false"
+            @change="(info) => handleChange(info, 'certPem')"
+          >
+            <a-button type="primary" preIcon="carbon:cloud-upload"> 证书上传 </a-button>
+          </a-upload>
+          <a-input v-else defaultValue="cert.pem" disabled>
+            <template #addonAfter v-if="!showable">
+              <a-tooltip>
+                <template #title> 删除上传的证书文件 </template>
+                <icon @click="form.certPem = ''" icon="ant-design:close-circle-outlined" :size="20" />
+              </a-tooltip>
+            </template>
+          </a-input>
+        </a-form-item>
+        <a-form-item label="私钥(key.pem)" name="keyPem">
+          <a-upload
+            v-if="!form.keyPem"
+            :disabled="showable"
+            name="file"
+            :multiple="false"
+            :action="uploadAction"
+            :headers="tokenHeader"
+            :showUploadList="false"
+            @change="(info) => handleChange(info, 'keyPem')"
+          >
+            <a-button type="primary" preIcon="carbon:cloud-upload"> 私钥上传 </a-button>
+          </a-upload>
+          <a-input v-else defaultValue="key.pem" disabled>
+            <template #addonAfter v-if="!showable">
+              <a-tooltip>
+                <template #title> 删除上传的证书文件 </template>
+                <icon @click="form.keyPem = ''" icon="ant-design:close-circle-outlined" :size="20" />
               </a-tooltip>
             </template>
           </a-input>
         </a-form-item>
         <a-form-item label="APIv2密钥" name="apiKeyV2">
-          <a-textarea :rows="5" :disabled="showable" v-model:value="form.apiKeyV2" placeholder="请输入APIv2密钥" />
+          <a-textarea :rows="3" :disabled="showable" v-model:value="form.apiKeyV2" placeholder="请输入APIv2密钥" />
         </a-form-item>
         <a-form-item label="APIv3密钥" name="apiKeyV3">
-          <a-textarea :rows="5" :disabled="showable" v-model:value="form.apiKeyV3" placeholder="请输入APIv3密钥" />
-        </a-form-item>
-        <a-form-item label="证书(cert.pem)" name="certPem">
-          <a-textarea :rows="5" :disabled="showable" v-model:value="form.certPem" placeholder="请填入证书内容" />
-        </a-form-item>
-        <a-form-item label="私钥(key.pem)" name="keyPem">
-          <a-textarea :rows="5" v-model:value="form.keyPem" :disabled="showable" placeholder="请填入私钥内容" />
+          <a-textarea :rows="3" :disabled="showable" v-model:value="form.apiKeyV3" placeholder="请输入APIv3密钥" />
         </a-form-item>
         <a-form-item label="备注" name="remark">
           <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
@@ -129,7 +167,8 @@
     showable,
     formEditType,
   } = useFormEdit()
-  const { tokenHeader, uploadAction } = useUpload('/file/upload')
+  // 文件上传
+  const { tokenHeader, uploadAction } = useUpload('/wechat/pay/toBase64')
   const { createMessage } = useMessage()
 
   let editType = $ref<FormEditType>()
@@ -211,7 +250,7 @@
       } else if (formEditType.value === FormEditType.Edit) {
         await update({
           ...form,
-          ...diffForm(rawForm, form, 'wxMchId', 'wxAppId', 'appSecret', 'apiKeyV2', 'apiKeyV3', 'keyPem', 'certPem'),
+          ...diffForm(rawForm, form, 'wxMchId', 'wxAppId', 'p12', 'appSecret', 'apiKeyV2', 'apiKeyV3', 'keyPem', 'certPem'),
         })
       }
       confirmLoading.value = false
@@ -229,12 +268,12 @@
   /**
    * 文件上传
    */
-  function handleChange(info) {
+  function handleChange(info, fieldName) {
     // 上传完毕
     if (info.file.status === 'done') {
       const res = info.file.response
       if (!res.code) {
-        form.p12 = res.data.id
+        form[fieldName] = res.data
         createMessage.success(`${info.file.name} 上传成功!`)
       } else {
         createMessage.error(`${res.msg}`)
