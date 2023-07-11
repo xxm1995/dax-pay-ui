@@ -180,8 +180,8 @@
     showable,
     formEditType,
   } = useFormEdit()
-  // 文件上传
-  const { tokenHeader, uploadAction } = useUpload('/alipay/toBase64')
+  // 读取证书内容
+  const { tokenHeader, uploadAction } = useUpload('/alipay/readPem')
   const { createMessage } = useMessage()
 
   const formRef = $ref<FormInstance>()

@@ -114,10 +114,6 @@ export interface WechatPayConfig extends BaseEntity {
   appSecret?: string
   // p12的文件id
   p12?: string | null
-  // API 证书中的 cert.pem
-  certPem?: string
-  // API 证书中的 key.pem
-  keyPem?: string
   // 应用域名，回调中会使用此参数
   domain?: string
   // 服务器异步通知页面路径

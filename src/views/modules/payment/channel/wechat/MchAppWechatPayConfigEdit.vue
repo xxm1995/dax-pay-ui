@@ -73,50 +73,6 @@
             </template>
           </a-input>
         </a-form-item>
-        <a-form-item label="证书(cert.pem)" name="certPem">
-          <a-upload
-            v-if="!form.certPem"
-            :disabled="showable"
-            name="file"
-            :multiple="false"
-            :action="uploadAction"
-            :headers="tokenHeader"
-            :showUploadList="false"
-            @change="(info) => handleChange(info, 'certPem')"
-          >
-            <a-button type="primary" preIcon="carbon:cloud-upload"> 证书上传 </a-button>
-          </a-upload>
-          <a-input v-else defaultValue="cert.pem" disabled>
-            <template #addonAfter v-if="!showable">
-              <a-tooltip>
-                <template #title> 删除上传的证书文件 </template>
-                <icon @click="form.certPem = ''" icon="ant-design:close-circle-outlined" :size="20" />
-              </a-tooltip>
-            </template>
-          </a-input>
-        </a-form-item>
-        <a-form-item label="私钥(key.pem)" name="keyPem">
-          <a-upload
-            v-if="!form.keyPem"
-            :disabled="showable"
-            name="file"
-            :multiple="false"
-            :action="uploadAction"
-            :headers="tokenHeader"
-            :showUploadList="false"
-            @change="(info) => handleChange(info, 'keyPem')"
-          >
-            <a-button type="primary" preIcon="carbon:cloud-upload"> 私钥上传 </a-button>
-          </a-upload>
-          <a-input v-else defaultValue="key.pem" disabled>
-            <template #addonAfter v-if="!showable">
-              <a-tooltip>
-                <template #title> 删除上传的证书文件 </template>
-                <icon @click="form.keyPem = ''" icon="ant-design:close-circle-outlined" :size="20" />
-              </a-tooltip>
-            </template>
-          </a-input>
-        </a-form-item>
         <a-form-item label="APIv2密钥" name="apiKeyV2">
           <a-textarea :rows="3" :disabled="showable" v-model:value="form.apiKeyV2" placeholder="请输入APIv2密钥" />
         </a-form-item>
@@ -185,8 +141,6 @@
     p12: null,
     apiKeyV2: '',
     apiKeyV3: '',
-    keyPem: '',
-    certPem: '',
     domain: '',
     notifyUrl: '',
     returnUrl: '',
