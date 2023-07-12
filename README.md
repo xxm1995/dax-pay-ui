@@ -9,7 +9,8 @@ Dax-Pay是Bootx-Platform的子项目之一，主要是对支付收单和账务�
 
 > 基于 Vben-Admin-Next 前端脚手架
 
-演示地址: [地址](http://v3.platform.bootx.cn/)
+演示地址: [Dax支付系统](http://daxpay.demo.bootx.cn/)
+后端项目：[后端项目](https://gitee.com/bootx/dax-pay)
 
 使用Vue3 + Vite + TS进行构建开发
 

@@ -19,20 +19,30 @@
         <a-form-item label="应用编号" name="wxAppId">
           <a-input v-model:value="form.wxAppId" :disabled="showable" placeholder="请输入微信应用AppId" />
         </a-form-item>
+        <a-form-item label="API版本" name="apiVersion">
+          <a-radio-group v-model:value="form.apiVersion" button-style="solid">
+            <a-radio-button value="apiV2"> Api_V2 </a-radio-button>
+            <a-radio-button value="apiV3"> Api_V3 </a-radio-button>
+          </a-radio-group>
+        </a-form-item>
         <a-form-item label="AppSecret" name="appSecret">
           <a-input v-model:value="form.appSecret" :disabled="showable" placeholder="APPID对应的接口密码，用于获取接口调用凭证时使用" />
         </a-form-item>
-        <a-form-item label="超时配置" name="expireTime">
-          <a-input-number :min="1" :max="12000" :step="1" :disabled="showable" v-model:value="form.expireTime" />
+        <a-form-item label="超时配置(分钟)" name="expireTime">
+          <a-input-number
+            placeholder="请输入默认超时配置"
+            :min="1"
+            :max="12000"
+            :step="1"
+            :disabled="showable"
+            v-model:value="form.expireTime"
+          />
         </a-form-item>
         <a-form-item label="异步通知UR" name="notifyUrl">
           <a-input v-model:value="form.notifyUrl" :disabled="showable" placeholder="请输入服务器异步通知页面路径" />
         </a-form-item>
         <a-form-item label="同步通知URL" name="returnUrl">
           <a-input v-model:value="form.returnUrl" :disabled="showable" placeholder="请输入页面跳转同步通知页面路径" />
-        </a-form-item>
-        <a-form-item label="应用域名" name="domain">
-          <a-input v-model:value="form.domain" :disabled="showable" placeholder="请输入应用域名，回调中会使用此参数" />
         </a-form-item>
         <a-form-item label="支持支付方式" name="payWayList">
           <a-select
@@ -45,11 +55,14 @@
             placeholder="选择支付方式"
           />
         </a-form-item>
-        <a-form-item label="是否沙箱环境" name="sandbox">
-          <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.sandbox" :disabled="showable" />
-        </a-form-item>
         <a-form-item label="是否启用" v-show="showable" name="activity">
           <a-tag>{{ form.activity ? '启用' : '未启用' }}</a-tag>
+        </a-form-item>
+        <a-form-item label="APIv2密钥" name="apiKeyV2">
+          <a-textarea :rows="3" :disabled="showable" v-model:value="form.apiKeyV2" placeholder="请输入APIv2密钥" />
+        </a-form-item>
+        <a-form-item label="APIv3密钥" name="apiKeyV3">
+          <a-textarea :rows="3" :disabled="showable" v-model:value="form.apiKeyV3" placeholder="请输入APIv3密钥" />
         </a-form-item>
         <a-form-item label="p12证书" name="p12">
           <a-upload
@@ -73,12 +86,7 @@
             </template>
           </a-input>
         </a-form-item>
-        <a-form-item label="APIv2密钥" name="apiKeyV2">
-          <a-textarea :rows="3" :disabled="showable" v-model:value="form.apiKeyV2" placeholder="请输入APIv2密钥" />
-        </a-form-item>
-        <a-form-item label="APIv3密钥" name="apiKeyV3">
-          <a-textarea :rows="3" :disabled="showable" v-model:value="form.apiKeyV3" placeholder="请输入APIv3密钥" />
-        </a-form-item>
+
         <a-form-item label="备注" name="remark">
           <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
         </a-form-item>
@@ -107,6 +115,7 @@
   import { MchAppPayConfigResult } from '/@/views/modules/payment/app/MchApplication.api'
   import { dropdownTranslate } from '/@/utils/dataUtil'
   import { LabeledValue } from 'ant-design-vue/lib/select'
+  import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
 
   const {
     initFormEditType,
@@ -137,16 +146,15 @@
     wxMchId: '',
     wxAppId: '',
     appSecret: '',
-    apiVersion: 'api_v2',
     p12: null,
     apiKeyV2: '',
     apiKeyV3: '',
-    domain: '',
+    apiVersion: 'apiV2',
     notifyUrl: '',
     returnUrl: '',
     expireTime: 15,
     payWayList: [],
-    sandbox: false,
+    // sandbox: false,
     remark: '',
   })
   // 校验
@@ -157,10 +165,10 @@
       appSecret: [{ required: true, message: '请输入AppSecret' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
       returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],
-      domain: [{ required: true, message: '请输入请求应用域名' }],
-      apiKeyV2: [{ required: form.apiVersion === 'api_v2', message: '请输入V2秘钥' }],
-      apiKeyV3: [{ required: form.apiVersion === 'api_v3', message: '请输入V3秘钥' }],
-      sandbox: [{ required: true, message: '请选择是否为沙箱环境' }],
+      apiVersion: [{ required: true, message: '请选择支付API版本' }],
+      apiKeyV2: [{ required: form.apiVersion === 'apiV2', message: '请输入V2秘钥' }],
+      apiKeyV3: [{ required: form.apiVersion === 'apiV3', message: '请输入V3秘钥' }],
+      p12: [{ required: form.apiVersion === 'apiV3', message: '请上传p12证书' }],
       expireTime: [{ required: true, message: '请输入默认超时配置' }],
       payWayList: [{ required: true, message: '请选择支持的支付类型' }],
     } as Record<string, Rule[]>
@@ -241,4 +249,8 @@
   })
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  .vben-basic-title {
+    font-size: 14px;
+  }
+</style>
