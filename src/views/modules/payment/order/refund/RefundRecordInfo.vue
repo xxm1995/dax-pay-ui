@@ -39,10 +39,10 @@
       <a-descriptions-item label="退款信息">
         <a-tag v-for="o in form.refundableInfo" :key="o.payChannel">{{ dictConvert('PayChannel', o.payChannel) }}: {{ o.amount }}</a-tag>
       </a-descriptions-item>
-      <a-descriptions-item label="错误码">
+      <a-descriptions-item v-if="form.errorCode" label="错误码">
         {{ form.errorCode }}
       </a-descriptions-item>
-      <a-descriptions-item label="错误信息">
+      <a-descriptions-item v-if="form.errorMsg" label="错误信息">
         {{ form.errorMsg }}
       </a-descriptions-item>
     </a-descriptions>
