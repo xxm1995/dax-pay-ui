@@ -6,8 +6,8 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
-        <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="paymentId" title="支付号" />
+        <vxe-column type="seq" width="60" />
+        <vxe-column field="paymentId" title="支付记录id" />
         <vxe-column field="payChannel" title="支付通道">
           <template #default="{ row }">
             {{ dictConvert('PayChannel', row.payChannel) }}
@@ -15,12 +15,12 @@
         </vxe-column>
         <vxe-column field="status" title="处理状态">
           <template #default="{ row }">
-            {{ dictConvert('PayNotifyStatus', row.status) }}
+            {{ dictConvert('PaySyncStatus', row.status) }}
           </template>
         </vxe-column>
         <vxe-column field="msg" title="提示信息" />
-        <vxe-column field="notifyTime" title="通知时间" />
-        <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
+        <vxe-column field="syncTime" title="同步时间" />
+        <vxe-column fixed="right" width="50" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
               <a-link @click="show(row)">查看</a-link>
@@ -36,7 +36,7 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
-      <pay-notify-record-info ref="payNotifyRecordInfo" />
+      <sync-record-info ref="syncRecordInfo" @ok="queryPage" />
     </div>
   </div>
 </template>
@@ -44,14 +44,15 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page } from './PayNotifyRecord.api'
+  import { page } from './SyncRecord.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+  import SyncRecordInfo from './SyncRecordInfo.vue'
+  import { VxeTableInstance, VxeToolbarInstance, VxeTable, VxeColumn, VxePager, VxeToolbar } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
+  import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import PayNotifyRecordInfo from './PayNotifyRecordInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -72,26 +73,32 @@
       field: 'status',
       type: LIST,
       name: '处理状态',
-      placeholder: '请选择消息处理状态',
-      selectList: dictDropDown('PayNotifyStatus'),
+      placeholder: '请选择处理状态',
+      selectList: dictDropDown('PaySyncStatus'),
     },
+    { field: 'mchCode', type: STRING, name: '商户编码', placeholder: '请输入商户编码' },
+    { field: 'mchAppCode', type: STRING, name: '应用号编码', placeholder: '请输入商户编码' },
   ] as QueryField[]
-
-  console.log(fields)
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
-  const payNotifyRecordInfo = $ref<any>()
+  const syncRecordInfo = $ref<any>()
 
   onMounted(() => {
     vxeBind()
     queryPage()
   })
+
+  /**
+   * 初始化绑定
+   */
   function vxeBind() {
     xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
-  // 分页查询
+  /**
+   * 分页查询
+   */
   function queryPage() {
     loading.value = true
     page({
@@ -102,9 +109,12 @@
     })
     return Promise.resolve()
   }
-  // 查看
+
+  /**
+   * 查看
+   */
   function show(record) {
-    payNotifyRecordInfo.init(record.id)
+    syncRecordInfo.init(record.id)
   }
 </script>
 

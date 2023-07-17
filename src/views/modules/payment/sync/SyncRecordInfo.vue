@@ -1,7 +1,6 @@
 <template>
   <basic-modal
     title="查看"
-    v-bind="$attrs"
     :loading="confirmLoading"
     :width="modalWidth"
     :visible="visible"
@@ -17,22 +16,22 @@
           {{ dictConvert('PayChannel', form.payChannel) }}
         </a-descriptions-item>
         <a-descriptions-item label="商户编码">
-          {{ dictConvert('PayChannel', form.mchCode) }}
+          {{ form.mchCode }}
         </a-descriptions-item>
-        <a-descriptions-item label="商户应用编码">
-          {{ dictConvert('PayChannel', form.mchAppCode) }}
+        <a-descriptions-item label="应用编码">
+          {{ form.mchAppCode }}
         </a-descriptions-item>
         <a-descriptions-item label="通知消息">
-          <json-preview :data="JSON.parse(form.notifyInfo || '{}')" />
+          <json-preview :data="JSON.parse(form.syncInfo || '{}')" />
         </a-descriptions-item>
         <a-descriptions-item label="状态">
-          {{ dictConvert('PayNotifyStatus', form.status) }}
+          {{ dictConvert('PaySyncStatus', form.status) }}
         </a-descriptions-item>
-        <a-descriptions-item label="提示消息" v-if="form.msg">
+        <a-descriptions-item label="错误消息" v-show="form.msg">
           {{ form.msg }}
         </a-descriptions-item>
-        <a-descriptions-item label="通知时间">
-          {{ form.notifyTime }}
+        <a-descriptions-item label="同步时间">
+          {{ form.syncTime }}
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>
@@ -45,12 +44,11 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { get, PayNotifyRecord } from './PayNotifyRecord.api'
-  import { FormInstance } from 'ant-design-vue/lib/form'
-  import { FormEditType } from '/@/enums/formTypeEnum'
+  import { get, SyncRecord } from './SyncRecord.api'
+  import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { BasicModal } from '/@/components/Modal'
-  import { useDict } from '/@/hooks/bootx/useDict'
   import JsonPreview from '/@/components/CodeEditor/src/json-preview/JsonPreview.vue'
+  import { useDict } from '/@/hooks/bootx/useDict'
   const {
     initFormEditType,
     handleCancel,
@@ -65,29 +63,23 @@
     showable,
     formEditType,
   } = useFormEdit()
-  const { dictConvert } = useDict()
-
   // 表单
   const formRef = $ref<FormInstance>()
-  let form = $ref<PayNotifyRecord>({
-    id: null,
-    paymentId: '',
-    notifyInfo: '',
-    payChannel: 1,
-    status: 1,
-    msg: '',
-    notifyTime: '',
-  })
-  // 入口
+  let form = $ref<SyncRecord>({})
+  const { dictConvert } = useDict()
+
+  /**
+   * 入口 获取信息
+   */
   function init(id) {
     visible.value = true
+    console.log(123)
     confirmLoading.value = true
     get(id).then(({ data }) => {
       form = data
       confirmLoading.value = false
     })
   }
-
   defineExpose({
     init,
   })

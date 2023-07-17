@@ -113,7 +113,7 @@
   const { handleTableChange, pageQueryResHandel, resetQuery, resetQueryParams, pagination, pages, model, loading, superQueryFlag } =
     useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
-  const { dictConvert, dictDropDownNumber } = useDict()
+  const { dictConvert, dictDropDown } = useDict()
 
   // 查询条件
   const fields = [
@@ -134,9 +134,9 @@
     { field: 'amount', name: '金额', type: NUMBER, precision: 2 },
     { field: 'errorCode', name: '错误码', type: STRING },
     { field: 'asyncPayMode', name: '异步支付', type: BOOLEAN },
-    { field: 'asyncPayChannel', name: '异步支付方式', type: LIST, selectList: dictDropDownNumber('PayChannel') },
+    { field: 'asyncPayChannel', name: '异步支付方式', type: LIST, selectList: dictDropDown('PayChannel') },
     { field: 'payTime', name: '支付时间', type: DATE_TIME },
-    { field: 'payStatus', name: '支付状态', type: LIST, selectList: dictDropDownNumber('PayStatus') },
+    { field: 'payStatus', name: '支付状态', type: LIST, selectList: dictDropDown('PayStatus') },
   ] as QueryField[]
 
   let superQueryParam = $ref<QueryParam[]>([])

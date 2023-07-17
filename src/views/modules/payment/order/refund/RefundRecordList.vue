@@ -21,7 +21,7 @@
         <vxe-column field="refundTime" title="退款时间" />
         <vxe-column field="refundStatus" title="状态">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('PayRefundProcess', row.refundStatus) }}</a-tag>
+            <a-tag>{{ dictConvert('PayRefundStatus', row.refundStatus) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
@@ -56,18 +56,32 @@
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
+  import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
   import PaymentInfo from '/@/views/modules/payment/order/payment/PaymentInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
-  const { dictConvert } = useDict()
+  const { dictConvert, dictDropDown } = useDict()
 
   // 查询条件
   const fields = [
     { field: 'paymentId', type: STRING, name: '支付单号', placeholder: '请输入支付单号' },
+    {
+      field: 'payChannel',
+      type: LIST,
+      name: '支付通道',
+      placeholder: '请选择支付通道',
+      selectList: dictDropDown('AsyncPayChannel'),
+    },
+    {
+      field: 'status',
+      type: LIST,
+      name: '处理状态',
+      placeholder: '请选择处理状态',
+      selectList: dictDropDown('PayRefundStatus'),
+    },
     { field: 'businessId', type: STRING, name: '业务ID', placeholder: '请输入业务ID' },
     { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
     { field: 'mchCode', type: STRING, name: '商户编码', placeholder: '请输入商户编码' },
