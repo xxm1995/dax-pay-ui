@@ -121,14 +121,14 @@
     { field: 'businessId', type: STRING, name: '业务ID', placeholder: '请输入业务ID' },
     { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
     { field: 'mchCode', type: STRING, name: '商户编码', placeholder: '请输入商户编码' },
-    { field: 'mchAppCode', type: STRING, name: '应用号编码', placeholder: '请输入商户编码' },
+    { field: 'mchAppCode', type: STRING, name: '应用编码', placeholder: '请输入应用编码' },
   ] as QueryField[]
   // 超级查询条件
   const queryFields = [
     { field: 'id', name: '支付ID', type: STRING },
     { field: 'businessId', name: '业务ID', type: STRING },
     { field: 'mchCode', type: STRING, name: '商户编码' },
-    { field: 'mchAppCode', type: STRING, name: '应用号编码' },
+    { field: 'mchAppCode', type: STRING, name: '应用编码' },
     { field: 'userId', name: '用户ID', type: STRING },
     { field: 'title', name: '标题', type: STRING },
     { field: 'amount', name: '金额', type: NUMBER, precision: 2 },

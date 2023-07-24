@@ -63,7 +63,7 @@
       />
       <voucher-info ref="voucherInfo" />
       <voucher-generation ref="voucherGeneration" @ok="queryPage" />
-      <voucher-log-list ref="voucherLogList" />
+<!--      <voucher-log-list ref="voucherLogList" />-->
     </div>
   </div>
 </template>
@@ -73,13 +73,13 @@
   import { $ref } from 'vue/macros'
   import { lock, page, unlock } from './Voucher.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import VoucherInfo from './VoucherInfo.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import VoucherGeneration from '/@/views/modules/payment/voucher/VoucherGeneration.vue'
+  import VoucherInfo from './VoucherInfo.vue'
+  import VoucherGeneration from './VoucherGeneration.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -90,6 +90,8 @@
   const fields = [
     { field: 'cardNo', type: STRING, name: '卡号', placeholder: '请输入储值卡卡号' },
     { field: 'batchNo', type: STRING, name: '批次号', placeholder: '请输入批次号' },
+    { field: 'mchCode', type: STRING, name: '商户编码', placeholder: '请输入商户编码' },
+    { field: 'mchAppCode', type: STRING, name: '应用编码', placeholder: '请输入应用编码' },
   ] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()
