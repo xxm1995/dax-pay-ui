@@ -44,7 +44,7 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import { combinationPay, findStatusByBusinessId } from '/@/views/demo/payment/cashier/Cashier.api'
-  import { Voucher } from '/@/views/modules/payment/voucher/Voucher.api'
+  import { Voucher } from '/src/views/modules/payment/channel/voucher/list/Voucher.api'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { useIntervalFn } from '@vueuse/core'
@@ -54,7 +54,7 @@
   import { payWayEnum } from '/@/enums/payment/payWayEnum'
   import { findByParamKey } from '/@/api/common/Parameter'
   import { PayStatus } from '/@/enums/payment/PayStatus'
-  import { findByUser as findWalletByUser, Wallet } from '/@/views/modules/payment/wallet/Wallet.api'
+  import { findByUser as findWalletByUser, Wallet } from '/src/views/modules/payment/channel/wallet/Wallet.api'
 
   const { createMessage } = useMessage()
 

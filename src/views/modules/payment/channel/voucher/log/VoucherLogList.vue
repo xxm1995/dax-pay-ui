@@ -39,7 +39,7 @@
   import { QueryField } from '/@/components/Bootx/Query/Query'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { nextTick } from 'vue'
-  import { pageByVoucherId } from "/@/views/modules/payment/voucher/VoucherLog.api";
+  import { pageByVoucherId } from './VoucherLog.api'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -49,7 +49,7 @@
   // 查询条件
   const fields = [] as QueryField[]
   let visible = $ref(false)
-  let walletId = $ref<string>()
+  let voucherId = $ref<string>()
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
@@ -58,17 +58,22 @@
     xTable?.connect(xToolbar as VxeToolbarInstance)
   })
 
+  /**
+   * 初始化
+   */
   function init(id) {
     visible = true
-    walletId = id
+    voucherId = id
     queryPage()
   }
-  // 分页查询
+  /**
+   * 分页查询
+   */
   function queryPage() {
     pageByVoucherId({
       ...model.queryParam,
       ...pages,
-      walletId,
+      voucherId,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })

@@ -28,12 +28,12 @@
 
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
-  import useFormEdit from '/@/hooks/bootx/useFormEdit'
+  import useFormEdit from '/src/hooks/bootx/useFormEdit'
   import { add, get, getWalletInfo, update, Wallet } from '../Wallet.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
-  import { FormEditType } from '/@/enums/formTypeEnum'
-  import { BasicModal } from '/@/components/Modal'
-  import { useDict } from '/@/hooks/bootx/useDict'
+  import { FormEditType } from '/src/enums/formTypeEnum'
+  import { BasicModal } from '/src/components/Modal'
+  import { useDict } from '/src/hooks/bootx/useDict'
   const { initFormEditType, handleCancel, modalWidth, title, confirmLoading, visible } = useFormEdit()
   const { dictConvert } = useDict()
 

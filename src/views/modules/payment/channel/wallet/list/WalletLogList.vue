@@ -32,15 +32,15 @@
 </template>
 
 <script lang="ts" setup>
-  import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
-  import useTablePage from '/@/hooks/bootx/useTablePage'
-  import { useMessage } from '/@/hooks/web/useMessage'
-  import { QueryField } from '/@/components/Bootx/Query/Query'
+  import BasicDrawer from '/src/components/Drawer/src/BasicDrawer.vue'
+  import useTablePage from '/src/hooks/bootx/useTablePage'
+  import { useMessage } from '/src/hooks/web/useMessage'
+  import { QueryField } from '/src/components/Bootx/Query/Query'
   import { $ref } from 'vue/macros'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { nextTick } from 'vue'
-  import { pageByWalletId } from '/@/views/modules/payment/wallet/WalletLog.api'
-  import { useDict } from '/@/hooks/bootx/useDict'
+  import { pageByWalletId } from '/src/views/modules/payment/channel/wallet/WalletLog.api'
+  import { useDict } from '/src/hooks/bootx/useDict'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)

@@ -63,6 +63,7 @@
       />
       <voucher-info ref="voucherInfo" />
       <voucher-generation ref="voucherGeneration" @ok="queryPage" />
+      <voucher-log-list ref="voucherLogList" />
     </div>
   </div>
 </template>
@@ -70,7 +71,7 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { del, lock, page, unlock } from './Voucher.api'
+  import { lock, page, unlock } from './Voucher.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import VoucherInfo from './VoucherInfo.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -95,16 +96,23 @@
   const xToolbar = $ref<VxeToolbarInstance>()
   const voucherInfo = $ref<any>()
   const voucherGeneration = $ref<any>()
+  const voucherLogList = $ref<any>()
 
   onMounted(() => {
     vxeBind()
     queryPage()
   })
+
+  /**
+   * 绑定
+   */
   function vxeBind() {
     xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
-  // 分页查询
+  /**
+   * 分页查询
+   */
   function queryPage() {
     loading.value = true
     page({
@@ -115,15 +123,27 @@
     })
     return Promise.resolve()
   }
-  // 查看
+  /**
+   * 查看
+   */
   function show(record) {
     voucherInfo.init(record.id)
   }
 
-  // 批量生成
+  /**
+   * 批量生成
+   */
   function generationBatch() {
     voucherGeneration.init()
   }
+
+  /**
+   * 查看日志
+   */
+  function showLogs(record) {
+    voucherLogList.init(record.id)
+  }
+
   /**
    * 启用/停用 储值卡
    * @param voucherId 储值卡id
@@ -141,7 +161,7 @@
           await unlock(voucherId)
         }
         createMessage.success(type ? '停用该储值卡成功' : '启用该储值卡成功')
-        queryPage()
+        await queryPage()
       },
     })
   }

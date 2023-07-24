@@ -29,10 +29,10 @@
 <script setup lang="ts">
   import { $ref } from 'vue/macros'
   import { createWallet, findByUser, Wallet } from '../Wallet.api'
-  import { useMessage } from '/@/hooks/web/useMessage'
-  import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
+  import { useMessage } from '/src/hooks/web/useMessage'
+  import BasicTitle from '/src/components/Basic/src/BasicTitle.vue'
   import { onMounted } from 'vue'
-  import { useDict } from '/@/hooks/bootx/useDict'
+  import { useDict } from '/src/hooks/bootx/useDict'
 
   const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert } = useDict()

@@ -46,7 +46,7 @@
   import { get, Voucher } from './Voucher.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
-  import { VoucherEnum } from "../../../../enums/payment/voucherEnum";
+  import { VoucherEnum } from '/@/enums/payment/voucherEnum'
   const { handleCancel, modalWidth, confirmLoading, visible } = useFormEdit()
   // 表单
   const formRef = $ref<FormInstance>()

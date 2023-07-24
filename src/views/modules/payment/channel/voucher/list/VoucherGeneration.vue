@@ -64,7 +64,7 @@
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { computed, nextTick } from 'vue'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
-  import { generationBatch } from '/@/views/modules/payment/voucher/Voucher.api'
+  import { generationBatch } from './Voucher.api'
   import { VoucherEnum } from '/@/enums/payment/voucherEnum'
 
   const { handleCancel, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, editable, showable, formEditType } = useFormEdit()
