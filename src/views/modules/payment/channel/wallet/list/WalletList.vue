@@ -14,7 +14,6 @@
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
         <vxe-column field="userId" title="用户ID" />
-        <vxe-column field="id" title="钱包ID" />
         <vxe-column field="balance" title="余额" />
         <vxe-column field="freezeBalance" title="冻结额度" />
         <vxe-column field="payStatus" title="状态">
@@ -22,6 +21,8 @@
             {{ dictConvert('WalletStatus', row.status) }}
           </template>
         </vxe-column>
+        <vxe-column field="mchCode" title="商户号" />
+        <vxe-column field="mchAppCode" title="应用号" />
         <vxe-column field="createTime" title="创建时间" />
         <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
           <template #default="{ row }">
@@ -60,7 +61,7 @@
       <wallet-info ref="walletInfo" />
       <wallet-changer ref="walletChanger" @ok="queryPage" />
       <wallet-log-list ref="walletLogList" />
-      <b-user-select-modal ref="userSelectModal" multiple :data-source="pageByNotWallet" @ok="createBatchWallet" />
+      <wallet-create ref="walletCreate" multiple :data-source="pageByNotWallet" @ok="queryPage" />
     </div>
   </div>
 </template>
@@ -68,18 +69,20 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { createWalletBatch, del, lock, page, pageByNotWallet, unlock } from '../Wallet.api'
-  import useTablePage from '/src/hooks/bootx/useTablePage'
+  import { lock, page, pageByNotWallet, unlock } from '../Wallet.api'
+  import useTablePage from '/@/hooks/bootx/useTablePage'
   import WalletInfo from './WalletInfo.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
-  import BQuery from '/src/components/Bootx/Query/BQuery.vue'
-  import { useMessage } from '/src/hooks/web/useMessage'
-  import { QueryField, STRING } from '/src/components/Bootx/Query/Query'
-  import { useDict } from '/src/hooks/bootx/useDict'
-  import BUserSelectModal from '/src/components/Bootx/UserSelectModal/BUserSelectModal.vue'
-  import WalletLogList from './WalletLogList.vue'
+  import BQuery from '/@/components/Bootx/Query/BQuery.vue'
+  import { useMessage } from '/@/hooks/web/useMessage'
+  import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
+  import { useDict } from '/@/hooks/bootx/useDict'
+  import BUserSelectModal from '/@/components/Bootx/UserSelectModal/BUserSelectModal.vue'
+  import WalletLogList from '../log/WalletLogList.vue'
   import WalletChanger from './WalletChanger.vue'
-  import { WalletEnum } from '/src/enums/payment/walletEnum'
+  import { WalletEnum } from '/@/enums/payment/walletEnum'
+  import WalletCreate from './WalletCreate.vue'
+
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
@@ -88,12 +91,14 @@
   const fields = [
     { field: 'walletId', type: STRING, name: '钱包ID', placeholder: '请输入钱包ID' },
     { field: 'userId', type: STRING, name: '用户ID', placeholder: '请输入用户ID' },
+    { field: 'mchCode', type: STRING, name: '商户编码', placeholder: '请输入商户编码' },
+    { field: 'mchAppCode', type: STRING, name: '应用编码', placeholder: '请输入应用编码' },
   ] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const walletInfo = $ref<any>()
-  const userSelectModal = $ref<any>()
+  const walletCreate = $ref<any>()
   const walletLogList = $ref<any>()
   const walletChanger = $ref<any>()
 
@@ -116,25 +121,27 @@
     })
     return Promise.resolve()
   }
-  // 开通钱包
+  /**
+   * 开通钱包
+   */
   function add() {
-    userSelectModal.init()
+    walletCreate.init()
   }
-  // 查看
+  /**
+   * 查看
+   */
   function show(record) {
     walletInfo.init(record.id)
   }
-  // 批量开通钱包
-  function createBatchWallet(userIds: string[]) {
-    loading.value = true
-    createMessage.success('批量开通钱包中')
-    createWalletBatch(userIds).then(() => queryPage())
-  }
-  // 钱包日志
+  /**
+   * 钱包日志
+   */
   function showLog(walletId) {
     walletLogList.init(walletId)
   }
-  // 调整余额
+  /**
+   * 调整余额
+   */
   function recharge(walletId) {
     walletChanger.init(walletId)
   }

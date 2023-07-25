@@ -160,7 +160,6 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicDrawer } from '/@/components/Drawer'
   import { MchAppPayConfigResult } from '/@/views/modules/payment/app/MchApplication.api'
-  import { dropdownTranslate } from '/@/utils/dataUtil'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { useUpload } from '/@/hooks/bootx/useUpload'
   import { useMessage } from '/@/hooks/web/useMessage'
@@ -232,7 +231,7 @@
   // 入口
   function init(record: MchAppPayConfigResult) {
     findPayWayList().then(({ data }) => {
-      payWayList = dropdownTranslate(data, 'value', 'key')
+      payWayList = data
     })
     editType = record.configId ? FormEditType.Edit : FormEditType.Add
     initFormEditType(editType)

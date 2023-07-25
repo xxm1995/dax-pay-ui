@@ -1,6 +1,6 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
-import { BaseEntity } from '/#/web'
+import { BaseEntity, KeyValue } from "/#/web";
 
 /**
  * 分页
@@ -18,6 +18,16 @@ export function page(params) {
 export function findAll() {
   return defHttp.get<Result<MchApplication[]>>({
     url: '/mch/app/findAll',
+  })
+}
+
+/**
+ * 下拉列表, 通过商户Code
+ */
+export function dropdown(mchCode) {
+  return defHttp.get<Result<KeyValue[]>>({
+    url: '/mch/app/dropdown',
+    params: { mchCode },
   })
 }
 

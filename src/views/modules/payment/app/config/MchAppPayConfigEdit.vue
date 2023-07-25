@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
   import { $ref } from 'vue/macros'
-  import { MchAppPayConfigResult } from './MchApplication.api'
+  import { MchAppPayConfigResult } from '../MchApplication.api'
   import MchAppAlipayConfigEdit from '/@/views/modules/payment/channel/alipay/MchAppAlipayConfigEdit.vue'
   import MchAppWechatPayConfigEdit from '/@/views/modules/payment/channel/wechat/MchAppWechatPayConfigEdit.vue'
   import MchAppWalletConfigEdit from '/@/views/modules/payment/channel/wallet/config/MchAppWalletConfigEdit.vue'

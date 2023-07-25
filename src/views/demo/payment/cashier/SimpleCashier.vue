@@ -48,13 +48,13 @@
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { useIntervalFn } from '@vueuse/core'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { getAndJudgeVoucher, Voucher } from '/src/views/modules/payment/channel/voucher/list/Voucher.api'
+  import { getAndJudgeVoucher, Voucher } from '/@/views/modules/payment/channel/voucher/list/Voucher.api'
   import CashierQrCode from './CashierQrCode.vue'
   import { payChannelEnum } from '/@/enums/payment/payChannelEnum'
   import { findByParamKey } from '/@/api/common/Parameter'
   import { payWayEnum } from '/@/enums/payment/payWayEnum'
   import { PayStatus } from '/@/enums/payment/PayStatus'
-  import { findByUser as findWalletByUser, Wallet } from '/src/views/modules/payment/channel/wallet/Wallet.api'
+  import { findByUser as findWalletByUser, Wallet } from '/@/views/modules/payment/channel/wallet/Wallet.api'
 
   const { createMessage } = useMessage()
 

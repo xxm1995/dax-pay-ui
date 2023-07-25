@@ -17,6 +17,12 @@
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
     >
+      <a-form-item label="商户号" name="mchCode">
+        <a-select allow-clear :options="mchList" v-model:value="form.mchCode" placeholder="请选择商户" @change="mchAppChange" />
+      </a-form-item>
+      <a-form-item label="应用号" name="mchAppCode" v-show="form.mchCode">
+        <a-select allow-clear :options="mchAppList" v-model:value="form.mchAppCode" placeholder="请选择商户应用" />
+      </a-form-item>
       <a-form-item label="面值" name="faceValue">
         <a-input-number
           :precision="2"
@@ -66,13 +72,22 @@
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import { generationBatch } from './Voucher.api'
   import { VoucherEnum } from '/@/enums/payment/voucherEnum'
+  import { dropdown as mchDrop } from '/@/views/modules/payment/merchant/MerchantInfo.api'
+  import { dropdown as mchAppDrop } from '/@/views/modules/payment/app/MchApplication.api'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
 
   const { handleCancel, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, editable, showable, formEditType } = useFormEdit()
   const { createMessage } = useMessage()
 
+  // 商户和应用下拉列表
+  let mchList = $ref<LabeledValue[]>()
+  let mchAppList = $ref<LabeledValue[]>()
+
   // 表单
   const formRef = $ref<FormInstance>()
   const form = $ref({
+    mchCode: undefined,
+    mchAppCode: undefined,
     count: 1,
     faceValue: 1,
     dataTime: null,
@@ -82,25 +97,43 @@
     status: VoucherEnum.STATUS_NORMAL,
   })
 
-  const rules = computed<Record<string, Rule[]>>(() => {
-    return {
-      count: [{ required: true, message: '请输入要生成的数量' }],
-      faceValue: [{ required: true, message: '请输入储值卡的面值' }],
-      enduring: [{ required: true, message: '请选择储值卡有效期类型' }],
-      dataTime: [{ required: form.enduring, message: '请选择有效时间范围' }],
-      status: [{ required: true, message: '请选择默认状态' }],
-    }
-  })
+  const rules = {
+    mchCode: [{ required: true, message: '请选择商户' }],
+    mchAppCode: [{ required: true, message: '请选择商户对应的应用' }],
+    count: [{ required: true, message: '请输入要生成的数量' }],
+    faceValue: [{ required: true, message: '请输入储值卡的面值' }],
+    enduring: [{ required: true, message: '请选择储值卡有效期类型' }],
+    dataTime: [{ required: form.enduring, message: '请选择有效时间范围' }],
+    status: [{ required: true, message: '请选择默认状态' }],
+  } as Record<string, Rule[]>
 
   const emits = defineEmits(['ok'])
 
+  /**
+   * 初始化
+   */
   function init() {
     visible.value = true
     resetForm()
+    // 商户下拉列表
+    mchDrop().then(({ data }) => {
+      mchList = data
+    })
     confirmLoading.value = false
   }
 
-  // 时间范围变动
+  /**
+   * 商户应用下拉列表
+   */
+  function mchAppChange() {
+    mchAppDrop(form.mchCode).then(({ data }) => {
+      mchAppList = data
+    })
+  }
+
+  /**
+   * 时间范围变动
+   */
   function changeTime(_, times) {
     form.startTime = (times[0] + ' 00:00:00') as any
     form.endTime = (times[1] + ' 23:59:59') as any

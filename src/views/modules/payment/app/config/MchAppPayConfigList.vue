@@ -41,7 +41,7 @@
 <script setup lang="ts">
   import { BasicDrawer } from '/@/components/Drawer'
   import { $ref } from 'vue/macros'
-  import { findAllConfig, MchApplication, MchAppPayConfigResult } from './MchApplication.api'
+  import { findAllConfig, MchApplication, MchAppPayConfigResult } from '../MchApplication.api'
   import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
   import MchAppPayConfigEdit from './MchAppPayConfigEdit.vue'
 

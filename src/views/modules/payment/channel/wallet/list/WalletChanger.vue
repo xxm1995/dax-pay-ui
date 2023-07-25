@@ -35,13 +35,13 @@
 </template>
 
 <script lang="ts" setup>
-  import useFormEdit from '/src/hooks/bootx/useFormEdit'
-  import { useMessage } from '/src/hooks/web/useMessage'
+  import useFormEdit from '/@/hooks/bootx/useFormEdit'
+  import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { nextTick } from 'vue'
-  import { changerBalance } from '/src/views/modules/payment/channel/wallet/Wallet.api'
-  import BasicModal from '/src/components/Modal/src/BasicModal.vue'
+  import { changerBalance } from '/@/views/modules/payment/channel/wallet/Wallet.api'
+  import BasicModal from '/@/components/Modal/src/BasicModal.vue'
 
   const { handleCancel, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, editable, showable, formEditType } = useFormEdit()
   const { createMessage } = useMessage()

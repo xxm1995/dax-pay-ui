@@ -84,10 +84,11 @@ export function getWalletInfo(walletId) {
 /**
  * 批量开通钱包
  */
-export function createWalletBatch(obj) {
+export function createWalletBatch(params, data) {
   return defHttp.post({
     url: '/wallet/admin/createWalletBatch',
-    data: obj,
+    params: params,
+    data: data,
   })
 }
 

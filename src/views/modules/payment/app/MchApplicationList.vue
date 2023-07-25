@@ -63,7 +63,7 @@
   import { del, page } from './MchApplication.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import MchApplicationEdit from './MchApplicationEdit.vue'
-  import MchAppPayConfigList from './mchAppPayConfigList.vue'
+  import MchAppPayConfigList from './config/MchAppPayConfigList.vue'
   import { VxeTableInstance, VxeToolbarInstance, VxeTable, VxeColumn, VxePager, VxeToolbar } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'

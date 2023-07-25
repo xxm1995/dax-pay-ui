@@ -17,8 +17,6 @@
         <vxe-column field="batchNo" title="生成批次号" />
         <vxe-column field="faceValue" title="面值" />
         <vxe-column field="balance" title="余额" />
-        <vxe-column field="startTime" title="开始时间" />
-        <vxe-column field="endTime" title="结束时间" />
         <vxe-column field="enduring" title="长期有效">
           <template #default="{ row }">
             <a-tag>{{ row.enduring ? '长期' : '期限' }}</a-tag>
@@ -29,6 +27,8 @@
             {{ dictConvert('VoucherStatus', row.status) }}
           </template>
         </vxe-column>
+        <vxe-column field="mchCode" title="商户号" />
+        <vxe-column field="mchAppCode" title="应用号" />
         <vxe-column field="createTime" title="创建时间" />
         <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
           <template #default="{ row }">
@@ -41,7 +41,7 @@
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
-                    <a-link @click="showLogs(row.id)">日志</a-link>
+                    <a-link @click="showLogs(row)">日志</a-link>
                   </a-menu-item>
                   <a-menu-item>
                     <a-link danger v-if="row.status === 'normal'" @click="lockConfirm(row.id, true)">停用</a-link>
@@ -63,7 +63,7 @@
       />
       <voucher-info ref="voucherInfo" />
       <voucher-generation ref="voucherGeneration" @ok="queryPage" />
-<!--      <voucher-log-list ref="voucherLogList" />-->
+      <voucher-log-list ref="voucherLogList" />
     </div>
   </div>
 </template>
@@ -79,6 +79,7 @@
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
   import VoucherInfo from './VoucherInfo.vue'
+  import VoucherLogList from '../log/VoucherLogList.vue'
   import VoucherGeneration from './VoucherGeneration.vue'
 
   // 使用hooks

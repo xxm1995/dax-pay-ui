@@ -62,7 +62,6 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicDrawer } from '/@/components/Drawer'
   import { dropdown } from '/@/views/modules/payment/merchant/MerchantInfo.api'
-  import { dropdownTranslate } from '/@/utils/dataUtil'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { useDict } from '/@/hooks/bootx/useDict'
   const {
@@ -121,7 +120,7 @@
     }
     // 列表
     dropdown().then(({ data }) => {
-      mchList = dropdownTranslate(data, 'value', 'key')
+      mchList = data
     })
   }
 

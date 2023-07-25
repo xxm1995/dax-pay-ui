@@ -15,6 +15,12 @@
       <a-descriptions-item label="生成批次号">
         {{ form.batchNo }}
       </a-descriptions-item>
+      <a-descriptions-item label="商户号">
+        {{ form.mchCode }}
+      </a-descriptions-item>
+      <a-descriptions-item label="应用号">
+        {{ form.mchAppCode }}
+      </a-descriptions-item>
       <a-descriptions-item label="面值">
         {{ form.faceValue }}
       </a-descriptions-item>
@@ -27,10 +33,10 @@
       <a-descriptions-item label="状态">
         {{ form.status === VoucherEnum.STATUS_NORMAL ? '正常' : '停用' }}
       </a-descriptions-item>
-      <a-descriptions-item label="开始时间">
+      <a-descriptions-item label="有效期(开始时间)">
         {{ form.startTime }}
       </a-descriptions-item>
-      <a-descriptions-item label="结束时间">
+      <a-descriptions-item label="有效期(结束时间)">
         {{ form.endTime }}
       </a-descriptions-item>
     </a-descriptions>
