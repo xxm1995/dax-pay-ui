@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="m-3 p-3 pt-5 bg-white">
-      <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
+      <b-query :query-params="model.queryParam" :default-item-count="3" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
@@ -89,10 +89,10 @@
   const { dictConvert } = useDict()
   // 查询条件
   const fields = [
-    { field: 'walletId', type: STRING, name: '钱包ID', placeholder: '请输入钱包ID' },
-    { field: 'userId', type: STRING, name: '用户ID', placeholder: '请输入用户ID' },
     { field: 'mchCode', type: STRING, name: '商户编码', placeholder: '请输入商户编码' },
     { field: 'mchAppCode', type: STRING, name: '应用编码', placeholder: '请输入应用编码' },
+    { field: 'walletId', type: STRING, name: '钱包ID', placeholder: '请输入钱包ID' },
+    { field: 'userId', type: STRING, name: '用户ID', placeholder: '请输入用户ID' },
   ] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()

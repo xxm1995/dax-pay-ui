@@ -91,7 +91,7 @@
   let selectUserId = $ref<string>()
   const xTable = $ref<any>()
   const fields = [
-    { field: 'name', type: STRING, name: '账号', placeholder: '输入用户名称' },
+    { field: 'name', type: STRING, name: '名称', placeholder: '输入用户名称' },
     { field: 'username', type: STRING, name: '账号', placeholder: '输入用户账号' },
   ]
   const checkboxConfig = computed(() => {

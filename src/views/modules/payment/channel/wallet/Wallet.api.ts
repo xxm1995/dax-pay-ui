@@ -125,18 +125,20 @@ export function changerBalance(obj) {
 /**
  * 查询用户钱包
  */
-export function findByUser() {
+export function findByUser(params) {
   return defHttp.get<Result<Wallet>>({
     url: '/wallet/findByUser',
+    params: params,
   })
 }
 
 /**
  * 开通钱包
  */
-export function createWallet() {
+export function createWallet(params) {
   return defHttp.post<Result<void>>({
     url: '/wallet/createWallet',
+    params: params,
   })
 }
 
