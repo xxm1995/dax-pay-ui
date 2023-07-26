@@ -64,10 +64,10 @@ export function del(id) {
 /**
  * 详情
  */
-export function getAndJudgeVoucher(cardNo) {
+export function getAndJudgeVoucher(params) {
   return defHttp.get<Result<Voucher>>({
     url: '/voucher/getAndJudgeVoucher',
-    params: { cardNo },
+    params: params,
   })
 }
 
@@ -109,6 +109,10 @@ export interface Voucher extends BaseEntity {
   cardNo?: string
   // 批次号
   batchNo?: string
+  // 商户编码
+  mchCode: string
+  // 商户App编码
+  mchAppCode: string
   // 面值
   faceValue?: number
   // 余额

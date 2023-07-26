@@ -121,7 +121,10 @@
    */
   function initWallet() {
     // 获取钱包
-    findWalletByUser().then((res) => {
+    findWalletByUser({
+      mchCode: form.mchCode,
+      mchAppCode: form.mchAppCode,
+    }).then((res) => {
       wallet = res.data
     })
   }
@@ -131,10 +134,10 @@
    */
   async function init() {
     genOrderNo()
-    initWallet()
     // 获取商户和应用编码
     form.mchCode = (await findByParamKey('CashierMchCode')).data
     form.mchAppCode = (await findByParamKey('CashierMchAppCode')).data
+    initWallet()
   }
   // 生成订单号
   function genOrderNo() {

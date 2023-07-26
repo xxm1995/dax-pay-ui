@@ -55,6 +55,7 @@
   import { payWayEnum } from '/@/enums/payment/payWayEnum'
   import { PayStatus } from '/@/enums/payment/PayStatus'
   import { findByUser as findWalletByUser, Wallet } from '/@/views/modules/payment/channel/wallet/Wallet.api'
+  import { LabeledValue } from "ant-design-vue/lib/select";
 
   const { createMessage } = useMessage()
 
@@ -71,7 +72,6 @@
   const payChannel = [
     { code: payChannelEnum.ALI, name: '支付宝' },
     { code: payChannelEnum.WECHAT, name: '微信' },
-    // { code: 3, name: '云闪付' },
     { code: payChannelEnum.WALLET, name: '钱包' },
     { code: payChannelEnum.VOUCHER, name: '储值卡' },
   ]
@@ -91,13 +91,16 @@
     mchAppCode: '',
   })
   const rules = {
-    payChannel: [{ required: true, message: '不可为空' }],
-    businessId: [{ required: true, message: '不可为空' }],
-    title: [{ required: true, message: '不可为空' }],
-    payWay: [{ required: true, message: '不可为空' }],
-    amount: [{ required: true, message: '不可为空' }],
-    voucherNo: [{ required: true, message: '不可为空' }],
+    payChannel: [{ required: true, message: '支付通道不可为空' }],
+    businessId: [{ required: true, message: '业务不可为空' }],
+    title: [{ required: true, message: '标题不可为空' }],
+    payWay: [{ required: true, message: '支付方式不可为空' }],
+    amount: [{ required: true, message: '金额不可为空' }],
+    voucherNo: [{ required: true, message: '储值卡号不可为空' }],
   }
+  // 商户和应用下拉列表
+  let mchList = $ref<LabeledValue[]>()
+  let mchAppList = $ref<LabeledValue[]>()
 
   // 检查支付状态
   const { pause, resume } = useIntervalFn(
@@ -117,7 +120,7 @@
     1000 * 3,
     { immediate: false },
   )
-
+  // 页面加载钩子
   onMounted(() => {
     initData()
   })
@@ -128,21 +131,40 @@
   async function initData() {
     // 生成订单号
     genOrderNo()
-    // 初始化钱包信息
-    initWallet()
     // 获取商户和应用编码
     form.mchCode = (await findByParamKey('CashierMchCode')).data
     form.mchAppCode = (await findByParamKey('CashierMchAppCode')).data
+    // 初始化钱包信息
+    getWallet()
   }
 
   /**
-   * 初始化钱包信息
+   * 获取钱包信息
    */
-  function initWallet() {
+  function getWallet() {
     // 获取钱包
-    findWalletByUser().then((res) => {
+    findWalletByUser({
+      mchCode: form.mchCode,
+      mchAppCode: form.mchAppCode,
+    }).then((res) => {
       wallet = res.data
     })
+  }
+
+  /**
+   * 获取储值卡信息
+   */
+  function getVoucher() {
+    if (form.voucherNo) {
+      getAndJudgeVoucher({ cardNo: form.voucherNo }).then(({ data }) => {
+        // 储值卡是否属于当前商户
+        if (data.mchCode !== form.mchCode || data.mchAppCode !== form.mchAppCode) {
+          createMessage.warn('储值卡当前商户无法使用')
+        } else {
+          voucher = data
+        }
+      })
+    }
   }
 
   /**
@@ -171,22 +193,12 @@
         resume()
       } else {
         createMessage.success('支付成功')
-        initWallet()
+        getWallet()
         genOrderNo()
         getVoucher()
         pause()
       }
     })
-  }
-  /**
-   * 获取储值卡信息
-   */
-  function getVoucher() {
-    if (form.voucherNo) {
-      getAndJudgeVoucher(form.voucherNo).then(({ data }) => {
-        voucher = data
-      })
-    }
   }
 
   /**

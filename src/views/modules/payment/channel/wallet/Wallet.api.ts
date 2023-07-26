@@ -1,3 +1,4 @@
+//  @ts-nocheck
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
