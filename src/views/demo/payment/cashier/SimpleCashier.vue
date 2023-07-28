@@ -3,6 +3,12 @@
     <a-spin :spinning="loading">
       <div>
         <a-form ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+          <a-form-item label="商户号" name="mchCode">
+            <a-select allow-clear :options="mchList" v-model:value="form.mchCode" placeholder="请选择商户" @change="mchAppChange" />
+          </a-form-item>
+          <a-form-item label="应用号" name="mchAppCode" v-show="form.mchCode">
+            <a-select allow-clear :options="mchAppList" v-model:value="form.mchAppCode" placeholder="请选择商户应用" @change="getWallet" />
+          </a-form-item>
           <a-form-item label="支付方式" name="payChannel">
             <a-radio-group v-model:value="form.payChannel" button-style="solid">
               <a-radio-button v-for="o in payChannel" :value="o.code" :key="o.code"> {{ o.name }} </a-radio-button>
@@ -21,13 +27,15 @@
           <a-form-item label="金额" name="amount">
             <a-input-number :precision="2" :min="0.01" v-model:value="form.amount" placeholder="请输入金额" />
             <template v-if="form.payChannel === payChannelEnum.WALLET" #help>
-              <span>钱包余额：{{ wallet.balance }}</span>
+              <span v-if="wallet">钱包余额：{{ wallet.balance }}</span>
+              <span v-else></span>
             </template>
           </a-form-item>
           <a-form-item label="储值卡" name="voucherNo" v-if="form.payChannel === payChannelEnum.VOUCHER">
             <a-input v-model:value="form.voucherNo" @blur="getVoucher" placeholder="请输入储值卡号" />
             <template #help>
-              <span>储值卡面值：{{ voucher.faceValue }} 余额：{{ voucher.balance }}</span>
+              <span v-if="voucher">储值卡面值：{{ voucher.faceValue }} 余额：{{ voucher.balance }}</span>
+              <span v-else></span>
             </template>
           </a-form-item>
         </a-form>
@@ -55,7 +63,9 @@
   import { payWayEnum } from '/@/enums/payment/payWayEnum'
   import { PayStatus } from '/@/enums/payment/PayStatus'
   import { findByUser as findWalletByUser, Wallet } from '/@/views/modules/payment/channel/wallet/Wallet.api'
-  import { LabeledValue } from "ant-design-vue/lib/select";
+  import { dropdown as mchDrop } from '/@/views/modules/payment/merchant/MerchantInfo.api'
+  import { dropdown as mchAppDrop } from '/@/views/modules/payment/app/MchApplication.api'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
 
   const { createMessage } = useMessage()
 
@@ -77,20 +87,21 @@
   ]
   let loading = $ref(false)
   let visible = $ref(false)
-  let wallet = $ref<Wallet>({ balance: 0 })
-  let voucher = $ref<Voucher>({})
+  let wallet = $ref<Wallet>()
+  let voucher = $ref<Voucher>()
   let form = $ref({
     payChannel: payChannelEnum.ALI,
     payWay: payWayEnum.QRCODE,
     businessId: '',
     voucherNo: '',
     title: '测试支付订单',
-    // 二维码支付方式
     amount: 0.01,
     mchCode: '',
     mchAppCode: '',
   })
   const rules = {
+    mchCode: [{ required: true, message: '请选择商户' }],
+    mchAppCode: [{ required: true, message: '请选择商户对应的应用' }],
     payChannel: [{ required: true, message: '支付通道不可为空' }],
     businessId: [{ required: true, message: '业务不可为空' }],
     title: [{ required: true, message: '标题不可为空' }],
@@ -120,7 +131,9 @@
     1000 * 3,
     { immediate: false },
   )
-  // 页面加载钩子
+  /**
+   * 页面加载钩子
+   */
   onMounted(() => {
     initData()
   })
@@ -134,8 +147,23 @@
     // 获取商户和应用编码
     form.mchCode = (await findByParamKey('CashierMchCode')).data
     form.mchAppCode = (await findByParamKey('CashierMchAppCode')).data
+    // 商户下拉列表
+    mchDrop().then(({ data }) => {
+      mchList = data
+    })
+    // 初始化应用下拉列表
+    mchAppChange()
     // 初始化钱包信息
     getWallet()
+  }
+
+  /**
+   * 商户应用下拉列表
+   */
+  function mchAppChange() {
+    mchAppDrop(form.mchCode).then(({ data }) => {
+      mchAppList = data
+    })
   }
 
   /**
@@ -147,7 +175,12 @@
       mchCode: form.mchCode,
       mchAppCode: form.mchAppCode,
     }).then((res) => {
-      wallet = res.data
+      if (res.data) {
+        wallet = res.data
+      } else {
+        wallet = null as any
+        createMessage.warn('用户钱包不存在或者未开通')
+      }
     })
   }
 
@@ -159,6 +192,7 @@
       getAndJudgeVoucher({ cardNo: form.voucherNo }).then(({ data }) => {
         // 储值卡是否属于当前商户
         if (data.mchCode !== form.mchCode || data.mchAppCode !== form.mchAppCode) {
+          voucher = null as any
           createMessage.warn('储值卡当前商户无法使用')
         } else {
           voucher = data
