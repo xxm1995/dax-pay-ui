@@ -85,6 +85,7 @@
    */
   function mchAppChange() {
     mchAppDrop(form.mchCode).then(({ data }) => {
+      form.mchAppCode = ''
       mchAppList = data
     })
   }
