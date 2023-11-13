@@ -106,8 +106,8 @@
     resetForm()
     getInfo(id, editType)
   }
-  function initData() {
-    messageTemplateTypes = dictDropDownNumber('MessageTemplateCode')
+  async function initData() {
+    messageTemplateTypes = await dictDropDownNumber('MessageTemplateCode')
   }
   // 获取信息
   function getInfo(id, editType: FormEditType) {

@@ -41,6 +41,16 @@ export function updatePassword(password, newPassword) {
 }
 
 /**
+ * 要修改的密码是否重复
+ */
+export function isRecentlyUsed(password) {
+  return defHttp.get<Result<boolean>>({
+    url: '/security/password/isRecentlyUsed',
+    params: { password },
+  })
+}
+
+/**
  * 绑定手机
  */
 export function bindPhone(phone, captcha) {

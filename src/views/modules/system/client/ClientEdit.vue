@@ -13,14 +13,20 @@
         <a-form-item label="主键" name="id" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="编码" v-bind="validateInfos.code" name="code">
+        <a-form-item label="编码" name="code">
           <a-input v-model:value="form.code" :disabled="showable" @blur="validate('code')" placeholder="请输入编码" />
         </a-form-item>
-        <a-form-item label="名称" v-bind="validateInfos.name" name="name">
+        <a-form-item label="名称" name="name">
           <a-input v-model:value="form.name" :disabled="showable" @blur="validate('name')" placeholder="请输入名称" />
         </a-form-item>
-        <a-form-item label="启用状态" v-bind="validateInfos.enable" name="enable">
+        <a-form-item label="启用状态" name="enable">
           <a-switch checked-children="开" un-checked-children="关" v-model:checked="form.enable" :disabled="showable || form.system" />
+        </a-form-item>
+        <a-form-item name="defaultEndow">
+          <template #label>
+            <basic-title helpMessage="新注册的用户是否默认赋予该终端">默认赋权</basic-title>
+          </template>
+          <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.defaultEndow" :disabled="showable" />
         </a-form-item>
         <a-form-item label="系统内置" name="system">
           <a-tag v-if="form.system" color="green">是</a-tag>
@@ -66,6 +72,7 @@
   import { $ref } from 'vue/macros'
   import { useValidate } from '/@/hooks/bootx/useValidate'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
+  import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
 
   const {
     initFormEditType,
@@ -102,7 +109,7 @@
     name: [{ required: true, message: '请输入应用名称' }],
     enable: [{ required: true, message: '请选择启用状态' }],
   } as Record<string, Rule[]>)
-  const formRef: FormInstance = $ref()
+  const formRef = $ref<FormInstance>()
 
   // 表单
   const { resetFields, validate, validateInfos } = useForm(form, rules)
@@ -165,4 +172,8 @@
   })
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  .vben-basic-title {
+    font-size: 14px;
+  }
+</style>

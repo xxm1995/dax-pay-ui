@@ -6,7 +6,6 @@
         @keyup.enter="query"
         allowClear
         v-if="field.type === STRING"
-        :disabled="field.disable"
         :placeholder="field.placeholder ? field.placeholder : '请输入查询值'"
         v-model:value="queryParams[field.field]"
       />
@@ -15,13 +14,12 @@
         allowClear
         style="width: 100%"
         v-else-if="field.type === NUMBER"
-        :disabled="field.disable"
         :placeholder="field.placeholder ? field.placeholder : '请输入查询值'"
         :precision="field.precision ? field.precision : 0"
         v-model:value="queryParams[field.field]"
       />
       <!-- 布尔 -->
-      <a-radio-group v-else-if="field.type === BOOLEAN" :disabled="field.disable" v-model:value="queryParams[field.field]">
+      <a-radio-group v-else-if="field.type === BOOLEAN" v-model:value="queryParams[field.field]">
         <a-radio :value="true">是</a-radio>
         <a-radio :value="false">否</a-radio>
       </a-radio-group>
@@ -29,17 +27,15 @@
       <a-select
         allowClear
         v-else-if="field.type === LIST"
-        :disabled="field.disable"
         :placeholder="field.placeholder ? field.placeholder : '请选择查询值'"
-        :options="field.selectList"
         v-model:value="queryParams[field.field]"
+        :options="field.selectList"
       />
       <!-- 日期 -->
       <a-date-picker
         allowClear
         v-else-if="field.type === DATE"
         style="width: 100%"
-        :disabled="field.disable"
         :placeholder="field.placeholder ? field.placeholder : '请选择日期'"
         :valueFormat="field.format ? field.format : 'yyyy-MM-DD'"
         v-model:value="queryParams[field.field]"
@@ -49,7 +45,6 @@
         allowClear
         v-else-if="field.type === TIME"
         style="width: 100%"
-        :disabled="field.disable"
         :placeholder="field.placeholder ? field.placeholder : '请选择时间'"
         :valueFormat="field.format ? field.format : 'HH:mm:ss'"
         v-model:value="queryParams[field.field]"
@@ -60,7 +55,6 @@
         showTime
         v-else-if="field.type === DATE_TIME"
         style="width: 100%"
-        :disabled="field.disable"
         :placeholder="field.placeholder ? field.placeholder : '请选择日期时间'"
         :valueFormat="field.format ? field.format : 'yyyy-MM-DD HH:mm:ss'"
         v-model:value="queryParams[field.field]"
@@ -69,7 +63,6 @@
       <a-input
         allowClear
         v-else
-        :disabled="field.disable"
         :placeholder="field.placeholder ? field.placeholder : '请输入查询值'"
         v-model:value="queryParams[field.field]"
       />

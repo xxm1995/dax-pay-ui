@@ -112,7 +112,6 @@
           </a-input>
         </a-form-item>
         <a-form-item v-show="form.authType === 'cart'" label="支付宝CA根证书" name="alipayRootCert">
-          <!--          <a-textarea :rows="5" v-model:value="form.alipayRootCert" :disabled="showable" placeholder="请输入支付宝CA根证书" />-->
           <a-upload
             v-if="!form.alipayRootCert"
             :disabled="showable"

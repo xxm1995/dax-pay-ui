@@ -25,6 +25,12 @@ export const INTERNAL: AppRouteModule = {
       component: () => import('/@/views/sys/about/index.vue'),
       meta: { title: '关于' },
     },
+    {
+      path: '/person/siteMessage',
+      name: 'PersonSiteMessage',
+      component: () => import('/@/views/modules/notice/site/receive/SiteMessageList.vue'),
+      meta: { title: '站内信(收)' },
+    },
   ],
 }
 
@@ -45,12 +51,6 @@ export const OUTSIDE: AppRouteModule = {
     //     ignoreAuth: true,
     //   },
     // },
-    {
-      path: '/cashier',
-      name: 'cashier',
-      component: () => import('/@/views/demo/payment/cashier/Cashier.vue'),
-      meta: { title: '结算台支付演示', ignoreAuth: true },
-    },
   ],
 }
 

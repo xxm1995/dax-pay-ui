@@ -66,7 +66,9 @@
     mediaId = null
     visible = true
     loading.value = true
-    mediaTypes = dictDropDown('WeChatMediaType')
+    dictDropDown('WeChatMediaType').then((res) => {
+      mediaTypes = res
+    })
     queryPage()
   }
 

@@ -24,6 +24,12 @@
         <vxe-column field="dbDriver" title="驱动类" />
         <vxe-column field="dbUrl" title="连接地址" />
         <vxe-column field="dbUsername" title="用户名" />
+        <vxe-column field="autoLoad" title="自动加载">
+          <template #default="{ row }">
+            <a-tag v-if="row.autoLoad" color="green">是</a-tag>
+            <a-tag v-else color="red">否</a-tag>
+          </template>
+        </vxe-column>
         <vxe-column field="remark" title="备注" />
         <vxe-column field="createTime" title="创建时间" />
         <vxe-column fixed="right" width="160" :showOverflow="false" title="操作">
@@ -176,7 +182,7 @@
     createConfirm({
       iconType: 'warning',
       title: '删除',
-      content: '是否删除流程模型',
+      content: '是否删除动态表单',
       onOk: () => {
         loading.value = true
         del(record.id).then(() => {

@@ -115,25 +115,42 @@
     })
     return Promise.resolve()
   }
-  // 新增
+  /**
+   * 新增
+   */
   function add() {
     dynamicFormEdit.init(null, FormEditType.Add)
   }
-  // 编辑
+  /**
+   * 编辑
+   */
   function edit(record) {
     dynamicFormEdit.init(record.id, FormEditType.Edit)
   }
-  // 查看
+  /**
+   * 查看
+   */
   function show(record) {
     dynamicFormEdit.init(record.id, FormEditType.Show)
   }
 
-  // 设计
-  function design(record) {}
-  // 预览
-  function preview(record) {}
+  /**
+   * 设计
+   */
+  function design(id) {
+    dynamicDesign.init(id)
+  }
+  /**
+   * 预览
+   */
+  function preview(id) {
+    console.log(12)
+    dynamicPreview.init(id)
+  }
 
-  // 删除
+  /**
+   * 删除
+   */
   function remove(record) {
     createConfirm({
       iconType: 'warning',

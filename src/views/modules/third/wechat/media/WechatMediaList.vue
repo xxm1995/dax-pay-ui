@@ -116,8 +116,8 @@
     xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
-  function initData() {
-    mediaTypes = dictDropDown('WeChatMediaType')
+  async function initData() {
+    mediaTypes = await dictDropDown('WeChatMediaType')
   }
   // 分页查询
   function queryPage() {

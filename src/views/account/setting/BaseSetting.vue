@@ -95,11 +95,7 @@
   async function init() {
     confirmLoading = true
     // 初始化角色下拉菜单
-    sexList = [
-      { label: '未知', value: 0 },
-      { label: '男', value: 1 },
-      { label: '男', value: 2 },
-    ] as LabeledValue[]
+    sexList = await dictDropDownNumber('Sex')
 
     const { data: userInfo } = await getUserBaseInfo()
     // 设置头像

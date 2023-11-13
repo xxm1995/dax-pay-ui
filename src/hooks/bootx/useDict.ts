@@ -1,7 +1,20 @@
 import { useDictStore } from '/@/store/modules/dict'
 import { LabeledValue } from 'ant-design-vue/lib/select'
+import { Dict } from '/#/store'
 
 const dictStore = useDictStore()
+
+/**
+ * 获取字典列表
+ */
+async function getDict(): Promise<Dict[]> {
+  const dictList = dictStore.getDict
+  if (dictList.length > 0) {
+    return dictList
+  } else {
+    return await dictStore.initDict()
+  }
+}
 
 /**
  * 字典项转换
@@ -19,34 +32,10 @@ function dictConvert(dictCode: string, code) {
 }
 
 /**
- * 获取字典项列表
- */
-export function dictItems(dictCode: string) {
-  const dictList = dictStore.getDict
-  return dictList
-    .filter((dict) => dictCode === dict.dictCode)
-    .map((item) => {
-      return { ...item, code: Number(item.code) }
-    })
-}
-
-/**
- * 获取字典项列表(code值为数字)
- */
-export function dictItemsNumber(dictCode: string) {
-  const dictList = dictStore.getDict
-  return dictList
-    .filter((dict) => dictCode === dict.dictCode)
-    .map((item) => {
-      return { ...item, code: Number(item.code) }
-    })
-}
-
-/**
  * 获取字典下拉框数据列表
  */
-function dictDropDown(dictCode: string): LabeledValue[] {
-  const list = dictStore.getDict
+async function dictDropDown(dictCode: string): Promise<LabeledValue[]> {
+  const list = await getDict()
   return list
     .filter((dict) => dictCode === dict.dictCode)
     .map((o) => {
@@ -54,10 +43,10 @@ function dictDropDown(dictCode: string): LabeledValue[] {
     })
 }
 /**
- * 获取字典下拉框数据列表
+ * 获取字典下拉框数据列表(value值为数字)
  */
-function dictDropDownNumber(dictCode: string): LabeledValue[] {
-  const list = dictStore.getDict
+async function dictDropDownNumber(dictCode: string): Promise<LabeledValue[]> {
+  const list = await getDict()
   return list
     .filter((dict) => dictCode === dict.dictCode)
     .map((o) => {
@@ -71,8 +60,6 @@ function dictDropDownNumber(dictCode: string): LabeledValue[] {
 export function useDict() {
   return {
     dictConvert,
-    dictItems,
-    dictItemsNumber,
     dictDropDown,
     dictDropDownNumber,
   }

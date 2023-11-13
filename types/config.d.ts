@@ -126,11 +126,11 @@ export interface ProjectConfig {
   showBreadCrumbIcon: boolean
   // Use error-handler-plugin
   useErrorHandle: boolean
-  // Whether to open back to top
+  // 是否打开返回顶部
   useOpenBackTop: boolean
-  // Is it possible to embed iframe pages
+  // 是否可以嵌入 iframe 页面
   canEmbedIFramePage: boolean
-  // Whether to delete unclosed messages and notify when switching the interface
+  // 切换接口时是否删除未关闭的消息并通知
   closeMessageOnSwitch: boolean
   // Whether to cancel the http request that has been sent but not responded when switching the interface.
   removeAllHttpPending: boolean
@@ -153,6 +153,8 @@ export interface GlobEnvConfig {
   VITE_GLOB_APP_TITLE: string
   // 接口地址
   VITE_GLOB_API_URL: string
+  // 请求超时时间
+  VITE_GLOB_API_TIMEOUT: number
   // 接口前缀
   VITE_GLOB_API_URL_PREFIX?: string
   // Project abbreviation

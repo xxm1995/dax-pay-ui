@@ -70,10 +70,7 @@
     multiple?: boolean
     // 宽度
     width?: number | string
-    /**
-     * 数据源
-     * 返回的格式需要为 Result<PageResult<T>>
-     */
+    // 数据源
     dataSource?: Function
   }
   const props = withDefaults(defineProps<Props>(), {

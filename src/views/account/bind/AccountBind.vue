@@ -62,13 +62,13 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { CollapseContainer } from '/@/components/Container'
+  import { $ref } from 'vue/macros'
   import { DING_TALK, WE_CHAT, WE_CHAT_OPEN, QQ, WE_COM } from '/@/views/login/third/OpenIdLoginType'
   import { bindThird, getThirdBindInfo, unbindThird } from '/@/views/account/account.api'
   import { UserThirdBindInfo } from '/@/views/account/accountModel'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { getAppEnvConfig } from '/@/utils/env'
   import WeChatQrBind from './WeChatQrBind.vue'
-  import { $ref } from "vue/macros";
 
   const { createMessage, createConfirm } = useMessage()
 

@@ -105,7 +105,7 @@
 
   async function initData() {
     findClients().then(({ data }) => {
-      clients = dropdownTranslate(data)
+      clients = dropdownTranslate(data, 'name', 'id')
     })
   }
 

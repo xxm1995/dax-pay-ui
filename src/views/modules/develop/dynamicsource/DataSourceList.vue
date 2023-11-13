@@ -1,6 +1,6 @@
 <template>
   <basic-drawer forceRender showFooter v-bind="$attrs" title="数据源列表" width="35%" :visible="visible" @close="visible = false">
-    <vxe-toolbar ref="xToolbar" custom :refresh="{ query: query }" />
+    <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: query }" />
     <vxe-table row-id="key" ref="xTable" :data="records" :loading="loading">
       <vxe-column type="seq" width="60" />
       <vxe-column field="key" title="数据源" />
@@ -37,6 +37,7 @@
       records = data
       loading = false
     })
+    return Promise.resolve()
   }
   // 移除数据源
   function remove(record) {

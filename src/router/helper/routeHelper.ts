@@ -84,7 +84,7 @@ function dynamicImport(dynamicViewsModules: Record<string, () => Promise<Recorda
  * 将后端对象变成路由对象
  */
 export function transformObjToRoute<T = AppRouteModule>(routeList: AppRouteRecordRaw[]): T[] {
-  routeList.forEach((route) => {
+  routeList?.forEach((route) => {
     const component = route.component as string
     if (component) {
       if (component.toUpperCase() === 'LAYOUT') {

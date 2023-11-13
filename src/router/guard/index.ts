@@ -13,7 +13,7 @@ import nProgress from 'nprogress'
 import projectSetting from '/@/settings/projectSetting'
 import { createParamMenuGuard } from './paramMenuGuard'
 
-// Don't change the order of creation
+// 不要更改创建顺序
 export function setupRouterGuard(router: Router) {
   createPageGuard(router)
   createPageLoadingGuard(router)
@@ -111,15 +111,18 @@ function createScrollGuard(router: Router) {
 }
 
 /**
- * Used to close the message instance when the route is switched
+ * 用于在切换路由时关闭消息实例
  * @param router
  */
 export function createMessageGuard(router: Router) {
   const { closeMessageOnSwitch } = projectSetting
 
+  console.log(projectSetting)
+  console.log(closeMessageOnSwitch)
   router.beforeEach(async () => {
     try {
       if (closeMessageOnSwitch) {
+        console.log(666444)
         Modal.destroyAll()
         notification.destroy()
       }

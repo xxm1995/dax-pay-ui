@@ -35,7 +35,7 @@
   import { nextTick, reactive } from 'vue'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import StrengthMeter from '/@/components/StrengthMeter/src/StrengthMeter.vue'
-  import { updatePassword } from '/@/views/account/account.api'
+  import { isRecentlyUsed, updatePassword } from '/@/views/account/account.api'
 
   const { visible, confirmLoading, modalWidth, labelCol, wrapperCol, handleCancel } = useFormEdit()
 
@@ -48,7 +48,10 @@
   })
   const rules = reactive({
     oldPassword: [{ required: true, message: '请输入原密码!' }],
-    newPassword: [{ required: true, message: '请输入新密码!' }],
+    newPassword: [
+      { required: true, message: '请输入新密码!' },
+      { validator: validatePasswordRecently, trigger: 'blur' },
+    ],
     confirmPassword: [{ required: true, message: '请重新输入新密码!' }, { validator: validateConfirmPassword }],
   } as Record<string, Rule[]>)
   const formRef = $ref<FormInstance>()
@@ -58,6 +61,14 @@
     nextTick(() => {
       formRef?.resetFields()
     })
+  }
+
+  /**
+   * 查看要修改的密码是否重复
+   */
+  async function validatePasswordRecently() {
+    const { data } = await isRecentlyUsed(form.newPassword)
+    return data ? Promise.reject('不可以使用近期使用过的密码! ') : Promise.resolve()
   }
 
   // 验证新密码

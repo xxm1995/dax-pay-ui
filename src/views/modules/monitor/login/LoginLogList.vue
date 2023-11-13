@@ -4,7 +4,14 @@
       <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
+        <template #buttons>
+          <a-space>
+            <a-select style="width: 180px" v-model:value="deleteDay" :options="deleteDays" allow-clear placeholder="清除多久前的日志" />
+            <a-button v-if="deleteDay" @click="deleteLogs" type="primary">清理</a-button>
+          </a-space>
+        </template>
+      </vxe-toolbar>
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
         <vxe-column field="userId" title="用户id" />
@@ -54,7 +61,7 @@
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page } from './LoginLog.api'
+  import { deleteByDay, page } from './LoginLog.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
@@ -64,17 +71,29 @@
   import { findAll as findLoginTypes, LoginType } from '/@/views/modules/system/loginType/LoginType.api'
   import { dropdownTranslate, findOneByField } from '/@/utils/dataUtil'
   import LoginLogInfo from './LoginLogInfo.vue'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
-  const { notification, createMessage } = useMessage()
+  const { notification, createMessage, createConfirm } = useMessage()
 
   let clients = $ref<Client[]>()
   let loginTypes = $ref<LoginType[]>()
+  const deleteDay = $ref<any>(undefined)
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const loginLogInfo = $ref<any>()
 
+  // 删除条件
+  let deleteDays = $ref<LabeledValue[]>([
+    { label: '3天之前', value: '3' },
+    { label: '7天之前', value: '7' },
+    { label: '30天之前', value: '30' },
+    { label: '60天之前', value: '60' },
+    { label: '90天之前', value: '90' },
+    { label: '180天之前', value: '180' },
+    { label: '365天之前', value: '365' },
+  ])
   // 查询条件
   const fields = computed(() => {
     return [
@@ -101,6 +120,7 @@
    */
   function initClientAndLoginType() {
     findClients().then(({ data }) => {
+      console.log(data)
       clients = data
     })
     findLoginTypes().then(({ data }) => {
@@ -112,7 +132,9 @@
     xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
-  // 分页查询
+  /**
+   * 分页查询
+   */
   function queryPage() {
     loading.value = true
     page({
@@ -123,17 +145,40 @@
       pageQueryResHandel(data)
     })
   }
-  // 查看
+  /**
+   * 查看
+   */
   function show(record) {
     loginLogInfo.show(record.id)
   }
-  // 获取终端信息
+  /**
+   * 获取终端信息
+   */
   function getClient(code) {
     return findOneByField(clients, code, 'code')?.['name']
   }
-  // 获取登录方式信息
+  /**
+   * 获取登录方式信息
+   */
   function getLoginType(code) {
     return findOneByField(loginTypes, code, 'code')?.['name']
+  }
+  /**
+   * 清理日志
+   */
+  function deleteLogs() {
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '是否清除指定日期前的日志，该操作不可撤回',
+      onOk: async () => {
+        createMessage.info('清理日志中...')
+        deleteByDay(deleteDay).then(() => {
+          createMessage.success('清理日志成功')
+          queryPage()
+        })
+      },
+    })
   }
 </script>
 

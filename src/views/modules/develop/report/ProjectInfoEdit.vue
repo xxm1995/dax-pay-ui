@@ -17,7 +17,7 @@
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
     >
-      <a-form-item label="主键" name="id" :hidden="true">
+      <a-form-item label="主键" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
       <a-form-item label="项目名称" name="name">

@@ -41,4 +41,4 @@ export const LoginRoute: AppRouteRecordRaw = {
 }
 
 // 无需鉴权的基本路由
-export const basicRoutes = [LoginRoute, RootRoute, ...mainOutRoutes, REDIRECT_ROUTE, PAGE_NOT_FOUND_ROUTE]
+export const BASIC_ROUTES = [LoginRoute, RootRoute, ...mainOutRoutes, REDIRECT_ROUTE, PAGE_NOT_FOUND_ROUTE]

@@ -27,6 +27,9 @@
                   <a-menu-item>
                     <a @click="lockUserConfirmBatch(false)">解锁账号</a>
                   </a-menu-item>
+                  <a-menu-item>
+                    <a @click="resetPwdBatch(false)">重置密码</a>
+                  </a-menu-item>
                 </a-menu>
               </template>
             </a-dropdown>
@@ -46,9 +49,9 @@
         <vxe-column field="username" title="账号" />
         <vxe-column field="phone" title="手机号" />
         <vxe-column field="email" title="邮箱" />
-        <vxe-column field="admin" title="是否管理员">
+        <vxe-column field="administrator" title="是否管理员">
           <template #default="{ row }">
-            <a-tag v-if="row.admin" color="green">是</a-tag>
+            <a-tag v-if="row.administrator" color="green">是</a-tag>
             <a-tag v-else color="red">否</a-tag>
           </template>
         </vxe-column>
@@ -81,7 +84,7 @@
                     <a @click="resetPwd(row)">重置密码</a>
                   </a-menu-item>
                   <a-menu-item>
-                    <a v-if="row.status === 1" @click="lockUserConfirm(row.id, true)">锁定账号</a>
+                    <a v-if="row.status === 1" @click="lockUserConfirm(row.id, true)">封禁账号</a>
                     <a v-if="row.status === 3" @click="lockUserConfirm(row.id, false)">解锁账号</a>
                   </a-menu-item>
                 </a-menu>
@@ -101,6 +104,8 @@
       <user-add ref="userAdd" @ok="queryPage" />
       <user-edit ref="userEdit" @ok="queryPage" />
       <user-show ref="userShow" />
+      <user-reset-pwd ref="userResetPwd" />
+      <user-reset-pwd-batch ref="userResetPwdBatch" />
       <user-role-assign ref="userRoleAssign" />
       <user-role-assign-batch ref="userRoleAssignBatch" />
       <user-data-scope-assign ref="userDataScopeAssign" />
@@ -119,7 +124,7 @@
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { $ref } from 'vue/macros'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
-  import { lockUser, lockUserBatch, page, unlockUser, unlockUserBatch } from './User.api'
+  import { banUser, banUserBatch, page, unlockUser, unlockUserBatch } from './User.api'
   import { useDict } from '/@/hooks/bootx/useDict'
   import { Icon } from '/@/components/Icon'
   import UserAdd from './UserAdd.vue'
@@ -131,6 +136,8 @@
   import UserDataScopeAssignBatch from './scope/UserDataScopeAssignBatch.vue'
   import UserDeptAssign from './dept/UserDeptAssign.vue'
   import UserDeptAssignBatch from './dept/UserDeptAssignBatch.vue'
+  import UserResetPwd from './UserResetPwd.vue'
+  import UserResetPwdBatch from './UserResetPwdBatch.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading, batchOperateFlag } =
@@ -154,7 +161,8 @@
   let userDataScopeAssignBatch = $ref<any>()
   let userDeptAssign = $ref<any>()
   let userDeptAssignBatch = $ref<any>()
-  let resetPassword = $ref<any>()
+  let userResetPwd = $ref<any>()
+  let userResetPwdBatch = $ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -175,15 +183,19 @@
     })
     return Promise.resolve()
   }
-  // 选中全部
+  /**
+   * 选中全部
+   */
   function selectAllEvent() {
-    const records = xTable.getCheckboxRecords()
-    batchOperateFlag.value = !!records.length
+    const records = xTable?.getCheckboxRecords()
+    batchOperateFlag.value = !!records?.length
   }
-  // 选中事件
+  /**
+   * 选中事件
+   */
   function selectChangeEvent() {
-    const records = xTable.getCheckboxRecords()
-    batchOperateFlag.value = !!records.length
+    const records = xTable?.getCheckboxRecords()
+    batchOperateFlag.value = !!records?.length
   }
   /**
    * 锁定/解锁用户
@@ -194,10 +206,10 @@
     createConfirm({
       iconType: 'warning',
       title: '警告',
-      content: type ? '是否锁定选中的用户' : '是否解锁选中的用户',
+      content: type ? '是否封禁选中的用户' : '是否解锁选中的用户',
       onOk: async () => {
         if (type) {
-          await lockUser(userId)
+          await banUser(userId)
         } else {
           await unlockUser(userId)
         }
@@ -210,14 +222,14 @@
    * @param type true 锁定, false 解锁
    */
   function lockUserConfirmBatch(type) {
-    const userIds = xTable.getCheckboxRecords().map((o) => o.id)
+    const userIds = xTable?.getCheckboxRecords().map((o) => o.id)
     createConfirm({
       iconType: 'warning',
       title: '警告',
       content: type ? '是否锁定选中的用户' : '是否解锁选中的用户',
       onOk: async () => {
         if (type) {
-          await lockUserBatch(userIds)
+          await banUserBatch(userIds)
         } else {
           await unlockUserBatch(userIds)
         }
@@ -231,7 +243,7 @@
   }
   // 批量分配角色
   function assignRolesBatch() {
-    const userIds = xTable.getCheckboxRecords().map((o) => o.id)
+    const userIds = xTable?.getCheckboxRecords().map((o) => o.id)
     userRoleAssignBatch.init(userIds)
   }
   // 分配数据权限
@@ -240,7 +252,7 @@
   }
   // 批量分配数据权限
   function assignDataScopeBatch() {
-    const userIds = xTable.getCheckboxRecords().map((o) => o.id)
+    const userIds = xTable?.getCheckboxRecords().map((o) => o.id)
     userDataScopeAssignBatch.init(userIds)
   }
   // 分配部门
@@ -249,20 +261,36 @@
   }
   // 批量分配部门
   function assignDeptBatch() {
-    const userIds = xTable.getCheckboxRecords().map((o) => o.id)
+    const userIds = xTable?.getCheckboxRecords().map((o) => o.id)
     userDeptAssignBatch.init(userIds)
   }
   function add() {
     userAdd.init()
   }
+  /**
+   * 查看信息
+   */
   function show(record) {
     userShow.init(record.id)
   }
+  /**
+   * 信息编辑
+   */
   function edit(record) {
     userEdit.init(record.id)
   }
+  /**
+   * 重置密码
+   */
   function resetPwd(record) {
-    resetPassword.init(record.id)
+    userResetPwd.init(record.id)
+  }
+  /**
+   * 重置密码
+   */
+  function resetPwdBatch() {
+    const userIds = xTable?.getCheckboxRecords().map((o) => o.id)
+    userResetPwdBatch.init(userIds)
   }
 </script>
 

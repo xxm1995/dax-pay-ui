@@ -14,10 +14,10 @@ export const page = (params) => {
 /**
  * 获取表相关的代码生成参数信息
  */
-export function getTableGenParam(tableName) {
+export function getTableGenParam(dataSourceCode, tableName) {
   return defHttp.get<Result<TableGenParam>>({
     url: '/gen/table/getTableGenParam',
-    params: { tableName },
+    params: { dataSourceCode, tableName },
   })
 }
 
@@ -64,4 +64,9 @@ export interface TableGenParam {
   entityName: string
   // 功能模块名称(全小写)
   module: string
+}
+
+export interface DataSource {
+  value: string
+  label: string
 }

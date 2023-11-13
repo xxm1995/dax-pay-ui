@@ -18,8 +18,8 @@
   import { findOneByField } from '/@/utils/dataUtil'
 
   const props = defineProps<{
-    clients: Client[]
-    loginTypes: LoginType[]
+    clients?: Client[]
+    loginTypes?: LoginType[]
   }>()
 
   let data = $ref<LoginLog>()

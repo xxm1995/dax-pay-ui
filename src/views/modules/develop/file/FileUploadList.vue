@@ -30,6 +30,8 @@
             <a href="javascript:" @click="show(row)">查看</a>
             <a-divider type="vertical" />
             <a href="javascript:" @click="down(row)">下载</a>
+            <a-divider type="vertical" />
+            <a href="javascript:" style="color: red" @click="remove(row)">删除</a>
           </template>
         </vxe-column>
       </vxe-table>
@@ -46,9 +48,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, onMounted } from 'vue'
+  import { onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page } from './FileUpload.api'
+  import { page, del } from './FileUpload.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
@@ -61,7 +63,7 @@
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
-  const { notification, createMessage } = useMessage()
+  const { notification, createMessage, createConfirm } = useMessage()
   const useUserStore = useUserStoreWithOut()
   const { VITE_GLOB_API_URL } = getAppEnvConfig()
 
@@ -81,7 +83,9 @@
     xTable?.connect(xToolbar as VxeToolbarInstance)
   }
 
-  // 上传完成回调
+  /**
+   * 上传完成回调
+   */
   function handleChange(info) {
     if (info.file.status === 'done') {
       if (!info.file.response.code) {
@@ -95,7 +99,9 @@
     }
   }
 
-  // 分页查询
+  /**
+   * 分页查询
+   */
   function queryPage() {
     loading.value = true
     page({
@@ -106,18 +112,38 @@
     })
     return Promise.resolve()
   }
-  // 上传
-  function upload() {}
-  // 查看
+  /**
+   * 查看
+   */
   function show(record) {
     getFilePreviewUrl(record.id).then((res) => {
       window.open(res.data)
     })
   }
-  // 下载
+  /**
+   * 下载
+   */
   function down(record) {
     getFileDownloadUrl(record.id).then((res) => {
       window.open(res.data)
+    })
+  }
+
+  /**
+   * 删除
+   */
+  function remove(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: '删除',
+      content: '是否删除该文件',
+      onOk: () => {
+        loading.value = true
+        del(record.id).then(() => {
+          createMessage.success('删除成功')
+          queryPage()
+        })
+      },
     })
   }
 </script>

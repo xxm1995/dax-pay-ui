@@ -25,11 +25,11 @@
         <a-form-item label="用户名称" name="name">
           <a-input v-model:value="form.name" placeholder="请输入用户名称" />
         </a-form-item>
-        <a-form-item label="关联应用" name="clientIdList">
+        <a-form-item label="关联终端" name="clientIds">
           <a-select
             allowClear
             mode="multiple"
-            v-model:value="form.clientIdList"
+            v-model:value="form.clientIds"
             :filter-option="search"
             :options="clients"
             placeholder="请选择关联适用的终端"
@@ -83,7 +83,7 @@
     username: '',
     phone: '',
     email: '',
-    clientIdList: [],
+    clientIds: [],
   })
   let rawForm: any = {}
 

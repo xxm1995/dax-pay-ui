@@ -21,6 +21,15 @@ export const get = (id) => {
     params: { id },
   })
 }
+/**
+ * 清除指定天数之前的日志
+ */
+export const deleteByDay = (deleteDay) => {
+  return defHttp.delete<Result>({
+    url: '/log/login/deleteByDay',
+    params: { deleteDay },
+  })
+}
 
 /**
  * 登陆日志

@@ -10,13 +10,13 @@ export interface RequestOptions {
   // Whether to return native response headers
   // For example: use this attribute when you need to get the response headers
   isReturnNativeResponse?: boolean
-  // Whether to join url
+  // 是否加入网址
   joinPrefix?: boolean
-  // Interface address, use the default apiUrl if you leave it blank
+  // 接口地址，如果将其留空，请使用默认 apiUrl
   apiUrl?: string
   // 请求拼接路径
   urlPrefix?: string
-  // Error message prompt type
+  // 错误消息提示类型
   errorMessageMode?: ErrorMessageMode
   // Whether to add a timestamp
   joinTime?: boolean

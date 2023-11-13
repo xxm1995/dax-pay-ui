@@ -20,7 +20,7 @@
           <count-down-input v-model:value="form.oldCaptcha" :send-code-api="sendOldEmailCaptcha" :count="120">获取验证码1</count-down-input>
         </a-form-item>
         <a-form-item validate-first label="邮箱" name="email" v-show="currentTab === 1">
-          <a-input v-model:value="form.email" placeholder="邮箱" />
+          <a-input v-model:value="form.email" placeholder="请输入邮箱" />
         </a-form-item>
         <a-form-item validate-first label="验证码" name="newCaptcha" v-show="currentTab === 1">
           <count-down-input v-model:value="form.newCaptcha" :send-code-api="sendNewEmailCaptcha" :count="120">获取验证码1</count-down-input>

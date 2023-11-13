@@ -61,21 +61,32 @@ export function restartPassword(userId, newPassword) {
 }
 
 /**
- * 锁定用户
+ * 批量重置密码
  */
-export function lockUser(userId) {
+export function restartPasswordBatch(userIds, newPassword) {
   return defHttp.post({
-    url: '/user/admin/lock',
+    url: '/user/admin/restartPasswordBatch',
+    data: userIds,
+    params: { newPassword },
+  })
+}
+
+/**
+ * 封禁用户
+ */
+export function banUser(userId) {
+  return defHttp.post({
+    url: '/user/admin/ban',
     params: { userId },
   })
 }
 
 /**
- * 锁定用户 批量
+ * 封禁用户 批量
  */
-export function lockUserBatch(userIds) {
+export function banUserBatch(userIds) {
   return defHttp.post({
-    url: '/user/admin/lockBatch',
+    url: '/user/admin/banUserBatch',
     data: userIds,
   })
 }
@@ -117,8 +128,7 @@ export interface UserInfo extends BaseEntity {
   // 邮箱
   email?: string
   // 关联终端
-  clientIds?: string
-  clientIdList?: string[]
+  clientIds?: string[]
   // 注册来源
   source?: string
   // 是否超级管理员

@@ -13,9 +13,9 @@ export interface UserDetails {
   // 邮箱
   email?: string
   // 是否管理员
-  admin?: boolean
+  administrator?: boolean
   // 终端id列表
-  clientIdList?: string[]
+  clients?: string[]
 }
 
 /**

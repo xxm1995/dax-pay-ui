@@ -14,7 +14,6 @@
         <a-form-item v-show="form.menuType !== 0" label="上级菜单" name="parentId">
           <a-tree-select
             style="width: 100%"
-            :dropdown-style="{ maxHeight: '200px', overflow: 'auto' }"
             :tree-data="treeData"
             v-model:value="form.parentId"
             placeholder="请选择父级菜单"

@@ -158,6 +158,8 @@ export interface DynamicDataSource extends BaseEntity {
   dbUsername?: string
   // 密码
   dbPassword?: string
+  // 自动加载
+  autoLoad?: boolean
   // 备注
   remark?: string
 }

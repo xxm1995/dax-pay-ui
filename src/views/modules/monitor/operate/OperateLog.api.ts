@@ -23,6 +23,16 @@ export const get = (id) => {
 }
 
 /**
+ * 清除指定天数之前的日志
+ */
+export const deleteByDay = (deleteDay) => {
+  return defHttp.delete<Result>({
+    url: '/log/operate/deleteByDay',
+    params: { deleteDay },
+  })
+}
+
+/**
  * 操作日志
  */
 export interface OperateLog extends BaseEntity {

@@ -1,6 +1,6 @@
 <template>
   <basic-drawer forceRender v-bind="$attrs" title="用户范围权限分配" width="60%" :visible="visible" @close="visible = false">
-    <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryList }">
+    <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryList }">
       <template #buttons>
         <a-space>
           <a-button type="primary" pre-icon="ant-design:usergroup-add" @click="selectUserShow">选择用户</a-button>

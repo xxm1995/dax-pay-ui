@@ -63,9 +63,6 @@
         return unref(statusMapRef).get(unref(getStatus)) as MapValue
       })
 
-      const backLoginI18n = '返回登录'
-      const backHomeI18n = '返回首页'
-
       unref(statusMapRef).set(ExceptionEnum.PAGE_NOT_ACCESS, {
         title: '403',
         status: `${ExceptionEnum.PAGE_NOT_ACCESS}`,
@@ -86,12 +83,12 @@
         title: '500',
         status: `${ExceptionEnum.ERROR}`,
         subTitle: t('sys.exception.subTitle500'),
-        btnText: backHomeI18n,
+        btnText: '返回首页',
         handler: () => go(),
       })
 
       unref(statusMapRef).set(ExceptionEnum.PAGE_NOT_DATA, {
-        title: t('sys.exception.noDataTitle'),
+        title: '当前页无数据',
         subTitle: '',
         btnText: t('common.redo'),
         handler: () => redo(),
@@ -99,8 +96,8 @@
       })
 
       unref(statusMapRef).set(ExceptionEnum.NET_WORK_ERROR, {
-        title: t('sys.exception.networkErrorTitle'),
-        subTitle: t('sys.exception.networkErrorSubTitle'),
+        title: '网络错误',
+        subTitle: '抱歉，您的网络连接已断开，请检查您的网络！',
         btnText: t('common.redo'),
         handler: () => redo(),
         icon: netWorkSvg,

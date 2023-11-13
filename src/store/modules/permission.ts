@@ -2,7 +2,7 @@ import type { AppRouteRecordRaw, Menu } from '/@/router/types'
 
 import { defineStore } from 'pinia'
 import { store } from '/@/store'
-import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper'
+import { flatMultiLevelRoutes, transformObjToRoute } from '/@/router/helper/routeHelper'
 import { transformRouteToMenu } from '/@/router/helper/menuHelper'
 
 import { DASHBOARD, ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
@@ -15,7 +15,7 @@ import { useMessage } from '/@/hooks/web/useMessage'
 import { PageEnum } from '/@/enums/pageEnum'
 import { getAppEnvConfig } from '/@/utils/env'
 import { PermMenu } from '/@/api/sys/model/menuModel'
-import { PROJECT_BASE } from "/@/router/routes/project";
+import { PROJECT_BASE } from '/@/router/routes/project'
 
 interface PermissionState {
   // 权限代码列表
@@ -89,7 +89,7 @@ export const usePermissionStore = defineStore({
       this.lastBuildMenuTime = 0
     },
     /**
-     * 权限码和菜单更新
+     * 权限码和菜单更新, 更新权限码并返回菜单信息
      */
     async changeMenuAndPermCode(): Promise<PermMenu[]> {
       const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
@@ -104,28 +104,27 @@ export const usePermissionStore = defineStore({
      * 转换路由为系统中的菜单
      */
     convertMenus(permMenus: PermMenu[]): AppRouteRecordRaw[] {
-      return permMenus?.map((o) => {
-        const menu = {
-          name: o.name,
-          path: o.path,
-          component: o.component,
-          targetOutside: o.targetOutside,
-          iframeUrl: o.iframeUrl,
-          redirect: o.redirect,
-          meta: {
-            orderNo: o.sortNo,
-            title: o.title,
-            icon: o.icon,
-            hideMenu: o.hidden,
-            hideChildrenInMenu: o.hideChildrenInMenu,
-            ignoreKeepAlive: !o.keepAlive,
-          },
-          children: this.convertMenus(o.children),
-        } as AppRouteRecordRaw
-        if (o.component.toUpperCase()) {
-        }
-        return menu
-      })
+      return (
+        permMenus?.map((o) => {
+          return {
+            name: o.name,
+            path: o.path,
+            component: o.component,
+            targetOutside: o.targetOutside,
+            iframeUrl: o.iframeUrl,
+            redirect: o.redirect,
+            meta: {
+              orderNo: o.sortNo,
+              title: o.title,
+              icon: o.icon,
+              hideMenu: o.hidden,
+              hideChildrenInMenu: o.hideChildrenInMenu,
+              ignoreKeepAlive: !o.keepAlive,
+            },
+            children: this.convertMenus(o.children),
+          } as AppRouteRecordRaw
+        }) || []
+      )
     },
 
     /**
@@ -184,7 +183,7 @@ export const usePermissionStore = defineStore({
 
       let routeList: AppRouteRecordRaw[] = []
 
-      // 获取菜单和权限码
+      // 获取后台的菜单和更新权限码
       try {
         const permMenus = await this.changeMenuAndPermCode()
         // 将 后端获取的菜单转换为系统中的菜单格式
@@ -192,17 +191,19 @@ export const usePermissionStore = defineStore({
       } catch (error) {
         console.error(error)
       }
+      // 后端获取的菜单如果为空, 不进行处理
+      if (routeList) {
+        routeList = transformObjToRoute(routeList)
+        //  后台路由到菜单结构
+        const backMenuList = transformRouteToMenu(routeList)
+        this.setBackMenuList(backMenuList)
+        // 删除 meta.ignoreRoute 项
+        routeList = filter(routeList, routeRemoveIgnoreFilter)
+        routeList = routeList.filter(routeRemoveIgnoreFilter)
 
-      // 动态引入组件
-      routeList = transformObjToRoute(routeList)
-      //  后台路由到菜单结构
-      const backMenuList = transformRouteToMenu(routeList)
-      this.setBackMenuList(backMenuList)
-      // 删除 meta.ignoreRoute 项
-      routeList = filter(routeList, routeRemoveIgnoreFilter)
-      routeList = routeList.filter(routeRemoveIgnoreFilter)
+        routeList = flatMultiLevelRoutes(routeList)
+      }
 
-      routeList = flatMultiLevelRoutes(routeList)
       routes = [PAGE_NOT_FOUND_ROUTE, ...routeList]
 
       // 添加更多配置的路由菜单

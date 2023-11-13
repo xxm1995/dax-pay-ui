@@ -89,13 +89,14 @@
   const form = $ref({
     basePack: 'cn.bootx.platform.daxpay',
     module: '',
+    dataSourceCode: '',
     tableName: '',
     entityName: '',
     baseEntity: 'MpBaseEntity',
     vueVersion: 'v3',
     corePack: '',
     editType: 'modal',
-    deleteType: 'popconfirm',
+    deleteType: 'confirm',
     paramPack: '',
     dtoPack: '',
     controllerPack: '',
@@ -111,9 +112,10 @@
 
   const emits = defineEmits(['down', 'preview'])
 
-  function show(tableName, type: 'down' | 'preview') {
+  function show(dataSourceCode, tableName, type: 'down' | 'preview') {
     visible.value = true
     form.tableName = tableName
+    form.dataSourceCode = dataSourceCode
     genType = type
     genPackFlag = false
     getGenConfigParam()
@@ -129,7 +131,7 @@
    */
   async function getGenConfigParam() {
     // 获取功能模块名称
-    const { data } = await getTableGenParam(form.tableName)
+    const { data } = await getTableGenParam(form.dataSourceCode, form.tableName)
     form.entityName = data.entityName
     form.module = data.module
   }

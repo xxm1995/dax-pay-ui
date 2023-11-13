@@ -63,7 +63,7 @@
             <a-typography-text
               :style="{ width: '200px' }"
               :ellipsis="{ tooltip: hardwareInfo.cpuModel }"
-              :content="hardwareInfo.cpuModel"
+              :content="hardwareInfo.cpuModel || ''"
             />
           </td>
           <td>CPU核数：</td>
@@ -155,6 +155,7 @@
   const { pause, resume } = useIntervalFn(() => getSysInfo(), 1000 * 5, { immediate: true })
 
   onMounted(() => {
+    getSysInfo()
     resume()
   })
 

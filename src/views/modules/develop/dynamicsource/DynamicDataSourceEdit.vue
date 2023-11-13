@@ -40,6 +40,9 @@
       <a-form-item label="密码" name="dbPassword">
         <a-input-password v-model:value="form.dbPassword" :disabled="showable" placeholder="请输入密码" />
       </a-form-item>
+      <a-form-item label="自动加载" name="autoLoad">
+        <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.autoLoad" />
+      </a-form-item>
       <a-form-item label="备注" name="remark">
         <a-textarea :rows="2" v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
       </a-form-item>
@@ -56,7 +59,6 @@
 
 <script lang="ts" setup>
   import { nextTick, reactive } from 'vue'
-  import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import {
     add,
@@ -74,6 +76,7 @@
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { useValidate } from '/@/hooks/bootx/useValidate'
+  import { $ref } from 'vue/macros'
 
   const {
     initFormEditType,
@@ -106,6 +109,7 @@
     dbUrl: '',
     dbUsername: '',
     dbPassword: '',
+    autoLoad: true,
     remark: '',
   })
   let rawForm
@@ -151,6 +155,7 @@
   // 测试连接
   function testConnectionInfo() {
     formRef?.validateFields(['dbDriver', 'dbUrl', 'dbUsername', 'dbPassword']).then(async () => {
+      createMessage.info('测试连接中....')
       const { data } = await testConnection(form)
       if (data) {
         createMessage.warn(data)

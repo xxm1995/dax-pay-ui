@@ -149,8 +149,8 @@
     getInfo(id, editType)
   }
   // 初始化基础数据
-  function initData() {
-    securityTypes = dictDropDownNumber('MailSecurityCode')
+  async function initData() {
+    securityTypes = await dictDropDownNumber('MailSecurityCode')
   }
   // 获取信息
   function getInfo(id, editType: FormEditType) {

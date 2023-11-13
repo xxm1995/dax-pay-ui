@@ -35,8 +35,8 @@ export interface QueryField {
   selectList?: LabeledValue[] | null
   // 时间格式化
   format?: string | null
-  // 是否禁止编辑
-  disable?: boolean
+  // 默认值 未启用
+  defaultValue?: number | string
 }
 
 /**

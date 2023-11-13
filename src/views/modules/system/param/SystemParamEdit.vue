@@ -13,10 +13,10 @@
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
       <a-form-item label="参数名称" name="name">
-        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入参数名称" />
+        <a-input v-model:value="form.name" :disabled="showable || form.internal" placeholder="请输入参数名称" />
       </a-form-item>
       <a-form-item label="参数键名" name="paramKey">
-        <a-input v-model:value="form.paramKey" :disabled="showable" placeholder="请输入参数键名" />
+        <a-input v-model:value="form.paramKey" :disabled="showable || form.internal" placeholder="请输入参数键名" />
       </a-form-item>
       <a-form-item label="参数值" name="value">
         <a-input v-model:value="form.value" :disabled="showable" placeholder="请输入参数值" />
@@ -60,6 +60,7 @@
   import { BasicModal } from '/@/components/Modal'
   import { useValidate } from '/@/hooks/bootx/useValidate'
   import { useDict } from '/@/hooks/bootx/useDict'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
 
   const {
     initFormEditType,
@@ -91,7 +92,7 @@
     remark: '',
   })
   // 参数类型
-  let paramTypeList = dictDropDownNumber('ParamType')
+  let paramTypeList = $ref<LabeledValue[]>([])
   // 校验
   const rules = reactive({
     name: [{ required: true, message: '参数名称必填', trigger: ['blur', 'change'] }],
@@ -109,6 +110,7 @@
     initFormEditType(editType)
     resetForm()
     getInfo(id, editType)
+    dictDropDownNumber('ParamType').then((res) => (paramTypeList = res))
   }
   // 获取信息
   function getInfo(id, editType: FormEditType) {

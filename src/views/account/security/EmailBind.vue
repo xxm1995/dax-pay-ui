@@ -18,7 +18,7 @@
         :wrapper-col="wrapperCol"
       >
         <a-form-item validateFirst label="邮箱号" name="email">
-          <a-input v-model:value="form.email" placeholder="邮箱" />
+          <a-input v-model:value="form.email" placeholder="请输入邮箱" />
         </a-form-item>
         <a-form-item validateFirst label="验证码" name="captcha">
           <count-down-input v-model:value="form.captcha" :send-code-api="sendEmailCaptcha" :count="120">获取验证码</count-down-input>

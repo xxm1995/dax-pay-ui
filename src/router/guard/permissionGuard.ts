@@ -1,39 +1,34 @@
 import type { Router, RouteRecordRaw } from 'vue-router'
 
 import { usePermissionStoreWithOut } from '/@/store/modules/permission'
-
 import { PageEnum } from '/@/enums/pageEnum'
 import { useUserStoreWithOut } from '/@/store/modules/user'
-
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
-
-import { initWebSocket } from "/@/logics/websocket/UserGlobalWebSocker";
+import { userLoginInitAction } from '/@/store/action/userAction'
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN
 
 const whitePathList: PageEnum[] = [LOGIN_PATH]
 
 /**
- * 路由守卫
+ * 路由守卫: 处理下列情况
+ * 1. 载入菜单
+ * 2. 处理登录后用户提示
  * @param router
  */
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut()
   const permissionStore = usePermissionStoreWithOut()
   router.beforeEach(async (to, from, next) => {
-
     const token = userStore.getToken
-
-    // Whitelist can be directly entered
+    // 可以访问输入白名单中的页面
     if (whitePathList.includes(to.path as PageEnum)) {
+      // 如果在登录状态下访问登录页, 自动跳转到后续页面
       if (to.path === LOGIN_PATH && token) {
-        const isSessionTimeout = userStore.getSessionTimeout
         try {
-          await userStore.afterLoginAction()
-          if (!isSessionTimeout) {
-            next((to.query?.redirect as string) || '/')
-            return
-          }
+          // 如果参数未携带重定向路径则自动跳转到首页
+          next((to.query?.redirect as string) || '/')
+          return
         } catch {}
       }
       next()
@@ -47,8 +42,7 @@ export function createPermissionGuard(router: Router) {
         next()
         return
       }
-
-      // redirect login page
+      //重定向登录页面
       const redirectData: { path: string; replace: boolean; query?: Recordable<string> } = {
         path: LOGIN_PATH,
         replace: true,
@@ -63,33 +57,17 @@ export function createPermissionGuard(router: Router) {
       return
     }
 
-    // Jump to the 404 page after processing the login
-    if (from.path === LOGIN_PATH && to.name === PAGE_NOT_FOUND_ROUTE.name && to.fullPath !== PageEnum.BASE_HOME) {
-      next(PageEnum.BASE_HOME)
-      return
-    }
-
-    // get userinfo while last fetch time is empty
-    if (userStore.getLastUpdateTime === 0) {
-      try {
-        await userStore.refreshUserInfoAction()
-      } catch (err) {
-        next()
-        return
-      }
-    }
-
+    // 路由是否初始化完毕, 完毕后直接直接跳转, 不再向下执行初始化操作
     if (permissionStore.getIsDynamicAddedRoute) {
       next()
       return
     }
-    // 初始化 websocket连接.
-    initWebSocket()
+    // 用户初始化等操作.
+    userLoginInitAction()
 
-    // 重载菜单
+    // 重载菜单, 进行路由菜单的组装并进行跳转
     console.log('重载菜单')
     const routes = await permissionStore.buildRoutesAction()
-
     routes.forEach((route) => {
       try {
         router.addRoute(route as unknown as RouteRecordRaw)
@@ -98,8 +76,8 @@ export function createPermissionGuard(router: Router) {
       }
     })
 
+    // 40x 系列路由
     router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw)
-
     permissionStore.setDynamicAddedRoute(true)
 
     if (to.name === PAGE_NOT_FOUND_ROUTE.name) {

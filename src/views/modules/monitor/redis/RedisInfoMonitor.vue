@@ -131,6 +131,7 @@
    * 加载页面
    */
   onMounted(() => {
+    getInfo()
     resume()
   })
 

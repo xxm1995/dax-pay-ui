@@ -44,10 +44,12 @@
             <span>
               <a href="javascript:" @click="edit(row)">编辑</a>
             </span>
-            <a-divider type="vertical" />
-            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-              <a href="javascript:" style="color: red">删除</a>
-            </a-popconfirm>
+            <template v-if="!row.internal">
+              <a-divider type="vertical" />
+              <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
+                <a href="javascript:" style="color: red">删除</a>
+              </a-popconfirm>
+            </template>
           </template>
         </vxe-column>
       </vxe-table>
@@ -85,7 +87,7 @@
   // 查询条件
   const fields = [
     { field: 'name', type: STRING, name: '参数名称', placeholder: '请输入字典名称' },
-    { field: 'paramKey', type: STRING, name: '参数键名', placeholder: '请输入参数键名' },
+    { field: 'paramKey', type: STRING, name: '分组标签', placeholder: '请输入分组标签' },
   ] as QueryField[]
 
   const xTable = $ref<VxeTableInstance>()

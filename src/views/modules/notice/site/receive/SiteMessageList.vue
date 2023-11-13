@@ -57,10 +57,7 @@
 
   const noticeReader = $ref<InstanceType<typeof NoticeReader>>(null)
   // 查询条件
-  const fields = [
-    { field: 'code', type: STRING, name: '流程编号', placeholder: '请输入流程编号' },
-    { field: 'code', type: STRING, name: '流程名称', placeholder: '请输入流程名称' },
-  ] as QueryField[]
+  const fields = [{ field: 'title', type: STRING, name: '标题', placeholder: '请输入要查询的标题' }] as QueryField[]
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   onMounted(() => {

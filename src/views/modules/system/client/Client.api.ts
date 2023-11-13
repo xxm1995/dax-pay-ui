@@ -90,6 +90,8 @@ export interface Client extends BaseEntity {
   system: boolean
   // 是否可用
   enable: boolean
+  // 新注册的用户是否默认赋予该终端
+  defaultEndow: boolean
   // 关联登录方式
   loginTypeIdList: Array<string> | undefined | null
   // 描述

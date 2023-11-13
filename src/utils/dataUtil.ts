@@ -41,7 +41,7 @@ export interface Tree {
  * @param fieldValue 要查询的字段值
  * @param fieldName 字段名称
  */
-export function findOneByField(list: any[], fieldValue: object, fieldName: string) {
+export function findOneByField(list: any, fieldValue: object, fieldName: string) {
   const item = unref(list)?.filter((o) => {
     return o[fieldName] === fieldValue
   })
@@ -58,7 +58,7 @@ export function findOneByField(list: any[], fieldValue: object, fieldName: strin
  * @param labelName label名称
  * @param valueName 值名称
  */
-export function dropdownTranslate(list: any[], labelName = 'name', valueName = 'code') {
+export function dropdownTranslate(list: any, labelName = 'name', valueName = 'code') {
   return unref(list)?.map((o) => {
     return {
       label: o[labelName],

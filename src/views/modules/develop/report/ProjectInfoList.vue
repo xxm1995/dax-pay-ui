@@ -16,13 +16,13 @@
         <vxe-column type="seq" width="60" />
         <vxe-column field="id" title="大屏代码" />
         <vxe-column field="name" title="项目名称" />
-        <vxe-column field="state" title="发布状态">
+        <vxe-column field="state" title="发布状态" :title-help="{message: '需要未编辑状态下才能进行发布！'}">
           <template #default="{ row }">
             <a-tag v-if="row.state === 1" color="green">已发布</a-tag>
             <a-tag v-else color="red">未发布</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="edit" title="编辑状态">
+        <vxe-column field="edit" title="编辑状态"  :title-help="{message: '请在‘操作->更多->进行保存或重置编辑‘，变更状态！'}">
           <template #default="{ row }">
             <a-tag v-if="row.edit" color="red">编辑中</a-tag>
             <a-tag v-else color="green">未编辑</a-tag>
@@ -54,10 +54,10 @@
                   <a-menu-item v-if="row.edit">
                     <a-link @click="enableEdit(row)">保存编辑</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="row.edit">
+                  <a-menu-item v-if="row.edit && row.state === -1">
                     <a-link @click="resetEdit(row)">重置编辑</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="row.state === -1">
+                  <a-menu-item v-if="!row.edit && row.state === -1">
                     <a-link @click="publishInfo(row)">发布</a-link>
                   </a-menu-item>
                   <a-menu-item v-if="row.state === 1">

@@ -165,17 +165,16 @@ const setting: ProjectConfig = {
   // Use error-handler-plugin
   useErrorHandle: false,
 
-  // Whether to open back to top
+  // 是否打开返回顶部
   useOpenBackTop: true,
 
-  //  Is it possible to embed iframe pages
+  //  是否可以嵌入 iframe 页面
   canEmbedIFramePage: true,
 
-  // Whether to delete unclosed messages and notify when switching the interface
-  closeMessageOnSwitch: true,
+  // 切换接口时是否删除未关闭的消息并通知
+  closeMessageOnSwitch: false,
 
-  // Whether to cancel the http request that has been sent but not responded when switching the interface.
-  // If it is enabled, I want to overwrite a single interface. Can be set in a separate interface
+  // 如果启用，我想覆盖单个接口。可以在单独的界面中设置
   removeAllHttpPending: false,
 }
 

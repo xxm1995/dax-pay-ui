@@ -31,7 +31,6 @@
 
   const getShow = computed(() => {
     const flag = unref(getLoginState) === LoginStateEnum.QR_CODE
-    console.log(flag)
     // 变相实现Watch的效果
     flag ? getQrCode() : pause()
     return flag

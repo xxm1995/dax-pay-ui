@@ -15,6 +15,7 @@ function genBem(name: string, mods?: Mods): string {
   }
 
   if (Array.isArray(mods)) {
+    // @ts-ignore
     return mods.reduce<string>((ret, item) => ret + genBem(name, item), '')
   }
 

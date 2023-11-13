@@ -24,7 +24,7 @@ export function listenerEvent(key: WsListenerEnum, callback: Handler) {
  * 清除指定key所关联的事件监听
  */
 export function clearEventsByKey(key: WsListenerEnum) {
-  // 一个key可能对应多个事件回调, 清除时
+  // 一个key可能对应多个事件回调, 清除该key所关联的所有会话
   const eventHandlerList = emitter.all.get(key.toString()) as EventHandlerList
   eventHandlerList.forEach((value) => emitter.off(key.toString(), value))
 }

@@ -82,27 +82,11 @@ export function usePermission() {
   }
 
   /**
-   * Change roles
-   * @param roles
-   */
-  async function changeRole(roles: RoleEnum | RoleEnum[]): Promise<void> {
-    if (projectSetting.permissionMode !== PermissionModeEnum.ROUTE_MAPPING) {
-      throw new Error('Please switch PermissionModeEnum to ROUTE_MAPPING mode in the configuration to operate!')
-    }
-
-    if (!isArray(roles)) {
-      roles = [roles]
-    }
-    userStore.setRoleList(roles)
-    await resume()
-  }
-
-  /**
    * refresh menu data
    */
   async function refreshMenu() {
     resume()
   }
 
-  return { changeRole, hasPermission, togglePermissionMode, refreshMenu }
+  return { hasPermission, togglePermissionMode, refreshMenu }
 }
