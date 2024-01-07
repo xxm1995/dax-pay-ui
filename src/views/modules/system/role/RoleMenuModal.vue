@@ -53,15 +53,17 @@
   import { $ref } from 'vue/macros'
   import { findAll as findClients, Client } from '/@/views/modules/system/client/Client.api'
   import { getAppEnvConfig } from '/@/utils/env'
-  import { findPermissionIdsByRole, saveRoleMenu } from '/@/views/modules/system/role/Role.api'
+  import { findPermissionIdsByRole, findTreeByRole, RoleTree, saveRoleMenu } from '/@/views/modules/system/role/Role.api'
   import { Tree, treeDataTranslate } from '/@/utils/dataUtil'
   import XEUtils from 'xe-utils'
-  import { allTree, MenuTree } from '/@/views/modules/system/menu/Menu.api'
+  import { MenuTree } from '/@/views/modules/system/menu/Menu.api'
+  import { useMessage } from '/@/hooks/web/useMessage'
 
   const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
+  const { createMessage, createConfirm } = useMessage()
 
   let loading = $ref(false)
-  let roleId = $ref('')
+  let currentRole = $ref<RoleTree>({})
   let visible = $ref(false)
   // 终端列表
   let clients = $ref([] as Client[])
@@ -80,31 +82,36 @@
   let treeData = $ref<Tree[]>([])
   let treeList = $ref<MenuTree[]>([])
 
-  function init(id) {
-    roleId = id
+  function init(record: RoleTree) {
+    currentRole = record
     initData()
     initAssign()
   }
 
+  /**
+   * 初始化终端列表
+   */
   function initData() {
     findClients().then(({ data }) => {
       clients = data
     })
   }
 
-  // 初始化菜单分配信息
+  /**
+   * 初始化菜单分配信息
+   */
   async function initAssign() {
     visible = true
     loading = true
     searchName = ''
     expandedKeys = []
-    // 权限树
-    await allTree(clientCode).then((res) => {
+    // 当前角色的菜单和权限码树
+    await findTreeByRole(currentRole.id, clientCode).then((res) => {
       treeData = treeDataTranslate(res.data, 'id', 'title')
       generateTreeList(res.data)
     })
     // 当前角色已经选择的
-    await findPermissionIdsByRole(roleId, clientCode).then((res) => {
+    await findPermissionIdsByRole(currentRole.id, clientCode).then((res) => {
       checkedKeys = res.data
     })
     // 所有的key值
@@ -112,23 +119,52 @@
     loading = false
   }
 
-  // 保存
+  /**
+   * 保存
+   */
   function handleSubmit() {
+    // 是否级联更新子角色
+    if (currentRole.children) {
+      createConfirm({
+        iconType: 'warning',
+        title: '警告',
+        cancelText: '不应用',
+        okText: '应用',
+        content: '将新增的权限应用到下级子角色中，注意：删除权限时无论如何选择，都将会下级角色的权限被级联删除',
+        onOk: () => {
+          save(true)
+        },
+        onCancel: () => {
+          save(false)
+        },
+      })
+    } else {
+      save(false)
+    }
+  }
+
+  function save(updateChildren: boolean) {
     loading = true
     saveRoleMenu({
-      roleId,
+      roleId: currentRole.id,
       clientCode,
+      updateChildren,
       permissionIds: checkedKeys,
     }).then(() => {
+      createMessage.success('保存成功')
       handleCancel()
     })
   }
+
   // 取消
   function handleCancel() {
     visible = false
   }
   // 树数据铺平
   function generateTreeList(treeData) {
+    if (!treeData) {
+      return
+    }
     for (let i = 0; i < treeData.length; i++) {
       const node = treeData[i]
       treeList.push(node)

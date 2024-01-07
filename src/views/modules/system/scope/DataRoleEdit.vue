@@ -18,8 +18,14 @@
       <a-form-item label="编码" name="code">
         <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
       </a-form-item>
-      <a-form-item label="类型" name="type">
-        <a-select :disabled="!addable" :options="dataScopeTypes" v-model:value="form.type" style="width: 100%" placeholder="选择支付方式" />
+      <a-form-item label="权限类型" name="type">
+        <a-select
+          :disabled="showable"
+          :options="dataScopeTypes"
+          v-model:value="form.type"
+          style="width: 100%"
+          placeholder="选择管理数据权限类型"
+        />
       </a-form-item>
       <a-form-item label="说明" name="remark">
         <a-input v-model:value="form.remark" :disabled="showable" placeholder="请输入说明" />
@@ -38,7 +44,7 @@
   import { nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, existsByCode, existsByCodeNotId, existsByName, existsByNameNotId, DataScope } from './DataScope.api'
+  import { add, get, update, existsByCode, existsByCodeNotId, existsByName, existsByNameNotId, DataRole } from './DataRole.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
@@ -47,7 +53,7 @@
   import { useDict } from '/@/hooks/bootx/useDict'
 
   const { existsByServer } = useValidate()
-  const { dictDropDownNumber } = useDict()
+  const { dictDropDown } = useDict()
   const {
     initFormEditType,
     handleCancel,
@@ -67,12 +73,11 @@
   // 表单
   const formRef = $ref<FormInstance>()
   let form = $ref({
-    id: null,
     code: '',
     name: '',
-    type: 1,
+    type: undefined,
     remark: '',
-  } as DataScope)
+  } as DataRole)
   // 校验
   const rules = reactive({
     name: [
@@ -87,9 +92,12 @@
   } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
-  // 入口
-  function init(id, editType: FormEditType) {
-    dataScopeTypes = dictDropDownNumber('DataScopePerm')
+  /**
+   * 入口
+   */
+  async function init(id, editType: FormEditType) {
+    dataScopeTypes = await dictDropDown('DataScopePerm')
+    console.log(dataScopeTypes)
     initFormEditType(editType)
     resetForm()
     getInfo(id, editType)
@@ -130,11 +138,6 @@
   async function validateCode() {
     const { code, id } = form
     return existsByServer(code, id, formEditType.value, existsByCode, existsByCodeNotId)
-    if (!code) {
-      return Promise.resolve()
-    }
-    const res = formEditType.value === FormEditType.Edit ? await existsByCodeNotId(code, id) : await existsByCode(code)
-    return res.data ? Promise.reject('该编码已存在!') : Promise.resolve()
   }
   async function validateName() {
     const { name, id } = form

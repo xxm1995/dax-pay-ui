@@ -1,9 +1,8 @@
 import { defHttp } from '/@/utils/http/axios'
-import { PageResult, Result } from '/#/axios'
-import { BaseEntity } from '/#/web'
-import { Role } from "/@/views/modules/system/role/Role.api";
-import { DataScope } from "/@/views/modules/system/scope/DataScope.api";
-import { Dept } from "/@/views/modules/system/dept/Dept.api";
+import { Result } from '/#/axios'
+import { Role } from '/@/views/modules/system/role/Role.api'
+import { DataRole } from '/@/views/modules/system/scope/DataRole.api'
+import { Dept } from '/@/views/modules/system/dept/Dept.api'
 
 /**
  * 获取用户拥有部门id集合
@@ -88,9 +87,9 @@ export function addUserRoleBatch(data) {
 /**
  * 获取用户拥有数据权限id集合
  */
-export function getDataScopeIdByUser(id) {
+export function getDataRoleIdByUser(id) {
   return defHttp.get<Result<string>>({
-    url: `/user/data/scope/findDataScopeIdByUser`,
+    url: `/user/data/role/findDataRoleIdByUser`,
     params: { id },
   })
 }
@@ -99,8 +98,8 @@ export function getDataScopeIdByUser(id) {
  * 获取用户拥有数据权限集合
  */
 export function getDataScopeByUser(id) {
-  return defHttp.get<Result<DataScope>>({
-    url: `/user/data/scope/findDataScopeByUser`,
+  return defHttp.get<Result<DataRole>>({
+    url: `/user/data/role/findDataRoleByUser`,
     params: { id },
   })
 }
@@ -110,7 +109,7 @@ export function getDataScopeByUser(id) {
  */
 export function addUserDataScope(data) {
   return defHttp.post({
-    url: `/user/data/scope/saveAssign`,
+    url: `/user/data/role/saveAssign`,
     data: data,
   })
 }
@@ -120,7 +119,7 @@ export function addUserDataScope(data) {
  */
 export function addUserDataScopeBatch(data) {
   return defHttp.post({
-    url: `/user/data/scope/saveAssignBatch`,
+    url: `/user/data/role/saveAssignBatch`,
     data: data,
   })
 }

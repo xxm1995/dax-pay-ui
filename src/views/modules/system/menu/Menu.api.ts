@@ -3,11 +3,20 @@ import { Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
 
 /**
- * 树列表
+ * 菜单树列表
  */
 export const menuTree = (clientCode: string) => {
   return defHttp.get<Result<Array<Menu>>>({
     url: '/perm/menu/menuTree',
+    params: { clientCode },
+  })
+}
+/**
+ * 获取菜单和权限码树
+ */
+export const menuAndPermCodeTree = (clientCode: string) => {
+  return defHttp.get<Result<Array<Menu>>>({
+    url: '/perm/menu/menuAndPermCodeTree',
     params: { clientCode },
   })
 }
@@ -78,16 +87,6 @@ export const existsByPermCodeNotId = (permCode, id) => {
   })
 }
 
-/**
- * 菜单和权限码树
- * @param clientCode
- */
-export function allTree(clientCode) {
-  return defHttp.get<Result<MenuTree[]>>({
-    url: '/perm/menu/allTree',
-    params: { clientCode },
-  })
-}
 
 /**
  * 权限_菜单

@@ -131,7 +131,7 @@
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  function init(id, editType: FormEditType, clientCode, row) {
+  function init(id: any, editType: FormEditType, clientCode: string | undefined, row: any) {
     initMenuTree(clientCode)
     initFormEditType(editType)
     resetForm()
@@ -166,7 +166,6 @@
           form.parentId = row.id
           form.path = row.path
         }).then()
-        // 复制
       } else {
         // 复制
         const { data } = await get(id)

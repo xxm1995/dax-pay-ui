@@ -44,14 +44,14 @@
 <script lang="ts" setup>
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   import { $ref } from 'vue/macros'
-  import { getDeptIds, saveDeptAssign } from '/@/views/modules/system/scope/DataScope.api'
+  import { getDeptIds, saveDeptAssign } from '/@/views/modules/system/scope/DataRole.api'
   import XEUtils from 'xe-utils'
   import { treeDataTranslate } from '/@/utils/dataUtil'
   import { tree } from '/@/views/modules/system/dept/Dept.api'
 
   let loading = $ref(false)
   let visible = $ref(false)
-  let dataScopeId = $ref<string>()
+  let dataRoleId = $ref<string>()
   let searchName = $ref()
   let allTreeKeys = $ref<string[]>([])
   let expandedKeys = $ref<string[]>([])
@@ -66,7 +66,7 @@
   async function init(id) {
     visible = true
     loading = true
-    dataScopeId = id
+    dataRoleId = id
     expandedKeys = []
     // 权限树
     await tree().then(({ data }) => {
@@ -74,7 +74,7 @@
       generateTreeList(data)
     })
     // 当前用户已经分配的数据权限
-    await getDeptIds(dataScopeId).then(({ data }) => {
+    await getDeptIds(dataRoleId).then(({ data }) => {
       checkedKeys = data
     })
     // 所有的key值
@@ -111,7 +111,7 @@
   function handleSubmit() {
     loading = true
     saveDeptAssign({
-      dataScopeId,
+      dataRoleId,
       deptIds: checkedKeys.checked,
     }).then(() => {
       handleCancel()

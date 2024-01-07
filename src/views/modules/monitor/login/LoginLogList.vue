@@ -46,13 +46,13 @@
         </vxe-column>
       </vxe-table>
       <vxe-pager
-        size="medium"
-        :loading="loading"
-        :current-page="pagination.current"
-        :page-size="pagination.size"
-        :total="pagination.total"
-        @page-change="handleTableChange"
-      />
+      size="medium"
+      :loading="loading"
+      :current-page="pagination.current"
+      :page-size="pagination.size"
+      :total="pagination.total"
+      @page-change="handleTableChange"
+    />
       <login-log-info :clients="clients" :login-types="loginTypes" ref="loginLogInfo" />
     </div>
   </div>
@@ -72,6 +72,7 @@
   import { dropdownTranslate, findOneByField } from '/@/utils/dataUtil'
   import LoginLogInfo from './LoginLogInfo.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
+  import { h } from 'vue/dist/vue'
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
@@ -141,7 +142,6 @@
       ...model.queryParam,
       ...pages,
     }).then(({ data }) => {
-      data.records[0].loginTime
       pageQueryResHandel(data)
     })
   }

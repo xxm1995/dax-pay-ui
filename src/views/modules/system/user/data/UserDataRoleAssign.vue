@@ -17,12 +17,12 @@
         <a-form-item label="用户名称" name="name">
           <a-input :disabled="true" v-model:value="userInfo.name" />
         </a-form-item>
-        <a-form-item label="数据权限" name="dataScopeId">
+        <a-form-item label="数据权限" name="dataRoleId">
           <a-select
             allowClear
-            v-model:value="form.dataScopeId"
+            v-model:value="form.dataRoleId"
             style="width: 100%"
-            :default-value="form.dataScopeId"
+            :default-value="form.dataRoleId"
             :filter-option="search"
             :options="dataScopes"
             placeholder="选择数据权限"
@@ -42,9 +42,9 @@
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { nextTick } from 'vue'
   import { dropdownTranslate } from '/@/utils/dataUtil'
-  import { addUserDataScope, getDataScopeIdByUser } from '/@/views/modules/system/user/UserAssign.api'
+  import { addUserDataScope, getDataRoleIdByUser } from '/@/views/modules/system/user/UserAssign.api'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
-  import { findAll as dataScopeList } from '/@/views/modules/system/scope/DataScope.api'
+  import { findAll as dataRoleList } from '/@/views/modules/system/scope/DataRole.api'
 
   const { createMessage } = useMessage()
   const { initFormEditType, handleCancel, search, labelCol, wrapperCol, modalWidth, confirmLoading, visible } = useFormEdit()
@@ -56,7 +56,7 @@
   let dataScopes = $ref<LabeledValue[]>([])
   let form = $ref({
     userId: '',
-    dataScopeId: undefined as undefined | string,
+    dataRoleId: undefined as undefined | string,
   })
 
   async function init(info: UserInfo) {
@@ -68,13 +68,13 @@
     })
     form.userId = info.id as string
     // 获取数据权限列表
-    await dataScopeList().then(({ data }) => {
+    await dataRoleList().then(({ data }) => {
       dataScopes = dropdownTranslate(data, 'name', 'id')
     })
 
     // 获取关联权限信息
-    await getDataScopeIdByUser(userInfo.id).then(({ data }) => {
-      form.dataScopeId = data || undefined
+    await getDataRoleIdByUser(userInfo.id).then(({ data }) => {
+      form.dataRoleId = data || undefined
     })
     confirmLoading.value = false
   }

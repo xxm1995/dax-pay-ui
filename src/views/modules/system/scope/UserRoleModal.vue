@@ -29,28 +29,28 @@
 <script lang="ts" setup>
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   import { $ref } from 'vue/macros'
-  import { DataScopeUser, deleteBatchUserAssign, findUsersByDataScopeId, saveUserAssign } from '/@/views/modules/system/scope/DataScope.api'
+  import { DataScopeUser, deleteBatchUserAssign, findUsersByDataRoleId, saveUserAssign } from '/@/views/modules/system/scope/DataRole.api'
   import BUserSelectModal from '/@/components/Bootx/UserSelectModal/BUserSelectModal.vue'
   import { VxeTableInstance } from 'vxe-table'
 
   let loading = $ref(false)
   let visible = $ref(false)
   let selectIds = $ref<string[]>([])
-  let dataScopeId = $ref<string>()
+  let dataRoleId = $ref<string>()
 
   let tableData = $ref<DataScopeUser[]>([])
   const userSelectModal = $ref<any>()
   const xTable = $ref<VxeTableInstance>()
 
   function init(id) {
-    dataScopeId = id
+    dataRoleId = id
     visible = true
     queryList()
   }
   // 查询关联用户信息
   function queryList() {
     loading = true
-    findUsersByDataScopeId(dataScopeId).then(({ data }) => {
+    findUsersByDataRoleId(dataRoleId).then(({ data }) => {
       tableData = data
       loading = false
     })
@@ -63,7 +63,7 @@
   function selectUser(userIds) {
     loading = true
     saveUserAssign({
-      dataScopeId,
+      dataRoleId,
       userIds,
     }).then(() => {
       queryList()

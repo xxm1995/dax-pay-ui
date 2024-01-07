@@ -1,7 +1,7 @@
 <template>
   <basic-drawer
     show-footer
-    title="添加用户"
+    title="用户信息"
     v-bind="$attrs"
     :width="modalWidth"
     :visible="visible"
@@ -34,8 +34,8 @@
         <a-form-item label="终端列表">
           <a-tag color="green" v-for="o in clientList" :key="o.id">{{ o.name }}</a-tag>
         </a-form-item>
-        <a-form-item label="数据权限">
-          <a-tag color="green" v-show="dataScope.name">{{ dataScope.name }}</a-tag>
+        <a-form-item label="数据角色">
+          <a-tag color="green" v-show="dataRole.name">{{ dataRole.name }}</a-tag>
         </a-form-item>
         <a-form-item label="部门列表">
           <a-tag color="green" v-for="o in deptList" :key="o.id">{{ o.deptName }}</a-tag>
@@ -56,7 +56,7 @@
   import { Role } from '/@/views/modules/system/role/Role.api'
   import { get, UserInfo } from '/@/views/modules/system/user/User.api'
   import { getDataScopeByUser, getDeptList, getRoles } from '/@/views/modules/system/user/UserAssign.api'
-  import { DataScope } from '/@/views/modules/system/scope/DataScope.api'
+  import { DataRole } from '/@/views/modules/system/scope/DataRole.api'
   import { Dept } from '/@/views/modules/system/dept/Dept.api'
   import { useDict } from '/@/hooks/bootx/useDict'
   import { onMounted } from 'vue'
@@ -71,7 +71,7 @@
   let roles = $ref<Role[]>([])
   let clients = $ref<Client[]>([])
   let clientList = $ref<Client[]>([])
-  let dataScope = $ref<DataScope>({})
+  let dataRole = $ref<DataRole>({})
   let deptList = $ref<Dept[]>([])
 
   async function init(id) {
@@ -88,14 +88,14 @@
       deptList = res.data
     })
     await getDataScopeByUser(id).then((res) => {
-      dataScope = res.data
+      dataRole = res.data
     })
     confirmLoading.value = false
   }
 
   // 获取用户关联终端信息
   function getClientList() {
-    const clientIds = form.clientIdList as string[]
+    const clientIds = form.clientIds as string[]
     return clientIds.map((clientId) => {
       return getClientById(clientId)
     })

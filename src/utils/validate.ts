@@ -175,6 +175,7 @@ export function validateEmail(email) {
 
 /**
  * 判断手机号码是否正确
+ * @return
  */
 export function validateMobile(phone) {
   let result = false
@@ -188,7 +189,7 @@ export function validateMobile(phone) {
         result = true
       }
     } else {
-      msg = '手机号码长度不为11位'
+      msg = '手机号码格式不正确'
     }
   } else {
     msg = '手机号码不能为空'

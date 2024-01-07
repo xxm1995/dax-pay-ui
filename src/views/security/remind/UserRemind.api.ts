@@ -6,7 +6,7 @@ import { Result } from '/#/axios'
  */
 export function checkPasswordSecurity() {
   return defHttp.get<Result<passwordSecurityCheckResult>>({
-    url: `/security/password/checkPasswordSecurity`,
+    url: `/security/password/check`,
   })
 }
 

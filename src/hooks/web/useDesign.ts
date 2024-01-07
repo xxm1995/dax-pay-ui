@@ -14,7 +14,7 @@ export function useDesign(scope: string) {
   //   });
   // }
   return {
-    // prefixCls: computed(() => `${values.prefixCls}-${scope}`),
+    // prefixCls: computed(() => `${values.prefixCls}-${data}`),
     prefixCls: `${values.prefixCls}-${scope}`,
     prefixVar: values.prefixCls,
     // style,

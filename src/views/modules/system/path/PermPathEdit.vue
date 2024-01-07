@@ -5,12 +5,15 @@
     :loading="confirmLoading"
     :title="title"
     :visible="visible"
-    :mask-closable="showable"
+    :mask-closable="false"
     @cancel="handleCancel"
   >
     <a-form class="small-from-item" ref="formRef" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
       <a-form-item label="主键" name="id" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
+      </a-form-item>
+      <a-form-item name="generate" :hidden="true">
+        <a-switch v-model:checked="form.generate" />
       </a-form-item>
       <a-form-item label="请求路径" name="path">
         <a-input v-model:value="form.path" :disabled="showable" placeholder="请输入请求路径" />
@@ -98,6 +101,7 @@
   function init(id, editType: FormEditType) {
     initFormEditType(editType)
     resetForm()
+    console.log(form.generate)
     getInfo(id, editType)
   }
   // 获取信息

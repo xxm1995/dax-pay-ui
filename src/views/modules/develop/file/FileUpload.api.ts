@@ -1,12 +1,12 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
-import { BaseEntity } from '/#/web'
+import { UpdateFileInfo } from "/@/api/common/FileUpload";
 
 /**
  * 分页
  */
 export const page = (params) => {
-  return defHttp.get<Result<PageResult<FileUpload>>>({
+  return defHttp.get<Result<PageResult<UpdateFileInfo>>>({
     url: '/file/page',
     params,
   })
@@ -16,7 +16,7 @@ export const page = (params) => {
  * 获取单条
  */
 export const get = (id) => {
-  return defHttp.get<Result<FileUpload>>({
+  return defHttp.get<Result<UpdateFileInfo>>({
     url: '/file/findById',
     params: { id },
   })
@@ -25,7 +25,7 @@ export const get = (id) => {
 /**
  * 添加
  */
-export const add = (obj: FileUpload) => {
+export const add = (obj: UpdateFileInfo) => {
   return defHttp.post({
     url: '/file/add',
     data: obj,
@@ -35,7 +35,7 @@ export const add = (obj: FileUpload) => {
 /**
  * 更新
  */
-export const update = (obj: FileUpload) => {
+export const update = (obj: UpdateFileInfo) => {
   return defHttp.post({
     url: '/file/update',
     data: obj,
@@ -56,25 +56,7 @@ export const del = (id) => {
  * 查询全部
  */
 export const findAll = () => {
-  return defHttp.get<Result<Array<FileUpload>>>({
+  return defHttp.get<Result<UpdateFileInfo>>({
     url: '/file/findAll',
   })
-}
-
-/**
- * 上传文件信息
- */
-export interface FileUpload extends BaseEntity {
-  // 存储位置
-  filePath: string
-  // 文件名称
-  fileName: string
-  // 文件类型
-  fileType: string
-  // 文件后缀
-  fileSuffix: string
-  // 文件大小
-  fileSize: number
-  // 外部关联id
-  externalStorageId: string
 }

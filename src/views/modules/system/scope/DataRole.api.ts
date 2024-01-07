@@ -6,8 +6,8 @@ import { BaseEntity } from '/#/web'
  * 分页
  */
 export const page = (params) => {
-  return defHttp.get<Result<PageResult<DataScope>>>({
-    url: '/data/scope/page',
+  return defHttp.get<Result<PageResult<DataRole>>>({
+    url: '/data/role/page',
     params,
   })
 }
@@ -16,8 +16,8 @@ export const page = (params) => {
  * 获取单条
  */
 export const get = (id) => {
-  return defHttp.get<Result<DataScope>>({
-    url: '/data/scope/findById',
+  return defHttp.get<Result<DataRole>>({
+    url: '/data/role/findById',
     params: { id },
   })
 }
@@ -25,9 +25,9 @@ export const get = (id) => {
 /**
  * 添加
  */
-export const add = (obj: DataScope) => {
+export const add = (obj: DataRole) => {
   return defHttp.post({
-    url: '/data/scope/add',
+    url: '/data/role/add',
     data: obj,
   })
 }
@@ -35,9 +35,9 @@ export const add = (obj: DataScope) => {
 /**
  * 更新
  */
-export const update = (obj: DataScope) => {
+export const update = (obj: DataRole) => {
   return defHttp.post({
-    url: '/data/scope/update',
+    url: '/data/role/update',
     data: obj,
   })
 }
@@ -47,7 +47,7 @@ export const update = (obj: DataScope) => {
  */
 export const del = (id) => {
   return defHttp.delete({
-    url: '/data/scope/delete',
+    url: '/data/role/delete',
     params: { id },
   })
 }
@@ -56,8 +56,8 @@ export const del = (id) => {
  * 查询全部
  */
 export const findAll = () => {
-  return defHttp.get<Result<Array<DataScope>>>({
-    url: '/data/scope/findAll',
+  return defHttp.get<Result<Array<DataRole>>>({
+    url: '/data/role/findAll',
   })
 }
 
@@ -66,13 +66,13 @@ export const findAll = () => {
  */
 export function existsByCode(code: string) {
   return defHttp.get<Result<boolean>>({
-    url: '/data/scope/existsByCode',
+    url: '/data/role/existsByCode',
     params: { code },
   })
 }
 export function existsByCodeNotId(code, id) {
   return defHttp.get<Result<boolean>>({
-    url: '/data/scope/existsByCodeNotId',
+    url: '/data/role/existsByCodeNotId',
     params: { code, id },
   })
 }
@@ -82,13 +82,13 @@ export function existsByCodeNotId(code, id) {
  */
 export function existsByName(name: string) {
   return defHttp.get<Result<boolean>>({
-    url: '/data/scope/existsByName',
+    url: '/data/role/existsByName',
     params: { name },
   })
 }
 export function existsByNameNotId(name: string, id) {
   return defHttp.get<Result<boolean>>({
-    url: '/data/scope/existsByNameNotId',
+    url: '/data/role/existsByNameNotId',
     params: { name, id },
   })
 }
@@ -98,7 +98,7 @@ export function existsByNameNotId(name: string, id) {
  */
 export function getDeptIds(id) {
   return defHttp.get<Result<string[]>>({
-    url: '/data/scope/getDeptIds',
+    url: '/data/role/getDeptIds',
     params: { id },
   })
 }
@@ -108,7 +108,7 @@ export function getDeptIds(id) {
  */
 export function saveDeptAssign(obj) {
   return defHttp.post({
-    url: '/data/scope/saveDeptAssign',
+    url: '/data/role/saveDeptAssign',
     data: obj,
   })
 }
@@ -116,9 +116,9 @@ export function saveDeptAssign(obj) {
 /**
  * 获取关联的用户列表
  */
-export function findUsersByDataScopeId(id) {
+export function findUsersByDataRoleId(id) {
   return defHttp.get<Result<DataScopeUser[]>>({
-    url: '/data/scope/findUsersByDataScopeId',
+    url: '/data/role/findUsersByDataRoleId',
     params: { id },
   })
 }
@@ -128,7 +128,7 @@ export function findUsersByDataScopeId(id) {
  */
 export function saveUserAssign(obj) {
   return defHttp.post({
-    url: '/data/scope/saveUserAssign',
+    url: '/data/role/saveUserAssign',
     data: obj,
   })
 }
@@ -138,7 +138,7 @@ export function saveUserAssign(obj) {
  */
 export function deleteBatchUserAssign(obj) {
   return defHttp.delete({
-    url: '/data/scope/deleteUserAssigns',
+    url: '/data/role/deleteUserAssigns',
     data: obj,
   })
 }
@@ -146,13 +146,13 @@ export function deleteBatchUserAssign(obj) {
 /**
  * 数据范围权限
  */
-export interface DataScope extends BaseEntity {
+export interface DataRole extends BaseEntity {
   // 编码
   code?: string
   // 名称
   name?: string
   // 类型
-  type?: number
+  type?: string
   // 说明
   remark?: string
 }

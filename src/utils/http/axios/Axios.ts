@@ -142,7 +142,6 @@ export class VAxios {
       data: formData,
       headers: {
         'Content-type': ContentTypeEnum.FORM_DATA,
-        // @ts-ignore
         ignoreCancelToken: true,
       },
     })

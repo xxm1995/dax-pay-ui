@@ -1,8 +1,8 @@
 {
   "name": "dax-pay-ui",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": {
-    "name": "xxm"
+    "name": "bootx"
   },
   "scripts": {
     "commit": "czg",
@@ -69,7 +69,7 @@
     "vue-json-pretty": "^2.0.6",
     "vue-router": "^4.0.16",
     "vue-types": "^4.1.1",
-    "vxe-table": "^4.4.2",
+    "vxe-table": "^4.5.14",
     "xe-utils": "^3.5.7",
     "xlsx": "^0.18.5"
   },
@@ -134,7 +134,7 @@
     "stylelint-order": "^5.0.0",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3",
-    "vite": "^4.3.3",
+    "vite": "^4.3.9",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-html": "^3.2.0",
     "vite-plugin-imagemin": "^0.6.1",

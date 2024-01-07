@@ -1,7 +1,24 @@
 <template>
   <div>
     <div class="m-3 p-3 pt-5 bg-white">
-      <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
+      <a-form class="page-query" layout="inline">
+        <a-row :gutter="10">
+          <a-col :md="8" :sm="24">
+            <a-form-item label="查询">
+              <a-input-search
+                v-model:value="searchName"
+                @search="search"
+                @keyup.enter="search"
+                allow-clear
+                placeholder="请输入角色名称或编码"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="24">
+            <a-button type="primary" @click="queryPage">查询</a-button>
+          </a-col>
+        </a-row>
+      </a-form>
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
@@ -11,25 +28,21 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
-        <vxe-column type="seq" width="60" />
-        <vxe-column field="code" title="编码" />
-        <vxe-column field="name" title="名称" />
-        <vxe-column field="remark" title="说明" />
-        <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="210" :showOverflow="false" title="操作">
+      <vxe-table resizable ref="xTable" border="inner" :loading="loading" :tree-config="{ children: 'children' }" :data="tableData">
+        <vxe-column field="name" title="名称" tree-node>
           <template #default="{ row }">
-            <span>
-              <a href="javascript:" @click="show(row)">查看</a>
-            </span>
+            <a-link @click="show(row)">{{ row.name }}</a-link>
+          </template>
+        </vxe-column>
+        <vxe-column field="code" title="编码" />
+        <vxe-column field="remark" title="说明" />
+        <vxe-column fixed="right" width="270" :showOverflow="false" title="操作">
+          <template #default="{ row }">
+            <a-link @click="addChildren(row)">添加子角色</a-link>
             <a-divider type="vertical" />
-            <span>
-              <a href="javascript:" @click="edit(row)">编辑</a>
-            </span>
+            <a-link @click="edit(row)">编辑</a-link>
             <a-divider type="vertical" />
-            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-              <a href="javascript:" style="color: red">删除</a>
-            </a-popconfirm>
+            <a-link danger @click="remove(row)">删除</a-link>
             <a-divider type="vertical" />
             <a-dropdown>
               <a> 授权 <Icon icon="ant-design:down-outlined" :size="12" /> </a>
@@ -47,14 +60,6 @@
           </template>
         </vxe-column>
       </vxe-table>
-      <vxe-pager
-        size="medium"
-        :loading="loading"
-        :current-page="pagination.current"
-        :page-size="pagination.size"
-        :total="pagination.total"
-        @page-change="handleTableChange"
-      />
       <role-edit ref="roleEdit" @ok="queryPage" />
       <role-menu-modal ref="roleMenuModal" />
       <role-path-modal ref="rolePathModal" />
@@ -63,24 +68,29 @@
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue'
-  import { del, page } from './Role.api'
+  import { nextTick, onMounted, ref } from 'vue'
+  import { del, RoleTree, tree } from './Role.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import RoleEdit from './RoleEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
-  import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'
   import { QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import Icon from '/@/components/Icon/src/Icon.vue'
-  import RoleMenuModal from "./RoleMenuModal.vue";
-  import RolePathModal from "./RolePathModal.vue";
+  import RoleMenuModal from './RoleMenuModal.vue'
+  import RolePathModal from './RolePathModal.vue'
+  import ALink from '/@/components/Link/Link.vue'
+  import XEUtils from 'xe-utils'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
-  const { createMessage } = useMessage()
+  const { createMessage, createConfirm } = useMessage()
 
+  let searchName = $ref<string>()
+  let tableData = $ref<RoleTree[]>([])
+  let remoteTableData = $ref<RoleTree[]>([])
+  let treeExpand = $ref(false)
   const roleEdit = $ref<any>()
   const roleMenuModal = $ref<any>()
   const rolePathModal = $ref<any>()
@@ -103,17 +113,19 @@
   // 分页查询
   function queryPage() {
     loading.value = true
-    page({
-      ...model.queryParam,
-      ...pages,
-    }).then(({ data }) => {
-      pageQueryResHandel(data)
+    tree().then(({ data }) => {
+      remoteTableData = data
+      search()
+      loading.value = false
     })
     return Promise.resolve()
   }
   // 新增
   function add() {
     roleEdit.init(null, FormEditType.Add)
+  }
+  function addChildren(record) {
+    roleEdit.init(null, FormEditType.Add, record.id)
   }
   // 查看
   function edit(record) {
@@ -123,20 +135,53 @@
   function show(record) {
     roleEdit.init(record.id, FormEditType.Show)
   }
-  // 菜单授权处理
+  /**
+   * 菜单授权处理
+   */
   function handleRoleMenu(record) {
-    roleMenuModal.init(record.id)
+    roleMenuModal.init(record)
   }
-  // 请求授权处理
+  /**
+   * 请求授权处理
+   */
   function handleRolePath(record) {
-    rolePathModal.init(record.id)
+    rolePathModal.init(record)
   }
-  // 删除
+  /**
+   * 删除
+   */
   function remove(record) {
-    del(record.id).then(() => {
-      createMessage.success('删除成功')
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '是否删除该数据',
+      onOk: () => {
+        del(record.id).then(() => {
+          createMessage.success('删除成功')
+          queryPage()
+        })
+      },
     })
-    queryPage()
+  }
+
+  /**
+   * 搜索
+   */
+  function search() {
+    const search = XEUtils.toValueString(searchName).trim().toLowerCase()
+    if (search) {
+      const searchProps = ['name', 'code']
+      tableData = XEUtils.searchTree(remoteTableData, (item) =>
+        searchProps.some((key) => XEUtils.toValueString(item[key]).toLowerCase().indexOf(search) > -1),
+      )
+      // 搜索状态默认展开
+      treeExpand = true
+    } else {
+      tableData = remoteTableData
+    }
+    nextTick(() => {
+      xTable?.setAllTreeExpand(treeExpand)
+    })
   }
 </script>
 

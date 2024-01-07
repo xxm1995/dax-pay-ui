@@ -31,21 +31,21 @@
         <a-form-item label="确认密码" name="confirmPassword">
           <a-input-password v-model:value="form.confirmPassword" placeholder="请重新输入登录密码" />
         </a-form-item>
-        <a-form-item label="关联应用" name="clientIdList">
+        <a-form-item label="关联应用" name="clientIds">
           <a-select
             allowClear
             mode="multiple"
-            v-model:value="form.clientIdList"
-            :default-value="form.clientIdList"
+            v-model:value="form.clientIds"
+            :default-value="form.clientIds"
             :filter-option="search"
             :options="clients"
             placeholder="请选择关联适用的终端"
           />
         </a-form-item>
-        <a-form-item label="手机号" name="phone">
+        <a-form-item label="手机号" validate-first name="phone">
           <a-input v-model:value="form.phone" placeholder="请输入用户手机号" />
         </a-form-item>
-        <a-form-item label="邮箱" name="email">
+        <a-form-item label="邮箱" validate-first name="email">
           <a-input v-model:value="form.email" placeholder="请输入用户邮箱" />
         </a-form-item>
       </a-form>
@@ -76,7 +76,7 @@
     username: '',
     phone: '',
     email: '',
-    clientIdList: [],
+    clientIds: [],
     password: '',
     confirmPassword: '',
   })
@@ -157,6 +157,9 @@
    */
   function validateEmailRule() {
     const { email } = form
+    if (!email) {
+      return Promise.resolve()
+    }
     const { msg, result } = validateEmail(email)
     return result ? Promise.resolve() : Promise.reject(msg)
   }
@@ -173,6 +176,9 @@
    */
   function validatePhone() {
     const { phone } = form
+    if (!phone) {
+      return Promise.resolve()
+    }
     const { msg, result } = validateMobile(phone)
     return result ? Promise.resolve() : Promise.reject(msg)
   }

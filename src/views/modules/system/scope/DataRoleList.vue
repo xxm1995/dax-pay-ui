@@ -35,17 +35,17 @@
             <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
               <a href="javascript:" style="color: red">删除</a>
             </a-popconfirm>
-            <template v-if="[2, 3, 4].includes(row.type)">
+            <template v-if="['user', 'dept', 'dept_and_user'].includes(row.type)">
               <a-divider type="vertical" />
               <a-dropdown>
                 <a class="ant-dropdown-link"> 关联 <icon icon="ant-design:down-outlined" :size="12" /> </a>
                 <template #overlay>
                   <a-menu>
-                    <a-menu-item :disabled="![2, 4].includes(row.type)">
-                      <a :disabled="![2, 4].includes(row.type) ? true : null" href="javascript:" @click="handleUserScope(row)">关联用户</a>
+                    <a-menu-item v-if="['user', 'dept_and_user'].includes(row.type)">
+                      <a href="javascript:" @click="handleUserScope(row)">关联用户</a>
                     </a-menu-item>
-                    <a-menu-item :disabled="![3, 4].includes(row.type)">
-                      <a href="javascript:" :disabled="![3, 4].includes(row.type) ? true : null" @click="handleDeptScope(row)">关联部门</a>
+                    <a-menu-item v-if="['dept', 'dept_and_user'].includes(row.type)">
+                      <a href="javascript:" @click="handleDeptScope(row)">关联部门</a>
                     </a-menu-item>
                   </a-menu>
                 </template>
@@ -62,9 +62,9 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
-      <data-scope-edit ref="dataScopeEdit" @ok="queryPage" />
-      <dept-scope-modal ref="deptScopeModal" />
-      <user-scope-modal ref="userScopeModal" />
+      <data-role-edit ref="dataRoleEdit" @ok="queryPage" />
+      <dept-role-modal ref="deptRoleModal" />
+      <user-role-modal ref="userRoleModal" />
     </div>
   </div>
 </template>
@@ -72,18 +72,19 @@
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
   import { $ref } from 'vue/macros'
-  import { del, page } from './DataScope.api'
+  import { del, page } from './DataRole.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import DataScopeEdit from './DataScopeEdit.vue'
+  import DataRoleEdit from './DataRoleEdit.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import DeptScopeModal from './DeptScopeModal.vue'
-  import UserScopeModal from './UserScopeModal.vue'
+  import DeptRoleModal from './DeptRoleModal.vue'
+  import UserRoleModal from './UserRoleModal.vue'
   import Icon from '/@/components/Icon/src/Icon.vue'
+  import ALink from "/@/components/Link/Link.vue";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -98,9 +99,9 @@
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
-  const dataScopeEdit = $ref<any>()
-  const deptScopeModal = $ref<any>()
-  const userScopeModal = $ref<any>()
+  const dataRoleEdit = $ref<any>()
+  const deptRoleModal = $ref<any>()
+  const userRoleModal = $ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -123,23 +124,23 @@
   }
   // 新增
   function add() {
-    dataScopeEdit.init(null, FormEditType.Add)
+    dataRoleEdit.init(null, FormEditType.Add)
   }
   // 查看
   function edit(record) {
-    dataScopeEdit.init(record.id, FormEditType.Edit)
+    dataRoleEdit.init(record.id, FormEditType.Edit)
   }
   // 查看
   function show(record) {
-    dataScopeEdit.init(record.id, FormEditType.Show)
+    dataRoleEdit.init(record.id, FormEditType.Show)
   }
   // 用户范围
   function handleUserScope(record) {
-    userScopeModal.init(record.id)
+    userRoleModal.init(record.id)
   }
   // 部门范围
   function handleDeptScope(record) {
-    deptScopeModal.init(record.id)
+    deptRoleModal.init(record.id)
   }
 
   // 删除

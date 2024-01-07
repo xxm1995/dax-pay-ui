@@ -3,9 +3,9 @@
     <template #headerContent>
       <div class="flex justify-between items-center">
         <span class="flex-1">
-          <a :href="GITEE_URL" target="_blank">Dax-Pay </a>
-          是Bootx-Platform的子项目之一，专注支付领域，对微信和支付宝的各种支付方式进行封装，
-          同时扩展了更多支付方式，如储值卡、现金卡等，可以作为一个支付系统的底座进行使用
+          <a :href="GITHUB_URL" target="_blank">Bootx-Platform </a>
+          是一个基于Spring Boot、Vue、Ant-Design-Vue
+          、TypeScript的后台管理脚手架，包含支付收单(支付宝、微信、聚合、组合支付)、工作流(Flowable)、三方对接(微信、钉钉、企微、短信)等功能。
         </span>
       </div>
     </template>

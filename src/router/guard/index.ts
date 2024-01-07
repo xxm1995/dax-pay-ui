@@ -117,12 +117,9 @@ function createScrollGuard(router: Router) {
 export function createMessageGuard(router: Router) {
   const { closeMessageOnSwitch } = projectSetting
 
-  console.log(projectSetting)
-  console.log(closeMessageOnSwitch)
   router.beforeEach(async () => {
     try {
       if (closeMessageOnSwitch) {
-        console.log(666444)
         Modal.destroyAll()
         notification.destroy()
       }

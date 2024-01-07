@@ -1,8 +1,25 @@
 <template>
-  <basic-modal :loading="confirmLoading" v-bind="$attrs" :title="title" :visible="visible" :mask-closable="showable" @cancel="handleCancel">
+  <basic-modal
+    :loading="confirmLoading"
+    v-bind="$attrs"
+    :width="750"
+    :title="title"
+    :visible="visible"
+    :mask-closable="showable"
+    @cancel="handleCancel"
+  >
     <a-form class="small-from-item" :model="form" ref="formRef" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
       <a-form-item label="主键" name="id" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
+      </a-form-item>
+      <a-form-item v-show="addable" label="上级菜单" name="parentId">
+        <a-tree-select
+          style="width: 100%"
+          :tree-data="treeData"
+          v-model:value="form.pid"
+          placeholder="请选择上级角色"
+          :disabled="showable"
+        />
       </a-form-item>
       <a-form-item label="编码" name="code">
         <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
@@ -27,14 +44,27 @@
   import { nextTick, reactive } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, existsByCode, existsByCodeNotId, existsByName, existsByNameNotId, Role } from './Role.api'
+  import { add, get, update, existsByCode, existsByCodeNotId, existsByName, existsByNameNotId, Role, tree } from './Role.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
   import { useValidate } from '/@/hooks/bootx/useValidate'
+  import { treeDataTranslate } from '/@/utils/dataUtil'
 
-  const { initFormEditType, handleCancel, search, labelCol, wrapperCol, title, confirmLoading, visible, editable, showable, formEditType } =
-    useFormEdit()
+  const {
+    initFormEditType,
+    handleCancel,
+    search,
+    labelCol,
+    wrapperCol,
+    title,
+    confirmLoading,
+    visible,
+    editable,
+    addable,
+    showable,
+    formEditType,
+  } = useFormEdit()
   const { existsByServer } = useValidate()
 
   // 表单
@@ -42,9 +72,13 @@
   let form = $ref({
     id: null,
     code: '',
+    pid: undefined,
     name: '',
     remark: '',
   } as Role)
+
+  let treeData = $ref<any[]>()
+
   // 校验
   const rules = reactive({
     name: [
@@ -59,21 +93,39 @@
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  function init(id, editType: FormEditType) {
+  function init(id, editType: FormEditType, roleId) {
+    initRoleTree()
     initFormEditType(editType)
     resetForm()
-    getInfo(id, editType)
+    getInfo(id, editType, roleId)
   }
-  // 获取信息
-  function getInfo(id, editType: FormEditType) {
+  /**
+   * 查询树
+   */
+  function initRoleTree() {
+    tree().then((res) => {
+      treeData = treeDataTranslate(res.data, 'id', 'name')
+    })
+  }
+
+  /**
+   * 获取信息
+   */
+  function getInfo(id, editType: FormEditType, roleId) {
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
       confirmLoading.value = true
       get(id).then(({ data }) => {
         form = data
         confirmLoading.value = false
       })
-    } else {
+    } else if (editType === FormEditType.Add) {
       confirmLoading.value = false
+      // 添加下级
+      if (roleId) {
+        nextTick(() => {
+          form.pid = roleId
+        }).then()
+      }
     }
   }
   // 保存

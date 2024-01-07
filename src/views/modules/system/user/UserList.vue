@@ -19,7 +19,7 @@
                     <a @click="assignDeptBatch()">部门分配</a>
                   </a-menu-item>
                   <a-menu-item>
-                    <a @click="assignDataScopeBatch()">数据权限分配</a>
+                    <a @click="assignDataScopeBatch()">数据角色分配</a>
                   </a-menu-item>
                   <a-menu-item>
                     <a @click="lockUserConfirmBatch(true)">锁定账号</a>
@@ -60,7 +60,6 @@
             {{ dictConvert('UserStatusCode', row.status) }}
           </template>
         </vxe-column>
-        <vxe-column field="registerTime" title="注册时间" />
         <vxe-column fixed="right" width="170" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a href="javascript:" @click="show(row)">查看</a>
@@ -72,20 +71,20 @@
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
-                    <a @click="assignRoles(row)">角色分配</a>
+                    <a-link @click="assignRoles(row)">角色分配</a-link>
                   </a-menu-item>
                   <a-menu-item>
-                    <a @click="assignDept(row)">部门分配</a>
+                    <a-link @click="assignDept(row)">部门分配</a-link>
                   </a-menu-item>
                   <a-menu-item>
-                    <a @click="assignDataScope(row)">数据权限分配</a>
+                    <a-link @click="assignDataScope(row)">数据角色分配</a-link>
                   </a-menu-item>
                   <a-menu-item>
-                    <a @click="resetPwd(row)">重置密码</a>
+                    <a-link @click="resetPwd(row)">重置密码</a-link>
                   </a-menu-item>
-                  <a-menu-item>
-                    <a v-if="row.status === 1" @click="lockUserConfirm(row.id, true)">封禁账号</a>
-                    <a v-if="row.status === 3" @click="lockUserConfirm(row.id, false)">解锁账号</a>
+                  <a-menu-item v-if="[1, 3].includes(row.status)">
+                    <a-link v-if="row.status === 1" @click="lockUserConfirm(row.id, true)">封禁账号</a-link>
+                    <a-link v-if="row.status === 3" @click="lockUserConfirm(row.id, false)">解锁账号</a-link>
                   </a-menu-item>
                 </a-menu>
               </template>
@@ -132,8 +131,8 @@
   import UserShow from './UserShow.vue'
   import UserRoleAssign from './role/UserRoleAssign.vue'
   import UserRoleAssignBatch from './role/UserRoleAssignBatch.vue'
-  import UserDataScopeAssign from './scope/UserDataScopeAssign.vue'
-  import UserDataScopeAssignBatch from './scope/UserDataScopeAssignBatch.vue'
+  import UserDataScopeAssign from '/@/views/modules/system/user/data/UserDataRoleAssign.vue'
+  import UserDataScopeAssignBatch from '/@/views/modules/system/user/data/UserDataRoleAssignBatch.vue'
   import UserDeptAssign from './dept/UserDeptAssign.vue'
   import UserDeptAssignBatch from './dept/UserDeptAssignBatch.vue'
   import UserResetPwd from './UserResetPwd.vue'

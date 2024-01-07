@@ -11,6 +11,10 @@ import { LabeledValue } from 'ant-design-vue/lib/select'
  */
 export function treeDataTranslate(data, value = 'value', title = 'title', children = 'children') {
   const temp = [] as Tree[]
+  if (!data) {
+    return []
+  }
+
   for (let i = 0; i < data.length; i++) {
     const p = {
       key: data[i][value],

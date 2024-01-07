@@ -101,7 +101,7 @@ export const DASHBOARD: AppRouteModule = {
       component: () => import('/@/views/dashboard/analysis/index.vue'),
       meta: {
         // affix: true,
-        title: '分析页',
+        title: '主页',
       },
     },
   ],

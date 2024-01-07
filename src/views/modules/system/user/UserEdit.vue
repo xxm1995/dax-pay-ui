@@ -35,10 +35,10 @@
             placeholder="请选择关联适用的终端"
           />
         </a-form-item>
-        <a-form-item label="手机号" name="phone">
+        <a-form-item label="手机号" validate-first name="phone">
           <a-input v-model:value="form.phone" placeholder="请输入用户手机号" />
         </a-form-item>
-        <a-form-item label="邮箱" name="email">
+        <a-form-item label="邮箱" validate-first name="email">
           <a-input v-model:value="form.email" placeholder="请输入用户邮箱" />
         </a-form-item>
       </a-form>
@@ -132,7 +132,7 @@
   function handleOk() {
     formRef?.validate().then(async () => {
       confirmLoading.value = true
-      await update({ ...form, ...diffForm(rawForm, form, 'username', 'password') })
+      await update({ ...form, ...diffForm(rawForm, form, 'username', 'password', 'phone', 'email') })
       createMessage.success('用户更改成功')
       confirmLoading.value = false
       emits('ok')
@@ -153,7 +153,7 @@
    */
   function validateEmailRule() {
     const { email } = form
-    if (rawForm.email === email) {
+    if (!email) {
       return Promise.resolve()
     }
     const { msg, result } = validateEmail(email)
@@ -175,9 +175,9 @@
    */
   function validatePhone() {
     const { phone } = form
-    // if (rawForm.phone === phone) {
-    //   return Promise.resolve()
-    // }
+    if (!phone) {
+      return Promise.resolve()
+    }
     const { msg, result } = validateMobile(phone)
     return result ? Promise.resolve() : Promise.reject(msg)
   }
@@ -186,9 +186,6 @@
    */
   async function validateBindPhone() {
     const { phone, id } = form
-    // if (rawForm.phone === phone) {
-    //   return Promise.resolve()
-    // }
     const { data } = await existsPhoneNotId(phone, id)
     return data ? Promise.reject('手机号已被使用') : Promise.resolve()
   }

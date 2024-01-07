@@ -1,7 +1,6 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
-import { deleteBatchUserAssign } from "/@/views/modules/system/scope/DataScope.api";
 
 /**
  * 分页

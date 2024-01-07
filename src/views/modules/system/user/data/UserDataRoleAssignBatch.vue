@@ -16,12 +16,12 @@
         </a-col>
       </a-row>
       <a-form class="small-from-item" ref="formRef" :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="数据权限" name="dataScopeId">
+        <a-form-item label="数据权限" name="dataRoleId">
           <a-select
             allowClear
-            v-model:value="form.dataScopeId"
+            v-model:value="form.dataRoleId"
             style="width: 100%"
-            :default-value="form.dataScopeId"
+            :default-value="form.dataRoleId"
             :filter-option="search"
             :options="dataScopes"
             placeholder="选择数据权限"
@@ -40,7 +40,7 @@
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { nextTick } from 'vue'
-  import { findAll as dataScopeList } from '/@/views/modules/system/scope/DataScope.api'
+  import { findAll as dataRoleList } from '/@/views/modules/system/scope/DataRole.api'
   import { dropdownTranslate } from '/@/utils/dataUtil'
   import { addUserDataScopeBatch } from '/@/views/modules/system/user/UserAssign.api'
 
@@ -50,7 +50,7 @@
   let dataScopes = $ref<LabeledValue[]>([])
   let form = $ref({
     userIds: [],
-    dataScopeId: undefined as undefined | string,
+    dataRoleId: undefined as undefined | string,
   })
   async function init(ids) {
     visible.value = true
@@ -60,7 +60,7 @@
     })
     form.userIds = ids
     // 获取数据权限列表
-    await dataScopeList().then(({ data }) => {
+    await dataRoleList().then(({ data }) => {
       dataScopes = dropdownTranslate(data, 'name', 'id')
     })
     confirmLoading.value = false
