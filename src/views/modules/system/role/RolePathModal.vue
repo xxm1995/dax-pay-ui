@@ -9,7 +9,7 @@
         :loading="loading"
         :data="tableData"
         :showHeader="true"
-        :tree-config="{ children: 'children' }"
+        :tree-config="{ childrenField: 'children' }"
         :checkbox-config="{ labelField: 'name', checkRowKeys: checkedKeys }"
       >
         <vxe-column type="checkbox" title="权限名称" tree-node />

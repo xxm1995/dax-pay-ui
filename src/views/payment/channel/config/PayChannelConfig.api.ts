@@ -79,7 +79,7 @@ export const existsByCodeNotId = (code: string, id) => {
 
 
 /**
- * 支付通道配置
+ * 支付通道信息
  */
 export interface PayChannelConfig extends BaseEntity {
   // 通道编码
@@ -91,3 +91,5 @@ export interface PayChannelConfig extends BaseEntity {
   // 图片
   image?: string
 }
+
+

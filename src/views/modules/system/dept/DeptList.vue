@@ -32,7 +32,7 @@
         row-id="id"
         ref="xTable"
         border="inner"
-        :tree-config="{ children: 'children' }"
+        :tree-config="{ childrenField: 'children' }"
         :data="tableData"
         :loading="loading"
       >

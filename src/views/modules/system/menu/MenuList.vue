@@ -43,7 +43,7 @@
           <a-button style="margin-left: 8px" @click="allTreeExpand(false)">关闭所有</a-button>
         </template>
       </vxe-toolbar>
-      <vxe-table resizable ref="xTable" border="inner" :loading="loading" :tree-config="{ children: 'children' }" :data="tableData">
+      <vxe-table resizable ref="xTable" border="inner" :loading="loading" :tree-config="{ childrenField: 'children' }" :data="tableData">
         <vxe-column field="title" title="菜单名称" tree-node />
         <vxe-column field="name" title="路由名称" />
         <vxe-column field="menuType" title="菜单类型" :visible="false">

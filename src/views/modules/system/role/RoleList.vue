@@ -28,7 +28,7 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table resizable ref="xTable" border="inner" :loading="loading" :tree-config="{ children: 'children' }" :data="tableData">
+      <vxe-table resizable ref="xTable" border="inner" :loading="loading" :tree-config="{ childrenField: 'children' }" :data="tableData">
         <vxe-column field="name" title="名称" tree-node>
           <template #default="{ row }">
             <a-link @click="show(row)">{{ row.name }}</a-link>
