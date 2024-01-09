@@ -25,7 +25,7 @@
         </vxe-column>
       </vxe-table>
     </div>
-    <pay-channel-info-edit ref="payChannelInfoEdit" />
+    <pay-channel-info-edit ref="payChannelInfoEdit" @ok="queryPage" />
   </div>
 </template>
 <script setup lang="ts">

@@ -6,6 +6,7 @@
         <vxe-column type="seq" width="60" />
         <vxe-column field="code" title="通道编码" />
         <vxe-column field="name" title="支付通道名称" />
+        <vxe-column field="remark" title="备注" />
         <vxe-column fixed="right" width="100" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
@@ -19,6 +20,7 @@
         </vxe-column>
       </vxe-table>
     </div>
+    <pay-way-info-edit ref="payWayInfoEdit" @ok="queryPage" />
   </div>
 </template>
 
@@ -31,6 +33,7 @@
   import { onMounted } from 'vue'
   import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
   import { FormEditType } from '/@/enums/formTypeEnum'
+  import PayWayInfoEdit from './PayWayInfoEdit.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -38,7 +41,7 @@
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
-  const payChannelConfigEdit = $ref<any>()
+  const payWayInfoEdit = $ref<any>()
 
   let urlPrefix = $ref<string>()
   let records = $ref<PayWayInfo[]>([])
@@ -72,11 +75,11 @@
   }
   // 编辑
   function edit(record) {
-    payChannelConfigEdit.init(record.id, FormEditType.Edit)
+    payWayInfoEdit.init(record.id, FormEditType.Edit)
   }
   // 查看
   function show(record) {
-    payChannelConfigEdit.init(record.id, FormEditType.Show)
+    payWayInfoEdit.init(record.id, FormEditType.Show)
   }
 </script>
 

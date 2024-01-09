@@ -51,7 +51,7 @@
           <a-input placeholder="请输入描述" v-model:value="form.bgColor" />
         </a-form-item>
         <a-form-item label="备注" name="remark">
-          <a-textarea placeholder="请输入备注" v-model:value="form.remark" />
+          <a-textarea :disable="showable" placeholder="请输入备注" v-model:value="form.remark" />
         </a-form-item>
       </a-form>
     </a-spin>

@@ -1,13 +1,5 @@
 <template>
-  <basic-modal
-    v-bind="$attrs"
-    :loading="confirmLoading"
-    :width="modalWidth"
-    :title="title"
-    :visible="visible"
-    :mask-closable="showable"
-    @cancel="handleCancel"
-  >
+  <a-modal :loading="confirmLoading" :width="modalWidth" :title="title" :visible="visible" :mask-closable="showable" @cancel="handleCancel">
     <a-spin :spinning="confirmLoading">
       <a-form
         class="small-from-item"
@@ -20,14 +12,32 @@
         <a-form-item label="主键" name="id" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="通道编码" name="code">
+        <a-form-item label="编码" name="code">
           <span>{{ form.code }}</span>
         </a-form-item>
-        <a-form-item label="通道名称" name="name">
+        <a-form-item label="名称" name="name">
           <span>{{ form.name }}</span>
         </a-form-item>
+        <a-form-item label="接口地址" name="api">
+          <span>{{ form.api }}</span>
+        </a-form-item>
+        <a-form-item label="启用接口" name="enable">
+          <a-switch v-model:checked="form.enable" :disabled="showable" />
+        </a-form-item>
+        <a-form-item label="参数签名" name="reqSign">
+          <a-switch v-model:checked="form.reqSign" :disabled="showable" />
+        </a-form-item>
+        <a-form-item label="回调通知" name="notice">
+          <a-switch v-model:checked="form.notice" :disabled="showable" />
+        </a-form-item>
+        <a-form-item label="回调签名" name="noticeSign">
+          <a-switch v-model:checked="form.noticeSign" :disabled="showable" />
+        </a-form-item>
+        <a-form-item label="回调地址" name="noticeUrl">
+          <a-input v-model:value="form.noticeUrl" :disabled="showable" placeholder="请输入回调地址" />
+        </a-form-item>
         <a-form-item label="备注" name="remark">
-          <a-textarea placeholder="请输入备注" v-model:value="form.remark" />
+          <a-textarea :disable="showable" placeholder="请输入备注" v-model:value="form.remark" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -37,7 +47,7 @@
         <a-button v-if="!showable" key="forward" :loading="confirmLoading" type="primary" @click="handleOk">保存</a-button>
       </a-space>
     </template>
-  </basic-modal>
+  </a-modal>
 </template>
 
 <script setup lang="ts">
@@ -47,7 +57,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { nextTick } from 'vue'
   import { FormInstance } from 'ant-design-vue/lib/form'
-  import { get, PayWayInfo, update } from './PayWayInfo.api'
+  import { get, PayApiConfig, update } from './PayApiConfig.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
   import { BasicModal } from '/@/components/Modal'
@@ -67,16 +77,15 @@
     formEditType,
   } = useFormEdit()
   const { existsByServer } = useValidate()
+  const { tokenHeader, uploadAction } = useUpload('/file/upload')
   const { createMessage } = useMessage()
+
+  const emits = defineEmits(['ok'])
 
   // 表单
   const formRef = $ref<FormInstance>()
   let urlPrefix = $ref<string>()
-  let form = $ref<PayWayInfo>({
-    code: '',
-    name: '',
-    remark: '',
-  })
+  let form = $ref<PayApiConfig>({})
   // 入口
   function init(id, editType: FormEditType) {
     initFormEditType(editType)
@@ -93,7 +102,9 @@
     urlPrefix = result.data
   }
 
-  // 获取信息
+  /**
+   * 获取信息
+   */
   function getInfo(id) {
     confirmLoading.value = true
     get(id).then(({ data }) => {
@@ -101,17 +112,22 @@
       confirmLoading.value = false
     })
   }
-  // 保存
+  /**
+   * 更新
+   */
   function handleOk() {
     formRef?.validate().then(async () => {
       confirmLoading.value = true
       await update(form)
       confirmLoading.value = false
+      emits('ok')
       handleCancel()
     })
   }
 
-  // 重置表单
+  /**
+   * 重置表单
+   */
   function resetForm() {
     nextTick(() => {
       formRef?.resetFields()
