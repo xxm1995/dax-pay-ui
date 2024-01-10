@@ -13,20 +13,23 @@
         <a-descriptions-item label="支付记录id">
           {{ form.paymentId }}
         </a-descriptions-item>
-        <a-descriptions-item label="支付通道">
-          {{ dictConvert('PayChannel', form.payChannel) }}
+        <a-descriptions-item label="业务号">
+          {{ form.businessNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="通知消息">
-          <json-preview :data="JSON.parse(form.notifyInfo || '{}')" />
+        <a-descriptions-item label="异步支付通道">
+          {{ dictConvert('PayChannel', form.asyncChannel) }}
         </a-descriptions-item>
-        <a-descriptions-item label="状态">
-          {{ dictConvert('PayNotifyStatus', form.status) }}
+        <a-descriptions-item label="是否关闭成功">
+          {{ form.closed ? '是' : '否' }}
         </a-descriptions-item>
-        <a-descriptions-item label="提示消息" v-if="form.msg">
-          {{ form.msg }}
+        <a-descriptions-item label="错误消息" v-if="form.errorMsg">
+          {{ form.errorMsg }}
         </a-descriptions-item>
-        <a-descriptions-item label="通知时间">
-          {{ form.notifyTime }}
+        <a-descriptions-item label="客户端IP">
+          {{ form.clientIp }}
+        </a-descriptions-item>
+        <a-descriptions-item label="关闭时间">
+          {{ form.createdTime }}
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>
@@ -39,11 +42,10 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { get, PayNotifyRecord } from './PayCallbackRecord.api'
+  import { get, PayCloseRecord } from './PayCloseRecord.api'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import JsonPreview from '/@/components/CodeEditor/src/json-preview/JsonPreview.vue'
   const {
     initFormEditType,
     handleCancel,
@@ -62,13 +64,7 @@
 
   // 表单
   const formRef = $ref<FormInstance>()
-  let form = $ref<PayNotifyRecord>({
-    id: null,
-    paymentId: '',
-    notifyInfo: '',
-    msg: '',
-    notifyTime: '',
-  })
+  let form = $ref<PayCloseRecord>({})
   // 入口
   function init(id) {
     visible.value = true

@@ -7,7 +7,7 @@ import { BaseEntity } from '/#/web'
  */
 export function page(params) {
   return defHttp.get<Result<PageResult<SyncRecord>>>({
-    url: '/pay/sync/page',
+    url: '/record/sync/page',
     params,
   })
 }
@@ -15,10 +15,10 @@ export function page(params) {
 /**
  * 获取单条
  */
-export function get(id) {
+export function get(paymentId) {
   return defHttp.get<Result<SyncRecord>>({
-    url: '/pay/sync/findById',
-    params: { id },
+    url: '/record/sync/findById',
+    params: { paymentId },
   })
 }
 
@@ -28,16 +28,18 @@ export function get(id) {
 export interface SyncRecord extends BaseEntity {
   // 支付记录id
   paymentId?: string
-  // 商户编码
-  mchCode?: string
-  // 商户应用编码
-  mchAppCode?: string
-  // 支付通道
-  payChannel?: string
+  // 业务号
+  businessNo?: string
+  // 同步通道
+  asyncChannel?: string
   // 通知消息
   syncInfo?: string
   // 同步状态
   status?: string
+  // 是否进行修复
+  repairOrder?: boolean
+  // 错误消息
+  errorMsg?: string
   // 同步时间
   syncTime?: string
 }

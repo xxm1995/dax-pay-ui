@@ -15,10 +15,10 @@ export function page(params) {
 /**
  * 获取单条
  */
-export function get(id) {
+export function get(paymentId) {
   return defHttp.get<Result<PayNotifyRecord>>({
     url: '/record/callback/findById',
-    params: { id },
+    params: { paymentId },
   })
 }
 

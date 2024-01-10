@@ -15,10 +15,10 @@ export function page(params) {
 /**
  * 获取单条
  */
-export function get(id) {
+export function get(paymentId) {
   return defHttp.get<Result<PayCloseRecord>>({
     url: '/record/close/findById',
-    params: { id },
+    params: { paymentId },
   })
 }
 

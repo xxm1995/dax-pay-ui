@@ -6,8 +6,8 @@ import { BaseEntity } from '/#/web'
  * 分页
  */
 export function page(params) {
-  return defHttp.get<Result<PageResult<PayCloseRecord>>>({
-    url: '/record/close/page',
+  return defHttp.get<Result<PageResult<PayRepairRecord>>>({
+    url: '/record/repair/page',
     params,
   })
 }
@@ -15,17 +15,17 @@ export function page(params) {
 /**
  * 获取单条
  */
-export function get(id) {
-  return defHttp.get<Result<PayCloseRecord>>({
-    url: '/record/close/findById',
-    params: { id },
+export function get(paymentId) {
+  return defHttp.get<Result<PayRepairRecord>>({
+    url: '/record/repair/findById',
+    params: { paymentId },
   })
 }
 
 /**
  * 支付回调记录
  */
-export interface PayCloseRecord extends BaseEntity {
+export interface PayRepairRecord extends BaseEntity {
   // 支付号
   paymentId?: string
   // 业务号

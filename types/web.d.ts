@@ -27,6 +27,7 @@ export interface TablePageModel<T = any> {
  */
 export interface BaseEntity {
   id?: number | string | null
+  createdTime?: string | null
 }
 
 /**

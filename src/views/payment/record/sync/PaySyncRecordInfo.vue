@@ -3,7 +3,7 @@
     title="查看"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="modalWidth"
+    :width="750"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
@@ -13,20 +13,29 @@
         <a-descriptions-item label="支付记录id">
           {{ form.paymentId }}
         </a-descriptions-item>
-        <a-descriptions-item label="支付通道">
-          {{ dictConvert('PayChannel', form.payChannel) }}
+        <a-descriptions-item label="业务号">
+          {{ form.businessNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="通知消息">
-          <json-preview :data="JSON.parse(form.notifyInfo || '{}')" />
+        <a-descriptions-item label="同步通道">
+          {{ dictConvert('AsyncPayChannel', form.asyncChannel) }}
         </a-descriptions-item>
-        <a-descriptions-item label="状态">
-          {{ dictConvert('PayNotifyStatus', form.status) }}
+        <a-descriptions-item label="同步消息">
+          <json-preview :data="JSON.parse(form.syncInfo || '{}')" />
         </a-descriptions-item>
-        <a-descriptions-item label="提示消息" v-if="form.msg">
-          {{ form.msg }}
+        <a-descriptions-item label="修复">
+          <a-tag>{{ form.repairOrder ? '是' : '否' }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="通知时间">
-          {{ form.notifyTime }}
+        <a-descriptions-item label="修复前订单状态" v-if="form.errorMsg">
+          {{ form.errorMsg }}
+        </a-descriptions-item>
+        <a-descriptions-item label="修复后订单状态">
+          {{ dictConvert('PayStatus', form.afterStatus) }}
+        </a-descriptions-item>
+        <a-descriptions-item label="同步时间">
+          {{ form.syncTime }}
+        </a-descriptions-item>
+        <a-descriptions-item label="客户端IP">
+          {{ form.clientIp }}
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>
@@ -39,7 +48,7 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { get, PayNotifyRecord } from './PayCallbackRecord.api'
+  import { get, SyncRecord } from './PaySyncRecord.api'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
@@ -62,13 +71,7 @@
 
   // 表单
   const formRef = $ref<FormInstance>()
-  let form = $ref<PayNotifyRecord>({
-    id: null,
-    paymentId: '',
-    notifyInfo: '',
-    msg: '',
-    notifyTime: '',
-  })
+  let form = $ref<SyncRecord>({})
   // 入口
   function init(id) {
     visible.value = true

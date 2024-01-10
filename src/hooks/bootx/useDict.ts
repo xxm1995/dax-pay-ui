@@ -35,7 +35,7 @@ function dictConvert(dictCode: string, code) {
  * 获取字典下拉框数据列表
  */
 async function dictDropDown(dictCode: string): Promise<LabeledValue[]> {
-  const list = await getDict()
+  const list = (await getDict()) || []
   return list
     .filter((dict) => dictCode === dict.dictCode)
     .map((o) => {
@@ -46,7 +46,7 @@ async function dictDropDown(dictCode: string): Promise<LabeledValue[]> {
  * 获取字典下拉框数据列表(value值为数字)
  */
 async function dictDropDownNumber(dictCode: string): Promise<LabeledValue[]> {
-  const list = await getDict()
+  const list = (await getDict()) || []
   return list
     .filter((dict) => dictCode === dict.dictCode)
     .map((o) => {
