@@ -14,11 +14,50 @@ export function page(params) {
 }
 
 /**
- * 获取单条
+ * 获取订单
  */
-export function get(id) {
+export function getOrder(id) {
   return defHttp.get<Result<PayOrder>>({
     url: '/order/pay/findById',
+    params: { id },
+  })
+}
+/**
+ * 获取订单扩展信息
+ */
+export function getOrderExtra(id) {
+  return defHttp.get<Result<PayOrderExtra>>({
+    url: '/order/pay/getExtraById',
+    params: { id },
+  })
+}
+
+/**
+ * 获取订单关联支付通道信息
+ */
+export function getPayChannel(paymentId) {
+  return defHttp.get<Result<PayOrderChannel[]>>({
+    url: '/order/pay/getChannels',
+    params: { paymentId },
+  })
+}
+
+/**
+ * 同步支付状态
+ */
+export function sync(id) {
+  return defHttp.post<Result<PayOrder>>({
+    url: '/order/pay/sync',
+    params: { id },
+  })
+}
+
+/**
+ * 关闭支付吉利
+ */
+export function close(id) {
+  return defHttp.post<Result<PayOrder>>({
+    url: '/order/pay/close',
     params: { id },
   })
 }
@@ -32,9 +71,9 @@ export interface PayOrder extends BaseEntity {
   // 标题
   title?: string
   // 是否是异步支付
-  asyncPay: boolean
+  asyncPay?: boolean
   // 是否是组合支付
-  combinationPay: boolean
+  combinationPay?: boolean
   // 异步支付通道
   asyncChannel?: boolean
   // 金额
@@ -84,7 +123,7 @@ export interface PayOrderExtra {
  */
 export interface PayOrderChannel {
   // 支付通道
-  payChannel?: number
+  channel?: number
   // 支付方式
   payWay?: number
   // 金额

@@ -59,7 +59,7 @@ export interface RefundRecord extends BaseEntity {
  */
 export interface RefundableInfo {
   // 支付通道
-  payChannel?: number
+  channel?: number
   // 金额
   amount?: number
 }

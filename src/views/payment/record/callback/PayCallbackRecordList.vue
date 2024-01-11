@@ -59,7 +59,6 @@
   const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
-  //
   let asyncPayChannelList = $ref<LabeledValue[]>([])
   let PayCallbackStatusList = $ref<LabeledValue[]>([])
 
@@ -89,7 +88,7 @@
   const payCallbackRecordInfo = $ref<any>()
 
   onMounted(() => {
-    init()
+    initData()
     vxeBind()
     queryPage()
   })
@@ -100,7 +99,7 @@
   /**
    * 初始化
    */
-  async function init() {
+  async function initData() {
     asyncPayChannelList = await dictDropDown('AsyncPayChannel')
     PayCallbackStatusList = await dictDropDown('PayCallbackStatus')
   }

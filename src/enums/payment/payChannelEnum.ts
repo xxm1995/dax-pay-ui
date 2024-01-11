@@ -9,6 +9,5 @@ export enum payChannelEnum {
   WALLET = 'wallet_pay',
   VOUCHER = 'voucher_pay',
   CREDIT_CARD = 'credit_pay',
-  APPLE_PAY = 'apple_pay',
   AGGREGATION = 'aggregation_pay',
 }
