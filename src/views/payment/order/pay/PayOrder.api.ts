@@ -2,6 +2,7 @@ import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
 import { RefundableInfo } from '/@/views/payment/order/refund/RefundRecord.api'
+import { PaySyncResult } from "/@/views/payment/record/sync/PaySyncRecord.api";
 
 /**
  * 分页
@@ -46,17 +47,17 @@ export function getPayChannel(paymentId) {
  * 同步支付状态
  */
 export function sync(id) {
-  return defHttp.post<Result<PayOrder>>({
+  return defHttp.post<Result<PaySyncResult>>({
     url: '/order/pay/sync',
     params: { id },
   })
 }
 
 /**
- * 关闭支付吉利
+ * 关闭支付记录
  */
 export function close(id) {
-  return defHttp.post<Result<PayOrder>>({
+  return defHttp.post<Result<void>>({
     url: '/order/pay/close',
     params: { id },
   })
@@ -81,7 +82,7 @@ export interface PayOrder extends BaseEntity {
   // 可退款余额
   refundableBalance?: number
   // 可退款信息
-  refundableInfo?: RefundableInfo[]
+  refundableInfos?: RefundableInfo[]
   // 支付状态
   payStatus?: number
   // 支付时间

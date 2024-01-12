@@ -43,3 +43,20 @@ export interface SyncRecord extends BaseEntity {
   // 同步时间
   syncTime?: string
 }
+/**
+ * 支付同步结果
+ */
+export interface PaySyncResult {
+  // 支付网关同步状态
+  gatewayStatus?: string
+  // 是否同步成功
+  success?: boolean
+  // 是否进行了修复
+  repair?: boolean
+  // 支付单同步前状态
+  beforeStatus?: string
+  // 支付单同步后状态
+  afterStatus?: string
+  // 支付单同步后状态
+  errorMsg?: string
+}

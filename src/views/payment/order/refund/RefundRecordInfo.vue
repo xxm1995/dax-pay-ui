@@ -3,22 +3,22 @@
     title="查看"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="modalWidth"
+    :width="750"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
+    <a-descriptions bordered title="" :column="{ md: 2, sm: 1, xs: 1 }">
       <a-descriptions-item label="付款记录ID">
         {{ form.paymentId }}
       </a-descriptions-item>
       <a-descriptions-item label="业务ID">
         {{ form.businessId }}
       </a-descriptions-item>
-      <a-descriptions-item label="多次退款业务号">
+      <a-descriptions-item label="退款业务号">
         {{ form.refundRequestNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="标题">
+      <a-descriptions-item label="原支付标题">
         {{ form.title }}
       </a-descriptions-item>
       <a-descriptions-item label="退款金额">
@@ -37,7 +37,7 @@
         {{ form.clientIp }}
       </a-descriptions-item>
       <a-descriptions-item label="退款信息">
-        <a-tag v-for="o in form.refundableInfo" :key="o.payChannel">{{ dictConvert('PayChannel', o.payChannel) }}: {{ o.amount }}</a-tag>
+        <a-tag v-for="o in form.refundableInfo" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.amount }}</a-tag>
       </a-descriptions-item>
       <a-descriptions-item v-if="form.errorCode" label="错误码">
         {{ form.errorCode }}

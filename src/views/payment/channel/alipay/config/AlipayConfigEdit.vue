@@ -13,33 +13,23 @@
         <a-form-item label="主键" name="id" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
+        <!--        <a-form-item v-show="showable" label="是否启用" name="activity">-->
+        <!--          <a-tag>{{ form.enable ? '启用' : '未启用' }}</a-tag>-->
+        <!--        </a-form-item>-->
         <a-form-item label="AppId" name="appId">
           <a-input v-model:value="form.appId" :disabled="showable" placeholder="请输入支付宝商户AppId" />
         </a-form-item>
         <a-form-item label="异步通知URL" name="notifyUrl">
           <a-input v-model:value="form.notifyUrl" :disabled="showable" placeholder="请输入异步通知URL" />
         </a-form-item>
-        <a-form-item label="同步通知URL" name="returnUrl">
-          <a-input v-model:value="form.returnUrl" :disabled="showable" placeholder="请输入同步通知URL" />
-        </a-form-item>
         <a-form-item label="支付网关URL" name="serverUrl">
           <a-input v-model:value="form.serverUrl" :disabled="showable" placeholder="请输入支付网关URL" />
-        </a-form-item>
-        <a-form-item label="默认支付超时配置(分钟)" name="expireTime">
-          <a-input-number
-            :min="1"
-            :max="12000"
-            :step="1"
-            :disabled="showable"
-            placeholder="请输入超时配置"
-            v-model:value="form.expireTime"
-          />
         </a-form-item>
         <a-form-item label="支持支付方式" name="payWayList">
           <a-select
             allowClear
             mode="multiple"
-            v-model:value="form.payWayList"
+            v-model:value="form.payWays"
             :disabled="showable"
             :options="payWayList"
             style="width: 100%"
@@ -48,9 +38,6 @@
         </a-form-item>
         <a-form-item label="沙箱环境" name="sandbox">
           <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.sandbox" :disabled="showable" />
-        </a-form-item>
-        <a-form-item v-show="showable" label="是否启用" name="activity">
-          <a-tag>{{ form.activity ? '启用' : '未启用' }}</a-tag>
         </a-form-item>
         <a-form-item label="认证方式" name="authType">
           <a-select allowClear :disabled="showable" v-model:value="form.authType" style="width: 100%" placeholder="选择认证方式">
@@ -89,7 +76,6 @@
           </a-input>
         </a-form-item>
         <a-form-item v-show="form.authType === 'cart'" label="支付宝公钥证书" name="alipayCert">
-          <!--          <a-textarea :rows="5" v-model:value="form.alipayCert" :disabled="showable" placeholder="请输入支付宝公钥证书内容" />-->
           <a-upload
             v-if="!form.alipayCert"
             :disabled="showable"
@@ -151,14 +137,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, nextTick, reactive } from 'vue'
+  import { computed, nextTick } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, AlipayConfig, findPayWayList } from './AlipayConfig.api'
+  import { update, AlipayConfig, findPayWays, getConfig } from './AlipayConfig.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicDrawer } from '/@/components/Drawer'
-  import { MchAppPayConfigResult } from '/@/views/modules/payment/app/MchApplication.api'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { useUpload } from '/@/hooks/bootx/useUpload'
   import { useMessage } from '/@/hooks/web/useMessage'
@@ -179,7 +164,7 @@
     formEditType,
   } = useFormEdit()
   // 读取证书内容
-  const { tokenHeader, uploadAction } = useUpload('/alipay/readPem')
+  const { tokenHeader, uploadAction } = useUpload('/alipay/config/readPem')
   const { createMessage } = useMessage()
 
   const formRef = $ref<FormInstance>()
@@ -187,7 +172,6 @@
   let editType = $ref<FormEditType>()
   let payWayList = $ref<LabeledValue[]>([])
   let form = $ref({
-    // name: '',
     appId: '',
     notifyUrl: '',
     returnUrl: '',
@@ -200,18 +184,17 @@
     alipayRootCert: '',
     privateKey: '',
     expireTime: 15,
-    payWayList: [],
+    payWays: [],
     sandbox: false,
     remark: '',
   } as AlipayConfig)
-  let rawForm
+  let rawForm: any
   // 校验
   const rules = computed(() => {
     return {
       // name: [{ required: true, message: '请输入配置名称' }],
       appId: [{ required: true, message: '请输入AppId' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
-      returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],
       serverUrl: [{ required: true, message: '请输入请求网关地址' }],
       authType: [{ required: true, message: '请选择认证方式' }],
       signType: [{ required: true, message: '请选择加密类型' }],
@@ -227,47 +210,42 @@
   })
   // 事件
   const emits = defineEmits(['ok'])
-  // 入口
-  function init(record: MchAppPayConfigResult) {
-    findPayWayList().then(({ data }) => {
+  /**
+   * 入口
+   */
+  function init() {
+    visible.value = true
+    resetForm()
+    getInfo()
+  }
+  /**
+   * 获取信息
+   */
+  function getInfo() {
+    confirmLoading.value = true
+    findPayWays().then(({ data }) => {
       payWayList = data
     })
-    editType = record.configId ? FormEditType.Edit : FormEditType.Add
-    initFormEditType(editType)
-    resetForm()
-    form.mchCode = record.mchCode
-    form.mchAppCode = record.mchAppCode
-    getInfo(record.configId, editType)
-  }
-  // 获取信息
-  function getInfo(id, editType: FormEditType) {
-    if ([FormEditType.Edit].includes(editType)) {
-      confirmLoading.value = true
-      get(id).then(({ data }) => {
-        rawForm = { ...data }
-        form = data
-        confirmLoading.value = false
-      })
-    } else {
+    getConfig().then(({ data }) => {
+      rawForm = { ...data }
+      form = data
       confirmLoading.value = false
-    }
+    })
   }
-  // 保存
+  /**
+   * 更新
+   */
   function handleOk() {
     formRef?.validate().then(async () => {
       confirmLoading.value = true
-      if (formEditType.value === FormEditType.Add) {
-        await add(form)
-      } else if (formEditType.value === FormEditType.Edit) {
-        await update({
-          ...form,
-          ...diffForm(rawForm, form, 'appId', 'alipayPublicKey', 'appCert', 'alipayCert', 'alipayRootCert', 'privateKey'),
-        })
-      }
-      confirmLoading.value = false
-      handleCancel()
-      emits('ok')
+      await update({
+        ...form,
+        ...diffForm(rawForm, form, 'appId', 'alipayPublicKey', 'appCert', 'alipayCert', 'alipayRootCert', 'privateKey'),
+      })
     })
+    confirmLoading.value = false
+    handleCancel()
+    emits('ok')
   }
   /**
    * 文件上传
@@ -287,7 +265,9 @@
     }
   }
 
-  // 重置表单
+  /**
+   * 重置表单
+   */
   function resetForm() {
     nextTick(() => {
       formRef?.resetFields()

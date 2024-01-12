@@ -112,9 +112,7 @@
   import Icon from '/@/components/Icon/src/Icon.vue'
   import { useUpload } from '/@/hooks/bootx/useUpload'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { MchAppPayConfigResult } from '/@/views/modules/payment/app/MchApplication.api'
   import { LabeledValue } from 'ant-design-vue/lib/select'
-  import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
 
   const {
     initFormEditType,
@@ -178,7 +176,7 @@
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  function init(record: MchAppPayConfigResult) {
+  function init(record) {
     findPayWayList().then(({ data }) => {
       payWayList = data
     })

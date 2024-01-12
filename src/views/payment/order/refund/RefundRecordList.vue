@@ -21,7 +21,7 @@
         <vxe-column field="refundTime" title="退款时间" />
         <vxe-column field="refundStatus" title="状态">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('PayRefundStatus', row.refundStatus) }}</a-tag>
+            <a-tag>{{ dictConvert('PayRefundStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
@@ -41,13 +41,13 @@
         @page-change="handleTableChange"
       />
       <refund-record-info ref="refundRecordInfo" @ok="queryPage" />
-      <payment-info ref="paymentInfo" />
+      <pay-order-info ref="payOrderInfo" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted } from 'vue'
+import { computed, onMounted } from "vue";
   import { $ref } from 'vue/macros'
   import { page } from './RefundRecord.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
@@ -58,47 +58,51 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import PaymentInfo from '/@/views/modules/payment/order/payment/PaymentInfo.vue'
+  import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
+  let payRefundStatusList = $ref<LabeledValue[]>([])
+
   // 查询条件
-  const fields = [
-    { field: 'paymentId', type: STRING, name: '支付单号', placeholder: '请输入支付单号' },
-    {
-      field: 'payChannel',
-      type: LIST,
-      name: '支付通道',
-      placeholder: '请选择支付通道',
-      selectList: dictDropDown('AsyncPayChannel'),
-    },
-    {
-      field: 'status',
-      type: LIST,
-      name: '处理状态',
-      placeholder: '请选择处理状态',
-      selectList: dictDropDown('PayRefundStatus'),
-    },
-    { field: 'businessId', type: STRING, name: '业务ID', placeholder: '请输入业务ID' },
-    { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
-    { field: 'mchCode', type: STRING, name: '商户编码', placeholder: '请输入商户编码' },
-    { field: 'mchAppCode', type: STRING, name: '应用编码', placeholder: '请输入应用编码' },
-  ] as QueryField[]
+  const fields = computed(() => {
+    return [
+      { field: 'paymentId', type: STRING, name: '支付单号', placeholder: '请输入支付单号' },
+      {
+        field: 'status',
+        type: LIST,
+        name: '处理状态',
+        placeholder: '请选择处理状态',
+        selectList: payRefundStatusList,
+      },
+      { field: 'businessNo', type: STRING, name: '业务ID', placeholder: '请输入业务号' },
+      { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
+    ] as QueryField[]
+  })
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const refundRecordInfo = $ref<any>()
-  const paymentInfo = $ref<any>()
+  const payOrderInfo = $ref<any>()
 
   onMounted(() => {
+    initData()
     vxeBind()
     queryPage()
   })
   function vxeBind() {
     xTable?.connect(xToolbar as VxeToolbarInstance)
+  }
+
+  /**
+   * 初始化数据`````````````````````````````````````````````````````````````````````````````````````````````````````
+   */
+  async function initData() {
+    payRefundStatusList = await dictDropDown('PayRefundStatus')
   }
 
   /**
@@ -118,11 +122,11 @@
    * 查看
    */
   function show(record) {
-    refundRecordInfo.init(record.id, FormEditType.Show)
+    refundRecordInfo.init(record.id)
   }
 
   function showPayment(paymentId) {
-    paymentInfo.init(paymentId, 'show')
+    payOrderInfo.init(paymentId, 'show')
   }
 </script>
 

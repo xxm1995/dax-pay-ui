@@ -44,7 +44,7 @@
           <a-tag v-for="o in orderChannel" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.amount }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="可退款信息">
-          <a-tag v-for="o in order.refundableInfo" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.amount }}</a-tag>
+          <a-tag v-for="o in order.refundableInfos" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.amount }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="客户IP">
           {{ orderExtra.clientIp }}

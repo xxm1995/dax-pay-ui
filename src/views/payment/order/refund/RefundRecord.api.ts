@@ -7,7 +7,7 @@ import { BaseEntity } from '/#/web'
  */
 export function page(params) {
   return defHttp.get<Result<PageResult<RefundRecord>>>({
-    url: '/pay/refund/page',
+    url: '/order/refund/page',
     params,
   })
 }
@@ -15,10 +15,20 @@ export function page(params) {
 /**
  * 获取单条
  */
-export function get(id) {
+export function get(paymentId) {
   return defHttp.get<Result<RefundRecord>>({
-    url: '/pay/refund/findById',
-    params: { id },
+    url: '/order/refund/findById',
+    params: { paymentId },
+  })
+}
+
+/**
+ * 发起退款
+ */
+export function refund(params) {
+  return defHttp.post<Result<void>>({
+    url: '/order/refund/refund',
+    data: params,
   })
 }
 

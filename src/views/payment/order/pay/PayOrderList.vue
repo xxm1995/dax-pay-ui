@@ -183,8 +183,10 @@
       content: '是否同步支付信息',
       onOk: () => {
         loading.value = true
-        sync(record.id).then(() => {
+        sync(record.id).then(({ data }) => {
+          // TODO 后期可以根据返回结果进行相应的处理
           createMessage.success('同步成功')
+          console.log(data)
           queryPage()
         })
       },
