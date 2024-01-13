@@ -121,7 +121,6 @@
    */
   function initClientAndLoginType() {
     findClients().then(({ data }) => {
-      console.log(data)
       clients = data
     })
     findLoginTypes().then(({ data }) => {

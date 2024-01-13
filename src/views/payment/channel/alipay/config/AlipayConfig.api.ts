@@ -34,10 +34,10 @@ export function findPayWays() {
  * 支付宝配置
  */
 export interface AlipayConfig extends BaseEntity {
-  // 是否启用
-  enable?: boolean
   // 支付宝商户appId
   appId?: string
+  // 是否启用
+  enable: boolean
   // 服务器异步通知页面路径
   notifyUrl?: string
   // 页面跳转同步通知页面路径

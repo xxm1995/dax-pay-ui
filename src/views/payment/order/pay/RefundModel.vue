@@ -15,7 +15,7 @@
         </a-form-item>
       </template>
       <a-form-item label="原因" name="reason">
-        <a-textarea v-model:value="form.reason" rows="3" />
+        <a-textarea v-model:value="form.reason" :rows="3" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -36,7 +36,7 @@
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { nextTick } from "vue";
+  import { nextTick } from 'vue'
 
   const {
     initFormEditType,
@@ -76,7 +76,6 @@
     getOrder(id).then(({ data }) => {
       const { id, refundableInfos } = data
       form.paymentId = id as string
-      console.log(data)
       form.refundChannels = [...(refundableInfos as RefundableInfo[])]
       confirmLoading.value = false
     })

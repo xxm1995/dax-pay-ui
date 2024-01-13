@@ -84,7 +84,7 @@ export interface PayOrder extends BaseEntity {
   // 可退款信息
   refundableInfos?: RefundableInfo[]
   // 支付状态
-  payStatus?: number
+  status?: number
   // 支付时间
   payTime?: string
   // 过期时间

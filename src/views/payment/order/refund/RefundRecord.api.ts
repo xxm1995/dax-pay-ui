@@ -53,7 +53,7 @@ export interface RefundRecord extends BaseEntity {
   // 可退款信息
   refundableInfo?: RefundableInfo[]
   // 退款状态
-  refundStatus?: number
+  status?: number
   // 支付时间
   refundTime?: string
   // 客户ip

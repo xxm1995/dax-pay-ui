@@ -14,9 +14,9 @@
             <a-tag>{{ dictConvert('AsyncPayChannel', row.asyncChannel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="status" title="同步状态">
+        <vxe-column field="status" title="同步结果">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('PaySyncStatus', row.status) }}</a-tag>
+            <a-tag>{{ dictConvert('PaySyncStatus', row.gatewayStatus) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="repairOrder" title="修复">

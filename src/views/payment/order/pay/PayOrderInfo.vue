@@ -29,7 +29,7 @@
           {{ order.refundableBalance }}
         </a-descriptions-item>
         <a-descriptions-item label="支付状态">
-          {{ dictConvert('PayStatus', order.payStatus) }}
+          <a-tag>{{ dictConvert('PayStatus', order.status) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="异步支付">
           {{ order.asyncPay ? '是' : '否' }}

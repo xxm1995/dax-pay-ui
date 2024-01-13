@@ -1,5 +1,5 @@
 <template>
-  <basic-drawer showFooter v-bind="$attrs" width="60%" :title="title" :visible="visible" :maskClosable="false" @close="handleCancel">
+  <basic-drawer showFooter v-bind="$attrs" width="60%" title="微信支付配置" :visible="visible" :maskClosable="false" @close="handleCancel">
     <a-spin :spinning="confirmLoading">
       <a-form
         class="small-from-item"
@@ -19,44 +19,34 @@
         <a-form-item label="应用编号" name="wxAppId">
           <a-input v-model:value="form.wxAppId" :disabled="showable" placeholder="请输入微信应用AppId" />
         </a-form-item>
-        <a-form-item label="API版本" name="apiVersion">
-          <a-radio-group v-model:value="form.apiVersion" button-style="solid">
-            <a-radio-button value="apiV2"> Api_V2 </a-radio-button>
-            <a-radio-button value="apiV3"> Api_V3 </a-radio-button>
-          </a-radio-group>
-        </a-form-item>
         <a-form-item label="AppSecret" name="appSecret">
           <a-input v-model:value="form.appSecret" :disabled="showable" placeholder="APPID对应的接口密码，用于获取接口调用凭证时使用" />
         </a-form-item>
-        <a-form-item label="超时配置(分钟)" name="expireTime">
-          <a-input-number
-            placeholder="请输入默认超时配置"
-            :min="1"
-            :max="12000"
-            :step="1"
-            :disabled="showable"
-            v-model:value="form.expireTime"
-          />
+        <a-form-item label="是否启用" name="enable">
+          <a-switch v-model:checked="form.enable" />
         </a-form-item>
-        <a-form-item label="异步通知UR" name="notifyUrl">
-          <a-input v-model:value="form.notifyUrl" :disabled="showable" placeholder="请输入服务器异步通知页面路径" />
+        <a-form-item name="notifyUrl">
+          <template #label>
+            <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 异步通知地址 </basic-title>
+          </template>
+          <a-input v-model:value="form.notifyUrl" :disabled="showable" placeholder="请输入服务器异步通知地址" />
         </a-form-item>
-        <a-form-item label="同步通知URL" name="returnUrl">
-          <a-input v-model:value="form.returnUrl" :disabled="showable" placeholder="请输入页面跳转同步通知页面路径" />
+        <a-form-item name="returnUrl">
+          <template #label>
+            <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 同步通知地址 </basic-title>
+          </template>
+          <a-input v-model:value="form.returnUrl" :disabled="showable" placeholder="请输入页面跳转同步通知地址" />
         </a-form-item>
-        <a-form-item label="支持支付方式" name="payWayList">
+        <a-form-item label="支持支付方式" name="payWays">
           <a-select
             allowClear
             mode="multiple"
             :disabled="showable"
             :options="payWayList"
-            v-model:value="form.payWayList"
+            v-model:value="form.payWays"
             style="width: 100%"
             placeholder="选择支付方式"
           />
-        </a-form-item>
-        <a-form-item label="是否启用" v-show="showable" name="activity">
-          <a-tag>{{ form.activity ? '启用' : '未启用' }}</a-tag>
         </a-form-item>
         <a-form-item label="APIv2密钥" name="apiKeyV2">
           <a-textarea :rows="3" :disabled="showable" v-model:value="form.apiKeyV2" placeholder="请输入APIv2密钥" />
@@ -64,7 +54,10 @@
         <a-form-item label="APIv3密钥" name="apiKeyV3">
           <a-textarea :rows="3" :disabled="showable" v-model:value="form.apiKeyV3" placeholder="请输入APIv3密钥" />
         </a-form-item>
-        <a-form-item label="p12证书" name="p12">
+        <a-form-item name="p12">
+          <template #label>
+            <basic-title helpMessage="例如退款、转账时，必须要配置p12证书才可以执行"> p12证书 </basic-title>
+          </template>
           <a-upload
             v-if="!form.p12"
             :disabled="showable"
@@ -105,7 +98,7 @@
   import { computed, nextTick } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { add, get, update, findPayWayList, WechatPayConfig } from './WechatPayConfig.api'
+  import { getConfig, update, findPayWayList, WechatPayConfig } from './WechatPayConfig.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicDrawer } from '/@/components/Drawer'
@@ -113,6 +106,7 @@
   import { useUpload } from '/@/hooks/bootx/useUpload'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { LabeledValue } from 'ant-design-vue/lib/select'
+  import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
 
   const {
     initFormEditType,
@@ -130,28 +124,27 @@
     formEditType,
   } = useFormEdit()
   // 文件上传
-  const { tokenHeader, uploadAction } = useUpload('/wechat/pay/toBase64')
+  const { tokenHeader, uploadAction } = useUpload('/wechat/pay/config/toBase64')
   const { createMessage } = useMessage()
 
   let editType = $ref<FormEditType>()
 
   // 表单
   const formRef = $ref<FormInstance>()
-  let rawForm
+  let rawForm: any
   let form = $ref<WechatPayConfig>({
     id: null,
+    enable: false,
     wxMchId: '',
     wxAppId: '',
     appSecret: '',
     p12: null,
     apiKeyV2: '',
     apiKeyV3: '',
-    apiVersion: 'apiV2',
     notifyUrl: '',
     returnUrl: '',
-    expireTime: 15,
-    payWayList: [],
-    // sandbox: false,
+    payWays: [],
+    sandbox: false,
     remark: '',
   })
   // 校验
@@ -160,14 +153,14 @@
       wxMchId: [{ required: true, message: '请输入商户号' }],
       wxAppId: [{ required: true, message: '请输入应用编号' }],
       appSecret: [{ required: true, message: '请输入AppSecret' }],
+      enable: [{ required: true, message: '请选择是否启用' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
       returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],
       apiVersion: [{ required: true, message: '请选择支付API版本' }],
-      apiKeyV2: [{ required: form.apiVersion === 'apiV2', message: '请输入V2秘钥' }],
-      apiKeyV3: [{ required: form.apiVersion === 'apiV3', message: '请输入V3秘钥' }],
-      p12: [{ required: form.apiVersion === 'apiV3', message: '请上传p12证书' }],
-      expireTime: [{ required: true, message: '请输入默认超时配置' }],
-      payWayList: [{ required: true, message: '请选择支持的支付类型' }],
+      apiKeyV2: [{ required: true, message: '请输入V2秘钥' }],
+      // apiKeyV3: [{ required: true, message: '请输入V3秘钥' }],
+      // p12: [{ required: true, message: '请上传p12证书' }],
+      payWays: [{ required: true, message: '请选择支持的支付类型' }],
     } as Record<string, Rule[]>
   })
 
@@ -175,45 +168,37 @@
 
   // 事件
   const emits = defineEmits(['ok'])
-  // 入口
-  function init(record) {
+  /**
+   * 入口
+   */
+  function init() {
+    visible.value = true
+    resetForm()
+    getInfo()
+  }
+  // 获取信息
+  function getInfo() {
+    confirmLoading.value = true
     findPayWayList().then(({ data }) => {
       payWayList = data
     })
-    editType = record.configId ? FormEditType.Edit : FormEditType.Add
-    initFormEditType(editType)
-    resetForm()
-    form.mchCode = record.mchCode
-    form.mchAppCode = record.mchAppCode
-    getInfo(record.configId, editType)
-  }
-  // 获取信息
-  function getInfo(id, editType: FormEditType) {
-    if ([FormEditType.Edit].includes(editType)) {
-      confirmLoading.value = true
-      get(id).then(({ data }) => {
-        rawForm = { ...data }
-        form = data
-        confirmLoading.value = false
-      })
-    } else {
+    getConfig().then(({ data }) => {
+      rawForm = { ...data }
+      form = data
       confirmLoading.value = false
-    }
+    })
   }
   // 保存
   function handleOk() {
     formRef?.validate().then(async () => {
       confirmLoading.value = true
-      if (formEditType.value === FormEditType.Add) {
-        await add(form)
-      } else if (formEditType.value === FormEditType.Edit) {
-        await update({
-          ...form,
-          ...diffForm(rawForm, form, 'wxMchId', 'wxAppId', 'p12', 'appSecret', 'apiKeyV2', 'apiKeyV3', 'keyPem', 'certPem'),
-        })
-      }
+      await update({
+        ...form,
+        ...diffForm(rawForm, form, 'wxMchId', 'wxAppId', 'p12', 'appSecret', 'apiKeyV2', 'apiKeyV3'),
+      })
       confirmLoading.value = false
       handleCancel()
+      createMessage.success('保存成功')
       emits('ok')
     })
   }

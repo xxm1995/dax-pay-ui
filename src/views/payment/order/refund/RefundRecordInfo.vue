@@ -31,7 +31,7 @@
         {{ form.refundTime }}
       </a-descriptions-item>
       <a-descriptions-item label="退款状态">
-        <a-tag>{{ dictConvert('PayRefundStatus', form.refundStatus) }}</a-tag>
+        <a-tag>{{ dictConvert('PayRefundStatus', form.status) }}</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="退款终端ip">
         {{ form.clientIp }}
@@ -77,20 +77,7 @@
   const { dictConvert } = useDict()
   // 表单
   const formRef = $ref<FormInstance>()
-  let form = $ref<RefundRecord>({
-    id: null,
-    paymentId: '',
-    refundRequestNo: '',
-    userId: '',
-    title: '',
-    amount: 0,
-    refundableInfo: [],
-    refundStatus: 0,
-    refundTime: '',
-    clientIp: '',
-    errorCode: '',
-    errorMsg: '',
-  })
+  let form = $ref<RefundRecord>({})
 
   // 事件
   const emits = defineEmits(['ok'])

@@ -20,19 +20,23 @@
           {{ dictConvert('AsyncPayChannel', form.asyncChannel) }}
         </a-descriptions-item>
         <a-descriptions-item label="同步消息">
-          <json-preview :data="JSON.parse(form.syncInfo || '{}')" />
+          <json-preview :data="XEUtils.toStringJSON(form.syncInfo || '{}')" />
         </a-descriptions-item>
-        <a-descriptions-item label="修复">
+        <a-descriptions-item label="同步结果">
+          {{ dictConvert('PaySyncResult', form.gatewayStatus) }}
+        </a-descriptions-item>
+        <a-descriptions-item label="是否修复">
           <a-tag>{{ form.repairOrder ? '是' : '否' }}</a-tag>
-        </a-descriptions-item>
-        <a-descriptions-item label="修复前订单状态" v-if="form.errorMsg">
-          {{ form.errorMsg }}
         </a-descriptions-item>
         <a-descriptions-item label="修复后订单状态">
           {{ dictConvert('PayStatus', form.afterStatus) }}
         </a-descriptions-item>
         <a-descriptions-item label="同步时间">
           {{ form.syncTime }}
+        </a-descriptions-item>
+
+        <a-descriptions-item label="错误信息" v-if="form.errorMsg">
+          {{ form.errorMsg }}
         </a-descriptions-item>
         <a-descriptions-item label="客户端IP">
           {{ form.clientIp }}
@@ -53,6 +57,8 @@
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   import JsonPreview from '/@/components/CodeEditor/src/json-preview/JsonPreview.vue'
+  import XEUtils from 'xe-utils'
+
   const {
     initFormEditType,
     handleCancel,
@@ -78,6 +84,8 @@
     confirmLoading.value = true
     get(id).then(({ data }) => {
       form = data
+      console.log(XEUtils.toStringJSON(data.syncInfo))
+      console.log(JSON.parse(data.syncInfo))
       confirmLoading.value = false
     })
   }

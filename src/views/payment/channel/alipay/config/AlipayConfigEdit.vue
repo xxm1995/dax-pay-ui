@@ -1,5 +1,5 @@
 <template>
-  <basic-drawer showFooter v-bind="$attrs" width="60%" :title="title" :visible="visible" :maskClosable="false" @close="handleCancel">
+  <basic-drawer showFooter v-bind="$attrs" width="60%" title="支付宝支付配置" :visible="visible" :maskClosable="false" @close="handleCancel">
     <a-spin :spinning="confirmLoading">
       <a-form
         class="small-from-item"
@@ -11,21 +11,30 @@
         :wrapper-col="wrapperCol"
       >
         <a-form-item label="主键" name="id" :hidden="true">
-          <a-input v-model:value="form.id" :disabled="showable" />
+          <a-input v-model:value="form.id" />
         </a-form-item>
-        <!--        <a-form-item v-show="showable" label="是否启用" name="activity">-->
-        <!--          <a-tag>{{ form.enable ? '启用' : '未启用' }}</a-tag>-->
-        <!--        </a-form-item>-->
         <a-form-item label="AppId" name="appId">
-          <a-input v-model:value="form.appId" :disabled="showable" placeholder="请输入支付宝商户AppId" />
+          <a-input v-model:value="form.appId" placeholder="请输入支付宝商户AppId" />
         </a-form-item>
-        <a-form-item label="异步通知URL" name="notifyUrl">
-          <a-input v-model:value="form.notifyUrl" :disabled="showable" placeholder="请输入异步通知URL" />
+        <a-form-item label="是否启用" name="enable">
+          <a-switch v-model:checked="form.enable" />
+        </a-form-item>
+        <a-form-item name="notifyUrl">
+          <template #label>
+            <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 异步通知地址 </basic-title>
+          </template>
+          <a-input v-model:value="form.notifyUrl" placeholder="请输入异步通知URL" />
+        </a-form-item>
+        <a-form-item name="returnUrl">
+          <template #label>
+            <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 同步通知地址 </basic-title>
+          </template>
+          <a-input v-model:value="form.returnUrl" placeholder="请输入同步通知URL" />
         </a-form-item>
         <a-form-item label="支付网关URL" name="serverUrl">
-          <a-input v-model:value="form.serverUrl" :disabled="showable" placeholder="请输入支付网关URL" />
+          <a-input v-model:value="form.serverUrl" placeholder="请输入支付网关URL" />
         </a-form-item>
-        <a-form-item label="支持支付方式" name="payWayList">
+        <a-form-item label="支持支付方式" name="payWays">
           <a-select
             allowClear
             mode="multiple"
@@ -37,21 +46,21 @@
           />
         </a-form-item>
         <a-form-item label="沙箱环境" name="sandbox">
-          <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.sandbox" :disabled="showable" />
+          <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.sandbox" />
         </a-form-item>
         <a-form-item label="认证方式" name="authType">
-          <a-select allowClear :disabled="showable" v-model:value="form.authType" style="width: 100%" placeholder="选择认证方式">
+          <a-select allowClearv-model:value="form.authType" style="width: 100%" placeholder="选择认证方式">
             <a-select-option key="key">公钥模式</a-select-option>
             <a-select-option key="cart">证书模式</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item label="签名类型" name="signType">
-          <a-select allowClear :disabled="showable" v-model:value="form.signType" style="width: 100%" placeholder="选择签名类型">
+          <a-select allowClearv-model:value="form.signType" style="width: 100%" placeholder="选择签名类型">
             <a-select-option key="RSA2">RSA2秘钥</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item v-show="form.authType === 'key'" label="支付宝公钥" name="alipayPublicKey">
-          <a-textarea :rows="5" v-model:value="form.alipayPublicKey" :disabled="showable" placeholder="请输入支付宝公钥" />
+          <a-textarea :rows="5" v-model:value="form.alipayPublicKey" placeholder="请输入支付宝公钥" />
         </a-form-item>
         <a-form-item v-show="form.authType === 'cart'" label="应用公钥证书" name="appCert">
           <a-upload
@@ -120,10 +129,10 @@
           </a-input>
         </a-form-item>
         <a-form-item label="应用私钥" name="privateKey">
-          <a-textarea :rows="5" v-model:value="form.privateKey" :disabled="showable" placeholder="请输入应用私钥" />
+          <a-textarea :rows="5" v-model:value="form.privateKey" placeholder="请输入应用私钥" />
         </a-form-item>
         <a-form-item label="备注" name="remark">
-          <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
+          <a-textarea v-model:value="form.remark" placeholder="请输入备注" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -148,6 +157,7 @@
   import { useUpload } from '/@/hooks/bootx/useUpload'
   import { useMessage } from '/@/hooks/web/useMessage'
   import Icon from '/@/components/Icon/src/Icon.vue'
+  import BasicTitle from "/@/components/Basic/src/BasicTitle.vue";
   const {
     initFormEditType,
     handleCancel,
@@ -173,6 +183,7 @@
   let payWayList = $ref<LabeledValue[]>([])
   let form = $ref({
     appId: '',
+    enable: false,
     notifyUrl: '',
     returnUrl: '',
     serverUrl: '',
@@ -183,7 +194,6 @@
     alipayCert: '',
     alipayRootCert: '',
     privateKey: '',
-    expireTime: 15,
     payWays: [],
     sandbox: false,
     remark: '',
@@ -192,9 +202,10 @@
   // 校验
   const rules = computed(() => {
     return {
-      // name: [{ required: true, message: '请输入配置名称' }],
       appId: [{ required: true, message: '请输入AppId' }],
+      enable: [{ required: true, message: '请选择是否启用' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
+      returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],
       serverUrl: [{ required: true, message: '请输入请求网关地址' }],
       authType: [{ required: true, message: '请选择认证方式' }],
       signType: [{ required: true, message: '请选择加密类型' }],
@@ -205,7 +216,7 @@
       privateKey: [{ required: true, message: '请输入支付私钥' }],
       sandbox: [{ required: true, message: '请选择是否为沙箱环境' }],
       expireTime: [{ required: true, message: '请输入默认超时配置' }],
-      payWayList: [{ required: true, message: '请选择支持的支付类型' }],
+      payWays: [{ required: true, message: '请选择支持的支付类型' }],
     } as Record<string, Rule[]>
   })
   // 事件
@@ -242,10 +253,11 @@
         ...form,
         ...diffForm(rawForm, form, 'appId', 'alipayPublicKey', 'appCert', 'alipayCert', 'alipayRootCert', 'privateKey'),
       })
+      confirmLoading.value = false
+      createMessage.success('保存成功')
+      handleCancel()
+      emits('ok')
     })
-    confirmLoading.value = false
-    handleCancel()
-    emits('ok')
   }
   /**
    * 文件上传

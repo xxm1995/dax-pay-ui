@@ -41,12 +41,11 @@
 </script>
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-basic-title';
-
   .@{prefix-cls} {
     position: relative;
     display: flex;
     padding-left: 7px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 24px;
     color: @text-color-base;

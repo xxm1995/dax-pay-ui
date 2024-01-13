@@ -34,14 +34,22 @@ export interface SyncRecord extends BaseEntity {
   asyncChannel?: string
   // 通知消息
   syncInfo?: string
-  // 同步状态
-  status?: string
+  // 网关返回状态
+  gatewayStatus?: string
   // 是否进行修复
   repairOrder?: boolean
+  // 支付单修复前状态
+  beforeStatus?: string
+  // 支付单修复后状态
+  afterStatus?: string
   // 错误消息
   errorMsg?: string
   // 同步时间
   syncTime?: string
+  // 终端ip
+  clientIp?: string
+  // 请求链路ID
+  reqId?: string
 }
 /**
  * 支付同步结果
