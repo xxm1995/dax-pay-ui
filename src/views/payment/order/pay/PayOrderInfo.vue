@@ -1,6 +1,6 @@
 <template>
   <basic-modal
-    title="查看"
+    title="查看支付单"
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="modalWidth"
@@ -10,7 +10,7 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions title="" :column="{ md: 2, sm: 1, xs: 1 }">
-        <a-descriptions-item label="支付ID">
+        <a-descriptions-item label="支付号">
           {{ order.id }}
         </a-descriptions-item>
         <a-descriptions-item label="业务号">

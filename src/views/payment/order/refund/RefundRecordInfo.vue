@@ -1,6 +1,6 @@
 <template>
   <basic-modal
-    title="查看"
+    title="退款订单"
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="750"
@@ -8,14 +8,14 @@
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-descriptions bordered title="" :column="{ md: 2, sm: 1, xs: 1 }">
-      <a-descriptions-item label="付款记录ID">
+    <a-descriptions title="" :column="{ md: 2, sm: 1, xs: 1 }">
+      <a-descriptions-item label="原支付号">
         {{ form.paymentId }}
       </a-descriptions-item>
-      <a-descriptions-item label="业务ID">
-        {{ form.businessId }}
+      <a-descriptions-item label="原业务号">
+        {{ form.businessNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="退款业务号">
+      <a-descriptions-item label="退款号">
         {{ form.refundRequestNo }}
       </a-descriptions-item>
       <a-descriptions-item label="原支付标题">

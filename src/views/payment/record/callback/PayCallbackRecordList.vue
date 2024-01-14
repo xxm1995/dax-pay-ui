@@ -65,7 +65,7 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'paymentId', type: STRING, name: '支付单号', placeholder: '请输入支付单号' },
+      { field: 'paymentId', type: STRING, name: '支付号', placeholder: '请输入完整支付号' },
       {
         field: 'payChannel',
         type: LIST,

@@ -36,10 +36,10 @@ export function refund(params) {
  * 退款记录
  */
 export interface RefundRecord extends BaseEntity {
-  // 支付记录id
+  // 原支付记录id
   paymentId?: string
-  // 关联业务id
-  businessId?: string
+  // 原业务号
+  businessNo?: string
   // 异步方式关联退款请求号
   refundRequestNo?: string
   // 用户id

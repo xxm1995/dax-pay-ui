@@ -22,7 +22,11 @@ export default function <T>(queryPageCallback: CallableFunction) {
   const batchOperateFlag = ref(false)
   // 超级查询条件生效状态
   const superQueryFlag = ref(false)
-
+  // 排序条件
+  const sortParam = reactive({
+    sortField: null,
+    asc: false,
+  })
   // 不可以被重新赋值, 否则会失去绑定
   const { pages, pagination } = model
   /**
@@ -41,6 +45,14 @@ export default function <T>(queryPageCallback: CallableFunction) {
     batchOperateFlag.value = false
     pages.current = currentPage
     pages.size = pageSize
+    queryPageCallback()
+  }
+  /**
+   * 排序条件变动
+   */
+  function sortChange({ order, property }) {
+    sortParam.sortField = order ? property : null
+    sortParam.asc = order === 'asc'
     queryPageCallback()
   }
   /**
@@ -87,7 +99,9 @@ export default function <T>(queryPageCallback: CallableFunction) {
     pagination,
     batchOperateFlag,
     superQueryFlag,
+    sortParam,
     query,
+    sortChange,
     resetPage,
     pageQueryResHandel,
     handleTableChange,

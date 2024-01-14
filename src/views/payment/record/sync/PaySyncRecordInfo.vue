@@ -84,8 +84,6 @@
     confirmLoading.value = true
     get(id).then(({ data }) => {
       form = data
-      console.log(XEUtils.toStringJSON(data.syncInfo))
-      console.log(JSON.parse(data.syncInfo))
       confirmLoading.value = false
     })
   }

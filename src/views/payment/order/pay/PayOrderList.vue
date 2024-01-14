@@ -14,12 +14,12 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="id" title="支付ID" />
-        <vxe-column field="businessId" title="业务ID" />
+        <vxe-column field="id" title="支付号" sortable width="170" />
+        <vxe-column field="businessNo" title="业务号" />
         <vxe-column field="title" title="标题" />
         <vxe-column field="amount" title="金额(分)" sortable />
         <vxe-column field="refundableBalance" title="可退余额(分)" sortable />
-        <vxe-column field="status" title="支付状态" sortable>
+        <vxe-column field="status" title="支付状态">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayStatus', row.status) }}</a-tag>
           </template>
@@ -34,7 +34,7 @@
             <a-tag>{{ row.combinationPayMode ? '是' : '否' }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="asyncPayChannel" title="异步支付方式">
+        <vxe-column field="asyncChannel" title="异步支付方式">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayChannel', row.asyncChannel) }}</a-tag>
           </template>
@@ -97,7 +97,7 @@
   import { LabeledValue } from 'ant-design-vue/lib/select'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, resetQuery, resetQueryParams, pagination, pages, model, loading, superQueryFlag } =
+  const { handleTableChange, pageQueryResHandel, sortChange, resetQueryParams, pagination, pages, sortParam, model, loading } =
     useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
@@ -108,18 +108,13 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'paymentId', type: STRING, name: '支付ID', placeholder: '请输入支付ID' },
+      { field: 'paymentId', type: STRING, name: '支付号', placeholder: '请输入完整支付号' },
       { field: 'businessNo', type: STRING, name: '业务号', placeholder: '请输入业务号' },
       { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
       { field: 'errorCode', name: '错误码', type: STRING },
-      { field: 'asyncPayChannel', name: '异步支付方式', type: LIST, selectList: cayChannelList },
-      { field: 'payStatus', name: '支付状态', type: LIST, selectList: payStatusList },
+      { field: 'asyncChannel', name: '异步支付方式', type: LIST, selectList: cayChannelList },
+      { field: 'status', name: '支付状态', type: LIST, selectList: payStatusList },
     ] as QueryField[]
-  })
-
-  let sortParam = $ref({
-    sortField: 'createTime',
-    asc: false,
   })
 
   const xTable = $ref<VxeTableInstance>()
@@ -141,7 +136,7 @@
    */
   async function initData() {
     cayChannelList = await dictDropDown('AsyncPayChannel')
-    payStatusList = await dictDropDown('PayCallbackStatus')
+    payStatusList = await dictDropDown('PayStatus')
   }
   /**
    * 分页查询
@@ -155,15 +150,6 @@
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
-  }
-
-  /**
-   * 排序条件变动
-   */
-  function sortChange({ order, property }) {
-    sortParam.sortField = order ? property : null
-    sortParam.asc = order === 'asc'
-    queryPage()
   }
 
   /**
