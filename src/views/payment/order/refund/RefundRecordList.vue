@@ -138,8 +138,12 @@
     refundRecordInfo.init(record.id)
   }
 
+  /**
+   * 查看支付单信息
+   * @param paymentId
+   */
   function showPayment(paymentId) {
-    payOrderInfo.init(paymentId, 'show')
+    payOrderInfo.init(paymentId)
   }
 </script>
 

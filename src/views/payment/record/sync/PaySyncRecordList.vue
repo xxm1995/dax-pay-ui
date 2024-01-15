@@ -7,22 +7,35 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="paymentId" title="支付号" />
+        <vxe-column field="paymentId" title="原支付号" width="170" sortable>
+          <template #default="{ row }">
+            <a @click="showPayment(row.paymentId)">
+              {{ row.paymentId }}
+            </a>
+          </template>
+        </vxe-column>
         <vxe-column field="businessNo" title="业务号" />
         <vxe-column field="channel" title="同步通道">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('AsyncPayChannel', row.asyncChannel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="status" title="同步结果">
+        <vxe-column field="status" title="同步结果" width="140">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PaySyncStatus', row.gatewayStatus) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="repairOrder" title="修复">
+        <vxe-column field="repairOrder" title="是否修复">
           <template #default="{ row }">
             <a-tag v-if="row.repairOrder" color="green">是</a-tag>
             <a-tag v-else>否</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="repairOrderId" title="关联修复号" width="170">
+          <template #default="{ row }">
+            <a @click="showRepairInfo(row.repairOrderId)">
+              {{ row.repairOrderId }}
+            </a>
           </template>
         </vxe-column>
         <vxe-column field="errorMsg" title="错误消息" />
@@ -44,7 +57,9 @@
         @page-change="handleTableChange"
       />
     </div>
-    <pay-sync-record-info ref="paySyncRecordInfo"/>
+    <pay-sync-record-info ref="paySyncRecordInfo" />
+    <pay-order-info ref="payOrderInfo" />
+    <pay-repair-record-info ref="payRepairRecordInfo" />
   </div>
 </template>
 
@@ -60,6 +75,8 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import PaySyncRecordInfo from './PaySyncRecordInfo.vue'
+  import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
+  import PayRepairRecordInfo from '/@/views/payment/record/repair/PayRepairRecordInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -75,10 +92,10 @@
       { field: 'paymentId', type: STRING, name: '支付单号', placeholder: '请输入支付单号' },
       { field: 'businessNo', type: STRING, name: '业务号', placeholder: '请输入业务号' },
       {
-        field: 'status',
+        field: 'gatewayStatus',
         type: LIST,
-        name: '同步状态',
-        placeholder: '请选择同步状态',
+        name: '同步结果',
+        placeholder: '请选择同步结果',
         selectList: syncStatusList,
       },
       {
@@ -94,6 +111,8 @@
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const paySyncRecordInfo = $ref<any>()
+  const payOrderInfo = $ref<any>()
+  const payRepairRecordInfo = $ref<any>()
 
   onMounted(() => {
     init()
@@ -130,6 +149,20 @@
    */
   function show(record) {
     paySyncRecordInfo.init(record.id)
+  }
+
+  /**
+   * 查看支付单信息
+   * @param paymentId
+   */
+  function showPayment(paymentId) {
+    payOrderInfo.init(paymentId)
+  }
+  /**
+   * 查看支付单信息
+   */
+  function showRepairInfo(repairId) {
+    payRepairRecordInfo.init(repairId)
   }
 </script>
 

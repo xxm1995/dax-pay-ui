@@ -7,7 +7,13 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="paymentId" title="支付号" />
+        <vxe-column field="paymentId" title="原支付号" width="170" sortable>
+          <template #default="{ row }">
+            <a @click="showPayment(row.paymentId)">
+              {{ row.paymentId }}
+            </a>
+          </template>
+        </vxe-column>
         <vxe-column field="businessNo" title="业务号" />
         <vxe-column field="repairSource" title="修复来源">
           <template #default="{ row }">
@@ -53,6 +59,7 @@
       />
     </div>
     <pay-repair-record-info ref="payRepairRecordInfo" />
+    <pay-order-info ref="payOrderInfo" />
   </div>
 </template>
 
@@ -68,6 +75,7 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import PayRepairRecordInfo from './PayRepairRecordInfo.vue'
+  import PayOrderInfo from "/@/views/payment/order/pay/PayOrderInfo.vue";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -76,6 +84,7 @@
 
   let repairSourceList = $ref<LabeledValue[]>([])
   let repairTypeList = $ref<LabeledValue[]>([])
+  let asyncChannelList = $ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
@@ -96,12 +105,20 @@
         placeholder: '请选择修复类型',
         selectList: repairTypeList,
       },
+      {
+        field: 'asyncChannel',
+        type: LIST,
+        name: '修复通道',
+        placeholder: '请选择修复通道',
+        selectList: asyncChannelList,
+      },
     ] as QueryField[]
   })
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const payRepairRecordInfo = $ref<any>()
+  const payOrderInfo = $ref<any>()
 
   onMounted(() => {
     init()
@@ -118,6 +135,7 @@
   async function init() {
     repairSourceList = await dictDropDown('PayRepairSource')
     repairTypeList = await dictDropDown('PayRepairType')
+    asyncChannelList = await dictDropDown('AsyncPayChannel')
   }
 
   /**
@@ -138,6 +156,14 @@
    */
   function show(record) {
     payRepairRecordInfo.init(record.id)
+  }
+
+  /**
+   * 查看支付单信息
+   * @param paymentId
+   */
+  function showPayment(paymentId) {
+    payOrderInfo.init(paymentId)
   }
 </script>
 

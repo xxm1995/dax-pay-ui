@@ -7,7 +7,13 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="paymentId" title="支付号" />
+        <vxe-column field="paymentId" title="原支付号" width="170" sortable>
+          <template #default="{ row }">
+            <a @click="showPayment(row.paymentId)">
+              {{ row.paymentId }}
+            </a>
+          </template>
+        </vxe-column>
         <vxe-column field="payChannel" title="支付通道">
           <template #default="{ row }">
             {{ dictConvert('PayChannel', row.payChannel) }}
@@ -37,7 +43,7 @@
         @page-change="handleTableChange"
       />
       <pay-callback-record-info ref="payCallbackRecordInfo" />
-    </div>
+      <pay-order-info ref="payOrderInfo" /> </div>
   </div>
 </template>
 
@@ -53,6 +59,7 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import PayCallbackRecordInfo from './PayCallbackRecordInfo.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
+  import PayOrderInfo from "/@/views/payment/order/pay/PayOrderInfo.vue";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -86,6 +93,7 @@
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const payCallbackRecordInfo = $ref<any>()
+  const payOrderInfo = $ref<any>()
 
   onMounted(() => {
     initData()
@@ -122,6 +130,14 @@
    */
   function show(record) {
     payCallbackRecordInfo.init(record.id)
+  }
+
+  /**
+   * 查看支付单信息
+   * @param paymentId
+   */
+  function showPayment(paymentId) {
+    payOrderInfo.init(paymentId)
   }
 </script>
 
