@@ -39,7 +39,7 @@
           </template>
         </vxe-column>
         <vxe-column field="errorMsg" title="错误消息" />
-        <vxe-column field="syncTime" title="同步时间" />
+        <vxe-column field="createTime" title="同步时间" />
         <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>

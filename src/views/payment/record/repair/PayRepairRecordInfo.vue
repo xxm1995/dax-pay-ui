@@ -32,7 +32,7 @@
           {{ dictConvert('PayStatus', form.afterStatus) }}
         </a-descriptions-item>
         <a-descriptions-item label="修复时间">
-          {{ form.createdTime }}
+          {{ form.createTime }}
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>

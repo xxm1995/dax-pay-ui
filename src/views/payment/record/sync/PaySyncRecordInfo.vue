@@ -1,6 +1,6 @@
 <template>
   <basic-modal
-    title="查看"
+    title="查看同步信息"
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="750"
@@ -9,8 +9,8 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
-        <a-descriptions-item label="支付记录id">
+      <a-descriptions title="" :column="{ md: 1, sm: 1, xs: 1 }">
+        <a-descriptions-item label="支付号">
           {{ form.paymentId }}
         </a-descriptions-item>
         <a-descriptions-item label="业务号">
@@ -23,7 +23,7 @@
           <json-preview :data="XEUtils.toStringJSON(form.syncInfo || '{}')" />
         </a-descriptions-item>
         <a-descriptions-item label="同步结果">
-          {{ dictConvert('PaySyncResult', form.gatewayStatus) }}
+          {{ dictConvert('PaySyncStatus', form.gatewayStatus) }}
         </a-descriptions-item>
         <a-descriptions-item label="是否修复">
           <a-tag>{{ form.repairOrder ? '是' : '否' }}</a-tag>
@@ -32,7 +32,7 @@
           {{ dictConvert('PayStatus', form.afterStatus) }}
         </a-descriptions-item>
         <a-descriptions-item label="同步时间">
-          {{ form.syncTime }}
+          {{ form.createTime }}
         </a-descriptions-item>
 
         <a-descriptions-item label="错误信息" v-if="form.errorMsg">

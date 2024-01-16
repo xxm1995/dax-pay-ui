@@ -6,19 +6,24 @@
           <template #renderItem="{ item }">
             <a-card hoverable style="max-width: 200px; margin-bottom: 50px" @click="setting(item)">
               <template #cover>
-                <a-image :preview="false" :src="urlPrefix + String(item?.img)" :fallback="fallbackImg" />
+                <a-image
+                  style="width: 200px; height: 200px"
+                  :preview="false"
+                  :src="urlPrefix + String(item?.iconId)"
+                  :fallback="fallbackImg"
+                />
               </template>
               <a-card-meta :title="item.name">
-<!--                <template #description>-->
-<!--                  <template v-if="item.enable">-->
-<!--                    <a-badge dot color="green" />-->
-<!--                    <span style="color: green">已启用</span>-->
-<!--                  </template>-->
-<!--                  <template v-else>-->
-<!--                    <a-badge dot color="red" />-->
-<!--                    <span style="color: red">停用</span>-->
-<!--                  </template>-->
-<!--                </template>-->
+                <template #description>
+                  <template v-if="item.enable">
+                    <a-badge dot color="green" />
+                    <span style="color: green">已启用</span>
+                  </template>
+                  <template v-else>
+                    <a-badge dot color="red" />
+                    <span style="color: red">停用</span>
+                  </template>
+                </template>
               </a-card-meta>
             </a-card>
           </template>

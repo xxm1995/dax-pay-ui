@@ -45,7 +45,7 @@ export interface SyncRecord extends BaseEntity {
   // 错误消息
   errorMsg?: string
   // 同步时间
-  syncTime?: string
+  createTime?: string
   // 终端ip
   clientIp?: string
   // 请求链路ID

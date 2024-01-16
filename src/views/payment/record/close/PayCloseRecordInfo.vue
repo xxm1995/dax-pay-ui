@@ -29,7 +29,7 @@
           {{ form.clientIp }}
         </a-descriptions-item>
         <a-descriptions-item label="关闭时间">
-          {{ form.createdTime }}
+          {{ form.createTime }}
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>

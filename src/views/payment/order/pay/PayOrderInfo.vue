@@ -76,6 +76,9 @@
         <a-descriptions-item label="过期时间">
           {{ order.expiredTime }}
         </a-descriptions-item>
+        <a-descriptions-item label="创建时间">
+          {{ order.createTime }}
+        </a-descriptions-item>
       </a-descriptions>
     </a-spin>
     <template #footer>
