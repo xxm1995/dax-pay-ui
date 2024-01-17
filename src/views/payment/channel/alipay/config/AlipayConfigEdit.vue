@@ -1,5 +1,13 @@
 <template>
-  <basic-drawer showFooter v-bind="$attrs" width="60%" title="支付宝支付配置" :visible="visible" :maskClosable="false" @close="handleCancel">
+  <basic-drawer
+    showFooter
+    v-bind="$attrs"
+    width="60%"
+    title="支付宝支付配置"
+    :visible="visible"
+    :maskClosable="false"
+    @close="handleCancel"
+  >
     <a-spin :spinning="confirmLoading">
       <a-form
         class="small-from-item"
@@ -17,7 +25,7 @@
           <a-input v-model:value="form.appId" placeholder="请输入支付宝商户AppId" />
         </a-form-item>
         <a-form-item label="是否启用" name="enable">
-          <a-switch v-model:checked="form.enable" />
+          <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.enable" />
         </a-form-item>
         <a-form-item name="notifyUrl">
           <template #label>
@@ -157,7 +165,7 @@
   import { useUpload } from '/@/hooks/bootx/useUpload'
   import { useMessage } from '/@/hooks/web/useMessage'
   import Icon from '/@/components/Icon/src/Icon.vue'
-  import BasicTitle from "/@/components/Basic/src/BasicTitle.vue";
+  import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
   const {
     initFormEditType,
     handleCancel,

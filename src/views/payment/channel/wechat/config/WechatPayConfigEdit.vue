@@ -48,6 +48,9 @@
             placeholder="选择支付方式"
           />
         </a-form-item>
+        <a-form-item label="沙箱环境" name="sandbox">
+          <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.sandbox" />
+        </a-form-item>
         <a-form-item label="APIv2密钥" name="apiKeyV2">
           <a-textarea :rows="3" :disabled="showable" v-model:value="form.apiKeyV2" placeholder="请输入APIv2密钥" />
         </a-form-item>
@@ -158,6 +161,7 @@
       returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],
       apiVersion: [{ required: true, message: '请选择支付API版本' }],
       apiKeyV2: [{ required: true, message: '请输入V2秘钥' }],
+      sandbox: [{ required: true, message: '请选择是否为沙箱环境' }],
       // apiKeyV3: [{ required: true, message: '请输入V3秘钥' }],
       // p12: [{ required: true, message: '请上传p12证书' }],
       payWays: [{ required: true, message: '请选择支持的支付类型' }],
