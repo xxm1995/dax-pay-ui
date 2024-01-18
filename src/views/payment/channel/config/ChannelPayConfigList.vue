@@ -30,20 +30,20 @@
         </a-list>
       </a-spin>
     </div>
-    <channel-pay-config-edit ref="channelPayConfigEdit" />
+    <channel-pay-config-edit ref="channelPayConfigEdit" @ok="init" />
   </div>
 </template>
 
 <script setup lang="ts">
   import { $ref } from 'vue/macros'
   import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
-  import { findAll, PayChannelInfo } from '/@/views/payment/system/payinfo/channel/ChannelInfo.api'
+  import { findAll, PayChannelConfig } from '/@/views/payment/system/channel/ChannelConfig.api'
   import ChannelPayConfigEdit from '/@/views/payment/channel/config/ChannelPayConfigEdit.vue'
   import { onMounted } from 'vue'
 
   let confirmLoading = $ref(false)
   let visible = $ref(false)
-  let channelConfigs = $ref<PayChannelInfo[]>([])
+  let channelConfigs = $ref<PayChannelConfig[]>([])
   let urlPrefix = $ref<string>()
 
   const channelPayConfigEdit = $ref<any>()
@@ -74,7 +74,7 @@
   /**
    * 打开支付设置界面
    */
-  function setting(record: PayChannelInfo) {
+  function setting(record: PayChannelConfig) {
     channelPayConfigEdit.show(record)
   }
 </script>

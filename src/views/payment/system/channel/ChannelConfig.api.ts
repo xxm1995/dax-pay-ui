@@ -6,8 +6,8 @@ import { BaseEntity } from '/#/web'
  * 列表
  */
 export function findAll() {
-  return defHttp.get<Result<PayChannelInfo[]>>({
-    url: '/pay/channel/info/findAll',
+  return defHttp.get<Result<PayChannelConfig[]>>({
+    url: '/pay/channel/config/findAll',
   })
 }
 
@@ -15,8 +15,8 @@ export function findAll() {
  * 获取单条
  */
 export function get(id) {
-  return defHttp.get<Result<PayChannelInfo>>({
-    url: '/pay/channel/info/findById',
+  return defHttp.get<Result<PayChannelConfig>>({
+    url: '/pay/channel/config/findById',
     params: { id },
   })
 }
@@ -24,17 +24,17 @@ export function get(id) {
 /**
  * 更新
  */
-export function update(param: PayChannelInfo){
+export function update(param: PayChannelConfig){
   return defHttp.post<Result<void>>({
-    url: '/pay/channel/info/update',
+    url: '/pay/channel/config/update',
     data: param,
   })
 }
 
 /**
- * 支付通道信息
+ * 支付通道配着
  */
-export interface PayChannelInfo extends BaseEntity {
+export interface PayChannelConfig extends BaseEntity {
   // 通道编码
   code?: string
   // 支付通道名称

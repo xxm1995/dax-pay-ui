@@ -6,7 +6,7 @@
   import { $ref } from 'vue/macros'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { payChannelEnum } from '/@/enums/payment/payChannelEnum'
-  import { PayChannelInfo } from '/@/views/payment/system/payinfo/channel/ChannelInfo.api'
+  import { PayChannelConfig } from '/@/views/payment/system/channel/ChannelConfig.api'
   import AlipayConfigEdit from '/@/views/payment/channel/alipay/config/AlipayConfigEdit.vue'
   import WechatPayConfigEdit from '/@/views/payment/channel/wechat/config/WechatPayConfigEdit.vue'
 
@@ -20,7 +20,7 @@
   /**
    * 打开
    */
-  function show(record: PayChannelInfo) {
+  function show(record: PayChannelConfig) {
     switch (record.code) {
       case payChannelEnum.ALI: {
         alipay.init(record)

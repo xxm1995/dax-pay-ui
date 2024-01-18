@@ -25,19 +25,19 @@
         </vxe-column>
       </vxe-table>
     </div>
-    <pay-channel-info-edit ref="payChannelInfoEdit" @ok="queryPage" />
+    <pay-channel-config-edit ref="payChannelConfigEdit" @ok="queryPage" />
   </div>
 </template>
 <script setup lang="ts">
   import { VxeTable, VxeTableInstance, VxeToolbar, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '/@/hooks/web/useMessage'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import { findAll, PayChannelInfo } from './ChannelInfo.api'
+  import { findAll, PayChannelConfig } from './ChannelConfig.api'
   import { onMounted } from 'vue'
   import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { $ref } from 'vue/macros'
-  import PayChannelInfoEdit from './PayChannelInfoEdit.vue'
+  import PayChannelConfigEdit from './PayChannelConfigEdit.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -48,10 +48,10 @@
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
-  const payChannelInfoEdit = $ref<any>()
+  const payChannelConfigEdit = $ref<any>()
 
   let urlPrefix = $ref<string>()
-  let records = $ref<PayChannelInfo[]>([])
+  let records = $ref<PayChannelConfig[]>([])
 
   onMounted(() => {
     vxeBind()
@@ -82,11 +82,11 @@
   }
   // 编辑
   function edit(record) {
-    payChannelInfoEdit.init(record.id, FormEditType.Edit)
+    payChannelConfigEdit.init(record.id, FormEditType.Edit)
   }
   // 查看
   function show(record) {
-    payChannelInfoEdit.init(record.id, FormEditType.Show)
+    payChannelConfigEdit.init(record.id, FormEditType.Show)
   }
 </script>
 
