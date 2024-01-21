@@ -49,7 +49,7 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
-      <refund-record-info ref="refundRecordInfo" @ok="queryPage" />
+      <refund-order-info ref="refundOrderInfo" @ok="queryPage" />
       <pay-order-info ref="payOrderInfo" />
     </div>
   </div>
@@ -58,9 +58,9 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page } from './RefundRecord.api'
+  import { page } from './RefundOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import RefundRecordInfo from './RefundRecordInfo.vue'
+  import RefundOrderInfo from './RefundOrderInfo.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
@@ -98,7 +98,7 @@
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
-  const refundRecordInfo = $ref<any>()
+  const refundOrderInfo = $ref<any>()
   const payOrderInfo = $ref<any>()
 
   onMounted(() => {
@@ -135,7 +135,7 @@
    * 查看
    */
   function show(record) {
-    refundRecordInfo.init(record.id)
+    refundOrderInfo.init(record.id)
   }
 
   /**

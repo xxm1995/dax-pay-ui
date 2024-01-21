@@ -6,7 +6,7 @@ import { BaseEntity } from '/#/web'
  * 分页
  */
 export function page(params) {
-  return defHttp.get<Result<PageResult<RefundRecord>>>({
+  return defHttp.get<Result<PageResult<RefundOrder>>>({
     url: '/order/refund/page',
     params,
   })
@@ -16,7 +16,7 @@ export function page(params) {
  * 获取单条
  */
 export function get(paymentId) {
-  return defHttp.get<Result<RefundRecord>>({
+  return defHttp.get<Result<RefundOrder>>({
     url: '/order/refund/findById',
     params: { paymentId },
   })
@@ -35,7 +35,7 @@ export function refund(params) {
 /**
  * 退款记录
  */
-export interface RefundRecord extends BaseEntity {
+export interface RefundOrder extends BaseEntity {
   // 原支付记录id
   paymentId?: string
   // 原业务号

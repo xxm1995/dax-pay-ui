@@ -1,7 +1,7 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
-import { RefundableInfo } from '/@/views/payment/order/refund/RefundRecord.api'
+import { RefundableInfo } from '/src/views/payment/order/refund/RefundOrder.api'
 import { PaySyncResult } from "/@/views/payment/record/sync/PaySyncRecord.api";
 
 /**

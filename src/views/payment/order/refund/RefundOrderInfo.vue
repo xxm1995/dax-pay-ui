@@ -56,7 +56,7 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { get, RefundRecord } from './RefundRecord.api'
+  import { get, RefundOrder } from './RefundOrder.api'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
@@ -77,7 +77,7 @@
   const { dictConvert } = useDict()
   // 表单
   const formRef = $ref<FormInstance>()
-  let form = $ref<RefundRecord>({})
+  let form = $ref<RefundOrder>({})
 
   // 事件
   const emits = defineEmits(['ok'])
