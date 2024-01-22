@@ -3,11 +3,21 @@ import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
 
 /**
+ * 创建对账订单
+ */
+export function create(params: any) {
+  return defHttp.post<ReconcileOrder>({
+    url: '/order/reconcile/create',
+    data: params,
+  })
+}
+
+/**
  * 分页
  */
 export function page(params: any) {
-  return defHttp.get<PageResult<ReconcileOrder>>({
-    url: '/reconcile/page',
+  return defHttp.get<Result<PageResult<ReconcileOrder>>>({
+    url: '/order/reconcile/page',
     params,
   })
 }
@@ -16,8 +26,38 @@ export function page(params: any) {
  * 查看单条
  */
 export function get(id: string) {
-  return defHttp.get<ReconcileOrder>({
-    url: '/reconcile/get',
+  return defHttp.get<Result<ReconcileOrder>>({
+    url: '/order/reconcile/findById',
+    params: { id },
+  })
+}
+
+/**
+ * 明细分页
+ */
+export function pageDetail(params) {
+  return defHttp.get<Result<PageResult<ReconcileDetail>>>({
+    url: '/order/reconcile/pageDetail',
+    params,
+  })
+}
+
+/**
+ * 明细详情
+ */
+export function getDetail(id: string) {
+  return defHttp.get<Result<ReconcileDetail>>({
+    url: '/order/reconcile/findDetailById',
+    params: { id },
+  })
+}
+
+/**
+ * 下载对账单
+ */
+export function downAndSave(id: any) {
+  return defHttp.post<any>({
+    url: '/order/reconcile/downAndSave',
     params: { id },
   })
 }

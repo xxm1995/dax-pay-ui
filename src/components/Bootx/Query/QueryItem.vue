@@ -37,7 +37,7 @@
         v-else-if="field.type === DATE"
         style="width: 100%"
         :placeholder="field.placeholder ? field.placeholder : '请选择日期'"
-        :valueFormat="field.format ? field.format : 'yyyy-MM-DD'"
+        :valueFormat="field.format ? field.format : 'YYYY-MM-DD'"
         v-model:value="queryParams[field.field]"
       />
       <!-- 时间 -->
@@ -56,7 +56,7 @@
         v-else-if="field.type === DATE_TIME"
         style="width: 100%"
         :placeholder="field.placeholder ? field.placeholder : '请选择日期时间'"
-        :valueFormat="field.format ? field.format : 'yyyy-MM-DD HH:mm:ss'"
+        :valueFormat="field.format ? field.format : 'YYYY-MM-DD HH:mm:ss'"
         v-model:value="queryParams[field.field]"
       />
       <!-- 默认文本输入 -->
