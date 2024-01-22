@@ -1,25 +1,19 @@
 <template>
   <basic-drawer forceRender v-bind="$attrs" title="字典列表" width="60%" :visible="visible" @close="visible = false">
-    <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
-      <template #buttons>
-        <a-space>
-          <a-button type="primary" pre-icon="ant-design:plus-outlined" @click="add">新建</a-button>
-        </a-space>
-      </template>
-    </vxe-toolbar>
+    <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
       <vxe-column type="seq" width="60" />
       <vxe-column field="title" title="商品名称" />
-      <vxe-column field="orderId" title="本地订单号" />
-      <vxe-column field="gatewayOrderNo" title="字典项名称" />
+      <vxe-column field="amount" title="交易金额" />
+      <vxe-column field="paymentId" title="本地订单ID" />
+      <vxe-column field="refundId" title="本地退款ID" />
+      <vxe-column field="gatewayOrderNo" title="网关订单号" />
       <vxe-column field="type" title="交易类型">
         <template #default="{ row }">
-          <a-tag v-if="row.type" color="green">启用</a-tag>
-          <a-tag v-else color="red">停用</a-tag>
+          <a-tag v-if="row.type === 'pay'">支付</a-tag>
+          <a-tag v-if="row.type === 'refund'">停用</a-tag>
         </template>
       </vxe-column>
-      <vxe-column field="amount" title="交易金额" />
-      <vxe-column field="remark" title="备注" />
       <vxe-column field="createTime" title="创建时间" />
       <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
         <template #default="{ row }">
@@ -37,20 +31,19 @@
       :total="pagination.total"
       @page-change="handleTableChange"
     />
-    <reconcile-detail-info ref="reconcileDetailInfo" />"
+    <reconcile-detail-info ref="reconcileDetailInfo" />
   </basic-drawer>
 </template>
 
 <script setup lang="ts">
   import { nextTick, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page } from './ReconcileOrder.api'
+  import { pageDetail, ReconcileOrder } from "./ReconcileOrder.api";
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import ReconcileDetailInfo from './ReconcileDetailInfo.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { QueryField } from '/@/components/Bootx/Query/Query'
-  import { Dict } from '/@/views/modules/system/dict/Dict.api'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
 
   // 使用hooks
@@ -60,7 +53,7 @@
   // 查询条件
   const fields = [] as QueryField[]
   let visible = $ref(false)
-  let dictInfo = $ref<Dict>()
+  let reconcileOrder = $ref<ReconcileOrder>()
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
@@ -84,7 +77,7 @@
    */
   function init(record) {
     visible = true
-    dictInfo = record
+    reconcileOrder = record
     queryPage()
   }
 
@@ -93,10 +86,10 @@
    */
   function queryPage() {
     loading.value = true
-    page({
+    pageDetail({
       ...model.queryParam,
       ...pages,
-      dictId: dictInfo?.id,
+      recordOrderId: reconcileOrder?.id,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })

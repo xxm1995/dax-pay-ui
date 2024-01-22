@@ -37,7 +37,7 @@
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-            <a-link @click="show(row)">对账明细</a-link>
+            <a-link @click="showDetailPage(row)">对账明细</a-link>
           </template>
         </vxe-column>
       </vxe-table>
