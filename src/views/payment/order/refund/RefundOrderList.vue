@@ -32,7 +32,7 @@
             <a-tag>{{ dictConvert('PayRefundStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="140" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
@@ -69,7 +69,7 @@
   import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import RefundChannelOrderList from '/@/views/payment/order/refund/RefundChannelOrderList.vue'
-  import ALink from "/@/components/Link/Link.vue";
+  import ALink from '/@/components/Link/Link.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, sortChange, sortParam, pagination, pages, model, loading } =

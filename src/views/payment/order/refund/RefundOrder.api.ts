@@ -27,8 +27,18 @@ export function get(paymentId) {
  */
 export function listByChannel(refundId) {
   return defHttp.get<Result<RefundChannelOrder[]>>({
-    url: '/order/refund/channelRefund',
+    url: '/order/refund/listByChannel',
     params: { refundId },
+  })
+}
+
+/**
+ * 通道对款订单详情查询
+ */
+export function getDetail(id) {
+  return defHttp.get<Result<RefundChannelOrder>>({
+    url: '/order/refund/findChannelById',
+    params: { id },
   })
 }
 
@@ -79,7 +89,7 @@ export interface RefundChannelOrder extends BaseEntity {
   // 通道支付单id
   payChannelId?: string
   // 关联网关退款号
-  gatewayRequestNo?: string
+  gatewayOrderNo?: string
   // 通道支付单id
   async?: boolean
   // 订单金额
