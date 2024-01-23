@@ -1,5 +1,6 @@
 <template>
   <basic-drawer forceRender v-bind="$attrs" title="字典列表" width="60%" :visible="visible" @close="visible = false">
+    <b-query :query-params="model.queryParam" :default-item-count="3" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
       <vxe-column type="seq" width="60" />
@@ -10,8 +11,7 @@
       <vxe-column field="gatewayOrderNo" title="网关订单号" />
       <vxe-column field="type" title="交易类型">
         <template #default="{ row }">
-          <a-tag v-if="row.type === 'pay'">支付</a-tag>
-          <a-tag v-if="row.type === 'refund'">停用</a-tag>
+          <a-tag>{{ dictConvert('PayReconcileTrade', row.type) }}</a-tag>
         </template>
       </vxe-column>
       <vxe-column field="createTime" title="创建时间" />
@@ -36,24 +36,38 @@
 </template>
 
 <script setup lang="ts">
-  import { nextTick, onMounted } from 'vue'
+  import { computed, nextTick, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { pageDetail, ReconcileOrder } from "./ReconcileOrder.api";
+  import { pageDetail, ReconcileDetail } from './ReconcileOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import ReconcileDetailInfo from './ReconcileDetailInfo.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { QueryField } from '/@/components/Bootx/Query/Query'
+  import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
+  import BQuery from '/@/components/Bootx/Query/BQuery.vue'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
+  import { useDict } from '/@/hooks/bootx/useDict'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage } = useMessage()
+  const { dictDropDown, dictConvert } = useDict()
+
+  let reconcileTradeList = $ref<LabeledValue[]>([])
 
   // 查询条件
-  const fields = [] as QueryField[]
+  const fields = computed(() => {
+    return [
+      { field: 'title', type: STRING, name: '订单名称', placeholder: '请输入订单名称' },
+      { field: 'paymentId', type: STRING, name: '本地支付ID', placeholder: '请输入本地支付ID' },
+      { field: 'refundId', type: STRING, name: '本地退款ID', placeholder: '请输入本地退款ID' },
+      { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入网关订单号' },
+      { field: 'type', type: LIST, name: '交易类型', placeholder: '请选择交易类型', selectList: reconcileTradeList },
+    ] as QueryField[]
+  })
   let visible = $ref(false)
-  let reconcileOrder = $ref<ReconcileOrder>()
+  let reconcileDetail = $ref<ReconcileDetail>()
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
@@ -70,14 +84,16 @@
   /**
    * 初始化基础数据
    */
-  function initData() {}
+  async function initData() {
+    reconcileTradeList = await dictDropDown('PayReconcileTrade')
+  }
   /**
    * 入口
    * @param record
    */
   function init(record) {
     visible = true
-    reconcileOrder = record
+    reconcileDetail = record
     queryPage()
   }
 
@@ -89,7 +105,7 @@
     pageDetail({
       ...model.queryParam,
       ...pages,
-      recordOrderId: reconcileOrder?.id,
+      recordOrderId: reconcileDetail?.id,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })

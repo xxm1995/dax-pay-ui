@@ -86,12 +86,12 @@ export interface ReconcileOrder extends BaseEntity {
 export interface ReconcileDetail extends BaseEntity {
   // 关联对账订单ID
   recordOrderId?: string
-  // 交易状态
-  status?: string
   // 交易类型
   type?: string
   // 订单id
-  orderId?: string
+  paymentId?: string
+  // 订单id
+  refundId?: string
   // 网关订单号
   gatewayOrderNo?: string
   // 交易金额

@@ -33,7 +33,7 @@
           </template>
         </vxe-column>
         <vxe-column field="errorMsg" title="错误信息" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="140" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
