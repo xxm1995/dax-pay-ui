@@ -15,7 +15,7 @@
       >
         <vxe-column type="seq" title="序号" width="60" />
         <vxe-column field="id" title="退款号" width="180" sortable />
-        <vxe-column field="paymentId" title="原支付号" width="170" sortable>
+        <vxe-column field="paymentId" title="原支付号" width="170">
           <template #default="{ row }">
             <a @click="showPayment(row.paymentId)">
               {{ row.paymentId }}
@@ -26,18 +26,17 @@
         <vxe-column field="title" title="原支付标题" />
         <vxe-column field="amount" title="退款金额" sortable />
         <vxe-column field="refundableBalance" title="剩余可退金额" sortable />
-        <vxe-column field="refundRequestNo" title="外部网关请求号" />
         <vxe-column field="refundTime" title="退款时间" sortable />
         <vxe-column field="refundStatus" title="状态">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayRefundStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
           <template #default="{ row }">
-            <span>
-              <a-link @click="show(row)">查看</a-link>
-            </span>
+            <a-link @click="show(row)">查看</a-link>
+            <a-divider type="vertical" />
+            <a-link @click="showChannel(row)">渠道订单</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -50,6 +49,7 @@
         @page-change="handleTableChange"
       />
       <refund-order-info ref="refundOrderInfo" @ok="queryPage" />
+      <refund-channel-order-list ref="refundChannelOrderList" />
       <pay-order-info ref="payOrderInfo" />
     </div>
   </div>
@@ -68,6 +68,8 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
+  import RefundChannelOrderList from '/@/views/payment/order/refund/RefundChannelOrderList.vue'
+  import ALink from "/@/components/Link/Link.vue";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, sortChange, sortParam, pagination, pages, model, loading } =
@@ -100,6 +102,7 @@
   const xToolbar = $ref<VxeToolbarInstance>()
   const refundOrderInfo = $ref<any>()
   const payOrderInfo = $ref<any>()
+  const refundChannelOrderList = $ref<any>()
 
   onMounted(() => {
     initData()
@@ -144,6 +147,13 @@
    */
   function showPayment(paymentId) {
     payOrderInfo.init(paymentId)
+  }
+
+  /**
+   * 查看通道明细
+   */
+  function showChannel(record) {
+    refundChannelOrderList.init(record)
   }
 </script>
 

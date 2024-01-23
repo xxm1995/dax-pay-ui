@@ -23,6 +23,16 @@ export function get(paymentId) {
 }
 
 /**
+ * 通道退款订单列表查询
+ */
+export function listByChannel(refundId) {
+  return defHttp.get<Result<RefundChannelOrder[]>>({
+    url: '/order/refund/channelRefund',
+    params: { refundId },
+  })
+}
+
+/**
  * 发起退款
  */
 export function refund(params) {
@@ -41,20 +51,16 @@ export interface RefundOrder extends BaseEntity {
   // 原业务号
   businessNo?: string
   // 异步方式关联退款请求号
-  refundRequestNo?: string
-  // 用户id
-  userId?: string
+  refundNo?: string
   // 标题
   title?: string
   // 金额
   amount?: number
   // 剩余可退款金额
   refundableBalance?: number
-  // 可退款信息
-  refundableInfo?: RefundableInfo[]
   // 退款状态
   status?: number
-  // 支付时间
+  // 退款时间
   refundTime?: string
   // 客户ip
   clientIp?: string
@@ -62,6 +68,24 @@ export interface RefundOrder extends BaseEntity {
   errorCode?: string
   // 错误信息
   errorMsg?: string
+}
+
+/**
+ * 通道退款订单
+ */
+export interface RefundChannelOrder extends BaseEntity {
+  // 支付通道
+  refundId?: string
+  // 通道支付单id
+  payChannelId?: string
+  // 关联网关退款号
+  gatewayRequestNo?: string
+  // 通道支付单id
+  async?: boolean
+  // 订单金额
+  totalAmount?: number
+  // 退款金额
+  amount?: number
 }
 
 /**
