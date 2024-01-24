@@ -27,6 +27,12 @@
       <a-descriptions-item label="剩余可退款金额">
         {{ form.refundableBalance }}
       </a-descriptions-item>
+      <a-descriptions-item label="订单金额信息">
+        <a-tag v-for="o in refundChannelOrders" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.orderAmount }}</a-tag>
+      </a-descriptions-item>
+      <a-descriptions-item label="退款信息">
+        <a-tag v-for="o in refundChannelOrders" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.amount }}</a-tag>
+      </a-descriptions-item>
       <a-descriptions-item label="退款时间">
         {{ form.refundTime }}
       </a-descriptions-item>
@@ -52,7 +58,7 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { get, RefundOrder } from './RefundOrder.api'
+  import { get, listByChannel, RefundChannelOrder, RefundOrder } from './RefundOrder.api'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
@@ -74,17 +80,21 @@
   // 表单
   const formRef = $ref<FormInstance>()
   let form = $ref<RefundOrder>({})
+  let refundChannelOrders = $ref<RefundChannelOrder[]>([])
 
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  function init(id) {
+  async function init(id) {
     visible.value = true
     confirmLoading.value = true
-    get(id).then(({ data }) => {
+    await get(id).then(({ data }) => {
       form = data
-      confirmLoading.value = false
     })
+    await listByChannel(id).then(({ data }) => {
+      refundChannelOrders = data
+    })
+    confirmLoading.value = false
   }
   defineExpose({
     init,

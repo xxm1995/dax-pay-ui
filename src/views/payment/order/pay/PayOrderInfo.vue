@@ -44,7 +44,7 @@
           <a-tag v-for="o in orderChannel" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.amount }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="可退款信息">
-          <a-tag v-for="o in order.refundableInfos" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.amount }}</a-tag>
+          <a-tag v-for="o in orderChannel" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.refundableBalance }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="客户IP">
           {{ orderExtra.clientIp }}
@@ -92,7 +92,7 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { getOrder, PayOrder, PayOrderExtra, PayOrderChannel, getOrderExtra, getPayChannel } from './PayOrder.api'
+  import { getOrder, PayOrder, PayOrderExtra, PayChannelOrder, getOrderExtra, listByChannel } from './PayOrder.api'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   const {
@@ -113,7 +113,7 @@
 
   let order = $ref<PayOrder>({})
   let orderExtra = $ref<PayOrderExtra>({})
-  let orderChannel = $ref<PayOrderChannel[]>([])
+  let orderChannel = $ref<PayChannelOrder[]>([])
   // 入口
   async function init(id) {
     visible.value = true
@@ -124,7 +124,7 @@
     await getOrderExtra(id).then(({ data }) => {
       orderExtra = data
     })
-    await getPayChannel(id).then(({ data }) => {
+    await listByChannel(id).then(({ data }) => {
       orderChannel = data
     })
     confirmLoading.value = false

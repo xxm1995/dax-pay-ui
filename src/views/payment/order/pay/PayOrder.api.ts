@@ -1,8 +1,8 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
-import { RefundableInfo } from '/src/views/payment/order/refund/RefundOrder.api'
-import { PaySyncResult } from "/@/views/payment/record/sync/PaySyncRecord.api";
+import { RefundableInfo } from '/@/views/payment/order/refund/RefundOrder.api'
+import { PaySyncResult } from '/@/views/payment/record/sync/PaySyncRecord.api'
 
 /**
  * 分页
@@ -34,12 +34,22 @@ export function getOrderExtra(id) {
 }
 
 /**
- * 获取订单关联支付通道信息
+ * 获取付通道订单列表
  */
-export function getPayChannel(paymentId) {
-  return defHttp.get<Result<PayOrderChannel[]>>({
-    url: '/order/pay/getChannels',
+export function listByChannel(paymentId) {
+  return defHttp.get<Result<PayChannelOrder[]>>({
+    url: '/order/pay/listByChannel',
     params: { paymentId },
+  })
+}
+
+/**
+ * 获取付通道订单列表
+ */
+export function getChannel(id) {
+  return defHttp.get<Result<PayChannelOrder>>({
+    url: '/order/pay/getChannel',
+    params: { id },
   })
 }
 
@@ -81,8 +91,6 @@ export interface PayOrder extends BaseEntity {
   amount?: number
   // 可退款余额
   refundableBalance?: number
-  // 可退款信息
-  refundableInfos?: RefundableInfo[]
   // 支付状态
   status?: number
   // 支付时间
@@ -122,13 +130,21 @@ export interface PayOrderExtra {
 /**
  * 支付通道信息
  */
-export interface PayOrderChannel {
+export interface PayChannelOrder extends BaseEntity {
   // 支付通道
   channel?: number
   // 支付方式
   payWay?: number
+  // 异步支付方式
+  async?: boolean
   // 金额
   amount?: number
+  // 可退款金额
+  refundableBalance?: number
+  // 支付状态
+  status?: string
+  // 关联网关支付号
+  gatewayOrderNo?: number
   // 扩展参数的json字符串
   extraParamsJson?: string
 }

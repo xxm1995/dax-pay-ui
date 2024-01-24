@@ -41,11 +41,11 @@
         </vxe-column>
         <vxe-column field="expiredTime" title="过期时间" sortable />
         <vxe-column field="createTime" title="创建时间" sortable />
-        <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
           <template #default="{ row }">
-            <span>
-              <a-link @click="show(row)">查看</a-link>
-            </span>
+            <a-link @click="show(row)">查看</a-link>
+            <a-divider type="vertical" />
+            <a-link @click="showChannel(row)">通道订单</a-link>
             <a-divider type="vertical" />
             <a-dropdown>
               <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /></a>
@@ -75,6 +75,7 @@
         @page-change="handleTableChange"
       />
       <pay-order-info ref="payOrderInfo" />
+      <pay-channel-order-list ref="payChannelOrderList" />
       <refund-model ref="refundModel" @ok="queryPage" />
     </div>
   </div>
@@ -95,6 +96,7 @@
   import ALink from '/@/components/Link/Link.vue'
   import { PayStatus } from '/@/enums/payment/PayStatus'
   import { LabeledValue } from 'ant-design-vue/lib/select'
+  import PayChannelOrderList from './PayChannelOrderList.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, sortChange, resetQueryParams, pagination, pages, sortParam, model, loading } =
@@ -120,6 +122,7 @@
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const payOrderInfo = $ref<any>()
+  const payChannelOrderList = $ref<any>()
   const refundModel = $ref<any>()
 
   onMounted(() => {
@@ -157,6 +160,12 @@
    */
   function show(record) {
     payOrderInfo.init(record.id)
+  }
+  /**
+   * 查看
+   */
+  function showChannel(record) {
+    payChannelOrderList.init(record)
   }
 
   /**

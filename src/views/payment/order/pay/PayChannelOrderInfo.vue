@@ -9,16 +9,23 @@
     @cancel="handleCancel"
   >
     <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
-      <a-descriptions-item label="订单金额">
-        {{ form.orderAmount }}
+      <a-descriptions-item label="支付通道">
+        <a-tag>{{ dictConvert('PayChannel', form.channel) }}</a-tag>
       </a-descriptions-item>
-      <a-descriptions-item label="退款金额">
+      <a-descriptions-item label="支付通道">
+        <a-tag v-if="form.async" color="green">是</a-tag>
+        <a-tag v-else color="red">否</a-tag>
+      </a-descriptions-item>
+      <a-descriptions-item label="支付方式">
+        <a-tag>{{ dictConvert('PayWay', form.payWay) }}</a-tag>
+      </a-descriptions-item>
+      <a-descriptions-item label="订单金额">
         {{ form.amount }}
       </a-descriptions-item>
-      <a-descriptions-item label="通道支付单ID">
-        {{ form.payChannelId }}
+      <a-descriptions-item label="支付状态">
+        <a-tag>{{ dictConvert('PayStatus', form.status) }}</a-tag>
       </a-descriptions-item>
-      <a-descriptions-item label="退款通道">
+      <a-descriptions-item label="关联网关退款号">
         {{ form.gatewayOrderNo }}
       </a-descriptions-item>
     </a-descriptions>
@@ -31,10 +38,10 @@
 <script setup lang="ts">
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { getDetail, RefundChannelOrder } from './RefundOrder.api'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
+  import { getChannel, PayChannelOrder } from '/@/views/payment/order/pay/PayOrder.api'
   const {
     initFormEditType,
     handleCancel,
@@ -52,7 +59,7 @@
   const { dictConvert } = useDict()
   // 表单
   const formRef = $ref<FormInstance>()
-  let form = $ref<RefundChannelOrder>({})
+  let form = $ref<PayChannelOrder>({})
 
   // 事件
   const emits = defineEmits(['ok'])
@@ -60,7 +67,7 @@
   function init(id) {
     visible.value = true
     confirmLoading.value = true
-    getDetail(id).then(({ data }) => {
+    getChannel(id).then(({ data }) => {
       form = data
       confirmLoading.value = false
     })

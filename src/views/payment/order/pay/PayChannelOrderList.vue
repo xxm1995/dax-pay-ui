@@ -3,14 +3,30 @@
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="records" :loading="loading">
       <vxe-column type="seq" width="60" />
-      <vxe-column field="channel" title="退款通道">
+      <vxe-column field="channel" title="支付通道">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
         </template>
       </vxe-column>
-      <vxe-column field="orderAmount" title="订单金额" />
-      <vxe-column field="amount" title="退款金额" />
+      <vxe-column field="payWay" title="支付方式">
+        <template #default="{ row }">
+          <a-tag>{{ dictConvert('PayWay', row.payWay) }}</a-tag>
+        </template>
+      </vxe-column>
+      <vxe-column field="amount" title="订单金额" />
+      <vxe-column field="refundableBalance" title="可退款金额" />
+      <vxe-column field="async" title="异步支付">
+        <template #default="{ row }">
+          <a-tag v-if="row.async" color="green">是</a-tag>
+          <a-tag v-else color="red">否</a-tag>
+        </template>
+      </vxe-column>
       <vxe-column field="payChannelId" title="通道支付单ID" />
+      <vxe-column field="status" title="支付状态">
+        <template #default="{ row }">
+          <a-tag>{{ dictConvert('PayStatus', row.status) }}</a-tag>
+        </template>
+      </vxe-column>
       <vxe-column field="gatewayOrderNo" title="关联网关退款号" />
       <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
         <template #default="{ row }">
@@ -20,7 +36,7 @@
         </template>
       </vxe-column>
     </vxe-table>
-    <refund-channel-order-info ref="refundChannelOrderInfo" />
+    <pay-channel-order-info ref="payChannelOrderInfo" />
   </basic-drawer>
 </template>
 
@@ -32,8 +48,8 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import { listByChannel, RefundOrder } from './RefundOrder.api'
-  import RefundChannelOrderInfo from './RefundChannelOrderInfo.vue'
+  import { listByChannel, PayChannelOrder, PayOrder } from '/@/views/payment/order/pay/PayOrder.api'
+  import PayChannelOrderInfo from './PayChannelOrderInfo.vue'
 
   // 使用hooks
   const { resetQueryParams, model, loading } = useTablePage(queryPage)
@@ -41,11 +57,11 @@
   const { dictDropDown, dictConvert } = useDict()
 
   let visible = $ref(false)
-  let refundOrder = $ref<RefundOrder>()
-  let records = $ref<RefundOrder[]>([])
+  let payOrder = $ref<PayOrder>()
+  let records = $ref<PayChannelOrder[]>([])
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
-  const refundChannelOrderInfo = $ref<any>()
+  const payChannelOrderInfo = $ref<any>()
 
   nextTick(() => {
     xTable?.connect(xToolbar as VxeToolbarInstance)
@@ -57,7 +73,7 @@
    */
   function init(record) {
     visible = true
-    refundOrder = record
+    payOrder = record
     queryPage()
   }
 
@@ -66,7 +82,7 @@
    */
   function queryPage() {
     loading.value = true
-    listByChannel(refundOrder?.id).then(({ data }) => {
+    listByChannel(payOrder?.id).then(({ data }) => {
       records = data
       loading.value = false
     })
@@ -75,7 +91,7 @@
    * 查看
    */
   function show(record) {
-    refundChannelOrderInfo.init(record)
+    payChannelOrderInfo.init(record)
   }
   defineExpose({
     init,

@@ -150,7 +150,7 @@
   }
 
   /**
-   * 查看通道明细
+   * 查看通道明细列表
    */
   function showChannel(record) {
     refundChannelOrderList.init(record)

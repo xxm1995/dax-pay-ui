@@ -92,8 +92,10 @@ export interface RefundChannelOrder extends BaseEntity {
   gatewayOrderNo?: string
   // 通道支付单id
   async?: boolean
+  // 通道
+  channel?: string
   // 订单金额
-  totalAmount?: number
+  orderAmount?: number
   // 退款金额
   amount?: number
 }
