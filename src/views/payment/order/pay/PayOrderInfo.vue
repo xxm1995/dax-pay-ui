@@ -16,6 +16,9 @@
         <a-descriptions-item label="业务号">
           {{ order.businessNo }}
         </a-descriptions-item>
+        <a-descriptions-item label="网关订单号">
+          {{ order.gatewayOrderNo }}
+        </a-descriptions-item>
         <a-descriptions-item label="标题">
           {{ order.title }}
         </a-descriptions-item>

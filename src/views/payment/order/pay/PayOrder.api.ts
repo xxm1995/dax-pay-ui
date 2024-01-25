@@ -87,6 +87,8 @@ export interface PayOrder extends BaseEntity {
   combinationPay?: boolean
   // 异步支付通道
   asyncChannel?: boolean
+  // 关联网关支付号
+  gatewayOrderNo?: number
   // 金额
   amount?: number
   // 可退款余额
@@ -143,8 +145,6 @@ export interface PayChannelOrder extends BaseEntity {
   refundableBalance?: number
   // 支付状态
   status?: string
-  // 关联网关支付号
-  gatewayOrderNo?: number
   // 扩展参数的json字符串
   extraParamsJson?: string
 }

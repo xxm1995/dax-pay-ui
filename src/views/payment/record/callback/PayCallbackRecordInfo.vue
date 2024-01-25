@@ -39,7 +39,7 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { get, PayNotifyRecord } from './PayCallbackRecord.api'
+  import { get, PayCallbackRecord } from './PayCallbackRecord.api'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
@@ -62,7 +62,7 @@
 
   // 表单
   const formRef = $ref<FormInstance>()
-  let form = $ref<PayNotifyRecord>({
+  let form = $ref<PayCallbackRecord>({
     id: null,
     paymentId: '',
     notifyInfo: '',

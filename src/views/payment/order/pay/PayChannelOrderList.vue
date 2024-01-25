@@ -3,6 +3,7 @@
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="records" :loading="loading">
       <vxe-column type="seq" width="60" />
+      <vxe-column field="id" title="通道支付单ID" width="170"/>
       <vxe-column field="channel" title="支付通道">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
@@ -21,13 +22,11 @@
           <a-tag v-else color="red">否</a-tag>
         </template>
       </vxe-column>
-      <vxe-column field="payChannelId" title="通道支付单ID" />
       <vxe-column field="status" title="支付状态">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('PayStatus', row.status) }}</a-tag>
         </template>
       </vxe-column>
-      <vxe-column field="gatewayOrderNo" title="关联网关退款号" />
       <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
         <template #default="{ row }">
           <span>

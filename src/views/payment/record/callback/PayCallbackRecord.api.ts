@@ -6,7 +6,7 @@ import { BaseEntity } from '/#/web'
  * 分页
  */
 export function page(params) {
-  return defHttp.get<Result<PageResult<PayNotifyRecord>>>({
+  return defHttp.get<Result<PageResult<PayCallbackRecord>>>({
     url: '/record/callback/page',
     params,
   })
@@ -16,7 +16,7 @@ export function page(params) {
  * 获取单条
  */
 export function get(paymentId) {
-  return defHttp.get<Result<PayNotifyRecord>>({
+  return defHttp.get<Result<PayCallbackRecord>>({
     url: '/record/callback/findById',
     params: { paymentId },
   })
@@ -25,7 +25,7 @@ export function get(paymentId) {
 /**
  * 支付回调记录
  */
-export interface PayNotifyRecord extends BaseEntity {
+export interface PayCallbackRecord extends BaseEntity {
   // 支付号
   paymentId?: string
   // 支付通道

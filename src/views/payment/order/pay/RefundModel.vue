@@ -11,7 +11,7 @@
     <a-form ref="formRef" :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
       <template :key="o.channel" v-for="o in form.refundChannels">
         <a-form-item :label="dictConvert('PayChannel', o.channel)" name="name">
-          <a-input-number :min="1" :max="o.amount" :precision="0" v-model:value="o.amount" />
+          <a-input-number :min="1" :max="o.maxAmount" :precision="0" v-model:value="o.amount" />
         </a-form-item>
       </template>
       <a-form-item label="原因" name="reason">
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { getOrder } from './PayOrder.api'
+  import { listByChannel } from './PayOrder.api'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { useDict } from '/@/hooks/bootx/useDict'
@@ -62,21 +62,26 @@
     // 原因
     reason: '',
     // 可退款明细
-    refundChannels: [] as RefundableInfo[],
+    refundChannels: [] as any,
   })
   const emits = defineEmits(['ok'])
 
   /**
    * 入口
    */
-  function init(id) {
+  async function init(id) {
     resetForm()
     confirmLoading.value = true
     visible.value = true
-    getOrder(id).then(({ data }) => {
-      const { id, refundableInfos } = data
-      form.paymentId = id as string
-      form.refundChannels = [...(refundableInfos as RefundableInfo[])]
+    form.paymentId = id
+    listByChannel(id).then(({ data }) => {
+      form.refundChannels = data.map((item) => {
+        return {
+          channel: item.channel,
+          amount: item.amount,
+          maxAmount: item.amount,
+        }
+      })
       confirmLoading.value = false
     })
   }
