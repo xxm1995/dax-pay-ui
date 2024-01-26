@@ -1,5 +1,5 @@
 <template>
-  <basic-drawer forceRender v-bind="$attrs" title="字典列表" width="60%" :visible="visible" @close="visible = false">
+  <basic-drawer forceRender v-bind="$attrs" title="通道退款订单列表" width="60%" :visible="visible" @close="visible = false">
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="records" :loading="loading">
       <vxe-column type="seq" width="60" />
@@ -11,7 +11,6 @@
       <vxe-column field="orderAmount" title="订单金额" />
       <vxe-column field="amount" title="退款金额" />
       <vxe-column field="payChannelId" title="通道支付单ID" />
-      <vxe-column field="gatewayOrderNo" title="关联网关退款号" />
       <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
         <template #default="{ row }">
           <span>

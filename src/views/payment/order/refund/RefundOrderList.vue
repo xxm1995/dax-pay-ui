@@ -26,6 +26,7 @@
         <vxe-column field="title" title="原支付标题" />
         <vxe-column field="amount" title="退款金额" sortable />
         <vxe-column field="refundableBalance" title="剩余可退金额" sortable />
+        <vxe-column field="gatewayOrderNo" title="网关订单号" />
         <vxe-column field="refundTime" title="退款时间" sortable />
         <vxe-column field="refundStatus" title="状态">
           <template #default="{ row }">
@@ -36,7 +37,7 @@
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-            <a-link @click="showChannel(row)">渠道订单</a-link>
+            <a-link @click="showChannel(row)">通道订单</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -85,7 +86,7 @@
       { field: 'id', type: STRING, name: '退款号', placeholder: '请输入完整退款号' },
       { field: 'paymentId', type: STRING, name: '原支付单号', placeholder: '请输入完整支付号' },
       { field: 'businessNo', type: STRING, name: '原业务号', placeholder: '请输入业务号' },
-      { field: 'refundRequestNo', type: STRING, name: '外部网关请求号', placeholder: '请输入完整外部网关请求号' },
+      { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
       { field: 'title', type: STRING, name: '原支付标题', placeholder: '请输入原支付标题' },
       {
         field: 'status',
@@ -114,7 +115,7 @@
   }
 
   /**
-   * 初始化数据`````````````````````````````````````````````````````````````````````````````````````````````````````
+   * 初始化数据
    */
   async function initData() {
     payRefundStatusList = await dictDropDown('PayRefundStatus')

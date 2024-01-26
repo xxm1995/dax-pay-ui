@@ -15,10 +15,10 @@ export function page(params) {
 /**
  * 获取单条
  */
-export function get(paymentId) {
+export function get(id) {
   return defHttp.get<Result<RefundOrder>>({
     url: '/order/refund/findById',
-    params: { paymentId },
+    params: { id },
   })
 }
 
@@ -62,6 +62,8 @@ export interface RefundOrder extends BaseEntity {
   businessNo?: string
   // 异步方式关联退款请求号
   refundNo?: string
+  // 网关订单号
+  gatewayOrderNo?: string
   // 标题
   title?: string
   // 金额

@@ -1,6 +1,6 @@
 <template>
   <basic-modal
-    title="退款订单"
+    title="通道支付订单详情"
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="750"
@@ -9,10 +9,13 @@
     @cancel="handleCancel"
   >
     <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
+      <a-descriptions-item label="通道支付单ID">
+        <a-tag>{{ form.id }}</a-tag>
+      </a-descriptions-item>
       <a-descriptions-item label="支付通道">
         <a-tag>{{ dictConvert('PayChannel', form.channel) }}</a-tag>
       </a-descriptions-item>
-      <a-descriptions-item label="支付通道">
+      <a-descriptions-item label="异步支付">
         <a-tag v-if="form.async" color="green">是</a-tag>
         <a-tag v-else color="red">否</a-tag>
       </a-descriptions-item>
@@ -24,9 +27,6 @@
       </a-descriptions-item>
       <a-descriptions-item label="支付状态">
         <a-tag>{{ dictConvert('PayStatus', form.status) }}</a-tag>
-      </a-descriptions-item>
-      <a-descriptions-item label="关联网关退款号">
-        {{ form.gatewayOrderNo }}
       </a-descriptions-item>
     </a-descriptions>
 
@@ -64,10 +64,10 @@
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  function init(id) {
+  function init(record) {
     visible.value = true
     confirmLoading.value = true
-    getChannel(id).then(({ data }) => {
+    getChannel(record.id).then(({ data }) => {
       form = data
       confirmLoading.value = false
     })

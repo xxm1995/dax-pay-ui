@@ -15,6 +15,9 @@
       <a-descriptions-item label="原业务号">
         {{ form.businessNo }}
       </a-descriptions-item>
+      <a-descriptions-item label="网关订单号">
+        {{ form.gatewayOrderNo }}
+      </a-descriptions-item>
       <a-descriptions-item label="退款号">
         {{ form.refundNo }}
       </a-descriptions-item>

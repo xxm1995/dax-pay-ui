@@ -78,8 +78,8 @@
       form.refundChannels = data.map((item) => {
         return {
           channel: item.channel,
-          amount: item.amount,
-          maxAmount: item.amount,
+          amount: item.refundableBalance,
+          maxAmount: item.refundableBalance,
         }
       })
       confirmLoading.value = false

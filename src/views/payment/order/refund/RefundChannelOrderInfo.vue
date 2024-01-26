@@ -1,6 +1,6 @@
 <template>
   <basic-modal
-    title="退款订单"
+    title="通道退款订单详情"
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="750"
@@ -57,10 +57,10 @@
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  function init(id) {
+  function init(record) {
     visible.value = true
     confirmLoading.value = true
-    getDetail(id).then(({ data }) => {
+    getDetail(record.id).then(({ data }) => {
       form = data
       confirmLoading.value = false
     })

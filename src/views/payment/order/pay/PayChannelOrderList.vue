@@ -1,9 +1,9 @@
 <template>
-  <basic-drawer forceRender v-bind="$attrs" title="字典列表" width="60%" :visible="visible" @close="visible = false">
+  <basic-drawer forceRender v-bind="$attrs" title="通道订单列表" width="60%" :visible="visible" @close="visible = false">
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="records" :loading="loading">
       <vxe-column type="seq" width="60" />
-      <vxe-column field="id" title="通道支付单ID" width="170"/>
+      <vxe-column field="id" title="通道支付单ID" width="170" />
       <vxe-column field="channel" title="支付通道">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
