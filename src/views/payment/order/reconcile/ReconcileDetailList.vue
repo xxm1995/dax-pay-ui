@@ -1,5 +1,5 @@
 <template>
-  <basic-drawer forceRender v-bind="$attrs" title="字典列表" width="60%" :visible="visible" @close="visible = false">
+  <basic-drawer forceRender v-bind="$attrs" title="对账单明细列表" width="60%" :visible="visible" @close="visible = false">
     <b-query :query-params="model.queryParam" :default-item-count="3" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">

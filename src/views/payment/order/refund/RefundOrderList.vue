@@ -22,11 +22,11 @@
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="businessNo" title="原业务号" />
+        <vxe-column field="businessNo" title="原业务号" :visible="false" />
         <vxe-column field="title" title="原支付标题" />
         <vxe-column field="amount" title="退款金额" sortable />
         <vxe-column field="refundableBalance" title="剩余可退金额" sortable />
-        <vxe-column field="gatewayOrderNo" title="网关订单号" />
+        <vxe-column field="gatewayOrderNo" title="网关订单号" :visible="false" />
         <vxe-column field="refundTime" title="退款时间" sortable />
         <vxe-column field="refundStatus" title="状态">
           <template #default="{ row }">

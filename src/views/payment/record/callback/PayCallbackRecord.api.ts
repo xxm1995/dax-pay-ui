@@ -26,13 +26,17 @@ export function get(paymentId) {
  * 支付回调记录
  */
 export interface PayCallbackRecord extends BaseEntity {
-  // 支付号
-  paymentId?: string
+  // 本地订单id
+  orderId?: string
+  // 支付网关订单号
+  gatewayOrderNo?: string
   // 支付通道
   payChannel?: string
+  // 回调类型
+  type?: string
   // 通知消息
   notifyInfo?: string
-  // 处理状态
+  // 回调处理状态
   status?: string
   // 提示信息
   msg?: string

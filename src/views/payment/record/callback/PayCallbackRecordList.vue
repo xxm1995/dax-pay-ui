@@ -43,7 +43,8 @@
         @page-change="handleTableChange"
       />
       <pay-callback-record-info ref="payCallbackRecordInfo" />
-      <pay-order-info ref="payOrderInfo" /> </div>
+      <pay-order-info ref="payOrderInfo" />
+    </div>
   </div>
 </template>
 

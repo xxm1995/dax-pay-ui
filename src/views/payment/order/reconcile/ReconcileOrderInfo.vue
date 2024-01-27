@@ -30,6 +30,11 @@
         {{ form.errorMsg }}
       </a-descriptions-item>
     </a-descriptions>
+    <template #footer>
+      <a-space>
+        <a-button key="cancel" @click="handleCancel">取消</a-button>
+      </a-space>
+    </template>
   </basic-modal>
 </template>
 
