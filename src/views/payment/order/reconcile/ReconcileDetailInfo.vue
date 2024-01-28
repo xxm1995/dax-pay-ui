@@ -25,7 +25,7 @@
         {{ form.gatewayOrderNo }}
       </a-descriptions-item>
       <a-descriptions-item label="交易类型">
-        <a-tag>{{ dictConvert('PayReconcileTrade', form.type) }}</a-tag>
+        <a-tag>{{ dictConvert('PayReconcileTrade', form.repairType) }}</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="创建时间">
         {{ form.createTime }}

@@ -152,8 +152,8 @@
   function remove(record) {
     del(record.id).then(() => {
       notification.success({ message: '删除成功' })
+          queryPage()
     })
-    queryPage()
   }
   // 批量删除
   function removeDataScopeBatch() {

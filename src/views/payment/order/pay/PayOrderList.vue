@@ -8,9 +8,9 @@
       <vxe-table
         row-id="id"
         ref="xTable"
-        :sort-config="{ remote: true, trigger: 'cell' }"
         :data="pagination.records"
         :loading="loading"
+        :sort-config="{ remote: true, trigger: 'cell' }"
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />

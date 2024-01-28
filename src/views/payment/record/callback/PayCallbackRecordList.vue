@@ -5,27 +5,39 @@
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
-      <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
+      <vxe-table
+        row-id="id"
+        ref="xTable"
+        :data="pagination.records"
+        :loading="loading"
+        :sort-config="{ remote: true, trigger: 'cell' }"
+        @sort-change="sortChange"
+      >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="paymentId" title="原支付号" width="170" sortable>
+        <vxe-column field="orderId" title="本地订单ID" width="170">
           <template #default="{ row }">
-            <a @click="showPayment(row.paymentId)">
-              {{ row.paymentId }}
+            <a @click="showOrder(row)">
+              {{ row.orderId }}
             </a>
           </template>
         </vxe-column>
         <vxe-column field="payChannel" title="支付通道">
           <template #default="{ row }">
-            {{ dictConvert('PayChannel', row.payChannel) }}
+            <a-tag>{{ dictConvert('PayChannel', row.payChannel) }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="callbackType" title="回调类型">
+          <template #default="{ row }">
+            <a-tag>{{ dictConvert('PayCallbackType', row.callbackType) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="status" title="处理状态">
           <template #default="{ row }">
-            {{ dictConvert('PayCallbackStatus', row.status) }}
+            <a-tag>{{ dictConvert('PayCallbackStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="msg" title="提示信息" />
-        <vxe-column field="notifyTime" title="通知时间" />
+        <vxe-column field="createTime" title="通知时间" sortable />
         <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
@@ -44,6 +56,7 @@
       />
       <pay-callback-record-info ref="payCallbackRecordInfo" />
       <pay-order-info ref="payOrderInfo" />
+      <refund-order-info ref="refundOrderInfo" />
     </div>
   </div>
 </template>
@@ -51,19 +64,21 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page } from './PayCallbackRecord.api'
+  import { page, PayCallbackRecord } from './PayCallbackRecord.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+  import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
   import PayCallbackRecordInfo from './PayCallbackRecordInfo.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
-  import PayOrderInfo from "/@/views/payment/order/pay/PayOrderInfo.vue";
+  import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
+  import RefundOrderInfo from '/@/views/payment/order/refund/RefundOrderInfo.vue'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
+  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
+    useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
@@ -95,6 +110,7 @@
   const xToolbar = $ref<VxeToolbarInstance>()
   const payCallbackRecordInfo = $ref<any>()
   const payOrderInfo = $ref<any>()
+  const refundOrderInfo = $ref<any>()
 
   onMounted(() => {
     initData()
@@ -121,6 +137,7 @@
     page({
       ...model.queryParam,
       ...pages,
+      ...sortParam,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
@@ -134,11 +151,14 @@
   }
 
   /**
-   * 查看支付单信息
-   * @param paymentId
+   * 查看订单单信息
    */
-  function showPayment(paymentId) {
-    payOrderInfo.init(paymentId)
+  function showOrder(record: PayCallbackRecord) {
+    if (record.callbackType === 'pay') {
+      payOrderInfo.init(record.orderId)
+    } else {
+      refundOrderInfo.init(record.orderId)
+    }
   }
 </script>
 

@@ -11,7 +11,14 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
+      <vxe-table
+        row-id="id"
+        ref="xTable"
+        :data="pagination.records"
+        :loading="loading"
+        :sort-config="{ remote: true, trigger: 'cell' }"
+        @sort-change="sortChange"
+      >
         <vxe-column type="seq" title="序号" width="60" />
         <vxe-column field="date" title="对账日期" />
         <vxe-column field="batchNo" title="批次号" />
@@ -63,14 +70,14 @@
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { computed, onMounted } from 'vue'
   import { DATE, LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
-  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+  import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { downAndSave, page } from './ReconcileOrder.api'
   import ReconcileOrderInfo from './ReconcileOrderInfo.vue'
   import ReconcileDetailList from './ReconcileDetailList.vue'
   import ReconcileOrderCreate from '/@/views/payment/order/reconcile/ReconcileOrderCreate.vue'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
+  const { handleTableChange, pageQueryResHandel, resetQueryParams, sortChange, sortParam, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
@@ -121,6 +128,7 @@
     page({
       ...model.queryParam,
       ...pages,
+      ...sortParam,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })

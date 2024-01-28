@@ -26,14 +26,18 @@ export function get(paymentId) {
  * 支付回调记录
  */
 export interface PayRepairRecord extends BaseEntity {
-  // 支付号
-  paymentId?: string
-  // 业务号
-  businessNo?: string
+  // 支付回调记录id
+  repairId?: string
+  // 本地订单ID
+  orderId?: string
+  // 本地业务号
+  orderNo?: string
+  // 类型  支付修复/退款修复
+  repairType?: string
   // 修复来源
   repairSource?: string
   // 修复类型
-  repairType?: string
+  repairWay?: string
   // 修复的异步支付通道
   asyncChannel?: string
   // 修复前状态

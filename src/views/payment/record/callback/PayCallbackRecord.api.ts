@@ -33,7 +33,7 @@ export interface PayCallbackRecord extends BaseEntity {
   // 支付通道
   payChannel?: string
   // 回调类型
-  type?: string
+  callbackType?: string
   // 通知消息
   notifyInfo?: string
   // 回调处理状态

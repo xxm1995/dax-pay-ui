@@ -68,8 +68,8 @@
     loading.value = true
     dictDropDown('WeChatMediaType').then((res) => {
       mediaTypes = res
+          queryPage()
     })
-    queryPage()
   }
 
   function queryPage() {

@@ -10,11 +10,17 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
-        <a-descriptions-item label="支付记录id">
-          {{ form.paymentId }}
+        <a-descriptions-item label="本地订单ID">
+          {{ form.orderId }}
+        </a-descriptions-item>
+        <a-descriptions-item label="支付网关订单号">
+          {{ form.gatewayOrderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="支付通道">
-          {{ dictConvert('PayChannel', form.payChannel) }}
+          <a-tag>{{ dictConvert('PayChannel', form.payChannel) }}</a-tag>
+        </a-descriptions-item>
+        <a-descriptions-item label="支付通道">
+          <a-tag>{{ dictConvert('PayCallbackType', form.callbackType) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="通知消息">
           <json-preview :data="JSON.parse(form.notifyInfo || '{}')" />
@@ -26,7 +32,7 @@
           {{ form.msg }}
         </a-descriptions-item>
         <a-descriptions-item label="通知时间">
-          {{ form.notifyTime }}
+          {{ form.createTime }}
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>
@@ -62,13 +68,7 @@
 
   // 表单
   const formRef = $ref<FormInstance>()
-  let form = $ref<PayCallbackRecord>({
-    id: null,
-    paymentId: '',
-    notifyInfo: '',
-    msg: '',
-    notifyTime: '',
-  })
+  let form = $ref<PayCallbackRecord>({})
   // 入口
   function init(id) {
     visible.value = true

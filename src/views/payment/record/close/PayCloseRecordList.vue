@@ -5,7 +5,14 @@
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
-      <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
+      <vxe-table
+        row-id="id"
+        ref="xTable"
+        :data="pagination.records"
+        :loading="loading"
+        :sort-config="{ remote: true, trigger: 'cell' }"
+        @sort-change="sortChange"
+      >
         <vxe-column type="seq" title="序号" width="60" />
         <vxe-column field="paymentId" title="原支付号" width="170" sortable>
           <template #default="{ row }">
@@ -56,17 +63,17 @@
   import { $ref } from 'vue/macros'
   import { page } from './PayCloseRecord.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+  import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import PayCloseRecordInfo from './PayCloseRecordInfo.vue'
-  import PayOrderInfo from "/@/views/payment/order/pay/PayOrderInfo.vue";
+  import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
+  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
@@ -126,6 +133,7 @@
     page({
       ...model.queryParam,
       ...pages,
+      ...sortParam
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })

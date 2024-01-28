@@ -1,7 +1,14 @@
 <template>
   <div>
     <div class="m-3 p-3 pt-5 bg-white">
-      <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
+      <b-query
+        :query-params="model.queryParam"
+        :fields="fields"
+        @query="queryPage"
+        @reset="resetQueryParams"
+        :sort-config="{ remote: true, trigger: 'cell' }"
+        @sort-change="sortChange"
+      />
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
@@ -62,7 +69,7 @@
   import { page } from './RefundOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import RefundOrderInfo from './RefundOrderInfo.vue'
-  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+  import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'

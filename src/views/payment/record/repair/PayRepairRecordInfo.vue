@@ -10,17 +10,26 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
-        <a-descriptions-item label="支付记录id">
-          {{ form.paymentId }}
+        <a-descriptions-item label="主键ID">
+          {{ form.id }}
         </a-descriptions-item>
-        <a-descriptions-item label="业务号">
-          {{ form.businessNo }}
+        <a-descriptions-item label="修复号">
+          {{ form.repairId }}
+        </a-descriptions-item>
+        <a-descriptions-item label="本地订单ID">
+          {{ form.orderId }}
+        </a-descriptions-item>
+        <a-descriptions-item label="本地业务号">
+          {{ form.orderNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="支付">
+          {{ dictConvert('PayRepairSource', form.repairSource) }}
         </a-descriptions-item>
         <a-descriptions-item label="修复来源">
           {{ dictConvert('PayRepairSource', form.repairSource) }}
         </a-descriptions-item>
-        <a-descriptions-item label="修复来源">
-          {{ dictConvert('PayRepairType', form.repairType) }}
+        <a-descriptions-item label="修复方式">
+          {{ dictConvert('PayRepairType', form.repairWay) }}
         </a-descriptions-item>
         <a-descriptions-item label="修复通道">
           {{ dictConvert('AsyncPayChannel', form.asyncChannel) }}

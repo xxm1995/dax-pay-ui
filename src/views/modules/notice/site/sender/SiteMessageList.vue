@@ -135,8 +135,8 @@
   function remove(record) {
     del(record.id).then(() => {
       createMessage.success('删除成功')
+          queryPage()
     })
-    queryPage()
   }
 
   //发送
