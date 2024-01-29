@@ -10,6 +10,11 @@
       </vxe-column>
       <vxe-column field="orderAmount" title="订单金额" />
       <vxe-column field="amount" title="退款金额" />
+      <vxe-column field="refundStatus" title="状态">
+        <template #default="{ row }">
+          <a-tag>{{ dictConvert('PayRefundStatus', row.status) }}</a-tag>
+        </template>
+      </vxe-column>
       <vxe-column field="payChannelId" title="通道支付单ID" />
       <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
         <template #default="{ row }">

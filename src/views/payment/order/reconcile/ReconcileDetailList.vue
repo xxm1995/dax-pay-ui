@@ -11,7 +11,7 @@
       <vxe-column field="gatewayOrderNo" title="网关订单号" />
       <vxe-column field="repairType" title="交易类型">
         <template #default="{ row }">
-          <a-tag>{{ dictConvert('PayReconcileTrade', row.repairType) }}</a-tag>
+          <a-tag>{{ dictConvert('PayReconcileTrade', row.type) }}</a-tag>
         </template>
       </vxe-column>
       <vxe-column field="createTime" title="创建时间" />

@@ -33,18 +33,27 @@
         <vxe-column field="title" title="原支付标题" />
         <vxe-column field="amount" title="退款金额" sortable />
         <vxe-column field="refundableBalance" title="剩余可退金额" sortable />
-        <vxe-column field="gatewayOrderNo" title="网关订单号" :visible="false" />
+        <vxe-column field="async" title="包含异步通道">
+          <template #default="{ row }">
+            <a-tag color="green">{{ row.asyncPay ? '是' : '否' }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="gatewayOrderNo" title="支付网关订单号" :visible="false" />
         <vxe-column field="refundTime" title="退款时间" sortable />
         <vxe-column field="refundStatus" title="状态">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayRefundStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column fixed="right" width="140" :showOverflow="false" title="操作">
+        <vxe-column field="errorMsg" title="提示信息" />
+        <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
             <a-link @click="showChannel(row)">通道订单</a-link>
+            <a-divider type="vertical" />
+            <!--      只有退款中的异步订单才可以同步      -->
+            <a-link :disabled="!row.asyncPay || !row.status === 'progress'" @click="sync(row)">同步</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -66,7 +75,7 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page } from './RefundOrder.api'
+  import { page, syncById } from './RefundOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import RefundOrderInfo from './RefundOrderInfo.vue'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -142,6 +151,27 @@
     })
     return Promise.resolve()
   }
+
+  /**
+   * 退款信息同步
+   */
+  function sync(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '是否同步退款信息',
+      onOk: () => {
+        loading.value = true
+        syncById(record.id).then(({ data }) => {
+          // TODO 后期可以根据返回结果进行相应的处理
+          createMessage.success('同步成功')
+          console.log(data)
+          queryPage()
+        })
+      },
+    })
+  }
+
   /**
    * 查看
    */

@@ -33,9 +33,9 @@
             <a-tag>{{ dictConvert('PayRepairType', row.repairType) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="repairType" title="修复方式">
+        <vxe-column field="repairWay" title="修复方式">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('PayRepairWay', row.repairType) || dictConvert('RefundRepairWay', row.repairType) }}</a-tag>
+            <a-tag>{{ dictConvert('PayRepairWay', row.repairWay) || dictConvert('RefundRepairWay', row.repairWay) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="createTime" title="修复时间" />
@@ -172,6 +172,7 @@
    * 查看订单单信息
    */
   function showOrder(record: PayRepairRecord) {
+    console.log(record)
     if (record.repairType === 'pay') {
       payOrderInfo.init(record.orderId)
     } else {

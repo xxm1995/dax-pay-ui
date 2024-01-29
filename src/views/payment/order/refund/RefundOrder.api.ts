@@ -53,6 +53,16 @@ export function refund(params) {
 }
 
 /**
+ * 退款信息同步
+ */
+export function syncById(id) {
+  return defHttp.post<Result<void>>({
+    url: '/order/refund/syncById',
+    params: { id },
+  })
+}
+
+/**
  * 退款记录
  */
 export interface RefundOrder extends BaseEntity {
@@ -64,6 +74,10 @@ export interface RefundOrder extends BaseEntity {
   refundNo?: string
   // 网关订单号
   gatewayOrderNo?: string
+  // 是否是异步支付
+  asyncPay?: boolean
+  // 异步支付通道
+  asyncChannel?: boolean
   // 标题
   title?: string
   // 金额
@@ -100,6 +114,8 @@ export interface RefundChannelOrder extends BaseEntity {
   orderAmount?: number
   // 退款金额
   amount?: number
+  // 状态
+  status?: string
 }
 
 /**

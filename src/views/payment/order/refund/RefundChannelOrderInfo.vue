@@ -21,6 +21,9 @@
       <a-descriptions-item label="退款通道">
         {{ form.gatewayOrderNo }}
       </a-descriptions-item>
+      <a-descriptions-item label="状态">
+        <a-tag>{{ dictConvert('PayRefundStatus', form.status) }}</a-tag>
+      </a-descriptions-item>
     </a-descriptions>
 
     <template #footer>

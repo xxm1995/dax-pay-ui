@@ -83,10 +83,10 @@ export interface PayOrder extends BaseEntity {
   title?: string
   // 是否是异步支付
   asyncPay?: boolean
-  // 是否是组合支付
-  combinationPay?: boolean
   // 异步支付通道
   asyncChannel?: boolean
+  // 是否是组合支付
+  combinationPay?: boolean
   // 关联网关支付号
   gatewayOrderNo?: number
   // 金额

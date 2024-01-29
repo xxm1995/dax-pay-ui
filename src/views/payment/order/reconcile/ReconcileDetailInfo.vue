@@ -18,20 +18,19 @@
       <a-descriptions-item label="本地订单ID">
         {{ form.paymentId }}
       </a-descriptions-item>
-      <a-descriptions-item label="本地退款ID">
+      <a-descriptions-item label="本地退款ID" v-if="form.refundId">
         {{ form.refundId }}
       </a-descriptions-item>
       <a-descriptions-item label="网关订单号">
         {{ form.gatewayOrderNo }}
       </a-descriptions-item>
       <a-descriptions-item label="交易类型">
-        <a-tag>{{ dictConvert('PayReconcileTrade', form.repairType) }}</a-tag>
+        <a-tag>{{ dictConvert('PayReconcileTrade', form.type) }}</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="创建时间">
         {{ form.createTime }}
       </a-descriptions-item>
     </a-descriptions>
-
     <template #footer>
       <a-space>
         <a-button key="cancel" @click="handleCancel">取消</a-button>

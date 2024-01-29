@@ -22,14 +22,14 @@
         <a-descriptions-item label="本地业务号">
           {{ form.orderNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="支付">
-          {{ dictConvert('PayRepairSource', form.repairSource) }}
+        <a-descriptions-item label="修复类型">
+          {{ dictConvert('PayRepairType', form.repairType) }}
         </a-descriptions-item>
         <a-descriptions-item label="修复来源">
           {{ dictConvert('PayRepairSource', form.repairSource) }}
         </a-descriptions-item>
         <a-descriptions-item label="修复方式">
-          {{ dictConvert('PayRepairType', form.repairWay) }}
+          {{ dictConvert('PayRepairWay', form.repairWay) }}
         </a-descriptions-item>
         <a-descriptions-item label="修复通道">
           {{ dictConvert('AsyncPayChannel', form.asyncChannel) }}

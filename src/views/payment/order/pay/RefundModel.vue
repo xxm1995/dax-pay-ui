@@ -11,7 +11,7 @@
     <a-form ref="formRef" :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
       <template :key="o.channel" v-for="o in form.refundChannels">
         <a-form-item :label="dictConvert('PayChannel', o.channel)" name="name">
-          <a-input-number :min="1" :max="o.maxAmount" :precision="0" v-model:value="o.amount" />
+          <a-input-number :min="0" :max="o.maxAmount" :precision="0" v-model:value="o.amount" />
         </a-form-item>
       </template>
       <a-form-item label="原因" name="reason">
