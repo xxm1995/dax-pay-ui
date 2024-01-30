@@ -20,7 +20,7 @@
           <a-tag>{{ dictConvert('PayChannel', form.payChannel) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="支付通道">
-          <a-tag>{{ dictConvert('PayCallbackType', form.callbackType) }}</a-tag>
+          <a-tag>{{ dictConvert('PaymentType', form.callbackType) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="通知消息">
           <json-preview :data="JSON.parse(form.notifyInfo || '{}')" />

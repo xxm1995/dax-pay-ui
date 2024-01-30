@@ -56,7 +56,7 @@ export function getChannel(id) {
 /**
  * 同步支付状态
  */
-export function sync(id) {
+export function syncById(id) {
   return defHttp.post<Result<PaySyncResult>>({
     url: '/order/pay/sync',
     params: { id },

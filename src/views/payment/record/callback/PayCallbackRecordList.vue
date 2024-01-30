@@ -28,7 +28,7 @@
         </vxe-column>
         <vxe-column field="callbackType" title="回调类型">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('PayCallbackType', row.callbackType) }}</a-tag>
+            <a-tag>{{ dictConvert('PaymentType', row.callbackType) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="status" title="处理状态">

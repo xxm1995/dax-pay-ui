@@ -21,7 +21,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="id" title="退款号" width="180" sortable />
+        <vxe-column field="id" title="退款ID" width="180" />
         <vxe-column field="paymentId" title="原支付号" width="170">
           <template #default="{ row }">
             <a @click="showPayment(row.paymentId)">
@@ -53,7 +53,7 @@
             <a-link @click="showChannel(row)">通道订单</a-link>
             <a-divider type="vertical" />
             <!--      只有退款中的异步订单才可以同步      -->
-            <a-link :disabled="!row.asyncPay || !row.status === 'progress'" @click="sync(row)">同步</a-link>
+            <a-link :disabled="!(row.asyncPay && row.status === 'progress')" @click="sync(row)">同步</a-link>
           </template>
         </vxe-column>
       </vxe-table>

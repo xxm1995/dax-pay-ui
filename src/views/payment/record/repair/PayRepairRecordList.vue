@@ -30,7 +30,7 @@
         </vxe-column>
         <vxe-column field="repairType" title="修复类型">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('PayRepairType', row.repairType) }}</a-tag>
+            <a-tag>{{ dictConvert('PaymentType', row.repairType) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="repairWay" title="修复方式">
@@ -143,7 +143,7 @@
    */
   async function init() {
     repairSourceList = await dictDropDown('PayRepairSource')
-    repairTypeList = await dictDropDown('PayRepairType')
+    repairTypeList = await dictDropDown('PaymentType')
     asyncChannelList = await dictDropDown('AsyncPayChannel')
     repairWayList = (await dictDropDown('PayRepairWay')).concat(await dictDropDown('RefundRepairWay'))
   }

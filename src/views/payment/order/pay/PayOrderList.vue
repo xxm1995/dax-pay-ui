@@ -52,7 +52,7 @@
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
-                    <a-link @click="syncInfo(row)">同步</a-link>
+                    <a-link @click="sync(row)">同步</a-link>
                   </a-menu-item>
                   <a-menu-item v-if="[PayStatus.PROGRESS].includes(row.status)">
                     <a-link @click="closeOrder(row)" danger>关闭</a-link>
@@ -84,7 +84,7 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { close, page, sync } from './PayOrder.api'
+  import { close, page, syncById } from './PayOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import PayOrderInfo from './PayOrderInfo.vue'
   import RefundModel from './RefundModel.vue'
@@ -172,14 +172,14 @@
   /**
    * 同步信息
    */
-  function syncInfo(record) {
+  function sync(record) {
     createConfirm({
       iconType: 'warning',
       title: '警告',
       content: '是否同步支付信息',
       onOk: () => {
         loading.value = true
-        sync(record.id).then(({ data }) => {
+        syncById(record.id).then(({ data }) => {
           // TODO 后期可以根据返回结果进行相应的处理
           createMessage.success('同步成功')
           console.log(data)
