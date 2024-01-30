@@ -58,7 +58,7 @@ export function getChannel(id) {
  */
 export function syncById(id) {
   return defHttp.post<Result<PaySyncResult>>({
-    url: '/order/pay/sync',
+    url: '/order/pay/syncById',
     params: { id },
   })
 }
