@@ -9,6 +9,9 @@
     @cancel="handleCancel"
   >
     <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
+      <a-descriptions-item label="通道订单ID">
+        {{ form.id }}
+      </a-descriptions-item>
       <a-descriptions-item label="订单金额">
         {{ form.orderAmount }}
       </a-descriptions-item>
@@ -17,6 +20,9 @@
       </a-descriptions-item>
       <a-descriptions-item label="通道支付单ID">
         {{ form.payChannelId }}
+      </a-descriptions-item>
+      <a-descriptions-item label="剩余可退余额">
+        {{ form.refundableAmount }}
       </a-descriptions-item>
       <a-descriptions-item label="退款通道">
         {{ form.gatewayOrderNo }}

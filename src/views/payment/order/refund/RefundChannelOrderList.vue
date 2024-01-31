@@ -10,6 +10,7 @@
       </vxe-column>
       <vxe-column field="orderAmount" title="订单金额" />
       <vxe-column field="amount" title="退款金额" />
+      <vxe-column field="refundableAmount" title="剩余可退余额" />
       <vxe-column field="refundStatus" title="状态">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('PayRefundStatus', row.status) }}</a-tag>

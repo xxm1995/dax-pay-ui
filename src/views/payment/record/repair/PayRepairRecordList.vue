@@ -35,7 +35,8 @@
         </vxe-column>
         <vxe-column field="repairWay" title="修复方式">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('PayRepairWay', row.repairWay) || dictConvert('RefundRepairWay', row.repairWay) }}</a-tag>
+            <a-tag v-if="row.repairType === 'pay'">{{ dictConvert('PayRepairWay', row.repairWay) }}</a-tag>
+            <a-tag v-else>{{ dictConvert('RefundRepairWay', row.repairWay) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="createTime" title="修复时间" />

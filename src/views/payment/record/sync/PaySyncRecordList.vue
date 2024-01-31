@@ -7,14 +7,19 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="paymentId" title="原支付号" width="170" sortable>
+        <vxe-column field="orderId" title="本地支付号" width="170" sortable>
           <template #default="{ row }">
-            <a @click="showPayment(row.paymentId)">
-              {{ row.paymentId }}
+            <a @click="showOrder(row)">
+              {{ row.orderId }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="businessNo" title="业务号" />
+        <vxe-column field="orderNo" title="业务号" />
+        <vxe-column field="channel" title="同步类型">
+          <template #default="{ row }">
+            <a-tag>{{ dictConvert('PaymentType', row.syncType) }}</a-tag>
+          </template>
+        </vxe-column>
         <vxe-column field="channel" title="同步通道">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('AsyncPayChannel', row.asyncChannel) }}</a-tag>
@@ -22,22 +27,17 @@
         </vxe-column>
         <vxe-column field="status" title="同步结果" width="140">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('PaySyncStatus', row.gatewayStatus) }}</a-tag>
+            <a-tag v-if="row.syncType === 'pay'">{{ dictConvert('PaySyncStatus', row.gatewayStatus) }}</a-tag>
+            <a-tag v-else>{{ dictConvert('RefundSyncStatus', row.gatewayStatus) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="repairOrder" title="是否修复">
           <template #default="{ row }">
-            <a-tag v-if="row.repairOrder" color="green">是</a-tag>
+            <a v-if="row.repairOrder" @click="showRepairInfo(row.repairOrderId)"> 修复单 </a>
             <a-tag v-else>否</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="repairOrderId" title="关联修复号" width="170">
-          <template #default="{ row }">
-            <a @click="showRepairInfo(row.repairOrderId)">
-              {{ row.repairOrderId }}
-            </a>
-          </template>
-        </vxe-column>
+        <vxe-column field="gatewayOrderNo" title="网关订单号" width="170" />
         <vxe-column field="errorMsg" title="错误消息" />
         <vxe-column field="createTime" title="同步时间" />
         <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
@@ -59,6 +59,7 @@
     </div>
     <pay-sync-record-info ref="paySyncRecordInfo" />
     <pay-order-info ref="payOrderInfo" />
+    <refund-order-info ref="refundOrderInfo" />
     <pay-repair-record-info ref="payRepairRecordInfo" />
   </div>
 </template>
@@ -77,6 +78,7 @@
   import PaySyncRecordInfo from './PaySyncRecordInfo.vue'
   import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
   import PayRepairRecordInfo from '/@/views/payment/record/repair/PayRepairRecordInfo.vue'
+  import RefundOrderInfo from '/@/views/payment/order/refund/RefundOrderInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -112,6 +114,7 @@
   const xToolbar = $ref<VxeToolbarInstance>()
   const paySyncRecordInfo = $ref<any>()
   const payOrderInfo = $ref<any>()
+  const refundOrderInfo = $ref<any>()
   const payRepairRecordInfo = $ref<any>()
 
   onMounted(() => {
@@ -153,13 +156,16 @@
 
   /**
    * 查看支付单信息
-   * @param paymentId
    */
-  function showPayment(paymentId) {
-    payOrderInfo.init(paymentId)
+  function showOrder(record) {
+    if (record.callbackType === 'pay') {
+      payOrderInfo.init(record.orderId)
+    } else {
+      refundOrderInfo.init(record.orderId)
+    }
   }
   /**
-   * 查看支付单信息
+   * 查看修复信息
    */
   function showRepairInfo(repairId) {
     payRepairRecordInfo.init(repairId)

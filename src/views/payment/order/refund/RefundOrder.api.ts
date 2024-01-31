@@ -114,6 +114,8 @@ export interface RefundChannelOrder extends BaseEntity {
   orderAmount?: number
   // 退款金额
   amount?: number
+  // 剩余可退余额
+  refundableAmount?: number
   // 状态
   status?: string
 }

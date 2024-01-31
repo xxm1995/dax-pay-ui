@@ -23,13 +23,15 @@
           {{ form.orderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="修复类型">
-          {{ dictConvert('PayRepairType', form.repairType) }}
+          {{ dictConvert('PaymentType', form.repairType) }}
+          {{ form.repairType }}
         </a-descriptions-item>
         <a-descriptions-item label="修复来源">
           {{ dictConvert('PayRepairSource', form.repairSource) }}
         </a-descriptions-item>
         <a-descriptions-item label="修复方式">
-          {{ dictConvert('PayRepairWay', form.repairWay) }}
+          <a-tag v-if="form.repairType === 'pay'">{{ dictConvert('PayRepairWay', row.repairWay) }}</a-tag>
+          <a-tag v-else>{{ dictConvert('RefundRepairWay', form.repairWay) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="修复通道">
           {{ dictConvert('AsyncPayChannel', form.asyncChannel) }}

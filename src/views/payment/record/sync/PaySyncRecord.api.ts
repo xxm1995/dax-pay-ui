@@ -26,10 +26,14 @@ export function get(paymentId) {
  * 支付同步记录
  */
 export interface SyncRecord extends BaseEntity {
-  // 支付记录id
-  paymentId?: string
-  // 业务号
-  businessNo?: string
+  // 本地订单id
+  orderId?: string
+  // 本地业务号
+  orderNo?: string
+  // 网关订单号
+  gatewayOrderNo?: string
+  // 同步类型
+  syncType?: string
   // 同步通道
   asyncChannel?: string
   // 通知消息
@@ -38,10 +42,6 @@ export interface SyncRecord extends BaseEntity {
   gatewayStatus?: string
   // 是否进行修复
   repairOrder?: boolean
-  // 支付单修复前状态
-  beforeStatus?: string
-  // 支付单修复后状态
-  afterStatus?: string
   // 错误消息
   errorMsg?: string
   // 同步时间

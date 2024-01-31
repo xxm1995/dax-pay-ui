@@ -10,31 +10,34 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions title="" :column="{ md: 1, sm: 1, xs: 1 }">
-        <a-descriptions-item label="支付号">
-          {{ form.paymentId }}
+        <a-descriptions-item label="本地订单号">
+          {{ form.orderId }}
         </a-descriptions-item>
-        <a-descriptions-item label="业务号">
-          {{ form.businessNo }}
+        <a-descriptions-item label="本地业务号">
+          {{ form.orderNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="网关订单号">
+          {{ form.gatewayOrderNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="同步类型">
+          <a-tag>{{ dictConvert('PaymentType', form.syncType) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="同步通道">
-          {{ dictConvert('AsyncPayChannel', form.asyncChannel) }}
-        </a-descriptions-item>
-        <a-descriptions-item label="同步消息">
-          <json-preview :data="XEUtils.toStringJSON(form.syncInfo || '{}')" />
+          <a-tag> {{ dictConvert('AsyncPayChannel', form.asyncChannel) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="同步结果">
-          {{ dictConvert('PaySyncStatus', form.gatewayStatus) }}
+          <a-tag v-if="form.syncType === 'pay'">{{ dictConvert('PaySyncStatus', form.gatewayStatus) }}</a-tag>
+          <a-tag v-else>{{ dictConvert('RefundSyncStatus', form.gatewayStatus) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="是否修复">
           <a-tag>{{ form.repairOrder ? '是' : '否' }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="修复后订单状态">
-          {{ dictConvert('PayStatus', form.afterStatus) }}
-        </a-descriptions-item>
         <a-descriptions-item label="同步时间">
           {{ form.createTime }}
+          <a-descriptions-item label="同步消息">
+            <json-preview :data="XEUtils.toStringJSON(form.syncInfo || '{}')" />
+          </a-descriptions-item>
         </a-descriptions-item>
-
         <a-descriptions-item label="错误信息" v-if="form.errorMsg">
           {{ form.errorMsg }}
         </a-descriptions-item>
