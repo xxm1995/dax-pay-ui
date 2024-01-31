@@ -42,6 +42,8 @@ export interface SyncRecord extends BaseEntity {
   gatewayStatus?: string
   // 是否进行修复
   repairOrder?: boolean
+  // 修复号
+  repairOrderNo?: boolean
   // 错误消息
   errorMsg?: string
   // 同步时间

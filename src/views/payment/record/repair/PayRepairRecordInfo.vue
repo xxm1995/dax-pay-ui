@@ -23,24 +23,23 @@
           {{ form.orderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="修复类型">
-          {{ dictConvert('PaymentType', form.repairType) }}
-          {{ form.repairType }}
-        </a-descriptions-item>
-        <a-descriptions-item label="修复来源">
-          {{ dictConvert('PayRepairSource', form.repairSource) }}
-        </a-descriptions-item>
-        <a-descriptions-item label="修复方式">
-          <a-tag v-if="form.repairType === 'pay'">{{ dictConvert('PayRepairWay', row.repairWay) }}</a-tag>
-          <a-tag v-else>{{ dictConvert('RefundRepairWay', form.repairWay) }}</a-tag>
+          <a-tag>{{ dictConvert('PaymentType', form.repairType) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="修复通道">
-          {{ dictConvert('AsyncPayChannel', form.asyncChannel) }}
+          <a-tag>{{ dictConvert('AsyncPayChannel', form.asyncChannel) }}</a-tag>
+        </a-descriptions-item>
+        <a-descriptions-item label="修复来源">
+          <a-tag>{{ dictConvert('PayRepairSource', form.repairSource) }}</a-tag>
+        </a-descriptions-item>
+        <a-descriptions-item label="修复方式">
+          <a-tag v-if="form.repairType === 'pay'">{{ dictConvert('PayRepairWay', form.repairWay) }}</a-tag>
+          <a-tag v-else>{{ dictConvert('RefundRepairWay', form.repairWay) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="修复前订单状态">
-          {{ dictConvert('PayStatus', form.beforeStatus) }}
+          <a-tag>{{ dictConvert('PayStatus', form.beforeStatus) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="修复后订单状态">
-          {{ dictConvert('PayStatus', form.afterStatus) }}
+          <a-tag>{{ dictConvert('PayStatus', form.afterStatus) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="修复时间">
           {{ form.createTime }}

@@ -30,13 +30,14 @@
           <a-tag v-else>{{ dictConvert('RefundSyncStatus', form.gatewayStatus) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="是否修复">
-          <a-tag>{{ form.repairOrder ? '是' : '否' }}</a-tag>
+          <a-tag v-if="form.repairOrder" color="green"> {{ form.repairOrderNo }} </a-tag>
+          <a-tag v-else>否</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="同步时间">
           {{ form.createTime }}
-          <a-descriptions-item label="同步消息">
-            <json-preview :data="XEUtils.toStringJSON(form.syncInfo || '{}')" />
-          </a-descriptions-item>
+        </a-descriptions-item>
+        <a-descriptions-item label="同步消息">
+          <json-preview :data="XEUtils.toStringJSON(form.syncInfo || '{}')" />
         </a-descriptions-item>
         <a-descriptions-item label="错误信息" v-if="form.errorMsg">
           {{ form.errorMsg }}

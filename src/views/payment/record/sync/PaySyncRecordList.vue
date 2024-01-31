@@ -7,14 +7,14 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="本地支付号" width="170" sortable>
+        <vxe-column field="orderId" title="本地订单号" width="170" sortable>
           <template #default="{ row }">
             <a @click="showOrder(row)">
               {{ row.orderId }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="orderNo" title="业务号" />
+        <vxe-column field="orderNo" title="本地业务号" />
         <vxe-column field="channel" title="同步类型">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PaymentType', row.syncType) }}</a-tag>
@@ -25,15 +25,15 @@
             <a-tag>{{ dictConvert('AsyncPayChannel', row.asyncChannel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="status" title="同步结果" width="140">
+        <vxe-column field="status" title="同步结果">
           <template #default="{ row }">
             <a-tag v-if="row.syncType === 'pay'">{{ dictConvert('PaySyncStatus', row.gatewayStatus) }}</a-tag>
             <a-tag v-else>{{ dictConvert('RefundSyncStatus', row.gatewayStatus) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="repairOrder" title="是否修复">
+        <vxe-column field="repairOrder" title="是否修复" width="170">
           <template #default="{ row }">
-            <a v-if="row.repairOrder" @click="showRepairInfo(row.repairOrderId)"> 修复单 </a>
+            <a-tag v-if="row.repairOrder" color="green"> {{ row.repairOrderNo }} </a-tag>
             <a-tag v-else>否</a-tag>
           </template>
         </vxe-column>
