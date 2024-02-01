@@ -13,8 +13,8 @@
         <a-descriptions-item label="主键ID">
           {{ form.id }}
         </a-descriptions-item>
-        <a-descriptions-item label="修复号">
-          {{ form.repairId }}
+        <a-descriptions-item label="修复单号">
+          {{ form.repairNo }}
         </a-descriptions-item>
         <a-descriptions-item label="本地订单ID">
           {{ form.orderId }}

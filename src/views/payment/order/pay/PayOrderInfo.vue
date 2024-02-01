@@ -10,7 +10,7 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions title="" :column="{ md: 2, sm: 1, xs: 1 }">
-        <a-descriptions-item label="支付号">
+        <a-descriptions-item label="支付ID">
           {{ order.id }}
         </a-descriptions-item>
         <a-descriptions-item label="业务号">

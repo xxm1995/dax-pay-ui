@@ -14,7 +14,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="paymentId" title="原支付号" width="170" sortable>
+        <vxe-column field="paymentId" title="原支付ID" width="170" sortable>
           <template #default="{ row }">
             <a @click="showPayment(row.paymentId)">
               {{ row.paymentId }}

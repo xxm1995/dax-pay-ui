@@ -22,7 +22,8 @@
       >
         <vxe-column type="seq" title="序号" width="60" />
         <vxe-column field="id" title="退款ID" width="180" />
-        <vxe-column field="paymentId" title="原支付号" width="170">
+        <vxe-column field="title" title="原支付标题" />
+        <vxe-column field="paymentId" title="原支付ID" width="170">
           <template #default="{ row }">
             <a @click="showPayment(row.paymentId)">
               {{ row.paymentId }}
@@ -30,7 +31,6 @@
           </template>
         </vxe-column>
         <vxe-column field="businessNo" title="原业务号" :visible="false" />
-        <vxe-column field="title" title="原支付标题" />
         <vxe-column field="amount" title="退款金额" sortable />
         <vxe-column field="refundableBalance" title="剩余可退金额" sortable />
         <vxe-column field="async" title="包含异步通道">
@@ -100,7 +100,7 @@
   const fields = computed(() => {
     return [
       { field: 'id', type: STRING, name: '退款号', placeholder: '请输入完整退款号' },
-      { field: 'paymentId', type: STRING, name: '原支付单号', placeholder: '请输入完整支付号' },
+      { field: 'paymentId', type: STRING, name: '原支付单号', placeholder: '请输入完整支付ID' },
       { field: 'businessNo', type: STRING, name: '原业务号', placeholder: '请输入业务号' },
       { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
       { field: 'title', type: STRING, name: '原支付标题', placeholder: '请输入原支付标题' },
@@ -111,7 +111,6 @@
         placeholder: '请选择处理状态',
         selectList: payRefundStatusList,
       },
-      { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
     ] as QueryField[]
   })
 

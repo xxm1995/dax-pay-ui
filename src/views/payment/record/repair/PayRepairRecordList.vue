@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="m-3 p-3 pt-5 bg-white">
-      <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
+      <b-query :query-params="model.queryParam" :default-item-count="3" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
@@ -14,23 +14,23 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="repairId" title="修复号" width="170" />
-        <vxe-column field="orderId" title="被修复订单ID" width="170">
+        <vxe-column field="repairNo" title="修复单号" width="170" />
+        <vxe-column field="repairType" title="修复类型">
+          <template #default="{ row }">
+            <a-tag color="green">{{ dictConvert('PaymentType', row.repairType) }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="orderId" title="本地订单ID" width="170">
           <template #default="{ row }">
             <a @click="showOrder(row)">
               {{ row.orderId }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="orderNo" title="本地业务号" />
+        <vxe-column field="orderNo" title="本地订单号" />
         <vxe-column field="repairSource" title="修复来源">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayRepairSource', row.repairSource) }}</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="repairType" title="修复类型">
-          <template #default="{ row }">
-            <a-tag>{{ dictConvert('PaymentType', row.repairType) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="repairWay" title="修复方式">
@@ -91,8 +91,9 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'paymentId', type: STRING, name: '支付单号', placeholder: '请输入支付单号' },
-      { field: 'businessNo', type: STRING, name: '业务号', placeholder: '请输入业务号' },
+      { field: 'repairNo', type: STRING, name: '修复单号', placeholder: '请输入修复号' },
+      { field: 'orderId', type: STRING, name: '本地订单ID', placeholder: '请输入本地订单ID' },
+      { field: 'orderNo', type: STRING, name: '本地订单号', placeholder: '请输入本地订单号' },
       {
         field: 'repairSource',
         type: LIST,

@@ -26,7 +26,7 @@ export function get(paymentId) {
  * 支付回调记录
  */
 export interface PayCloseRecord extends BaseEntity {
-  // 支付号
+  // 支付ID
   paymentId?: string
   // 业务号
   businessNo?: string

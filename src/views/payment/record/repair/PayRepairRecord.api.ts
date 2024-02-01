@@ -26,8 +26,8 @@ export function get(id) {
  * 支付回调记录
  */
 export interface PayRepairRecord extends BaseEntity {
-  // 支付回调记录id
-  repairId?: string
+  // 修复号
+  repairNo?: string
   // 本地订单ID
   orderId?: string
   // 本地业务号

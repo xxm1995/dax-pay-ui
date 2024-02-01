@@ -15,7 +15,7 @@
       <a-descriptions-item label="退款号">
         {{ form.refundNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="原支付号">
+      <a-descriptions-item label="原支付ID">
         {{ form.paymentId }}
       </a-descriptions-item>
       <a-descriptions-item label="原业务号">

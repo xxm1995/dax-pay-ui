@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="m-3 p-3 pt-5 bg-white">
-      <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
+      <b-query :query-params="model.queryParam" :default-item-count="3" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
@@ -87,12 +87,20 @@
 
   let syncStatusList = $ref<LabeledValue[]>([])
   let payChannelList = $ref<LabeledValue[]>([])
+  let syncTypeList = $ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'paymentId', type: STRING, name: '支付单号', placeholder: '请输入支付单号' },
-      { field: 'businessNo', type: STRING, name: '业务号', placeholder: '请输入业务号' },
+      { field: 'orderId', type: STRING, name: '本地订单ID', placeholder: '请输入本地订单ID' },
+      { field: 'orderNo', type: STRING, name: '本地订单号', placeholder: '请输入本地订单号' },
+      {
+        field: 'syncType',
+        type: LIST,
+        name: '同步类型',
+        placeholder: '请选择同步类型',
+        selectList: syncTypeList,
+      },
       {
         field: 'gatewayStatus',
         type: LIST,
@@ -132,6 +140,7 @@
   async function init() {
     syncStatusList = await dictDropDown('PaySyncStatus')
     payChannelList = await dictDropDown('PayChannel')
+    syncTypeList = await dictDropDown('PaymentType')
   }
 
   /**

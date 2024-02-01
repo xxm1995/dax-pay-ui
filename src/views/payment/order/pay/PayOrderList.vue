@@ -14,7 +14,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="id" title="支付号" sortable width="170" />
+        <vxe-column field="id" title="支付ID" sortable width="170" />
         <vxe-column field="businessNo" title="业务号" />
         <vxe-column field="title" title="标题" />
         <vxe-column field="amount" title="金额(分)" sortable />
@@ -110,9 +110,9 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'paymentId', type: STRING, name: '支付号', placeholder: '请输入完整支付号' },
-      { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
+      { field: 'paymentId', type: STRING, name: '支付ID', placeholder: '请输入完整支付ID' },
       { field: 'businessNo', type: STRING, name: '业务号', placeholder: '请输入业务号' },
+      { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
       { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
       { field: 'errorCode', name: '错误码', type: STRING },
       { field: 'asyncChannel', name: '异步支付方式', type: LIST, selectList: cayChannelList },
