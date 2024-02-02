@@ -17,7 +17,7 @@
           {{ form.gatewayOrderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="支付通道">
-          <a-tag>{{ dictConvert('PayChannel', form.payChannel) }}</a-tag>
+          <a-tag>{{ dictConvert('PayChannel', form.channel) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="支付通道">
           <a-tag>{{ dictConvert('PaymentType', form.callbackType) }}</a-tag>

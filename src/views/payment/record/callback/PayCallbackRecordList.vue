@@ -21,9 +21,9 @@
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="payChannel" title="支付通道">
+        <vxe-column field="channel" title="支付通道">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('PayChannel', row.payChannel) }}</a-tag>
+            <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="callbackType" title="回调类型">

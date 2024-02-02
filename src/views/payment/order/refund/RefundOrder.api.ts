@@ -103,7 +103,7 @@ export interface RefundChannelOrder extends BaseEntity {
   // 支付通道
   refundId?: string
   // 通道支付单id
-  payChannelId?: string
+  PayChannelId?: string
   // 关联网关退款号
   gatewayOrderNo?: string
   // 通道支付单id

@@ -19,7 +19,7 @@
         {{ form.amount }}
       </a-descriptions-item>
       <a-descriptions-item label="通道支付单ID">
-        {{ form.payChannelId }}
+        {{ form.PayChannelId }}
       </a-descriptions-item>
       <a-descriptions-item label="剩余可退余额">
         {{ form.refundableAmount }}

@@ -139,7 +139,7 @@
    * 初始化数据
    */
   async function initData() {
-    cayChannelList = await dictDropDown('AsyncPayChannel')
+    cayChannelList = await dictDropDown('AsyncChannel')
     payStatusList = await dictDropDown('PayStatus')
   }
   /**

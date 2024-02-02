@@ -85,7 +85,7 @@
       { field: 'paymentId', type: STRING, name: '支付单号', placeholder: '请输入支付单号' },
       { field: 'businessNo', type: STRING, name: '业务号', placeholder: '请输入业务号' },
       {
-        field: 'payChannel',
+        field: 'channel',
         type: LIST,
         name: '支付通道',
         placeholder: '请选择支付通道',
