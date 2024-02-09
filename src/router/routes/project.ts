@@ -38,7 +38,7 @@ export const INTERNAL: AppRouteModule = {
  * 位于主框架外的页面
  */
 export const OUTSIDE: AppRouteModule = {
-  path: '/base/outside',
+  path: '/outside',
   name: 'PROJECT_OUTSIDE',
   meta: { title: '' },
   children: [
@@ -51,6 +51,12 @@ export const OUTSIDE: AppRouteModule = {
     //     ignoreAuth: true,
     //   },
     // },
+    {
+      path: '/cashier',
+      name: 'cashier',
+      component: () => import('/@/views/paydemo/cashier/Cashier.vue'),
+      meta: { title: '结算台支付演示', ignoreAuth: true },
+    },
   ],
 }
 

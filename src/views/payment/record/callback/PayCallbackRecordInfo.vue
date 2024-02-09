@@ -13,13 +13,13 @@
         <a-descriptions-item label="本地订单ID">
           {{ form.orderId }}
         </a-descriptions-item>
-        <a-descriptions-item label="支付网关订单号">
+        <a-descriptions-item label="网关订单号">
           {{ form.gatewayOrderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="支付通道">
           <a-tag>{{ dictConvert('PayChannel', form.channel) }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="支付通道">
+        <a-descriptions-item label="回调类型">
           <a-tag>{{ dictConvert('PaymentType', form.callbackType) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="通知消息">

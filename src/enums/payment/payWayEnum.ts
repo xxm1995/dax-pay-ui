@@ -2,11 +2,11 @@
  * 支付通道
  */
 export enum payWayEnum {
-  NORMAL = 'NORMAL',
-  WAP = 'WAP',
-  APP = 'APP',
-  WEB = 'WEB',
-  QRCODE = 'QRCODE',
-  BARCODE = 'BARCODE',
-  JSAPI = 'JSAPI',
+  NORMAL = 'normal',
+  WAP = 'wap',
+  APP = 'app',
+  WEB = 'web',
+  QRCODE = 'qrcode',
+  BARCODE = 'barcode',
+  JSAPI = 'jsapi',
 }
