@@ -28,6 +28,9 @@
       <a-descriptions-item label="支付状态">
         <a-tag>{{ dictConvert('PayStatus', form.status) }}</a-tag>
       </a-descriptions-item>
+      <a-descriptions-item label="支付时间">
+        {{ form.payTime }}
+      </a-descriptions-item>
     </a-descriptions>
 
     <template #footer>

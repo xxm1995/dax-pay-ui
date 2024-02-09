@@ -28,7 +28,7 @@
         {{ form.gatewayOrderNo }}
       </a-descriptions-item>
       <a-descriptions-item label="状态">
-        <a-tag>{{ dictConvert('PayRefundStatus', form.status) }}</a-tag>
+        <a-tag>{{ dictConvert('RefundStatus', form.status) }}</a-tag>
       </a-descriptions-item>
     </a-descriptions>
 

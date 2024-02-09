@@ -43,7 +43,7 @@
         {{ form.refundTime }}
       </a-descriptions-item>
       <a-descriptions-item label="退款状态">
-        <a-tag>{{ dictConvert('PayRefundStatus', form.status) }}</a-tag>
+        <a-tag>{{ dictConvert('RefundStatus', form.status) }}</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="退款终端ip">
         {{ form.clientIp }}

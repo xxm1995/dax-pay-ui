@@ -27,6 +27,7 @@
           <a-tag>{{ dictConvert('PayStatus', row.status) }}</a-tag>
         </template>
       </vxe-column>
+      <vxe-column field="payTime" title="支付时间" />
       <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
         <template #default="{ row }">
           <span>

@@ -145,6 +145,8 @@ export interface PayChannelOrder extends BaseEntity {
   refundableBalance?: number
   // 支付状态
   status?: string
-  // 扩展参数的json字符串
-  extraParamsJson?: string
+  // 支付状态
+  payTime?: string
+  // 附加支付参数
+  channelExtra?: string
 }

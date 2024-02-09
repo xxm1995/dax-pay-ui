@@ -13,7 +13,7 @@
       <vxe-column field="refundableAmount" title="剩余可退余额" />
       <vxe-column field="refundStatus" title="状态">
         <template #default="{ row }">
-          <a-tag>{{ dictConvert('PayRefundStatus', row.status) }}</a-tag>
+          <a-tag>{{ dictConvert('RefundStatus', row.status) }}</a-tag>
         </template>
       </vxe-column>
       <vxe-column field="PayChannelId" title="通道支付单ID" />

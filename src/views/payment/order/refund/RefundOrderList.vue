@@ -42,7 +42,7 @@
         <vxe-column field="refundTime" title="退款时间" sortable />
         <vxe-column field="refundStatus" title="状态">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('PayRefundStatus', row.status) }}</a-tag>
+            <a-tag>{{ dictConvert('RefundStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="errorMsg" title="提示信息" />
@@ -133,7 +133,7 @@
    * 初始化数据
    */
   async function initData() {
-    payRefundStatusList = await dictDropDown('PayRefundStatus')
+    payRefundStatusList = await dictDropDown('RefundStatus')
   }
 
   /**

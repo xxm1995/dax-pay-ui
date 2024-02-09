@@ -14,10 +14,10 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="repairNo" title="修复单号" width="170" />
-        <vxe-column field="repairType" title="修复类型">
+        <vxe-column field="repairNo" title="修复单号" min-width="170" />
+        <vxe-column field="repairWay" title="修复方式">
           <template #default="{ row }">
-            <a-tag color="green">{{ dictConvert('PaymentType', row.repairType) }}</a-tag>
+            <a-tag color="green">{{ dictConvert('PayRepairWay', row.repairWay) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="orderId" title="本地订单ID" width="170">
@@ -27,16 +27,15 @@
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="orderNo" title="本地订单号" />
+        <vxe-column field="repairType" title="订单类型">
+          <template #default="{ row }">
+            <a-tag>{{ dictConvert('PaymentType', row.repairType) + '订单' }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="orderNo" :visible="false" title="本地订单号" />
         <vxe-column field="repairSource" title="修复来源">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayRepairSource', row.repairSource) }}</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="repairWay" title="修复方式">
-          <template #default="{ row }">
-            <a-tag v-if="row.repairType === 'pay'">{{ dictConvert('PayRepairWay', row.repairWay) }}</a-tag>
-            <a-tag v-else>{{ dictConvert('RefundRepairWay', row.repairWay) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="createTime" title="修复时间" />
@@ -79,7 +78,8 @@
   import RefundOrderInfo from '/@/views/payment/order/refund/RefundOrderInfo.vue'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } = useTablePage(queryPage)
+  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
+    useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
@@ -104,8 +104,8 @@
       {
         field: 'repairType',
         type: LIST,
-        name: '修复类型',
-        placeholder: '请选择修复类型',
+        name: '订单类型',
+        placeholder: '请选择订单类型',
         selectList: repairTypeList,
       },
       {
@@ -147,7 +147,8 @@
     repairSourceList = await dictDropDown('PayRepairSource')
     repairTypeList = await dictDropDown('PaymentType')
     asyncChannelList = await dictDropDown('AsyncPayChannel')
-    repairWayList = (await dictDropDown('PayRepairWay')).concat(await dictDropDown('RefundRepairWay'))
+    // 退款修复方式是支付修复的子集
+    repairWayList = await dictDropDown('PayRepairWay')
   }
 
   /**
