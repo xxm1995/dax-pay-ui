@@ -50,6 +50,15 @@
                     </div>
                   </div>
                 </div>
+                <div class="paydemo-type-name">聚合支付</div>
+                <div class="paydemo-type-body">
+                  <div v-for="item in aggregationPayList" :key="item.payInfo.payWay" @click="handleActive(item.payInfo)">
+                    <div :class="item.payInfo === currentActive ? 'colorChange' : 'paydemoType'">
+                      <img :src="item.img" class="paydemo-type-img" />
+                      <span class="color-change">{{ item.title }}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="paydemo-type-content">
                 <div class="paydemo-type-name">支付信息</div>
@@ -96,7 +105,12 @@
 <script lang="ts" setup>
   import CashierQrCode from './CashierQrCode.vue'
   import CashierBarCode from './CashierBarCode.vue'
-  import { findStatusByBusinessId, simplePayCashier } from './Cashier.api'
+  import {
+    aggregateBarCodePay,
+    createAggregatePayUrl,
+    findStatusByBusinessId,
+    simplePayCashier
+  } from "./Cashier.api";
   import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'
   import { onMounted, onUnmounted } from 'vue'
@@ -128,7 +142,7 @@
   let AliPayList = $ref([
     {
       img: new URL('./imgs/ali/ali_qr.svg', import.meta.url).href,
-      title: '二维码支付',
+      title: '扫码支付',
       payInfo: { payChannel: payChannelEnum.ALI, payWay: payWayEnum.QRCODE },
     },
     {
@@ -150,13 +164,25 @@
   let WxPayList = $ref([
     {
       img: new URL('./imgs/wechat/wx_native.svg', import.meta.url),
-      title: '二维码支付',
+      title: '扫码支付',
       payInfo: { payChannel: payChannelEnum.WECHAT, payWay: payWayEnum.QRCODE },
     },
     {
       img: new URL('./imgs/wechat/wx_bar.svg', import.meta.url),
       title: '条码支付',
       payInfo: { payChannel: payChannelEnum.WECHAT, payWay: payWayEnum.BARCODE },
+    },
+  ])
+  let aggregationPayList = $ref([
+    {
+      img: new URL('./imgs/qr/qr_cashier.svg', import.meta.url).href,
+      title: '扫码支付',
+      payInfo: { payChannel: payChannelEnum.AGGREGATION, payWay: payWayEnum.QRCODE },
+    },
+    {
+      img: new URL('./imgs/qr/auto_bar.svg', import.meta.url).href,
+      title: '条码支付',
+      payInfo: { payChannel: payChannelEnum.AGGREGATION, payWay: payWayEnum.BARCODE },
     },
   ])
   // 结算台下部分内容
@@ -205,17 +231,66 @@
     }
   }
   /**
-   * 发起支付
+   * 发起支付. 分别处理普通支付和聚合支付
    */
   function pay() {
     const { payChannel, payWay } = currentActive
-    // 付款码
+    // 聚合支付
+    if (payChannel === payChannelEnum.AGGREGATION) {
+      if (payWay === payWayEnum.BARCODE) {
+        cashierBarCode.init('请输入支付宝条码或微信条码')
+      } else {
+        aggregationQr()
+      }
+      return
+    }
+
+    // 普通支付
     if (payWay === payWayEnum.BARCODE) {
       cashierBarCode.init(payChannel === payChannelEnum.ALI ? '请输入支付宝条码' : '请输入微信条码')
     } else {
       qrPay(payChannel, payWay)
     }
   }
+
+  /**
+   * 聚合扫码
+   */
+  async function aggregationQr() {
+    const param = {
+      businessNo,
+      amount: totalMoney,
+      title: title,
+    }
+    // 获取聚合支付中间页地址
+    const { data: qrUrl } = await createAggregatePayUrl(param)
+    cashierQrCode.init(qrUrl, '请使用支付宝或微信"扫一扫"扫码支付')
+  }
+
+  /**
+   * 条码支付, 处理普通支付和聚合支付
+   */
+  function barPay(authCode: string) {
+    const { payChannel, payWay } = currentActive
+    // 聚合支付走单独分支
+    if (payChannel === payChannelEnum.AGGREGATION) {
+      aggregationBarPay(authCode)
+      return
+    }
+    // 普通条码支付
+    const param = {
+      title: title,
+      businessNo,
+      amount: totalMoney,
+      channel: payChannel,
+      payWay,
+      authCode,
+    }
+    simplePayCashier(param).then(() => {
+      resume()
+    })
+  }
+
   /**
    * 扫码支付
    */
@@ -244,17 +319,14 @@
   /**
    * 条码支付
    */
-  function barPay(authCode) {
-    const { payChannel, payWay } = currentActive
+  function aggregationBarPay(authCode: string) {
     const param = {
       title: title,
-      businessNo,
       amount: totalMoney,
-      channel: payChannel,
-      payWay,
+      businessNo,
       authCode,
     }
-    simplePayCashier(param).then(() => {
+    createAggregatePayUrl(param).then(() => {
       resume()
     })
   }

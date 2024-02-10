@@ -24,6 +24,28 @@ export function findStatusByBusinessId(businessNo) {
 }
 
 /**
+ * 创建聚合支付码连接
+ */
+export function createAggregatePayUrl(obj) {
+  return defHttp.post<Result<PayOrderResult>>({
+    url: '/demo/aggregate/createUrl',
+    method: 'POST',
+    data: obj,
+  })
+}
+
+/**
+ * 聚合条码支付
+ */
+export function aggregateBarCodePay(obj) {
+  return defHttp.post<Result<PayOrderResult>>({
+    url: '/demo/aggregate/barCodePay',
+    method: 'POST',
+    data: obj,
+  })
+}
+
+/**
  * 发起支付后响应对象
  */
 export interface PayOrderResult {

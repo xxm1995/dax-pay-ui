@@ -21,17 +21,34 @@
         </vxe-column>
         <vxe-column field="notice" title="回调通知">
           <template #default="{ row }">
-            <a-tag v-if="row.notice" color="green">启用</a-tag>
-            <a-tag v-else color="red">停用</a-tag>
+            <template v-if="row.noticeSupport">
+              <a-tag v-if="row.notice" color="green">启用</a-tag>
+              <a-tag v-else color="red">停用</a-tag>
+            </template>
+            <template v-else>
+              <a-tag>不支持</a-tag>
+            </template>
           </template>
         </vxe-column>
         <vxe-column field="noticeSign" title="回调签名">
           <template #default="{ row }">
-            <a-tag v-if="row.noticeSign" color="green">启用</a-tag>
-            <a-tag v-else color="red">停用</a-tag>
+            <template v-if="row.noticeSupport">
+              <a-tag v-if="row.noticeSign" color="green">启用</a-tag>
+              <a-tag v-else color="red">停用</a-tag>
+            </template>
+            <template v-else>
+            </template>
           </template>
         </vxe-column>
-        <vxe-column field="noticeUrl" title="默认回调地址" />
+        <vxe-column field="noticeUrl" title="默认回调地址">
+          <template #default="{ row }">
+            <template v-if="row.noticeSupport">
+              {{ row.noticeUrl }}
+            </template>
+            <template v-else>
+            </template>
+          </template>
+        </vxe-column>
         <vxe-column field="remark" title="备注" />
         <vxe-column fixed="right" width="100" :showOverflow="false" title="操作">
           <template #default="{ row }">

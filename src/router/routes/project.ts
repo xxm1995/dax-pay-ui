@@ -54,7 +54,7 @@ export const OUTSIDE: AppRouteModule = {
     {
       path: '/cashier',
       name: 'cashier',
-      component: () => import('/@/views/paydemo/cashier/Cashier.vue'),
+      component: () => import('/@/views/demo/cashier/Cashier.vue'),
       meta: { title: '结算台支付演示', ignoreAuth: true },
     },
   ],

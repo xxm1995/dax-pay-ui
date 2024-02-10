@@ -5,7 +5,7 @@ import { BaseEntity } from '/#/web'
 /**
  * 查询全部
  */
-export function findAll(){
+export function findAll() {
   return defHttp.get<Result<PayApiConfig[]>>({
     url: '/pay/api/config/findAll',
   })
@@ -34,19 +34,29 @@ export function update(param: PayApiConfig) {
 /**
  * 支付开放接口配置
  */
-export interface PayApiConfig extends BaseEntity{
-  /**
-   * 编码
-   */
+export interface PayApiConfig extends BaseEntity {
+  // 编码
   code?: string
+  // 接口地址
   api?: string
+  // 名称
   name?: string
+  // 支持回调通知
+  noticeSupport?: boolean
+  // 是否启用
   enable?: boolean
+  // 是否开启回调通知
   notice?: boolean
+  // 只有异步支付才进行通知
   onlyAsyncNotice?: boolean
+  // 默认回调地址
   noticeUrl?: string
+  // 请求参数是否签名
   reqSign?: boolean
+  // 响应参数是否签名
   resSign?: boolean
+  // 回调信息是否签名
   noticeSign?: boolean
+  // 是否记录请求的信息
   record?: boolean
 }

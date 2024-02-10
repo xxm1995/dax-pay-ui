@@ -27,13 +27,13 @@
         <a-form-item label="参数签名" name="reqSign">
           <a-switch v-model:checked="form.reqSign" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="回调通知" name="notice">
+        <a-form-item label="回调通知" v-if="form.noticeSupport" name="notice">
           <a-switch v-model:checked="form.notice" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="回调签名" name="noticeSign">
+        <a-form-item label="回调签名" v-if="form.noticeSupport" name="noticeSign">
           <a-switch v-model:checked="form.noticeSign" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="默认回调地址" name="noticeUrl">
+        <a-form-item label="默认回调地址" v-if="form.noticeSupport" name="noticeUrl">
           <a-input v-model:value="form.noticeUrl" :disabled="showable" placeholder="请输入回调地址" />
         </a-form-item>
         <a-form-item label="备注" name="remark">
