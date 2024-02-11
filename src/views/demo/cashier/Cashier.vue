@@ -6,7 +6,7 @@
           <div class="content" style="padding-top: 20px">
             <div style="width: 100%">
               <a-alert
-                message="本结算台是基于支付网关搭建的演示模块，支付后可以通过管理端进行退款操作，"
+                message="本收银台是基于DaxPay开源支付网关搭建的演示模块，支付后可以通过管理端进行退款操作，"
                 type="warning"
                 show-icon
                 style="margin-bottom: 20px; padding: 15px"
@@ -23,11 +23,11 @@
                   <div style="position: relative">
                     <div class="paydemo-type-h5" @mouseover="wxHover = true" @mouseleave="wxHover = false">
                       <img src="./imgs/wechat/wx_jsapi.svg" class="paydemo-type-img" />
-                      <span class="color-change">公众号支付</span>
+                      <span class="color-change">公众号</span>
                     </div>
                     <div class="paydemo-type-h5 codeImg_wx_h5" v-if="wxHover">
                       <qr-code :options="{ margin: 2 }" :width="150" :value="wxH5Url" />
-                      <span>请使用手机浏览器扫码</span>
+                      <span>使用微信扫码体验</span>
                     </div>
                   </div>
                 </div>
@@ -40,13 +40,13 @@
                     </div>
                   </div>
                   <div style="position: relative">
-                    <div class="paydemo-type-h5" code="ALI_WAP" @mouseover="aliHover = true" @mouseleave="aliHover = false">
+                    <div class="paydemo-type-h5" @mouseover="aliHover = true" @mouseleave="aliHover = false">
                       <img src="./imgs/ali/ali_jsapi.svg" class="paydemo-type-img" />
                       <span>h5支付</span>
                     </div>
                     <div class="paydemo-type-h5 codeImg_wx_h5" v-if="aliHover">
                       <qr-code :options="{ margin: 2 }" :width="150" :value="aliH5Url" />
-                      <span>请使用手机浏览器扫码</span>
+                      <span>使用支付宝扫码体验</span>
                     </div>
                   </div>
                 </div>
@@ -57,6 +57,10 @@
                       <img :src="item.img" class="paydemo-type-img" />
                       <span class="color-change">{{ item.title }}</span>
                     </div>
+                  </div>
+                  <div class="paydemo-type-h5" @click="h5cashier">
+                    <img src="./imgs/aggregate/cashier-h5.svg" class="paydemo-type-img" style="margin-left: 8px" />
+                    <span>H5收银台</span>
                   </div>
                 </div>
               </div>
@@ -133,11 +137,13 @@
   let title = $ref('测试支付')
   let loading = $ref(false)
   // 微信 h5
-  let wxH5Url = $ref('cs')
+  let wxH5Url = $ref('初始化中...')
   let wxHover = $ref(false)
   // 支付宝 h5
-  let aliH5Url = $ref('cs')
+  let aliH5Url = $ref('初始化中...')
   let aliHover = $ref(false)
+  // 聚合支付
+  let h5cashierUrl = $ref('初始化中...')
   // 当前选择支付渠道和方式
   let currentActive = $ref({
     payChannel: null,
@@ -184,12 +190,12 @@
   ])
   let aggregationPayList = $ref([
     {
-      img: new URL('./imgs/qr/qr_cashier.svg', import.meta.url).href,
+      img: new URL('./imgs/aggregate/qr_cashier.svg', import.meta.url).href,
       title: '扫码支付',
       payInfo: { payChannel: payChannelEnum.AGGREGATION, payWay: payWayEnum.QRCODE },
     },
     {
-      img: new URL('./imgs/qr/auto_bar.svg', import.meta.url).href,
+      img: new URL('./imgs/aggregate/auto_bar.svg', import.meta.url).href,
       title: '条码支付',
       payInfo: { payChannel: payChannelEnum.AGGREGATION, payWay: payWayEnum.BARCODE },
     },
@@ -226,9 +232,10 @@
   /**
    * 初始化业务数据
    */
-  async function initData() {
+  function initData() {
     // 生成业务编码
     genBusinessNo()
+    // 获取微信H5、支付宝H5、手机收银台
   }
   /**
    * 支付金额变动
@@ -242,6 +249,14 @@
       payMoneyShow = false
     }
   }
+
+  /**
+   * h5收银台
+   */
+  function h5cashier() {
+    cashierQrCode.init(h5cashierUrl, '请使用浏览器、支付宝、微信等软件扫码体验')
+  }
+
   /**
    * 发起支付. 分别处理普通支付和聚合支付
    */
@@ -277,7 +292,7 @@
     // 获取聚合支付中间页地址
     const { data: qrUrl } = await createAggregatePayUrl(param)
     resume()
-    cashierQrCode.init(qrUrl, '请使用支付宝或微信"扫一扫"扫码支付')
+    cashierQrCode.init(qrUrl, '请使用支付宝或微信"扫一扫"进行支付')
   }
 
   /**
@@ -322,10 +337,10 @@
     if ([payWayEnum.WAP, payWayEnum.WEB].includes(payWay)) {
       window.open(data.payBody)
     } else if (payChannel === payChannelEnum.ALI) {
-      cashierQrCode.init(data.payBody, '请使用支付宝"扫一扫"扫码支付')
+      cashierQrCode.init(data.payBody, '请使用支付宝"扫一扫"进行支付')
       resume()
     } else {
-      cashierQrCode.init(data.payBody, '请使用微信"扫一扫"扫码支付')
+      cashierQrCode.init(data.payBody, '请使用微信"扫一扫"进行支付')
       resume()
     }
   }
