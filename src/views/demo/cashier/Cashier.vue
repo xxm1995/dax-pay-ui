@@ -22,8 +22,8 @@
                   </div>
                   <div style="position: relative">
                     <div class="paydemo-type-h5" @mouseover="wxHover = true" @mouseleave="wxHover = false">
-                      <img src="./imgs/wechat/wx_h5.svg" class="paydemo-type-img" />
-                      <span>微信H5</span>
+                      <img src="./imgs/wechat/wx_jsapi.svg" class="paydemo-type-img" />
+                      <span class="color-change">公众号支付</span>
                     </div>
                     <div class="paydemo-type-h5 codeImg_wx_h5" v-if="wxHover">
                       <qr-code :options="{ margin: 2 }" :width="150" :value="wxH5Url" />
@@ -41,8 +41,8 @@
                   </div>
                   <div style="position: relative">
                     <div class="paydemo-type-h5" code="ALI_WAP" @mouseover="aliHover = true" @mouseleave="aliHover = false">
-                      <img src="./imgs/ali/ali_wap.svg" class="paydemo-type-img" />
-                      <span>支付宝WAP</span>
+                      <img src="./imgs/ali/ali_jsapi.svg" class="paydemo-type-img" />
+                      <span>h5支付</span>
                     </div>
                     <div class="paydemo-type-h5 codeImg_wx_h5" v-if="aliHover">
                       <qr-code :options="{ margin: 2 }" :width="150" :value="aliH5Url" />
@@ -83,10 +83,19 @@
                         {{ item.label }}
                       </a-radio>
                     </a-radio-group>
+                    <a-input-number
+                      v-if="payMoneyShow"
+                      style="width: 120px !important"
+                      :max="100"
+                      :min="0.01"
+                      :precision="2"
+                      v-model:value="totalMoney"
+                    />
                   </div>
+
                   <div style="margin-top: 20px; text-align: right">
-                    <span style="color: #fd482c; font-size: 18px; padding-right: 10px">{{ '¥ ' + totalMoney }}</span>
-                    <a-button type="primary" :disabled="currentActive.payWay == null" @click="pay">立即支付</a-button>
+                    <span v-if="totalMoney" style="color: #fd482c; font-size: 18px; padding-right: 10px">{{ '¥ ' + totalMoney }}</span>
+                    <a-button type="primary" :disabled="currentActive.payWay == null || !totalMoney" @click="pay">立即支付</a-button>
                   </div>
                 </a-form>
               </div>
@@ -105,12 +114,7 @@
 <script lang="ts" setup>
   import CashierQrCode from './CashierQrCode.vue'
   import CashierBarCode from './CashierBarCode.vue'
-  import {
-    aggregateBarCodePay,
-    createAggregatePayUrl,
-    findStatusByBusinessId,
-    simplePayCashier
-  } from "./Cashier.api";
+  import { createAggregatePayUrl, findStatusByBusinessId, simplePayCashier } from './Cashier.api'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'
   import { onMounted, onUnmounted } from 'vue'
@@ -172,6 +176,11 @@
       title: '条码支付',
       payInfo: { payChannel: payChannelEnum.WECHAT, payWay: payWayEnum.BARCODE },
     },
+    {
+      img: new URL('./imgs/wechat/wx_h5.svg', import.meta.url).href,
+      title: 'wap支付',
+      payInfo: { payChannel: payChannelEnum.WECHAT, payWay: payWayEnum.WAP },
+    },
   ])
   let aggregationPayList = $ref([
     {
@@ -189,8 +198,11 @@
   let payMoneyList = [
     // 支付金额列表
     { label: '0.01', value: 0.01 },
+    { label: '0.02', value: 0.02 },
+    { label: '0.03', value: 0.03 },
     { label: '0.1', value: 0.1 },
-    { label: '9.99', value: 9.99 },
+    { label: '1.00', value: 1.0 },
+    { label: '自定义', value: null },
   ]
   let payMoneyValue = $ref(0.01)
   let totalMoney: null | number = $ref(0.01)
@@ -223,7 +235,7 @@
    */
   function payMoneyValueChange(e) {
     totalMoney = null
-    if (e.target.value === '6') {
+    if (e.target.value === null) {
       payMoneyShow = true
     } else {
       totalMoney = e.target.value
@@ -264,6 +276,7 @@
     }
     // 获取聚合支付中间页地址
     const { data: qrUrl } = await createAggregatePayUrl(param)
+    resume()
     cashierQrCode.init(qrUrl, '请使用支付宝或微信"扫一扫"扫码支付')
   }
 

@@ -6,7 +6,7 @@
           {{ topTitle }}
         </div>
         <div style="display: flex; flex-direction: row; justify-content: space-between">
-          <a-input allowClear v-model="authCode" />
+          <a-input allowClear v-model:value="authCode" placeholder="请输入付款条码" />
         </div>
       </div>
     </a-spin>
