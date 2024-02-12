@@ -18,8 +18,16 @@ export function simplePayCashier(obj) {
 export function findStatusByBusinessId(businessNo) {
   return defHttp.get<Result<boolean>>({
     url: '/demo/cashier/queryPayOrderSuccess',
-    method: 'GET',
     params: { businessNo },
+  })
+}
+
+/**
+ * 获取手机收银台链接
+ */
+export function getUniCashierUrl() {
+  return defHttp.get<Result<string>>({
+    url: '/demo/cashier/getUniCashierUrl',
   })
 }
 
@@ -29,7 +37,6 @@ export function findStatusByBusinessId(businessNo) {
 export function createAggregatePayUrl(obj) {
   return defHttp.post<Result<PayOrderResult>>({
     url: '/demo/aggregate/createUrl',
-    method: 'POST',
     data: obj,
   })
 }

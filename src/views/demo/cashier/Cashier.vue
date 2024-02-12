@@ -6,7 +6,7 @@
           <div class="content" style="padding-top: 20px">
             <div style="width: 100%">
               <a-alert
-                message="本收银台是基于DaxPay开源支付网关搭建的演示模块，支付后可以通过管理端进行退款操作，"
+                message="本收银台是基于DaxPay开源支付网关搭建的演示模块，支付后可以通过管理端进行退款。"
                 type="warning"
                 show-icon
                 style="margin-bottom: 20px; padding: 15px"
@@ -118,7 +118,7 @@
 <script lang="ts" setup>
   import CashierQrCode from './CashierQrCode.vue'
   import CashierBarCode from './CashierBarCode.vue'
-  import { createAggregatePayUrl, findStatusByBusinessId, simplePayCashier } from './Cashier.api'
+  import { aggregateBarCodePay, createAggregatePayUrl, findStatusByBusinessId, getUniCashierUrl, simplePayCashier } from './Cashier.api'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'
   import { onMounted, onUnmounted } from 'vue'
@@ -133,17 +133,17 @@
   const cashierBarCode = $ref<any>()
 
   // 业务单号
-  let businessNo = $ref('')
-  let title = $ref('测试支付')
+  let businessNo = $ref<string>('')
+  let title = $ref<string>('测试支付')
   let loading = $ref(false)
   // 微信 h5
-  let wxH5Url = $ref('初始化中...')
-  let wxHover = $ref(false)
+  let wxH5Url = $ref<string>('初始化中...')
+  let wxHover = $ref<boolean>(false)
   // 支付宝 h5
-  let aliH5Url = $ref('初始化中...')
-  let aliHover = $ref(false)
+  let aliH5Url = $ref<string>('初始化中...')
+  let aliHover = $ref<boolean>(false)
   // 聚合支付
-  let h5cashierUrl = $ref('初始化中...')
+  let h5cashierUrl = $ref<string>('初始化中...')
   // 当前选择支付渠道和方式
   let currentActive = $ref({
     payChannel: null,
@@ -235,7 +235,8 @@
   function initData() {
     // 生成业务编码
     genBusinessNo()
-    // 获取微信H5、支付宝H5、手机收银台
+    // 获取微信H5、支付宝H5、手机收银台的链接地址
+    initH5CashierUrl()
   }
   /**
    * 支付金额变动
@@ -331,8 +332,9 @@
       payWay,
     }
     loading = true
-    const { data } = await simplePayCashier(param)
-    loading = false
+    const { data } = await simplePayCashier(param).finally(() => {
+      loading = false
+    })
     // pc支付
     if ([payWayEnum.WAP, payWayEnum.WEB].includes(payWay)) {
       window.open(data.payBody)
@@ -354,7 +356,7 @@
       businessNo,
       authCode,
     }
-    createAggregatePayUrl(param).then(() => {
+    aggregateBarCodePay(param).then(() => {
       resume()
     })
   }
@@ -364,6 +366,18 @@
   function genBusinessNo() {
     businessNo = 'P' + new Date().getTime()
   }
+
+  /**
+   * 初始化H5收银台链接
+   */
+  function initH5CashierUrl() {
+    getUniCashierUrl().then((res) => {
+      h5cashierUrl = res.data
+      wxH5Url = res.data
+      aliH5Url = res.data
+    })
+  }
+
   /**
    * 当前选择的支付类型
    */
