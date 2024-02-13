@@ -57,13 +57,13 @@
           <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.sandbox" />
         </a-form-item>
         <a-form-item label="认证方式" name="authType">
-          <a-select allowClearv-model:value="form.authType" style="width: 100%" placeholder="选择认证方式">
+          <a-select allowClear v-model:value="form.authType" style="width: 100%" placeholder="选择认证方式">
             <a-select-option key="key">公钥模式</a-select-option>
             <a-select-option key="cart">证书模式</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item label="签名类型" name="signType">
-          <a-select allowClearv-model:value="form.signType" style="width: 100%" placeholder="选择签名类型">
+          <a-select allowClear v-model:value="form.signType" style="width: 100%" placeholder="选择签名类型">
             <a-select-option key="RSA2">RSA2秘钥</a-select-option>
           </a-select>
         </a-form-item>

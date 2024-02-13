@@ -1,19 +1,59 @@
 # Dax-Pay-UI
 
-## 🍈 项目介绍
+## 🍈项目介绍
 
-Dax-Pay是Bootx-Platform的子项目之一，主要是对支付收单和账务进行优化，精简与支付无关的模块，专注支付领域，对微信和支付宝的各种支付方式进行封装，
-同时扩展了更多支付方式，如储值卡、现金卡等，可以作为一个简单的四方支付进行使用。
+> DaxPay是一套基于Bootx-Platform脚手架构建的一套开源支付网关系统，已经对接支付宝、微信支付相关的接口，以及扩展了钱包支付、储值卡支付、现金支付等新的支付方式。
+> 可以独立部署，提供接口供业务系统进行调用，不对原有系统产生影响
 
-## 前端项目
+## 🍒 文档和源码地址
+### 文档地址
+在 [Bootx开源文档站](https://bootx.gitee.io/) 下的支付网关(DaxPay)模块下可以进行查阅相关文档，具体链接地址如下：
+[快速指南](https://bootx.gitee.io/daxpay/guides/overview/项目介绍.html)、
+[支付对接](https://bootx.gitee.io/daxpay/gateway/overview/接口清单.html)、
+[平台配置](https://bootx.gitee.io/daxpay/admin/config/平台配置.html)
 
-> 基于 Vben-Admin-Next 前端脚手架
+### 项目地址
+后端地址：[https://gitee.com/bootx/dax-pay](https://gitee.com/bootx/dax-pay)
 
-演示地址: [Dax支付系统](http://daxpay.demo.bootx.cn/)
-后端项目：[后端项目](https://gitee.com/bootx/dax-pay)
+Web前端地址：[https://gitee.com/bootx/dax-pay-ui](https://gitee.com/bootx/dax-pay-ui)
 
-使用Vue3 + Vite + TS进行构建开发
+H5前端地址：[https://gitee.com/bootx/dax-pay-h5](https://gitee.com/bootx/dax-pay-h5)
 
+## 🏬 系统演示
+### 管理平台:
+> 注：演示账号部分功能修改删除权限未开放。
+
+地址：https://daxpay.demo.bootx.cn
+
+账号：daxpay
+
+密码：123456
+
+### 网关接口
+> 注：接口平台只开放支付网关相关的接口，不开放系统其他接口。
+
+地址: https://daxpay.server.bootx.cn/doc.html
+
+账号: daxpay
+
+密码: 123456
+
+### 收银台演示
+> 请勿大额支付，可以通过后台管理端进行退款
+
+电脑收银台地址: https://daxpay.demo.bootx.cn/#/cashier
+
+手机收银台地址: https://daxpay.demo.bootx.cn/h5/#/cashier/uniCashier
+
+## 项目启动
+```shell
+# 安装项目依赖, 请使用Node16及以上版本
+pnpm install
+# 启动项目
+pnpm run dev
+# 构建打包
+pnpm build
+```
 
 ## 常见问题
 出现以下错误不用管，不影响使用，只在第一次启动时出现，之后就不会再出现

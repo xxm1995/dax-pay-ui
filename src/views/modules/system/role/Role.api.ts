@@ -138,7 +138,7 @@ export function findPermissionIdsByRole(roleId, clientCode) {
  */
 export function findTreeByRole(roleId, clientCode) {
   return defHttp.get<Result<MenuTree[]>>({
-    url: '/perm/menu/findTreeByRole',
+    url: '/role/menu/findTreeByRole',
     params: { roleId, clientCode },
   })
 }

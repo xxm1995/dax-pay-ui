@@ -12,7 +12,7 @@
       <a-form-item label="主键" name="id" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
-      <a-form-item v-show="addable" label="上级菜单" name="parentId">
+      <a-form-item v-show="addable" label="上级角色" name="parentId">
         <a-tree-select
           style="width: 100%"
           :tree-data="treeData"
