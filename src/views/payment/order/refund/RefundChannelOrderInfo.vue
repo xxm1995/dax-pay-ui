@@ -19,13 +19,13 @@
         {{ form.amount }}
       </a-descriptions-item>
       <a-descriptions-item label="通道支付单ID">
-        {{ form.PayChannelId }}
+        {{ form.payChannelId }}
       </a-descriptions-item>
       <a-descriptions-item label="剩余可退余额">
         {{ form.refundableAmount }}
       </a-descriptions-item>
       <a-descriptions-item label="退款通道">
-        {{ form.gatewayOrderNo }}
+        {{ dictConvert('PayChannel', form.channel) }}
       </a-descriptions-item>
       <a-descriptions-item label="状态">
         <a-tag>{{ dictConvert('RefundStatus', form.status) }}</a-tag>

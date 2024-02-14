@@ -16,7 +16,7 @@
           <a-tag>{{ dictConvert('RefundStatus', row.status) }}</a-tag>
         </template>
       </vxe-column>
-      <vxe-column field="PayChannelId" title="通道支付单ID" />
+      <vxe-column field="payChannelId" title="通道支付单ID" />
       <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
         <template #default="{ row }">
           <span>

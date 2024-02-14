@@ -15,10 +15,10 @@
       <a-descriptions-item label="交易金额">
         {{ form.amount }}
       </a-descriptions-item>
-      <a-descriptions-item label="本地订单ID">
+      <a-descriptions-item label="支付订单ID">
         {{ form.paymentId }}
       </a-descriptions-item>
-      <a-descriptions-item label="本地退款ID" v-if="form.refundId">
+      <a-descriptions-item label="退款订单ID" v-if="form.refundId">
         {{ form.refundId }}
       </a-descriptions-item>
       <a-descriptions-item label="网关订单号">

@@ -34,7 +34,7 @@
         <vxe-column field="repairOrder" title="是否修复" width="170">
           <template #default="{ row }">
             <a-tag v-if="row.repairOrder" color="green"> {{ row.repairOrderNo }} </a-tag>
-            <a-tag v-else>否</a-tag>
+            <a-tag v-else>无需修复</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="gatewayOrderNo" title="网关订单号" width="170" />

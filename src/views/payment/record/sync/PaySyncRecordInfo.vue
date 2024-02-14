@@ -29,9 +29,9 @@
           <a-tag v-if="form.syncType === 'pay'">{{ dictConvert('PaySyncStatus', form.gatewayStatus) }}</a-tag>
           <a-tag v-else>{{ dictConvert('RefundSyncStatus', form.gatewayStatus) }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="是否修复">
+        <a-descriptions-item label="修复单号">
           <a-tag v-if="form.repairOrder" color="green"> {{ form.repairOrderNo }} </a-tag>
-          <a-tag v-else>否</a-tag>
+          <a-tag v-else>无需修复</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="同步时间">
           {{ form.createTime }}

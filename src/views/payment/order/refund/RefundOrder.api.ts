@@ -100,13 +100,11 @@ export interface RefundOrder extends BaseEntity {
  * 通道退款订单
  */
 export interface RefundChannelOrder extends BaseEntity {
-  // 支付通道
+  // 退款订单
   refundId?: string
   // 通道支付单id
-  PayChannelId?: string
-  // 关联网关退款号
-  gatewayOrderNo?: string
-  // 通道支付单id
+  payChannelId?: string
+  // 是否为异步支付
   async?: boolean
   // 通道
   channel?: string

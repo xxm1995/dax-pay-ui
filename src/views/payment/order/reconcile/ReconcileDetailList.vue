@@ -6,8 +6,8 @@
       <vxe-column type="seq" width="60" />
       <vxe-column field="title" title="商品名称" />
       <vxe-column field="amount" title="交易金额" />
-      <vxe-column field="paymentId" title="本地订单ID" />
-      <vxe-column field="refundId" title="本地退款ID" />
+      <vxe-column field="paymentId" title="支付订单ID" />
+      <vxe-column field="refundId" title="退款订单ID" />
       <vxe-column field="gatewayOrderNo" title="网关订单号" />
       <vxe-column field="repairType" title="交易类型">
         <template #default="{ row }">
