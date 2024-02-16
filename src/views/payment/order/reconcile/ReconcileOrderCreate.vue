@@ -1,6 +1,6 @@
 <template>
   <basic-modal
-    title="对账订单详情"
+    title="新建对账订单"
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="modalWidth"
