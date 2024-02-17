@@ -103,7 +103,6 @@
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { getConfig, update, findPayWayList, WechatPayConfig } from './WechatPayConfig.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
-  import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicDrawer } from '/@/components/Drawer'
   import Icon from '/@/components/Icon/src/Icon.vue'
   import { useUpload } from '/@/hooks/bootx/useUpload'
@@ -111,26 +110,11 @@
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
 
-  const {
-    initFormEditType,
-    handleCancel,
-    search,
-    diffForm,
-    labelCol,
-    wrapperCol,
-    modalWidth,
-    title,
-    confirmLoading,
-    visible,
-    editable,
-    showable,
-    formEditType,
-  } = useFormEdit()
+  const { handleCancel, search, diffForm, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, editable, showable } =
+    useFormEdit()
   // 文件上传
   const { tokenHeader, uploadAction } = useUpload('/wechat/pay/config/toBase64')
   const { createMessage } = useMessage()
-
-  let editType = $ref<FormEditType>()
 
   // 表单
   const formRef = $ref<FormInstance>()
@@ -235,8 +219,4 @@
   })
 </script>
 
-<style lang="less" scoped>
-  .vben-basic-title {
-    font-size: 14px;
-  }
-</style>
+<style lang="less" scoped></style>

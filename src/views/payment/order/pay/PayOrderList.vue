@@ -36,7 +36,7 @@
         </vxe-column>
         <vxe-column field="asyncChannel" title="异步支付方式">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('PayChannel', row.asyncChannel) }}</a-tag>
+            <a-tag>{{ dictConvert('PayChannel', row.asyncChannel) || '无' }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="expiredTime" title="过期时间" sortable />

@@ -159,35 +159,20 @@
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { update, AlipayConfig, findPayWays, getConfig } from './AlipayConfig.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
-  import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicDrawer } from '/@/components/Drawer'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { useUpload } from '/@/hooks/bootx/useUpload'
   import { useMessage } from '/@/hooks/web/useMessage'
   import Icon from '/@/components/Icon/src/Icon.vue'
   import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
-  const {
-    initFormEditType,
-    handleCancel,
-    search,
-    diffForm,
-    labelCol,
-    wrapperCol,
-    modalWidth,
-    title,
-    confirmLoading,
-    visible,
-    editable,
-    showable,
-    formEditType,
-  } = useFormEdit()
+  const { handleCancel, search, diffForm, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, editable, showable } =
+    useFormEdit()
   // 读取证书内容
   const { tokenHeader, uploadAction } = useUpload('/alipay/config/readPem')
   const { createMessage } = useMessage()
 
   const formRef = $ref<FormInstance>()
 
-  let editType = $ref<FormEditType>()
   let payWayList = $ref<LabeledValue[]>([])
   let form = $ref({
     appId: '',
