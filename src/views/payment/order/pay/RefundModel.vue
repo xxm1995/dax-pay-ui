@@ -32,7 +32,7 @@
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import { refund, RefundableInfo } from '../refund/RefundOrder.api'
+  import { refund } from '../refund/RefundOrder.api'
   import BasicModal from '/@/components/Modal/src/BasicModal.vue'
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { useMessage } from '/@/hooks/web/useMessage'
