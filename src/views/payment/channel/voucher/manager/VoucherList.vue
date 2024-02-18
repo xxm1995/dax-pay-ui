@@ -6,7 +6,7 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
-          <a-button type="primary" @click="create">钱包开通</a-button>
+          <a-button type="primary" @click="importCard">导入储值卡</a-button>
         </template>
       </vxe-toolbar>
       <vxe-table
@@ -18,23 +18,26 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="id" title="钱包ID" width="170" />
-        <vxe-column field="userId" title="用户ID" />
-        <vxe-column field="name" title="钱包名称" />
+        <vxe-column field="id" title="卡ID" width="170" />
+        <vxe-column field="cardNo" title="卡号" />
+        <vxe-column field="faceValue" title="面值(分)" sortable />
         <vxe-column field="balance" title="余额(分)" sortable />
+        <vxe-column field="enduring" title="是否长期有效">
+          <template #default="{ row }">
+            <a-tag>{{ row.enduring ? '长期' : '期限' }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="startTime" title="开始时间" sortable />
+        <vxe-column field="endTime" title="结束时间" sortable />
         <vxe-column field="status" title="状态">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('WalletStatus', row.status) || '无' }}</a-tag>
+            <a-tag>{{ dictConvert('VoucherStatus', row.status) || '无' }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="createTime" title="创建时间" sortable />
-        <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="100" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
-            <a-divider type="vertical" />
-            <a-link @click="showRecharge(row)">充值</a-link>
-            <a-divider type="vertical" />
-            <a-link @click="showDeduction(row)">扣减</a-link>
             <a-divider type="vertical" />
             <a-link @click="showRecord(row)">流水</a-link>
           </template>
@@ -49,18 +52,16 @@
         @page-change="handleTableChange"
       />
     </div>
-    <wallet-info ref="walletInfo" />
-    <wallet-create-model ref="walletCreateModel" @ok="queryPage" />
-    <wallet-deduct-model ref="walletDeductModel" @ok="queryPage" />
-    <wallet-recharge-model ref="walletRechargeModel" @ok="queryPage" />
-    <wallet-record-list ref="walletRecordList" />
+    <voucher-import-model ref="voucherImportModel" @ok="queryPage" />
+    <voucher-record-list ref="voucherRecordList" />
+    <voucher-info ref="voucherInfo" />
   </div>
 </template>
 
 <script setup lang="ts">
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page } from './Wallet.api'
+  import { page } from './Voucher.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
@@ -68,11 +69,9 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import { VxeTableInstance, VxeToolbarInstance, VxePager, VxeTable, VxeToolbar } from 'vxe-table'
   import ALink from '/@/components/Link/Link.vue'
-  import WalletCreateModel from './WalletCreateModel.vue'
-  import WalletRecordList from '../record/WalletRecordList.vue'
-  import WalletRechargeModel from './WalletRechargeModel.vue'
-  import WalletDeductModel from './WalletDeductModel.vue'
-  import WalletInfo from './WalletInfo.vue'
+  import VoucherImportModel from './VoucherImportModel.vue'
+  import VoucherInfo from './VoucherInfo.vue'
+  import VoucherRecordList from '/@/views/payment/channel/voucher/record/VoucherRecordList.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, sortChange, resetQueryParams, pagination, pages, sortParam, model, loading } =
@@ -88,11 +87,9 @@
     ] as QueryField[]
   })
 
-  let walletInfo = $ref<any>()
-  let walletCreateModel = $ref<any>()
-  let walletDeductModel = $ref<any>()
-  let walletRechargeModel = $ref<any>()
-  let walletRecordList = $ref<any>()
+  const voucherImportModel = $ref<any>()
+  const voucherRecordList = $ref<any>()
+  const voucherInfo = $ref<any>()
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
@@ -120,37 +117,24 @@
   }
 
   /**
-   * 开通钱包
+   * 导入储值卡
    */
-  function create() {
-    walletCreateModel.init()
+  function importCard() {
+    voucherImportModel.init()
   }
 
   /**
    * 查看
    */
   function show(record) {
-    walletInfo.init(record)
+    voucherInfo.init(record)
   }
 
   /**
-   * 充值
-   */
-  function showRecharge(record) {
-    walletRechargeModel.init(record.id)
-  }
-
-  /**
-   * 扣减
-   */
-  function showDeduction(record) {
-    walletDeductModel.init(record.id)
-  }
-  /**
-   * 流水
+   * 查看记录
    */
   function showRecord(record) {
-    walletRecordList.init(record)
+    voucherRecordList.init(record)
   }
 </script>
 
