@@ -19,6 +19,8 @@
       <vxe-column field="oldAmount" title="变动之前的金额" />
       <vxe-column field="newAmount" title="变动之后的金额" />
       <vxe-column field="createTime" title="记录时间" sortable />
+      <vxe-column field="remark" title="备注" />
+      <vxe-column field="createTime" title="创建时间" sortable />
     </vxe-table>
     <vxe-pager
       size="medium"
