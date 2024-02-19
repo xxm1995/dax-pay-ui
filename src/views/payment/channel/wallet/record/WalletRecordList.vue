@@ -10,14 +10,13 @@
       @sort-change="sortChange"
     >
       <vxe-column type="seq" title="序号" width="60" />
-      <vxe-column field="type" title="本地订单ID" min-width="170">
+      <vxe-column field="orderId" title="订单号" />
+      <vxe-column field="type" title="类型">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('WalletRecordType', row.type) }}</a-tag>
         </template>
       </vxe-column>
       <vxe-column field="amount" title="金额" />
-      <vxe-column field="oldAmount" title="变动之前的金额" />
-      <vxe-column field="newAmount" title="变动之后的金额" />
       <vxe-column field="remark" title="备注" />
       <vxe-column field="createTime" title="记录时间" sortable />
     </vxe-table>
