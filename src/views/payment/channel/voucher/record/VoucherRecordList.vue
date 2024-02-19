@@ -12,15 +12,18 @@
       <vxe-column type="seq" title="序号" width="60" />
       <vxe-column field="type" title="本地订单ID" min-width="170">
         <template #default="{ row }">
-          <a-tag>{{ dictConvert('WalletRecordType', row.type) }}</a-tag>
+          <a-tag>{{ dictConvert('VoucherRecordType', row.type) }}</a-tag>
         </template>
       </vxe-column>
       <vxe-column field="amount" title="金额" />
-      <vxe-column field="oldAmount" title="变动之前的金额" />
-      <vxe-column field="newAmount" title="变动之后的金额" />
-      <vxe-column field="createTime" title="记录时间" sortable />
+      <vxe-column field="orderId" title="订单号" />
       <vxe-column field="remark" title="备注" />
       <vxe-column field="createTime" title="创建时间" sortable />
+      <vxe-column fixed="right" width="50" :showOverflow="false" title="操作">
+        <template #default="{ row }">
+          <a-link @click="show(row)">查看</a-link>
+        </template>
+      </vxe-column>
     </vxe-table>
     <vxe-pager
       size="medium"
@@ -30,6 +33,7 @@
       :total="pagination.total"
       @page-change="handleTableChange"
     />
+    <voucher-record-info ref="voucherRecordInfo" />
   </basic-drawer>
 </template>
 
@@ -43,6 +47,8 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   import { Voucher } from '../manager/Voucher.api'
+  import ALink from '/@/components/Link/Link.vue'
+  import VoucherRecordInfo from './VoucherRecordInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
@@ -52,6 +58,7 @@
 
   let visible = $ref<boolean>(false)
   let voucher = $ref<Voucher>({})
+  let voucherRecordInfo = $ref<any>()
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
@@ -91,6 +98,14 @@
     })
     return Promise.resolve()
   }
+
+  /**
+   * 查看详情
+   */
+  function show(record) {
+    voucherRecordInfo.init(record)
+  }
+
   defineExpose({ init })
 </script>
 

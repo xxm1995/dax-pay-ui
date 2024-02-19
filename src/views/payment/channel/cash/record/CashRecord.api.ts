@@ -27,13 +27,13 @@ export function get(id) {
  */
 export interface CashRecord extends BaseEntity {
   // 类型
-  type: string
+  type?: string
   // 金额
-  amount: string
+  amount?: string
   // 交易订单号
-  orderId: string
+  orderId?: string
   // 地址
-  ip: string
+  ip?: string
   // 备注
-  remark: string
+  remark?: string
 }

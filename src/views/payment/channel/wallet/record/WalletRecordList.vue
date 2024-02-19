@@ -19,6 +19,11 @@
       <vxe-column field="amount" title="金额" />
       <vxe-column field="remark" title="备注" />
       <vxe-column field="createTime" title="记录时间" sortable />
+      <vxe-column fixed="right" width="50" :showOverflow="false" title="操作">
+        <template #default="{ row }">
+          <a-link @click="show(row)">查看</a-link>
+        </template>
+      </vxe-column>
     </vxe-table>
     <vxe-pager
       size="medium"
@@ -28,6 +33,7 @@
       :total="pagination.total"
       @page-change="handleTableChange"
     />
+    <wallet-record-info ref="walletRecordInfo" />
   </basic-drawer>
 </template>
 
@@ -41,6 +47,8 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import { Wallet } from '/@/views/payment/channel/wallet/manager/Wallet.api'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
+  import WalletRecordInfo from './WalletRecordInfo.vue'
+  import ALink from "/@/components/Link/Link.vue";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
@@ -50,6 +58,7 @@
 
   let visible = $ref<boolean>(false)
   let wallet = $ref<Wallet>({})
+  let walletRecordInfo = $ref<any>()
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
@@ -72,6 +81,13 @@
     visible = true
     wallet = record
     queryPage()
+  }
+
+  /**
+   * 查看
+   */
+  function show(record) {
+    walletRecordInfo.init(record)
   }
 
   /**
