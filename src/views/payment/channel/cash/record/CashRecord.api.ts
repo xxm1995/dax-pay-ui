@@ -26,6 +26,8 @@ export function get(id) {
  * 现金记录
  */
 export interface CashRecord extends BaseEntity {
+  // 标题
+  title?: string
   // 类型
   type?: string
   // 金额

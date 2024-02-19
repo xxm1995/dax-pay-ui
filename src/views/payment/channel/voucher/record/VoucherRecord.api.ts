@@ -28,6 +28,8 @@ export function get(id) {
 export interface VoucherRecord extends BaseEntity {
   // 储值卡 id
   voucherId?: string
+  // 标题
+  title?: string
   // 业务类型
   type?: string
   // 金额

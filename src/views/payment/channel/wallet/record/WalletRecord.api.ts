@@ -28,6 +28,8 @@ export function get(id) {
 export interface WalletRecord extends BaseEntity {
   // 钱包id
   walletId?: string
+  // 标题
+  title?: string
   // 业务类型
   type?: string
   // 金额

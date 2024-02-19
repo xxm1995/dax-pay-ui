@@ -10,7 +10,8 @@
       @sort-change="sortChange"
     >
       <vxe-column type="seq" title="序号" width="60" />
-      <vxe-column field="type" title="本地订单ID" min-width="170">
+      <vxe-column field="title" title="标题" />
+      <vxe-column field="type" title="类型" min-width="170">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('VoucherRecordType', row.type) }}</a-tag>
         </template>

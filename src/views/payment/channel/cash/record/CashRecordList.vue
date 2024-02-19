@@ -14,13 +14,14 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="本地订单ID" width="170" />
-        <vxe-column field="amount" title="金额" width="170" />
+        <vxe-column field="title" title="标题" />
         <vxe-column field="type" title="业务类型">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('CashRecordType', row.type) }}</a-tag>
           </template>
         </vxe-column>
+        <vxe-column field="amount" title="金额" width="170" />
+        <vxe-column field="orderId" title="本地订单ID" width="170" />
         <vxe-column field="remark" title="备注" />
         <vxe-column field="createTime" title="创建时间" sortable />
         <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">

@@ -10,6 +10,9 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
+        <a-descriptions-item label="标题">
+          {{ walletRecord.title }}
+        </a-descriptions-item>
         <a-descriptions-item label="金额(分)">
           {{ walletRecord.amount }}
         </a-descriptions-item>
