@@ -11,25 +11,22 @@
     <a-spin :spinning="confirmLoading">
       <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
         <a-descriptions-item label="标题">
-          {{ walletRecord.title }}
+          {{ alipayRecord.title }}
         </a-descriptions-item>
         <a-descriptions-item label="金额(分)">
-          {{ walletRecord.amount }}
+          {{ alipayRecord.amount }}
         </a-descriptions-item>
-        <a-descriptions-item label="变动前金额(分)">
-          {{ walletRecord.oldAmount }}
+        <a-descriptions-item label="本地订单号">
+          {{ alipayRecord.orderId }}
         </a-descriptions-item>
-        <a-descriptions-item label="变动后金额(分)">
-          {{ walletRecord.newAmount }}
-        </a-descriptions-item>
-        <a-descriptions-item label="交易订单号">
-          {{ walletRecord.orderId }}
+        <a-descriptions-item label="网关订单号">
+          {{ alipayRecord.gatewayOrderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="业务类型">
-          <a-tag>{{ dictConvert('WalletRecordType', walletRecord.type) }}</a-tag>
+          <a-tag>{{ dictConvert('AlipayRecordType', alipayRecord.type) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="记录时间">
-          {{ walletRecord.createTime }}
+          {{ alipayRecord.createTime }}
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>
@@ -40,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-  import { get, WalletRecord } from './WalletRecord.api'
+  import { get, AlipayRecord } from './AlipayRecord.api'
   import { $ref } from 'vue/macros'
   import { BasicModal } from '/@/components/Modal'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
@@ -63,25 +60,25 @@
   const { dictConvert } = useDict()
 
   let loading = $ref(false)
-  let walletRecord = $ref<WalletRecord>({})
+  let alipayRecord = $ref<AlipayRecord>({})
 
   /**
    * 入口
    */
-  function init(record: WalletRecord) {
+  function init(record: AlipayRecord) {
     visible.value = true
-    walletRecord = record
+    alipayRecord = record
     initData(record.id as string)
   }
 
   /**
    * 初始化数据
    */
-  async function initData(walletId) {
+  async function initData(alipayId) {
     loading = true
-    const { data } = await get(walletId)
+    const { data } = await get(alipayId)
     loading = false
-    walletRecord = data
+    alipayRecord = data
   }
 
   defineExpose({ init })

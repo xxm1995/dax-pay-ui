@@ -11,25 +11,22 @@
     <a-spin :spinning="confirmLoading">
       <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
         <a-descriptions-item label="标题">
-          {{ walletRecord.title }}
+          {{ wechatPayRecord.title }}
         </a-descriptions-item>
         <a-descriptions-item label="金额(分)">
-          {{ walletRecord.amount }}
+          {{ wechatPayRecord.amount }}
         </a-descriptions-item>
-        <a-descriptions-item label="变动前金额(分)">
-          {{ walletRecord.oldAmount }}
+        <a-descriptions-item label="本地订单号">
+          {{ wechatPayRecord.orderId }}
         </a-descriptions-item>
-        <a-descriptions-item label="变动后金额(分)">
-          {{ walletRecord.newAmount }}
-        </a-descriptions-item>
-        <a-descriptions-item label="交易订单号">
-          {{ walletRecord.orderId }}
+        <a-descriptions-item label="网关订单号">
+          {{ wechatPayRecord.gatewayOrderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="业务类型">
-          <a-tag>{{ dictConvert('WalletRecordType', walletRecord.type) }}</a-tag>
+          <a-tag>{{ dictConvert('WechatPayRecordType', wechatPayRecord.type) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="记录时间">
-          {{ walletRecord.createTime }}
+          {{ wechatPayRecord.createTime }}
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>
@@ -40,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-  import { get, WalletRecord } from './WalletRecord.api'
+  import { get, WechatPayRecord } from './WechatPayRecord.api'
   import { $ref } from 'vue/macros'
   import { BasicModal } from '/@/components/Modal'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
@@ -63,25 +60,25 @@
   const { dictConvert } = useDict()
 
   let loading = $ref(false)
-  let walletRecord = $ref<WalletRecord>({})
+  let wechatPayRecord = $ref<WechatPayRecord>({})
 
   /**
    * 入口
    */
-  function init(record: WalletRecord) {
+  function init(record: WechatPayRecord) {
     visible.value = true
-    walletRecord = record
+    wechatPayRecord = record
     initData(record.id as string)
   }
 
   /**
    * 初始化数据
    */
-  async function initData(walletId) {
+  async function initData(wechatPayId) {
     loading = true
-    const { data } = await get(walletId)
+    const { data } = await get(wechatPayId)
     loading = false
-    walletRecord = data
+    wechatPayRecord = data
   }
 
   defineExpose({ init })

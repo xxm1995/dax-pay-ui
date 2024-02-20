@@ -28,9 +28,6 @@
         <a-descriptions-item label="业务类型">
           <a-tag>{{ dictConvert('VoucherRecordType', voucherRecord.type) }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="备注">
-          {{ voucherRecord.remark }}
-        </a-descriptions-item>
         <a-descriptions-item label="导入时间">
           {{ voucherRecord.createTime }}
         </a-descriptions-item>

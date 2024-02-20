@@ -18,7 +18,6 @@
       </vxe-column>
       <vxe-column field="amount" title="金额" />
       <vxe-column field="orderId" title="订单号" />
-      <vxe-column field="remark" title="备注" />
       <vxe-column field="createTime" title="记录时间" sortable />
       <vxe-column fixed="right" width="50" :showOverflow="false" title="操作">
         <template #default="{ row }">
