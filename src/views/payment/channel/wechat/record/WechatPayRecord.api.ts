@@ -7,7 +7,7 @@ import { BaseEntity } from '/#/web'
  */
 export function page(params) {
   return defHttp.get<Result<PageResult<WechatPayRecord>>>({
-    url: '/alipay/record/page',
+    url: '/wechat/pay/record/page',
     params,
   })
 }
@@ -17,7 +17,7 @@ export function page(params) {
  */
 export function get(id) {
   return defHttp.get<Result<WechatPayRecord>>({
-    url: '/alipay/record/findById',
+    url: '/wechat/pay/record/findById',
     params: { id },
   })
 }

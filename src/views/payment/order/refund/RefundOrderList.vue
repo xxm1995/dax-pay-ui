@@ -45,7 +45,7 @@
             <a-tag>{{ dictConvert('RefundStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="errorMsg" title="提示信息" />
+        <vxe-column field="reason" title="原因" />
         <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>

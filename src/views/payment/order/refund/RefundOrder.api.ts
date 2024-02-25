@@ -88,6 +88,8 @@ export interface RefundOrder extends BaseEntity {
   status?: number
   // 退款时间
   refundTime?: string
+  // 退款原因
+  reason?: string
   // 客户ip
   clientIp?: string
   // 错误码
