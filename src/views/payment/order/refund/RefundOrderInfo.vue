@@ -27,6 +27,9 @@
       <a-descriptions-item label="原支付标题">
         {{ form.title }}
       </a-descriptions-item>
+      <a-descriptions-item label="退款原因">
+        {{ form.reason }}
+      </a-descriptions-item>
       <a-descriptions-item label="退款金额">
         {{ form.amount }}
       </a-descriptions-item>
@@ -39,7 +42,7 @@
       <a-descriptions-item label="退款信息">
         <a-tag v-for="o in refundChannelOrders" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.amount }}</a-tag>
       </a-descriptions-item>
-      <a-descriptions-item label="退款时间">
+      <a-descriptions-item label="退款完成时间">
         {{ form.refundTime }}
       </a-descriptions-item>
       <a-descriptions-item label="退款状态">

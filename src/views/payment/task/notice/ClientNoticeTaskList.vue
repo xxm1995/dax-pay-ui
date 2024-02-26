@@ -14,7 +14,13 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="本地订单ID" width="170" />
+        <vxe-column field="orderId" title="本地订单ID" width="170">
+          <template #default="{ row }">
+            <a-link @click="showOrder(row)">
+              {{ row.orderId }}
+            </a-link>
+          </template>
+        </vxe-column>
         <vxe-column field="type" title="消息类型">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('ClientNoticeType', row.type) }}</a-tag>
@@ -51,6 +57,8 @@
     </div>
     <client-notice-task-info ref="clientNoticeTaskInfo" />
     <client-notice-record-list ref="clientNoticeRecordList" />
+    <pay-order-info ref="payOrderInfo" />
+    <refund-order-info ref="refundOrderInfo" />
   </div>
 </template>
 
@@ -67,6 +75,8 @@
   import ALink from '/@/components/Link/Link.vue'
   import ClientNoticeRecordList from './ClientNoticeRecordList.vue'
   import ClientNoticeTaskInfo from '/@/views/payment/task/notice/ClientNoticeTaskInfo.vue'
+  import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
+  import RefundOrderInfo from '/@/views/payment/order/refund/RefundOrderInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, sortChange, resetQueryParams, pagination, pages, sortParam, model, loading } =
@@ -81,6 +91,8 @@
 
   const clientNoticeRecordList = $ref<any>()
   const clientNoticeTaskInfo = $ref<any>()
+  const payOrderInfo = $ref<any>()
+  const refundOrderInfo = $ref<any>()
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
 
@@ -135,6 +147,17 @@
    */
   function showRecord(record) {
     clientNoticeRecordList.init(record)
+  }
+  /**
+   * 查看订单信息
+   */
+  function showOrder(record) {
+    console.log(record)
+    if (record.type === 'pay') {
+      payOrderInfo.init(record.orderId)
+    } else {
+      refundOrderInfo.init(record.orderId)
+    }
   }
 </script>
 

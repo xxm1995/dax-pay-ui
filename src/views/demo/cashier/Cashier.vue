@@ -217,13 +217,18 @@
   // 检查支付状态
   const { pause, resume } = useIntervalFn(
     () => {
-      findStatusByBusinessId(businessNo).then((res) => {
-        // 成功
-        if (res.data) {
-          createMessage.success('支付成功')
+      findStatusByBusinessId(businessNo)
+        .then((res) => {
+          // 成功
+          if (res.data) {
+            createMessage.success('支付成功')
+            handleCancel()
+          }
+        })
+        .catch((err) => {
+          // 失败
           handleCancel()
-        }
-      })
+        })
     },
     1000 * 3,
     { immediate: false },
