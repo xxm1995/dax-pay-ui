@@ -110,7 +110,7 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'paymentId', type: STRING, name: '支付ID', placeholder: '请输入完整支付ID' },
+      { field: 'id', type: STRING, name: '支付ID', placeholder: '请输入完整支付ID' },
       { field: 'businessNo', type: STRING, name: '业务号', placeholder: '请输入业务号' },
       { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
       { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
