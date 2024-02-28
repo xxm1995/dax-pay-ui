@@ -38,4 +38,6 @@ export interface WechatPayRecord extends BaseEntity {
   gatewayOrderNo?: string
   // 终端ip
   ip?: string
+  // 网关时间
+  gatewayTime?: string
 }

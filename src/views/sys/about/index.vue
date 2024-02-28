@@ -3,9 +3,8 @@
     <template #headerContent>
       <div class="flex justify-between items-center">
         <span class="flex-1">
-          <a :href="GITHUB_URL" target="_blank">Bootx-Platform </a>
-          是一个基于Spring Boot、Vue、Ant-Design-Vue
-          、TypeScript的后台管理脚手架，包含支付收单(支付宝、微信、聚合、组合支付)、工作流(Flowable)、三方对接(微信、钉钉、企微、短信)等功能。
+          <a :href="GITHUB_URL" target="_blank">dax-pay </a>
+          是一款免费开源的支付网关，独立部署通过HTTP方式进行调用，不与其他系统产生耦合关联，可以快速集成到各种系统中，提供可视化界面进行管理，便于实现统一的支付信息管理。
         </span>
       </div>
     </template>

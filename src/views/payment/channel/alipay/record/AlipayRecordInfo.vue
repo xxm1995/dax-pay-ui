@@ -25,6 +25,9 @@
         <a-descriptions-item label="业务类型">
           <a-tag>{{ dictConvert('AlipayRecordType', alipayRecord.type) }}</a-tag>
         </a-descriptions-item>
+        <a-descriptions-item label="网关时间">
+          {{ alipayRecord.gatewayTime }}
+        </a-descriptions-item>
         <a-descriptions-item label="记录时间">
           {{ alipayRecord.createTime }}
         </a-descriptions-item>

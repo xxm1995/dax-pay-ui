@@ -63,6 +63,16 @@ export function downAndSave(id: any) {
 }
 
 /**
+ * 下载对账单
+ */
+export function compare(id: any) {
+  return defHttp.post<any>({
+    url: '/order/reconcile/compare',
+    params: { id },
+  })
+}
+
+/**
  * 支付对账订单
  */
 export interface ReconcileOrder extends BaseEntity {

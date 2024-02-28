@@ -99,8 +99,9 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'id', type: STRING, name: '退款号', placeholder: '请输入完整退款号' },
-      { field: 'paymentId', type: STRING, name: '原支付单号', placeholder: '请输入完整支付ID' },
+      { field: 'id', type: STRING, name: '退款ID', placeholder: '请输入完整退款ID' },
+      { field: 'refundNo', type: STRING, name: '退款号', placeholder: '请输入完整退款号' },
+      { field: 'paymentId', type: STRING, name: '原支付ID', placeholder: '请输入完整支付ID' },
       { field: 'businessNo', type: STRING, name: '原业务号', placeholder: '请输入业务号' },
       { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
       { field: 'title', type: STRING, name: '原支付标题', placeholder: '请输入原支付标题' },

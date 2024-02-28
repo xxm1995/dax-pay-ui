@@ -25,6 +25,9 @@
         <a-descriptions-item label="业务类型">
           <a-tag>{{ dictConvert('WechatPayRecordType', wechatPayRecord.type) }}</a-tag>
         </a-descriptions-item>
+        <a-descriptions-item label="网关时间">
+          {{ wechatPayRecord.gatewayTime }}
+        </a-descriptions-item>
         <a-descriptions-item label="记录时间">
           {{ wechatPayRecord.createTime }}
         </a-descriptions-item>

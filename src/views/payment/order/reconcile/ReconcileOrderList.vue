@@ -36,7 +36,7 @@
         <vxe-column field="compare" title="对账单比对">
           <template #default="{ row }">
             <a-tag v-if="row.compare" color="green">已比对</a-tag>
-            <a-link v-else :disabled="!row.down" color="red" @click="compare(row)">比对</a-link>
+            <a-link v-else :disabled="!row.down" color="red" @click="compareOrder(row)">比对</a-link>
           </template>
         </vxe-column>
         <vxe-column field="errorMsg" title="错误信息" />
@@ -71,7 +71,7 @@
   import { computed, onMounted } from 'vue'
   import { DATE, LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
-  import { downAndSave, page } from './ReconcileOrder.api'
+  import { compare, downAndSave, page } from "./ReconcileOrder.api";
   import ReconcileOrderInfo from './ReconcileOrderInfo.vue'
   import ReconcileDetailList from './ReconcileDetailList.vue'
   import ReconcileOrderCreate from '/@/views/payment/order/reconcile/ReconcileOrderCreate.vue'
@@ -162,8 +162,11 @@
   /**
    * 对账明显比对
    */
-  function compare(record) {
-    createMessage.warn('下个版本支持...')
+  function compareOrder(record) {
+    compare(record.id).then(() => {
+      createMessage.info('对账单比对完成')
+      queryPage()
+    })
   }
 
   /**
