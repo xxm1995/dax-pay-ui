@@ -44,7 +44,7 @@
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import { getDetail, ReconcileDetail } from './ReconcileOrder.api'
+  import { get, ReconcileDetail } from './ReconcileDetail.api'
   const {
     initFormEditType,
     handleCancel,
@@ -70,7 +70,7 @@
   function init(record) {
     visible.value = true
     confirmLoading.value = true
-    getDetail(record.id).then(({ data }) => {
+    get(record.id).then(({ data }) => {
       form = data
       confirmLoading.value = false
     })

@@ -33,26 +33,6 @@ export function get(id: string) {
 }
 
 /**
- * 明细分页
- */
-export function pageDetail(params) {
-  return defHttp.get<Result<PageResult<ReconcileDetail>>>({
-    url: '/order/reconcile/pageDetail',
-    params,
-  })
-}
-
-/**
- * 明细详情
- */
-export function getDetail(id: string) {
-  return defHttp.get<Result<ReconcileDetail>>({
-    url: '/order/reconcile/findDetailById',
-    params: { id },
-  })
-}
-
-/**
  * 下载对账单
  */
 export function downAndSave(id: any) {
@@ -63,7 +43,7 @@ export function downAndSave(id: any) {
 }
 
 /**
- * 下载对账单
+ * 对账单比对
  */
 export function compare(id: any) {
   return defHttp.post<any>({
@@ -88,24 +68,4 @@ export interface ReconcileOrder extends BaseEntity {
   compare?: boolean
   // 错误信息
   errorMsg?: string
-}
-
-/**
- * 通用支付对账记录
- */
-export interface ReconcileDetail extends BaseEntity {
-  // 关联对账订单ID
-  recordOrderId?: string
-  // 交易类型
-  type?: string
-  // 订单id
-  paymentId?: string
-  // 订单id
-  refundId?: string
-  // 网关订单号
-  gatewayOrderNo?: string
-  // 交易金额
-  amount?: string
-  // 商品名称
-  title?: string
 }

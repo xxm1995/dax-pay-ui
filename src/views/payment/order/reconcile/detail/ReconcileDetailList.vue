@@ -38,7 +38,7 @@
 <script setup lang="ts">
   import { computed, nextTick, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { pageDetail, ReconcileDetail } from './ReconcileOrder.api'
+  import { page, ReconcileDetail } from './ReconcileDetail.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import ReconcileDetailInfo from './ReconcileDetailInfo.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -102,7 +102,7 @@
    */
   function queryPage() {
     loading.value = true
-    pageDetail({
+    page({
       ...model.queryParam,
       ...pages,
       recordOrderId: reconcileDetail?.id,
