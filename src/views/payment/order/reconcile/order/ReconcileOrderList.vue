@@ -40,11 +40,23 @@
           </template>
         </vxe-column>
         <vxe-column field="errorMsg" title="错误信息" />
-        <vxe-column fixed="right" width="140" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-            <a-link @click="showDetailPage(row)">对账明细</a-link>
+            <a-dropdown>
+              <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /></a>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item>
+                    <a-link @click="showDetailPage(row)">对账明细</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link @click="showDiffPage(row)">差异明细</a-link>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
           </template>
         </vxe-column>
       </vxe-table>
@@ -60,6 +72,7 @@
     <reconcile-order-create ref="reconcileOrderCreate" @ok="queryPage" />
     <reconcile-detail-list ref="reconcileDetailList" />
     <reconcile-order-info ref="reconcileOrderInfo" />
+    <reconcile-diff-list-model ref="reconcileDiffListModel" />
   </div>
 </template>
 <script setup lang="ts">
@@ -71,13 +84,16 @@
   import { computed, onMounted } from 'vue'
   import { DATE, LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
-  import { compare, downAndSave, page } from "./ReconcileOrder.api";
+  import { compare, downAndSave, page } from './ReconcileOrder.api'
   import ReconcileOrderInfo from './ReconcileOrderInfo.vue'
-  import ReconcileDetailList from './ReconcileDetailList.vue'
-  import ReconcileOrderCreate from '/@/views/payment/order/reconcile/ReconcileOrderCreate.vue'
+  import ReconcileDetailList from '../detail/ReconcileDetailList.vue'
+  import ReconcileOrderCreate from './ReconcileOrderCreate.vue'
+  import ALink from '/@/components/Link/Link.vue'
+  import ReconcileDiffListModel from '/@/views/payment/order/reconcile/diff/ReconcileDiffListModel.vue'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, resetQueryParams, sortChange, sortParam, pagination, pages, model, loading } = useTablePage(queryPage)
+  const { handleTableChange, pageQueryResHandel, resetQueryParams, sortChange, sortParam, pagination, pages, model, loading } =
+    useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
@@ -103,6 +119,7 @@
   const reconcileOrderCreate = $ref<any>()
   const reconcileOrderInfo = $ref<any>()
   const reconcileDetailList = $ref<any>()
+  const reconcileDiffListModel = $ref<any>()
 
   onMounted(() => {
     initData()
@@ -151,10 +168,13 @@
       content: '确定要下载对账单吗？',
       onOk: () => {
         createMessage.info('对账单下载保存中.....')
-        downAndSave(record.id).then(() => {
-          createMessage.info('对账单下载完成')
-          queryPage()
-        })
+        downAndSave(record.id)
+          .then(() => {
+            createMessage.info('对账单下载完成')
+          })
+          .finally(() => {
+            queryPage()
+          })
       },
     })
   }
@@ -163,9 +183,20 @@
    * 对账明显比对
    */
   function compareOrder(record) {
-    compare(record.id).then(() => {
-      createMessage.info('对账单比对完成')
-      queryPage()
+    createConfirm({
+      iconType: 'info',
+      title: '提示',
+      content: '确定要进行比对吗？',
+      onOk: () => {
+        createMessage.info('对账单比对中.....')
+        compare(record.id)
+          .then(() => {
+            createMessage.info('对账单比对完成')
+          })
+          .finally(() => {
+            queryPage()
+          })
+      },
     })
   }
 
@@ -181,6 +212,13 @@
    */
   function showDetailPage(record) {
     reconcileDetailList.init(record)
+  }
+
+  /**
+   * 查看差异单
+   */
+  function showDiffPage(record) {
+    reconcileDiffListModel.init(record)
   }
 </script>
 

@@ -1,24 +1,34 @@
 <template>
-  <basic-drawer forceRender v-bind="$attrs" title="对账单明细列表" width="60%" :visible="visible" @close="visible = false">
+  <basic-drawer forceRender v-bind="$attrs" title="差异明细列表" width="60%" :visible="visible" @close="visible = false">
     <b-query :query-params="model.queryParam" :default-item-count="3" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
-    <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
-      <vxe-column type="seq" width="60" />
-      <vxe-column field="title" title="商品名称" />
-      <vxe-column field="amount" title="交易金额" />
-      <vxe-column field="orderId" title="本地订单ID" />
-      <vxe-column field="gatewayOrderNo" title="网关订单号" />
-      <vxe-column field="repairType" title="交易类型">
+    <vxe-table
+      row-id="id"
+      ref="xTable"
+      :data="pagination.records"
+      :loading="loading"
+      :sort-config="{ remote: true, trigger: 'cell' }"
+      @sort-change="sortChange"
+    >
+      <vxe-column type="seq" title="序号" width="60" />
+      <vxe-column field="title" title="订单标题" />
+      <vxe-column field="orderType" title="订单类型">
         <template #default="{ row }">
-          <a-tag>{{ dictConvert('ReconcileTrade', row.type) }}</a-tag>
+          <a-tag>{{ dictConvert('ReconcileTrade', row.orderType) }}</a-tag>
         </template>
       </vxe-column>
-      <vxe-column field="createTime" title="创建时间" />
-      <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
+      <vxe-column field="diffType" title="差异类型">
         <template #default="{ row }">
-          <span>
-            <a-link @click="show(row)">查看</a-link>
-          </span>
+          <a-tag>{{ dictConvert('ReconcileDiffType', row.diffType) }}</a-tag>
+        </template>
+      </vxe-column>
+      <vxe-column field="orderId" title="本地订单" />
+      <vxe-column field="gatewayOrderNo" title="网关订单" />
+      <vxe-column field="amount" title="交易金额" />
+      <vxe-column field="orderTime" title="订单时间" />
+      <vxe-column fixed="right" width="80" :showOverflow="false" title="操作">
+        <template #default="{ row }">
+          <a-link @click="show(row)">查看</a-link>
         </template>
       </vxe-column>
     </vxe-table>
@@ -30,27 +40,27 @@
       :total="pagination.total"
       @page-change="handleTableChange"
     />
-    <reconcile-detail-info ref="reconcileDetailInfo" />
+    <reconcile-diff-info ref="reconcileDiffInfo" />
   </basic-drawer>
 </template>
 
 <script setup lang="ts">
   import { computed, nextTick, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page, ReconcileDetail } from './ReconcileDetail.api'
+  import { page } from './ReconcileDiff.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
-  import ReconcileDetailInfo from './ReconcileDetailInfo.vue'
-  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+  import ReconcileDiffInfo from './ReconcileDiffInfo.vue'
+  import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import ALink from '/@/components/Link/Link.vue'
+  import { ReconcileDetail } from '/@/views/payment/order/reconcile/detail/ReconcileDetail.api'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
+  const { handleTableChange, pageQueryResHandel, resetQueryParams, sortChange, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage } = useMessage()
   const { dictDropDown, dictConvert } = useDict()
 
@@ -58,20 +68,14 @@
 
   // 查询条件
   const fields = computed(() => {
-    return [
-      { field: 'title', type: STRING, name: '订单名称', placeholder: '请输入订单名称' },
-      { field: 'paymentId', type: STRING, name: '本地支付ID', placeholder: '请输入本地支付ID' },
-      { field: 'refundId', type: STRING, name: '本地退款ID', placeholder: '请输入本地退款ID' },
-      { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入网关订单号' },
-      { field: 'type', type: LIST, name: '交易类型', placeholder: '请选择交易类型', selectList: reconcileTradeList },
-    ] as QueryField[]
+    return [{ field: 'title', type: STRING, name: '订单名称', placeholder: '请输入订单名称' }] as QueryField[]
   })
   let visible = $ref(false)
   let reconcileDetail = $ref<ReconcileDetail>()
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
-  const reconcileDetailInfo = $ref<any>()
+  const reconcileDiffInfo = $ref<any>()
 
   nextTick(() => {
     xTable?.connect(xToolbar as VxeToolbarInstance)
@@ -89,9 +93,8 @@
   }
   /**
    * 入口
-   * @param record
    */
-  function init(record) {
+  function init(record: ReconcileDetail) {
     visible = true
     reconcileDetail = record
     queryPage()
@@ -105,7 +108,7 @@
     page({
       ...model.queryParam,
       ...pages,
-      recordOrderId: reconcileDetail?.id,
+      recordId: reconcileDetail?.id,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
@@ -114,7 +117,7 @@
    * 查看
    */
   function show(record) {
-    reconcileDetailInfo.init(record)
+    reconcileDiffInfo.init(record)
   }
   defineExpose({
     init,
