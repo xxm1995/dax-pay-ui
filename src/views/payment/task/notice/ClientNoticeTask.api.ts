@@ -61,8 +61,8 @@ export function getRecord(id) {
 export interface ClientNoticeTask extends BaseEntity {
   // 本地订单ID
   orderId?: number
-  // 回调类型
-  type?: string
+  // 消息类型
+  noticeType?: string
   // 消息内容
   content?: string
   // 是否发送成功
@@ -83,6 +83,8 @@ export interface ClientNoticeRecord extends BaseEntity {
   taskId?: string
   // 请求次数
   reqCount?: number
+  // 发送类型
+  sendType?: boolean
   // 发送是否成功
   success?: boolean
   // 错误信息

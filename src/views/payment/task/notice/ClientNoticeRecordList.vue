@@ -10,16 +10,20 @@
       @sort-change="sortChange"
     >
       <vxe-column type="seq" width="60" />
-      <vxe-column field="reqCount" title="请求次数" />
+      <vxe-column field="reqCount" title="请求次数">
+        <template #default="{ row }">
+          <a-tag color="green">{{ row.reqCount || '空' }}</a-tag>
+        </template>
+      </vxe-column>
       <vxe-column field="channel" title="是否成功">
         <template #default="{ row }">
           <a-tag v-if="row.success" color="green">是</a-tag>
           <a-tag v-else color="red">否</a-tag>
         </template>
       </vxe-column>
-      <vxe-column field="type" title="发送类型">
+      <vxe-column field="sendType" title="发送类型">
         <template #default="{ row }">
-          <a-tag>{{ dictConvert('ClientNoticeSendType', row.type) }}</a-tag>
+          <a-tag>{{ dictConvert('ClientNoticeSendType', row.sendType) }}</a-tag>
         </template>
       </vxe-column>
       <vxe-column field="errorMsg" title="错误信息" max-width="200" />

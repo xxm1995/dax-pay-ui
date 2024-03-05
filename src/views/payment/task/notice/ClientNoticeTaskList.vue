@@ -21,9 +21,15 @@
             </a-link>
           </template>
         </vxe-column>
-        <vxe-column field="type" title="消息类型">
+        <vxe-column field="noticeType" title="消息类型">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('ClientNoticeType', row.type) }}</a-tag>
+            <a-tag>{{ dictConvert('ClientNoticeType', row.noticeType) }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="success" title="发送成功">
+          <template #default="{ row }">
+            <a-tag v-if="row.noticeType === 'pay'">{{ dictConvert('PayStatus', row.orderStatus) || '未知' }}</a-tag>
+            <a-tag v-else>{{ dictConvert('RefundStatus', row.orderStatus) || '未知' }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="success" title="发送成功">
