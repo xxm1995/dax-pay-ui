@@ -20,7 +20,7 @@
           <a-tag>{{ dictConvert('ReconcileTrade', row.type) }}</a-tag>
         </template>
       </vxe-column>
-      <vxe-column field="createTime" title="创建时间" sortable />
+      <vxe-column field="orderTime" title="订单时间" sortable />
       <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
         <template #default="{ row }">
           <span>
