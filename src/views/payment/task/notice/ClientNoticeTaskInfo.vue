@@ -17,7 +17,11 @@
           <a-tag>{{ task.orderId }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="回调类型">
-          <a-tag>{{ dictConvert('ClientNoticeType', task.type) }}</a-tag>
+          <a-tag>{{ dictConvert('ClientNoticeType', task.noticeType) }}</a-tag>
+        </a-descriptions-item>
+        <a-descriptions-item label="订单状态">
+          <a-tag v-if="task.noticeType === 'pay'">{{ dictConvert('PayStatus', task.orderStatus) || '未知' }}</a-tag>
+          <a-tag v-else>{{ dictConvert('RefundStatus', task.orderStatus) || '未知' }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="消息内容">
           <json-preview :data="JSON.parse(task.content || '{}')" />
