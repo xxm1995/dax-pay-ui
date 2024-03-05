@@ -24,8 +24,8 @@
       </vxe-column>
       <vxe-column field="orderId" title="本地订单" />
       <vxe-column field="gatewayOrderNo" title="网关订单" />
-      <vxe-column field="amount" title="交易金额" />
-      <vxe-column field="orderTime" title="订单时间" />
+      <vxe-column field="amount" title="交易金额" sortable />
+      <vxe-column field="orderTime" title="订单时间" sortable />
       <vxe-column fixed="right" width="80" :showOverflow="false" title="操作">
         <template #default="{ row }">
           <a-link @click="show(row)">查看</a-link>
@@ -60,15 +60,23 @@
   import { ReconcileDetail } from '/@/views/payment/order/reconcile/detail/ReconcileDetail.api'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, resetQueryParams, sortChange, pagination, pages, model, loading } = useTablePage(queryPage)
+  const { handleTableChange, pageQueryResHandel, resetQueryParams, sortChange, pagination, pages, sortParam, model, loading } =
+    useTablePage(queryPage)
   const { notification, createMessage } = useMessage()
   const { dictDropDown, dictConvert } = useDict()
 
-  let reconcileTradeList = $ref<LabeledValue[]>([])
+  let orderTypeList = $ref<LabeledValue[]>([])
+  let diffTypeList = $ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
-    return [{ field: 'title', type: STRING, name: '订单名称', placeholder: '请输入订单名称' }] as QueryField[]
+    return [
+      { field: 'title', type: STRING, name: '订单名称', placeholder: '请输入订单名称' },
+      { field: 'orderType', type: LIST, name: '订单类型', placeholder: '请选择订单类型', selectList: orderTypeList },
+      { field: 'diffType', type: LIST, name: '差异类型', placeholder: '请选择差异类型', selectList: diffTypeList },
+      { field: 'orderId', type: STRING, name: '本地定单', placeholder: '请输入本地定单ID' },
+      { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入网关订单号' },
+    ] as QueryField[]
   })
   let visible = $ref(false)
   let reconcileDetail = $ref<ReconcileDetail>()
@@ -89,7 +97,8 @@
    * 初始化基础数据
    */
   async function initData() {
-    reconcileTradeList = await dictDropDown('PayReconcileTrade')
+    orderTypeList = await dictDropDown('ReconcileTrade')
+    diffTypeList = await dictDropDown('ReconcileDiffType')
   }
   /**
    * 入口
@@ -97,6 +106,8 @@
   function init(record: ReconcileDetail) {
     visible = true
     reconcileDetail = record
+    model.queryParam = {}
+    xTable?.clearSort()
     queryPage()
   }
 
@@ -108,6 +119,7 @@
     page({
       ...model.queryParam,
       ...pages,
+      ...sortParam,
       recordId: reconcileDetail?.id,
     }).then(({ data }) => {
       pageQueryResHandel(data)
