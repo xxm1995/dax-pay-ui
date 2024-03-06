@@ -46,14 +46,17 @@
           </template>
         </vxe-column>
         <vxe-column field="reason" title="原因" />
-        <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="220" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
             <a-link @click="showChannel(row)">通道订单</a-link>
             <a-divider type="vertical" />
             <!--      只有退款中的异步订单才可以同步      -->
+            <a-divider type="vertical" />
             <a-link :disabled="!(row.asyncPay && row.status === 'progress')" @click="sync(row)">同步</a-link>
+            <!--      只有退款失败的异步订单才可以重新退款      -->
+            <a-link :disabled="!(row.asyncPay && row.status === 'fail')" @click="reset(row)">重试</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -75,7 +78,7 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page, syncById } from './RefundOrder.api'
+  import { page, resetRefund, syncById } from "./RefundOrder.api";
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import RefundOrderInfo from './RefundOrderInfo.vue'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -166,6 +169,24 @@
           // TODO 后期可以根据返回结果进行相应的处理
           createMessage.success('同步成功')
           console.log(data)
+          queryPage()
+        })
+      },
+    })
+  }
+
+  /**
+   * 退款重试
+   */
+  function reset(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '是否同步退款信息',
+      onOk: () => {
+        loading.value = true
+        resetRefund(record.id).then(() => {
+          createMessage.success('提交成功')
           queryPage()
         })
       },

@@ -29,6 +29,9 @@
       <a-descriptions-item label="错误信息">
         {{ form.errorMsg }}
       </a-descriptions-item>
+      <a-descriptions-item label="创建时间">
+        {{ form.createTime }}
+      </a-descriptions-item>
     </a-descriptions>
     <template #footer>
       <a-space>
