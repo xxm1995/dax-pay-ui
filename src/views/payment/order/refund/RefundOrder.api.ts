@@ -63,6 +63,16 @@ export function syncById(id) {
 }
 
 /**
+ * 退款重试
+ */
+export function resetRefund(id){
+  return defHttp.post<Result<void>>({
+    url: '/order/refund/resetRefund',
+    params: { id },
+  })
+}
+
+/**
  * 退款记录
  */
 export interface RefundOrder extends BaseEntity {

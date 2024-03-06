@@ -40,6 +40,7 @@
           </template>
         </vxe-column>
         <vxe-column field="errorMsg" title="错误信息" />
+        <vxe-column field="createTime" title="创建时间" />
         <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
