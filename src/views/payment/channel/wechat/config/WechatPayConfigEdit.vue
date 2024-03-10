@@ -23,7 +23,7 @@
           <a-input v-model:value="form.appSecret" :disabled="showable" placeholder="APPID对应的接口密码，用于获取接口调用凭证时使用" />
         </a-form-item>
         <a-form-item label="是否启用" name="enable">
-          <a-switch v-model:checked="form.enable" />
+          <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.enable" />
         </a-form-item>
         <a-form-item name="notifyUrl">
           <template #label>
