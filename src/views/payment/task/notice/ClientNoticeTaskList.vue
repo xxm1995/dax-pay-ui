@@ -157,9 +157,8 @@
   /**
    * 查看订单信息
    */
-  function showOrder(record) {
-    console.log(record)
-    if (record.type === 'pay') {
+  function showOrder(record: ClientNoticeTask) {
+    if (record.noticeType === 'pay') {
       payOrderInfo.init(record.orderId)
     } else {
       refundOrderInfo.init(record.orderId)
