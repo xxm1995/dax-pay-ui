@@ -26,7 +26,7 @@
             <a-tag>{{ dictConvert('ClientNoticeType', row.noticeType) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="success" title="发送成功">
+        <vxe-column field="success" title="订单状态">
           <template #default="{ row }">
             <a-tag v-if="row.noticeType === 'pay'">{{ dictConvert('PayStatus', row.orderStatus) || '未知' }}</a-tag>
             <a-tag v-else>{{ dictConvert('RefundStatus', row.orderStatus) || '未知' }}</a-tag>
