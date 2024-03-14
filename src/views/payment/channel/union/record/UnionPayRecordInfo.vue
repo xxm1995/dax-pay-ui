@@ -23,7 +23,7 @@
           {{ unionPayRecord.gatewayOrderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="业务类型">
-          <a-tag>{{ dictConvert('unionPayRecordType', unionPayRecord.type) }}</a-tag>
+          <a-tag>{{ dictConvert('UnionPayRecordType', unionPayRecord.type) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="网关时间">
           {{ unionPayRecord.gatewayTime }}

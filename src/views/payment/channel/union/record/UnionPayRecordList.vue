@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="m-3 p-3 pt-5 bg-white">
-      <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
+      <b-query :query-params="model.queryParam" :fields="fields" :default-item-count="3" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
@@ -53,8 +53,9 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import ALink from '/@/components/Link/Link.vue'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
-  import { STRING } from '/@/components/Bootx/Query/Query'
+  import { LIST, STRING } from '/@/components/Bootx/Query/Query'
   import UnionPayRecordInfo from './UnionPayRecordInfo.vue'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
@@ -66,14 +67,17 @@
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
+  let recordTypeList = $ref<LabeledValue[]>([])
 
   const fields = [
     { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
     { field: 'orderId', type: STRING, name: '本地订单ID', placeholder: '请输入完整本地订单ID' },
+    { field: 'type', type: LIST, name: '记录类型', placeholder: '请选择记录类型', selectList: recordTypeList },
     { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
   ]
   onMounted(() => {
     vxeBind()
+    initData()
     queryPage()
   })
 
@@ -82,6 +86,13 @@
    */
   function vxeBind() {
     xTable?.connect(xToolbar as VxeToolbarInstance)
+  }
+
+  /**
+   * 初始化数据
+   */
+  async function initData() {
+    recordTypeList = await dictDropDown('UnionPayRecordType')
   }
 
   /**
