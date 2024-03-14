@@ -16,10 +16,10 @@
           <div class="my-auto">
             <img :alt="title" src="../../assets/svg/login-box-bg.svg" class="w-1/2 -mt-16 -enter-x" />
             <div class="mt-10 font-medium text-white -enter-x">
-              <span class="inline-block mt-4 text-3xl"> 开箱即用的中后台管理系统</span>
+              <span class="inline-block mt-4 text-3xl"> 开箱即用的支付网关系统</span>
             </div>
             <div class="mt-5 font-normal text-white dark:text-gray-500 -enter-x"
-              >基于Vite+Vue3打造，支持支付收单、工作流(Flowable)、三方对接等模块
+              >基于Vite+Vue3打造，支持支付宝、微信支付、云闪付等支付方式的统一网关系统
             </div>
           </div>
         </div>

@@ -52,8 +52,8 @@
             <a-divider type="vertical" />
             <a-link @click="showChannel(row)">通道订单</a-link>
             <a-divider type="vertical" />
-            <!--      只有退款中的异步订单才可以同步      -->
-            <a-link :disabled="!(row.asyncPay && row.status === 'progress')" @click="sync(row)">同步</a-link>
+            <!--      只有异步订单才可以同步      -->
+            <a-link :disabled="!row.asyncPay" @click="sync(row)">同步</a-link>
             <a-divider type="vertical" />
             <!--      只有退款失败的异步订单才可以重新退款      -->
             <a-link :disabled="!(row.asyncPay && row.status === 'fail')" @click="reset(row)">重试</a-link>

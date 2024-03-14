@@ -9,7 +9,7 @@
     @cancel="handleCancel"
   >
     <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
-      <a-descriptions-item label="商品名称">
+      <a-descriptions-item label="订单名称">
         {{ form.title }}
       </a-descriptions-item>
       <a-descriptions-item label="交易金额">
