@@ -5,7 +5,7 @@ import { BaseEntity } from '/#/web'
 /**
  * 重新发送消息通知
  */
-export function resetSendNotice(taskId){
+export function resetSendNotice(taskId) {
   return defHttp.post<Result>({
     url: '/task/notice/resetSend',
     method: 'post',
