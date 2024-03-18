@@ -1,6 +1,6 @@
 <template>
   <Card title="退款各通道分布" :loading="loading">
-    <div ref="chartRef" :style="{ width, height }"></div>
+    <div ref="chartRef" :style="{ width: '100%', height: '300px' }"></div>
   </Card>
 </template>
 <script lang="ts" setup>
@@ -10,13 +10,8 @@
 
   const props = defineProps({
     loading: Boolean,
-    width: {
-      type: String as PropType<string>,
-      default: '100%',
-    },
-    height: {
-      type: String as PropType<string>,
-      default: '300px',
+    data: {
+      type: Array,
     },
   })
 
@@ -24,11 +19,8 @@
   const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>)
 
   watch(
-    () => props.loading,
+    () => props.data,
     () => {
-      if (props.loading) {
-        return
-      }
       setOptions({
         tooltip: {
           trigger: 'item',
@@ -40,15 +32,7 @@
             type: 'pie',
             radius: '80%',
             center: ['50%', '50%'],
-            color: ['#5ab1ef', '#b6a2de', '#67e0e3', '#2ec7c9'],
-            data: [
-              { value: 500, name: '电子产品' },
-              { value: 310, name: '服装' },
-              { value: 274, name: '化妆品' },
-              { value: 400, name: '家居' },
-            ].sort(function (a, b) {
-              return a.value - b.value
-            }),
+            data: props.data as any,
             roseType: 'radius',
             animationType: 'scale',
             animationEasing: 'exponentialInOut',

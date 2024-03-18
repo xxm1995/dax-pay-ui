@@ -5,12 +5,12 @@
     <!--  占比图  -->
     <div class="md:flex !my-4 enter-y">
       <!--   支付   -->
-      <VisitSource class="md:w-1/2 !md:my-0 !my-4 w-full" :loading="loading" :data="payChannelLine" />
+      <VisitSource class="md:w-1/2 !md:my-0 !my-4 w-full" :loading="loading" :data="payOrderChannelCount" />
       <!--   退款   -->
-      <SalesProductPie class="md:w-1/2 !md:mx-4 w-full" :loading="loading" />
+      <SalesProductPie class="md:w-1/2 !md:mx-4 w-full" :loading="loading" :data="refundOrderChannelCount" />
     </div>
-    <!--  订单  -->
-    <SiteAnalysis class="!my-4 enter-y" :loading="loading" />
+    <!--  订单折线图  -->
+    <SiteAnalysis class="!my-4 enter-y" :loading="loading" :payOrder="payOrderChannelAmount" :refundOrder="refundOrderChannelAmount" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -19,13 +19,14 @@
   import SiteAnalysis from './components/SiteAnalysis.vue'
   import VisitSource from './components/VisitSource.vue'
   import SalesProductPie from './components/SalesProductPie.vue'
-  import dayjs, { OpUnitType } from 'dayjs'
+  import dayjs from 'dayjs'
   import {
     CockpitReportQuery,
     getPayAmount,
     getPayChannelInfo,
     getPayOrderCount,
     getRefundAmount,
+    getRefundChannelInfo,
     getRefundOrderCount,
   } from '/@/views/dashboard/analysis/components/CockpitReport.api'
   import { $ref } from 'vue/macros'
@@ -41,6 +42,7 @@
     initTime()
     initOrderCount()
     initPayChannelInfo()
+    initRefundChannelInfo()
   })
 
   /**
@@ -57,6 +59,15 @@
   let refundAmount = $ref<number>(0)
   let payCount = $ref<number>(0)
   let refundCount = $ref<number>(0)
+  // 支付订单通道数量分布
+  let payOrderChannelCount = $ref<any>([])
+  // 退款订单通道数量分布
+  let refundOrderChannelCount = $ref<any>([])
+  // 支付订单通道金额分布
+  let payOrderChannelAmount = $ref<any>([])
+  // 退款订单通道金额分布
+  let refundOrderChannelAmount = $ref<any>([])
+
   const orderListData = computed(() => [
     {
       title: '支付金额',
@@ -67,14 +78,14 @@
     },
     {
       title: '支付订单数',
-      value: refundAmount,
+      value: payCount,
       icon: 'transaction|svg',
       action: '',
       decimals: 0,
     },
     {
       title: '退款金额',
-      value: payCount,
+      value: refundAmount,
       icon: 'total-sales|svg',
       action: '单位(元)',
       decimals: 2,
@@ -91,20 +102,35 @@
    * 初始化订单信息
    */
   function initOrderCount() {
-    getPayAmount(param).then(({ data }) => (payAmount = data / 10.0))
-    getRefundAmount(param).then(({ data }) => (refundAmount = data))
-    getPayOrderCount(param).then(({ data }) => (payCount = data / 10.0))
+    getPayAmount(param).then(({ data }) => (payAmount = data / 100.0))
+    getRefundAmount(param).then(({ data }) => (refundAmount = data / 100.0))
+    getPayOrderCount(param).then(({ data }) => (payCount = data))
     getRefundOrderCount(param).then(({ data }) => (refundCount = data))
   }
 
-  let payChannelLine = $ref<any>()
-
   /**
-   * 初始化退款订单
+   * 初始化支付通道订单数量
    */
   function initPayChannelInfo() {
     getPayChannelInfo(param).then(({ data }) => {
-      payChannelLine = data.map((o) => {
+      payOrderChannelCount = data.map((o) => {
+        return { name: o.channelName, value: o.orderCount }
+      })
+      payOrderChannelAmount = data.map((o) => {
+        return { name: o.channelName, value: o.orderAmount }
+      })
+    })
+  }
+
+  /**
+   * 初始化退款通道订单数量
+   */
+  function initRefundChannelInfo() {
+    getRefundChannelInfo(param).then(({ data }) => {
+      refundOrderChannelCount = data.map((o) => {
+        return { name: o.channelName, value: o.orderCount }
+      })
+      refundOrderChannelAmount = data.map((o) => {
         return { name: o.channelName, value: o.orderAmount }
       })
     })
