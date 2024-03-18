@@ -1,30 +1,30 @@
 <template>
   <basic-drawer forceRender v-bind="$attrs" title="通道订单列表" width="60%" :visible="visible" @close="visible = false">
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
-    <vxe-table row-id="id" ref="xTable" :data="records" :loading="loading">
+    <vxe-table row-id="id" ref="xTable" :data="records" :loading="loading" :cell-style="cellStyle">
       <vxe-column type="seq" width="60" />
       <vxe-column field="id" title="通道支付单ID" width="170" />
       <vxe-column field="channel" title="支付通道">
         <template #default="{ row }">
-          <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
+           {{ dictConvert('PayChannel', row.channel) }} 
         </template>
       </vxe-column>
       <vxe-column field="payWay" title="支付方式">
         <template #default="{ row }">
-          <a-tag>{{ dictConvert('PayWay', row.payWay) }}</a-tag>
+          {{ dictConvert('PayWay', row.payWay) }}
         </template>
       </vxe-column>
       <vxe-column field="amount" title="订单金额" />
       <vxe-column field="refundableBalance" title="可退款金额" />
       <vxe-column field="async" title="异步支付">
         <template #default="{ row }">
-          <a-tag v-if="row.async" color="green">是</a-tag>
-          <a-tag v-else color="red">否</a-tag>
+          <span  v-if="row.async" style="color:green">是</span>
+          <span v-else style="color:red">否</span>
         </template>
       </vxe-column>
       <vxe-column field="status" title="支付状态">
         <template #default="{ row }">
-          <a-tag>{{ dictConvert('PayStatus', row.status) }}</a-tag>
+          {{ dictConvert('PayStatus', row.status) }} 
         </template>
       </vxe-column>
       <vxe-column field="payTime" title="支付时间" />
@@ -93,6 +93,38 @@
   function show(record) {
     payChannelOrderInfo.init(record)
   }
+
+  function cellStyle({ row, column }) {
+  if (column.field == 'status') {
+    if (row.status == 'success') {
+      return { color: 'green' }
+    }
+    if (row.status == 'fail') {
+      return { color: 'red' }
+    }
+    if (row.status == 'progress') {
+      return { color: 'orange' }
+    }
+    if (row.status == 'close') {
+      return { color: 'gray' }
+    }
+    return { color: 'red' }
+  }
+  if (column.field == 'asyncPay') {
+    if (row.asyncPay) {
+      return { color: 'green' }
+    } else {
+      return { color: 'gray' }
+    }
+  }
+  if (column.field == 'combinationPayMode') {
+    if (row.combinationPayMode) {
+      return { color: 'green' }
+    } else {
+      return { color: 'gray' }
+    }
+  }
+}
   defineExpose({
     init,
   })

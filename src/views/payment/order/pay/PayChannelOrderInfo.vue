@@ -10,23 +10,23 @@
   >
     <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
       <a-descriptions-item label="通道支付单ID">
-        <a-tag>{{ form.id }}</a-tag>
+         {{ form.id }} 
       </a-descriptions-item>
       <a-descriptions-item label="支付通道">
-        <a-tag>{{ dictConvert('PayChannel', form.channel) }}</a-tag>
+         {{ dictConvert('PayChannel', form.channel) }} 
       </a-descriptions-item>
       <a-descriptions-item label="异步支付">
-        <a-tag v-if="form.async" color="green">是</a-tag>
-        <a-tag v-else color="red">否</a-tag>
+        <span v-if="form.async" style="color:green">是</span>
+        <span v-else style="color:red">否</span>
       </a-descriptions-item>
       <a-descriptions-item label="支付方式">
-        <a-tag>{{ dictConvert('PayWay', form.payWay) }}</a-tag>
+        {{ dictConvert('PayWay', form.payWay) }} 
       </a-descriptions-item>
       <a-descriptions-item label="订单金额">
         {{ form.amount }}
       </a-descriptions-item>
       <a-descriptions-item label="支付状态">
-        <a-tag>{{ dictConvert('PayStatus', form.status) }}</a-tag>
+        <span :style="dynamicStyle(form.status)"> {{ dictConvert('PayStatus', form.status) }}</span>
       </a-descriptions-item>
       <a-descriptions-item label="支付时间">
         {{ form.payTime }}
@@ -74,6 +74,21 @@
       form = data
       confirmLoading.value = false
     })
+  }
+  function dynamicStyle(item: string){
+    if (item == 'success') {
+      return { color: 'green' }
+    }
+    if (item == 'fail') {
+      return { color: 'red' }
+    }
+    if (item == 'progress') {
+      return { color: 'orange' }
+    }
+    if (item == 'close') {
+      return { color: 'gray' }
+    }
+    return { color: 'red' }
   }
   defineExpose({
     init,
