@@ -28,7 +28,7 @@
         {{ dictConvert('PayChannel', form.channel) }}
       </a-descriptions-item>
       <a-descriptions-item label="状态">
-        <a-tag>{{ dictConvert('RefundStatus', form.status) }}</a-tag>
+        <span :style="dynamicStyle(form.status)">{{ dictConvert('RefundStatus', form.status) }}</span>
       </a-descriptions-item>
     </a-descriptions>
 
@@ -73,6 +73,21 @@
       form = data
       confirmLoading.value = false
     })
+  }
+  function dynamicStyle(item: string){
+    if (item == 'success') {
+      return { color: 'green' }
+    }
+    if (item == 'fail') {
+      return { color: 'red' }
+    }
+    if (item == 'progress') {
+      return { color: 'orange' }
+    }
+    if (item == 'close') {
+      return { color: 'gray' }
+    }
+    return { color: 'red' }
   }
   defineExpose({
     init,
