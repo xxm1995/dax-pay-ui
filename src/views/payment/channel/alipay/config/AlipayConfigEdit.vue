@@ -27,6 +27,18 @@
         <a-form-item label="是否启用" name="enable">
           <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.enable" />
         </a-form-item>
+        <a-form-item name="alipayUserId">
+          <template #label>
+            <basic-title
+              helpMessage="，是商家与支付宝签约后，商家获得的支付宝商家唯一识别码，以 2088 开头的 16 位数字组成，在开放平台中账户中心获取"
+              >合作者身份ID
+            </basic-title>
+          </template>
+          <a-input v-model:value="form.alipayUserId" placeholder="请输入合作者身份ID" />
+        </a-form-item>
+        <a-form-item label="单次支付限额(分)" name="limitAmount">
+          <a-input-number :precision="0" :min="1" v-model:value="form.limitAmount" placeholder="请输入单次支付限额(分)" />
+        </a-form-item>
         <a-form-item name="notifyUrl">
           <template #label>
             <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 异步通知地址 </basic-title>
@@ -177,6 +189,7 @@
   let form = $ref({
     appId: '',
     enable: false,
+    limitAmount: 20000,
     notifyUrl: '',
     returnUrl: '',
     serverUrl: '',
@@ -197,6 +210,7 @@
     return {
       appId: [{ required: true, message: '请输入AppId' }],
       enable: [{ required: true, message: '请选择是否启用' }],
+      limitAmount: [{ required: true, message: '请选择单次支付限额' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
       returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],
       serverUrl: [{ required: true, message: '请输入请求网关地址' }],
