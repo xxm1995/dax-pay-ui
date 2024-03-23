@@ -25,6 +25,9 @@
         <a-form-item label="是否启用" name="enable">
           <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.enable" />
         </a-form-item>
+        <a-form-item label="单次支付限额(分)" name="singleLimit">
+          <a-input-number :precision="0" :min="1" v-model:value="form.singleLimit" placeholder="请输入单次支付限额(分)" />
+        </a-form-item>
         <a-form-item name="notifyUrl">
           <template #label>
             <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 异步通知地址 </basic-title>
@@ -88,10 +91,6 @@
             </template>
           </a-input>
         </a-form-item>
-
-        <a-form-item label="备注" name="remark">
-          <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
-        </a-form-item>
       </a-form>
     </a-spin>
     <template #footer>
@@ -128,6 +127,7 @@
   let form = $ref<WechatPayConfig>({
     id: null,
     enable: false,
+    singleLimit: 20000,
     apiVersion: 'apiV2',
     wxMchId: '',
     wxAppId: '',
@@ -145,6 +145,7 @@
   const rules = computed(() => {
     return {
       wxMchId: [{ required: true, message: '请输入商户号' }],
+      singleLimit: [{ required: true, message: '请选择单次支付限额' }],
       wxAppId: [{ required: true, message: '请输入应用编号' }],
       appSecret: [{ required: true, message: '请输入AppSecret' }],
       enable: [{ required: true, message: '请选择是否启用' }],

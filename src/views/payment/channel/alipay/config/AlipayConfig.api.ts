@@ -39,7 +39,7 @@ export interface AlipayConfig extends BaseEntity {
   // 是否启用
   enable: boolean
   // 支付限额
-  limitAmount: number
+  singleLimit: number
   // 商户账号ID
   alipayUserId?: string
   // 服务器异步通知页面路径
