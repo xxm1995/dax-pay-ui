@@ -25,8 +25,6 @@ export function update(param: PayPlatformConfig) {
  * 支付平台配置
  */
 export interface PayPlatformConfig extends BaseEntity {
-  // 网站地址
-  websiteUrl?: string
   // 签名方式
   signType?: string
   // 签名秘钥
@@ -35,6 +33,8 @@ export interface PayPlatformConfig extends BaseEntity {
   notifyUrl?: string
   // 同步支付通知地址
   returnUrl?: string
+  // 订单限额(分)
+  limitAmount?: number
   // 订单默认超时时间(分钟)
   orderTimeout?: number
 }
