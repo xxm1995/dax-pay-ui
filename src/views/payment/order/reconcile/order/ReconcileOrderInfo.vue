@@ -18,9 +18,9 @@
       <a-descriptions-item label="支付通道">
         <a-tag>{{ dictConvert('PayChannel', form.channel) }}</a-tag>
       </a-descriptions-item>
-      <a-descriptions-item label="对账单下载">
-        <a-tag v-if="form?.down" color="green">已下载</a-tag>
-        <a-tag v-else color="red">未下载</a-tag>
+      <a-descriptions-item label="对账单下载/上传">
+        <a-tag v-if="form?.down" color="green">完成下载/上传</a-tag>
+        <a-tag v-else color="red">未下载/上传</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="对账单比对">
         <a-tag v-if="form?.compare" color="green">已比对</a-tag>

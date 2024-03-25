@@ -27,13 +27,29 @@
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="down" title="对账单下载">
+        <vxe-column field="down" title="下载或上传">
           <template #default="{ row }">
-            <a-tag v-if="row.down" color="green">已下载</a-tag>
-            <a-link v-else color="red" @click="down(row)">下载</a-link>
+            <template v-if="row.down">
+              <a-tag v-if="row.down" color="green">已完成</a-tag>
+            </template>
+            <template v-else>
+              <a-link color="red" @click="down(row)">下载</a-link>
+              <a-divider type="vertical" />
+              <a-upload
+                name="file"
+                :multiple="false"
+                :action="uploadAction"
+                :headers="tokenHeader"
+                :data="{ id: row.id }"
+                :showUploadList="false"
+                @change="handleChange"
+              >
+                <a-link color="red">上传</a-link>
+              </a-upload>
+            </template>
           </template>
         </vxe-column>
-        <vxe-column field="compare" title="对账单比对">
+        <vxe-column field="compare" title="比对">
           <template #default="{ row }">
             <a-tag v-if="row.compare" color="green">已比对</a-tag>
             <a-link v-else :disabled="!row.down" color="red" @click="compareOrder(row)">比对</a-link>
@@ -91,12 +107,15 @@
   import ReconcileOrderCreate from './ReconcileOrderCreate.vue'
   import ALink from '/@/components/Link/Link.vue'
   import ReconcileDiffListModel from '/@/views/payment/order/reconcile/diff/ReconcileDiffListModel.vue'
+  import { useUpload } from '/@/hooks/bootx/useUpload'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, sortChange, sortParam, pagination, pages, model, loading } =
     useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
+  // 手动上传对账单
+  const { tokenHeader, uploadAction } = useUpload('/order/reconcile/upload')
 
   let payChannelList = $ref<LabeledValue[]>([])
 
@@ -199,6 +218,22 @@
           })
       },
     })
+  }
+
+  /**
+   * 上传完成回调
+   */
+  function handleChange(info) {
+    if (info.file.status === 'done') {
+      if (!info.file.response.code) {
+        queryPage()
+        createMessage.success(`${info.file.name} 上传成功!`)
+      } else {
+        createMessage.error(`${info.file.response.msg}`)
+      }
+    } else if (info.file.status === 'error') {
+      createMessage.error('上传失败')
+    }
   }
 
   /**
