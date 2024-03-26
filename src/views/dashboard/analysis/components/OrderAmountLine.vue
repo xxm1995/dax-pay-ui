@@ -2,7 +2,7 @@
   <div ref="chartRef" :style="{ height: '280px', width: '95%' }"></div>
 </template>
 <script lang="ts" setup>
-  import {  ref, Ref, watch } from 'vue'
+  import { ref, Ref, watch } from 'vue'
   import { useECharts } from '/@/hooks/web/useECharts'
 
   const chartRef = ref<HTMLDivElement | null>(null)

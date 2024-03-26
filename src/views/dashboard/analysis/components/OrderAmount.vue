@@ -1,17 +1,17 @@
 <template>
   <Card :tab-list="tabListTitle" v-bind="$attrs" :active-tab-key="activeKey" @tab-change="onTabChange">
     <p v-if="activeKey === 't1'">
-      <VisitAnalysis :head="payHead" :data="payAmount" :max="payMax" />
+      <OrderAmountLine :head="payHead" :data="payAmount" :max="payMax" />
     </p>
     <p v-if="activeKey === 't2'">
-      <VisitAnalysis :head="refundHead" :data="refundAmount" :max="refundMax" />
+      <OrderAmountLine :head="refundHead" :data="refundAmount" :max="refundMax" />
     </p>
   </Card>
 </template>
 <script lang="ts" setup>
   import { computed, ref } from 'vue'
   import { Card } from 'ant-design-vue'
-  import VisitAnalysis from './VisitAnalysis.vue'
+  import OrderAmountLine from './OrderAmountLine.vue'
 
   const activeKey = ref('t1')
   const tabListTitle = [

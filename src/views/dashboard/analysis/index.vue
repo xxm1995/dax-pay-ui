@@ -5,20 +5,20 @@
     <!--  占比图  -->
     <div class="md:flex !my-4 enter-y">
       <!--   支付   -->
-      <VisitSource class="md:w-1/2 !md:my-0 !my-4 w-full" :loading="loading" :data="payOrderChannelCount" />
+      <PayOrderCount class="md:w-1/2 !md:my-0 !my-4 w-full" :loading="loading" :data="payOrderChannelCount" />
       <!--   退款   -->
-      <SalesProductPie class="md:w-1/2 !md:mx-4 w-full" :loading="loading" :data="refundOrderChannelCount" />
+      <RefundOrderCount class="md:w-1/2 !md:mx-4 w-full" :loading="loading" :data="refundOrderChannelCount" />
     </div>
     <!--  订单折线图  -->
-    <SiteAnalysis class="!my-4 enter-y" :loading="loading" :payOrder="payOrderChannelAmount" :refundOrder="refundOrderChannelAmount" />
+    <OrderAmount class="!my-4 enter-y" :loading="loading" :payOrder="payOrderChannelAmount" :refundOrder="refundOrderChannelAmount" />
   </div>
 </template>
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue'
   import OrderCount from './components/OrderCount.vue'
-  import SiteAnalysis from './components/SiteAnalysis.vue'
-  import VisitSource from './components/VisitSource.vue'
-  import SalesProductPie from './components/SalesProductPie.vue'
+  import OrderAmount from './components/OrderAmount.vue'
+  import PayOrderCount from './components/PayOrderCount.vue'
+  import RefundOrderCount from './components/RefundOrderCount.vue'
   import dayjs from 'dayjs'
   import {
     CockpitReportQuery,
@@ -117,7 +117,7 @@
         return { name: o.channelName, value: o.orderCount }
       })
       payOrderChannelAmount = data.map((o) => {
-        return { name: o.channelName, value: o.orderAmount }
+        return { name: o.channelName, value: o.orderAmount / 100.0 }
       })
     })
   }
@@ -131,7 +131,7 @@
         return { name: o.channelName, value: o.orderCount }
       })
       refundOrderChannelAmount = data.map((o) => {
-        return { name: o.channelName, value: o.orderAmount }
+        return { name: o.channelName, value: o.orderAmount / 100.0 }
       })
     })
   }
