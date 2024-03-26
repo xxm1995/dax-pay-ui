@@ -40,6 +40,10 @@ export interface WechatPayConfig extends BaseEntity {
   wxMchId?: string
   // 是否启用
   enable: boolean
+  // 支付限额
+  singleLimit: number
+  // API 版本
+  apiVersion: string
   // 商户平台「API安全」中的 APIv2 密钥
   apiKeyV2?: string
   // 商户平台「API安全」中的 APIv3 密钥

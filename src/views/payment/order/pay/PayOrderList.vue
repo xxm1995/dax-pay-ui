@@ -8,39 +8,33 @@
       <vxe-table
         row-id="id"
         ref="xTable"
+        :cell-style="cellStyle"
         :data="pagination.records"
         :loading="loading"
         :sort-config="{ remote: true, trigger: 'cell' }"
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="id" title="支付ID" sortable width="170" />
-        <vxe-column field="businessNo" title="业务号" />
-        <vxe-column field="title" title="标题" />
-        <vxe-column field="amount" title="金额(分)" sortable />
-        <vxe-column field="refundableBalance" title="可退余额(分)" sortable />
-        <vxe-column field="status" title="支付状态">
-          <template #default="{ row }">
-            <a-tag>{{ dictConvert('PayStatus', row.status) }}</a-tag>
-          </template>
+        <vxe-column field="businessNo" title="业务号" width="180" />
+        <vxe-column field="title" title="标题" width="220" />
+        <vxe-column field="amount" title="金额(分)" width="120" sortable />
+        <vxe-column field="refundableBalance" title="可退余额(分)" width="120" sortable />
+        <vxe-column field="status" title="支付状态" width="120">
+          <template #default="{ row }">{{ dictConvert('PayStatus', row.status) }}</template>
         </vxe-column>
-        <vxe-column field="asyncPay" title="异步支付">
-          <template #default="{ row }">
-            <a-tag>{{ row.asyncPay ? '是' : '否' }}</a-tag>
-          </template>
+        <vxe-column field="createTime" title="创建时间" sortable width="220" />
+        <vxe-column field="id" title="支付ID" sortable width="220" />
+
+        <vxe-column field="asyncPay" title="异步支付" width="120">
+          <template #default="{ row }">{{ row.asyncPay ? '是' : '否' }}</template>
         </vxe-column>
-        <vxe-column field="combinationPayMode" title="组合支付">
-          <template #default="{ row }">
-            <a-tag>{{ row.combinationPayMode ? '是' : '否' }}</a-tag>
-          </template>
+        <vxe-column field="combinationPay" title="组合支付" width="120">
+          <template #default="{ row }">{{ row.combinationPay ? '是' : '否' }}</template>
         </vxe-column>
-        <vxe-column field="asyncChannel" title="异步支付方式">
-          <template #default="{ row }">
-            <a-tag>{{ dictConvert('PayChannel', row.asyncChannel) || '无' }}</a-tag>
-          </template>
+        <vxe-column field="asyncChannel" title="异步支付方式" width="160">
+          <template #default="{ row }">{{ dictConvert('PayChannel', row.asyncChannel) || '无' }}</template>
         </vxe-column>
-        <vxe-column field="expiredTime" title="过期时间" sortable />
-        <vxe-column field="createTime" title="创建时间" sortable />
+        <vxe-column field="expiredTime" title="过期时间" sortable width="220" />
         <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
@@ -48,7 +42,10 @@
             <a-link @click="showChannel(row)">通道订单</a-link>
             <a-divider type="vertical" />
             <a-dropdown>
-              <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /></a>
+              <a>
+                更多
+                <icon icon="ant-design:down-outlined" :size="12" />
+              </a>
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
@@ -209,6 +206,38 @@
    */
   function refund(record) {
     refundModel.init(record.id)
+  }
+
+  function cellStyle({ row, column }) {
+    if (column.field == 'status') {
+      if (row.status == 'success') {
+        return { color: 'green' }
+      }
+      if (row.status == 'fail') {
+        return { color: 'red' }
+      }
+      if (row.status == 'progress') {
+        return { color: 'orange' }
+      }
+      if (row.status == 'close') {
+        return { color: 'gray' }
+      }
+      return { color: 'red' }
+    }
+    if (column.field == 'asyncPay') {
+      if (row.asyncPay) {
+        return { color: 'green' }
+      } else {
+        return { color: 'gray' }
+      }
+    }
+    if (column.field == 'combinationPay') {
+      if (row.combinationPay) {
+        return { color: 'green' }
+      } else {
+        return { color: 'gray' }
+      }
+    }
   }
 </script>
 

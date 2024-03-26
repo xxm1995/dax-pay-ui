@@ -27,6 +27,9 @@
         <a-form-item label="是否启用" name="enable">
           <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.enable" />
         </a-form-item>
+        <a-form-item label="单次支付限额(分)" name="singleLimit">
+          <a-input-number :precision="0" :min="1" v-model:value="form.singleLimit" placeholder="请输入单次支付限额(分)" />
+        </a-form-item>
         <a-form-item label="签名类型" name="signType">
           <a-select
             allowClear
@@ -132,9 +135,6 @@
         <a-form-item label="测试环境" name="sandbox">
           <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.sandbox" />
         </a-form-item>
-        <a-form-item label="备注" name="remark">
-          <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
-        </a-form-item>
       </a-form>
     </a-spin>
     <template #footer>
@@ -173,6 +173,7 @@
   let form = $ref<UnionPayConfig>({
     id: null,
     seller: '',
+    singleLimit: 20000,
     enable: false,
     notifyUrl: '',
     returnUrl: '',
@@ -184,6 +185,7 @@
     return {
       machId: [{ required: true, message: '请输入商户号' }],
       wxAppId: [{ required: true, message: '请输入应用编号' }],
+      singleLimit: [{ required: true, message: '请选择单次支付限额' }],
       // certSign: [{ required: true, message: '请选择是否为证书签名' }],
       signType: [{ required: true, message: '请选择签名类型' }],
       keyPrivateCert: [{ required: true, message: '请上传应用私钥证书' }],

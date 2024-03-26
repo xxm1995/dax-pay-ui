@@ -5,8 +5,11 @@
         <a-form ref="formRef" :validate-trigger="['blur', 'change']" :label-col="{ span: 12 }" :model="form" :rules="rules">
           <a-row>
             <a-col :offset="2" :span="10">
-              <a-form-item label="网站地址" class="w-400px" name="websiteUrl">
-                <a-input placeholder="请输入网站地址" v-model:value="form.websiteUrl" :disabled="!edit" />
+              <a-form-item class="w-400px" name="limitAmount">
+                <template #label>
+                  <basic-title helpMessage="一次订单支付时最高可以支付的金额，单位为分"> 订单限额(分) </basic-title>
+                </template>
+                <a-input placeholder="请输入订单限额" v-model:value="form.limitAmount" :disabled="!edit" />
               </a-form-item>
             </a-col>
             <a-col :span="10">
@@ -54,7 +57,7 @@
                     同步支付通知地址
                   </basic-title>
                 </template>
-                <a-input placeholder="请输入同步支付通知地址" v-model:value="form.returnUrl" :disabled="!edit" />
+                <a-input placeholder="请输入同步支付跳转地址" v-model:value="form.returnUrl" :disabled="!edit" />
               </a-form-item>
             </a-col>
           </a-row>
@@ -87,10 +90,10 @@
   let edit = $ref(false)
 
   const rules = reactive({
-    websiteUrl: [{ required: true, message: '请输入网站地址', trigger: 'blur' }],
-    signType: [{ required: true, message: '请选择签名类型', trigger: 'blur' }],
-    signSecret: [{ required: true, message: '请输入签名密钥', trigger: 'blur' }],
-    orderTimeout: [{ required: true, message: '请输入订单默认超时时间(分钟)', trigger: 'blur' }],
+    limitAmount: [{ required: true, message: '请输入订单支付限额' }],
+    signType: [{ required: true, message: '请选择签名类型' }],
+    signSecret: [{ required: true, message: '请输入签名密钥' }],
+    orderTimeout: [{ required: true, message: '请输入订单默认超时时间(分钟)' }],
   } as Record<string, Rule[]>)
 
   onMounted(() => initData())

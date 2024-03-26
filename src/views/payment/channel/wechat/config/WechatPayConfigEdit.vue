@@ -25,6 +25,9 @@
         <a-form-item label="是否启用" name="enable">
           <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.enable" />
         </a-form-item>
+        <a-form-item label="单次支付限额(分)" name="singleLimit">
+          <a-input-number :precision="0" :min="1" v-model:value="form.singleLimit" placeholder="请输入单次支付限额(分)" />
+        </a-form-item>
         <a-form-item name="notifyUrl">
           <template #label>
             <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 异步通知地址 </basic-title>
@@ -50,6 +53,12 @@
         </a-form-item>
         <a-form-item label="沙箱环境" name="sandbox">
           <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.sandbox" />
+        </a-form-item>
+        <a-form-item label="API版本" name="apiVersion">
+          <a-radio-group v-model:value="form.apiVersion" button-style="solid">
+            <a-radio-button value="apiV2"> Api_V2 </a-radio-button>
+            <a-radio-button value="apiV3"> Api_V3 </a-radio-button>
+          </a-radio-group>
         </a-form-item>
         <a-form-item label="APIv2密钥" name="apiKeyV2">
           <a-textarea :rows="3" :disabled="showable" v-model:value="form.apiKeyV2" placeholder="请输入APIv2密钥" />
@@ -81,10 +90,6 @@
               </a-tooltip>
             </template>
           </a-input>
-        </a-form-item>
-
-        <a-form-item label="备注" name="remark">
-          <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -122,6 +127,8 @@
   let form = $ref<WechatPayConfig>({
     id: null,
     enable: false,
+    singleLimit: 20000,
+    apiVersion: 'apiV2',
     wxMchId: '',
     wxAppId: '',
     appSecret: '',
@@ -138,15 +145,16 @@
   const rules = computed(() => {
     return {
       wxMchId: [{ required: true, message: '请输入商户号' }],
+      singleLimit: [{ required: true, message: '请选择单次支付限额' }],
       wxAppId: [{ required: true, message: '请输入应用编号' }],
       appSecret: [{ required: true, message: '请输入AppSecret' }],
       enable: [{ required: true, message: '请选择是否启用' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
       returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],
-      apiVersion: [{ required: true, message: '请选择支付API版本' }],
-      apiKeyV2: [{ required: true, message: '请输入V2秘钥' }],
       sandbox: [{ required: true, message: '请选择是否为沙箱环境' }],
-      // apiKeyV3: [{ required: true, message: '请输入V3秘钥' }],
+      apiVersion: [{ required: true, message: '请选择支付API版本' }],
+      apiKeyV2: [{ required: form.apiVersion === 'apiV2', message: '请输入V2秘钥' }],
+      apiKeyV3: [{ required: form.apiVersion === 'apiV3', message: '请输入V3秘钥' }],
       // p12: [{ required: true, message: '请上传p12证书' }],
       payWays: [{ required: true, message: '请选择支持的支付类型' }],
     } as Record<string, Rule[]>

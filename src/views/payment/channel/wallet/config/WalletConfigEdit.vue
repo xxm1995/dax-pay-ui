@@ -24,11 +24,8 @@
         <a-form-item label="是否启用" name="enable">
           <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.enable" />
         </a-form-item>
-        <a-form-item name="singleLimit">
-          <template #label>
-            <basic-title helpMessage="一次支付中，最多可以通过用钱包进行支付的金额"> 支付限额 </basic-title>
-          </template>
-          <a-input-number v-model:value="form.singleLimit" placeholder="请输入支付限额" />
+        <a-form-item label="单次支付限额(分)" name="singleLimit">
+          <a-input-number :precision="0" :min="1" v-model:value="form.singleLimit" placeholder="请输入单次支付限额(分)" />
         </a-form-item>
         <a-form-item label="支持支付方式" name="payWays">
           <a-select

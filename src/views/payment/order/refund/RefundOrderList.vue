@@ -14,6 +14,7 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table
         row-id="id"
+        :cell-style="cellStyle"
         ref="xTable"
         :sort-config="{ remote: true, trigger: 'cell' }"
         :data="pagination.records"
@@ -21,9 +22,10 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="id" title="退款ID" width="180" />
-        <vxe-column field="title" title="原支付标题" />
-        <vxe-column field="paymentId" title="原支付ID" width="170">
+        <vxe-column field="id" title="退款ID" width="220" />
+        <vxe-column field="refundTime" title="退款时间" sortable width="180" />
+        <vxe-column field="title" title="原支付标题" width="160" />
+        <vxe-column field="paymentId" title="原支付ID" width="220">
           <template #default="{ row }">
             <a @click="showPayment(row.paymentId)">
               {{ row.paymentId }}
@@ -31,21 +33,20 @@
           </template>
         </vxe-column>
         <vxe-column field="businessNo" title="原业务号" :visible="false" />
-        <vxe-column field="amount" title="退款金额" sortable />
-        <vxe-column field="refundableBalance" title="剩余可退金额" sortable />
-        <vxe-column field="async" title="包含异步通道">
+        <vxe-column field="amount" title="退款金额(分)" sortable width="140" />
+        <vxe-column field="refundableBalance" title="剩余可退金额(分)" sortable width="160" />
+        <vxe-column field="async" title="包含异步通道" width="120">
           <template #default="{ row }">
-            <a-tag color="green">{{ row.asyncPay ? '是' : '否' }}</a-tag>
+            {{ row.asyncPay ? '是' : '否' }}
           </template>
         </vxe-column>
-        <vxe-column field="gatewayOrderNo" title="支付网关订单号" :visible="false" />
-        <vxe-column field="refundTime" title="退款时间" sortable />
-        <vxe-column field="refundStatus" title="状态">
+        <vxe-column field="gatewayOrderNo" title="支付网关订单号" :visible="false" width="220" />
+        <vxe-column field="refundStatus" title="状态" width="80">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('RefundStatus', row.status) }}</a-tag>
+            {{ dictConvert('RefundStatus', row.status) }}
           </template>
         </vxe-column>
-        <vxe-column field="reason" title="原因" />
+        <vxe-column field="reason" title="原因" width="160" />
         <vxe-column fixed="right" width="220" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
@@ -213,6 +214,38 @@
    */
   function showChannel(record) {
     refundChannelOrderList.init(record)
+  }
+
+  function cellStyle({ row, column }) {
+    if (column.field == 'refundStatus') {
+      if (row.status == 'success') {
+        return { color: 'green' }
+      }
+      if (row.status == 'fail') {
+        return { color: 'red' }
+      }
+      if (row.status == 'progress') {
+        return { color: 'orange' }
+      }
+      if (row.status == 'close') {
+        return { color: 'gray' }
+      }
+      return { color: 'red' }
+    }
+    if (column.field == 'async') {
+      if (row.asyncPay) {
+        return { color: 'green' }
+      } else {
+        return { color: 'gray' }
+      }
+    }
+    if (column.field == 'combinationPay') {
+      if (row.combinationPay) {
+        return { color: 'green' }
+      } else {
+        return { color: 'gray' }
+      }
+    }
   }
 </script>
 

@@ -1,6 +1,6 @@
 <template>
-  <Card title="访问来源" :loading="loading">
-    <div ref="chartRef" :style="{ width, height }"></div>
+  <Card title="支付各通道分布" :loading="loading">
+    <div ref="chartRef" :style="{ width: '100%', height: '300px' }"></div>
   </Card>
 </template>
 <script lang="ts" setup>
@@ -9,24 +9,16 @@
   import { useECharts } from '/@/hooks/web/useECharts'
   const props = defineProps({
     loading: Boolean,
-    width: {
-      type: String as PropType<string>,
-      default: '100%',
-    },
-    height: {
-      type: String as PropType<string>,
-      default: '300px',
+    data: {
+      type: Array,
     },
   })
   const chartRef = ref<HTMLDivElement | null>(null)
   const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>)
 
   watch(
-    () => props.loading,
+    () => props.data,
     () => {
-      if (props.loading) {
-        return
-      }
       setOptions({
         tooltip: {
           trigger: 'item',
@@ -37,8 +29,7 @@
         },
         series: [
           {
-            color: ['#5ab1ef', '#b6a2de', '#67e0e3', '#2ec7c9'],
-            name: '访问来源',
+            name: '支付通道',
             type: 'pie',
             radius: ['40%', '70%'],
             avoidLabelOverlap: false,
@@ -61,12 +52,7 @@
             labelLine: {
               show: false,
             },
-            data: [
-              { value: 1048, name: '搜索引擎' },
-              { value: 735, name: '直接访问' },
-              { value: 580, name: '邮件营销' },
-              { value: 484, name: '联盟广告' },
-            ],
+            data: props.data as any,
             animationType: 'scale',
             animationEasing: 'exponentialInOut',
             animationDelay: function () {
