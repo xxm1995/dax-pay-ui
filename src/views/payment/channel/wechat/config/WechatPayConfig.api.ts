@@ -40,6 +40,8 @@ export interface WechatPayConfig extends BaseEntity {
   wxMchId?: string
   // 是否启用
   enable: boolean
+  // 是否支持分账
+  allocation: boolean
   // 支付限额
   singleLimit: number
   // API 版本

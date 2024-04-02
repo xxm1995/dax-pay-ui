@@ -27,6 +27,9 @@
         <a-form-item label="是否启用" name="enable">
           <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.enable" />
         </a-form-item>
+        <a-form-item label="支持分账" name="allocation">
+          <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.allocation" />
+        </a-form-item>
         <a-form-item name="alipayUserId">
           <template #label>
             <basic-title
@@ -186,6 +189,7 @@
   let form = $ref({
     appId: '',
     enable: false,
+    allocation: false,
     singleLimit: 20000,
     notifyUrl: '',
     returnUrl: '',
@@ -207,6 +211,7 @@
     return {
       appId: [{ required: true, message: '请输入AppId' }],
       enable: [{ required: true, message: '请选择是否启用' }],
+      allocation: [{ required: true, message: '请选择是否启用分账支持' }],
       singleLimit: [{ required: true, message: '请选择单次支付限额' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
       returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],

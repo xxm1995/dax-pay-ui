@@ -25,6 +25,9 @@
         <a-form-item label="是否启用" name="enable">
           <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.enable" />
         </a-form-item>
+        <a-form-item label="支持分账" name="allocation">
+          <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.allocation" />
+        </a-form-item>
         <a-form-item label="单次支付限额(分)" name="singleLimit">
           <a-input-number :precision="0" :min="1" v-model:value="form.singleLimit" placeholder="请输入单次支付限额(分)" />
         </a-form-item>
@@ -127,6 +130,7 @@
   let form = $ref<WechatPayConfig>({
     id: null,
     enable: false,
+    allocation: false,
     singleLimit: 20000,
     apiVersion: 'apiV2',
     wxMchId: '',
@@ -149,6 +153,7 @@
       wxAppId: [{ required: true, message: '请输入应用编号' }],
       appSecret: [{ required: true, message: '请输入AppSecret' }],
       enable: [{ required: true, message: '请选择是否启用' }],
+      allocation: [{ required: true, message: '请选择是否启用分账支持' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
       returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],
       sandbox: [{ required: true, message: '请选择是否为沙箱环境' }],
