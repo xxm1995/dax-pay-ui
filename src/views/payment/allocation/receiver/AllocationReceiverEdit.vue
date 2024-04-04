@@ -120,7 +120,6 @@
       channel: [{ required: true, message: '请选择所属通道' }],
       receiverType: [{ required: true, message: '请选择分账接收方类型' }],
       receiverAccount: [{ required: true, message: '请输入接收方账号' }],
-      receiverName: [{ required: true, message: '请输入接收方姓名' }],
       relationType: [{ required: true, message: '请选择分账关系类型' }],
       relationName: [{ required: form.relationType === 'CUSTOM', message: '请输入类型关系名称' }],
     } as Record<string, Rule[]>
@@ -149,13 +148,12 @@
   /**
    * 获取信息
    */
-  async function getInfo(record: AllocationReceiver, editType: FormEditType) {
+  async function getInfo(record, editType: FormEditType) {
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
-      form = record
       confirmLoading.value = true
       await get(record.id).then(({ data }) => (form = data))
+      confirmLoading.value = false
       findReceiverTypeByChannel(form.channel).then(({ data }) => (receiverTypeList = data))
-      emits('ok')
     } else {
       confirmLoading.value = false
     }

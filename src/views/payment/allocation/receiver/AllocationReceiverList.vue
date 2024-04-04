@@ -43,13 +43,13 @@
             <a-tag>{{ row.sync ? '已同步' : '未同步' }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="220" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
             <a-link @click="edit(row)">编辑</a-link>
             <a-divider type="vertical" />
-            <a-link @click="remove(row)">删除</a-link>
+            <a-link :disabled="row.sync" @click="remove(row)">删除</a-link>
             <a-divider type="vertical" />
             <a-link v-if="!row.sync" @click="bind(row)">同步</a-link>
             <a-link v-else @click="unbind(row)">取消同步</a-link>
@@ -72,13 +72,7 @@
 <script setup lang="ts">
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import {
-    del,
-    findChannels,
-    page,
-    registerByGateway,
-    removeByGateway
-  } from "./AllocationReceiver.api";
+  import { del, findChannels, page, registerByGateway, removeByGateway } from './AllocationReceiver.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '/@/hooks/web/useMessage'
@@ -204,7 +198,7 @@
       onOk: () => {
         loading.value = true
         registerByGateway(record.id).then(({ data }) => {
-          createMessage.success('同步成功')
+          createMessage.success('该分账接收方同步到三方支付系统中成功')
           queryPage()
         })
       },
@@ -222,7 +216,7 @@
       onOk: () => {
         loading.value = true
         removeByGateway(record.id).then(({ data }) => {
-          createMessage.success('取消操作成功')
+          createMessage.success('该分账接收方从三方支付系统中取消成功')
           queryPage()
         })
       },

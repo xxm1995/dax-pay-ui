@@ -56,7 +56,7 @@ export function add(data: AllocationReceiver) {
  * 修改
  */
 export function update(data: AllocationReceiver) {
-  return defHttp.put<Result<null>>({
+  return defHttp.post<Result<null>>({
     url: '/allocation/receiver/update',
     data,
   })

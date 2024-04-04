@@ -116,7 +116,6 @@
    */
   async function getInfo(record: AllocationGroup, editType: FormEditType) {
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
-      form = record
       confirmLoading.value = true
       await get(record.id).then(({ data }) => (form = data))
       confirmLoading.value = false
