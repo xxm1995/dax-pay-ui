@@ -90,7 +90,7 @@
   const {
     initFormEditType,
     handleCancel,
-    search,
+    diffForm,
     labelCol,
     wrapperCol,
     modalWidth,
@@ -109,6 +109,7 @@
   // 表单
   const formRef = $ref<FormInstance>()
   let form = $ref<AllocationReceiver>({})
+  let rawForm = $ref<AllocationReceiver>({})
   let payChannelList = $ref<LabeledValue[]>([])
   let receiverTypeList = $ref<LabeledValue[]>([])
   let relationTypeList = $ref<LabeledValue[]>([])
@@ -151,7 +152,10 @@
   async function getInfo(record, editType: FormEditType) {
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
       confirmLoading.value = true
-      await get(record.id).then(({ data }) => (form = data))
+      await get(record.id).then(({ data }) => {
+        rawForm = { ...form }
+        form = data
+      })
       confirmLoading.value = false
       findReceiverTypeByChannel(form.channel).then(({ data }) => (receiverTypeList = data))
     } else {
@@ -177,7 +181,9 @@
         if (formEditType.value === FormEditType.Add) {
           await add(form)
         } else if (formEditType.value === FormEditType.Edit) {
-          await update(form)
+          console.log(rawForm)
+          console.log(diffForm(rawForm, form, 'receiverAccount'))
+          await update({ ...form, ...diffForm(rawForm, form, 'receiverAccount') })
         }
       } finally {
         confirmLoading.value = false

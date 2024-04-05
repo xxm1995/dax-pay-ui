@@ -30,7 +30,7 @@
           <template #default="{ row }"> {{ row.totalRate / 100.0 }}% </template>
         </vxe-column>
         <vxe-column field="remark" title="备注" />
-        <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="230" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
@@ -38,7 +38,7 @@
             <a-divider type="vertical" />
             <a-link @click="remove(row)">删除</a-link>
             <a-divider type="vertical" />
-            <a-link danger @click="config(row)">配置</a-link>
+            <a-link danger @click="config(row)">接收方配置</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -52,6 +52,7 @@
       />
     </div>
     <allocation-group-edit ref="allocationGroupEdit" @ok="queryPage" />
+    <allocation-group-config ref="allocationGroupConfig" />
   </div>
 </template>
 
@@ -70,6 +71,7 @@
   import AllocationGroupEdit from './AllocationGroupEdit.vue'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { findChannels } from '../receiver/AllocationReceiver.api'
+  import AllocationGroupConfig from './AllocationGroupConfig.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
@@ -78,6 +80,7 @@
   const { dictConvert, dictDropDown } = useDict()
 
   const allocationGroupEdit = $ref<any>()
+  const allocationGroupConfig = $ref<any>()
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
 
@@ -134,6 +137,7 @@
    * 配置页
    */
   function config(record) {
+    allocationGroupConfig.init(record)
   }
 
   /**

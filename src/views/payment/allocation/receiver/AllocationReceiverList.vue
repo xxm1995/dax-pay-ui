@@ -26,7 +26,7 @@
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="receiverType" title="分账接收方类型">
+        <vxe-column field="receiverType" title="接收方类型">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('AllocationReceiverType', row.receiverType) }}</a-tag>
           </template>
@@ -101,10 +101,9 @@
   const fields = computed(() => {
     return [
       { field: 'name', type: STRING, name: '账号别名', placeholder: '请输入账号别名' },
-      { field: 'receiverAccount', type: STRING, name: '接收方账号', placeholder: '请输入接收方账号' },
       { field: 'channel', type: LIST, name: '分账通道', placeholder: '请选择分账通道', selectList: payChannelList },
       { field: 'relationType', type: LIST, name: '分账关系', placeholder: '请选择分账关系', selectList: relationTypeList },
-      { field: 'receiverType', type: LIST, name: '接收方类型', placeholder: '请选择分账接收方类型', selectList: receiverTypeList },
+      // { field: 'receiverType', type: LIST, name: '接收方类型', placeholder: '请选择分账接收方类型', selectList: receiverTypeList },
     ] as QueryField[]
   })
   onMounted(() => {
@@ -126,6 +125,7 @@
   async function initData() {
     findChannels().then(({ data }) => (payChannelList = data))
     relationTypeList = await dictDropDown('AllocationRelationType')
+    // receiverTypeList = await dictDropDown('AllocationReceiverType')
   }
 
   /**
@@ -198,7 +198,7 @@
       onOk: () => {
         loading.value = true
         registerByGateway(record.id).then(({ data }) => {
-          createMessage.success('该分账接收方同步到三方支付系统中成功')
+          createMessage.success('该分账接收方成功同步到三方支付系统中')
           queryPage()
         })
       },

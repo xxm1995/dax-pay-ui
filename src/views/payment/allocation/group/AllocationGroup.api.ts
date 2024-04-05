@@ -27,7 +27,7 @@ export function get(id) {
  * 查询分账接收方信息
  */
 export function getReceivers(groupId) {
-  return defHttp.get<Result<LabeledValue[]>>({
+  return defHttp.get<Result<AllocationGroupReceiver[]>>({
     url: '/allocation/group/findReceiversByGroups',
     params: { groupId },
   })
@@ -66,7 +66,7 @@ export function del(id) {
 /**
  * 批量绑定接收者
  */
-export function bindReceivers(data: { groupId: string; receiverIds: string[] }) {
+export function bindReceivers(data) {
   return defHttp.post<Result>({
     url: '/allocation/group/bindReceivers',
     data,
@@ -86,20 +86,20 @@ export function unbindReceivers(data: { groupId: string; receiverIds: string[] }
 /**
  * 取消绑定接收者
  */
-export function unbindReceiver(data: { groupId: string; receiverId: string }) {
+export function unbindReceiver(receiverId) {
   return defHttp.post<Result>({
     url: '/allocation/group/unbindReceiver',
-    data,
+    params: { receiverId },
   })
 }
 
 /**
  * 修改分账比例
  */
-export function updateRate(receiverId: string, rate: number) {
+export function updateRate(receiverId, rate: number) {
   return defHttp.post<Result>({
     url: '/allocation/group/updateRate',
-    params: { receiverId, rate},
+    params: { receiverId, rate },
   })
 }
 
@@ -123,4 +123,42 @@ export interface AllocationGroup extends BaseEntity {
    * 分账组描述
    */
   remark?: string
+}
+
+/**
+ * 分账组接收方信息
+ */
+export interface AllocationGroupReceiver extends BaseEntity {
+  /**
+   * 分账接收方ID
+   */
+  receiverId?: string
+  /**
+   * 接收方账号别名
+   */
+  name?: string
+  /**
+   * 分账比例
+   */
+  rate?: number
+  /**
+   * 分账接收方类型
+   */
+  receiverType?: string
+  /**
+   * 分账接收方账号
+   */
+  receiverAccount?: string
+  /**
+   * 分账接收方名称
+   */
+  receiverName?: string
+  /**
+   * 分账关系类型
+   */
+  relationType?: string
+  /**
+   * 关系名称
+   */
+  relationName?: string
 }
