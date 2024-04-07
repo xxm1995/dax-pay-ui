@@ -1,7 +1,6 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
-import { LabeledValue } from 'ant-design-vue/lib/select'
 
 /**
  * 分页查询

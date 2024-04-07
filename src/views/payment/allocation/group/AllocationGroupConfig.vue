@@ -52,14 +52,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import BasicDrawer from '/@/components/Drawer/src/BasicDrawer.vue'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import {
-    AllocationGroup,
-    AllocationGroupReceiver,
-    bindReceivers,
-    getReceivers,
-    unbindReceiver,
-    updateRate
-  } from "./AllocationGroup.api";
+  import { AllocationGroup, AllocationGroupReceiver, bindReceivers, getReceivers, unbindReceiver, updateRate } from './AllocationGroup.api'
   import AllocationGroupSelect from '/@/views/payment/allocation/group/AllocationGroupSelect.vue'
 
   // 使用hooks
@@ -120,7 +113,7 @@
       groupId: group.id,
       receivers,
     }
-    console.log()
+    createMessage.success('添加中...')
     bindReceivers(param).then(() => {
       createMessage.success('添加成功')
       queryPage()
@@ -147,7 +140,7 @@
    * 实时修改触发,
    */
   function editActivatedEvent({ row }) {
-    row.rate =row.rate / 100
+    row.rate = row.rate / 100
   }
 
   /**
@@ -156,17 +149,19 @@
   function editClosedEvent({ row, column }) {
     row.rate = Math.round(row.rate * 100)
     // 判断单元格值是否被修改
-    if (xTable?.isUpdateByRow(row, column.field)){
+    if (xTable?.isUpdateByRow(row, column.field)) {
       createConfirm({
         iconType: 'warning',
         title: '确定修改该分账比例吗？',
         onOk: () => {
-          updateRate(row.id, row.rate ).then(() => {
-            createMessage.success('修改成功')
-            xTable.reloadRow(row, null, column.field)
-          }).catch(() => {
-            xTable?.revertData(row)
-          })
+          updateRate(row.id, row.rate)
+            .then(() => {
+              createMessage.success('修改成功')
+              xTable.reloadRow(row, null, column.field)
+            })
+            .catch(() => {
+              xTable?.revertData(row)
+            })
         },
         onCancel: () => {
           xTable?.revertData(row)
