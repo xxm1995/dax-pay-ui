@@ -20,7 +20,11 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="name" title="名称" />
+        <vxe-column field="name" title="名称">
+          <template #default="{ row }">
+            <a-link @click="show(row)">{{ row.name }}</a-link>
+          </template>
+        </vxe-column>
         <vxe-column field="channel" title="所属通道">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
@@ -29,16 +33,36 @@
         <vxe-column field="totalRate" title="分账比例">
           <template #default="{ row }"> {{ row.totalRate / 100.0 }}% </template>
         </vxe-column>
-        <vxe-column field="remark" title="备注" />
-        <vxe-column fixed="right" width="230" :showOverflow="false" title="操作">
+        <vxe-column field="defaultGroup" title="默认分组">
           <template #default="{ row }">
-            <a-link @click="show(row)">查看</a-link>
-            <a-divider type="vertical" />
-            <a-link @click="edit(row)">编辑</a-link>
-            <a-divider type="vertical" />
-            <a-link @click="remove(row)">删除</a-link>
-            <a-divider type="vertical" />
+            <a-tag color="green" v-if="row.defaultGroup">是</a-tag>
+            <a-tag v-else>否</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="remark" title="备注" />
+        <vxe-column fixed="right" width="160" :showOverflow="false" title="操作">
+          <template #default="{ row }">
             <a-link danger @click="config(row)">接收方配置</a-link>
+            <a-divider type="vertical" />
+            <a-dropdown>
+              <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /></a>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item v-if="!row.defaultGroup">
+                    <a-link @click="setUpDefault(row)">设为默认</a-link>
+                  </a-menu-item>
+                  <a-menu-item v-if="row.defaultGroup">
+                    <a-link @click="clearDefault(row)">取消默认</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link @click="edit(row)">编辑</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link danger :disabled="row.defaultGroup" @click="remove(row)">删除</a-link>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
           </template>
         </vxe-column>
       </vxe-table>
@@ -59,7 +83,7 @@
 <script setup lang="ts">
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { del, page } from './AllocationGroup.api'
+  import { cancelDefaultGroup, del, page, setDefaultGroup } from "./AllocationGroup.api";
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '/@/hooks/web/useMessage'
@@ -167,6 +191,42 @@
         loading.value = true
         del(record.id).then(({ data }) => {
           createMessage.success('删除成功')
+          queryPage()
+        })
+      },
+    })
+  }
+
+  /**
+   * 设为默认分账组
+   */
+  function setUpDefault(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '是否确认设为默认分账组?',
+      onOk: () => {
+        loading.value = true
+        setDefaultGroup(record.id).then(({ data }) => {
+          createMessage.success('设置成功')
+          queryPage()
+        })
+      },
+    })
+  }
+
+  /**
+   * 设为默认分账组
+   */
+  function clearDefault(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '是否取消当前的默认分账组?',
+      onOk: () => {
+        loading.value = true
+        cancelDefaultGroup(record.id).then(({ data }) => {
+          createMessage.success('取消成功')
           queryPage()
         })
       },

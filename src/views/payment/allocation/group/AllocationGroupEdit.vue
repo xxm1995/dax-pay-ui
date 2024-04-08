@@ -33,6 +33,10 @@
             placeholder="请选择所属通道"
           />
         </a-form-item>
+        <a-form-item label="默认分账组" name="defaultGroup">
+          <a-tag color="green" v-if="form.defaultGroup">是</a-tag>
+          <a-tag v-else>否</a-tag>
+        </a-form-item>
         <a-form-item label="备注" name="remark">
           <a-textarea :disabled="showable" placeholder="请输入备注" v-model:value="form.remark" />
         </a-form-item>

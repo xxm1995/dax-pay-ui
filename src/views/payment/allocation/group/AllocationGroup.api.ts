@@ -103,6 +103,26 @@ export function updateRate(receiverId, rate: number) {
 }
 
 /**
+ * 设置默认分账组
+ */
+export function setDefaultGroup(id) {
+  return defHttp.post<Result>({
+    url: '/allocation/group/setDefault',
+    params: { id },
+  })
+}
+
+/**
+ * 取消默认分账组
+ */
+export function cancelDefaultGroup(id) {
+  return defHttp.post<Result>({
+    url: '/allocation/group/clearDefault',
+    params: { id },
+  })
+}
+
+/**
  * 分账组
  */
 export interface AllocationGroup extends BaseEntity {
@@ -132,6 +152,10 @@ export interface AllocationGroupReceiver extends BaseEntity {
    * 分账接收方ID
    */
   receiverId?: string
+  /**
+   * 默认分账组
+   */
+  defaultGroup?: boolean
   /**
    * 接收方账号别名
    */
