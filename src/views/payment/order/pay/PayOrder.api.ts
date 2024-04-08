@@ -75,6 +75,16 @@ export function close(id) {
 }
 
 /**
+ * 触发分账
+ */
+export function allocationById(id) {
+  return defHttp.post<Result<void>>({
+    url: '/order/pay/allocation',
+    params: { id },
+  })
+}
+
+/**
  * 支付记录
  */
 export interface PayOrder extends BaseEntity {

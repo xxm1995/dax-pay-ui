@@ -54,6 +54,9 @@
                   <a-menu-item v-if="[PayStatus.PROGRESS].includes(row.status)">
                     <a-link @click="closeOrder(row)" danger>关闭</a-link>
                   </a-menu-item>
+                  <a-menu-item>
+                    <a-link :disabled="![PayStatus.SUCCESS].includes(row.status) || !row.allocation" @click="allocation(row)">分账</a-link>
+                  </a-menu-item>
                   <a-menu-item v-if="[PayStatus.SUCCESS, PayStatus.PARTIAL_REFUND].includes(row.status) && row.refundableBalance > 0">
                     <a-link @click="refund(row)" danger>退款</a-link>
                   </a-menu-item>
@@ -81,7 +84,7 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { close, page, syncById } from './PayOrder.api'
+  import { allocationById, close, page, syncById } from "./PayOrder.api";
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import PayOrderInfo from './PayOrderInfo.vue'
   import RefundModel from './RefundModel.vue'
@@ -208,6 +211,25 @@
     refundModel.init(record.id)
   }
 
+  /**
+   * 触发分账
+   */
+  function allocation(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '是否触发该订单的分账操作',
+      onOk: () => {
+        allocationById(record.id).then(() => {
+          createMessage.success('分账请求已发送')
+        })
+      },
+    })
+  }
+
+  /**
+   * 显示样式优化
+   */
   function cellStyle({ row, column }) {
     if (column.field == 'status') {
       if (row.status == 'success') {
