@@ -8,7 +8,7 @@ import { LabeledValue } from 'ant-design-vue/lib/select'
  */
 export function findChannels() {
   return defHttp.get<Result<LabeledValue[]>>({
-    url: '/allocation/order/findChannels',
+    url: '/order/allocation/findChannels',
   })
 }
 
@@ -17,7 +17,7 @@ export function findChannels() {
  */
 export function page(params) {
   return defHttp.get<Result<PageResult<AllocationOrder>>>({
-    url: '/allocation/order/page',
+    url: '/order/allocation/page',
     params,
   })
 }
@@ -27,7 +27,7 @@ export function page(params) {
  */
 export function get(id: string) {
   return defHttp.get<Result<AllocationOrder>>({
-    url: '/allocation/order/findById',
+    url: '/order/allocation/findById',
     params: { id },
   })
 }
@@ -37,7 +37,7 @@ export function get(id: string) {
  */
 export function detailList(orderId: string) {
   return defHttp.get<Result<AllocationOrderDetail[]>>({
-    url: '/allocation/order/detail/findAll',
+    url: '/order/allocation/detail/findAll',
     params: { orderId },
   })
 }
@@ -47,7 +47,7 @@ export function detailList(orderId: string) {
  */
 export function detail(id: string) {
   return defHttp.get<Result<AllocationOrderDetail>>({
-    url: '/allocation/order/detail/findById',
+    url: '/order/allocation/detail/findById',
     params: { id },
   })
 }

@@ -14,6 +14,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
+        <vxe-column field="allocationNo" title="分账单号" />
         <vxe-column field="title" title="订单标题" />
         <vxe-column field="paymentId" title="支付订单ID" />
         <vxe-column field="channel" title="所属通道">
@@ -21,11 +22,9 @@
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="allocationNo" title="分账单号" />
         <vxe-column field="amount" title="总分账金额">
           <template #default="{ row }"> {{ row.amount / 100.0 }}元 </template>
         </vxe-column>
-        <vxe-column field="description" title="分账描述" />
         <vxe-column field="status" title="状态">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('AllocationStatus', row.status) }}</a-tag>
@@ -33,11 +32,13 @@
         </vxe-column>
         <vxe-column field="errorMsg" title="错误原因" />
         <vxe-column field="finishTime" title="完成时间" />
-        <vxe-column fixed="right" width="230" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="170" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-            <a-link danger @click="showDetail(row)">接收方配置</a-link>
+            <a-link @click="sync(row)">同步</a-link>
+            <a-divider type="vertical" />
+            <a-link @click="showDetail(row)">明细列表</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -115,6 +116,14 @@
 
   function showDetail(record) {
     allocationOrderDetailList.init(record)
+  }
+
+  /**
+   * 同步分账状态
+   * @param record
+   */
+  function sync(record) {
+
   }
 
   /**
