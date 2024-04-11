@@ -51,6 +51,8 @@
         @page-change="handleTableChange"
       />
     </div>
+    <allocation-order-info ref="allocationOrderInfo" />
+    <allocation-order-detail-list ref="allocationOrderDetailList" />
   </div>
 </template>
 
@@ -67,6 +69,8 @@
   import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { FormEditType } from '/@/enums/formTypeEnum'
+  import AllocationOrderDetailList from './AllocationOrderDetailList.vue'
+  import AllocationOrderInfo from './AllocationOrderInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
@@ -83,8 +87,11 @@
 
   const fields = computed(() => {
     return [
-      { field: 'name', type: STRING, name: '分账组名称', placeholder: '请输入分账组名称' },
       { field: 'channel', type: LIST, name: '分账通道', placeholder: '请选择分账通道', selectList: payChannelList },
+      { field: 'orderNo', type: STRING, name: '分账订单号', placeholder: '请输入分账订单号' },
+      { field: 'paymentId', type: STRING, name: '支付订单ID', placeholder: '请输入支付订单ID' },
+      { field: 'title', type: STRING, name: '支付订单标题', placeholder: '请输入支付订单标题' },
+      { field: 'allocationNo', type: STRING, name: '分账业务号', placeholder: '请输入分账业务号' },
     ] as QueryField[]
   })
   onMounted(() => {
@@ -114,6 +121,10 @@
     allocationOrderInfo.init(record, FormEditType.Show)
   }
 
+  /**
+   * 查询分账明细列表
+   * @param record
+   */
   function showDetail(record) {
     allocationOrderDetailList.init(record)
   }
@@ -123,7 +134,7 @@
    * @param record
    */
   function sync(record) {
-
+    createMessage.info('待实现...')
   }
 
   /**

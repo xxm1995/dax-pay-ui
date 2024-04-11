@@ -25,7 +25,7 @@ export function page(params) {
 /**
  * 查询详情
  */
-export function get(id: string) {
+export function get(id) {
   return defHttp.get<Result<AllocationOrder>>({
     url: '/order/allocation/findById',
     params: { id },
@@ -35,7 +35,7 @@ export function get(id: string) {
 /**
  * 明细列表
  */
-export function detailList(orderId: string) {
+export function detailList(orderId) {
   return defHttp.get<Result<AllocationOrderDetail[]>>({
     url: '/order/allocation/detail/findAll',
     params: { orderId },
@@ -45,7 +45,7 @@ export function detailList(orderId: string) {
 /**
  * 明细详情
  */
-export function detail(id: string) {
+export function detail(id) {
   return defHttp.get<Result<AllocationOrderDetail>>({
     url: '/order/allocation/detail/findById',
     params: { id },
@@ -58,6 +58,8 @@ export function detail(id: string) {
 export interface AllocationOrder extends BaseEntity {
   // 支付订单ID
   paymentId?: string
+  // 分账订单号
+  orderNo?: string
   // 支付标题
   title?: string
   // 网关支付订单号
@@ -90,10 +92,10 @@ export interface AllocationOrderDetail extends BaseEntity {
   orderId?: string
   // 分账明细单号
   receiverId?: string
-  // 分账明细状态
-  rate?: number
-  // 分账明细状态
-  amount?: number
+  // 比例
+  rate: number
+  // 金额
+  amount: number
   // 分账接收方类型
   receiverType?: string
   // 接收方账号
