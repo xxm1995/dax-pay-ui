@@ -36,7 +36,7 @@
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-            <a-link @click="sync(row)">同步</a-link>
+            <a-link @click="syncInfo(row)">同步</a-link>
             <a-divider type="vertical" />
             <a-link @click="showDetail(row)">明细列表</a-link>
           </template>
@@ -59,7 +59,7 @@
 <script setup lang="ts">
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page, findChannels } from './AllocationOrder.api'
+  import { page, findChannels, sync } from './AllocationOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '/@/hooks/web/useMessage'
@@ -133,8 +133,18 @@
    * 同步分账状态
    * @param record
    */
-  function sync(record) {
-    createMessage.info('待实现...')
+  function syncInfo(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '同步分账状态',
+      content: '确定同步分账状态吗？',
+      onOk: () => {
+        sync(record.id).then(() => {
+          createMessage.success('同步成功')
+          queryPage()
+        })
+      },
+    })
   }
 
   /**

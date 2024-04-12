@@ -53,6 +53,16 @@ export function detail(id) {
 }
 
 /**
+ * 查询分账结果
+ */
+export function sync(id){
+  return defHttp.post<Result<AllocationOrder>>({
+    url: '/order/allocation/sync',
+    params: { id },
+  })
+}
+
+/**
  * 分账订单
  */
 export interface AllocationOrder extends BaseEntity {
