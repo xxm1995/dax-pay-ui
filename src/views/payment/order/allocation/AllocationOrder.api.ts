@@ -53,6 +53,16 @@ export function detail(id) {
 }
 
 /**
+ * 分账完结
+ */
+export function finish(id) {
+  return defHttp.post<Result<AllocationOrder>>({
+    url: '/order/allocation/finish',
+    params: { id },
+  })
+}
+
+/**
  * 查询分账结果
  */
 export function sync(id){

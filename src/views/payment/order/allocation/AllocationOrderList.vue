@@ -32,13 +32,28 @@
         </vxe-column>
         <vxe-column field="errorMsg" title="错误原因" />
         <vxe-column field="finishTime" title="完成时间" />
-        <vxe-column fixed="right" width="170" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-            <a-link @click="syncInfo(row)">同步</a-link>
-            <a-divider type="vertical" />
             <a-link @click="showDetail(row)">明细列表</a-link>
+            <a-divider type="vertical" />
+            <a-dropdown>
+              <a>
+                更多
+                <icon icon="ant-design:down-outlined" :size="12" />
+              </a>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item>
+                    <a-link @click="syncInfo(row)">同步</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link @click="finishInfo(row)">完结</a-link>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
           </template>
         </vxe-column>
       </vxe-table>
@@ -59,7 +74,7 @@
 <script setup lang="ts">
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page, findChannels, sync } from './AllocationOrder.api'
+  import { page, findChannels, sync, finish } from "./AllocationOrder.api";
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '/@/hooks/web/useMessage'
@@ -71,6 +86,7 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import AllocationOrderDetailList from './AllocationOrderDetailList.vue'
   import AllocationOrderInfo from './AllocationOrderInfo.vue'
+  import { PayStatus } from "/@/enums/payment/PayStatus";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
@@ -141,6 +157,23 @@
       onOk: () => {
         sync(record.id).then(() => {
           createMessage.success('同步成功')
+          queryPage()
+        })
+      },
+    })
+  }
+
+  /**
+   * 完结分账
+   */
+  function finishInfo(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '完结分账',
+      content: '确定完结分账吗？',
+      onOk: () => {
+        finish(record.id).then(() => {
+          createMessage.success('完结请求发送成功')
           queryPage()
         })
       },

@@ -34,6 +34,17 @@
         <vxe-column field="asyncChannel" title="异步支付方式" width="160">
           <template #default="{ row }">{{ dictConvert('PayChannel', row.asyncChannel) || '无' }}</template>
         </vxe-column>
+        <vxe-column field="allocation" title="分账" width="160">
+          <template #default="{ row }">
+            <a-tag v-if="row.allocation" color="green">支持</a-tag>
+            <a-tag v-else color="red">不支持</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="allocation" title="分账状态" width="160">
+          <template #default="{ row }">
+            {{ dictConvert('AllocationStatus', row.allocationStatus) }}
+          </template>
+        </vxe-column>
         <vxe-column field="expiredTime" title="过期时间" sortable width="220" />
         <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
           <template #default="{ row }">
@@ -84,7 +95,7 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { allocationById, close, page, syncById } from "./PayOrder.api";
+  import { allocationById, close, page, syncById } from './PayOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import PayOrderInfo from './PayOrderInfo.vue'
   import RefundModel from './RefundModel.vue'
