@@ -46,6 +46,9 @@
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
+                    <a-link @click="retryInfo(row)">重试</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
                     <a-link @click="syncInfo(row)">同步</a-link>
                   </a-menu-item>
                   <a-menu-item>
@@ -74,7 +77,7 @@
 <script setup lang="ts">
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page, findChannels, sync, finish } from "./AllocationOrder.api";
+  import { page, findChannels, sync, finish, retry } from "./AllocationOrder.api";
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '/@/hooks/web/useMessage'
@@ -86,7 +89,6 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import AllocationOrderDetailList from './AllocationOrderDetailList.vue'
   import AllocationOrderInfo from './AllocationOrderInfo.vue'
-  import { PayStatus } from "/@/enums/payment/PayStatus";
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
@@ -157,6 +159,23 @@
       onOk: () => {
         sync(record.id).then(() => {
           createMessage.success('同步成功')
+          queryPage()
+        })
+      },
+    })
+  }
+
+  /**
+   * 分账重试
+   */
+  function retryInfo(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '分账重试',
+      content: '确定分账重试吗？',
+      onOk: () => {
+        retry(record.id).then(() => {
+          createMessage.success('分账重试请求发送成功')
           queryPage()
         })
       },

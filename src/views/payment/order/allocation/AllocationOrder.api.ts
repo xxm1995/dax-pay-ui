@@ -63,6 +63,16 @@ export function finish(id) {
 }
 
 /**
+ * 分账完结
+ */
+export function retry(id) {
+  return defHttp.post<Result<AllocationOrder>>({
+    url: '/order/allocation/retry',
+    params: { id },
+  })
+}
+
+/**
  * 查询分账结果
  */
 export function sync(id){
