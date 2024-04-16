@@ -10,8 +10,8 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions title="" :column="{ md: 2, sm: 1, xs: 1 }">
-        <a-descriptions-item label="支付ID">
-          {{ order.id }}
+        <a-descriptions-item label="支付订单号">
+          {{ order.orderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="业务号">
           {{ order.businessNo }}
@@ -95,7 +95,7 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { getOrder, PayOrder, PayOrderExtra, PayChannelOrder, getOrderExtra, listByChannel } from './PayOrder.api'
+  import { getOrderByOrderNo, PayOrder, PayOrderExtra, PayChannelOrder, getOrderExtra, listByChannel } from './PayOrder.api'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   const {
@@ -118,17 +118,15 @@
   let orderExtra = $ref<PayOrderExtra>({})
   let orderChannel = $ref<PayChannelOrder[]>([])
   // 入口
-  async function init(id) {
+  async function init(orderNo:string) {
     visible.value = true
     confirmLoading.value = true
-    await getOrder(id).then(({ data }) => {
-      order = data
-    })
-    await getOrderExtra(id).then(({ data }) => {
-      orderExtra = data
-    })
-    await listByChannel(id).then(({ data }) => {
-      orderChannel = data
+    await getOrderByOrderNo(orderNo).then(({ data }) => {
+      order = data.payOrder
+      orderExtra = data.payOrderExtra
+      orderChannel = data.payChannelOrder
+
+
     })
     confirmLoading.value = false
   }

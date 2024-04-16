@@ -25,6 +25,15 @@ export function getOrder(id) {
 }
 
 /**
+ * 获取订单
+ */
+export function getOrderByOrderNo(orderNo:string) {
+  return defHttp.get<Result<PayOrder>>({
+    url: '/order/pay/findByOrderNo',
+    params: { orderNo },
+  })
+}
+/**
  * 获取订单扩展信息
  */
 export function getOrderExtra(id) {
@@ -88,6 +97,10 @@ export function allocationById(id) {
  * 支付记录
  */
 export interface PayOrder extends BaseEntity {
+  payOrder: any
+  orderNO: string
+  payOrderExtra: any
+  payChannelOrder: any
   // 关联的业务号
   businessNo?: string
   // 标题

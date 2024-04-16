@@ -22,13 +22,13 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="id" title="退款ID" width="220" />
+        <vxe-column field="refundNo" title="退款单号" width="220" />
         <vxe-column field="refundTime" title="退款时间" sortable width="180" />
         <vxe-column field="title" title="原支付标题" width="160" />
-        <vxe-column field="paymentId" title="原支付ID" width="220">
+        <vxe-column field="orderNo" title="原支付订单号" width="220">
           <template #default="{ row }">
-            <a @click="showPayment(row.paymentId)">
-              {{ row.paymentId }}
+            <a @click="showPayment(row.orderNo)">
+              {{ row.orderNo }}
             </a>
           </template>
         </vxe-column>

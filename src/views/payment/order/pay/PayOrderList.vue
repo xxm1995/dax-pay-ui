@@ -16,6 +16,8 @@
       >
         <vxe-column type="seq" title="序号" width="60" />
         <vxe-column field="businessNo" title="业务号" width="180" />
+        <vxe-column field="orderNo" title="支付网关订单号" sortable width="220" />
+
         <vxe-column field="title" title="标题" width="220" />
         <vxe-column field="amount" title="金额(分)" width="120" sortable />
         <vxe-column field="refundableBalance" title="可退余额(分)" width="120" sortable />
@@ -23,8 +25,6 @@
           <template #default="{ row }">{{ dictConvert('PayStatus', row.status) }}</template>
         </vxe-column>
         <vxe-column field="createTime" title="创建时间" sortable width="220" />
-        <vxe-column field="id" title="支付ID" sortable width="220" />
-
         <vxe-column field="asyncPay" title="异步支付" width="120">
           <template #default="{ row }">{{ row.asyncPay ? '是' : '否' }}</template>
         </vxe-column>
@@ -160,7 +160,7 @@
    * 查看
    */
   function show(record) {
-    payOrderInfo.init(record.id)
+    payOrderInfo.init(record.orderNo)
   }
   /**
    * 查看

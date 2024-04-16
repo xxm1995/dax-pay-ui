@@ -30,10 +30,10 @@
       <a-descriptions-item label="退款原因">
         {{ form.reason }}
       </a-descriptions-item>
-      <a-descriptions-item label="退款金额">
+      <a-descriptions-item label="退款金额(分)">
         {{ form.amount }}
       </a-descriptions-item>
-      <a-descriptions-item label="剩余可退款金额">
+      <a-descriptions-item label="剩余可退款金额(分)">
         {{ form.refundableBalance }}
       </a-descriptions-item>
       <a-descriptions-item label="订单金额信息">

@@ -5,6 +5,7 @@
       row-id="id"
       ref="xTable"
       :data="pagination.records"
+      :cell-style="cellStyle"
       :loading="loading"
       :sort-config="{ remote: true, trigger: 'cell' }"
       @sort-change="sortChange"
@@ -13,7 +14,7 @@
       <vxe-column field="title" title="标题" />
       <vxe-column field="type" title="类型">
         <template #default="{ row }">
-          <a-tag>{{ dictConvert('WalletRecordType', row.type) }}</a-tag>
+      {{ dictConvert('WalletRecordType', row.type) }}
         </template>
       </vxe-column>
       <vxe-column field="amount" title="金额" />
@@ -104,6 +105,24 @@
       pageQueryResHandel(data)
     })
     return Promise.resolve()
+  }
+  function cellStyle({ row, column }) {
+    if (column.field == 'type') {
+      if (row.status == 'success') {
+        return { color: 'green' }
+      }
+      if (row.status == 'fail') {
+        return { color: 'red' }
+      }
+      if (row.status == 'progress') {
+        return { color: 'orange' }
+      }
+      if (row.status == 'close') {
+        return { color: 'gray' }
+      }
+      return { color: 'red' }
+    }
+    
   }
   defineExpose({ init })
 </script>
