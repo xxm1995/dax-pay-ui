@@ -27,11 +27,13 @@
         </vxe-column>
         <vxe-column field="status" title="状态">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('AllocationStatus', row.status) }}</a-tag>
+            <a-tag>{{ dictConvert('AllocationOrderStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="errorMsg" title="错误原因" />
-        <vxe-column field="finishTime" title="完成时间" />
+        <vxe-column field="result" title="分账结果" width="130">
+          <template #default="{ row }"> {{ dictConvert('AllocationOrderResult', row.result) }} </template> </vxe-column
+        ><vxe-column field="errorMsg" title="错误原因" />
+        <vxe-column field="createTime" title="创建时间" />
         <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
@@ -45,13 +47,13 @@
               </a>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item>
+                  <a-menu-item v-if="['allocation_processing', 'allocation_end', 'allocation_failed'].includes(row.status)">
                     <a-link @click="retryInfo(row)">重试</a-link>
                   </a-menu-item>
                   <a-menu-item>
                     <a-link @click="syncInfo(row)">同步</a-link>
                   </a-menu-item>
-                  <a-menu-item>
+                  <a-menu-item v-if="row.status === 'allocation_end'">
                     <a-link @click="finishInfo(row)">完结</a-link>
                   </a-menu-item>
                 </a-menu>
@@ -77,7 +79,7 @@
 <script setup lang="ts">
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page, findChannels, sync, finish, retry } from "./AllocationOrder.api";
+  import { page, findChannels, sync, finish, retry } from './AllocationOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '/@/hooks/web/useMessage'

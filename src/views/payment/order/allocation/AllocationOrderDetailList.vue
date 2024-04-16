@@ -3,18 +3,26 @@
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="records" :loading="loading" :cell-style="cellStyle">
       <vxe-column type="seq" width="60" />
-      <vxe-column field="id" title="通道支付单ID" width="170" />
-      <vxe-column field="receiverName" title="接收方姓名" />
-      <vxe-column field="receiverType" title="接收方类型">
+      <vxe-column field="receiverName" title="接收方姓名" max-width="100" />
+      <vxe-column field="receiverType" title="接收方类型" max-width="100">
         <template #default="{ row }">
           {{ dictConvert('AllocationReceiverType', row.receiverType) }}
         </template>
       </vxe-column>
-      <vxe-column field="rate" title="分账比例">
+      <vxe-column field="rate" title="分账比例" max-width="70">
         <template #default="{ row }"> {{ row.rate / 100.0 }}% </template>
       </vxe-column>
-      <vxe-column field="amount" title="分账金额">
+      <vxe-column field="amount" title="分账金额" max-width="150">
         <template #default="{ row }"> {{ row.amount / 100.0 }} 元 </template>
+      </vxe-column>
+      <vxe-column field="result" title="分账结果" width="130">
+        <template #default="{ row }"> {{ dictConvert('AllocationDetailResult', row.result) }} </template>
+      </vxe-column>
+      <vxe-column field="result" title="错误原因" max-width="170">
+        <template #default="{ row }"> {{ row.errorMsg }} </template>
+      </vxe-column>
+      <vxe-column field="result" title="完成时间" width="150">
+        <template #default="{ row }"> {{ row.finishTime }} </template>
       </vxe-column>
       <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
         <template #default="{ row }">

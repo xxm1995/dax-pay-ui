@@ -132,4 +132,12 @@ export interface AllocationOrderDetail extends BaseEntity {
   receiverAccount?: string
   // 接收方姓名
   receiverName?: string
+  // 分账结果
+  result?: string
+  // 错误代码
+  errorCode?: string
+  // 错误原因
+  errorMsg?: string
+  // 完成时间
+  finishTime?: string
 }

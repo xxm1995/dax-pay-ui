@@ -18,6 +18,18 @@
         </a-descriptions-item>
         <a-descriptions-item label="分账比例"> {{ order.rate / 100.0 }}% </a-descriptions-item>
         <a-descriptions-item label="分账金额"> {{ order.amount / 100.0 }}元 </a-descriptions-item>
+        <a-descriptions-item label="分账结果">
+          <a-tag>{{ dictConvert('AllocationDetailResult', order.result) }}</a-tag>
+        </a-descriptions-item>
+        <a-descriptions-item label="错误代码">
+          {{ order.errorCode }}
+        </a-descriptions-item>
+        <a-descriptions-item label="错误原因">
+          {{ order.errorMsg }}
+        </a-descriptions-item>
+        <a-descriptions-item label="完成时间">
+          {{ order.finishTime }}
+        </a-descriptions-item>
       </a-descriptions>
     </a-spin>
     <template #footer>

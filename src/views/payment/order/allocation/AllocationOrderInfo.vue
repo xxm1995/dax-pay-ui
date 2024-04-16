@@ -34,8 +34,8 @@
         <a-descriptions-item label="总分账金额">
           {{ order.amount }}
         </a-descriptions-item>
-        <a-descriptions-item label="请求时间">
-          {{ dictConvert('AllocationStatus', order.status) }}
+        <a-descriptions-item label="状态">
+          {{ dictConvert('AllocationOrderStatus', order.status) }}
         </a-descriptions-item>
         <a-descriptions-item label="错误原因">
           {{ order.errorMsg }}
