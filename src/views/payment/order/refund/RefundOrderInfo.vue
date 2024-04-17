@@ -3,33 +3,31 @@
     title="退款订单"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="750"
+    :width="1200"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-descriptions title="" :column="{ md: 2, sm: 1, xs: 1 }">
-      <a-descriptions-item label="退款ID">
-        {{ form.id }}
-      </a-descriptions-item>
-      <a-descriptions-item label="退款号">
+    <a-descriptions   bordered>
+      <a-descriptions-item label="退款号" :span="3">
         {{ form.refundNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="原支付ID">
-        {{ form.paymentId }}
+      <a-descriptions-item label="退款原因" :span="3">
+        {{ form.reason }}
       </a-descriptions-item>
-      <a-descriptions-item label="原业务号">
+      <a-descriptions-item label="原业务号" :span="2">
         {{ form.businessNo }}
       </a-descriptions-item>
       <a-descriptions-item label="网关订单号">
         {{ form.gatewayOrderNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="原支付标题">
+      <a-descriptions-item label="原支付标题" :span="3">
         {{ form.title }}
       </a-descriptions-item>
-      <a-descriptions-item label="退款原因">
-        {{ form.reason }}
+      <a-descriptions-item label="原支付单号" :span="3">
+        {{ form.orderNo }}
       </a-descriptions-item>
+     
       <a-descriptions-item label="退款金额(分)">
         {{ form.amount }}
       </a-descriptions-item>

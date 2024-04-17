@@ -80,6 +80,7 @@ export interface RefundOrder extends BaseEntity {
   paymentId?: string
   // 原业务号
   businessNo?: string
+  orderNo:string
   // 异步方式关联退款请求号
   refundNo?: string
   // 网关订单号

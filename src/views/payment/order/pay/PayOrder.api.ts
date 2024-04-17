@@ -98,7 +98,7 @@ export function allocationById(id) {
  */
 export interface PayOrder extends BaseEntity {
   payOrder: any
-  orderNO: string
+  orderNo: string
   payOrderExtra: any
   payChannelOrder: any
   // 关联的业务号
