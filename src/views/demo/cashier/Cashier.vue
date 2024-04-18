@@ -95,6 +95,12 @@
                     </span>
                   </div>
                   <div class="paydemo-form-item">
+                    <label>是否分账：</label>
+                    <span>
+                      <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="allocation" />
+                    </span>
+                  </div>
+                  <div class="paydemo-form-item">
                     <label>支付金额(元)：</label>
                     <a-radio-group v-model:value="payMoneyValue" @change="payMoneyValueChange">
                       <a-radio :value="item.value" v-for="(item, index) in payMoneyList" :key="index">
@@ -112,8 +118,10 @@
                   </div>
 
                   <div style="margin-top: 20px; text-align: right">
-                    <span v-if="totalMoney" style="color: #fd482c; font-size: 18px; padding-right: 10px">{{ '¥ ' + totalMoney }}</span>
-                    <a-button type="primary" :disabled="currentActive.payWay == null || !totalMoney" @click="pay">立即支付</a-button>
+                    <affix :offset-bottom="20" class="mr-1">
+                      <span v-if="totalMoney" style="color: #fd482c; font-size: 18px; padding-right: 10px">{{ '¥ ' + totalMoney }}</span>
+                      <a-button type="primary" :disabled="currentActive.payWay == null || !totalMoney" @click="pay">立即支付</a-button>
+                    </affix>
                   </div>
                 </a-form>
               </div>
@@ -140,6 +148,7 @@
   import { useIntervalFn } from '@vueuse/core'
   import { payChannelEnum } from '/@/enums/payment/payChannelEnum'
   import { payWayEnum } from '/@/enums/payment/payWayEnum'
+  import { Affix } from 'ant-design-vue'
 
   const { createMessage } = useMessage()
 
@@ -151,6 +160,7 @@
   // 业务单号
   let businessNo = $ref<string>('')
   let title = $ref<string>('测试支付')
+  let allocation = $ref<boolean>(false)
   let loading = $ref(false)
   // 微信 h5
   let wxH5Url = $ref<string>('初始化中...')
@@ -339,6 +349,7 @@
   async function aggregationQr() {
     const param = {
       businessNo,
+      allocation,
       amount: totalMoney,
       title: title,
     }
@@ -362,6 +373,7 @@
     const param = {
       title: title,
       businessNo,
+      allocation,
       amount: totalMoney,
       channel: payChannel,
       payWay,
@@ -377,8 +389,9 @@
    */
   async function qrPay(payChannel, payWay) {
     const param = {
-      title: title,
-      businessNo: businessNo,
+      title,
+      businessNo,
+      allocation,
       amount: totalMoney,
       channel: payChannel,
       payWay,
@@ -415,7 +428,7 @@
    */
   function aggregationBarPay(authCode: string) {
     const param = {
-      title: title,
+      title,
       amount: totalMoney,
       businessNo,
       authCode,

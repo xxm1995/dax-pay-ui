@@ -2,7 +2,7 @@ import { defHttp } from '/@/utils/http/axios'
 import { Result, UploadFileParams } from '/#/axios'
 import { UploadApiResult } from '/@/api/sys/model/uploadModel'
 import { getAppEnvConfig } from '/@/utils/env'
-const { VITE_GLOB_API_URL } = getAppEnvConfig()
+const { VITE_GLOB_API_URL, VITE_GLOB_API_URL_PREFIX } = getAppEnvConfig()
 
 /**
  * 获取文件预览地址
@@ -41,7 +41,7 @@ export const getFileDownloadUrl = (id) => {
 export function uploadFile(params: UploadFileParams, onUploadProgress: (progressEvent: ProgressEvent) => void) {
   return defHttp.uploadFile<UploadApiResult>(
     {
-      url: VITE_GLOB_API_URL + '/file/upload',
+      url: VITE_GLOB_API_URL + VITE_GLOB_API_URL_PREFIX + '/file/upload',
       onUploadProgress,
     },
     params,
