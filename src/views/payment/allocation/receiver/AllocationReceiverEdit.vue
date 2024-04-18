@@ -181,7 +181,7 @@
         if (formEditType.value === FormEditType.Add) {
           await add(form)
         } else if (formEditType.value === FormEditType.Edit) {
-          await update({ ...form, ...diffForm(rawForm, form, 'receiverAccount') })
+          await update({ ...form, ...diffForm(rawForm, form, 'receiverAccount', 'receiverName') })
         }
       } finally {
         confirmLoading.value = false
