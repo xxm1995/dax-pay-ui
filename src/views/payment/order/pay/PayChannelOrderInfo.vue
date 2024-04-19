@@ -10,17 +10,17 @@
   >
     <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
       <a-descriptions-item label="通道支付单ID">
-         {{ form.id }} 
+        {{ form.id }}
       </a-descriptions-item>
       <a-descriptions-item label="支付通道">
-         {{ dictConvert('PayChannel', form.channel) }} 
+        {{ dictConvert('PayChannel', form.channel) }}
       </a-descriptions-item>
       <a-descriptions-item label="异步支付">
-        <span v-if="form.async" style="color:green">是</span>
-        <span v-else style="color:red">否</span>
+        <span v-if="form.async" style="color: green">是</span>
+        <span v-else style="color: red">否</span>
       </a-descriptions-item>
       <a-descriptions-item label="支付方式">
-        {{ dictConvert('PayWay', form.payWay) }} 
+        {{ dictConvert('PayWay', form.payWay) }}
       </a-descriptions-item>
       <a-descriptions-item label="订单金额">
         {{ form.amount }}
@@ -75,7 +75,7 @@
       confirmLoading.value = false
     })
   }
-  function dynamicStyle(item: string){
+  function dynamicStyle(item: string) {
     if (item == 'success') {
       return { color: 'green' }
     }

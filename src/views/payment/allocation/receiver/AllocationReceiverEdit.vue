@@ -153,8 +153,8 @@
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
       confirmLoading.value = true
       await get(record.id).then(({ data }) => {
-        rawForm = { ...form }
         form = data
+        rawForm = { ...form }
       })
       confirmLoading.value = false
       findReceiverTypeByChannel(form.channel).then(({ data }) => (receiverTypeList = data))
@@ -181,9 +181,7 @@
         if (formEditType.value === FormEditType.Add) {
           await add(form)
         } else if (formEditType.value === FormEditType.Edit) {
-          console.log(rawForm)
-          console.log(diffForm(rawForm, form, 'receiverAccount'))
-          await update({ ...form, ...diffForm(rawForm, form, 'receiverAccount') })
+          await update({ ...form, ...diffForm(rawForm, form, 'receiverAccount', 'receiverName') })
         }
       } finally {
         confirmLoading.value = false

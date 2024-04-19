@@ -27,18 +27,38 @@
         </vxe-column>
         <vxe-column field="status" title="状态">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('AllocationStatus', row.status) }}</a-tag>
+            <a-tag>{{ dictConvert('AllocationOrderStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="errorMsg" title="错误原因" />
-        <vxe-column field="finishTime" title="完成时间" />
-        <vxe-column fixed="right" width="170" :showOverflow="false" title="操作">
+        <vxe-column field="result" title="分账结果" width="130">
+          <template #default="{ row }"> {{ dictConvert('AllocationOrderResult', row.result) }} </template> </vxe-column
+        ><vxe-column field="errorMsg" title="错误原因" />
+        <vxe-column field="createTime" title="创建时间" />
+        <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-            <a-link @click="sync(row)">同步</a-link>
-            <a-divider type="vertical" />
             <a-link @click="showDetail(row)">明细列表</a-link>
+            <a-divider type="vertical" />
+            <a-dropdown>
+              <a>
+                更多
+                <icon icon="ant-design:down-outlined" :size="12" />
+              </a>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item v-if="['allocation_processing', 'allocation_end', 'allocation_failed'].includes(row.status)">
+                    <a-link @click="retryInfo(row)">重试</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link @click="syncInfo(row)">同步</a-link>
+                  </a-menu-item>
+                  <a-menu-item v-if="row.status === 'allocation_end'">
+                    <a-link @click="finishInfo(row)">完结</a-link>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
           </template>
         </vxe-column>
       </vxe-table>
@@ -51,13 +71,15 @@
         @page-change="handleTableChange"
       />
     </div>
+    <allocation-order-info ref="allocationOrderInfo" />
+    <allocation-order-detail-list ref="allocationOrderDetailList" />
   </div>
 </template>
 
 <script setup lang="ts">
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page, findChannels } from './AllocationOrder.api'
+  import { page, findChannels, sync, finish, retry } from './AllocationOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '/@/hooks/web/useMessage'
@@ -67,6 +89,8 @@
   import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { FormEditType } from '/@/enums/formTypeEnum'
+  import AllocationOrderDetailList from './AllocationOrderDetailList.vue'
+  import AllocationOrderInfo from './AllocationOrderInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
@@ -83,8 +107,11 @@
 
   const fields = computed(() => {
     return [
-      { field: 'name', type: STRING, name: '分账组名称', placeholder: '请输入分账组名称' },
       { field: 'channel', type: LIST, name: '分账通道', placeholder: '请选择分账通道', selectList: payChannelList },
+      { field: 'orderNo', type: STRING, name: '分账订单号', placeholder: '请输入分账订单号' },
+      { field: 'paymentId', type: STRING, name: '支付订单ID', placeholder: '请输入支付订单ID' },
+      { field: 'title', type: STRING, name: '支付订单标题', placeholder: '请输入支付订单标题' },
+      { field: 'allocationNo', type: STRING, name: '分账业务号', placeholder: '请输入分账业务号' },
     ] as QueryField[]
   })
   onMounted(() => {
@@ -114,6 +141,10 @@
     allocationOrderInfo.init(record, FormEditType.Show)
   }
 
+  /**
+   * 查询分账明细列表
+   * @param record
+   */
   function showDetail(record) {
     allocationOrderDetailList.init(record)
   }
@@ -122,8 +153,52 @@
    * 同步分账状态
    * @param record
    */
-  function sync(record) {
+  function syncInfo(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '同步分账状态',
+      content: '确定同步分账状态吗？',
+      onOk: () => {
+        sync(record.id).then(() => {
+          createMessage.success('同步成功')
+          queryPage()
+        })
+      },
+    })
+  }
 
+  /**
+   * 分账重试
+   */
+  function retryInfo(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '分账重试',
+      content: '确定分账重试吗？',
+      onOk: () => {
+        retry(record.id).then(() => {
+          createMessage.success('分账重试请求发送成功')
+          queryPage()
+        })
+      },
+    })
+  }
+
+  /**
+   * 完结分账
+   */
+  function finishInfo(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '完结分账',
+      content: '确定完结分账吗？',
+      onOk: () => {
+        finish(record.id).then(() => {
+          createMessage.success('完结请求发送成功')
+          queryPage()
+        })
+      },
+    })
   }
 
   /**

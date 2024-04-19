@@ -38,6 +38,17 @@
         <vxe-column field="asyncChannel" title="异步支付方式" width="160">
           <template #default="{ row }">{{ dictConvert('PayChannel', row.asyncChannel) || '无' }}</template>
         </vxe-column>
+        <vxe-column field="allocation" title="分账" width="160">
+          <template #default="{ row }">
+            <a-tag v-if="row.allocation" color="green">支持</a-tag>
+            <a-tag v-else color="red">不支持</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="allocation" title="分账状态" width="160">
+          <template #default="{ row }">
+            {{ dictConvert('PayOrderAllocationStatus', row.allocationStatus) }}
+          </template>
+        </vxe-column>
         <vxe-column field="expiredTime" title="过期时间" sortable width="220" />
         <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
           <template #default="{ row }">
@@ -58,8 +69,8 @@
                   <a-menu-item v-if="[PayStatus.PROGRESS].includes(row.status)">
                     <a-link @click="closeOrder(row)" danger>关闭</a-link>
                   </a-menu-item>
-                  <a-menu-item>
-                    <a-link :disabled="![PayStatus.SUCCESS].includes(row.status) || !row.allocation" @click="allocation(row)">分账</a-link>
+                  <a-menu-item v-if="row.allocationStatus === 'waiting'">
+                    <a-link @click="allocation(row)">分账</a-link>
                   </a-menu-item>
                   <a-menu-item v-if="[PayStatus.SUCCESS, PayStatus.PARTIAL_REFUND].includes(row.status) && row.refundableBalance > 0">
                     <a-link @click="refund(row)" danger>退款</a-link>
@@ -88,7 +99,7 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { allocationById, close, page, syncById } from "./PayOrder.api";
+  import { allocationById, close, page, syncById } from './PayOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import PayOrderInfo from './PayOrderInfo.vue'
   import RefundModel from './RefundModel.vue'
@@ -226,6 +237,7 @@
       onOk: () => {
         allocationById(record.id).then(() => {
           createMessage.success('分账请求已发送')
+          queryPage()
         })
       },
     })
