@@ -33,8 +33,13 @@
           </template>
         </vxe-column>
         <vxe-column field="businessNo" title="原业务号" :visible="false" />
-        <vxe-column field="amount" title="退款金额(分)" sortable width="140" />
-        <vxe-column field="refundableBalance" title="剩余可退金额(分)" sortable width="160" />
+        <vxe-column field="amount" title="退款金额(元)" sortable width="140" >
+          <template #default="{ row }">  {{ row.amount?(row.amount/100).toFixed(2):0 }} </template>
+        </vxe-column>
+        <vxe-column field="refundableBalance" title="剩余可退金额(元)" sortable width="160" >
+          <template #default="{ row }">  {{ row.refundableBalance?(row.refundableBalance/100).toFixed(2):0 }} </template>
+
+        </vxe-column>
         <vxe-column field="async" title="包含异步通道" width="120">
           <template #default="{ row }">
             {{ row.asyncPay ? '是' : '否' }}

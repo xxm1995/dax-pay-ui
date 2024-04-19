@@ -19,8 +19,12 @@
         <vxe-column field="orderNo" title="支付网关订单号" sortable width="220" />
 
         <vxe-column field="title" title="标题" width="220" />
-        <vxe-column field="amount" title="金额(分)" width="120" sortable />
-        <vxe-column field="refundableBalance" title="可退余额(分)" width="120" sortable />
+        <vxe-column field="amount" title="金额(元)" width="120" sortable >
+          <template #default="{ row }">  {{ row.amount?(row.amount/100).toFixed(2):0 }} </template>
+        </vxe-column>
+        <vxe-column field="refundableBalance" title="可退余额(元)" width="120" sortable >
+          <template #default="{ row }">  {{ row.refundableBalance?(row.refundableBalance/100).toFixed(2):0 }} </template>
+        </vxe-column>
         <vxe-column field="status" title="支付状态" width="120">
           <template #default="{ row }">{{ dictConvert('PayStatus', row.status) }}</template>
         </vxe-column>

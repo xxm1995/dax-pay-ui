@@ -28,11 +28,12 @@
         {{ form.orderNo }}
       </a-descriptions-item>
      
-      <a-descriptions-item label="退款金额(分)">
-        {{ form.amount }}
+      <a-descriptions-item label="退款金额(元)">
+        {{ form.amount?(form.amount/100).toFixed(2):0 }}
       </a-descriptions-item>
-      <a-descriptions-item label="剩余可退款金额(分)">
-        {{ form.refundableBalance }}
+      <a-descriptions-item label="剩余可退款金额(元)">
+        {{ form.refundableBalance?(form.refundableBalance/100).toFixed(2):0 }}
+
       </a-descriptions-item>
       <a-descriptions-item label="订单金额信息">
         <a-tag v-for="o in refundChannelOrders" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.orderAmount }}</a-tag>
