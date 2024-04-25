@@ -15,29 +15,18 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="businessNo" title="业务号" width="180" />
-        <vxe-column field="orderNo" title="支付网关订单号" sortable width="220" />
-
+        <vxe-column field="orderNo" title="订单号" sortable width="220" />
         <vxe-column field="title" title="标题" width="220" />
-        <vxe-column field="amount" title="金额(元)" width="120" sortable >
-          <template #default="{ row }">  {{ row.amount?(row.amount/100).toFixed(2):0 }} </template>
+        <vxe-column field="amount" title="金额(元)" width="120" sortable>
+          <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
         </vxe-column>
-        <vxe-column field="refundableBalance" title="可退余额(元)" width="120" sortable >
-          <template #default="{ row }">  {{ row.refundableBalance?(row.refundableBalance/100).toFixed(2):0 }} </template>
+        <vxe-column field="refundableBalance" title="可退余额(元)" width="120" sortable>
+          <template #default="{ row }"> {{ row.refundableBalance ? (row.refundableBalance / 100).toFixed(2) : 0 }} </template>
         </vxe-column>
         <vxe-column field="status" title="支付状态" width="120">
           <template #default="{ row }">{{ dictConvert('PayStatus', row.status) }}</template>
         </vxe-column>
         <vxe-column field="createTime" title="创建时间" sortable width="220" />
-        <vxe-column field="asyncPay" title="异步支付" width="120">
-          <template #default="{ row }">{{ row.asyncPay ? '是' : '否' }}</template>
-        </vxe-column>
-        <vxe-column field="combinationPay" title="组合支付" width="120">
-          <template #default="{ row }">{{ row.combinationPay ? '是' : '否' }}</template>
-        </vxe-column>
-        <vxe-column field="asyncChannel" title="异步支付方式" width="160">
-          <template #default="{ row }">{{ dictConvert('PayChannel', row.asyncChannel) || '无' }}</template>
-        </vxe-column>
         <vxe-column field="allocation" title="分账" width="160">
           <template #default="{ row }">
             <a-tag v-if="row.allocation" color="green">支持</a-tag>
@@ -53,8 +42,6 @@
         <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
-            <a-divider type="vertical" />
-            <a-link @click="showChannel(row)">通道订单</a-link>
             <a-divider type="vertical" />
             <a-dropdown>
               <a>
@@ -90,7 +77,6 @@
         @page-change="handleTableChange"
       />
       <pay-order-info ref="payOrderInfo" />
-      <pay-channel-order-list ref="payChannelOrderList" />
       <refund-model ref="refundModel" @ok="queryPage" />
     </div>
   </div>
@@ -99,7 +85,7 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { allocationById, close, page, syncById } from './PayOrder.api'
+  import { allocationById, close, page, syncByOrderNo } from './PayOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import PayOrderInfo from './PayOrderInfo.vue'
   import RefundModel from './RefundModel.vue'
@@ -111,7 +97,6 @@
   import ALink from '/@/components/Link/Link.vue'
   import { PayStatus } from '/@/enums/payment/PayStatus'
   import { LabeledValue } from 'ant-design-vue/lib/select'
-  import PayChannelOrderList from './PayChannelOrderList.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, sortChange, resetQueryParams, pagination, pages, sortParam, model, loading } =
@@ -125,12 +110,11 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'id', type: STRING, name: '支付ID', placeholder: '请输入完整支付ID' },
-      { field: 'businessNo', type: STRING, name: '业务号', placeholder: '请输入业务号' },
-      { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
+      { field: 'orderNo', type: STRING, name: '订单号', placeholder: '请输入订单号' },
+      { field: 'bizOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入商户订单号' },
+      { field: 'outOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入三方支付系统中的订单号' },
       { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
       { field: 'errorCode', name: '错误码', type: STRING },
-      { field: 'asyncChannel', name: '异步支付方式', type: LIST, selectList: cayChannelList },
       { field: 'status', name: '支付状态', type: LIST, selectList: payStatusList },
     ] as QueryField[]
   })
@@ -138,7 +122,6 @@
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const payOrderInfo = $ref<any>()
-  const payChannelOrderList = $ref<any>()
   const refundModel = $ref<any>()
 
   onMounted(() => {
@@ -177,12 +160,6 @@
   function show(record) {
     payOrderInfo.init(record.orderNo)
   }
-  /**
-   * 查看
-   */
-  function showChannel(record) {
-    payChannelOrderList.init(record)
-  }
 
   /**
    * 同步信息
@@ -194,7 +171,7 @@
       content: '是否同步支付信息',
       onOk: () => {
         loading.value = true
-        syncById(record.id).then(({ data }) => {
+        syncByOrderNo(record.id).then(({ data }) => {
           // TODO 后期可以根据返回结果进行相应的处理
           createMessage.success('同步成功')
           console.log(data)

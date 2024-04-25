@@ -1,7 +1,6 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
-import { RefundableInfo } from '/@/views/payment/order/refund/RefundOrder.api'
 import { PaySyncResult } from '/@/views/payment/record/sync/PaySyncRecord.api'
 
 /**
@@ -17,7 +16,7 @@ export function page(params) {
 /**
  * 获取订单
  */
-export function getOrder(id) {
+export function getOrder(id: number) {
   return defHttp.get<Result<PayOrder>>({
     url: '/order/pay/findById',
     params: { id },
@@ -27,8 +26,8 @@ export function getOrder(id) {
 /**
  * 获取订单
  */
-export function getOrderByOrderNo(orderNo:string) {
-  return defHttp.get<Result<PayOrder>>({
+export function getOrderByOrderNo(orderNo: string) {
+  return defHttp.get<Result>({
     url: '/order/pay/findByOrderNo',
     params: { orderNo },
   })
@@ -44,32 +43,12 @@ export function getOrderExtra(id) {
 }
 
 /**
- * 获取付通道订单列表
+ * 根据订单号同步支付状态
  */
-export function listByChannel(paymentId) {
-  return defHttp.get<Result<PayChannelOrder[]>>({
-    url: '/order/pay/listByChannel',
-    params: { paymentId },
-  })
-}
-
-/**
- * 获取付通道订单列表
- */
-export function getChannel(id) {
-  return defHttp.get<Result<PayChannelOrder>>({
-    url: '/order/pay/getChannel',
-    params: { id },
-  })
-}
-
-/**
- * 同步支付状态
- */
-export function syncById(id) {
+export function syncByOrderNo(orderNo) {
   return defHttp.post<Result<PaySyncResult>>({
-    url: '/order/pay/syncById',
-    params: { id },
+    url: '/order/pay/syncByOrderNo',
+    params: { orderNo },
   })
 }
 
@@ -97,56 +76,36 @@ export function allocationById(id) {
  * 支付记录
  */
 export interface PayOrder extends BaseEntity {
-  payOrder: any
-  orderNo: string
-  payOrderExtra: any
-  payChannelOrder: any
-  // 关联的业务号
-  businessNo?: string
+  // 商户订单号
+  bizOrderNo?: string
+  // 支付订单号
+  orderNo?: string
+  // 三方系统交易号
+  outOrderNo?: string
   // 标题
   title?: string
-  // 是否是异步支付
-  asyncPay?: boolean
-  // 异步支付通道
-  asyncChannel?: boolean
-  // 是否是组合支付
-  combinationPay?: boolean
-  // 关联网关支付ID
-  gatewayOrderNo?: number
+  // 描述
+  description?: any
+  // 是否支持分账
+  allocation?: boolean
+  // 支付通道
+  channel?: string
+  // 支付方式
+  method?: string
   // 金额
   amount?: number
   // 可退款余额
   refundableBalance?: number
   // 支付状态
-  status?: number
+  status?: string
+  // 支付状态
+  allocationStatus?: string
   // 支付时间
   payTime?: string
   // 过期时间
   expiredTime?: string
-}
-
-/**
- * 支付扩展信息
- */
-export interface PayOrderExtra {
-  // 描述
-  description?: string
-  // 支付终端ip
-  clientIp?: string
-  // 是否不需要异步通知
-  notNotify?: string
-  // 异步通知地址
-  notifyUrl?: string
-  // 签名类型
-  signType?: string
-  // 支付终端ip
-  sign?: string
-  // 商户扩展参数
-  attach?: string
-  // API版本号
-  apiVersion?: string
-  // 请求时间
-  reqTime?: string
+  // 过期时间
+  closeTime?: string
   // 错误码
   errorCode?: string
   // 错误信息
@@ -154,23 +113,21 @@ export interface PayOrderExtra {
 }
 
 /**
- * 支付通道信息
+ * 支付扩展信息
  */
-export interface PayChannelOrder extends BaseEntity {
-  // 支付通道
-  channel?: number
-  // 支付方式
-  payWay?: number
-  // 异步支付方式
-  async?: boolean
-  // 金额
-  amount?: number
-  // 可退款金额
-  refundableBalance?: number
-  // 支付状态
-  status?: string
-  // 支付状态
-  payTime?: string
-  // 附加支付参数
-  channelExtra?: string
+export interface PayOrderExtra {
+  // 是否不需要异步通知
+  notNotify?: string
+  // 异步通知地址
+  notifyUrl?: string
+  // 支付终端ip
+  sign?: string
+  // 商户扩展参数
+  attach?: string
+  // 附加参数
+  extraParam?: string
+  // 请求时间
+  reqTime?: string
+  // 支付终端ip
+  clientIp?: string
 }
