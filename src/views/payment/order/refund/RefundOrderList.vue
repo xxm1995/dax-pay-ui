@@ -22,8 +22,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="refundNo" title="退款单号" width="220" />
-        <vxe-column field="refundTime" title="退款时间" sortable width="180" />
+        <vxe-column field="refundNo" title="退款号" width="220" />
         <vxe-column field="title" title="原支付标题" width="160" />
         <vxe-column field="orderNo" title="原支付订单号" width="220">
           <template #default="{ row }">
@@ -33,36 +32,24 @@
           </template>
         </vxe-column>
         <vxe-column field="businessNo" title="原业务号" :visible="false" />
-        <vxe-column field="amount" title="退款金额(元)" sortable width="140" >
-          <template #default="{ row }">  {{ row.amount?(row.amount/100).toFixed(2):0 }} </template>
+        <vxe-column field="amount" title="退款金额(元)" width="140">
+          <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
         </vxe-column>
-        <vxe-column field="refundableBalance" title="剩余可退金额(元)" sortable width="160" >
-          <template #default="{ row }">  {{ row.refundableBalance?(row.refundableBalance/100).toFixed(2):0 }} </template>
-
-        </vxe-column>
-        <vxe-column field="async" title="包含异步通道" width="120">
-          <template #default="{ row }">
-            {{ row.asyncPay ? '是' : '否' }}
-          </template>
-        </vxe-column>
-        <vxe-column field="gatewayOrderNo" title="支付网关订单号" :visible="false" width="220" />
         <vxe-column field="refundStatus" title="状态" width="80">
           <template #default="{ row }">
             {{ dictConvert('RefundStatus', row.status) }}
           </template>
         </vxe-column>
-        <vxe-column field="reason" title="原因" width="160" />
-        <vxe-column fixed="right" width="220" :showOverflow="false" title="操作">
+        <vxe-column field="reason" title="退款原因" width="160" />
+        <vxe-column field="refundTime" title="退款时间" sortable width="180" />
+        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-            <a-link @click="showChannel(row)">通道订单</a-link>
+            <!--      钱包不可以同步      -->
+            <a-link @click="sync(row)">同步</a-link>
             <a-divider type="vertical" />
-            <!--      只有异步订单才可以同步      -->
-            <a-link :disabled="!row.asyncPay" @click="sync(row)">同步</a-link>
-            <a-divider type="vertical" />
-            <!--      只有退款失败的异步订单才可以重新退款      -->
-            <a-link :disabled="!(row.asyncPay && row.status === 'fail')" @click="reset(row)">重试</a-link>
+            <a-link :disabled="!(row.status === 'fail')" @click="reset(row)">重试</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -75,7 +62,6 @@
         @page-change="handleTableChange"
       />
       <refund-order-info ref="refundOrderInfo" @ok="queryPage" />
-      <refund-channel-order-list ref="refundChannelOrderList" />
       <pay-order-info ref="payOrderInfo" />
     </div>
   </div>
@@ -84,7 +70,7 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page, resetRefund, syncById } from './RefundOrder.api'
+  import { page, resetRefund, syncByRefundNo } from './RefundOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import RefundOrderInfo from './RefundOrderInfo.vue'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -94,7 +80,6 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
-  import RefundChannelOrderList from '/@/views/payment/order/refund/RefundChannelOrderList.vue'
   import ALink from '/@/components/Link/Link.vue'
 
   // 使用hooks
@@ -108,11 +93,11 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'id', type: STRING, name: '退款ID', placeholder: '请输入完整退款ID' },
-      { field: 'refundNo', type: STRING, name: '退款号', placeholder: '请输入完整退款号' },
-      { field: 'paymentId', type: STRING, name: '原支付ID', placeholder: '请输入完整支付ID' },
-      { field: 'businessNo', type: STRING, name: '原业务号', placeholder: '请输入业务号' },
-      { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
+      { field: 'bizOrderNo', type: STRING, name: '商户订单号', placeholder: '请输入商户订单号' },
+      { field: 'refundNo', type: STRING, name: '退款号', placeholder: '请输入退款号' },
+      { field: 'outRefundNo', type: STRING, name: '外部退款号', placeholder: '请输入外部退款号' },
+      { field: 'orderNo', type: STRING, name: '支付订单号', placeholder: '请输入支付订单号' },
+      { field: 'bizOrderNo', type: STRING, name: '商户订单号', placeholder: '请输入商户支付订单号' },
       { field: 'title', type: STRING, name: '原支付标题', placeholder: '请输入原支付标题' },
       {
         field: 'status',
@@ -128,7 +113,6 @@
   const xToolbar = $ref<VxeToolbarInstance>()
   const refundOrderInfo = $ref<any>()
   const payOrderInfo = $ref<any>()
-  const refundChannelOrderList = $ref<any>()
 
   onMounted(() => {
     initData()
@@ -171,7 +155,7 @@
       content: '是否同步退款信息',
       onOk: () => {
         loading.value = true
-        syncById(record.id).then(({ data }) => {
+        syncByRefundNo(record.refundNo).then(({ data }) => {
           // TODO 后期可以根据返回结果进行相应的处理
           createMessage.success('同步成功')
           console.log(data)
@@ -212,13 +196,6 @@
    */
   function showPayment(paymentId) {
     payOrderInfo.init(paymentId)
-  }
-
-  /**
-   * 查看通道明细列表
-   */
-  function showChannel(record) {
-    refundChannelOrderList.init(record)
   }
 
   function cellStyle({ row, column }) {

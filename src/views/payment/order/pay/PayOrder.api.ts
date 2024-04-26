@@ -32,6 +32,7 @@ export function getOrderByOrderNo(orderNo: string) {
     params: { orderNo },
   })
 }
+
 /**
  * 获取订单扩展信息
  */
@@ -45,7 +46,7 @@ export function getOrderExtra(id) {
 /**
  * 根据订单号同步支付状态
  */
-export function syncByOrderNo(orderNo) {
+export function syncByOrderNo(orderNo: string) {
   return defHttp.post<Result<PaySyncResult>>({
     url: '/order/pay/syncByOrderNo',
     params: { orderNo },
@@ -76,14 +77,14 @@ export function allocationById(id) {
  * 支付记录
  */
 export interface PayOrder extends BaseEntity {
+  // 标题
+  title?: string
   // 商户订单号
   bizOrderNo?: string
   // 支付订单号
   orderNo?: string
   // 三方系统交易号
   outOrderNo?: string
-  // 标题
-  title?: string
   // 描述
   description?: any
   // 是否支持分账
@@ -98,13 +99,13 @@ export interface PayOrder extends BaseEntity {
   refundableBalance?: number
   // 支付状态
   status?: string
-  // 支付状态
+  // 分账状态
   allocationStatus?: string
   // 支付时间
   payTime?: string
   // 过期时间
   expiredTime?: string
-  // 过期时间
+  // 关闭时间
   closeTime?: string
   // 错误码
   errorCode?: string
@@ -120,8 +121,6 @@ export interface PayOrderExtra {
   notNotify?: string
   // 异步通知地址
   notifyUrl?: string
-  // 支付终端ip
-  sign?: string
   // 商户扩展参数
   attach?: string
   // 附加参数

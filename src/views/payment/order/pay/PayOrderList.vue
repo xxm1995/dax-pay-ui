@@ -26,7 +26,7 @@
         <vxe-column field="status" title="支付状态" width="120">
           <template #default="{ row }">{{ dictConvert('PayStatus', row.status) }}</template>
         </vxe-column>
-        <vxe-column field="createTime" title="创建时间" sortable width="220" />
+
         <vxe-column field="allocation" title="分账" width="160">
           <template #default="{ row }">
             <a-tag v-if="row.allocation" color="green">支持</a-tag>
@@ -38,7 +38,7 @@
             {{ dictConvert('PayOrderAllocationStatus', row.allocationStatus) }}
           </template>
         </vxe-column>
-        <vxe-column field="expiredTime" title="过期时间" sortable width="220" />
+        <vxe-column field="createTime" title="创建时间" sortable width="220" />
         <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
@@ -111,8 +111,8 @@
   const fields = computed(() => {
     return [
       { field: 'orderNo', type: STRING, name: '订单号', placeholder: '请输入订单号' },
-      { field: 'bizOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入商户订单号' },
-      { field: 'outOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入三方支付系统中的订单号' },
+      { field: 'bizOrderNo', type: STRING, name: '商户订单号', placeholder: '请输入商户订单号' },
+      { field: 'outOrderNo', type: STRING, name: '外部订单号', placeholder: '请输入外部三方支付系统中的订单号' },
       { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
       { field: 'errorCode', name: '错误码', type: STRING },
       { field: 'status', name: '支付状态', type: LIST, selectList: payStatusList },
@@ -171,7 +171,7 @@
       content: '是否同步支付信息',
       onOk: () => {
         loading.value = true
-        syncByOrderNo(record.id).then(({ data }) => {
+        syncByOrderNo(record.orderNo).then(({ data }) => {
           // TODO 后期可以根据返回结果进行相应的处理
           createMessage.success('同步成功')
           console.log(data)

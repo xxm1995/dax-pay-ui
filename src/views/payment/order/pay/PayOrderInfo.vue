@@ -13,17 +13,17 @@
         <a-descriptions-item label="标题" :span="3">
           {{ order.title }}
         </a-descriptions-item>
-        <a-descriptions-item :span="1" label="支付订单号">
+        <a-descriptions-item :span="1" label="订单号">
           {{ order.orderNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="业务号" :span="1">
-          {{ order.businessNo }}
+        <a-descriptions-item label="商户订单号" :span="1">
+          {{ order.bizOrderNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="网关订单号" :span="1">
-          {{ order.gatewayOrderNo }}
+        <a-descriptions-item label="三方系统交易号" :span="1">
+          {{ order.outOrderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="描述">
-          {{ orderExtra.description }}
+          {{ order.description }}
         </a-descriptions-item>
         <a-descriptions-item label="金额(元)">
           {{ order.amount ? (order.amount / 100).toFixed(2) : 0 }}
@@ -34,32 +34,23 @@
         <a-descriptions-item label="支付状态">
           {{ dictConvert('PayStatus', order.status) }}
         </a-descriptions-item>
-        <a-descriptions-item label="异步支付">
-          {{ order.asyncPay ? '是' : '否' }}
+        <a-descriptions-item label="支持分账">
+          {{ order.allocation ? '是' : '否' }}
         </a-descriptions-item>
-        <a-descriptions-item label="组合支付">
-          {{ order.combinationPay ? '是' : '否' }}
-        </a-descriptions-item>
-        <a-descriptions-item label="异步支付方式">
-          {{ dictConvert('PayChannel', order.asyncChannel) }}
-        </a-descriptions-item>
-        <a-descriptions-item label="客户IP">
-          {{ orderExtra.clientIp }}
+        <a-descriptions-item label="分账状态">
+          {{ dictConvert('AllocationOrderStatus', order.allocationStatus) }}
         </a-descriptions-item>
         <a-descriptions-item label="错误信息">
-          {{ orderExtra.errorMsg }}
+          {{ order.errorMsg }}
         </a-descriptions-item>
         <a-descriptions-item label="是否通知">
           {{ orderExtra.notNotify ? '否' : '是' }}
         </a-descriptions-item>
-        <a-descriptions-item label="通知地址">
+        <a-descriptions-item label="客户IP">
+          {{ orderExtra.clientIp }}
+        </a-descriptions-item>
+        <a-descriptions-item label="通知地址" ::span="3">
           {{ orderExtra.notifyUrl }}
-        </a-descriptions-item>
-        <a-descriptions-item label="签名类型">
-          {{ orderExtra.signType }}
-        </a-descriptions-item>
-        <a-descriptions-item label="签名">
-          {{ orderExtra.sign }}
         </a-descriptions-item>
         <a-descriptions-item label="商户扩展参数" :span="3">
           {{ orderExtra.attach }}
@@ -72,6 +63,9 @@
         </a-descriptions-item>
         <a-descriptions-item label="过期时间">
           {{ order.expiredTime }}
+        </a-descriptions-item>
+        <a-descriptions-item label="关闭时间">
+          {{ order.closeTime }}
         </a-descriptions-item>
         <a-descriptions-item label="创建时间">
           {{ order.createTime }}
