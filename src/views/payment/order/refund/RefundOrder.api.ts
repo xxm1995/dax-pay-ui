@@ -27,7 +27,7 @@ export function get(id) {
  */
 export function getOrderExtra(id) {
   return defHttp.get<Result<RefundOrderExtra>>({
-    url: '/order/pay/getExtraById',
+    url: '/order/refund/getExtraById',
     params: { id },
   })
 }

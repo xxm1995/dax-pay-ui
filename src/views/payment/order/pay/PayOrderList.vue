@@ -15,9 +15,14 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderNo" title="订单号" sortable width="220" />
-        <vxe-column field="title" title="标题" width="220" />
-        <vxe-column field="amount" title="金额(元)" width="120" sortable>
+        <vxe-column field="orderNo" title="订单号" sortable min-width="220" />
+        <vxe-column field="title" title="标题" min-width="220" />
+        <vxe-column field="channel" title="支付通道" min-width="120">
+          <template #default="{ row }">
+            {{ dictConvert('PayChannel', row.channel) }}
+          </template>
+        </vxe-column>
+        <vxe-column field="amount" title="金额(元)" min-width="120" sortable>
           <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
         </vxe-column>
         <vxe-column field="refundableBalance" title="可退余额(元)" width="120" sortable>
@@ -27,18 +32,18 @@
           <template #default="{ row }">{{ dictConvert('PayStatus', row.status) }}</template>
         </vxe-column>
 
-        <vxe-column field="allocation" title="分账" width="160">
+        <vxe-column field="allocation" title="分账" min-width="160">
           <template #default="{ row }">
             <a-tag v-if="row.allocation" color="green">支持</a-tag>
             <a-tag v-else color="red">不支持</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="allocation" title="分账状态" width="160">
+        <vxe-column field="allocation" title="分账状态" min-width="160">
           <template #default="{ row }">
             {{ dictConvert('PayOrderAllocationStatus', row.allocationStatus) }}
           </template>
         </vxe-column>
-        <vxe-column field="createTime" title="创建时间" sortable width="220" />
+        <vxe-column field="createTime" title="创建时间" sortable min-width="220" />
         <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
@@ -172,9 +177,7 @@
       onOk: () => {
         loading.value = true
         syncByOrderNo(record.orderNo).then(({ data }) => {
-          // TODO 后期可以根据返回结果进行相应的处理
           createMessage.success('同步成功')
-          console.log(data)
           queryPage()
         })
       },
@@ -189,7 +192,7 @@
       title: '警告',
       content: '是否关闭支付订单',
       onOk: () => {
-        close(record.id).then(() => {
+        close(record.orderNo).then(() => {
           createMessage.success('关闭成功')
           queryPage()
         })

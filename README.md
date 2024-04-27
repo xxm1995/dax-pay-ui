@@ -54,7 +54,7 @@
 
 ## 项目启动
 ```shell
-# 安装项目依赖, 请使用Node16及以上版本
+# 安装项目依赖, 请使用Node20.x版本, pnpm使用8.x版本，
 pnpm install
 # 启动项目
 pnpm run dev

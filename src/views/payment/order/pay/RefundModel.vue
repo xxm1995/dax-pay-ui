@@ -8,9 +8,21 @@
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-form ref="formRef" :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
-      <a-form-item :label="dictConvert('PayChannel', order.channel)" name="name">
-        <a-input-number :min="0" :max="order.amount" :precision="0" v-model:value="form.amount" />
+    <a-form
+      ref="formRef"
+      :model="form"
+      :label-col="labelCol"
+      :rules="{ amount: [{ required: true, message: '请输入退款金额' }] }"
+      :wrapper-col="wrapperCol"
+    >
+      <a-form-item label="标题">
+        {{ order.title }}
+      </a-form-item>
+      <a-form-item label="订单号">
+        {{ order.orderNo }}
+      </a-form-item>
+      <a-form-item label="退款金额" name="amount">
+        <a-input-number :min="1" :max="order.amount" :precision="0" v-model:value="form.amount" />
       </a-form-item>
       <a-form-item label="原因" name="reason">
         <a-textarea v-model:value="form.reason" :rows="3" />

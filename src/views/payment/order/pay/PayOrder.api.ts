@@ -56,10 +56,10 @@ export function syncByOrderNo(orderNo: string) {
 /**
  * 关闭支付记录
  */
-export function close(id) {
+export function close(orderNo) {
   return defHttp.post<Result<void>>({
     url: '/order/pay/close',
-    params: { id },
+    params: { orderNo },
   })
 }
 
