@@ -55,7 +55,7 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { get, getOrderExtra, RefundOrder, RefundOrderExtra } from './RefundOrder.api'
+  import {get, getByRefundNo, getOrderExtra, RefundOrder, RefundOrderExtra} from './RefundOrder.api'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   const { handleCancel, confirmLoading, visible, showable } = useFormEdit()
@@ -67,16 +67,14 @@
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  async function init(id) {
+  async function init(refundNo) {
     visible.value = true
     confirmLoading.value = true
-    await get(id).then(({ data }) => {
-      order = data
+    getByRefundNo(refundNo).then(({ data }) => {
+      order = data.refundOrder
+      orderExtra = data.refundOrderExtra
+      confirmLoading.value = false
     })
-    getOrderExtra(id).then(({ data }) => {
-      orderExtra = data
-    })
-    confirmLoading.value = false
   }
   defineExpose({
     init,

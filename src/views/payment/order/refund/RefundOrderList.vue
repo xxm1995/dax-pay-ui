@@ -27,7 +27,7 @@
         <vxe-column field="reason" title="退款原因" min-width="160" />
         <vxe-column field="orderNo" title="原支付订单号" min-width="220">
           <template #default="{ row }">
-            <a @click="showPayment(row.orderNo)">
+            <a @click="showPayOrder(row)">
               {{ row.orderNo }}
             </a>
           </template>
@@ -191,15 +191,14 @@
    * 查看
    */
   function show(record) {
-    refundOrderInfo.init(record.id)
+    refundOrderInfo.init(record.refundNo)
   }
 
   /**
    * 查看支付单信息
-   * @param paymentId
    */
-  function showPayment(paymentId) {
-    payOrderInfo.init(paymentId)
+  function showPayOrder(record) {
+    payOrderInfo.init(record.orderNo)
   }
 
   function cellStyle({ row, column }) {

@@ -88,10 +88,10 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'orderId', type: STRING, name: '本地订单ID', placeholder: '请输入完整本地订单ID' },
-      { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
+      { field: 'tradeId', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
+      { field: 'outTradeNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
       {
-        field: 'payChannel',
+        field: 'channel',
         type: LIST,
         name: '支付通道',
         placeholder: '请选择支付通道',
@@ -156,9 +156,9 @@
    */
   function showOrder(record: PayCallbackRecord) {
     if (record.callbackType === 'pay') {
-      payOrderInfo.init(record.orderId)
+      payOrderInfo.init(record.tradeNo)
     } else {
-      refundOrderInfo.init(record.orderId)
+      refundOrderInfo.init(record.tradeNo)
     }
   }
 </script>

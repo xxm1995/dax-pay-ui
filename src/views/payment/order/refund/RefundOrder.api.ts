@@ -21,13 +21,22 @@ export function get(id) {
     params: { id },
   })
 }
+/**
+ * 获取单条
+ */
+export function getByRefundNo(refundNo) {
+  return defHttp.get<Result<any>>({
+    url: '/order/refund/findByOrderNo',
+    params: { refundNo },
+  })
+}
 
 /**
  * 获取订单扩展信息
  */
 export function getOrderExtra(id) {
   return defHttp.get<Result<RefundOrderExtra>>({
-    url: '/order/refund/getExtraById',
+    url: '/order/refund/findExtraById',
     params: { id },
   })
 }

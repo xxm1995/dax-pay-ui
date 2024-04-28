@@ -10,11 +10,11 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
-        <a-descriptions-item label="本地订单ID">
-          {{ form.orderId }}
+        <a-descriptions-item label="本地交易号">
+          {{ form.tradeNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="网关订单号">
-          {{ form.gatewayOrderNo }}
+        <a-descriptions-item label="外部交易号">
+          {{ form.outTradeNo }}
         </a-descriptions-item>
         <a-descriptions-item label="支付通道">
           <a-tag>{{ dictConvert('PayChannel', form.channel) }}</a-tag>
@@ -50,24 +50,10 @@
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   import JsonPreview from '/@/components/CodeEditor/src/json-preview/JsonPreview.vue'
-  const {
-    initFormEditType,
-    handleCancel,
-    search,
-    labelCol,
-    wrapperCol,
-    modalWidth,
-    title,
-    confirmLoading,
-    visible,
-    editable,
-    showable,
-    formEditType,
-  } = useFormEdit()
+  const { handleCancel, modalWidth, confirmLoading, visible, showable } = useFormEdit()
   const { dictConvert } = useDict()
 
   // 表单
-  const formRef = $ref<FormInstance>()
   let form = $ref<PayCallbackRecord>({})
   // 入口
   function init(id) {

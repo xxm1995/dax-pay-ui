@@ -34,16 +34,6 @@ export function getOrderByOrderNo(orderNo: string) {
 }
 
 /**
- * 获取订单扩展信息
- */
-export function getOrderExtra(id) {
-  return defHttp.get<Result<PayOrderExtra>>({
-    url: '/order/pay/getExtraById',
-    params: { id },
-  })
-}
-
-/**
  * 根据订单号同步支付状态
  */
 export function syncByOrderNo(orderNo: string) {
