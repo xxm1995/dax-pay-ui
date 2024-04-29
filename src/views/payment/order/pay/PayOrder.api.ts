@@ -1,7 +1,6 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
 import { BaseEntity } from '/#/web'
-import { PaySyncResult } from '/@/views/payment/record/sync/PaySyncRecord.api'
 
 /**
  * 分页
@@ -37,7 +36,7 @@ export function getOrderByOrderNo(orderNo: string) {
  * 根据订单号同步支付状态
  */
 export function syncByOrderNo(orderNo: string) {
-  return defHttp.post<Result<PaySyncResult>>({
+  return defHttp.post<Result>({
     url: '/order/pay/syncByOrderNo',
     params: { orderNo },
   })

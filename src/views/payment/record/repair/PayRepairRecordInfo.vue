@@ -10,23 +10,20 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
-        <a-descriptions-item label="主键ID">
-          {{ form.id }}
-        </a-descriptions-item>
         <a-descriptions-item label="修复单号">
           {{ form.repairNo }}
         </a-descriptions-item>
         <a-descriptions-item label="本地订单ID">
-          {{ form.orderId }}
+          {{ form.tradeId }}
         </a-descriptions-item>
         <a-descriptions-item label="本地业务号">
-          {{ form.orderNo }}
+          {{ form.tradeNo }}
         </a-descriptions-item>
         <a-descriptions-item label="修复类型">
           <a-tag>{{ dictConvert('PaymentType', form.repairType) }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item v-if="form.repairType === 'pay'" label="修复通道">
-          <a-tag>{{ dictConvert('AsyncPayChannel', form.asyncChannel) }}</a-tag>
+        <a-descriptions-item label="修复通道">
+          <a-tag>{{ dictConvert('PayChannel', form.channel) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="修复来源">
           <a-tag>{{ dictConvert('PayRepairSource', form.repairSource) }}</a-tag>
@@ -62,18 +59,11 @@
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   const {
-    initFormEditType,
     handleCancel,
-    search,
-    labelCol,
-    wrapperCol,
     modalWidth,
-    title,
     confirmLoading,
     visible,
-    editable,
     showable,
-    formEditType,
   } = useFormEdit()
   const { dictConvert } = useDict()
 

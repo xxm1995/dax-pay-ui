@@ -10,17 +10,20 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
-        <a-descriptions-item label="支付记录id">
-          {{ form.paymentId }}
+        <a-descriptions-item label="订单号">
+          {{ form.orderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="业务号">
-          {{ form.businessNo }}
+          {{ form.bizOrderNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="异步支付通道">
-          {{ dictConvert('PayChannel', form.asyncChannel) }}
+        <a-descriptions-item label="支付通道">
+          {{ dictConvert('PayChannel', form.channel) }}
         </a-descriptions-item>
         <a-descriptions-item label="是否关闭成功">
           {{ form.closed ? '是' : '否' }}
+        </a-descriptions-item>
+        <a-descriptions-item label="错误编码" v-if="form.errorCode">
+          {{ form.errorMsg }}
         </a-descriptions-item>
         <a-descriptions-item label="错误消息" v-if="form.errorMsg">
           {{ form.errorMsg }}
@@ -47,18 +50,11 @@
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   const {
-    initFormEditType,
     handleCancel,
-    search,
-    labelCol,
-    wrapperCol,
     modalWidth,
-    title,
     confirmLoading,
     visible,
-    editable,
     showable,
-    formEditType,
   } = useFormEdit()
   const { dictConvert } = useDict()
 
