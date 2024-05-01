@@ -30,9 +30,6 @@
         <a-form-item label="回调通知" v-if="form.noticeSupport" name="notice">
           <a-switch v-model:checked="form.notice" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="回调签名" v-if="form.noticeSupport" name="noticeSign">
-          <a-switch v-model:checked="form.noticeSign" :disabled="showable" />
-        </a-form-item>
         <a-form-item label="默认回调地址" v-if="form.noticeSupport" name="noticeUrl">
           <a-input v-model:value="form.noticeUrl" :disabled="showable" placeholder="请输入回调地址" />
         </a-form-item>

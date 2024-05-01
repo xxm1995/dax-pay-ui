@@ -14,10 +14,10 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="本地订单ID" width="170">
+        <vxe-column field="orderId" title="本地交易号" width="170">
           <template #default="{ row }">
             <a-link @click="showOrder(row)">
-              {{ row.orderId }}
+              {{ row.orderNo }}
             </a-link>
           </template>
         </vxe-column>
@@ -149,7 +149,7 @@
     clientNoticeTaskInfo.init(record)
   }
   /**
-   * 查看记录
+   * 查看记录列表
    */
   function showRecord(record) {
     clientNoticeRecordList.init(record)
@@ -159,9 +159,9 @@
    */
   function showOrder(record: ClientNoticeTask) {
     if (record.noticeType === 'pay') {
-      payOrderInfo.init(record.orderId)
+      payOrderInfo.init(record.tradeNo)
     } else {
-      refundOrderInfo.init(record.orderId)
+      refundOrderInfo.init(record.tradeNo)
     }
   }
 </script>

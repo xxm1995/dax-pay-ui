@@ -30,15 +30,6 @@
             </template>
           </template>
         </vxe-column>
-        <vxe-column field="noticeSign" title="回调签名">
-          <template #default="{ row }">
-            <template v-if="row.noticeSupport">
-              <a-tag v-if="row.noticeSign" color="green">启用</a-tag>
-              <a-tag v-else color="red">停用</a-tag>
-            </template>
-            <template v-else> </template>
-          </template>
-        </vxe-column>
         <vxe-column field="noticeUrl" title="默认回调地址">
           <template #default="{ row }">
             <template v-if="row.noticeSupport">

@@ -1,5 +1,5 @@
 <template>
-  <basic-drawer forceRender v-bind="$attrs" title="通道订单列表" width="60%" :visible="visible" @close="visible = false">
+  <basic-drawer forceRender v-bind="$attrs" title="通知明细列表" width="60%" :visible="visible" @close="visible = false">
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table
       row-id="id"
@@ -60,10 +60,9 @@
   import ClientNoticeRecordInfo from './ClientNoticeRecordInfo.vue'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, sortChange, resetQueryParams, pagination, pages, sortParam, model, loading } =
-    useTablePage(queryPage)
+  const { handleTableChange, pageQueryResHandel, sortChange, pagination, sortParam, loading } = useTablePage(queryPage)
   const { notification, createMessage } = useMessage()
-  const { dictDropDown, dictConvert } = useDict()
+  const { dictConvert } = useDict()
 
   let visible = $ref(false)
   let task = $ref<ClientNoticeTask>({})
