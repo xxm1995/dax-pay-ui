@@ -29,11 +29,11 @@
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'
-  import { findAll, PayWayInfo } from './PayWayInfo.api'
+  import { findAll, PayMethodInfo } from './PayMethodInfo.api'
   import { onMounted } from 'vue'
   import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
   import { FormEditType } from '/@/enums/formTypeEnum'
-  import PayWayInfoEdit from './PayWayInfoEdit.vue'
+  import PayWayInfoEdit from './PayMethodInfoEdit.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -44,7 +44,7 @@
   const payWayInfoEdit = $ref<any>()
 
   let urlPrefix = $ref<string>()
-  let records = $ref<PayWayInfo[]>([])
+  let records = $ref<PayMethodInfo[]>([])
 
   onMounted(() => {
     vxeBind()

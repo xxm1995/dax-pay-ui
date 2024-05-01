@@ -10,27 +10,27 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions title="" :column="{ md: 1, sm: 1, xs: 1 }">
-        <a-descriptions-item label="本地订单号">
-          {{ form.orderId }}
+        <a-descriptions-item label="本地交易号">
+          {{ form.tradeNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="本地业务号">
-          {{ form.orderNo }}
+        <a-descriptions-item label="本地交易号">
+          {{ form.bizTradeNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="网关订单号">
-          {{ form.gatewayOrderNo }}
+        <a-descriptions-item label="外部交易号">
+          {{ form.outTradeNo || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="同步类型">
           <a-tag>{{ dictConvert('PaymentType', form.syncType) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="同步通道">
-          <a-tag> {{ dictConvert('AsyncPayChannel', form.asyncChannel) }}</a-tag>
+          <a-tag> {{ dictConvert('AsyncPayChannel', form.channel) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="同步结果">
-          <a-tag v-if="form.syncType === 'pay'">{{ dictConvert('PaySyncStatus', form.gatewayStatus) }}</a-tag>
-          <a-tag v-else>{{ dictConvert('RefundSyncStatus', form.gatewayStatus) }}</a-tag>
+          <a-tag v-if="form.syncType === 'pay'">{{ dictConvert('PaySyncStatus', form.outTradeStatus) }}</a-tag>
+          <a-tag v-else>{{ dictConvert('RefundSyncStatus', form.outTradeStatus) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="修复单号">
-          <a-tag v-if="form.repairOrder" color="green"> {{ form.repairOrderNo }} </a-tag>
+          <a-tag v-if="form.repair" color="green"> {{ form.repairNo }} </a-tag>
           <a-tag v-else>无需修复</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="同步时间">

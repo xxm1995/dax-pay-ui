@@ -1,7 +1,7 @@
 /**
  * 支付通道
  */
-export enum payWayEnum {
+export enum payMethodEnum {
   NORMAL = 'normal',
   WAP = 'wap',
   APP = 'app',

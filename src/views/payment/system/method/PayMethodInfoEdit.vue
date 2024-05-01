@@ -46,7 +46,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { nextTick } from 'vue'
   import { FormInstance } from 'ant-design-vue/lib/form'
-  import { get, PayWayInfo, update } from './PayWayInfo.api'
+  import { get, PayMethodInfo, update } from './PayMethodInfo.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
   import { BasicModal } from '/@/components/Modal'
@@ -73,7 +73,7 @@
   // 表单
   const formRef = $ref<FormInstance>()
   let urlPrefix = $ref<string>()
-  let form = $ref<PayWayInfo>({
+  let form = $ref<PayMethodInfo>({
     code: '',
     name: '',
     remark: '',

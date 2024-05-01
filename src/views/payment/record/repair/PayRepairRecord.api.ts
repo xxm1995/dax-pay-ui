@@ -30,7 +30,7 @@ export interface PayRepairRecord extends BaseEntity {
   repairNo?: string
   // 本地订单ID
   tradeId?: string
-  // 本地业务号
+  // 本地交易号
   tradeNo?: string
   // 类型  支付修复/退款修复
   repairType?: string

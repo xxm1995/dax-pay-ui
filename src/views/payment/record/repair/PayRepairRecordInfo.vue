@@ -16,7 +16,7 @@
         <a-descriptions-item label="本地订单ID">
           {{ form.tradeId }}
         </a-descriptions-item>
-        <a-descriptions-item label="本地业务号">
+        <a-descriptions-item label="本地 号">
           {{ form.tradeNo }}
         </a-descriptions-item>
         <a-descriptions-item label="修复类型">

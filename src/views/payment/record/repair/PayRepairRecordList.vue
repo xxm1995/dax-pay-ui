@@ -20,10 +20,10 @@
             <a-tag color="green">{{ dictConvert('PayRepairWay', row.repairWay) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="orderId" title="本地订单ID" width="170">
+        <vxe-column field="tradeNo" title="本地交易号" min-width="170">
           <template #default="{ row }">
             <a @click="showOrder(row)">
-              {{ row.orderId }}
+              {{ row.tradeNo }}
             </a>
           </template>
         </vxe-column>

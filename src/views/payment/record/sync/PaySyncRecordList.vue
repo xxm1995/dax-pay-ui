@@ -7,14 +7,14 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="本地订单号" width="170" sortable>
+        <vxe-column field="tradeNo" title="本地交易号" min-width="170">
           <template #default="{ row }">
             <a @click="showOrder(row)">
-              {{ row.orderId }}
+              {{ row.tradeNo }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="orderNo" title="本地业务号" />
+        <vxe-column field="bizTradeNo" title="商户交易号" min-width="170" />
         <vxe-column field="channel" title="同步类型">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PaymentType', row.syncType) }}</a-tag>
@@ -22,13 +22,13 @@
         </vxe-column>
         <vxe-column field="channel" title="同步通道">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('AsyncPayChannel', row.asyncChannel) }}</a-tag>
+            <a-tag>{{ dictConvert('AsyncPayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="status" title="同步结果">
           <template #default="{ row }">
-            <a-tag v-if="row.syncType === 'pay'">{{ dictConvert('PaySyncStatus', row.gatewayStatus) }}</a-tag>
-            <a-tag v-else>{{ dictConvert('RefundSyncStatus', row.gatewayStatus) }}</a-tag>
+            <a-tag v-if="row.syncType === 'pay'">{{ dictConvert('PaySyncStatus', row.outTradeStatus) }}</a-tag>
+            <a-tag v-else>{{ dictConvert('RefundSyncStatus', row.outTradeStatus) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="repairOrder" title="是否修复" width="170">
@@ -37,7 +37,6 @@
             <a-tag v-else>无需修复</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="gatewayOrderNo" title="网关订单号" width="170" />
         <vxe-column field="errorMsg" title="错误消息" />
         <vxe-column field="createTime" title="同步时间" />
         <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
@@ -92,8 +91,7 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'orderId', type: STRING, name: '本地订单ID', placeholder: '请输入本地订单ID' },
-      { field: 'orderNo', type: STRING, name: '本地订单号', placeholder: '请输入本地订单号' },
+      { field: 'orderNo', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
       {
         field: 'syncType',
         type: LIST,
@@ -168,9 +166,9 @@
    */
   function showOrder(record) {
     if (record.callbackType === 'pay') {
-      payOrderInfo.init(record.orderId)
+      payOrderInfo.init(record.tradeNo)
     } else {
-      refundOrderInfo.init(record.orderId)
+      refundOrderInfo.init(record.tradeNo)
     }
   }
   /**
