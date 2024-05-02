@@ -87,17 +87,23 @@ export function sync(id){
  */
 export interface AllocationOrder extends BaseEntity {
   // 支付订单ID
-  paymentId?: string
-  // 分账订单号
+  orderId?: string
+  // 支付订单号
   orderNo?: string
-  // 支付标题
+  // 商户支付订单号
+  bizOrderNo?: string
+  // 外部系统支付订单号
+  outOrderNo?: string
+  // 支付订单号
   title?: string
   // 网关支付订单号
   gatewayPayOrderNo?: string
-  // 网关分账单号
-  gatewayAllocationNo?: string
+  // 外部分账号
+  outAllocationNo?: string
   // 分账单号
   allocationNo?: string
+  // 商户分账单号
+  bizAllocationNo?: string
   // 外部请求号
   outReqNo?: string
   // 所属通道
@@ -108,6 +114,8 @@ export interface AllocationOrder extends BaseEntity {
   description?: string
   // 状态
   status?: string
+  // 错误码
+  errorCode?: string
   // 错误原因
   errorMsg?: string
   // 完成时间

@@ -6,6 +6,5 @@ export enum payChannelEnum {
   WECHAT = 'wechat_pay',
   UNION_PAY = 'union_pay',
   WALLET = 'wallet_pay',
-  CREDIT_CARD = 'credit_pay',
   AGGREGATION = 'aggregation_pay',
 }

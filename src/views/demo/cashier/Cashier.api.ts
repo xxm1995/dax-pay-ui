@@ -15,10 +15,10 @@ export function simplePayCashier(obj) {
 /**
  * 根据业务ID获取支付状态
  */
-export function findStatusByBusinessId(businessNo) {
+export function findStatusByBizOrderNoeNo(bizOrderNoeNo) {
   return defHttp.get<Result<boolean>>({
     url: '/demo/cashier/queryPayOrderSuccess',
-    params: { businessNo },
+    params: { businessNo: bizOrderNoeNo },
   })
 }
 
@@ -56,12 +56,12 @@ export function aggregateBarCodePay(obj) {
  * 发起支付后响应对象
  */
 export interface PayOrderResult {
-  // 支付ID
-  paymentId: string
-  // 是否是异步支付
-  asyncPay: boolean
-  // 异步支付通道
-  asyncChannel: string
+  // 商户订单号
+  bizOrderNo: string
+  // 订单号
+  orderNo: string
+  // 支付状态
+  status: string
   // 支付参数体(通常用于发起异步支付的参数)
   payBody: string
 }

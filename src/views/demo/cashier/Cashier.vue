@@ -140,7 +140,7 @@
 <script lang="ts" setup>
   import CashierQrCode from './CashierQrCode.vue'
   import CashierBarCode from './CashierBarCode.vue'
-  import { aggregateBarCodePay, createAggregatePayUrl, findStatusByBusinessId, getUniCashierUrl, simplePayCashier } from './Cashier.api'
+  import { aggregateBarCodePay, createAggregatePayUrl, findStatusByBizOrderNoeNo, getUniCashierUrl, simplePayCashier } from './Cashier.api'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'
   import { nextTick, onMounted, onUnmounted } from 'vue'
@@ -266,7 +266,7 @@
   // 检查支付状态
   const { pause, resume } = useIntervalFn(
     () => {
-      findStatusByBusinessId(bizOrderNo)
+      findStatusByBizOrderNoeNo(bizOrderNo)
         .then((res) => {
           // 成功
           if (res.data) {

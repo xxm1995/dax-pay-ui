@@ -8,9 +8,6 @@ export enum PayStatus {
   /** 成功 */
   SUCCESS = 'success',
 
-  /** 失败 */
-  FAIL = 'fail',
-
   /** 支付关闭(超时/手动取消/订单已经关闭撤销支付单) */
   CANCEL = 'close',
 
@@ -19,4 +16,7 @@ export enum PayStatus {
 
   /** 全部退款 */
   REFUNDED = 'refunded',
+
+  /** 失败 */
+  FAIL = 'fail',
 }
