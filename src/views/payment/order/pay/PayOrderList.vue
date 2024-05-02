@@ -106,19 +106,31 @@
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, sortChange, resetQueryParams, pagination, pages, sortParam, model, loading } =
     useTablePage(queryPage)
-  const { notification, createMessage, createConfirm } = useMessage()
+  const { createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
-  let cayChannelList = $ref<LabeledValue[]>([])
+  let channelList = $ref<LabeledValue[]>([])
+  let methodList = $ref<LabeledValue[]>([])
   let payStatusList = $ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'orderNo', type: STRING, name: '订单号', placeholder: '请输入订单号' },
+      { field: 'orderNo', type: STRING, name: '订单号', placeholder: '请输入支付订单号' },
       { field: 'bizOrderNo', type: STRING, name: '商户订单号', placeholder: '请输入商户订单号' },
       { field: 'outOrderNo', type: STRING, name: '外部订单号', placeholder: '请输入外部三方支付系统中的订单号' },
       { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
+      {
+        field: 'allocation',
+        name: '支持分账',
+        type: LIST,
+        selectList: [
+          { label: '支持', value: true },
+          { label: '不支持', value: false },
+        ],
+      },
+      { field: 'channel', name: '支付通道', type: LIST, selectList: channelList },
+      { field: 'method', name: '支付方式', type: LIST, selectList: methodList },
       { field: 'errorCode', name: '错误码', type: STRING },
       { field: 'status', name: '支付状态', type: LIST, selectList: payStatusList },
     ] as QueryField[]
@@ -142,8 +154,9 @@
    * 初始化数据
    */
   async function initData() {
-    cayChannelList = await dictDropDown('AsyncChannel')
+    channelList = await dictDropDown('PayChannel')
     payStatusList = await dictDropDown('PayStatus')
+    methodList = await dictDropDown('PayMethod')
   }
   /**
    * 分页查询

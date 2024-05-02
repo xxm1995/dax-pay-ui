@@ -4,9 +4,10 @@
       <b-query
         :query-params="model.queryParam"
         :fields="fields"
+        :default-item-count="3"
+        :sort-config="{ remote: true, trigger: 'cell' }"
         @query="queryPage"
         @reset="resetQueryParams"
-        :sort-config="{ remote: true, trigger: 'cell' }"
         @sort-change="sortChange"
       />
     </div>
@@ -89,27 +90,31 @@
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, sortChange, sortParam, pagination, pages, model, loading } =
     useTablePage(queryPage)
-  const { notification, createMessage, createConfirm } = useMessage()
+  const { createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
-  let payRefundStatusList = $ref<LabeledValue[]>([])
+  let channelList = $ref<LabeledValue[]>([])
+  let refundStatusList = $ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'bizOrderNo', type: STRING, name: '商户订单号', placeholder: '请输入商户订单号' },
+      { field: 'bizRefundNo', type: STRING, name: '商户退款号', placeholder: '请输入商户退款号' },
       { field: 'refundNo', type: STRING, name: '退款号', placeholder: '请输入退款号' },
       { field: 'outRefundNo', type: STRING, name: '外部退款号', placeholder: '请输入外部退款号' },
-      { field: 'orderNo', type: STRING, name: '支付订单号', placeholder: '请输入支付订单号' },
       { field: 'bizOrderNo', type: STRING, name: '商户订单号', placeholder: '请输入商户支付订单号' },
+      { field: 'orderNo', type: STRING, name: '订单号', placeholder: '请输入支付订单号' },
+      { field: 'outOrderNo', type: STRING, name: '外部订单号', placeholder: '请输入三方支付的外部订单号' },
       { field: 'title', type: STRING, name: '原支付标题', placeholder: '请输入原支付标题' },
+      { field: 'errorCode', name: '错误码', type: STRING },
       {
         field: 'status',
         type: LIST,
         name: '处理状态',
         placeholder: '请选择处理状态',
-        selectList: payRefundStatusList,
+        selectList: refundStatusList,
       },
+      { field: 'channel', name: '支付通道', type: LIST, selectList: channelList },
     ] as QueryField[]
   })
 
@@ -131,7 +136,8 @@
    * 初始化数据
    */
   async function initData() {
-    payRefundStatusList = await dictDropDown('RefundStatus')
+    refundStatusList = await dictDropDown('RefundStatus')
+    channelList = await dictDropDown('PayChannel')
   }
 
   /**
