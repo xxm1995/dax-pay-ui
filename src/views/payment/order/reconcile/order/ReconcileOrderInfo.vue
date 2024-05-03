@@ -12,22 +12,28 @@
       <a-descriptions-item label="日期">
         {{ form.date }}
       </a-descriptions-item>
-      <a-descriptions-item label="批次号">
-        {{ form.batchNo }}
+      <a-descriptions-item label="对账号">
+        {{ form.reconcileNo }}
       </a-descriptions-item>
       <a-descriptions-item label="支付通道">
         <a-tag>{{ dictConvert('PayChannel', form.channel) }}</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="对账单下载/上传">
-        <a-tag v-if="form?.down" color="green">完成下载/上传</a-tag>
+        <a-tag v-if="form?.downOrUpload" color="green">完成下载/上传</a-tag>
         <a-tag v-else color="red">未下载/上传</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="对账单比对">
         <a-tag v-if="form?.compare" color="green">已比对</a-tag>
         <a-tag v-else color="red">未比对</a-tag>
       </a-descriptions-item>
+      <a-descriptions-item label="比对结果">
+        {{ dictConvert('ReconcileResult', form.result) }}
+      </a-descriptions-item>
       <a-descriptions-item label="错误信息">
         {{ form.errorMsg }}
+      </a-descriptions-item>
+      <a-descriptions-item label="错误码">
+        {{ form.errorCode }}
       </a-descriptions-item>
       <a-descriptions-item label="创建时间">
         {{ form.createTime }}

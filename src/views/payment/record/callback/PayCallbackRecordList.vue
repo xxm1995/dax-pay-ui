@@ -89,7 +89,7 @@
   const fields = computed(() => {
     return [
       { field: 'tradeId', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
-      { field: 'outTradeNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
+      { field: 'outTradeNo', type: STRING, name: '外部订单号', placeholder: '请输入完整外部订单号' },
       {
         field: 'channel',
         type: LIST,
