@@ -21,13 +21,13 @@
       >
         <vxe-column type="seq" title="序号" width="60" />
         <vxe-column field="date" title="对账日期" />
-        <vxe-column field="batchNo" title="批次号" />
-        <vxe-column field="channel" title="支付通道">
+        <vxe-column field="reconcileNo" title="对账号" />
+        <vxe-column field="channel" title="对账通道">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="down" title="下载或上传">
+        <vxe-column field="down" title="下载或上传" min-width="100">
           <template #default="{ row }">
             <template v-if="row.down">
               <a-tag v-if="row.down" color="green">已完成</a-tag>
@@ -55,25 +55,19 @@
             <a-link v-else :disabled="!row.down" color="red" @click="compareOrder(row)">比对</a-link>
           </template>
         </vxe-column>
+        <vxe-column field="result" title="对账结果">
+          <template #default="{ row }">
+            {{ dictConvert('ReconcileResult', row.result) }}
+          </template>
+        </vxe-column>
         <vxe-column field="errorMsg" title="错误信息" />
         <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-            <a-dropdown>
-              <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /></a>
-              <template #overlay>
-                <a-menu>
-                  <a-menu-item>
-                    <a-link @click="showDetailPage(row)">对账明细</a-link>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a-link @click="showDiffPage(row)">差异明细</a-link>
-                  </a-menu-item>
-                </a-menu>
-              </template>
-            </a-dropdown>
+<!--            <a-link v-if="row.result === 'consistent'" @click="showDiffPage(row)">差异明细</a-link>-->
+            <a-link @click="showDiffPage(row)">差异明细</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -87,9 +81,8 @@
       />
     </div>
     <reconcile-order-create ref="reconcileOrderCreate" @ok="queryPage" />
-    <reconcile-detail-list ref="reconcileDetailList" />
     <reconcile-order-info ref="reconcileOrderInfo" />
-    <reconcile-diff-list-model ref="reconcileDiffListModel" />
+    <reconcile-diff-list ref="reconcileDiffList" />
   </div>
 </template>
 <script setup lang="ts">
@@ -103,10 +96,9 @@
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { compare, downAndSave, page } from './ReconcileOrder.api'
   import ReconcileOrderInfo from './ReconcileOrderInfo.vue'
-  import ReconcileDetailList from '../detail/ReconcileDetailList.vue'
   import ReconcileOrderCreate from './ReconcileOrderCreate.vue'
   import ALink from '/@/components/Link/Link.vue'
-  import ReconcileDiffListModel from '/@/views/payment/order/reconcile/diff/ReconcileDiffListModel.vue'
+  import ReconcileDiffList from '../diff/ReconcileDiffList.vue'
   import { useUpload } from '/@/hooks/bootx/useUpload'
 
   // 使用hooks
@@ -118,18 +110,26 @@
   const { tokenHeader, uploadAction } = useUpload('/order/reconcile/upload')
 
   let payChannelList = $ref<LabeledValue[]>([])
+  let reconcileResultList = $ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
     return [
       { field: 'date', type: DATE, name: '对账日期', placeholder: '请选择对账日期' },
-      { field: 'batchNo', type: STRING, name: '批次号', placeholder: '请输入对账批次号' },
+      { field: 'reconcileNo', type: STRING, name: '批次号', placeholder: '请输入对账批次号' },
       {
         field: 'channel',
         type: LIST,
         name: '对账通道',
         placeholder: '请选择对账通道',
         selectList: payChannelList,
+      },
+      {
+        field: 'result',
+        type: LIST,
+        name: '对账结果',
+        placeholder: '请选择对账结果',
+        selectList: reconcileResultList,
       },
     ] as QueryField[]
   })
@@ -139,7 +139,7 @@
   const reconcileOrderCreate = $ref<any>()
   const reconcileOrderInfo = $ref<any>()
   const reconcileDetailList = $ref<any>()
-  const reconcileDiffListModel = $ref<any>()
+  const reconcileDiffList = $ref<any>()
 
   onMounted(() => {
     initData()
@@ -155,6 +155,7 @@
    */
   async function initData() {
     payChannelList = await dictDropDown('AsyncPayChannel')
+    reconcileResultList = await dictDropDown('ReconcileResult')
   }
 
   /**
@@ -254,7 +255,7 @@
    * 查看差异单
    */
   function showDiffPage(record) {
-    reconcileDiffListModel.init(record)
+    reconcileDiffList.init(record)
   }
 </script>
 

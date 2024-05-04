@@ -34,7 +34,7 @@ export interface ReconcileDetail extends BaseEntity {
   paymentId?: string
   // 订单id
   refundId?: string
-  // 网关订单号
+  // 外部订单号
   gatewayOrderNo?: string
   // 交易金额
   amount?: string

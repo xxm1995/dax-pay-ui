@@ -1,7 +1,7 @@
 /**
  * 支付状态
  */
-export enum PayStatus {
+export enum payStatus {
   /** 支付中 */
   PROGRESS = 'progress',
 

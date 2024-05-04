@@ -91,7 +91,9 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'orderNo', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
+      { field: 'tradeNo', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
+      { field: 'bizTradeNo', type: STRING, name: '商户交易号', placeholder: '请输入商户交易号' },
+      { field: 'bizTradeNo', type: STRING, name: '外部交易号', placeholder: '请输入外部交易号' },
       {
         field: 'syncType',
         type: LIST,
@@ -100,7 +102,7 @@
         selectList: syncTypeList,
       },
       {
-        field: 'gatewayStatus',
+        field: 'outTradeStatus',
         type: LIST,
         name: '同步结果',
         placeholder: '请选择同步结果',

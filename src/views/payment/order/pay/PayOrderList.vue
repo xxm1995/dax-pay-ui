@@ -58,13 +58,13 @@
                   <a-menu-item>
                     <a-link @click="sync(row)">同步</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="[PayStatus.PROGRESS].includes(row.status)">
+                  <a-menu-item v-if="[payStatus.PROGRESS].includes(row.status)">
                     <a-link @click="closeOrder(row)" danger>关闭</a-link>
                   </a-menu-item>
                   <a-menu-item v-if="row.allocationStatus === 'waiting'">
                     <a-link @click="allocation(row)">分账</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="[PayStatus.SUCCESS, PayStatus.PARTIAL_REFUND].includes(row.status) && row.refundableBalance > 0">
+                  <a-menu-item v-if="[payStatus.SUCCESS, payStatus.PARTIAL_REFUND].includes(row.status) && row.refundableBalance > 0">
                     <a-link @click="refund(row)" danger>退款</a-link>
                   </a-menu-item>
                 </a-menu>
@@ -100,7 +100,7 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import { VxeTableInstance, VxeToolbarInstance, VxePager, VxeTable, VxeToolbar } from 'vxe-table'
   import ALink from '/@/components/Link/Link.vue'
-  import { PayStatus } from '/@/enums/payment/PayStatus'
+  import { payStatus } from '/@/enums/payment/PayStatus'
   import { LabeledValue } from 'ant-design-vue/lib/select'
 
   // 使用hooks

@@ -24,7 +24,7 @@
       <a-descriptions-item label="本地订单ID">
         {{ form.orderId }}
       </a-descriptions-item>
-      <a-descriptions-item v-if="form.gatewayOrderNo" label="网关订单号">
+      <a-descriptions-item v-if="form.gatewayOrderNo" label="外部订单号">
         {{ form.gatewayOrderNo }}
       </a-descriptions-item>
       <a-descriptions-item label="订单类型">

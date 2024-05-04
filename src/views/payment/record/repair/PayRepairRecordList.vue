@@ -92,8 +92,7 @@
   const fields = computed(() => {
     return [
       { field: 'repairNo', type: STRING, name: '修复单号', placeholder: '请输入修复号' },
-      { field: 'orderId', type: STRING, name: '本地订单ID', placeholder: '请输入本地订单ID' },
-      { field: 'orderNo', type: STRING, name: '本地订单号', placeholder: '请输入本地订单号' },
+      { field: 'tradeNo', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
       {
         field: 'repairSource',
         type: LIST,
@@ -116,7 +115,7 @@
         selectList: repairWayList,
       },
       {
-        field: 'asyncChannel',
+        field: 'channel',
         type: LIST,
         name: '修复通道',
         placeholder: '请选择修复通道',

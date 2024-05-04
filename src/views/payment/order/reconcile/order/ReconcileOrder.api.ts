@@ -56,16 +56,20 @@ export function compare(id: any) {
  * 支付对账订单
  */
 export interface ReconcileOrder extends BaseEntity {
-  // 批次号
-  batchNo?: string
+  // 对账号
+  reconcileNo?: string
   // 日期
   date?: string
   // 通道
   channel?: string
   // 是否下载成功
-  down?: boolean
+  downOrUpload?: boolean
   // 是否比对完成
   compare?: boolean
+  // 比对结果
+  result?: string
+  // 错误码
+  errorCode?: string
   // 错误信息
   errorMsg?: string
 }

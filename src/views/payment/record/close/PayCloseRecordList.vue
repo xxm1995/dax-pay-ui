@@ -83,8 +83,8 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'paymentId', type: STRING, name: '支付单号', placeholder: '请输入支付单号' },
-      { field: 'businessNo', type: STRING, name: '业务号', placeholder: '请输入业务号' },
+      { field: 'orderNo', type: STRING, name: '订单号', placeholder: '请输入订单号' },
+      { field: 'bizOrderNo', type: STRING, name: '商户订单号', placeholder: '请输入商户订单号' },
       {
         field: 'channel',
         type: LIST,
