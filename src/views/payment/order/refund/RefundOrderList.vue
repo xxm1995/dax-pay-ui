@@ -12,7 +12,11 @@
       />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
+        <template #buttons>
+          <span>退款金额: {{}}元</span>
+        </template>
+      </vxe-toolbar>
       <vxe-table
         row-id="id"
         :cell-style="cellStyle"
@@ -78,7 +82,7 @@
   import { page, resetRefund, syncByRefundNo } from './RefundOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import RefundOrderInfo from './RefundOrderInfo.vue'
-  import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+  import { VxeTable, VxeTableInstance, VxeToolbar, VxeToolbarInstance } from "vxe-table";
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'

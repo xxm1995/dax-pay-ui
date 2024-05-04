@@ -4,7 +4,11 @@
       <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
+        <template #buttons>
+          <span>收款金额: {{}}元</span>
+        </template>
+      </vxe-toolbar>
       <vxe-table
         row-id="id"
         ref="xTable"

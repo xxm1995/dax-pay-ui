@@ -27,10 +27,10 @@
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="down" title="下载或上传" min-width="100">
+        <vxe-column field="down" title="下载或上传">
           <template #default="{ row }">
-            <template v-if="row.down">
-              <a-tag v-if="row.down" color="green">已完成</a-tag>
+            <template v-if="row.downOrUpload">
+              <a-tag v-if="row.downOrUpload" color="green">已完成</a-tag>
             </template>
             <template v-else>
               <a-link color="red" @click="down(row)">下载</a-link>
@@ -66,8 +66,25 @@
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-<!--            <a-link v-if="row.result === 'consistent'" @click="showDiffPage(row)">差异明细</a-link>-->
-            <a-link @click="showDiffPage(row)">差异明细</a-link>
+            <a-dropdown>
+              <a> 下载 <icon icon="ant-design:down-outlined" :size="12" /> </a>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item>
+                    <a-link @click="downOriginalFile(row)">原始对账单</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link @click="downOriginalTransferFile(row)">外部对账单</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link @click="downReconcileFile(row)">系统对账单</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link @click="downDiffFile(row)">差异明细</a-link>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
           </template>
         </vxe-column>
       </vxe-table>
@@ -100,6 +117,8 @@
   import ALink from '/@/components/Link/Link.vue'
   import ReconcileDiffList from '../diff/ReconcileDiffList.vue'
   import { useUpload } from '/@/hooks/bootx/useUpload'
+  import { useUserStoreWithOut } from '/@/store/modules/user'
+  import { getAppEnvConfig } from '/@/utils/env'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, sortChange, sortParam, pagination, pages, model, loading } =
@@ -108,6 +127,9 @@
   const { dictConvert, dictDropDown } = useDict()
   // 手动上传对账单
   const { tokenHeader, uploadAction } = useUpload('/order/reconcile/upload')
+  const useUserStore = useUserStoreWithOut()
+  const { VITE_GLOB_API_URL, VITE_GLOB_API_URL_PREFIX } = getAppEnvConfig()
+  const downUrl = VITE_GLOB_API_URL + VITE_GLOB_API_URL_PREFIX
 
   let payChannelList = $ref<LabeledValue[]>([])
   let reconcileResultList = $ref<LabeledValue[]>([])
@@ -138,7 +160,6 @@
   const xToolbar = $ref<VxeToolbarInstance>()
   const reconcileOrderCreate = $ref<any>()
   const reconcileOrderInfo = $ref<any>()
-  const reconcileDetailList = $ref<any>()
   const reconcileDiffList = $ref<any>()
 
   onMounted(() => {
@@ -201,7 +222,7 @@
   }
 
   /**
-   * 对账明显比对
+   * 对账比对
    */
   function compareOrder(record) {
     createConfirm({
@@ -245,17 +266,61 @@
   }
 
   /**
-   * 查看明细列表
+   * 下载原始对账单
    */
-  function showDetailPage(record) {
-    reconcileDetailList.init(record)
+  function downOriginalFile(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '提示',
+      content: '从三方支付系统中获取的交易对账单文件，未经过处理，确定要下载吗？',
+      onOk: () => {
+        const token = useUserStore.getToken
+        // 跳转到新页面进行下载
+        window.open(`${downUrl}/order/reconcile/downOriginal?id=${record.id}&Accesstoken=${token}`)
+      },
+    })
   }
 
   /**
-   * 查看差异单
+   * 下载原始对账单(转换)
    */
-  function showDiffPage(record) {
-    reconcileDiffList.init(record)
+  function downOriginalTransferFile(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '提示',
+      content: '将三方支付系统中的原始交易对账文件，转换为格式统一的CSV，确定要下载吗？',
+      onOk: () => {
+        createMessage.info('下载保存中.....')
+      },
+    })
+  }
+
+  /**
+   * 下载对账单
+   */
+  function downReconcileFile(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '提示',
+      content: '通过本系统中订单生成的对账单，确定要下载吗？',
+      onOk: () => {
+        createMessage.info('对账单下载保存中.....')
+      },
+    })
+  }
+
+  /**
+   * 下载对账差异明细
+   */
+  function downDiffFile(record) {
+    createConfirm({
+      iconType: 'info',
+      title: '提示',
+      content: '确定要下载对账差异明细吗？',
+      onOk: () => {
+        createMessage.info('对账差异明细单下载保存中.....')
+      },
+    })
   }
 </script>
 

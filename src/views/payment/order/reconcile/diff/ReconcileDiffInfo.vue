@@ -53,27 +53,13 @@
 <script setup lang="ts">
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { FormInstance } from 'ant-design-vue/lib/form'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import { get, ReconcileDiff, ReconcileRecord } from './ReconcileDiff.api'
-  const {
-    initFormEditType,
-    handleCancel,
-    search,
-    labelCol,
-    wrapperCol,
-    modalWidth,
-    title,
-    confirmLoading,
-    visible,
-    editable,
-    showable,
-    formEditType,
-  } = useFormEdit()
+  import { get } from './ReconcileDiff.api'
+  import { ReconcileOrder } from '/@/views/payment/order/reconcile/order/ReconcileOrder.api'
+  const { handleCancel, confirmLoading, visible, showable } = useFormEdit()
   const { dictConvert } = useDict()
   // 表单
-  const formRef = $ref<FormInstance>()
   let form = $ref<ReconcileOrder>({})
 
   // 事件
