@@ -27,7 +27,7 @@
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="down" title="下载或上传">
+        <vxe-column field="down" title="下载或上传" min-width="100">
           <template #default="{ row }">
             <template v-if="row.down">
               <a-tag v-if="row.down" color="green">已完成</a-tag>
