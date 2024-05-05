@@ -52,7 +52,7 @@
         <vxe-column field="compare" title="比对">
           <template #default="{ row }">
             <a-tag v-if="row.compare" color="green">已比对</a-tag>
-            <a-link v-else :disabled="!row.down" color="red" @click="compareOrder(row)">比对</a-link>
+            <a-link v-else :disabled="!row.downOrUpload" color="red" @click="compareOrder(row)">比对</a-link>
           </template>
         </vxe-column>
         <vxe-column field="result" title="对账结果">
@@ -99,7 +99,6 @@
     </div>
     <reconcile-order-create ref="reconcileOrderCreate" @ok="queryPage" />
     <reconcile-order-info ref="reconcileOrderInfo" />
-    <reconcile-diff-list ref="reconcileDiffList" />
   </div>
 </template>
 <script setup lang="ts">
@@ -115,7 +114,6 @@
   import ReconcileOrderInfo from './ReconcileOrderInfo.vue'
   import ReconcileOrderCreate from './ReconcileOrderCreate.vue'
   import ALink from '/@/components/Link/Link.vue'
-  import ReconcileDiffList from '../diff/ReconcileDiffList.vue'
   import { useUpload } from '/@/hooks/bootx/useUpload'
   import { useUserStoreWithOut } from '/@/store/modules/user'
   import { getAppEnvConfig } from '/@/utils/env'
@@ -160,7 +158,6 @@
   const xToolbar = $ref<VxeToolbarInstance>()
   const reconcileOrderCreate = $ref<any>()
   const reconcileOrderInfo = $ref<any>()
-  const reconcileDiffList = $ref<any>()
 
   onMounted(() => {
     initData()

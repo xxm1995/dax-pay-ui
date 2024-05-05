@@ -12,29 +12,32 @@
       <a-descriptions-item label="订单标题">
         {{ form.title }}
       </a-descriptions-item>
+      <a-descriptions-item label="对账号">
+        {{ form.reconcileNo }}
+      </a-descriptions-item>
+      <a-descriptions-item label="对账日期">
+        {{ form.reconcileDate }}
+      </a-descriptions-item>
+      <a-descriptions-item label="本地交易号">
+        {{ form.tradeNo }}
+      </a-descriptions-item>
+      <a-descriptions-item label="外部交易号">
+        {{ form.outTradeNo }}
+      </a-descriptions-item>
+      <a-descriptions-item label="外部交易号">
+        {{ form.tradeTime }}
+      </a-descriptions-item>
       <a-descriptions-item label="交易金额">
-        {{ form.amount }}
+        {{ form.amount ? (form.amount / 100).toFixed(2) : '无' }}
       </a-descriptions-item>
-      <a-descriptions-item label="对账单ID">
-        {{ form.recordId }}
+      <a-descriptions-item label="外部交易金额">
+        {{ form.outAmount ? (form.outAmount / 100).toFixed(2) : '无' }}
       </a-descriptions-item>
-      <a-descriptions-item v-if="form.detailId" label="对账单明细ID">
-        {{ form.detailId }}
-      </a-descriptions-item>
-      <a-descriptions-item label="本地订单ID">
-        {{ form.orderId }}
-      </a-descriptions-item>
-      <a-descriptions-item v-if="form.gatewayOrderNo" label="外部订单号">
-        {{ form.gatewayOrderNo }}
-      </a-descriptions-item>
-      <a-descriptions-item label="订单类型">
-        <a-tag>{{ dictConvert('ReconcileTrade', form.orderType) }}</a-tag>
+      <a-descriptions-item label="交易类型">
+        <a-tag>{{ dictConvert('ReconcileTrade', form.tradeType) }}</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="差异类型">
         <a-tag>{{ dictConvert('ReconcileDiffType', form.diffType) }}</a-tag>
-      </a-descriptions-item>
-      <a-descriptions-item label="订单时间">
-        {{ form.orderTime }}
       </a-descriptions-item>
       <template v-if="form.diffs">
         <a-descriptions-item :label="`${item.fieldName}[差异]`" :key="item" v-for="item in form.diffs">
@@ -55,12 +58,11 @@
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import { get } from './ReconcileDiff.api'
-  import { ReconcileOrder } from '/@/views/payment/order/reconcile/order/ReconcileOrder.api'
+  import { get, ReconcileDiff } from './ReconcileDiff.api'
   const { handleCancel, confirmLoading, visible, showable } = useFormEdit()
   const { dictConvert } = useDict()
   // 表单
-  let form = $ref<ReconcileOrder>({})
+  let form = $ref<ReconcileDiff>({})
 
   // 事件
   const emits = defineEmits(['ok'])

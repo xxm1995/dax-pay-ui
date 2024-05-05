@@ -6,7 +6,7 @@ import { BaseEntity } from '/#/web'
  * 对账差异分页
  */
 export function page(params) {
-  return defHttp.get<Result<PageResult<ReconcileRecord>>>({
+  return defHttp.get<Result<PageResult<ReconcileDiff>>>({
     url: '/order/reconcile/diff/page',
     params,
   })
@@ -16,7 +16,7 @@ export function page(params) {
  * 对账差异详情
  */
 export function get(id: string) {
-  return defHttp.get<Result<ReconcileRecord>>({
+  return defHttp.get<Result<ReconcileDiff>>({
     url: '/order/reconcile/diff/findById',
     params: { id },
   })
@@ -25,29 +25,37 @@ export function get(id: string) {
 /**
  * 通用支付对账记录
  */
-export interface ReconcileRecord extends BaseEntity {
-  // 关联对账订单ID
-  recordOrderId?: string
-  // 交易类型
-  type?: string
-  // 订单id
-  paymentId?: string
-  // 订单id
-  refundId?: string
-  // 外部订单号
-  gatewayOrderNo?: string
-  // 交易金额
-  amount?: string
+export interface ReconcileDiff extends BaseEntity {
   // 商品名称
   title?: string
+  // 关联对账订单ID
+  recordOrderId?: string
+  // 对账号
+  reconcileNo?: string
+  // 对账日期
+  reconcileDate?: string
+  // 交易类型
+  tradeType?: string
+  // 本地交易号
+  tradeNo?: string
+  // 外部交易号
+  outTradeNo?: string
+  // 交易时间
+  tradeTime?: string
+  // 交易金额
+  amount?: number
+  // 外部交易金额
+  outAmount?: number
+  // 差异类型
+  diffType?: string
   // 差异内容
-  diffs?: ReconcileDiff[]
+  diffs?: DiffInfo[]
 }
 
 /**
  * 差异内容
  */
-export interface ReconcileDiff {
+export interface DiffInfo {
   // 字段名
   fieldName?: string
   // 本地订单字段值
