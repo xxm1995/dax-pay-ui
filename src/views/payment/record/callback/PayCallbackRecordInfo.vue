@@ -13,7 +13,7 @@
         <a-descriptions-item label="本地交易号">
           {{ form.tradeNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="外部交易号">
+        <a-descriptions-item label="通道交易号">
           {{ form.outTradeNo }}
         </a-descriptions-item>
         <a-descriptions-item label="支付通道">

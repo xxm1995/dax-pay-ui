@@ -16,7 +16,7 @@
         <a-descriptions-item label="本地交易号">
           {{ form.bizTradeNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="外部交易号">
+        <a-descriptions-item label="通道交易号">
           {{ form.outTradeNo || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="同步类型">

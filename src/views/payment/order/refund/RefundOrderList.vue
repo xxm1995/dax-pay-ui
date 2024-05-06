@@ -14,7 +14,7 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
-          <span>退款金额: {{}}元</span>
+          <span>退款金额: {{ totalAmount ? (totalAmount / 100).toFixed(2) : 0 }}元</span>
         </template>
       </vxe-toolbar>
       <vxe-table
@@ -79,10 +79,10 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page, resetRefund, syncByRefundNo } from './RefundOrder.api'
+  import { getTotalAmount, page, resetRefund, syncByRefundNo } from './RefundOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import RefundOrderInfo from './RefundOrderInfo.vue'
-  import { VxeTable, VxeTableInstance, VxeToolbar, VxeToolbarInstance } from "vxe-table";
+  import { VxeTable, VxeTableInstance, VxeToolbar, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
@@ -99,16 +99,17 @@
 
   let channelList = $ref<LabeledValue[]>([])
   let refundStatusList = $ref<LabeledValue[]>([])
+  let totalAmount = $ref<number>(0.0)
 
   // 查询条件
   const fields = computed(() => {
     return [
       { field: 'bizRefundNo', type: STRING, name: '商户退款号', placeholder: '请输入商户退款号' },
       { field: 'refundNo', type: STRING, name: '退款号', placeholder: '请输入退款号' },
-      { field: 'outRefundNo', type: STRING, name: '外部退款号', placeholder: '请输入外部退款号' },
+      { field: 'outRefundNo', type: STRING, name: '通道退款号', placeholder: '请输入通道退款号' },
       { field: 'bizOrderNo', type: STRING, name: '商户订单号', placeholder: '请输入商户支付订单号' },
       { field: 'orderNo', type: STRING, name: '订单号', placeholder: '请输入支付订单号' },
-      { field: 'outOrderNo', type: STRING, name: '外部订单号', placeholder: '请输入三方支付的外部订单号' },
+      { field: 'outOrderNo', type: STRING, name: '通道订单号', placeholder: '请输入三方支付的通道订单号' },
       { field: 'title', type: STRING, name: '原支付标题', placeholder: '请输入原支付标题' },
       { field: 'errorCode', name: '错误码', type: STRING },
       {
@@ -155,6 +156,12 @@
       ...pages,
     }).then(({ data }) => {
       pageQueryResHandel(data)
+    })
+    // 汇总数据
+    getTotalAmount({
+      ...model.queryParam,
+    }).then(({ data }) => {
+      totalAmount = data
     })
     return Promise.resolve()
   }

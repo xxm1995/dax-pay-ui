@@ -18,7 +18,7 @@
       <a-descriptions-item label="本地订单ID">
         {{ form.orderId }}
       </a-descriptions-item>
-      <a-descriptions-item label="外部订单号">
+      <a-descriptions-item label="通道订单号">
         {{ form.gatewayOrderNo }}
       </a-descriptions-item>
       <a-descriptions-item label="交易类型">

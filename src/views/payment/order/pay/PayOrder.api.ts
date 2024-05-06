@@ -63,6 +63,16 @@ export function allocationById(id) {
 }
 
 /**
+ * 获取汇总金额
+ */
+export function getTotalAmount(param) {
+  return defHttp.get<Result<number>>({
+    url: '/order/pay/getTotalAmount',
+    params: param,
+  })
+}
+
+/**
  * 支付记录
  */
 export interface PayOrder extends BaseEntity {

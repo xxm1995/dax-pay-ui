@@ -98,7 +98,7 @@ export interface AllocationOrder extends BaseEntity {
   title?: string
   // 网关支付订单号
   gatewayPayOrderNo?: string
-  // 外部分账号
+  // 通道分账号
   outAllocationNo?: string
   // 分账单号
   allocationNo?: string

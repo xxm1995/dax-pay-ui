@@ -27,11 +27,11 @@
         </vxe-column>
         <vxe-column field="reconcileDate" title="对账日期" sortable min-width="120" />
         <vxe-column field="tradeNo" title="本地交易号" min-width="180" />
-        <vxe-column field="outTradeNo" title="外部交易号" min-width="220" />
+        <vxe-column field="outTradeNo" title="通道交易号" min-width="220" />
         <vxe-column field="amount" title="交易金额(元)" sortable min-width="120">
           <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : '无' }} </template>
         </vxe-column>
-        <vxe-column field="outAmount" title="外部交易金额(元)" sortable min-width="120">
+        <vxe-column field="outAmount" title="通道交易金额(元)" sortable min-width="120">
           <template #default="{ row }"> {{ row.outAmount ? (row.outAmount / 100).toFixed(2) : '无' }} </template>
         </vxe-column>
         <vxe-column field="tradeTime" title="交易时间" sortable min-width="150" />
@@ -92,7 +92,7 @@
       { field: 'diffType', type: LIST, name: '差异类型', placeholder: '请选择差异类型', selectList: diffTypeList },
       { field: 'channel', type: LIST, name: '对账通道', placeholder: '请选择对账', selectList: payChannelList },
       { field: 'tradeNo', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
-      { field: 'outOrderNo', type: STRING, name: '外部交易号', placeholder: '请输入外部交易号' },
+      { field: 'outOrderNo', type: STRING, name: '通道交易号', placeholder: '请输入通道交易号' },
     ] as QueryField[]
   })
 

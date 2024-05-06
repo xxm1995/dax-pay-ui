@@ -38,13 +38,13 @@ export interface ReconcileDiff extends BaseEntity {
   tradeType?: string
   // 本地交易号
   tradeNo?: string
-  // 外部交易号
+  // 通道交易号
   outTradeNo?: string
   // 交易时间
   tradeTime?: string
   // 交易金额
   amount?: number
-  // 外部交易金额
+  // 通道交易金额
   outAmount?: number
   // 差异类型
   diffType?: string

@@ -6,7 +6,7 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
-          <span>收款金额: {{}}元</span>
+          <span>收款金额: {{ totalAmount ? (totalAmount / 100).toFixed(2) : 0 }}元</span>
         </template>
       </vxe-toolbar>
       <vxe-table
@@ -94,7 +94,7 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { allocationById, close, page, syncByOrderNo } from './PayOrder.api'
+  import { allocationById, close, getTotalAmount, page, syncByOrderNo } from './PayOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import PayOrderInfo from './PayOrderInfo.vue'
   import RefundModel from './RefundModel.vue'
@@ -122,7 +122,7 @@
     return [
       { field: 'orderNo', type: STRING, name: '订单号', placeholder: '请输入支付订单号' },
       { field: 'bizOrderNo', type: STRING, name: '商户订单号', placeholder: '请输入商户订单号' },
-      { field: 'outOrderNo', type: STRING, name: '外部订单号', placeholder: '请输入外部三方支付系统中的订单号' },
+      { field: 'outOrderNo', type: STRING, name: '通道订单号', placeholder: '请输入外部三方支付系统中的订单号' },
       { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
       {
         field: 'allocation',
@@ -144,6 +144,7 @@
   const xToolbar = $ref<VxeToolbarInstance>()
   const payOrderInfo = $ref<any>()
   const refundModel = $ref<any>()
+  let totalAmount = $ref<number>(0.0)
 
   onMounted(() => {
     initData()
@@ -167,6 +168,7 @@
    */
   function queryPage() {
     loading.value = true
+    // 查询列表
     page({
       ...model.queryParam,
       ...pages,
@@ -174,6 +176,13 @@
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
+    // 汇总数据
+    getTotalAmount({
+      ...model.queryParam,
+    }).then(({ data }) => {
+      totalAmount = data
+    })
+    return Promise.resolve()
   }
 
   /**

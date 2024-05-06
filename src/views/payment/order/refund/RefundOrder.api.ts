@@ -21,6 +21,7 @@ export function get(id) {
     params: { id },
   })
 }
+
 /**
  * 获取单条
  */
@@ -72,6 +73,16 @@ export function resetRefund(id) {
 }
 
 /**
+ * 获取汇总金额
+ */
+export function getTotalAmount(param) {
+  return defHttp.get<Result<number>>({
+    url: '/order/refund/getTotalAmount',
+    params: param,
+  })
+}
+
+/**
  * 退款记录
  */
 export interface RefundOrder extends BaseEntity {
@@ -87,7 +98,7 @@ export interface RefundOrder extends BaseEntity {
   refundNo?: string
   // 商户退款号
   bizRefundNo?: string
-  // 外部退款号
+  // 通道退款号
   outRefundNo?: string
   // 订单金额
   orderAmount?: number

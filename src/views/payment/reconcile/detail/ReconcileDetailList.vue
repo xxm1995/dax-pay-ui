@@ -16,7 +16,7 @@
         <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
       </vxe-column>
       <vxe-column field="orderId" title="本地订单ID" />
-      <vxe-column field="gatewayOrderNo" title="外部订单号" />
+      <vxe-column field="gatewayOrderNo" title="通道订单号" />
       <vxe-column field="repairType" title="交易类型">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('ReconcileTrade', row.type) }}</a-tag>
@@ -72,7 +72,7 @@
       { field: 'title', type: STRING, name: '订单名称', placeholder: '请输入订单名称' },
       { field: 'type', type: LIST, name: '交易类型', placeholder: '请选择交易类型', selectList: reconcileTradeList },
       { field: 'orderId', type: STRING, name: '本地订单', placeholder: '请输入本地订单ID' },
-      { field: 'gatewayOrderNo', type: STRING, name: '外部订单号', placeholder: '请输入外部订单号' },
+      { field: 'gatewayOrderNo', type: STRING, name: '通道订单号', placeholder: '请输入通道订单号' },
     ] as QueryField[]
   })
   let visible = $ref(false)

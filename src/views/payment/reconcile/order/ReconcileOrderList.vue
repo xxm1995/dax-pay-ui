@@ -74,7 +74,7 @@
                     <a-link @click="downOriginalFile(row)">原始对账单</a-link>
                   </a-menu-item>
                   <a-menu-item>
-                    <a-link @click="downOriginalTransferFile(row)">外部对账单</a-link>
+                    <a-link @click="downOriginalTransferFile(row)">通道对账单</a-link>
                   </a-menu-item>
                   <a-menu-item>
                     <a-link @click="downReconcileFile(row)">系统对账单</a-link>

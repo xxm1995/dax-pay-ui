@@ -21,16 +21,16 @@
       <a-descriptions-item label="本地交易号">
         {{ form.tradeNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="外部交易号">
+      <a-descriptions-item label="通道交易号">
         {{ form.outTradeNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="外部交易号">
+      <a-descriptions-item label="通道交易号">
         {{ form.tradeTime }}
       </a-descriptions-item>
       <a-descriptions-item label="交易金额">
         {{ form.amount ? (form.amount / 100).toFixed(2) : '无' }}
       </a-descriptions-item>
-      <a-descriptions-item label="外部交易金额">
+      <a-descriptions-item label="通道交易金额">
         {{ form.outAmount ? (form.outAmount / 100).toFixed(2) : '无' }}
       </a-descriptions-item>
       <a-descriptions-item label="交易类型">

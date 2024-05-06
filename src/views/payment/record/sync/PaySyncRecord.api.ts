@@ -30,7 +30,7 @@ export interface SyncRecord extends BaseEntity {
   tradeNo?: string
   // 商户交易号
   bizTradeNo?: string
-  // 外部交易号
+  // 通道交易号
   outTradeNo?: string
   // 同步类型
   syncType?: string

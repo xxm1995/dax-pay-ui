@@ -28,7 +28,7 @@ export function get(id) {
 export interface PayCallbackRecord extends BaseEntity {
   // 交易号
   tradeNo?: string
-  // 外部交易号
+  // 通道交易号
   outTradeNo?: string
   // 支付通道
   channel?: string
