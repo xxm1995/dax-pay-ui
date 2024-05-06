@@ -285,9 +285,11 @@
     createConfirm({
       iconType: 'info',
       title: '提示',
-      content: '将三方支付系统中的原始交易对账文件，转换为格式统一的CSV，确定要下载吗？',
+      content: '将三方支付系统中的原始交易对账文件，转换为统一格式的CSV，确定要下载吗？',
       onOk: () => {
-        createMessage.info('下载保存中.....')
+        const token = useUserStore.getToken
+        // 跳转到新页面进行下载
+        window.open(`${downUrl}/order/reconcile/downOriginal2Csv?id=${record.id}&Accesstoken=${token}`)
       },
     })
   }
@@ -301,7 +303,9 @@
       title: '提示',
       content: '通过本系统中订单生成的对账单，确定要下载吗？',
       onOk: () => {
-        createMessage.info('对账单下载保存中.....')
+        const token = useUserStore.getToken
+        // 跳转到新页面进行下载
+        window.open(`${downUrl}/order/reconcile/downLocalCsv?id=${record.id}&Accesstoken=${token}`)
       },
     })
   }
@@ -315,6 +319,9 @@
       title: '提示',
       content: '确定要下载对账差异明细吗？',
       onOk: () => {
+        const token = useUserStore.getToken
+        // 跳转到新页面进行下载
+        window.open(`${downUrl}/order/reconcile/downDiffCsv?id=${record.id}&Accesstoken=${token}`)
         createMessage.info('对账差异明细单下载保存中.....')
       },
     })

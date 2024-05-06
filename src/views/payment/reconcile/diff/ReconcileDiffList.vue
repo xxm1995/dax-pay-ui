@@ -26,7 +26,7 @@
           </template>
         </vxe-column>
         <vxe-column field="reconcileDate" title="对账日期" sortable min-width="120" />
-        <vxe-column field="tradeNo" title="交易号" min-width="180" />
+        <vxe-column field="tradeNo" title="本地交易号" min-width="180" />
         <vxe-column field="outTradeNo" title="外部交易号" min-width="220" />
         <vxe-column field="amount" title="交易金额(元)" sortable min-width="120">
           <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : '无' }} </template>
