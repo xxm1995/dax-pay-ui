@@ -7,25 +7,25 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="tradeNo" title="本地交易号" min-width="170">
+        <vxe-column field="tradeNo" title="本地交易号" :min-width="220">
           <template #default="{ row }">
             <a @click="showOrder(row)">
               {{ row.tradeNo }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="bizTradeNo" title="商户交易号" min-width="170" />
-        <vxe-column field="channel" title="同步类型">
+        <vxe-column field="bizTradeNo" title="商户交易号" :min-width="220" />
+        <vxe-column field="channel" title="同步类型" :min-width="60">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PaymentType', row.syncType) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="channel" title="同步通道">
+        <vxe-column field="channel" title="同步通道" :min-width="100">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('AsyncPayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="status" title="同步结果">
+        <vxe-column field="status" title="同步结果" :min-width="100">
           <template #default="{ row }">
             <a-tag v-if="row.syncType === 'pay'">{{ dictConvert('PaySyncStatus', row.outTradeStatus) }}</a-tag>
             <a-tag v-else>{{ dictConvert('RefundSyncStatus', row.outTradeStatus) }}</a-tag>
@@ -37,9 +37,9 @@
             <a-tag v-else>无需修复</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="errorMsg" title="错误消息" />
-        <vxe-column field="createTime" title="同步时间" />
-        <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
+        <vxe-column field="errorMsg" title="错误消息" :min-width="160"/>
+        <vxe-column field="createTime" title="同步时间" :min-width="160" />
+        <vxe-column fixed="right" :min-width="60" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
               <a-link @click="show(row)">查看</a-link>
@@ -167,17 +167,11 @@
    * 查看支付单信息
    */
   function showOrder(record) {
-    if (record.callbackType === 'pay') {
+    if (record.syncType === 'pay') {
       payOrderInfo.init(record.tradeNo)
     } else {
       refundOrderInfo.init(record.tradeNo)
     }
-  }
-  /**
-   * 查看修复信息
-   */
-  function showRepairInfo(repairId) {
-    payRepairRecordInfo.init(repairId)
   }
 </script>
 

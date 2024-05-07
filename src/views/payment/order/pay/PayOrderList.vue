@@ -19,7 +19,13 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderNo" title="订单号" min-width="220" />
+        <vxe-column field="orderNo" title="订单号" min-width="220">
+          <template #default="{ row }">
+            <a @click="show(row)">
+              {{ row.orderNo }}
+            </a>
+          </template>
+        </vxe-column>
         <vxe-column field="title" title="标题" min-width="220" />
         <vxe-column field="channel" title="支付通道" min-width="120">
           <template #default="{ row }">

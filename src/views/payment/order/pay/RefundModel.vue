@@ -22,7 +22,7 @@
         {{ order.orderNo }}
       </a-form-item>
       <a-form-item label="退款金额" name="amount">
-        <a-input-number :min="1" :max="order.amount" :precision="0" v-model:value="form.amount" />
+        <a-input-number :min="0.01" :max="order.refundableBalance as number / 100" :precision="2" v-model:value="form.amount" />
       </a-form-item>
       <a-form-item label="原因" name="reason">
         <a-textarea v-model:value="form.reason" :rows="3" />
@@ -50,7 +50,6 @@
 
   const { handleCancel, labelCol, wrapperCol, modalWidth, confirmLoading, visible, showable } = useFormEdit()
   const { createMessage, createConfirm } = useMessage()
-  const { dictConvert } = useDict()
 
   let order = $ref<PayOrder>({})
 
@@ -61,7 +60,7 @@
     // 原因
     reason: '',
     // 退款金额
-    amount: 1,
+    amount: 0.01,
   })
   const emits = defineEmits(['ok'])
 
@@ -89,7 +88,11 @@
       content: '确实要申请退款!',
       onOk: () => {
         confirmLoading.value = true
-        refund(form).then(() => {
+        refund({
+          ...form,
+          // 将金额转为分
+          amount: form.amount * 100,
+        }).then(() => {
           visible.value = false
           createMessage.success('退款请求已提交')
           emits('ok')

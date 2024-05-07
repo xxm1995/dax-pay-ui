@@ -14,7 +14,13 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="repairNo" title="修复单号" min-width="170" />
+        <vxe-column field="repairNo" title="修复单号" min-width="170" >
+          <template #default="{ row }">
+            <a @click="show(row)">
+              {{ row.repairNo }}
+            </a>
+          </template>
+        </vxe-column>
         <vxe-column field="repairWay" title="修复方式">
           <template #default="{ row }">
             <a-tag color="green">{{ dictConvert('PayRepairWay', row.repairWay) }}</a-tag>
@@ -176,9 +182,9 @@
   function showOrder(record: PayRepairRecord) {
     console.log(record)
     if (record.repairType === 'pay') {
-      payOrderInfo.init(record.orderId)
+      payOrderInfo.init(record.tradeNo)
     } else {
-      refundOrderInfo.init(record.orderId)
+      refundOrderInfo.init(record.tradeNo)
     }
   }
 </script>

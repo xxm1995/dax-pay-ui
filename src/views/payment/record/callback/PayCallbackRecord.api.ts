@@ -41,5 +41,5 @@ export interface PayCallbackRecord extends BaseEntity {
   // 修复号
   repairNo?: string
   // 提示信息
-  msg?: string
+  errorMsg?: string
 }

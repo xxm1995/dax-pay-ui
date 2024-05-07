@@ -41,3 +41,4 @@ export interface PayCloseRecord extends BaseEntity {
   // 客户端IP
   clientIp?: string
 }
+

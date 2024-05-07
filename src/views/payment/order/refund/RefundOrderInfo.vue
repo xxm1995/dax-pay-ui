@@ -9,38 +9,39 @@
     @cancel="handleCancel"
   >
     <a-descriptions bordered>
-      <a-descriptions-item label="退款号" :span="1">
+      <a-descriptions-item label="退款号" :span="2">
         {{ order.refundNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="商户退款号" :span="1">
+      <a-descriptions-item label="商户退款号" :span="2">
         {{ order.refundNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="退款原因" :span="1">
-        {{ order.reason }}
-      </a-descriptions-item>
-      <a-descriptions-item label="原支付标题" :span="3">
+
+      <a-descriptions-item label="原支付标题" :span="2">
         {{ order.title }}
       </a-descriptions-item>
       <a-descriptions-item label="支付订单号" :span="2">
         {{ order.orderNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="商户支付订单号">
+      <a-descriptions-item label="商户支付订单号" :span="2">
         {{ order.bizOrderNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="退款金额(元)">
+      <a-descriptions-item label="退款金额(元)" :span="2">
         {{ order.amount ? (order.amount / 100).toFixed(2) : 0 }}
       </a-descriptions-item>
-      <a-descriptions-item label="退款完成时间">
-        {{ order.refundTime }}
+      <a-descriptions-item label="退款发起时间" :span="2">
+        {{ order.createTime }}
       </a-descriptions-item>
-      <a-descriptions-item label="退款状态">
-        <a-tag>{{ dictConvert('RefundStatus', order.status) }}</a-tag>
+      <a-descriptions-item label="退款完成时间" :span="2">
+        {{ order.finishTime }}
       </a-descriptions-item>
-      <a-descriptions-item v-if="order.errorCode" label="错误码">
+      <a-descriptions-item v-if="order.errorCode" label="错误码" :span="2">
         {{ order.errorCode }}
       </a-descriptions-item>
-      <a-descriptions-item v-if="order.errorMsg" label="错误信息">
+      <a-descriptions-item v-if="order.errorMsg" label="错误信息" :span="2">
         {{ order.errorMsg }}
+      </a-descriptions-item>
+      <a-descriptions-item label="退款状态" :span="2">
+        <a-tag>{{ dictConvert('RefundStatus', order.status) }}</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="退款终端ip">
         {{ orderExtra.clientIp }}

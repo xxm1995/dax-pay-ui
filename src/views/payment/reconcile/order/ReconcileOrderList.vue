@@ -20,14 +20,14 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="date" title="对账日期" />
-        <vxe-column field="reconcileNo" title="对账号" />
-        <vxe-column field="channel" title="对账通道">
+        <vxe-column field="date" title="对账日期" :min-width="100"/>
+        <vxe-column field="reconcileNo" title="对账号" :min-width="220"/>
+        <vxe-column field="channel" title="对账通道" :min-width="100">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="down" title="下载或上传">
+        <vxe-column field="down" title="下载或上传" :min-width="100">
           <template #default="{ row }">
             <template v-if="row.downOrUpload">
               <a-tag v-if="row.downOrUpload" color="green">已完成</a-tag>
@@ -49,20 +49,20 @@
             </template>
           </template>
         </vxe-column>
-        <vxe-column field="compare" title="比对">
+        <vxe-column field="compare" title="比对" :min-width="100">
           <template #default="{ row }">
             <a-tag v-if="row.compare" color="green">已比对</a-tag>
             <a-link v-else :disabled="!row.downOrUpload" color="red" @click="compareOrder(row)">比对</a-link>
           </template>
         </vxe-column>
-        <vxe-column field="result" title="对账结果">
+        <vxe-column field="result" title="对账结果" :min-width="100">
           <template #default="{ row }">
             {{ dictConvert('ReconcileResult', row.result) }}
           </template>
         </vxe-column>
-        <vxe-column field="errorMsg" title="错误信息" />
-        <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column field="errorMsg" title="错误信息" :min-width="160" />
+        <vxe-column field="createTime" title="创建时间" :min-width="160" />
+        <vxe-column fixed="right" :width="150" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />

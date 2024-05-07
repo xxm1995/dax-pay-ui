@@ -14,7 +14,7 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
-          <span style="font-size: 18px;">退款金额: {{ totalAmount ? (totalAmount / 100).toFixed(2) : 0 }}元</span>
+          <span style="font-size: 18px">退款金额: {{ totalAmount ? (totalAmount / 100).toFixed(2) : 0 }}元</span>
         </template>
       </vxe-toolbar>
       <vxe-table
@@ -27,10 +27,16 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="refundNo" title="退款号" min-width="220" />
+        <vxe-column field="refundNo" title="退款号" min-width="220">
+          <template #default="{ row }">
+            <a @click="show(row)">
+              {{ row.refundNo }}
+            </a>
+          </template>
+        </vxe-column>
         <vxe-column field="title" title="原支付标题" min-width="160" />
         <vxe-column field="reason" title="退款原因" min-width="160" />
-        <vxe-column field="orderNo" title="原支付订单号" min-width="220">
+        <vxe-column field="orderNo" title="支付订单号" min-width="220">
           <template #default="{ row }">
             <a @click="showPayOrder(row)">
               {{ row.orderNo }}

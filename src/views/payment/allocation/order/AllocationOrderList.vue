@@ -14,27 +14,40 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="allocationNo" title="分账单号" />
-        <vxe-column field="title" title="订单标题" />
-        <vxe-column field="paymentId" title="支付订单ID" />
-        <vxe-column field="channel" title="所属通道">
+        <vxe-column field="allocationNo" title="分账单号" :min-width="200">
+          <template #default="{ row }">
+            <a @click="show(row)">
+              {{ row.allocationNo }}
+            </a>
+          </template>
+        </vxe-column>
+        <vxe-column field="title" title="订单标题" :min-width="150" />
+        <vxe-column field="orderNo" title="支付订单号" :min-width="220">
+          <template #default="{ row }">
+            <a @click="showPayOrder(row)">
+              {{ row.orderNo }}
+            </a>
+          </template>
+        </vxe-column>
+
+        <vxe-column field="channel" title="所属通道" :min-width="100">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="amount" title="总分账金额">
-          <template #default="{ row }"> {{ row.amount / 100.0 }}元 </template>
+        <vxe-column field="amount" title="总分账金额(元)" :min-width="120">
+          <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
         </vxe-column>
-        <vxe-column field="status" title="状态">
+        <vxe-column field="status" title="状态" :min-width="100">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('AllocationOrderStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="result" title="分账结果" width="130">
+        <vxe-column field="result" title="分账结果" :min-width="100">
           <template #default="{ row }"> {{ dictConvert('AllocationOrderResult', row.result) }} </template> </vxe-column
-        ><vxe-column field="errorMsg" title="错误原因" />
-        <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
+        ><vxe-column field="errorMsg" title="错误原因" :min-width="160" />
+        <vxe-column field="createTime" title="创建时间" :min-width="160" />
+        <vxe-column fixed="right" :min-width="200" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
@@ -71,6 +84,7 @@
         @page-change="handleTableChange"
       />
     </div>
+    <pay-order-info ref="payOrderInfo" />
     <allocation-order-info ref="allocationOrderInfo" />
     <allocation-order-detail-list ref="allocationOrderDetailList" />
   </div>
@@ -91,12 +105,13 @@
   import { FormEditType } from '/@/enums/formTypeEnum'
   import AllocationOrderDetailList from './AllocationOrderDetailList.vue'
   import AllocationOrderInfo from './AllocationOrderInfo.vue'
+  import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
     useTablePage(queryPage)
-  const { notification, createMessage, createConfirm } = useMessage()
-  const { dictConvert, dictDropDown } = useDict()
+  const { createMessage, createConfirm } = useMessage()
+  const { dictConvert } = useDict()
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
@@ -104,6 +119,7 @@
   const allocationOrderInfo = $ref<any>()
 
   let payChannelList = $ref<LabeledValue[]>([])
+  const payOrderInfo = $ref<any>()
 
   const fields = computed(() => {
     return [
@@ -147,6 +163,13 @@
    */
   function showDetail(record) {
     allocationOrderDetailList.init(record)
+  }
+
+  /**
+   * 查看支付单信息
+   */
+  function showPayOrder(record) {
+    payOrderInfo.init(record.orderNo)
   }
 
   /**

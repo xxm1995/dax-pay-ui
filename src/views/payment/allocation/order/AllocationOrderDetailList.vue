@@ -3,28 +3,28 @@
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="records" :loading="loading" :cell-style="cellStyle">
       <vxe-column type="seq" width="60" />
-      <vxe-column field="receiverName" title="接收方姓名" max-width="100" />
-      <vxe-column field="receiverType" title="接收方类型" max-width="100">
+      <vxe-column field="receiverName" title="接收方姓名" :min-width="100" />
+      <vxe-column field="receiverType" title="接收方类型" :min-width="100">
         <template #default="{ row }">
           {{ dictConvert('AllocationReceiverType', row.receiverType) }}
         </template>
       </vxe-column>
-      <vxe-column field="rate" title="分账比例" max-width="70">
+      <vxe-column field="rate" title="分账比例" :min-width="100">
         <template #default="{ row }"> {{ row.rate / 100.0 }}% </template>
       </vxe-column>
-      <vxe-column field="amount" title="分账金额" max-width="150">
+      <vxe-column field="amount" title="分账金额" :min-width="100">
         <template #default="{ row }"> {{ row.amount / 100.0 }} 元 </template>
       </vxe-column>
-      <vxe-column field="result" title="分账结果" width="130">
+      <vxe-column field="result" title="分账结果" :min-width="130">
         <template #default="{ row }"> {{ dictConvert('AllocationDetailResult', row.result) }} </template>
       </vxe-column>
-      <vxe-column field="result" title="错误原因" max-width="170">
+      <vxe-column field="result" title="错误原因" :min-width="160">
         <template #default="{ row }"> {{ row.errorMsg }} </template>
       </vxe-column>
-      <vxe-column field="result" title="完成时间" width="150">
+      <vxe-column field="result" title="完成时间" :min-width="160">
         <template #default="{ row }"> {{ row.finishTime }} </template>
       </vxe-column>
-      <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
+      <vxe-column fixed="right" :min-width="60" :showOverflow="false" title="操作">
         <template #default="{ row }">
           <span>
             <a href="javascript:" @click="show(row)">查看</a>

@@ -3,13 +3,13 @@
     title="查看"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="modalWidth"
+    :width="1200"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
+      <a-descriptions bordered title="" :column="{ md: 2, sm: 1, xs: 1 }">
         <a-descriptions-item label="修复单号">
           {{ form.repairNo }}
         </a-descriptions-item>

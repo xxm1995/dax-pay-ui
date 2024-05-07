@@ -108,8 +108,6 @@ export interface RefundOrder extends BaseEntity {
   channel?: string
   // 退款状态
   status?: string
-  // 退款发起时间
-  refundTime?: string
   // 退款结束时间
   finishTime?: string
   // 退款原因

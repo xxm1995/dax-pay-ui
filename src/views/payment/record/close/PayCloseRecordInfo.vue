@@ -29,7 +29,7 @@
           {{ form.errorMsg }}
         </a-descriptions-item>
         <a-descriptions-item label="客户端IP">
-          {{ form.clientIp }}
+          {{ form.clientIp || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="关闭时间">
           {{ form.createTime }}
