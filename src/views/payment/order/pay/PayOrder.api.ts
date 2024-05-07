@@ -55,10 +55,10 @@ export function close(orderNo) {
 /**
  * 触发分账
  */
-export function allocationById(id) {
+export function allocationByOrderNo(orderNo) {
   return defHttp.post<Result<void>>({
     url: '/order/pay/allocation',
-    params: { id },
+    params: { orderNo },
   })
 }
 

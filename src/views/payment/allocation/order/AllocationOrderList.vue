@@ -159,7 +159,7 @@
       title: '同步分账状态',
       content: '确定同步分账状态吗？',
       onOk: () => {
-        sync(record.id).then(() => {
+        sync(record.allocationNo).then(() => {
           createMessage.success('同步成功')
           queryPage()
         })

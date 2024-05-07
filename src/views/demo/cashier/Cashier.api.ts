@@ -18,7 +18,7 @@ export function simplePayCashier(obj) {
 export function findStatusByBizOrderNoeNo(bizOrderNoeNo) {
   return defHttp.get<Result<boolean>>({
     url: '/demo/cashier/queryPayOrderSuccess',
-    params: { businessNo: bizOrderNoeNo },
+    params: { bizOrderNoeNo },
   })
 }
 

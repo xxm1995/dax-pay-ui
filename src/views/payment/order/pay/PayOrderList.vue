@@ -6,7 +6,7 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
-          <span>收款金额: {{ totalAmount ? (totalAmount / 100).toFixed(2) : 0 }}元</span>
+          <span style="font-size: 18px">收款金额: {{ totalAmount ? (totalAmount / 100).toFixed(2) : 0 }}元</span>
         </template>
       </vxe-toolbar>
       <vxe-table
@@ -19,13 +19,14 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderNo" title="订单号" sortable min-width="220" />
+        <vxe-column field="orderNo" title="订单号" min-width="220" />
         <vxe-column field="title" title="标题" min-width="220" />
         <vxe-column field="channel" title="支付通道" min-width="120">
           <template #default="{ row }">
             {{ dictConvert('PayChannel', row.channel) }}
           </template>
         </vxe-column>
+        <vxe-column field="bizOrderNo" title="商户订单号" min-width="220" />
         <vxe-column field="amount" title="金额(元)" min-width="120" sortable>
           <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
         </vxe-column>
@@ -48,7 +49,7 @@
           </template>
         </vxe-column>
         <vxe-column field="createTime" title="创建时间" sortable min-width="220" />
-        <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
@@ -94,7 +95,7 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { allocationById, close, getTotalAmount, page, syncByOrderNo } from './PayOrder.api'
+  import { allocationByOrderNo, close, getTotalAmount, page, syncByOrderNo } from './PayOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import PayOrderInfo from './PayOrderInfo.vue'
   import RefundModel from './RefundModel.vue'
@@ -241,7 +242,7 @@
       title: '警告',
       content: '是否触发该订单的分账操作',
       onOk: () => {
-        allocationById(record.id).then(() => {
+        allocationByOrderNo(record.orderNo).then(() => {
           createMessage.success('分账请求已发送')
           queryPage()
         })

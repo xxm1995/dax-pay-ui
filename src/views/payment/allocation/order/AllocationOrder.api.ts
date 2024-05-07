@@ -75,10 +75,10 @@ export function retry(id) {
 /**
  * 查询分账结果
  */
-export function sync(id){
+export function sync(allocationNo){
   return defHttp.post<Result<AllocationOrder>>({
     url: '/order/allocation/sync',
-    params: { id },
+    params: { allocationNo },
   })
 }
 

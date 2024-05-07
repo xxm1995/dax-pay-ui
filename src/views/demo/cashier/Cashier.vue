@@ -86,7 +86,7 @@
                     <span>
                       <a-input v-model:value="bizOrderNo" />
                     </span>
-                    <a-button type="primary" @click="genBusinessNo">生成</a-button>
+                    <a-button type="primary" @click="genBizOrderNoeNo">生成</a-button>
                   </div>
                   <div class="paydemo-form-item">
                     <label>支付标题：</label>
@@ -288,7 +288,7 @@
    */
   function initData() {
     // 生成业务编码
-    genBusinessNo()
+    genBizOrderNoeNo()
     // 获取微信H5、支付宝H5、手机收银台的链接地址
     initH5CashierUrl()
   }
@@ -440,7 +440,7 @@
   /**
    * 生成业务号
    */
-  function genBusinessNo() {
+  function genBizOrderNoeNo() {
     bizOrderNo = 'P' + new Date().getTime()
   }
 
@@ -467,7 +467,7 @@
   function handleCancel() {
     cashierQrCode.handleClose()
     cashierBarCode.handleClose()
-    genBusinessNo()
+    genBizOrderNoeNo()
     pause()
   }
 
