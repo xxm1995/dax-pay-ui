@@ -20,8 +20,14 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="date" title="对账日期" :min-width="100"/>
-        <vxe-column field="reconcileNo" title="对账号" :min-width="220"/>
+        <vxe-column field="date" title="对账日期" :min-width="100" />
+        <vxe-column field="reconcileNo" title="对账号" :min-width="220">
+          <template #default="{ row }">
+            <a @click="show(row)">
+              {{ row.reconcileNo }}
+            </a>
+          </template>
+        </vxe-column>
         <vxe-column field="channel" title="对账通道" :min-width="100">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>

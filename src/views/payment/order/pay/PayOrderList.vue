@@ -19,21 +19,21 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderNo" title="订单号" min-width="220">
+        <vxe-column field="orderNo" title="订单号" :min-width="220">
           <template #default="{ row }">
             <a @click="show(row)">
               {{ row.orderNo }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="title" title="标题" min-width="220" />
-        <vxe-column field="channel" title="支付通道" min-width="120">
+        <vxe-column field="title" title="标题" :min-width="220" />
+        <vxe-column field="channel" title="支付通道" :min-width="120">
           <template #default="{ row }">
             {{ dictConvert('PayChannel', row.channel) }}
           </template>
         </vxe-column>
-        <vxe-column field="bizOrderNo" title="商户订单号" min-width="220" />
-        <vxe-column field="amount" title="金额(元)" min-width="120" sortable>
+        <vxe-column field="bizOrderNo" title="商户订单号" :min-width="220" />
+        <vxe-column field="amount" title="金额(元)" :min-width="120" sortable>
           <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
         </vxe-column>
         <vxe-column field="refundableBalance" title="可退余额(元)" width="120" sortable>
@@ -43,18 +43,18 @@
           <template #default="{ row }">{{ dictConvert('PayStatus', row.status) }}</template>
         </vxe-column>
 
-        <vxe-column field="allocation" title="分账" min-width="160">
+        <vxe-column field="allocation" title="分账" :min-width="160">
           <template #default="{ row }">
             <a-tag v-if="row.allocation" color="green">支持</a-tag>
             <a-tag v-else color="red">不支持</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="allocation" title="分账状态" min-width="160">
+        <vxe-column field="allocation" title="分账状态" :min-width="160">
           <template #default="{ row }">
             {{ dictConvert('PayOrderAllocationStatus', row.allocationStatus) }}
           </template>
         </vxe-column>
-        <vxe-column field="createTime" title="创建时间" sortable min-width="220" />
+        <vxe-column field="createTime" title="创建时间" sortable :min-width="220" />
         <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>

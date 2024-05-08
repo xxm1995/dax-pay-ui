@@ -18,15 +18,15 @@
       @edit-activated="editActivatedEvent"
     >
       <vxe-column type="seq" width="60" />
-      <vxe-column field="name" title="账号别名" />
-      <vxe-column field="receiverType" title="接收方类型">
+      <vxe-column field="name" title="账号别名" :min-width="100" />
+      <vxe-column field="receiverType" title="接收方类型" :min-width="100">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('AllocationReceiverType', row.receiverType) }}</a-tag>
         </template>
       </vxe-column>
-      <vxe-column field="receiverAccount" title="接收方账号" />
-      <vxe-column field="receiverName" title="接收方姓名" />
-      <vxe-column field="rate" width="150" title="分账比例" :edit-render="{}">
+      <vxe-column field="receiverAccount" title="接收方账号" :min-width="220" />
+      <vxe-column field="receiverName" title="接收方姓名" :min-width="100" />
+      <vxe-column field="rate" width="150" title="分账比例" :edit-render="{}" :min-width="100">
         <template #default="{ row }"> {{ row.rate / 100.0 }}% </template>
         <template #edit="{ row }">
           <a-input-number v-model:value="row.rate" :min="0" :max="100" :precision="2" placeholder="请输入分账比例(%)" />
@@ -35,7 +35,7 @@
       <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
         <template #default="{ row }">
           <span>
-            <a href="javascript:" @click="remove(row)">删除</a>
+            <a-link danger @click="remove(row)">删除</a-link>
           </span>
         </template>
       </vxe-column>
@@ -54,6 +54,7 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import { AllocationGroup, AllocationGroupReceiver, bindReceivers, getReceivers, unbindReceiver, updateRate } from './AllocationGroup.api'
   import AllocationGroupSelect from '/@/views/payment/allocation/group/AllocationGroupSelect.vue'
+  import ALink from '/@/components/Link/Link.vue'
 
   // 使用hooks
   const { resetQueryParams, model, loading } = useTablePage(queryPage)

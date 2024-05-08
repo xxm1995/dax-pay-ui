@@ -65,6 +65,8 @@ export interface ClientNoticeTask extends BaseEntity {
   tradeNo?: string
   // 消息类型
   noticeType?: string
+  // 交易状态
+  tradeStatus?: string
   // 消息内容
   content?: string
   // 是否发送成功
@@ -89,6 +91,8 @@ export interface ClientNoticeRecord extends BaseEntity {
   sendType?: boolean
   // 发送是否成功
   success?: boolean
+  // 错误编码
+  errorCode?: string
   // 错误信息
   errorMsg?: string
 }

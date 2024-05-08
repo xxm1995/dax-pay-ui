@@ -2,7 +2,7 @@
   <basic-modal
     destroyOnClose
     title="接收方选择"
-    :width="840"
+    :width="1000"
     :visible="visible"
     :confirmLoading="loading"
     :maskClosable="false"
@@ -15,15 +15,15 @@
     </vxe-toolbar>
     <vxe-table row-id="id" ref="xTable" :height="350" :checkbox-config="checkboxConfig" :loading="loading" :data="pagination.records">
       <vxe-column type="checkbox" width="50" />
-      <vxe-column field="name" title="账号别名" />
-      <vxe-column field="receiverType" title="分账接收方类型">
+      <vxe-column field="name" title="账号别名" :min-width="100"/>
+      <vxe-column field="receiverType" title="分账接收方类型" :min-width="100">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('AllocationReceiverType', row.receiverType) }}</a-tag>
         </template>
       </vxe-column>
-      <vxe-column field="receiverAccount" title="接收方账号" />
-      <vxe-column field="receiverName" title="接收方姓名" />
-      <vxe-column field="relationType" title="分账关系">
+      <vxe-column field="receiverAccount" title="接收方账号" :min-width="160" />
+      <vxe-column field="receiverName" title="接收方姓名" :min-width="100" />
+      <vxe-column field="relationType" title="分账关系" :min-width="100">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('AllocationRelationType', row.relationType) }}</a-tag>
         </template>

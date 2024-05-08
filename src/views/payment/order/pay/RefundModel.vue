@@ -74,6 +74,7 @@
     getOrder(id).then(({ data }) => {
       order = data
       form.orderNo = data.orderNo as string
+      form.amount = (data.refundableBalance as number) / 100.0
       confirmLoading.value = false
     })
   }

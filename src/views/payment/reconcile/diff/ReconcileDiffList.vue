@@ -14,31 +14,39 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="title" title="订单标题" min-width="120" />
-        <vxe-column field="tradeType" title="交易类型" min-width="120">
+        <vxe-column field="title" title="订单标题" :min-width="120" />
+        <vxe-column field="reconcileDate" title="对账日期" sortable :min-width="120" />
+        <vxe-column field="channel" title="通道" :min-width="120">
+          <template #default="{ row }">
+            <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="tradeType" title="交易类型" :min-width="120">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PaymentType', row.tradeType) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="diffType" title="差异类型" min-width="120">
+        <vxe-column field="diffType" title="差异类型" :min-width="120">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('ReconcileDiffType', row.diffType) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="reconcileDate" title="对账日期" sortable min-width="120" />
-        <vxe-column field="tradeNo" title="本地交易号" min-width="180" />
-        <vxe-column field="outTradeNo" title="通道交易号" min-width="220" />
-        <vxe-column field="amount" title="交易金额(元)" sortable min-width="120">
+        <vxe-column field="tradeNo" title="本地交易号" :min-width="220">
+          <template #default="{ row }">
+            <a-link @click="showTrade(row)">{{ row.tradeNo }}</a-link>
+          </template>
+        </vxe-column>
+        <vxe-column field="outTradeNo" title="通道交易号" :min-width="220" />
+        <vxe-column field="amount" title="交易金额(元)" sortable :min-width="130">
           <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : '无' }} </template>
         </vxe-column>
-        <vxe-column field="outAmount" title="通道交易金额(元)" sortable min-width="120">
+        <vxe-column field="outAmount" title="通道交易金额(元)" sortable :min-width="150">
           <template #default="{ row }"> {{ row.outAmount ? (row.outAmount / 100).toFixed(2) : '无' }} </template>
         </vxe-column>
-        <vxe-column field="tradeTime" title="交易时间" sortable min-width="150" />
-        <vxe-column field="reconcileNo" title="对账单号" min-width="170" />
-        <vxe-column field="channel" title="通道" min-width="120">
+        <vxe-column field="tradeTime" title="交易时间" sortable :min-width="150" />
+        <vxe-column field="reconcileNo" title="对账单号" :min-width="220">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
+            <a-link @click="showReconcile(row)">{{ row.reconcileNo }}</a-link>
           </template>
         </vxe-column>
         <vxe-column fixed="right" width="100" :showOverflow="false" title="操作">
@@ -57,6 +65,9 @@
       />
     </div>
     <reconcile-diff-info ref="reconcileDiffInfo" />
+    <pay-order-info ref="payOrderInfo" />
+    <refund-order-info ref="refundOrderInfo" />
+    <reconcile-detail-info ref="reconcileDetailInfo" />
   </div>
 </template>
 
@@ -72,6 +83,9 @@
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { useDict } from '/@/hooks/bootx/useDict'
+  import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
+  import RefundOrderInfo from '/@/views/payment/order/refund/RefundOrderInfo.vue'
+  import ReconcileDetailInfo from '/@/views/payment/reconcile/detail/ReconcileDetailInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, sortChange, pagination, pages, sortParam, model, loading } =
@@ -99,6 +113,9 @@
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const reconcileDiffInfo = $ref<any>()
+  const payOrderInfo = $ref<any>()
+  const refundOrderInfo = $ref<any>()
+  const reconcileDetailInfo = $ref<any>()
 
   nextTick(() => {
     xTable?.connect(xToolbar as VxeToolbarInstance)
@@ -144,6 +161,30 @@
    */
   function show(record) {
     reconcileDiffInfo.init(record)
+  }
+
+  /**
+   * 查看对账单
+   */
+  function showReconcile(record) {
+    reconcileDiffInfo.init(record)
+  }
+
+  /**
+   * 查看交易单
+   */
+  function showTrade(record) {
+    if (record.callbackType === 'pay') {
+      payOrderInfo.init(record.tradeNo)
+    } else {
+      refundOrderInfo.init(record.tradeNo)
+    }
+  }
+  /**
+   * 查看通道交易信息
+   */
+  function showOutTrade(record) {
+    reconcileDetailInfo.init(record.outTradeNo)
   }
   defineExpose({
     init,

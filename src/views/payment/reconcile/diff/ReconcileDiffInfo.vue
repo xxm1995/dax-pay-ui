@@ -3,12 +3,12 @@
     title="对账订单详情"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="750"
+    :width="1000"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
+    <a-descriptions bordered title="" :column="{ md: 2, sm: 1, xs: 1 }">
       <a-descriptions-item label="订单标题">
         {{ form.title }}
       </a-descriptions-item>
@@ -21,16 +21,17 @@
       <a-descriptions-item label="本地交易号">
         {{ form.tradeNo }}
       </a-descriptions-item>
+
+      <a-descriptions-item label="交易时间">
+        {{ form.tradeTime }}
+      </a-descriptions-item>
       <a-descriptions-item label="通道交易号">
         {{ form.outTradeNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="通道交易号">
-        {{ form.tradeTime }}
-      </a-descriptions-item>
-      <a-descriptions-item label="交易金额">
+      <a-descriptions-item label="交易金额(元)">
         {{ form.amount ? (form.amount / 100).toFixed(2) : '无' }}
       </a-descriptions-item>
-      <a-descriptions-item label="通道交易金额">
+      <a-descriptions-item label="通道交易金额(元)">
         {{ form.outAmount ? (form.outAmount / 100).toFixed(2) : '无' }}
       </a-descriptions-item>
       <a-descriptions-item label="交易类型">

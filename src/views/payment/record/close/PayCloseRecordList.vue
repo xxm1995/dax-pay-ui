@@ -14,14 +14,14 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderNo" title="订单号" min-width="180">
+        <vxe-column field="orderNo" title="订单号" :min-width="180">
           <template #default="{ row }">
             <a @click="showPayOder(row.orderNo)">
               {{ row.orderNo }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="bizOrderNo" title="商户订单号" min-width="180" />
+        <vxe-column field="bizOrderNo" title="商户订单号" :min-width="180" />
         <vxe-column field="closed" title="关闭状态">
           <template #default="{ row }">
             <a-tag v-if="row.closed" color="green">成功</a-tag>

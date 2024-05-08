@@ -13,7 +13,7 @@
         {{ order.refundNo }}
       </a-descriptions-item>
       <a-descriptions-item label="商户退款号" :span="2">
-        {{ order.refundNo }}
+        {{ order.bizRefundNo }}
       </a-descriptions-item>
 
       <a-descriptions-item label="原支付标题" :span="2">

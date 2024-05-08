@@ -14,7 +14,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="repairNo" title="修复单号" min-width="170" >
+        <vxe-column field="repairNo" title="修复单号" :min-width="170" >
           <template #default="{ row }">
             <a @click="show(row)">
               {{ row.repairNo }}
@@ -26,7 +26,7 @@
             <a-tag color="green">{{ dictConvert('PayRepairWay', row.repairWay) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="tradeNo" title="本地交易号" min-width="170">
+        <vxe-column field="tradeNo" title="本地交易号" :min-width="170">
           <template #default="{ row }">
             <a @click="showOrder(row)">
               {{ row.tradeNo }}

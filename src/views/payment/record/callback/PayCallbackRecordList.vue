@@ -14,7 +14,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="订单号" min-width="220">
+        <vxe-column field="orderId" title="订单号" :min-width="220">
           <template #default="{ row }">
             <a @click="showOrder(row)">
               {{ row.tradeNo }}
@@ -36,7 +36,7 @@
             <a-tag>{{ dictConvert('PayCallbackStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="msg" title="提示信息" min-width="250" />
+        <vxe-column field="msg" title="提示信息" :min-width="250" />
         <vxe-column field="createTime" title="通知时间" sortable />
         <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
           <template #default="{ row }">
