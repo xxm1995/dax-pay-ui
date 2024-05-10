@@ -1,49 +1,52 @@
 <template>
   <basic-modal
-    title="查看对账单信息"
+    title="查看分账单信息"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="modalWidth"
+    :width="1200"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-descriptions title="" :column="{ md: 2, sm: 1, xs: 1 }">
-        <a-descriptions-item label="分账订单号">
-          {{ order.orderNo }}
-        </a-descriptions-item>
-        <a-descriptions-item label="支付订单ID">
-          {{ order.paymentId }}
-        </a-descriptions-item>
-        <a-descriptions-item label="支付订单标题">
+      <a-descriptions title="" bordered   >
+        <a-descriptions-item label="支付订单标题" :span="3">
           {{ order.title }}
         </a-descriptions-item>
-        <a-descriptions-item label="网关支付订单号">
+        <a-descriptions-item label="分账订单号" :span="1">
+          {{ order.orderNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="支付订单ID" :span="2">
+          {{ order.paymentId }}
+        </a-descriptions-item>
+      
+        <a-descriptions-item label="网关支付订单号" :span="1">
           {{ order.gatewayPayOrderNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="网关分账单号">
+        <a-descriptions-item label="网关分账单号" :span="2">
           {{ order.gatewayAllocationNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="分账单号">
+        <a-descriptions-item label="分账单号" :span="1">
           {{ order.allocationNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="所属通道">
-          <a-tag>{{ dictConvert('PayChannel', order.channel) }}</a-tag>
+        <a-descriptions-item label="所属通道" :span="2">
+       {{ dictConvert('PayChannel', order.channel) }}
         </a-descriptions-item>
-        <a-descriptions-item label="总分账金额">
-          {{ order.amount }}
-        </a-descriptions-item>
-        <a-descriptions-item label="状态">
+        <a-descriptions-item label="状态" :span="1">
           {{ dictConvert('AllocationOrderStatus', order.status) }}
         </a-descriptions-item>
-        <a-descriptions-item label="错误原因">
+        <a-descriptions-item label="总分账金额(元)" :span="2">
+          {{ order.amount ? (order.amount / 100).toFixed(2) : 0 }}
+
+        </a-descriptions-item>
+      
+        <a-descriptions-item label="错误原因" :span="3">
           {{ order.errorMsg }}
         </a-descriptions-item>
-        <a-descriptions-item label="完成时间">
+        <a-descriptions-item label="完成时间" :span="1" >
           {{ order.finishTime }}
         </a-descriptions-item>
-        <a-descriptions-item label="创建时间">
+        <a-descriptions-item label="创建时间" :span="1">
           {{ order.createTime }}
         </a-descriptions-item>
       </a-descriptions>

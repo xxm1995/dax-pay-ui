@@ -1,6 +1,6 @@
 <template>
   <basic-modal
-    title="查看对账单信息"
+    title="查看分账单信息"
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="800"
