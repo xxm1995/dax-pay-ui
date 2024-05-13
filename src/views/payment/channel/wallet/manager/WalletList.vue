@@ -70,7 +70,6 @@
   import { VxeTableInstance, VxeToolbarInstance, VxePager, VxeTable, VxeToolbar } from 'vxe-table'
   import ALink from '/@/components/Link/Link.vue'
   import WalletCreateModel from './WalletCreateModel.vue'
-  import WalletRecordList from '../record/WalletRecordList.vue'
   import WalletRechargeModel from './WalletRechargeModel.vue'
   import WalletDeductModel from './WalletDeductModel.vue'
   import WalletInfo from './WalletInfo.vue'
@@ -163,7 +162,7 @@
       }
       return { color: 'gray' }
     }
-    
+
   }
 </script>
 
