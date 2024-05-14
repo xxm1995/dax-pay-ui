@@ -9,45 +9,54 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-descriptions title="" bordered   >
-        <a-descriptions-item label="支付订单标题" :span="3">
+      <a-descriptions title="" bordered>
+        <a-descriptions-item label="支付订单标题" :span="2">
           {{ order.title }}
         </a-descriptions-item>
-        <a-descriptions-item label="分账订单号" :span="1">
-          {{ order.orderNo }}
-        </a-descriptions-item>
-        <a-descriptions-item label="支付订单ID" :span="2">
-          {{ order.paymentId }}
-        </a-descriptions-item>
-      
-        <a-descriptions-item label="网关支付订单号" :span="1">
-          {{ order.gatewayPayOrderNo }}
-        </a-descriptions-item>
-        <a-descriptions-item label="网关分账单号" :span="2">
-          {{ order.gatewayAllocationNo }}
-        </a-descriptions-item>
-        <a-descriptions-item label="分账单号" :span="1">
-          {{ order.allocationNo }}
-        </a-descriptions-item>
         <a-descriptions-item label="所属通道" :span="2">
-       {{ dictConvert('PayChannel', order.channel) }}
-        </a-descriptions-item>
-        <a-descriptions-item label="状态" :span="1">
-          {{ dictConvert('AllocationOrderStatus', order.status) }}
+          {{ dictConvert('PayChannel', order.channel) }}
         </a-descriptions-item>
         <a-descriptions-item label="总分账金额(元)" :span="2">
           {{ order.amount ? (order.amount / 100).toFixed(2) : 0 }}
-
         </a-descriptions-item>
-      
-        <a-descriptions-item label="错误原因" :span="3">
-          {{ order.errorMsg }}
+        <a-descriptions-item label="状态" :span="2">
+          {{ dictConvert('AllocOrderStatus', order.status) }}
         </a-descriptions-item>
-        <a-descriptions-item label="完成时间" :span="1" >
+        <a-descriptions-item label="处理结果" :span="2">
+          {{ dictConvert('AllocOrderResult', order.result) }}
+        </a-descriptions-item>
+        <a-descriptions-item label="分账描述" :span="2">
+          {{ order.description }}
+        </a-descriptions-item>
+        <a-descriptions-item label="分账号" :span="2">
+          {{ order.allocationNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="支付订单号" :span="2">
+          {{ order.orderNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="商户分账号" :span="2">
+          {{ order.allocationNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="商户支付订单号" :span="2">
+          {{ order.bizOrderNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="通道分账号" :span="2">
+          {{ order.outAllocationNo || '无' }}
+        </a-descriptions-item>
+        <a-descriptions-item label="通道支付订单号" :span="2">
+          {{ order.outOrderNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="创建时间" :span="2">
+          {{ order.createTime }}
+        </a-descriptions-item>
+        <a-descriptions-item label="完成时间" :span="2">
           {{ order.finishTime }}
         </a-descriptions-item>
-        <a-descriptions-item label="创建时间" :span="1">
-          {{ order.createTime }}
+        <a-descriptions-item v-if="order.errorCode" label="错误编码" :span="2">
+          {{ order.errorMsg }}
+        </a-descriptions-item>
+        <a-descriptions-item v-if="order.errorMsg" label="错误原因" :span="2">
+          {{ order.errorMsg }}
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>

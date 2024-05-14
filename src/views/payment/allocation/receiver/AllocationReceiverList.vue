@@ -28,14 +28,14 @@
         </vxe-column>
         <vxe-column field="receiverType" title="接收方类型" :min-width="100">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('AllocationReceiverType', row.receiverType) }}</a-tag>
+            <a-tag>{{ dictConvert('AllocReceiverType', row.receiverType) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="receiverAccount" title="接收方账号" :min-width="220" />
         <vxe-column field="receiverName" title="接收方姓名" :min-width="160" />
         <vxe-column field="relationType" title="分账关系" :min-width="100">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('AllocationRelationType', row.relationType) }}</a-tag>
+            <a-tag>{{ dictConvert('AllocRelationType', row.relationType) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="sync" title="是否同步" :min-width="100">

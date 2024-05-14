@@ -3,7 +3,7 @@
     title="查看分账单信息"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="800"
+    :width="1000"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
@@ -14,12 +14,12 @@
           {{ order.receiverName }}
         </a-descriptions-item>
         <a-descriptions-item label="分账接收方类型">
-          <a-tag>{{ dictConvert('AllocationReceiverType', order.receiverType) }}</a-tag>
+          <a-tag>{{ dictConvert('AllocReceiverType', order.receiverType) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="分账比例"> {{ order.rate / 100.0 }}% </a-descriptions-item>
         <a-descriptions-item label="分账金额(元)"> {{ order.amount ? (order.amount / 100).toFixed(2) : 0 }} </a-descriptions-item>
         <a-descriptions-item label="分账结果">
-          <a-tag>{{ dictConvert('AllocationDetailResult', order.result) }}</a-tag>
+          <a-tag>{{ dictConvert('AllocDetailResult', order.result) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="完成时间">
           {{ order.finishTime }}

@@ -14,7 +14,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="allocationNo" title="分账单号" :min-width="200">
+        <vxe-column field="allocationNo" title="分账单号" :min-width="220">
           <template #default="{ row }">
             <a @click="show(row)">
               {{ row.allocationNo }}
@@ -40,11 +40,11 @@
         </vxe-column>
         <vxe-column field="status" title="状态" :min-width="100">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('AllocationOrderStatus', row.status) }}</a-tag>
+            <a-tag>{{ dictConvert('AllocOrderStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="result" title="分账结果" :min-width="100">
-          <template #default="{ row }"> {{ dictConvert('AllocationOrderResult', row.result) }} </template> </vxe-column
+          <template #default="{ row }"> {{ dictConvert('AllocOrderResult', row.result) }} </template> </vxe-column
         ><vxe-column field="errorMsg" title="错误原因" :min-width="160" />
         <vxe-column field="createTime" title="创建时间" :min-width="160" />
         <vxe-column fixed="right" :min-width="200" :showOverflow="false" title="操作">

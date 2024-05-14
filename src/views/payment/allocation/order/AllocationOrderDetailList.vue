@@ -6,7 +6,7 @@
       <vxe-column field="receiverName" title="接收方姓名" :min-width="100" />
       <vxe-column field="receiverType" title="接收方类型" :min-width="100">
         <template #default="{ row }">
-          {{ dictConvert('AllocationReceiverType', row.receiverType) }}
+          {{ dictConvert('AllocReceiverType', row.receiverType) }}
         </template>
       </vxe-column>
       <vxe-column field="rate" title="分账比例" :min-width="100">
@@ -16,7 +16,7 @@
         <template #default="{ row }"> {{ row.amount / 100.0 }} 元 </template>
       </vxe-column>
       <vxe-column field="result" title="分账结果" :min-width="130">
-        <template #default="{ row }"> {{ dictConvert('AllocationDetailResult', row.result) }} </template>
+        <template #default="{ row }"> {{ dictConvert('AllocDetailResult', row.result) }} </template>
       </vxe-column>
       <vxe-column field="result" title="错误原因" :min-width="160">
         <template #default="{ row }"> {{ row.errorMsg }} </template>
