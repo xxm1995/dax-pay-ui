@@ -3,17 +3,17 @@
     title="查看同步信息"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="750"
+    :width="1200"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions title="" bordered>
-        <a-descriptions-item label="本地交易号" :span="2">
+        <a-descriptions-item label="本地交易号" :span="4">
           {{ form.tradeNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="本地交易号" :span="2">
+        <a-descriptions-item label="商户交易号" :span="2">
           {{ form.bizTradeNo }}
         </a-descriptions-item>
         <a-descriptions-item label="通道交易号" :span="2">
@@ -39,7 +39,10 @@
         <a-descriptions-item label="同步时间" :span="2">
           {{ form.createTime }}
         </a-descriptions-item>
-        <a-descriptions-item label="错误信息" v-if="form.errorMsg" :span="4">
+        <a-descriptions-item label="错误编码" v-if="form.errorCode" :span="2">
+          {{ form.errorMsg }}
+        </a-descriptions-item>
+        <a-descriptions-item label="错误信息" v-if="form.errorMsg" :span="2">
           {{ form.errorMsg }}
         </a-descriptions-item>
         <a-descriptions-item label="同步消息" :span="4">
