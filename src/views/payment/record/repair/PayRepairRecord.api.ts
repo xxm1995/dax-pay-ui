@@ -29,9 +29,9 @@ export interface PayRepairRecord extends BaseEntity {
   // 修复号
   repairNo?: string
   // 本地订单ID
-  orderId?: string
-  // 本地业务号
-  orderNo?: string
+  tradeId?: string
+  // 本地交易号
+  tradeNo?: string
   // 类型  支付修复/退款修复
   repairType?: string
   // 修复来源
@@ -39,11 +39,9 @@ export interface PayRepairRecord extends BaseEntity {
   // 修复类型
   repairWay?: string
   // 修复的异步支付通道
-  asyncChannel?: string
+  channel?: string
   // 修复前状态
   beforeStatus?: string
   // 修复后状态
   afterStatus?: string
-  // 金额变动
-  amount?: string
 }

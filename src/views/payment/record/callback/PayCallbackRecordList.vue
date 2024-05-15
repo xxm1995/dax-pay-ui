@@ -14,10 +14,10 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="本地订单ID" width="170">
+        <vxe-column field="orderId" title="订单号" :min-width="220">
           <template #default="{ row }">
             <a @click="showOrder(row)">
-              {{ row.orderId }}
+              {{ row.tradeNo }}
             </a>
           </template>
         </vxe-column>
@@ -36,7 +36,7 @@
             <a-tag>{{ dictConvert('PayCallbackStatus', row.status) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="msg" title="提示信息" />
+        <vxe-column field="msg" title="提示信息" :min-width="250" />
         <vxe-column field="createTime" title="通知时间" sortable />
         <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
           <template #default="{ row }">
@@ -88,10 +88,10 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'orderId', type: STRING, name: '本地订单ID', placeholder: '请输入完整本地订单ID' },
-      { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
+      { field: 'tradeNo', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
+      { field: 'outTradeNo', type: STRING, name: '通道交易号', placeholder: '请输入通道交易号' },
       {
-        field: 'payChannel',
+        field: 'channel',
         type: LIST,
         name: '支付通道',
         placeholder: '请选择支付通道',
@@ -156,9 +156,9 @@
    */
   function showOrder(record: PayCallbackRecord) {
     if (record.callbackType === 'pay') {
-      payOrderInfo.init(record.orderId)
+      payOrderInfo.init(record.tradeNo)
     } else {
-      refundOrderInfo.init(record.orderId)
+      refundOrderInfo.init(record.tradeNo)
     }
   }
 </script>

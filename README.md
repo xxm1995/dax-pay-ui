@@ -7,8 +7,19 @@
 
 ## 🍈项目介绍
 
-> DaxPay是一套基于Bootx-Platform脚手架构建的一套开源支付网关系统，已经对接支付宝、微信支付相关的接口，以及扩展了钱包支付、储值卡支付、现金支付等新的支付方式。
+> DaxPay是一套基于Bootx-Platform脚手架构建的一套开源支付网关系统，已经对接支付宝、微信支付、云闪付相关的接口。
 > 可以独立部署，提供接口供业务系统进行调用，不对原有系统产生影响
+
+
+## 项目启动
+```shell
+# 安装项目依赖, 请使用Node20.x版本, pnpm使用8.0.0到8.5.1版本，推荐直接使用8.5.1版本，更高版本会导致 pnpm-lock.yaml 失效
+pnpm install
+# 启动项目
+pnpm run dev
+# 构建打包
+pnpm build
+```
 
 ## 🍒 文档和源码地址
 ### 文档地址
@@ -51,16 +62,6 @@
 电脑收银台地址: https://daxpay.demo.bootx.cn/#/cashier
 
 手机收银台地址: https://daxpay.demo.bootx.cn/h5/#/cashier/uniCashier
-
-## 项目启动
-```shell
-# 安装项目依赖, 请使用Node16及以上版本
-pnpm install
-# 启动项目
-pnpm run dev
-# 构建打包
-pnpm build
-```
 
 ## 常见问题
 出现以下错误不用管，不影响使用，只在第一次启动时出现，之后就不会再出现

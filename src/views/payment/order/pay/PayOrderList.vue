@@ -4,7 +4,11 @@
       <b-query :query-params="model.queryParam" :fields="fields" @query="queryPage" @reset="resetQueryParams" />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
+        <template #buttons>
+          <span style="font-size: 18px">收款金额: {{ totalAmount ? (totalAmount / 100).toFixed(2) : 0 }}元</span>
+        </template>
+      </vxe-toolbar>
       <vxe-table
         row-id="id"
         ref="xTable"
@@ -15,42 +19,45 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="businessNo" title="业务号" width="180" />
-        <vxe-column field="title" title="标题" width="220" />
-        <vxe-column field="amount" title="金额(分)" width="120" sortable />
-        <vxe-column field="refundableBalance" title="可退余额(分)" width="120" sortable />
+        <vxe-column field="orderNo" title="订单号" :min-width="220">
+          <template #default="{ row }">
+            <a @click="show(row)">
+              {{ row.orderNo }}
+            </a>
+          </template>
+        </vxe-column>
+        <vxe-column field="title" title="标题" :min-width="220" />
+        <vxe-column field="channel" title="支付通道" :min-width="120">
+          <template #default="{ row }">
+            {{ dictConvert('PayChannel', row.channel) }}
+          </template>
+        </vxe-column>
+        <vxe-column field="bizOrderNo" title="商户订单号" :min-width="220" />
+        <vxe-column field="amount" title="金额(元)" :min-width="120" sortable>
+          <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
+        </vxe-column>
+        <vxe-column field="refundableBalance" title="可退余额(元)" width="120" sortable>
+          <template #default="{ row }"> {{ row.refundableBalance ? (row.refundableBalance / 100).toFixed(2) : 0 }} </template>
+        </vxe-column>
         <vxe-column field="status" title="支付状态" width="120">
           <template #default="{ row }">{{ dictConvert('PayStatus', row.status) }}</template>
         </vxe-column>
-        <vxe-column field="createTime" title="创建时间" sortable width="220" />
-        <vxe-column field="id" title="支付ID" sortable width="220" />
 
-        <vxe-column field="asyncPay" title="异步支付" width="120">
-          <template #default="{ row }">{{ row.asyncPay ? '是' : '否' }}</template>
-        </vxe-column>
-        <vxe-column field="combinationPay" title="组合支付" width="120">
-          <template #default="{ row }">{{ row.combinationPay ? '是' : '否' }}</template>
-        </vxe-column>
-        <vxe-column field="asyncChannel" title="异步支付方式" width="160">
-          <template #default="{ row }">{{ dictConvert('PayChannel', row.asyncChannel) || '无' }}</template>
-        </vxe-column>
-        <vxe-column field="allocation" title="分账" width="160">
+        <vxe-column field="allocation" title="分账" :min-width="160">
           <template #default="{ row }">
             <a-tag v-if="row.allocation" color="green">支持</a-tag>
             <a-tag v-else color="red">不支持</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="allocation" title="分账状态" width="160">
+        <vxe-column field="allocation" title="分账状态" :min-width="160">
           <template #default="{ row }">
             {{ dictConvert('PayOrderAllocationStatus', row.allocationStatus) }}
           </template>
         </vxe-column>
-        <vxe-column field="expiredTime" title="过期时间" sortable width="220" />
-        <vxe-column fixed="right" width="200" :showOverflow="false" title="操作">
+        <vxe-column field="createTime" title="创建时间" sortable :min-width="220" />
+        <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
-            <a-divider type="vertical" />
-            <a-link @click="showChannel(row)">通道订单</a-link>
             <a-divider type="vertical" />
             <a-dropdown>
               <a>
@@ -62,13 +69,13 @@
                   <a-menu-item>
                     <a-link @click="sync(row)">同步</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="[PayStatus.PROGRESS].includes(row.status)">
+                  <a-menu-item v-if="[payStatus.PROGRESS].includes(row.status)">
                     <a-link @click="closeOrder(row)" danger>关闭</a-link>
                   </a-menu-item>
                   <a-menu-item v-if="row.allocationStatus === 'waiting'">
                     <a-link @click="allocation(row)">分账</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="[PayStatus.SUCCESS, PayStatus.PARTIAL_REFUND].includes(row.status) && row.refundableBalance > 0">
+                  <a-menu-item v-if="[payStatus.SUCCESS, payStatus.PARTIAL_REFUND].includes(row.status) && row.refundableBalance > 0">
                     <a-link @click="refund(row)" danger>退款</a-link>
                   </a-menu-item>
                 </a-menu>
@@ -86,7 +93,6 @@
         @page-change="handleTableChange"
       />
       <pay-order-info ref="payOrderInfo" />
-      <pay-channel-order-list ref="payChannelOrderList" />
       <refund-model ref="refundModel" @ok="queryPage" />
     </div>
   </div>
@@ -95,7 +101,7 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { allocationById, close, page, syncById } from './PayOrder.api'
+  import { allocationByOrderNo, close, getTotalAmount, page, syncByOrderNo } from './PayOrder.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import PayOrderInfo from './PayOrderInfo.vue'
   import RefundModel from './RefundModel.vue'
@@ -105,28 +111,38 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import { VxeTableInstance, VxeToolbarInstance, VxePager, VxeTable, VxeToolbar } from 'vxe-table'
   import ALink from '/@/components/Link/Link.vue'
-  import { PayStatus } from '/@/enums/payment/PayStatus'
+  import { payStatus } from '/@/enums/payment/PayStatus'
   import { LabeledValue } from 'ant-design-vue/lib/select'
-  import PayChannelOrderList from './PayChannelOrderList.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, sortChange, resetQueryParams, pagination, pages, sortParam, model, loading } =
     useTablePage(queryPage)
-  const { notification, createMessage, createConfirm } = useMessage()
+  const { createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
-  let cayChannelList = $ref<LabeledValue[]>([])
+  let channelList = $ref<LabeledValue[]>([])
+  let methodList = $ref<LabeledValue[]>([])
   let payStatusList = $ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'id', type: STRING, name: '支付ID', placeholder: '请输入完整支付ID' },
-      { field: 'businessNo', type: STRING, name: '业务号', placeholder: '请输入业务号' },
-      { field: 'gatewayOrderNo', type: STRING, name: '网关订单号', placeholder: '请输入完整网关订单号' },
+      { field: 'orderNo', type: STRING, name: '订单号', placeholder: '请输入支付订单号' },
+      { field: 'bizOrderNo', type: STRING, name: '商户订单号', placeholder: '请输入商户订单号' },
+      { field: 'outOrderNo', type: STRING, name: '通道订单号', placeholder: '请输入外部三方支付系统中的订单号' },
       { field: 'title', type: STRING, name: '标题', placeholder: '请输入标题' },
+      {
+        field: 'allocation',
+        name: '支持分账',
+        type: LIST,
+        selectList: [
+          { label: '支持', value: true },
+          { label: '不支持', value: false },
+        ],
+      },
+      { field: 'channel', name: '支付通道', type: LIST, selectList: channelList },
+      { field: 'method', name: '支付方式', type: LIST, selectList: methodList },
       { field: 'errorCode', name: '错误码', type: STRING },
-      { field: 'asyncChannel', name: '异步支付方式', type: LIST, selectList: cayChannelList },
       { field: 'status', name: '支付状态', type: LIST, selectList: payStatusList },
     ] as QueryField[]
   })
@@ -134,8 +150,8 @@
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const payOrderInfo = $ref<any>()
-  const payChannelOrderList = $ref<any>()
   const refundModel = $ref<any>()
+  let totalAmount = $ref<number>(0.0)
 
   onMounted(() => {
     initData()
@@ -150,14 +166,16 @@
    * 初始化数据
    */
   async function initData() {
-    cayChannelList = await dictDropDown('AsyncChannel')
+    channelList = await dictDropDown('PayChannel')
     payStatusList = await dictDropDown('PayStatus')
+    methodList = await dictDropDown('PayMethod')
   }
   /**
    * 分页查询
    */
   function queryPage() {
     loading.value = true
+    // 查询列表
     page({
       ...model.queryParam,
       ...pages,
@@ -165,19 +183,20 @@
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
+    // 汇总数据
+    getTotalAmount({
+      ...model.queryParam,
+    }).then(({ data }) => {
+      totalAmount = data
+    })
+    return Promise.resolve()
   }
 
   /**
    * 查看
    */
   function show(record) {
-    payOrderInfo.init(record.id)
-  }
-  /**
-   * 查看
-   */
-  function showChannel(record) {
-    payChannelOrderList.init(record)
+    payOrderInfo.init(record.orderNo)
   }
 
   /**
@@ -190,10 +209,8 @@
       content: '是否同步支付信息',
       onOk: () => {
         loading.value = true
-        syncById(record.id).then(({ data }) => {
-          // TODO 后期可以根据返回结果进行相应的处理
+        syncByOrderNo(record.orderNo).then(({ data }) => {
           createMessage.success('同步成功')
-          console.log(data)
           queryPage()
         })
       },
@@ -208,7 +225,7 @@
       title: '警告',
       content: '是否关闭支付订单',
       onOk: () => {
-        close(record.id).then(() => {
+        close(record.orderNo).then(() => {
           createMessage.success('关闭成功')
           queryPage()
         })
@@ -231,7 +248,7 @@
       title: '警告',
       content: '是否触发该订单的分账操作',
       onOk: () => {
-        allocationById(record.id).then(() => {
+        allocationByOrderNo(record.orderNo).then(() => {
           createMessage.success('分账请求已发送')
           queryPage()
         })

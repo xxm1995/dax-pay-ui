@@ -3,36 +3,36 @@
     title="查看"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="modalWidth"
+    :width="1200"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
-        <a-descriptions-item label="本地订单ID">
-          {{ form.orderId }}
+      <a-descriptions bordered title="">
+        <a-descriptions-item label="本地交易号" :span="2">
+          {{ form.tradeNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="网关订单号">
-          {{ form.gatewayOrderNo }}
+        <a-descriptions-item label="通道交易号" :span="2">
+          {{ form.outTradeNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="支付通道">
+        <a-descriptions-item label="支付通道" :span="2">
           <a-tag>{{ dictConvert('PayChannel', form.channel) }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="回调类型">
+        <a-descriptions-item label="回调类型" :span="2">
           <a-tag>{{ dictConvert('PaymentType', form.callbackType) }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="通知消息">
-          <json-preview :data="JSON.parse(form.notifyInfo || '{}')" />
-        </a-descriptions-item>
-        <a-descriptions-item label="状态">
+        <a-descriptions-item label="状态" :span="2">
           {{ dictConvert('PayCallbackStatus', form.status) }}
-        </a-descriptions-item>
-        <a-descriptions-item label="提示消息" v-if="form.msg">
-          {{ form.msg }}
         </a-descriptions-item>
         <a-descriptions-item label="通知时间">
           {{ form.createTime }}
+        </a-descriptions-item>
+        <a-descriptions-item label="提示消息" v-if="form.errorMsg" :span="4">
+          {{ form.errorMsg }}
+        </a-descriptions-item>
+        <a-descriptions-item label="通知消息" :span="4">
+          <json-preview :data="JSON.parse(form.notifyInfo || '{}')" />
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>
@@ -50,24 +50,10 @@
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   import JsonPreview from '/@/components/CodeEditor/src/json-preview/JsonPreview.vue'
-  const {
-    initFormEditType,
-    handleCancel,
-    search,
-    labelCol,
-    wrapperCol,
-    modalWidth,
-    title,
-    confirmLoading,
-    visible,
-    editable,
-    showable,
-    formEditType,
-  } = useFormEdit()
+  const { handleCancel, modalWidth, confirmLoading, visible, showable } = useFormEdit()
   const { dictConvert } = useDict()
 
   // 表单
-  const formRef = $ref<FormInstance>()
   let form = $ref<PayCallbackRecord>({})
   // 入口
   function init(id) {
@@ -84,4 +70,8 @@
   })
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  /deep/ .ant-descriptions-item-label {
+    width: 170px;
+  }
+</style>

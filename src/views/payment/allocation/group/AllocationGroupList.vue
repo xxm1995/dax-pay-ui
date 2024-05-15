@@ -20,27 +20,27 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="name" title="名称">
+        <vxe-column field="name" title="名称" :min-width="160">
           <template #default="{ row }">
             <a-link @click="show(row)">{{ row.name }}</a-link>
           </template>
         </vxe-column>
-        <vxe-column field="channel" title="所属通道">
+        <vxe-column field="channel" title="所属通道" :min-width="100">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="totalRate" title="分账比例">
+        <vxe-column field="totalRate" title="分账比例" :min-width="100">
           <template #default="{ row }"> {{ row.totalRate / 100.0 }}% </template>
         </vxe-column>
-        <vxe-column field="defaultGroup" title="默认分组">
+        <vxe-column field="defaultGroup" title="默认分组" :min-width="100">
           <template #default="{ row }">
             <a-tag color="green" v-if="row.defaultGroup">是</a-tag>
             <a-tag v-else>否</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="remark" title="备注" />
-        <vxe-column fixed="right" width="160" :showOverflow="false" title="操作">
+        <vxe-column field="remark" title="备注" :min-width="160" />
+        <vxe-column fixed="right" :min-width="160" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link danger @click="config(row)">接收方配置</a-link>
             <a-divider type="vertical" />

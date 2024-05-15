@@ -14,16 +14,22 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="repairNo" title="修复单号" min-width="170" />
+        <vxe-column field="repairNo" title="修复单号" :min-width="170" >
+          <template #default="{ row }">
+            <a @click="show(row)">
+              {{ row.repairNo }}
+            </a>
+          </template>
+        </vxe-column>
         <vxe-column field="repairWay" title="修复方式">
           <template #default="{ row }">
             <a-tag color="green">{{ dictConvert('PayRepairWay', row.repairWay) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="orderId" title="本地订单ID" width="170">
+        <vxe-column field="tradeNo" title="本地交易号" :min-width="170">
           <template #default="{ row }">
             <a @click="showOrder(row)">
-              {{ row.orderId }}
+              {{ row.tradeNo }}
             </a>
           </template>
         </vxe-column>
@@ -92,8 +98,7 @@
   const fields = computed(() => {
     return [
       { field: 'repairNo', type: STRING, name: '修复单号', placeholder: '请输入修复号' },
-      { field: 'orderId', type: STRING, name: '本地订单ID', placeholder: '请输入本地订单ID' },
-      { field: 'orderNo', type: STRING, name: '本地订单号', placeholder: '请输入本地订单号' },
+      { field: 'tradeNo', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
       {
         field: 'repairSource',
         type: LIST,
@@ -116,7 +121,7 @@
         selectList: repairWayList,
       },
       {
-        field: 'asyncChannel',
+        field: 'channel',
         type: LIST,
         name: '修复通道',
         placeholder: '请选择修复通道',
@@ -177,9 +182,9 @@
   function showOrder(record: PayRepairRecord) {
     console.log(record)
     if (record.repairType === 'pay') {
-      payOrderInfo.init(record.orderId)
+      payOrderInfo.init(record.tradeNo)
     } else {
-      refundOrderInfo.init(record.orderId)
+      refundOrderInfo.init(record.tradeNo)
     }
   }
 </script>

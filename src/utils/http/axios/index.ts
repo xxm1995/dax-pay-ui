@@ -44,9 +44,9 @@ const transform: AxiosTransform = {
     if (!rawData) {
       throw new Error('请求出错，请稍候重试')
     }
-    // 下载流处理
+    // 下载流处理, 直接原样返回
     if (contentType === 'application/octet-stream') {
-      return rawData
+      return res
     }
 
     // 接收的通常是json的数据,这里 code，data，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
@@ -102,7 +102,7 @@ const transform: AxiosTransform = {
     if (apiUrl && isString(apiUrl)) {
       config.url = `${apiUrl}${config.url}`
     }
-    // 请求参数和请求体藕最
+    // 请求参数和请求体转换
     const params = config.params || {}
     const data = config.data || false
     formatDate && data && !isString(data) && formatRequestDate(data)

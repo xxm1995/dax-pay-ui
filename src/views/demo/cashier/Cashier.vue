@@ -15,7 +15,7 @@
               <div class="paydemo-type-content">
                 <div class="paydemo-type-name">微信支付</div>
                 <div class="paydemo-type-body">
-                  <div v-for="item in WxPayList" :key="item.payInfo.payWay" @click="handleActive(item.payInfo)">
+                  <div v-for="item in WxPayList" :key="item.payInfo.method" @click="handleActive(item.payInfo)">
                     <div :class="item.payInfo === currentActive ? 'colorChange' : 'paydemoType'">
                       <img :src="item.img" class="paydemo-type-img" />
                       <span class="color-change">{{ item.title }}</span>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="paydemo-type-name">支付宝支付</div>
                 <div class="paydemo-type-body">
-                  <div v-for="item in AliPayList" :key="item.payInfo.payWay" @click="handleActive(item.payInfo)">
+                  <div v-for="item in AliPayList" :key="item.payInfo.method" @click="handleActive(item.payInfo)">
                     <div :class="item.payInfo === currentActive ? 'colorChange' : 'paydemoType'">
                       <img :src="item.img" class="paydemo-type-img" />
                       <span class="color-change">{{ item.title }}</span>
@@ -57,7 +57,7 @@
                   <a target="_blank" href="https://open.unionpay.com/tjweb/ij/tool/qrcodeFormPage">条码仿真工具</a>
                 </div>
                 <div class="paydemo-type-body">
-                  <div v-for="item in UniPayList" :key="item.payInfo.payWay" @click="handleActive(item.payInfo)">
+                  <div v-for="item in UniPayList" :key="item.payInfo.method" @click="handleActive(item.payInfo)">
                     <div :class="item.payInfo === currentActive ? 'colorChange' : 'paydemoType'">
                       <img :src="item.img" class="paydemo-type-img" />
                       <span class="color-change">{{ item.title }}</span>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="paydemo-type-name">聚合支付</div>
                 <div class="paydemo-type-body">
-                  <div v-for="item in aggregationPayList" :key="item.payInfo.payWay" @click="handleActive(item.payInfo)">
+                  <div v-for="item in aggregationPayList" :key="item.payInfo.method" @click="handleActive(item.payInfo)">
                     <div :class="item.payInfo === currentActive ? 'colorChange' : 'paydemoType'">
                       <img :src="item.img" class="paydemo-type-img" />
                       <span class="color-change">{{ item.title }}</span>
@@ -84,9 +84,9 @@
                   <div class="paydemo-form-item">
                     <label>业务单号：</label>
                     <span>
-                      <a-input v-model:value="businessNo" />
+                      <a-input v-model:value="bizOrderNo" />
                     </span>
-                    <a-button type="primary" @click="genBusinessNo">生成</a-button>
+                    <a-button type="primary" @click="genBizOrderNoeNo">生成</a-button>
                   </div>
                   <div class="paydemo-form-item">
                     <label>支付标题：</label>
@@ -120,7 +120,7 @@
                   <div style="margin-top: 20px; text-align: right">
                     <affix :offset-bottom="20" class="mr-1">
                       <span v-if="totalMoney" style="color: #fd482c; font-size: 18px; padding-right: 10px">{{ '¥ ' + totalMoney }}</span>
-                      <a-button type="primary" :disabled="currentActive.payWay == null || !totalMoney" @click="pay">立即支付</a-button>
+                      <a-button type="primary" :disabled="currentActive.method == null || !totalMoney" @click="pay">立即支付</a-button>
                     </affix>
                   </div>
                 </a-form>
@@ -140,14 +140,14 @@
 <script lang="ts" setup>
   import CashierQrCode from './CashierQrCode.vue'
   import CashierBarCode from './CashierBarCode.vue'
-  import { aggregateBarCodePay, createAggregatePayUrl, findStatusByBusinessId, getUniCashierUrl, simplePayCashier } from './Cashier.api'
+  import { aggregateBarCodePay, createAggregatePayUrl, findStatusByBizOrderNoeNo, getUniCashierUrl, simplePayCashier } from './Cashier.api'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { $ref } from 'vue/macros'
   import { nextTick, onMounted, onUnmounted } from 'vue'
   import QrCode from '/@/components/Qrcode/src/Qrcode.vue'
   import { useIntervalFn } from '@vueuse/core'
   import { payChannelEnum } from '/@/enums/payment/payChannelEnum'
-  import { payWayEnum } from '/@/enums/payment/payWayEnum'
+  import { payMethodEnum } from '/src/enums/payment/payMethodEnum'
   import { Affix } from 'ant-design-vue'
 
   const { createMessage } = useMessage()
@@ -158,7 +158,7 @@
   let payForm = $ref<string>()
 
   // 业务单号
-  let businessNo = $ref<string>('')
+  let bizOrderNo = $ref<string>('')
   let title = $ref<string>('测试支付')
   let allocation = $ref<boolean>(false)
   let loading = $ref(false)
@@ -172,46 +172,46 @@
   let h5cashierUrl = $ref<string>('初始化中...')
   // 当前选择支付渠道和方式
   let currentActive = $ref({
-    payChannel: null,
-    payWay: null,
+    channel: null,
+    method: null,
   })
   let AliPayList = $ref([
     {
       img: new URL('./imgs/ali/ali_qr.svg', import.meta.url).href,
       title: '扫码支付',
-      payInfo: { payChannel: payChannelEnum.ALI, payWay: payWayEnum.QRCODE },
+      payInfo: { channel: payChannelEnum.ALI, method: payMethodEnum.QRCODE },
     },
     {
       img: new URL('./imgs/ali/ali_bar.svg', import.meta.url).href,
       title: '条码支付',
-      payInfo: { payChannel: payChannelEnum.ALI, payWay: payWayEnum.BARCODE },
+      payInfo: { channel: payChannelEnum.ALI, method: payMethodEnum.BARCODE },
     },
     {
       img: new URL('./imgs/ali/ali_pc.svg', import.meta.url).href,
       title: 'PC支付',
-      payInfo: { payChannel: payChannelEnum.ALI, payWay: payWayEnum.WEB },
+      payInfo: { channel: payChannelEnum.ALI, method: payMethodEnum.WEB },
     },
     {
       img: new URL('./imgs/ali/ali_wap.svg', import.meta.url).href,
       title: 'wap支付',
-      payInfo: { payChannel: payChannelEnum.ALI, payWay: payWayEnum.WAP },
+      payInfo: { channel: payChannelEnum.ALI, method: payMethodEnum.WAP },
     },
   ])
   let WxPayList = $ref([
     {
       img: new URL('./imgs/wechat/wx_native.svg', import.meta.url),
       title: '扫码支付',
-      payInfo: { payChannel: payChannelEnum.WECHAT, payWay: payWayEnum.QRCODE },
+      payInfo: { channel: payChannelEnum.WECHAT, method: payMethodEnum.QRCODE },
     },
     {
       img: new URL('./imgs/wechat/wx_bar.svg', import.meta.url),
       title: '条码支付',
-      payInfo: { payChannel: payChannelEnum.WECHAT, payWay: payWayEnum.BARCODE },
+      payInfo: { channel: payChannelEnum.WECHAT, method: payMethodEnum.BARCODE },
     },
     {
       img: new URL('./imgs/wechat/wx_h5.svg', import.meta.url).href,
       title: 'wap支付',
-      payInfo: { payChannel: payChannelEnum.WECHAT, payWay: payWayEnum.WAP },
+      payInfo: { channel: payChannelEnum.WECHAT, method: payMethodEnum.WAP },
     },
   ])
   // 云闪付
@@ -219,34 +219,34 @@
     {
       img: new URL('./imgs/wechat/wx_native.svg', import.meta.url),
       title: '扫码支付',
-      payInfo: { payChannel: payChannelEnum.UNION_PAY, payWay: payWayEnum.QRCODE },
+      payInfo: { channel: payChannelEnum.UNION_PAY, method: payMethodEnum.QRCODE },
     },
     {
       img: new URL('./imgs/wechat/wx_bar.svg', import.meta.url),
       title: '条码支付',
-      payInfo: { payChannel: payChannelEnum.UNION_PAY, payWay: payWayEnum.BARCODE },
+      payInfo: { channel: payChannelEnum.UNION_PAY, method: payMethodEnum.BARCODE },
     },
     {
       img: new URL('./imgs/wechat/wx_h5.svg', import.meta.url).href,
       title: 'wap支付',
-      payInfo: { payChannel: payChannelEnum.UNION_PAY, payWay: payWayEnum.WAP },
+      payInfo: { channel: payChannelEnum.UNION_PAY, method: payMethodEnum.WAP },
     },
     {
       img: new URL('./imgs/ali/ali_pc.svg', import.meta.url).href,
       title: 'web支付',
-      payInfo: { payChannel: payChannelEnum.UNION_PAY, payWay: payWayEnum.WEB },
+      payInfo: { channel: payChannelEnum.UNION_PAY, method: payMethodEnum.WEB },
     },
   ])
   let aggregationPayList = $ref([
     {
       img: new URL('./imgs/aggregate/qr_cashier.svg', import.meta.url).href,
       title: '扫码支付',
-      payInfo: { payChannel: payChannelEnum.AGGREGATION, payWay: payWayEnum.QRCODE },
+      payInfo: { channel: payChannelEnum.AGGREGATION, method: payMethodEnum.QRCODE },
     },
     {
       img: new URL('./imgs/aggregate/auto_bar.svg', import.meta.url).href,
       title: '条码支付',
-      payInfo: { payChannel: payChannelEnum.AGGREGATION, payWay: payWayEnum.BARCODE },
+      payInfo: { channel: payChannelEnum.AGGREGATION, method: payMethodEnum.BARCODE },
     },
   ])
   // 结算台下部分内容
@@ -266,7 +266,7 @@
   // 检查支付状态
   const { pause, resume } = useIntervalFn(
     () => {
-      findStatusByBusinessId(businessNo)
+      findStatusByBizOrderNoeNo(bizOrderNo)
         .then((res) => {
           // 成功
           if (res.data) {
@@ -288,7 +288,7 @@
    */
   function initData() {
     // 生成业务编码
-    genBusinessNo()
+    genBizOrderNoeNo()
     // 获取微信H5、支付宝H5、手机收银台的链接地址
     initH5CashierUrl()
   }
@@ -316,10 +316,10 @@
    * 发起支付. 分别处理普通支付和聚合支付
    */
   function pay() {
-    const { payChannel, payWay } = currentActive
+    const { channel, method } = currentActive
     // 聚合支付
-    if (payChannel === payChannelEnum.AGGREGATION) {
-      if (payWay === payWayEnum.BARCODE) {
+    if (channel === payChannelEnum.AGGREGATION) {
+      if (method === payMethodEnum.BARCODE) {
         cashierBarCode.init('请输入支付宝、微信或云闪付条码')
       } else {
         aggregationQr()
@@ -328,18 +328,18 @@
     }
 
     // 普通支付
-    if (payWay === payWayEnum.BARCODE) {
+    if (method === payMethodEnum.BARCODE) {
       let msg: string
-      if (payChannel === payChannelEnum.ALI) {
+      if (channel === payChannelEnum.ALI) {
         msg = '请输入支付宝条码'
-      } else if (payChannel === payChannelEnum.WECHAT) {
+      } else if (channel === payChannelEnum.WECHAT) {
         msg = '请输入微信条码'
       } else {
         msg = '请输入云闪付条码，使用二维码仿真工具获取'
       }
       cashierBarCode.init(msg)
     } else {
-      qrPay(payChannel, payWay)
+      qrPay(channel, method)
     }
   }
 
@@ -348,7 +348,7 @@
    */
   async function aggregationQr() {
     const param = {
-      businessNo,
+      bizOrderNo,
       allocation,
       amount: totalMoney,
       title: title,
@@ -363,20 +363,20 @@
    * 条码支付, 处理普通支付和聚合支付
    */
   function barPay(authCode: string) {
-    const { payChannel, payWay } = currentActive
+    const { channel, method } = currentActive
     // 聚合支付走单独分支
-    if (payChannel === payChannelEnum.AGGREGATION) {
+    if (channel === payChannelEnum.AGGREGATION) {
       aggregationBarPay(authCode)
       return
     }
     // 普通条码支付
     const param = {
       title: title,
-      businessNo,
+      bizOrderNo,
       allocation,
       amount: totalMoney,
-      channel: payChannel,
-      payWay,
+      channel: channel,
+      method,
       authCode,
     }
     simplePayCashier(param).then(() => {
@@ -387,21 +387,21 @@
   /**
    * 扫码支付
    */
-  async function qrPay(payChannel, payWay) {
+  async function qrPay(channel, method) {
     const param = {
       title,
-      businessNo,
+      bizOrderNo,
       allocation,
+      channel,
       amount: totalMoney,
-      channel: payChannel,
-      payWay,
+      method,
     }
     loading = true
     const { data } = await simplePayCashier(param).finally(() => {
       loading = false
     })
     // 云闪付wap和web支付
-    if ([payWayEnum.WAP, payWayEnum.WEB].includes(payWay) && payChannel === payChannelEnum.UNION_PAY) {
+    if ([payMethodEnum.WAP, payMethodEnum.WEB].includes(method) && channel === payChannelEnum.UNION_PAY) {
       payForm = data.payBody
       // 本地提交提交支付表单
       nextTick(() => {
@@ -410,12 +410,12 @@
       })
     }
     // pc支付(微信/支付宝)
-    else if ([payWayEnum.WAP, payWayEnum.WEB].includes(payWay)) {
+    else if ([payMethodEnum.WAP, payMethodEnum.WEB].includes(method)) {
       window.open(data.payBody)
-    } else if (payChannel === payChannelEnum.ALI) {
+    } else if (channel === payChannelEnum.ALI) {
       cashierQrCode.init(data.payBody, '请使用支付宝"扫一扫"进行支付')
       resume()
-    } else if (payChannel === payChannelEnum.WECHAT) {
+    } else if (channel === payChannelEnum.WECHAT) {
       cashierQrCode.init(data.payBody, '请使用微信"扫一扫"进行支付')
       resume()
     } else {
@@ -430,7 +430,7 @@
     const param = {
       title,
       amount: totalMoney,
-      businessNo,
+      bizOrderNo,
       authCode,
     }
     aggregateBarCodePay(param).then(() => {
@@ -440,8 +440,8 @@
   /**
    * 生成业务号
    */
-  function genBusinessNo() {
-    businessNo = 'P' + new Date().getTime()
+  function genBizOrderNoeNo() {
+    bizOrderNo = 'P' + new Date().getTime()
   }
 
   /**
@@ -467,7 +467,7 @@
   function handleCancel() {
     cashierQrCode.handleClose()
     cashierBarCode.handleClose()
-    genBusinessNo()
+    genBizOrderNoeNo()
     pause()
   }
 

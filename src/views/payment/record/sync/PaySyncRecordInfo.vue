@@ -3,47 +3,50 @@
     title="查看同步信息"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="750"
+    :width="1200"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-descriptions title="" :column="{ md: 1, sm: 1, xs: 1 }">
-        <a-descriptions-item label="本地订单号">
-          {{ form.orderId }}
+      <a-descriptions title="" bordered>
+        <a-descriptions-item label="本地交易号" :span="4">
+          {{ form.tradeNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="本地业务号">
-          {{ form.orderNo }}
+        <a-descriptions-item label="商户交易号" :span="2">
+          {{ form.bizTradeNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="网关订单号">
-          {{ form.gatewayOrderNo }}
+        <a-descriptions-item label="通道交易号" :span="2">
+          {{ form.outTradeNo || '无' }}
         </a-descriptions-item>
-        <a-descriptions-item label="同步类型">
+        <a-descriptions-item label="同步类型" :span="2">
           <a-tag>{{ dictConvert('PaymentType', form.syncType) }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="同步通道">
-          <a-tag> {{ dictConvert('AsyncPayChannel', form.asyncChannel) }}</a-tag>
+        <a-descriptions-item label="同步通道" :span="2">
+          <a-tag> {{ dictConvert('AsyncPayChannel', form.channel) }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="同步结果">
-          <a-tag v-if="form.syncType === 'pay'">{{ dictConvert('PaySyncStatus', form.gatewayStatus) }}</a-tag>
-          <a-tag v-else>{{ dictConvert('RefundSyncStatus', form.gatewayStatus) }}</a-tag>
+        <a-descriptions-item label="同步结果" :span="2">
+          <a-tag v-if="form.syncType === 'pay'">{{ dictConvert('PaySyncStatus', form.outTradeStatus) }}</a-tag>
+          <a-tag v-else>{{ dictConvert('RefundSyncStatus', form.outTradeStatus) }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="修复单号">
-          <a-tag v-if="form.repairOrder" color="green"> {{ form.repairOrderNo }} </a-tag>
+        <a-descriptions-item label="修复单号" :span="2">
+          <a-tag v-if="form.repair" color="green"> {{ form.repairNo }} </a-tag>
           <a-tag v-else>无需修复</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="同步时间">
+        <a-descriptions-item label="客户端IP" :span="2">
+          {{ form.clientIp }}
+        </a-descriptions-item>
+        <a-descriptions-item label="同步时间" :span="2">
           {{ form.createTime }}
         </a-descriptions-item>
-        <a-descriptions-item label="同步消息">
-          <json-preview :data="XEUtils.toStringJSON(form.syncInfo || '{}')" />
-        </a-descriptions-item>
-        <a-descriptions-item label="错误信息" v-if="form.errorMsg">
+        <a-descriptions-item label="错误编码" v-if="form.errorCode" :span="2">
           {{ form.errorMsg }}
         </a-descriptions-item>
-        <a-descriptions-item label="客户端IP">
-          {{ form.clientIp }}
+        <a-descriptions-item label="错误信息" v-if="form.errorMsg" :span="2">
+          {{ form.errorMsg }}
+        </a-descriptions-item>
+        <a-descriptions-item label="同步消息" :span="4">
+          <json-preview :data="XEUtils.toStringJSON(form.syncInfo || '{}')" />
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>
@@ -63,24 +66,10 @@
   import JsonPreview from '/@/components/CodeEditor/src/json-preview/JsonPreview.vue'
   import XEUtils from 'xe-utils'
 
-  const {
-    initFormEditType,
-    handleCancel,
-    search,
-    labelCol,
-    wrapperCol,
-    modalWidth,
-    title,
-    confirmLoading,
-    visible,
-    editable,
-    showable,
-    formEditType,
-  } = useFormEdit()
+  const { handleCancel, confirmLoading, visible, showable } = useFormEdit()
   const { dictConvert } = useDict()
 
   // 表单
-  const formRef = $ref<FormInstance>()
   let form = $ref<SyncRecord>({})
   // 入口
   function init(id) {
@@ -97,4 +86,8 @@
   })
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  /deep/ .ant-descriptions-item-label {
+    width: 170px;
+  }
+</style>

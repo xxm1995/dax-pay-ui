@@ -14,34 +14,33 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="本地订单ID" width="170">
+        <vxe-column field="orderId" title="本地交易号" :min-width="220">
           <template #default="{ row }">
             <a-link @click="showOrder(row)">
-              {{ row.orderId }}
+              {{ row.tradeNo }}
             </a-link>
           </template>
         </vxe-column>
-        <vxe-column field="noticeType" title="消息类型">
+        <vxe-column field="noticeType" title="消息类型" :min-width="170">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('ClientNoticeType', row.noticeType) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="success" title="订单状态">
+        <vxe-column field="tradeStatus" title="交易状态" :min-width="170">
           <template #default="{ row }">
-            <a-tag v-if="row.noticeType === 'pay'">{{ dictConvert('PayStatus', row.orderStatus) || '未知' }}</a-tag>
-            <a-tag v-else>{{ dictConvert('RefundStatus', row.orderStatus) || '未知' }}</a-tag>
+            <a-tag v-if="row.noticeType === 'pay'">{{ dictConvert('PayStatus', row.tradeStatus) || '未知' }}</a-tag>
+            <a-tag v-else>{{ dictConvert('RefundStatus', row.tradeStatus) || '未知' }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="success" title="发送成功">
+        <vxe-column field="success" title="发送成功" sortable :min-width="170">
           <template #default="{ row }">
             <a-tag v-if="row.success" color="green">是</a-tag>
             <a-tag v-else color="red">否</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="sendCount" title="发送次数" sortable />
-        <vxe-column field="latestTime" title="最后发送时间" sortable />
-        <vxe-column field="url" title="发送地址" />
-        <vxe-column field="createTime" title="创建时间" sortable />
+        <vxe-column field="sendCount" title="发送次数" sortable :min-width="170" />
+        <vxe-column field="latestTime" title="最后发送时间" sortable :min-width="170" />
+        <vxe-column field="createTime" title="创建时间" sortable :min-width="170" />
         <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
@@ -83,16 +82,21 @@
   import ClientNoticeTaskInfo from '/@/views/payment/task/notice/ClientNoticeTaskInfo.vue'
   import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
   import RefundOrderInfo from '/@/views/payment/order/refund/RefundOrderInfo.vue'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, sortChange, resetQueryParams, pagination, pages, sortParam, model, loading } =
     useTablePage(queryPage)
-  const { notification, createMessage, createConfirm } = useMessage()
+  const { createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
+  let noticeTypeList = $ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
-    return [{ field: 'orderId', type: STRING, name: '本地订单ID', placeholder: '请输入完整本地订单ID' }] as QueryField[]
+    return [
+      { field: 'tradeNo', type: STRING, name: '本地交易号', placeholder: '请输入完整本地交易号' },
+      { field: 'noticeType', type: LIST, name: '消息类型', placeholder: '请选择消息类型', selectList: noticeTypeList },
+    ] as QueryField[]
   })
 
   const clientNoticeRecordList = $ref<any>()
@@ -104,10 +108,18 @@
 
   onMounted(() => {
     vxeBind()
+    init()
     queryPage()
   })
   function vxeBind() {
     xTable?.connect(xToolbar as VxeToolbarInstance)
+  }
+
+  /**
+   * 初始化
+   */
+  async function init() {
+    noticeTypeList = await dictDropDown('ClientNoticeType')
   }
 
   /**
@@ -149,7 +161,7 @@
     clientNoticeTaskInfo.init(record)
   }
   /**
-   * 查看记录
+   * 查看记录列表
    */
   function showRecord(record) {
     clientNoticeRecordList.init(record)
@@ -159,9 +171,9 @@
    */
   function showOrder(record: ClientNoticeTask) {
     if (record.noticeType === 'pay') {
-      payOrderInfo.init(record.orderId)
+      payOrderInfo.init(record.tradeNo)
     } else {
-      refundOrderInfo.init(record.orderId)
+      refundOrderInfo.init(record.tradeNo)
     }
   }
 </script>

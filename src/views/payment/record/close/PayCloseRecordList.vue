@@ -14,23 +14,23 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="paymentId" title="原支付ID" width="170" sortable>
+        <vxe-column field="orderNo" title="订单号" :min-width="180">
           <template #default="{ row }">
-            <a @click="showPayment(row.paymentId)">
-              {{ row.paymentId }}
+            <a @click="showPayOder(row.orderNo)">
+              {{ row.orderNo }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="businessNo" title="业务号" />
+        <vxe-column field="bizOrderNo" title="商户订单号" :min-width="180" />
         <vxe-column field="closed" title="关闭状态">
           <template #default="{ row }">
             <a-tag v-if="row.closed" color="green">成功</a-tag>
             <a-tag v-else color="red">失败</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="asyncChannel" title="异步支付通道">
+        <vxe-column field="channel" title="支付通道">
           <template #default="{ row }">
-            {{ dictConvert('AsyncPayChannel', row.asyncChannel) }}
+            {{ dictConvert('PayChannel', row.channel) }}
           </template>
         </vxe-column>
         <vxe-column field="errorMsg" title="错误消息" />
@@ -73,7 +73,8 @@
   import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } = useTablePage(queryPage)
+  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
+    useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
@@ -82,8 +83,8 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'paymentId', type: STRING, name: '支付单号', placeholder: '请输入支付单号' },
-      { field: 'businessNo', type: STRING, name: '业务号', placeholder: '请输入业务号' },
+      { field: 'orderNo', type: STRING, name: '订单号', placeholder: '请输入订单号' },
+      { field: 'bizOrderNo', type: STRING, name: '商户订单号', placeholder: '请输入商户订单号' },
       {
         field: 'channel',
         type: LIST,
@@ -133,7 +134,7 @@
     page({
       ...model.queryParam,
       ...pages,
-      ...sortParam
+      ...sortParam,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
@@ -148,10 +149,9 @@
 
   /**
    * 查看支付单信息
-   * @param paymentId
    */
-  function showPayment(paymentId) {
-    payOrderInfo.init(paymentId)
+  function showPayOder(orderNo) {
+    payOrderInfo.init(orderNo)
   }
 </script>
 

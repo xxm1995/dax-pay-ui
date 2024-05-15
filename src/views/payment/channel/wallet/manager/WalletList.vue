@@ -12,6 +12,7 @@
       <vxe-table
         row-id="id"
         ref="xTable"
+        :cell-style="cellStyle"
         :data="pagination.records"
         :loading="loading"
         :sort-config="{ remote: true, trigger: 'cell' }"
@@ -24,7 +25,7 @@
         <vxe-column field="balance" title="余额(分)" sortable />
         <vxe-column field="status" title="状态">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('WalletStatus', row.status) || '无' }}</a-tag>
+            {{ dictConvert('WalletStatus', row.status) || '无' }}
           </template>
         </vxe-column>
         <vxe-column field="createTime" title="创建时间" sortable />
@@ -69,7 +70,6 @@
   import { VxeTableInstance, VxeToolbarInstance, VxePager, VxeTable, VxeToolbar } from 'vxe-table'
   import ALink from '/@/components/Link/Link.vue'
   import WalletCreateModel from './WalletCreateModel.vue'
-  import WalletRecordList from '../record/WalletRecordList.vue'
   import WalletRechargeModel from './WalletRechargeModel.vue'
   import WalletDeductModel from './WalletDeductModel.vue'
   import WalletInfo from './WalletInfo.vue'
@@ -151,6 +151,18 @@
    */
   function showRecord(record) {
     walletRecordList.init(record)
+  }
+  function cellStyle({ row, column }) {
+    if (column.field == 'status') {
+      if (row.status == 'normal') {
+        return { color: 'green' }
+      }
+      if (row.status == 'forbidden') {
+        return { color: 'red' }
+      }
+      return { color: 'gray' }
+    }
+
   }
 </script>
 

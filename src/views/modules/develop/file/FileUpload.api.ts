@@ -1,6 +1,6 @@
 import { defHttp } from '/@/utils/http/axios'
 import { PageResult, Result } from '/#/axios'
-import { UpdateFileInfo } from "/@/api/common/FileUpload";
+import { UpdateFileInfo } from '/@/api/common/FileUpload'
 
 /**
  * 分页

@@ -8,12 +8,22 @@
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-form ref="formRef" :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
-      <template :key="o.channel" v-for="o in form.refundChannels">
-        <a-form-item :label="dictConvert('PayChannel', o.channel)" name="name">
-          <a-input-number :min="0" :max="o.maxAmount" :precision="0" v-model:value="o.amount" />
-        </a-form-item>
-      </template>
+    <a-form
+      ref="formRef"
+      :model="form"
+      :label-col="labelCol"
+      :rules="{ amount: [{ required: true, message: '请输入退款金额' }] }"
+      :wrapper-col="wrapperCol"
+    >
+      <a-form-item label="标题">
+        {{ order.title }}
+      </a-form-item>
+      <a-form-item label="订单号">
+        {{ order.orderNo }}
+      </a-form-item>
+      <a-form-item label="退款金额" name="amount">
+        <a-input-number :min="0.01" :max="order.refundableBalance as number / 100" :precision="2" v-model:value="form.amount" />
+      </a-form-item>
       <a-form-item label="原因" name="reason">
         <a-textarea v-model:value="form.reason" :rows="3" />
       </a-form-item>
@@ -28,7 +38,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { listByChannel } from './PayOrder.api'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
   import { useDict } from '/@/hooks/bootx/useDict'
@@ -37,32 +46,21 @@
   import { FormInstance } from 'ant-design-vue/lib/form'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { nextTick } from 'vue'
+  import { getOrder, PayOrder } from './PayOrder.api'
 
-  const {
-    initFormEditType,
-    handleCancel,
-    search,
-    labelCol,
-    wrapperCol,
-    modalWidth,
-    title,
-    confirmLoading,
-    visible,
-    editable,
-    showable,
-    formEditType,
-  } = useFormEdit()
+  const { handleCancel, labelCol, wrapperCol, modalWidth, confirmLoading, visible, showable } = useFormEdit()
   const { createMessage, createConfirm } = useMessage()
-  const { dictConvert } = useDict()
+
+  let order = $ref<PayOrder>({})
 
   const formRef = $ref<FormInstance>()
   let form = $ref({
-    // 支付id
-    paymentId: '',
+    // 订单号
+    orderNo: '',
     // 原因
     reason: '',
-    // 可退款明细
-    refundChannels: [] as any,
+    // 退款金额
+    amount: 0.01,
   })
   const emits = defineEmits(['ok'])
 
@@ -73,15 +71,10 @@
     resetForm()
     confirmLoading.value = true
     visible.value = true
-    form.paymentId = id
-    listByChannel(id).then(({ data }) => {
-      form.refundChannels = data.map((item) => {
-        return {
-          channel: item.channel,
-          amount: item.refundableBalance,
-          maxAmount: item.refundableBalance,
-        }
-      })
+    getOrder(id).then(({ data }) => {
+      order = data
+      form.orderNo = data.orderNo as string
+      form.amount = (data.refundableBalance as number) / 100.0
       confirmLoading.value = false
     })
   }
@@ -96,7 +89,11 @@
       content: '确实要申请退款!',
       onOk: () => {
         confirmLoading.value = true
-        refund(form).then(() => {
+        refund({
+          ...form,
+          // 将金额转为分
+          amount: form.amount * 100,
+        }).then(() => {
           visible.value = false
           createMessage.success('退款请求已提交')
           emits('ok')

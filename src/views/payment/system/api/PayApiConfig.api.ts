@@ -55,8 +55,6 @@ export interface PayApiConfig extends BaseEntity {
   reqSign?: boolean
   // 响应参数是否签名
   resSign?: boolean
-  // 回调信息是否签名
-  noticeSign?: boolean
   // 是否记录请求的信息
-  record?: boolean
+  remark?: string
 }

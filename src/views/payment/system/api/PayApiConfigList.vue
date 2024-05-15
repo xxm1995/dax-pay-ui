@@ -4,22 +4,22 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="records" :loading="loading">
         <vxe-column type="seq" width="60" />
-        <vxe-column field="code" title="编码" />
-        <vxe-column field="name" title="名称" />
-        <vxe-column field="api" title="接口地址" />
-        <vxe-column field="enable" title="启用接口">
+        <vxe-column field="code" title="编码" :min-width="170" />
+        <vxe-column field="name" title="名称" :min-width="170" />
+        <vxe-column field="api" title="接口地址" :min-width="220" />
+        <vxe-column field="enable" title="启用接口" :min-width="100">
           <template #default="{ row }">
             <a-tag v-if="row.enable" color="green">启用</a-tag>
             <a-tag v-else color="red">停用</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="reqSign" title="参数签名">
+        <vxe-column field="reqSign" title="参数签名" :min-width="100">
           <template #default="{ row }">
-            <a-tag v-if="row.reqSign" color="green">启用</a-tag>
-            <a-tag v-else color="red">停用</a-tag>
+            <a-tag v-if="row.reqSign" color="green">校验</a-tag>
+            <a-tag v-else color="red">不校验</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="notice" title="回调通知">
+        <vxe-column field="notice" title="回调通知" :min-width="100">
           <template #default="{ row }">
             <template v-if="row.noticeSupport">
               <a-tag v-if="row.notice" color="green">启用</a-tag>
@@ -30,16 +30,7 @@
             </template>
           </template>
         </vxe-column>
-        <vxe-column field="noticeSign" title="回调签名">
-          <template #default="{ row }">
-            <template v-if="row.noticeSupport">
-              <a-tag v-if="row.noticeSign" color="green">启用</a-tag>
-              <a-tag v-else color="red">停用</a-tag>
-            </template>
-            <template v-else> </template>
-          </template>
-        </vxe-column>
-        <vxe-column field="noticeUrl" title="默认回调地址">
+        <vxe-column field="noticeUrl" title="默认回调地址" :min-width="220">
           <template #default="{ row }">
             <template v-if="row.noticeSupport">
               {{ row.noticeUrl }}
@@ -47,8 +38,8 @@
             <template v-else> </template>
           </template>
         </vxe-column>
-        <vxe-column field="remark" title="备注" />
-        <vxe-column fixed="right" width="100" :showOverflow="false" title="操作">
+        <vxe-column field="remark" title="备注" :min-width="160" />
+        <vxe-column fixed="right" width="100" :showOverflow="false" title="操作" :min-width="170">
           <template #default="{ row }">
             <span>
               <a-link @click="show(row)">查看</a-link>
@@ -113,6 +104,7 @@
       records = data
       loading.value = false
     })
+    return Promise.resolve()
   }
   // 编辑
   function edit(record) {

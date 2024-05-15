@@ -3,59 +3,48 @@
     title="退款订单"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="750"
+    :width="1200"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-descriptions title="" :column="{ md: 2, sm: 1, xs: 1 }">
-      <a-descriptions-item label="退款ID">
-        {{ form.id }}
+    <a-descriptions bordered>
+      <a-descriptions-item label="退款号" :span="2">
+        {{ order.refundNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="退款号">
-        {{ form.refundNo }}
+      <a-descriptions-item label="商户退款号" :span="2">
+        {{ order.bizRefundNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="原支付ID">
-        {{ form.paymentId }}
+
+      <a-descriptions-item label="原支付标题" :span="2">
+        {{ order.title }}
       </a-descriptions-item>
-      <a-descriptions-item label="原业务号">
-        {{ form.businessNo }}
+      <a-descriptions-item label="支付订单号" :span="2">
+        {{ order.orderNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="网关订单号">
-        {{ form.gatewayOrderNo }}
+      <a-descriptions-item label="商户支付订单号" :span="2">
+        {{ order.bizOrderNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="原支付标题">
-        {{ form.title }}
+      <a-descriptions-item label="退款金额(元)" :span="2">
+        {{ order.amount ? (order.amount / 100).toFixed(2) : 0 }}
       </a-descriptions-item>
-      <a-descriptions-item label="退款原因">
-        {{ form.reason }}
+      <a-descriptions-item label="退款发起时间" :span="2">
+        {{ order.createTime }}
       </a-descriptions-item>
-      <a-descriptions-item label="退款金额">
-        {{ form.amount }}
+      <a-descriptions-item label="退款完成时间" :span="2">
+        {{ order.finishTime }}
       </a-descriptions-item>
-      <a-descriptions-item label="剩余可退款金额">
-        {{ form.refundableBalance }}
+      <a-descriptions-item v-if="order.errorCode" label="错误码" :span="2">
+        {{ order.errorCode }}
       </a-descriptions-item>
-      <a-descriptions-item label="订单金额信息">
-        <a-tag v-for="o in refundChannelOrders" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.orderAmount }}</a-tag>
+      <a-descriptions-item v-if="order.errorMsg" label="错误信息" :span="2">
+        {{ order.errorMsg }}
       </a-descriptions-item>
-      <a-descriptions-item label="退款信息">
-        <a-tag v-for="o in refundChannelOrders" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.amount }}</a-tag>
-      </a-descriptions-item>
-      <a-descriptions-item label="退款完成时间">
-        {{ form.refundTime }}
-      </a-descriptions-item>
-      <a-descriptions-item label="退款状态">
-        <a-tag>{{ dictConvert('RefundStatus', form.status) }}</a-tag>
+      <a-descriptions-item label="退款状态" :span="2">
+        <a-tag>{{ dictConvert('RefundStatus', order.status) }}</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="退款终端ip">
-        {{ form.clientIp }}
-      </a-descriptions-item>
-      <a-descriptions-item v-if="form.errorCode" label="错误码">
-        {{ form.errorCode }}
-      </a-descriptions-item>
-      <a-descriptions-item v-if="form.errorMsg" label="错误信息">
-        {{ form.errorMsg }}
+        {{ orderExtra.clientIp }}
       </a-descriptions-item>
     </a-descriptions>
     <template #footer>
@@ -67,43 +56,26 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { get, listByChannel, RefundChannelOrder, RefundOrder } from './RefundOrder.api'
-  import { FormInstance } from 'ant-design-vue/lib/form'
+  import {get, getByRefundNo, getOrderExtra, RefundOrder, RefundOrderExtra} from './RefundOrder.api'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
-  const {
-    initFormEditType,
-    handleCancel,
-    search,
-    labelCol,
-    wrapperCol,
-    modalWidth,
-    title,
-    confirmLoading,
-    visible,
-    editable,
-    showable,
-    formEditType,
-  } = useFormEdit()
+  const { handleCancel, confirmLoading, visible, showable } = useFormEdit()
   const { dictConvert } = useDict()
   // 表单
-  const formRef = $ref<FormInstance>()
-  let form = $ref<RefundOrder>({})
-  let refundChannelOrders = $ref<RefundChannelOrder[]>([])
+  let order = $ref<RefundOrder>({})
+  let orderExtra = $ref<RefundOrderExtra>({})
 
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  async function init(id) {
+  async function init(refundNo) {
     visible.value = true
     confirmLoading.value = true
-    await get(id).then(({ data }) => {
-      form = data
+    getByRefundNo(refundNo).then(({ data }) => {
+      order = data.refundOrder
+      orderExtra = data.refundOrderExtra
+      confirmLoading.value = false
     })
-    await listByChannel(id).then(({ data }) => {
-      refundChannelOrders = data
-    })
-    confirmLoading.value = false
   }
   defineExpose({
     init,

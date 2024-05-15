@@ -3,84 +3,75 @@
     title="查看支付单"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="modalWidth"
+    :width="1200"
     :visible="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-descriptions title="" :column="{ md: 2, sm: 1, xs: 1 }">
-        <a-descriptions-item label="支付ID">
-          {{ order.id }}
-        </a-descriptions-item>
-        <a-descriptions-item label="业务号">
-          {{ order.businessNo }}
-        </a-descriptions-item>
-        <a-descriptions-item label="网关订单号">
-          {{ order.gatewayOrderNo }}
-        </a-descriptions-item>
-        <a-descriptions-item label="标题">
+      <a-descriptions title="" bordered>
+        <a-descriptions-item label="标题" :span="1">
           {{ order.title }}
         </a-descriptions-item>
-        <a-descriptions-item label="描述">
-          {{ orderExtra.description }}
+        <a-descriptions-item label="金额(元)">
+          {{ order.amount ? (order.amount / 100).toFixed(2) : 0 }}
         </a-descriptions-item>
-        <a-descriptions-item label="金额">
-          {{ order.amount }}
-        </a-descriptions-item>
-        <a-descriptions-item label="可退余额">
-          {{ order.refundableBalance }}
+        <a-descriptions-item label="可退余额(元)">
+          {{ order.refundableBalance ? (order.refundableBalance / 100).toFixed(2) : 0 }}
         </a-descriptions-item>
         <a-descriptions-item label="支付状态">
-          <a-tag>{{ dictConvert('PayStatus', order.status) }}</a-tag>
+          {{ dictConvert('PayStatus', order.status) }}
         </a-descriptions-item>
-        <a-descriptions-item label="异步支付">
-          {{ order.asyncPay ? '是' : '否' }}
+        <a-descriptions-item :span="2" label="订单号">
+          {{ order.orderNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="组合支付">
-          {{ order.combinationPay ? '是' : '否' }}
+        <a-descriptions-item label="支持分账">
+          {{ order.allocation ? '是' : '否' }}
         </a-descriptions-item>
-        <a-descriptions-item label="异步支付方式">
-          {{ dictConvert('PayChannel', order.asyncChannel) }}
+        <a-descriptions-item label="商户订单号" :span="2">
+          {{ order.bizOrderNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="支付信息">
-          <a-tag v-for="o in orderChannel" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.amount }}</a-tag>
+        <a-descriptions-item label="分账状态">
+          {{ dictConvert('PayOrderAllocationStatus', order.allocationStatus) || '无' }}
         </a-descriptions-item>
-        <a-descriptions-item label="可退款信息">
-          <a-tag v-for="o in orderChannel" :key="o.channel">{{ dictConvert('PayChannel', o.channel) }}: {{ o.refundableBalance }}</a-tag>
+        <a-descriptions-item label="三方系统交易号" :span="2">
+          {{ order.outOrderNo || '无' }}
         </a-descriptions-item>
-        <a-descriptions-item label="客户IP">
-          {{ orderExtra.clientIp }}
+        <a-descriptions-item v-if="order.errorCode" label="错误编码" :span="1">
+          {{ order.errorCode }}
         </a-descriptions-item>
-        <a-descriptions-item label="错误信息">
-          {{ orderExtra.errorMsg }}
+        <a-descriptions-item v-if="order.errorMsg" label="错误信息" :span="2">
+          {{ order.errorMsg }}
         </a-descriptions-item>
         <a-descriptions-item label="是否通知">
           {{ orderExtra.notNotify ? '否' : '是' }}
         </a-descriptions-item>
-        <a-descriptions-item label="通知地址">
-          {{ orderExtra.notifyUrl }}
+        <a-descriptions-item label="通知地址" :span="2">
+          {{ orderExtra.notifyUrl || '无' }}
         </a-descriptions-item>
-        <a-descriptions-item label="签名类型">
-          {{ orderExtra.signType }}
+        <a-descriptions-item label="客户IP">
+          {{ orderExtra.clientIp }}
         </a-descriptions-item>
-        <a-descriptions-item label="签名">
-          {{ orderExtra.sign }}
-        </a-descriptions-item>
-        <a-descriptions-item label="商户扩展参数">
-          {{ orderExtra.attach }}
+        <a-descriptions-item label="商户扩展参数" :span="2">
+          {{ orderExtra.attach || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="请求时间">
-          {{ orderExtra.reqTime }}
+          {{ orderExtra.reqTime || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="支付时间">
-          {{ order.payTime }}
+          {{ order.payTime || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="过期时间">
-          {{ order.expiredTime }}
+          {{ order.expiredTime || '无' }}
+        </a-descriptions-item>
+        <a-descriptions-item label="关闭时间">
+          {{ order.closeTime || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="创建时间">
           {{ order.createTime }}
+        </a-descriptions-item>
+        <a-descriptions-item label="描述" :span="1">
+          {{ order.description }}
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>
@@ -95,40 +86,21 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { getOrder, PayOrder, PayOrderExtra, PayChannelOrder, getOrderExtra, listByChannel } from './PayOrder.api'
+  import { PayOrder, PayOrderExtra, getOrderByOrderNo } from './PayOrder.api'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
-  const {
-    initFormEditType,
-    handleCancel,
-    search,
-    labelCol,
-    wrapperCol,
-    modalWidth,
-    title,
-    confirmLoading,
-    visible,
-    editable,
-    showable,
-    formEditType,
-  } = useFormEdit()
+  const { handleCancel, confirmLoading, visible, showable } = useFormEdit()
   const { dictConvert } = useDict()
 
   let order = $ref<PayOrder>({})
   let orderExtra = $ref<PayOrderExtra>({})
-  let orderChannel = $ref<PayChannelOrder[]>([])
   // 入口
-  async function init(id) {
+  async function init(orderNo: string) {
     visible.value = true
     confirmLoading.value = true
-    await getOrder(id).then(({ data }) => {
-      order = data
-    })
-    await getOrderExtra(id).then(({ data }) => {
-      orderExtra = data
-    })
-    await listByChannel(id).then(({ data }) => {
-      orderChannel = data
+    await getOrderByOrderNo(orderNo).then(({ data }) => {
+      order = data.payOrder
+      orderExtra = data.payOrderExtra
     })
     confirmLoading.value = false
   }
