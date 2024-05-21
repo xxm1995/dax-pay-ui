@@ -61,5 +61,5 @@ export interface DiffInfo {
   // 本地订单字段值
   localValue?: string
   // 网关订单字段值
-  gatewayValue?: string
+  outValue?: string
 }
