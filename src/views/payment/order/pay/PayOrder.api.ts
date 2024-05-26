@@ -88,6 +88,8 @@ export interface PayOrder extends BaseEntity {
   description?: any
   // 是否支持分账
   allocation?: boolean
+  // 自动分账
+  autoAllocation?: boolean
   // 支付通道
   channel?: string
   // 支付方式

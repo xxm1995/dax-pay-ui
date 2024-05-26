@@ -49,6 +49,12 @@
         <a-descriptions-item label="通知地址" :span="2">
           {{ orderExtra.notifyUrl || '无' }}
         </a-descriptions-item>
+        <a-descriptions-item label="自动分账" :span="1">
+          {{ order.autoAllocation || '无' }}
+        </a-descriptions-item>
+        <a-descriptions-item label="描述" :span="2">
+          {{ order.description }}
+        </a-descriptions-item>
         <a-descriptions-item label="客户IP">
           {{ orderExtra.clientIp }}
         </a-descriptions-item>
@@ -69,9 +75,6 @@
         </a-descriptions-item>
         <a-descriptions-item label="创建时间">
           {{ order.createTime }}
-        </a-descriptions-item>
-        <a-descriptions-item label="描述" :span="1">
-          {{ order.description }}
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>
