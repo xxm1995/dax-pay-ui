@@ -114,7 +114,6 @@
       groupId: group.id,
       receivers,
     }
-    createMessage.success('添加中...')
     bindReceivers(param).then(() => {
       createMessage.success('添加成功')
       queryPage()

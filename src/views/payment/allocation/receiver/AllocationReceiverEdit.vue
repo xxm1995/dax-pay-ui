@@ -2,7 +2,7 @@
   <basic-modal
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="modalWidth"
+    :width="900"
     :title="title"
     :visible="visible"
     :mask-closable="showable"
@@ -21,6 +21,9 @@
         <a-form-item label="主键" name="id" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
+        <a-form-item label="接收方编号" validate-first name="receiverNo">
+          <a-input v-model:value="form.receiverNo" :disabled="!addable" placeholder="请输入接收方编号" />
+        </a-form-item>
         <a-form-item label="账号别名" name="name">
           <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入账号别名" />
         </a-form-item>
@@ -38,31 +41,32 @@
           <a-select
             style="width: 100%"
             v-model:value="form.receiverType"
-            :disabled="showable || form.sync"
+            :disabled="!addable"
             :options="receiverTypeList"
             placeholder="请选择接收方类型"
           />
         </a-form-item>
         <a-form-item label="接收方账号" name="receiverAccount">
-          <a-input v-model:value="form.receiverAccount" :disabled="showable || form.sync" placeholder="请输入接收方账号" />
+          <a-input v-model:value="form.receiverAccount" :disabled="!addable" placeholder="请输入接收方账号">
+            <template v-if="['wx_personal', 'ali_open_id'].includes(form.receiverType as string)" #suffix>
+              <icon icon="ant-design:qrcode-outlined" @click="showQrCode" />
+            </template>
+          </a-input>
         </a-form-item>
         <a-form-item label="接收方姓名" name="receiverName">
-          <a-input v-model:value="form.receiverName" :disabled="showable || form.sync" placeholder="请输入接收方姓名" />
+          <a-input v-model:value="form.receiverName" :disabled="!addable" placeholder="请输入接收方姓名" />
         </a-form-item>
         <a-form-item label="分账关系类型" name="relationType">
           <a-select
             style="width: 100%"
             v-model:value="form.relationType"
-            :disabled="showable || form.sync"
+            :disabled="!addable"
             :options="relationTypeList"
             placeholder="请选择分账关系类型"
           />
         </a-form-item>
         <a-form-item v-if="form.relationType === 'CUSTOM'" label="接收者关系名称" name="relationName">
-          <a-input v-model:value="form.relationName" :disabled="showable || form.sync" placeholder="请输入接收者关系名称" />
-        </a-form-item>
-        <a-form-item label="备注" name="remark">
-          <a-textarea :disabled="showable" placeholder="请输入备注" v-model:value="form.remark" />
+          <a-input v-model:value="form.relationName" :disabled="!addable" placeholder="请输入接收者关系名称" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -81,11 +85,12 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { computed, nextTick } from 'vue'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
-  import { add, get, AllocationReceiver, update, findChannels, findReceiverTypeByChannel } from './AllocationReceiver.api'
+  import { add, get, AllocationReceiver, update, findChannels, findReceiverTypeByChannel, existsByNo } from './AllocationReceiver.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
+  import Icon from '/@/components/Icon'
 
   const {
     initFormEditType,
@@ -98,7 +103,6 @@
     confirmLoading,
     visible,
     addable,
-    editable,
     showable,
     formEditType,
   } = useFormEdit()
@@ -117,7 +121,10 @@
   // 校验
   const rules = computed(() => {
     return {
-      name: [{ required: true, message: '请输入账号别名' }],
+      receiverNo: [
+        { required: true, message: '请输入账号别名' },
+        { trigger: 'blur', validator: validateCode },
+      ],
       channel: [{ required: true, message: '请选择所属通道' }],
       receiverType: [{ required: true, message: '请选择分账接收方类型' }],
       receiverAccount: [{ required: true, message: '请输入接收方账号' }],
@@ -143,7 +150,7 @@
    */
   async function initData() {
     findChannels().then(({ data }) => (payChannelList = data))
-    relationTypeList = await dictDropDown('AllocationRelationType')
+    relationTypeList = await dictDropDown('AllocRelationType')
   }
 
   /**
@@ -189,6 +196,22 @@
       emits('ok')
       handleCancel()
     })
+  }
+
+  /**
+   * 扫码绑定
+   */
+  function showQrCode() {
+    createMessage.info('扫码获取OpenID开发中, 敬请期待')
+  }
+
+  /**
+   * 校验编码重复
+   */
+  async function validateCode() {
+    const { receiverNo } = form
+    const res = await existsByNo(receiverNo)
+    return res.data ? Promise.reject('该接收方编号已经存在') : Promise.resolve()
   }
 
   /**
