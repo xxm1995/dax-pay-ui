@@ -75,18 +75,10 @@
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   const {
-    initFormEditType,
     handleCancel,
-    search,
-    labelCol,
-    wrapperCol,
-    modalWidth,
-    title,
     confirmLoading,
     visible,
-    editable,
     showable,
-    formEditType,
   } = useFormEdit()
   const { dictConvert } = useDict()
 

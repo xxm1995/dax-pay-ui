@@ -15,7 +15,7 @@
           </template>
         </vxe-column>
         <vxe-column field="bizTradeNo" title="商户交易号" :min-width="220" />
-        <vxe-column field="channel" title="同步类型" :min-width="60">
+        <vxe-column field="channel" title="同步类型" :min-width="120">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PaymentType', row.syncType) }}</a-tag>
           </template>
@@ -28,7 +28,8 @@
         <vxe-column field="status" title="同步结果" :min-width="100">
           <template #default="{ row }">
             <a-tag v-if="row.syncType === 'pay'">{{ dictConvert('PaySyncStatus', row.outTradeStatus) }}</a-tag>
-            <a-tag v-else>{{ dictConvert('RefundSyncStatus', row.outTradeStatus) }}</a-tag>
+            <a-tag v-else-if="row.syncType === 'refund'">{{ dictConvert('RefundSyncStatus', row.outTradeStatus) }}</a-tag>
+            <a-tag v-else>无</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="repairOrder" title="是否修复" width="170">
@@ -57,9 +58,10 @@
       />
     </div>
     <pay-sync-record-info ref="paySyncRecordInfo" />
+    <pay-repair-record-info ref="payRepairRecordInfo" />
     <pay-order-info ref="payOrderInfo" />
     <refund-order-info ref="refundOrderInfo" />
-    <pay-repair-record-info ref="payRepairRecordInfo" />
+    <allocation-order-info ref="allocationOrderInfo" />
   </div>
 </template>
 
@@ -78,6 +80,7 @@
   import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
   import PayRepairRecordInfo from '/@/views/payment/record/repair/PayRepairRecordInfo.vue'
   import RefundOrderInfo from '/@/views/payment/order/refund/RefundOrderInfo.vue'
+  import AllocationOrderInfo from '/@/views/payment/allocation/order/AllocationOrderInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
@@ -124,6 +127,7 @@
   const payOrderInfo = $ref<any>()
   const refundOrderInfo = $ref<any>()
   const payRepairRecordInfo = $ref<any>()
+  const allocationOrderInfo = $ref<any>()
 
   onMounted(() => {
     init()
@@ -169,8 +173,10 @@
   function showOrder(record) {
     if (record.syncType === 'pay') {
       payOrderInfo.init(record.tradeNo)
-    } else {
+    } else if (record.syncType === 'refund') {
       refundOrderInfo.init(record.tradeNo)
+    } else {
+      allocationOrderInfo.init(record.tradeNo)
     }
   }
 </script>

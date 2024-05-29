@@ -171,10 +171,6 @@ export interface AllocationGroupReceiver extends BaseEntity {
    */
   defaultGroup?: boolean
   /**
-   * 接收方账号别名
-   */
-  name?: string
-  /**
    * 分账比例
    */
   rate?: number

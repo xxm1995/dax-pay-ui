@@ -25,7 +25,6 @@
             <a-link @click="show(row)">{{ row.receiverNo }}</a-link>
           </template>
         </vxe-column>
-        <vxe-column field="name" title="账号别名" :min-width="100" />
         <vxe-column field="channel" title="所属通道" :min-width="100">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
@@ -95,7 +94,6 @@
   const fields = computed(() => {
     return [
       { field: 'receiverNo', type: STRING, name: '接收方编号', placeholder: '请输入接收方编号' },
-      { field: 'name', type: STRING, name: '账号别名', placeholder: '请输入账号别名' },
       { field: 'channel', type: LIST, name: '分账通道', placeholder: '请选择分账通道', selectList: payChannelList },
       { field: 'relationType', type: LIST, name: '分账关系', placeholder: '请选择分账关系', selectList: relationTypeList },
     ] as QueryField[]

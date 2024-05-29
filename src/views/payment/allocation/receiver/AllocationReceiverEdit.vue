@@ -24,9 +24,6 @@
         <a-form-item label="接收方编号" validate-first name="receiverNo">
           <a-input v-model:value="form.receiverNo" :disabled="!addable" placeholder="请输入接收方编号" />
         </a-form-item>
-        <a-form-item label="账号别名" name="name">
-          <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入账号别名" />
-        </a-form-item>
         <a-form-item label="所属通道" name="channel">
           <a-select
             style="width: 100%"
@@ -122,7 +119,7 @@
   const rules = computed(() => {
     return {
       receiverNo: [
-        { required: true, message: '请输入账号别名' },
+        { required: true, message: '请输入账号编号' },
         { trigger: 'blur', validator: validateCode },
       ],
       channel: [{ required: true, message: '请选择所属通道' }],

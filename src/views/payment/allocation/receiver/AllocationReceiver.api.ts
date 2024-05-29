@@ -86,8 +86,6 @@ export function del(id) {
  * 分账接收方
  */
 export interface AllocationReceiver extends BaseEntity {
-  // 账号别名
-  name?: string
   // 分账接收方编号
   receiverNo?: string
   // 所属通道
