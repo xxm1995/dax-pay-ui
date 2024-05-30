@@ -33,6 +33,16 @@ export function get(id) {
 }
 
 /**
+ * 获取订单详细信息
+ */
+export function getOrderByAllocNo(allocNo: string) {
+  return defHttp.get<Result>({
+    url: '/order/allocation/findByAllocNo',
+    params: { allocNo },
+  })
+}
+
+/**
  * 扩展信息
  */
 export function getExtra(id) {
@@ -65,20 +75,20 @@ export function detail(id) {
 /**
  * 分账完结
  */
-export function finish(id) {
+export function finish(allocationNo) {
   return defHttp.post<Result<AllocationOrder>>({
     url: '/order/allocation/finish',
-    params: { id },
+    params: { allocationNo },
   })
 }
 
 /**
  * 分账完结
  */
-export function retry(id) {
+export function retry(bizAllocationNo) {
   return defHttp.post<Result<AllocationOrder>>({
     url: '/order/allocation/retry',
-    params: { id },
+    params: { bizAllocationNo },
   })
 }
 

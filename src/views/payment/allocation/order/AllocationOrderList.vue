@@ -199,7 +199,7 @@
       title: '分账重试',
       content: '确定分账重试吗？',
       onOk: () => {
-        retry(record.id).then(() => {
+        retry(record.bizAllocationNo).then(() => {
           createMessage.success('分账重试请求发送成功')
           queryPage()
         })
@@ -216,7 +216,7 @@
       title: '完结分账',
       content: '确定完结分账吗？',
       onOk: () => {
-        finish(record.id).then(() => {
+        finish(record.allocationNo).then(() => {
           createMessage.success('完结请求发送成功')
           queryPage()
         })

@@ -71,7 +71,12 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { get, AllocationOrder } from './AllocationOrder.api'
+  import {
+    get,
+    AllocationOrder,
+    getOrderByAllocNo,
+    AllocationOrderExtra
+  } from './AllocationOrder.api'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   const {
@@ -83,13 +88,15 @@
   const { dictConvert } = useDict()
 
   let order = $ref<AllocationOrder>({})
+  let orderExtra = $ref<AllocationOrderExtra>({})
   // 入口
   async function init(record: AllocationOrder) {
     visible.value = true
     order = record
     confirmLoading.value = true
-    await get(record.id).then(({ data }) => {
-      order = data
+    await getOrderByAllocNo(record.allocationNo as string).then(({ data }) => {
+      order = data.order
+      orderExtra = data.orderExtra
     })
     confirmLoading.value = false
   }
