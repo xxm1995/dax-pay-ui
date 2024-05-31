@@ -38,7 +38,7 @@
             <a-tag v-else>无需修复</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="errorMsg" title="错误消息" :min-width="160"/>
+        <vxe-column field="errorMsg" title="错误消息" :min-width="160" />
         <vxe-column field="createTime" title="同步时间" :min-width="160" />
         <vxe-column fixed="right" :min-width="60" :showOverflow="false" title="操作">
           <template #default="{ row }">
@@ -81,6 +81,7 @@
   import PayRepairRecordInfo from '/@/views/payment/record/repair/PayRepairRecordInfo.vue'
   import RefundOrderInfo from '/@/views/payment/order/refund/RefundOrderInfo.vue'
   import AllocationOrderInfo from '/@/views/payment/allocation/order/AllocationOrderInfo.vue'
+  import ALink from '/@/components/Link/Link.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)

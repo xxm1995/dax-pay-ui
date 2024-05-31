@@ -26,8 +26,8 @@
           <a-tag> {{ dictConvert('AsyncPayChannel', form.channel) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="同步结果" :span="2">
-          <a-tag v-if="row.syncType === 'pay'">{{ dictConvert('PaySyncStatus', form.outTradeStatus) }}</a-tag>
-          <a-tag v-else-if="row.syncType === 'refund'">{{ dictConvert('RefundSyncStatus', form.outTradeStatus) }}</a-tag>
+          <a-tag v-if="form.syncType === 'pay'">{{ dictConvert('PaySyncStatus', form.outTradeStatus) }}</a-tag>
+          <a-tag v-else-if="form.syncType === 'refund'">{{ dictConvert('RefundSyncStatus', form.outTradeStatus) }}</a-tag>
           <a-tag v-else>无</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="修复单号" :span="2">

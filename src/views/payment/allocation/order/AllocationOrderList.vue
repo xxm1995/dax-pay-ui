@@ -66,7 +66,7 @@
                   <a-menu-item>
                     <a-link @click="syncInfo(row)">同步</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="row.status === 'allocation_end'">
+                  <a-menu-item v-if="['allocation_end', 'finish_failed'].includes(row.status)">
                     <a-link @click="finishInfo(row)">完结</a-link>
                   </a-menu-item>
                 </a-menu>
@@ -154,7 +154,7 @@
    * 查看
    */
   function show(record) {
-    allocationOrderInfo.init(record, FormEditType.Show)
+    allocationOrderInfo.init(record.allocationNo, FormEditType.Show)
   }
 
   /**
