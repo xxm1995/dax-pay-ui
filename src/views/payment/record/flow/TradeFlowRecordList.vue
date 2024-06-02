@@ -7,6 +7,20 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" title="序号" width="60" />
+        <vxe-column field="title" title="标题" :min-width="220" />
+        <vxe-column field="amount" title="金额(元)" :min-width="120" sortable>
+          <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
+        </vxe-column>
+        <vxe-column field="type" title="流水类型" :min-width="120">
+          <template #default="{ row }">
+            <a-tag>{{ dictConvert('TradeFlowRecordType', row.type) }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="channel" title="交易通道" :min-width="100">
+          <template #default="{ row }">
+            <a-tag>{{ dictConvert('AsyncPayChannel', row.channel) }}</a-tag>
+          </template>
+        </vxe-column>
         <vxe-column field="tradeNo" title="本地交易号" :min-width="220">
           <template #default="{ row }">
             <a @click="showOrder(row)">
@@ -15,31 +29,8 @@
           </template>
         </vxe-column>
         <vxe-column field="bizTradeNo" title="商户交易号" :min-width="220" />
-        <vxe-column field="channel" title="同步类型" :min-width="120">
-          <template #default="{ row }">
-            <a-tag>{{ dictConvert('PaymentType', row.syncType) }}</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="channel" title="同步通道" :min-width="100">
-          <template #default="{ row }">
-            <a-tag>{{ dictConvert('AsyncPayChannel', row.channel) }}</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="status" title="同步结果" :min-width="100">
-          <template #default="{ row }">
-            <a-tag v-if="row.syncType === 'pay'">{{ dictConvert('PaySyncStatus', row.outTradeStatus) }}</a-tag>
-            <a-tag v-else-if="row.syncType === 'refund'">{{ dictConvert('RefundSyncStatus', row.outTradeStatus) }}</a-tag>
-            <a-tag v-else>无</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="repairOrder" title="是否修复" width="170">
-          <template #default="{ row }">
-            <a-tag v-if="row.repairOrder" color="green"> {{ row.repairOrderNo }} </a-tag>
-            <a-tag v-else>无需修复</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="errorMsg" title="错误消息" :min-width="160" />
-        <vxe-column field="createTime" title="同步时间" :min-width="160" />
+        <vxe-column field="outTradeNo" title="通道交易号" :min-width="220" />
+        <vxe-column field="createTime" title="时间" :min-width="160" sortable />
         <vxe-column fixed="right" :min-width="60" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
@@ -57,18 +48,16 @@
         @page-change="handleTableChange"
       />
     </div>
-    <pay-sync-record-info ref="paySyncRecordInfo" />
-    <pay-repair-record-info ref="payRepairRecordInfo" />
+    <trade-flow-record-info ref="tradeFlowRecordInfo" />
     <pay-order-info ref="payOrderInfo" />
     <refund-order-info ref="refundOrderInfo" />
-    <allocation-order-info ref="allocationOrderInfo" />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { page } from './PaySyncRecord.api'
+  import { page } from './TradeFlowRecord.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
@@ -76,47 +65,38 @@
   import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
-  import PaySyncRecordInfo from './PaySyncRecordInfo.vue'
   import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
-  import PayRepairRecordInfo from '/@/views/payment/record/repair/PayRepairRecordInfo.vue'
   import RefundOrderInfo from '/@/views/payment/order/refund/RefundOrderInfo.vue'
-  import AllocationOrderInfo from '/@/views/payment/allocation/order/AllocationOrderInfo.vue'
   import ALink from '/@/components/Link/Link.vue'
+  import TradeFlowRecordInfo from './TradeFlowRecordInfo.vue'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
-  let syncStatusList = $ref<LabeledValue[]>([])
   let payChannelList = $ref<LabeledValue[]>([])
-  let syncTypeList = $ref<LabeledValue[]>([])
+  let tradeFlowRecordTypeList = $ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
     return [
+      { field: 'title', type: STRING, name: '订单标题', placeholder: '请输入订单标题' },
       { field: 'tradeNo', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
       { field: 'bizTradeNo', type: STRING, name: '商户交易号', placeholder: '请输入商户交易号' },
       { field: 'outTradeNo', type: STRING, name: '通道交易号', placeholder: '请输入通道交易号' },
       {
-        field: 'syncType',
+        field: 'type',
         type: LIST,
-        name: '同步类型',
-        placeholder: '请选择同步类型',
-        selectList: syncTypeList,
-      },
-      {
-        field: 'outTradeStatus',
-        type: LIST,
-        name: '同步结果',
-        placeholder: '请选择同步结果',
-        selectList: syncStatusList,
+        name: '流水类型',
+        placeholder: '请选择流水类型',
+        selectList: tradeFlowRecordTypeList,
       },
       {
         field: 'channel',
         type: LIST,
-        name: '同步通道',
-        placeholder: '请选择同步通道',
+        name: '交易通道',
+        placeholder: '请选择交易通道',
         selectList: payChannelList,
       },
     ] as QueryField[]
@@ -124,11 +104,9 @@
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
-  const paySyncRecordInfo = $ref<any>()
   const payOrderInfo = $ref<any>()
   const refundOrderInfo = $ref<any>()
-  const payRepairRecordInfo = $ref<any>()
-  const allocationOrderInfo = $ref<any>()
+  const tradeFlowRecordInfo = $ref<any>()
 
   onMounted(() => {
     init()
@@ -143,9 +121,8 @@
    * 初始化
    */
   async function init() {
-    syncStatusList = await dictDropDown('PaySyncStatus')
+    tradeFlowRecordTypeList = await dictDropDown('TradeFlowRecordType')
     payChannelList = await dictDropDown('PayChannel')
-    syncTypeList = await dictDropDown('PaymentType')
   }
 
   /**
@@ -165,19 +142,17 @@
    * 查看
    */
   function show(record) {
-    paySyncRecordInfo.init(record.id)
+    tradeFlowRecordInfo.init(record.id)
   }
 
   /**
    * 查看支付单信息
    */
   function showOrder(record) {
-    if (record.syncType === 'pay') {
+    if (record.type === 'pay') {
       payOrderInfo.init(record.tradeNo)
-    } else if (record.syncType === 'refund') {
+    } else if (record.type === 'refund') {
       refundOrderInfo.init(record.tradeNo)
-    } else {
-      allocationOrderInfo.init(record.tradeNo)
     }
   }
 </script>
