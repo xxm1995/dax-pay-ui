@@ -27,7 +27,7 @@ export function get(id) {
  */
 export function getByRefundNo(refundNo) {
   return defHttp.get<Result<any>>({
-    url: '/order/refund/findByOrderNo',
+    url: '/order/refund/findByRefundNo',
     params: { refundNo },
   })
 }

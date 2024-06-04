@@ -18,7 +18,6 @@
       @edit-activated="editActivatedEvent"
     >
       <vxe-column type="seq" width="60" />
-      <vxe-column field="name" title="账号别名" :min-width="100" />
       <vxe-column field="receiverType" title="接收方类型" :min-width="100">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('AllocReceiverType', row.receiverType) }}</a-tag>
@@ -114,7 +113,6 @@
       groupId: group.id,
       receivers,
     }
-    createMessage.success('添加中...')
     bindReceivers(param).then(() => {
       createMessage.success('添加成功')
       queryPage()

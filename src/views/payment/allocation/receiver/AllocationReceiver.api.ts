@@ -53,6 +53,16 @@ export function add(data: AllocationReceiver) {
 }
 
 /**
+ * 编码是否存在
+ */
+export function existsByNo(receiverNo) {
+  return defHttp.get<Result<boolean>>({
+    url: '/allocation/receiver/existsByReceiverNo',
+    params: { receiverNo },
+  })
+}
+
+/**
  * 修改
  */
 export function update(data: AllocationReceiver) {
@@ -73,31 +83,11 @@ export function del(id) {
 }
 
 /**
- * 同步到三方支付系统中
- */
-export function registerByGateway(id) {
-  return defHttp.post<Result<null>>({
-    url: '/allocation/receiver/registerByGateway',
-    params: { id },
-  })
-}
-
-/**
- * 从三方支付系统中删除
- */
-export function removeByGateway(id) {
-  return defHttp.post<Result<null>>({
-    url: '/allocation/receiver/removeByGateway',
-    params: { id },
-  })
-}
-
-/**
  * 分账接收方
  */
 export interface AllocationReceiver extends BaseEntity {
-  // 账号别名
-  name?: string
+  // 分账接收方编号
+  receiverNo?: string
   // 所属通道
   channel?: string
   // 分账接收方类型
@@ -110,6 +100,4 @@ export interface AllocationReceiver extends BaseEntity {
   relationType?: string
   // 关系名称
   relationName?: string
-  // 是否已经同步到网关
-  sync?: boolean
 }

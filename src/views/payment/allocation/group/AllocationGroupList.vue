@@ -20,11 +20,12 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="name" title="名称" :min-width="160">
+        <vxe-column field="groupNo" title="分组编号" :min-width="160">
           <template #default="{ row }">
-            <a-link @click="show(row)">{{ row.name }}</a-link>
+            <a-link @click="show(row)">{{ row.groupNo }}</a-link>
           </template>
         </vxe-column>
+        <vxe-column field="name" title="分组名称" :min-width="160" />
         <vxe-column field="channel" title="所属通道" :min-width="100">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PayChannel', row.channel) }}</a-tag>
@@ -83,7 +84,7 @@
 <script setup lang="ts">
   import { computed, onMounted } from 'vue'
   import { $ref } from 'vue/macros'
-  import { cancelDefaultGroup, del, page, setDefaultGroup } from "./AllocationGroup.api";
+  import { cancelDefaultGroup, del, page, setDefaultGroup } from './AllocationGroup.api'
   import useTablePage from '/@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '/@/hooks/web/useMessage'
@@ -100,8 +101,8 @@
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, sortChange, sortParam, pages, model, loading } =
     useTablePage(queryPage)
-  const { notification, createMessage, createConfirm } = useMessage()
-  const { dictConvert, dictDropDown } = useDict()
+  const { createMessage, createConfirm } = useMessage()
+  const { dictConvert } = useDict()
 
   const allocationGroupEdit = $ref<any>()
   const allocationGroupConfig = $ref<any>()
@@ -112,6 +113,7 @@
 
   const fields = computed(() => {
     return [
+      { field: 'groupNo', type: STRING, name: '分账组编号', placeholder: '请输入分账组编号' },
       { field: 'name', type: STRING, name: '分账组名称', placeholder: '请输入分账组名称' },
       { field: 'channel', type: LIST, name: '分账通道', placeholder: '请选择分账通道', selectList: payChannelList },
     ] as QueryField[]

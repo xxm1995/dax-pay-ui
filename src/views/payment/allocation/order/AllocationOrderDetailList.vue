@@ -3,6 +3,7 @@
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <vxe-table row-id="id" ref="xTable" :data="records" :loading="loading" :cell-style="cellStyle">
       <vxe-column type="seq" width="60" />
+      <vxe-column field="receiverNo" title="接收方编号" :min-width="120" />
       <vxe-column field="receiverName" title="接收方姓名" :min-width="100" />
       <vxe-column field="receiverType" title="接收方类型" :min-width="100">
         <template #default="{ row }">

@@ -38,7 +38,7 @@
         <vxe-column field="amount" title="总分账金额(元)" :min-width="120">
           <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
         </vxe-column>
-        <vxe-column field="status" title="状态" :min-width="100">
+        <vxe-column field="status" title="状态" :min-width="120">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('AllocOrderStatus', row.status) }}</a-tag>
           </template>
@@ -66,7 +66,7 @@
                   <a-menu-item>
                     <a-link @click="syncInfo(row)">同步</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="row.status === 'allocation_end'">
+                  <a-menu-item v-if="['allocation_end', 'finish_failed'].includes(row.status)">
                     <a-link @click="finishInfo(row)">完结</a-link>
                   </a-menu-item>
                 </a-menu>
@@ -154,7 +154,7 @@
    * 查看
    */
   function show(record) {
-    allocationOrderInfo.init(record, FormEditType.Show)
+    allocationOrderInfo.init(record.allocationNo, FormEditType.Show)
   }
 
   /**
@@ -199,7 +199,7 @@
       title: '分账重试',
       content: '确定分账重试吗？',
       onOk: () => {
-        retry(record.id).then(() => {
+        retry(record.bizAllocationNo).then(() => {
           createMessage.success('分账重试请求发送成功')
           queryPage()
         })
@@ -216,7 +216,7 @@
       title: '完结分账',
       content: '确定完结分账吗？',
       onOk: () => {
-        finish(record.id).then(() => {
+        finish(record.allocationNo).then(() => {
           createMessage.success('完结请求发送成功')
           queryPage()
         })

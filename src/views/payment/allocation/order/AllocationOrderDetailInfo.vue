@@ -10,6 +10,9 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions title="" bordered :column="{ md: 2, sm: 1, xs: 1 }">
+        <a-descriptions-item label="接收方编号">
+          {{ order.receiverNo }}
+        </a-descriptions-item>
         <a-descriptions-item label="接收方姓名">
           {{ order.receiverName }}
         </a-descriptions-item>

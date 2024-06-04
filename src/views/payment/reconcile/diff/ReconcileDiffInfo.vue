@@ -42,7 +42,7 @@
       </a-descriptions-item>
       <template v-if="form.diffs">
         <a-descriptions-item :label="`${item.fieldName}[差异]`" :key="item" v-for="item in form.diffs">
-          <a-tag>本地</a-tag> : {{ item.localValue }}<br /><a-tag>远程</a-tag> : {{ item.gatewayValue }}
+          <a-tag>本地</a-tag> : {{ item.localValue }}<br /><a-tag>远程</a-tag> : {{ item.outValue }}
         </a-descriptions-item>
       </template>
     </a-descriptions>

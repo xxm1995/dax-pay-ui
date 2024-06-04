@@ -21,6 +21,9 @@
         <a-form-item label="主键" name="id" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
+        <a-form-item label="分账组编号" name="groupNo">
+          <a-input v-model:value="form.groupNo" :disabled="!addable" placeholder="请输入分账组编号" />
+        </a-form-item>
         <a-form-item label="分账组名称" name="name">
           <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入分账组名称" />
         </a-form-item>
@@ -53,11 +56,9 @@
 
 <script setup lang="ts">
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { useValidate } from '/@/hooks/bootx/useValidate'
-  import { useMessage } from '/@/hooks/web/useMessage'
   import { computed, nextTick } from 'vue'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
-  import { get, add, update, AllocationGroup } from './AllocationGroup.api'
+  import { get, add, update, AllocationGroup, existsByNo } from './AllocationGroup.api'
   import { FormEditType } from '/@/enums/formTypeEnum'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
@@ -67,7 +68,6 @@
   const {
     initFormEditType,
     handleCancel,
-    search,
     labelCol,
     wrapperCol,
     modalWidth,
@@ -75,12 +75,9 @@
     confirmLoading,
     visible,
     addable,
-    editable,
     showable,
     formEditType,
   } = useFormEdit()
-  const { existsByServer } = useValidate()
-  const { createMessage } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
   // 表单
@@ -91,7 +88,10 @@
   // 校验
   const rules = computed(() => {
     return {
-      name: [{ required: true, message: '请输入账号别名' }],
+      groupNo: [
+        { required: true, message: '请输入分账组编号' },
+        { trigger: 'blur', validator: validateCode },
+      ],
       channel: [{ required: true, message: '请选择所属通道' }],
     } as Record<string, Rule[]>
   })
@@ -146,6 +146,15 @@
       }
       handleCancel()
     })
+  }
+
+  /**
+   * 校验编码重复
+   */
+  async function validateCode() {
+    const { groupNo } = form
+    const res = await existsByNo(groupNo)
+    return res.data ? Promise.reject('该分账组编号已经存在') : Promise.resolve()
   }
 
   /**

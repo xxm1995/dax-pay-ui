@@ -103,6 +103,16 @@ export function updateRate(receiverId, rate: number) {
 }
 
 /**
+ * 编码是否存在
+ */
+export function existsByNo(receiverNo) {
+  return defHttp.get<Result<boolean>>({
+    url: '/allocation/group/existsByGroupNo',
+    params: { receiverNo },
+  })
+}
+
+/**
  * 设置默认分账组
  */
 export function setDefaultGroup(id) {
@@ -126,6 +136,10 @@ export function cancelDefaultGroup(id) {
  * 分账组
  */
 export interface AllocationGroup extends BaseEntity {
+  /**
+   * 分账组编号
+   */
+  groupNo?: string
   /**
    * 分账组名称
    */
@@ -156,10 +170,6 @@ export interface AllocationGroupReceiver extends BaseEntity {
    * 默认分账组
    */
   defaultGroup?: boolean
-  /**
-   * 接收方账号别名
-   */
-  name?: string
   /**
    * 分账比例
    */

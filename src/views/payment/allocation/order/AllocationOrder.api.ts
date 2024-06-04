@@ -33,6 +33,26 @@ export function get(id) {
 }
 
 /**
+ * 获取订单详细信息
+ */
+export function getOrderByAllocNo(allocNo: string) {
+  return defHttp.get<Result>({
+    url: '/order/allocation/findByAllocNo',
+    params: { allocNo },
+  })
+}
+
+/**
+ * 扩展信息
+ */
+export function getExtra(id) {
+  return defHttp.get<Result<AllocationOrder>>({
+    url: '/order/allocation/findById',
+    params: { id },
+  })
+}
+
+/**
  * 明细列表
  */
 export function detailList(orderId) {
@@ -55,27 +75,27 @@ export function detail(id) {
 /**
  * 分账完结
  */
-export function finish(id) {
+export function finish(allocationNo) {
   return defHttp.post<Result<AllocationOrder>>({
     url: '/order/allocation/finish',
-    params: { id },
+    params: { allocationNo },
   })
 }
 
 /**
  * 分账完结
  */
-export function retry(id) {
+export function retry(bizAllocationNo) {
   return defHttp.post<Result<AllocationOrder>>({
     url: '/order/allocation/retry',
-    params: { id },
+    params: { bizAllocationNo },
   })
 }
 
 /**
  * 查询分账结果
  */
-export function sync(allocationNo){
+export function sync(allocationNo) {
   return defHttp.post<Result<AllocationOrder>>({
     url: '/order/allocation/sync',
     params: { allocationNo },
@@ -121,6 +141,22 @@ export interface AllocationOrder extends BaseEntity {
 }
 
 /**
+ * 分账扩展订单信息
+ */
+export interface AllocationOrderExtra {
+  // 异步通知地址
+  notifyUrl?: string
+  // 商户扩展参数
+  attach?: string
+  // 附加参数
+  extraParam?: string
+  // 请求时间
+  reqTime?: string
+  // 支付终端ip
+  clientIp?: string
+}
+
+/**
  * 分账订单明细
  */
 export interface AllocationOrderDetail extends BaseEntity {
@@ -138,6 +174,8 @@ export interface AllocationOrderDetail extends BaseEntity {
   receiverAccount?: string
   // 接收方姓名
   receiverName?: string
+  // 接收方编号
+  receiverNo?: string
   // 分账结果
   result?: string
   // 错误代码

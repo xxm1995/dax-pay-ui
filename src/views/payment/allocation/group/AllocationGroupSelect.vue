@@ -15,7 +15,7 @@
     </vxe-toolbar>
     <vxe-table row-id="id" ref="xTable" :height="350" :checkbox-config="checkboxConfig" :loading="loading" :data="pagination.records">
       <vxe-column type="checkbox" width="50" />
-      <vxe-column field="name" title="账号别名" :min-width="100"/>
+      <vxe-column field="receiverNo" title="接收方编号" :min-width="160" />
       <vxe-column field="receiverType" title="分账接收方类型" :min-width="100">
         <template #default="{ row }">
           <a-tag>{{ dictConvert('AllocReceiverType', row.receiverType) }}</a-tag>
@@ -70,14 +70,12 @@
   let currentChannel = $ref<string>('')
   let queryParam = $ref<any>({})
   let relationTypeList = $ref<LabeledValue[]>([])
-  let receiverTypeList = $ref<LabeledValue[]>([])
 
   const xTable = $ref<any>()
   const fields = computed(() => {
     return [
-      { field: 'name', type: STRING, name: '账号别名', placeholder: '请输入账号别名' },
+      { field: 'receiverNo', type: STRING, name: '接收方编号', placeholder: '请输入接收方编号' },
       { field: 'relationType', type: LIST, name: '分账关系', placeholder: '请选择分账关系', selectList: relationTypeList },
-      // { field: 'receiverType', type: LIST, name: '接收方类型', placeholder: '请选择分账接收方类型', selectList: receiverTypeList },
     ] as QueryField[]
   })
   const checkboxConfig = {

@@ -52,6 +52,15 @@
         <a-descriptions-item label="完成时间" :span="2">
           {{ order.finishTime }}
         </a-descriptions-item>
+        <a-descriptions-item label="商户扩展参数" :span="2">
+          {{ orderExtra.attach }}
+        </a-descriptions-item>
+        <a-descriptions-item label="终端IP" :span="2">
+          {{ orderExtra.clientIp || '空' }}
+        </a-descriptions-item>
+        <a-descriptions-item label="通知地址" :span="4">
+          {{ orderExtra.notifyUrl }}
+        </a-descriptions-item>
         <a-descriptions-item v-if="order.errorCode" label="错误编码" :span="2">
           {{ order.errorMsg }}
         </a-descriptions-item>
@@ -71,33 +80,23 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { get, AllocationOrder } from './AllocationOrder.api'
+  import { AllocationOrder, getOrderByAllocNo, AllocationOrderExtra } from './AllocationOrder.api'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
-  const {
-    initFormEditType,
-    handleCancel,
-    search,
-    labelCol,
-    wrapperCol,
-    modalWidth,
-    title,
-    confirmLoading,
-    visible,
-    editable,
-    showable,
-    formEditType,
-  } = useFormEdit()
+  const { handleCancel, confirmLoading, visible, showable } = useFormEdit()
   const { dictConvert } = useDict()
 
   let order = $ref<AllocationOrder>({})
-  // 入口
-  async function init(record: AllocationOrder) {
+  let orderExtra = $ref<AllocationOrderExtra>({})
+  /**
+   * 入口
+   */
+  async function init(allocationNo) {
     visible.value = true
-    order = record
     confirmLoading.value = true
-    await get(record.id).then(({ data }) => {
-      order = data
+    await getOrderByAllocNo(allocationNo).then(({ data }) => {
+      order = data.order
+      orderExtra = data.extra
     })
     confirmLoading.value = false
   }
