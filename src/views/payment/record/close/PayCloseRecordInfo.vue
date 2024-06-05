@@ -19,6 +19,9 @@
         <a-descriptions-item label="支付通道">
           {{ dictConvert('PayChannel', form.channel) }}
         </a-descriptions-item>
+        <a-descriptions-item label="关闭类型">
+          {{ dictConvert('PayCloseType', form.closeType) }}
+        </a-descriptions-item>
         <a-descriptions-item label="是否关闭成功">
           {{ form.closed ? '是' : '否' }}
         </a-descriptions-item>

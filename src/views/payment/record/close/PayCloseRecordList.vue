@@ -22,20 +22,25 @@
           </template>
         </vxe-column>
         <vxe-column field="bizOrderNo" title="商户订单号" :min-width="180" />
-        <vxe-column field="closed" title="关闭状态">
+        <vxe-column field="closeType" title="关闭类型" :min-width="80">
+          <template #default="{ row }">
+            {{ dictConvert('PayCloseType', row.closeType) }}
+          </template>
+        </vxe-column>
+        <vxe-column field="closed" title="关闭状态" :min-width="80">
           <template #default="{ row }">
             <a-tag v-if="row.closed" color="green">成功</a-tag>
             <a-tag v-else color="red">失败</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="channel" title="支付通道">
+        <vxe-column field="channel" title="支付通道" :min-width="100">
           <template #default="{ row }">
             {{ dictConvert('PayChannel', row.channel) }}
           </template>
         </vxe-column>
-        <vxe-column field="errorMsg" title="错误消息" />
-        <vxe-column field="clientIp" title="客户端IP" />
-        <vxe-column field="createTime" title="请求时间" />
+        <vxe-column field="errorMsg" title="错误消息" :min-width="180" />
+        <vxe-column field="clientIp" title="客户端IP" :min-width="120" />
+        <vxe-column field="createTime" title="请求时间" :min-width="120" />
         <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
@@ -79,6 +84,7 @@
   const { dictConvert, dictDropDown } = useDict()
 
   let payChannelList = $ref<LabeledValue[]>([])
+  let closeTypeList = $ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
@@ -91,6 +97,13 @@
         name: '支付通道',
         placeholder: '请选择支付通道',
         selectList: payChannelList,
+      },
+      {
+        field: 'closeType',
+        type: LIST,
+        name: '关闭类型',
+        placeholder: '请选择订单关闭类型',
+        selectList: closeTypeList,
       },
       {
         field: 'closed',
@@ -124,6 +137,7 @@
    */
   async function init() {
     payChannelList = await dictDropDown('PayChannel')
+    closeTypeList = await dictDropDown('PayCloseType')
   }
 
   /**

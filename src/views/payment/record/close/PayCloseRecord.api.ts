@@ -32,6 +32,8 @@ export interface PayCloseRecord extends BaseEntity {
   bizOrderNo?: string
   // 关闭的支付通道
   channel?: string
+  // 关闭类型 关闭/撤销
+  closeType?: string
   // 是否关闭成功
   closed?: boolean
   // 错误编码
@@ -41,4 +43,3 @@ export interface PayCloseRecord extends BaseEntity {
   // 客户端IP
   clientIp?: string
 }
-
