@@ -75,30 +75,30 @@ export function detail(id) {
 /**
  * 分账完结
  */
-export function finish(allocationNo) {
+export function finish(allocNo) {
   return defHttp.post<Result<AllocationOrder>>({
     url: '/order/allocation/finish',
-    params: { allocationNo },
+    params: { allocNo },
   })
 }
 
 /**
  * 分账完结
  */
-export function retry(bizAllocationNo) {
+export function retry(bizAllocNo) {
   return defHttp.post<Result<AllocationOrder>>({
     url: '/order/allocation/retry',
-    params: { bizAllocationNo },
+    params: { bizAllocNo },
   })
 }
 
 /**
  * 查询分账结果
  */
-export function sync(allocationNo) {
+export function sync(allocNo) {
   return defHttp.post<Result<AllocationOrder>>({
     url: '/order/allocation/sync',
-    params: { allocationNo },
+    params: { allocNo },
   })
 }
 
@@ -107,11 +107,11 @@ export function sync(allocationNo) {
  */
 export interface AllocationOrder extends BaseEntity {
   // 分账单号
-  allocationNo?: string
+  allocNo?: string
   // 商户分账单号
-  bizAllocationNo?: string
+  bizAllocNo?: string
   // 通道分账号
-  outAllocationNo?: string
+  outAllocNo?: string
   // 支付订单ID
   orderId?: string
   // 支付订单号

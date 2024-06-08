@@ -29,19 +29,19 @@
           {{ order.description }}
         </a-descriptions-item>
         <a-descriptions-item label="分账号" :span="2">
-          {{ order.allocationNo }}
+          {{ order.allocNo }}
         </a-descriptions-item>
         <a-descriptions-item label="支付订单号" :span="2">
           {{ order.orderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="商户分账号" :span="2">
-          {{ order.allocationNo }}
+          {{ order.allocNo }}
         </a-descriptions-item>
         <a-descriptions-item label="商户支付订单号" :span="2">
           {{ order.bizOrderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="通道分账号" :span="2">
-          {{ order.outAllocationNo || '无' }}
+          {{ order.outAllocNo || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="通道支付订单号" :span="2">
           {{ order.outOrderNo }}
@@ -91,10 +91,10 @@
   /**
    * 入口
    */
-  async function init(allocationNo) {
+  async function init(allocNo) {
     visible.value = true
     confirmLoading.value = true
-    await getOrderByAllocNo(allocationNo).then(({ data }) => {
+    await getOrderByAllocNo(allocNo).then(({ data }) => {
       order = data.order
       orderExtra = data.extra
     })

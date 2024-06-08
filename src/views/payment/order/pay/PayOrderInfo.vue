@@ -32,7 +32,7 @@
           {{ order.bizOrderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="分账状态">
-          {{ dictConvert('PayOrderAllocationStatus', order.allocationStatus) || '无' }}
+          {{ dictConvert('PayOrderAllocStatus', order.allocStatus) || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="三方系统交易号" :span="2">
           {{ order.outOrderNo || '无' }}
@@ -43,8 +43,8 @@
         <a-descriptions-item v-if="order.errorMsg" label="错误信息" :span="2">
           {{ order.errorMsg }}
         </a-descriptions-item>
-        <a-descriptions-item label="是否通知">
-          {{ orderExtra.notNotify ? '否' : '是' }}
+        <a-descriptions-item label="退款状态">
+          {{ dictConvert('PayOrderRefundStatus', order.refundStatus) || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="通知地址" :span="2">
           {{ orderExtra.notifyUrl || '无' }}

@@ -100,8 +100,10 @@ export interface PayOrder extends BaseEntity {
   refundableBalance?: number
   // 支付状态
   status?: string
+  // 退款状态
+  refundStatus?: string
   // 分账状态
-  allocationStatus?: string
+  allocStatus?: string
   // 支付时间
   payTime?: string
   // 过期时间
