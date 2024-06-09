@@ -51,7 +51,7 @@
             <a-tag v-else color="red">不支持</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="allocation" title="分账状态" :min-width="160">
+        <vxe-column field="allocStatus" title="分账状态" :min-width="160">
           <template #default="{ row }">
             {{ dictConvert('PayOrderAllocStatus', row.allocStatus) || '无' }}
           </template>

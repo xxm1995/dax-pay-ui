@@ -40,7 +40,7 @@
   import PayChannelConfigEdit from './PayChannelConfigEdit.vue'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, resetQueryParams, pagination, pages, model, loading } = useTablePage(queryPage)
+  const { loading } = useTablePage(queryPage)
   const { notification, createMessage, createConfirm } = useMessage()
 
   const fallbackImg =
@@ -79,6 +79,7 @@
       records = data
       loading.value = false
     })
+    return Promise.resolve()
   }
   // 编辑
   function edit(record) {

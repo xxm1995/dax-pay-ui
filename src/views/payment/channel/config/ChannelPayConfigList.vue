@@ -13,18 +13,7 @@
                   :fallback="fallbackImg"
                 />
               </template>
-              <a-card-meta :title="item.name">
-                <template #description>
-                  <template v-if="item.enable">
-                    <a-badge dot color="green" />
-                    <span style="color: green">已启用</span>
-                  </template>
-                  <template v-else>
-                    <a-badge dot color="red" />
-                    <span style="color: red">停用</span>
-                  </template>
-                </template>
-              </a-card-meta>
+              <a-card-meta :title="item.name" />
             </a-card>
           </template>
         </a-list>
@@ -42,7 +31,6 @@
   import { onMounted } from 'vue'
 
   let confirmLoading = $ref(false)
-  let visible = $ref(false)
   let channelConfigs = $ref<PayChannelConfig[]>([])
   let urlPrefix = $ref<string>()
 
@@ -60,7 +48,6 @@
    * 初始化并展示
    */
   async function init() {
-    visible = true
     confirmLoading = true
     // 图片地址前缀
     const urlPrefixResult = await getFilePreviewUrlPrefix()
