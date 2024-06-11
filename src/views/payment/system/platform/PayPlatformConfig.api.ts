@@ -29,6 +29,8 @@ export interface PayPlatformConfig extends BaseEntity {
   websiteUrl?: string
   // 开启签名验证
   reqSign?: boolean
+  // 请求过期时长(秒)
+  reqTimeout?: number
   // 签名方式
   signType?: string
   // 签名秘钥

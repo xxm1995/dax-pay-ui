@@ -54,22 +54,38 @@
                 <a-input placeholder="请输入签名秘钥" v-model:value="form.signSecret" :disabled="!edit" />
               </a-form-item>
             </a-col>
-            <a-col :offset="4" :span="20">
-              <a-form-item class="w-400px" name="limitAmount">
+            <a-col :span="20">
+              <a-form-item class="w-800px" name="limitAmount">
                 <template #label>
                   <basic-title helpMessage="一次订单支付时最高可以支付的金额，支付通道同时配置以低的为准"> 订单限额(元) </basic-title>
                 </template>
                 <a-input placeholder="请输入订单限额" v-model:value="form.limitAmount" :disabled="!edit" />
               </a-form-item>
             </a-col>
-            <a-col :offset="4" :span="20">
-              <a-form-item label="订单默认超时时间(分钟)" class="w-400px" name="orderTimeout">
+            <a-col :span="20">
+              <a-form-item label="订单默认超时时间(分钟)" class="w-800px" name="orderTimeout">
                 <a-input-number
                   :disabled="!edit"
                   placeholder="请输入订单默认超时时间(分钟)"
                   :precision="0"
                   :min="5"
                   v-model:value="form.orderTimeout"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="20">
+              <a-form-item class="w-800px" name="reqTimeout">
+                <template #label>
+                  <basic-title helpMessage="调用支付相关接口时传输的请求时间早于当前服务时间, 且差值超过配置的时长, 将会拦截请求">
+                    请求有效时长(秒)
+                  </basic-title>
+                </template>
+                <a-input-number
+                  :disabled="!edit"
+                  placeholder="请输入请求有效时长(秒)"
+                  :precision="0"
+                  :min="5"
+                  v-model:value="form.reqTimeout"
                 />
               </a-form-item>
             </a-col>
@@ -109,6 +125,7 @@
       signType: [{ required: form.reqSign, message: '请选择签名类型' }],
       signSecret: [{ required: form.reqSign, message: '请输入签名密钥' }],
       orderTimeout: [{ required: true, message: '请输入订单默认超时时间(分钟)' }],
+      reqTimeout: [{ required: true, message: '请输入请求有效时长(秒)' }],
     } as Record<string, Rule[]>
   })
 
