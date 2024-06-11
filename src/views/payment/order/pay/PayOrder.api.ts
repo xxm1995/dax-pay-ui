@@ -110,18 +110,6 @@ export interface PayOrder extends BaseEntity {
   expiredTime?: string
   // 关闭时间
   closeTime?: string
-  // 错误码
-  errorCode?: string
-  // 错误信息
-  errorMsg?: string
-}
-
-/**
- * 支付扩展信息
- */
-export interface PayOrderExtra {
-  // 是否不需要异步通知
-  notNotify?: string
   // 异步通知地址
   notifyUrl?: string
   // 商户扩展参数
@@ -132,4 +120,8 @@ export interface PayOrderExtra {
   reqTime?: string
   // 支付终端ip
   clientIp?: string
+  // 错误码
+  errorCode?: string
+  // 错误信息
+  errorMsg?: string
 }

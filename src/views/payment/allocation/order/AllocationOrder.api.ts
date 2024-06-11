@@ -132,18 +132,8 @@ export interface AllocationOrder extends BaseEntity {
   status?: string
   // 处理结果
   result?: string
-  // 错误码
-  errorCode?: string
-  // 错误原因
-  errorMsg?: string
   // 完成时间
   finishTime?: string
-}
-
-/**
- * 分账扩展订单信息
- */
-export interface AllocationOrderExtra {
   // 异步通知地址
   notifyUrl?: string
   // 商户扩展参数
@@ -154,6 +144,10 @@ export interface AllocationOrderExtra {
   reqTime?: string
   // 支付终端ip
   clientIp?: string
+  // 错误码
+  errorCode?: string
+  // 错误原因
+  errorMsg?: string
 }
 
 /**

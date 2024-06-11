@@ -47,7 +47,7 @@
           {{ dictConvert('PayOrderRefundStatus', order.refundStatus) || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="通知地址" :span="2">
-          {{ orderExtra.notifyUrl || '无' }}
+          {{ order.notifyUrl || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="自动分账" :span="1">
           {{ order.autoAllocation || '无' }}
@@ -56,13 +56,13 @@
           {{ order.description }}
         </a-descriptions-item>
         <a-descriptions-item label="客户IP">
-          {{ orderExtra.clientIp }}
+          {{ order.clientIp }}
         </a-descriptions-item>
         <a-descriptions-item label="商户扩展参数" :span="2">
-          {{ orderExtra.attach || '无' }}
+          {{ order.attach || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="请求时间">
-          {{ orderExtra.reqTime || '无' }}
+          {{ order.reqTime || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="支付时间">
           {{ order.payTime || '无' }}
@@ -89,21 +89,19 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { PayOrder, PayOrderExtra, getOrderByOrderNo } from './PayOrder.api'
+  import { PayOrder, getOrderByOrderNo } from './PayOrder.api'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   const { handleCancel, confirmLoading, visible, showable } = useFormEdit()
   const { dictConvert } = useDict()
 
   let order = $ref<PayOrder>({})
-  let orderExtra = $ref<PayOrderExtra>({})
   // 入口
   async function init(orderNo: string) {
     visible.value = true
     confirmLoading.value = true
     await getOrderByOrderNo(orderNo).then(({ data }) => {
-      order = data.payOrder
-      orderExtra = data.payOrderExtra
+      order = data
     })
     confirmLoading.value = false
   }

@@ -44,7 +44,7 @@
         <a-tag>{{ dictConvert('RefundStatus', order.status) }}</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="退款终端ip">
-        {{ orderExtra.clientIp }}
+        {{ order.clientIp }}
       </a-descriptions-item>
     </a-descriptions>
     <template #footer>
@@ -56,14 +56,13 @@
 <script lang="ts" setup>
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import {get, getByRefundNo, getOrderExtra, RefundOrder, RefundOrderExtra} from './RefundOrder.api'
+  import { getByRefundNo, RefundOrder } from './RefundOrder.api'
   import { BasicModal } from '/@/components/Modal'
   import { useDict } from '/@/hooks/bootx/useDict'
   const { handleCancel, confirmLoading, visible, showable } = useFormEdit()
   const { dictConvert } = useDict()
   // 表单
   let order = $ref<RefundOrder>({})
-  let orderExtra = $ref<RefundOrderExtra>({})
 
   // 事件
   const emits = defineEmits(['ok'])
@@ -72,8 +71,7 @@
     visible.value = true
     confirmLoading.value = true
     getByRefundNo(refundNo).then(({ data }) => {
-      order = data.refundOrder
-      orderExtra = data.refundOrderExtra
+      order = data
       confirmLoading.value = false
     })
   }
