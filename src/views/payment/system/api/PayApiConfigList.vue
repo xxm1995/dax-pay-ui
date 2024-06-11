@@ -4,15 +4,15 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ query: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="records" :loading="loading">
         <vxe-column type="seq" width="60" />
-        <vxe-column field="name" title="名称" :min-width="170" />
         <vxe-column field="code" title="编码" :min-width="170" />
-        <vxe-column field="api" title="接口地址" :min-width="280" />
-        <vxe-column field="remark" title="备注" :min-width="280" />
-        <vxe-column field="enable" title="启用接口" fixed="right" :width="80">
+        <vxe-column field="enable" title="启用接口" :width="80">
           <template #default="{ row }">
             <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="row.enable" @change="edit(row)" />
           </template>
         </vxe-column>
+        <vxe-column field="name" title="名称" :min-width="170" />
+        <vxe-column field="api" title="接口地址" :min-width="280" />
+        <vxe-column field="remark" title="备注" :min-width="280" />
       </vxe-table>
     </div>
   </div>
