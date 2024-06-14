@@ -113,13 +113,15 @@
           <template #label>
             <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 异步通知地址 </basic-title>
           </template>
-          <a-input v-model:value="form.notifyUrl" :disabled="showable" placeholder="请输入服务器异步通知地址" />
+          <a-input v-model:value="form.notifyUrl" placeholder="请输入异步通知URL" style="width: calc(100% - 80px)" />
+          <a-button class="w-80px" type="primary" @click="genNotifyUrl">自动生成</a-button>
         </a-form-item>
         <a-form-item name="returnUrl">
           <template #label>
             <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 同步通知地址 </basic-title>
           </template>
-          <a-input v-model:value="form.returnUrl" :disabled="showable" placeholder="请输入页面跳转同步通知地址" />
+          <a-input v-model:value="form.returnUrl" placeholder="请输入同步通知URL" style="width: calc(100% - 80px)" />
+          <a-button class="w-80px" type="primary" @click="genReturnUrl">自动生成</a-button>
         </a-form-item>
         <a-form-item label="支持支付方式" name="payWays">
           <a-select
@@ -157,7 +159,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
-  import { getConfig, update, findPayWayList, UnionPayConfig } from './UnionPayConfig.api'
+  import { getConfig, update, findPayWayList, generateNotifyUrl, generateReturnUrl, UnionPayConfig } from './UnionPayConfig.api'
   import { useDict } from '/@/hooks/bootx/useDict'
 
   const { handleCancel, search, diffForm, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, editable, showable } =
@@ -267,6 +269,27 @@
       createMessage.error('上传失败')
     }
   }
+
+  /**
+   * 生成异步通知地址
+   */
+  function genNotifyUrl() {
+    generateNotifyUrl().then(({ data }) => {
+      form.notifyUrl = data
+      formRef?.validateFields(['notifyUrl'])
+    })
+  }
+
+  /**
+   * 生成同步通知地址
+   */
+  function genReturnUrl() {
+    generateReturnUrl().then(({ data }) => {
+      form.returnUrl = data
+      formRef?.validateFields(['returnUrl'])
+    })
+  }
+
   defineExpose({
     init,
   })

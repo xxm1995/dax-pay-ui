@@ -46,13 +46,15 @@
           <template #label>
             <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 异步通知地址 </basic-title>
           </template>
-          <a-input v-model:value="form.notifyUrl" placeholder="请输入异步通知URL" />
+          <a-input v-model:value="form.notifyUrl" placeholder="请输入异步通知URL" style="width: calc(100% - 80px)" />
+          <a-button class="w-80px" type="primary" @click="genNotifyUrl">自动生成</a-button>
         </a-form-item>
         <a-form-item name="returnUrl">
           <template #label>
             <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 同步通知地址 </basic-title>
           </template>
-          <a-input v-model:value="form.returnUrl" placeholder="请输入同步通知URL" />
+          <a-input v-model:value="form.returnUrl" placeholder="请输入同步通知URL" style="width: calc(100% - 80px)" />
+          <a-button class="w-80px" type="primary" @click="genReturnUrl">自动生成</a-button>
         </a-form-item>
         <a-form-item label="支付网关URL" name="serverUrl">
           <a-input v-model:value="form.serverUrl" placeholder="请输入支付网关URL" />
@@ -169,7 +171,14 @@
   import { computed, nextTick } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { update, AlipayConfig, findPayWays, getConfig } from './AlipayConfig.api'
+  import {
+    update,
+    AlipayConfig,
+    findPayWays,
+    getConfig,
+    generateNotifyUrl,
+    generateReturnUrl
+  } from './AlipayConfig.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { BasicDrawer } from '/@/components/Drawer'
   import { LabeledValue } from 'ant-design-vue/lib/select'
@@ -284,6 +293,26 @@
     } else if (info.file.status === 'error') {
       createMessage.error('上传失败')
     }
+  }
+
+  /**
+   * 生成异步通知地址
+   */
+  function genNotifyUrl() {
+    generateNotifyUrl().then(({ data }) => {
+      form.notifyUrl = data
+      formRef?.validateFields(['notifyUrl'])
+    })
+  }
+
+  /**
+   * 生成同步通知地址
+   */
+  function genReturnUrl() {
+    generateReturnUrl().then(({ data }) => {
+      form.returnUrl = data
+      formRef?.validateFields(['returnUrl'])
+    })
   }
 
   /**

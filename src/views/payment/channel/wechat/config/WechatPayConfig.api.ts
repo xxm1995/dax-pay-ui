@@ -31,6 +31,23 @@ export function findPayWayList() {
 }
 
 /**
+ * 生成异步通知地址
+ */
+export function generateNotifyUrl() {
+  return defHttp.get<Result<string>>({
+    url: '/wechat/pay/config/generateNotifyUrl',
+  })
+}
+/**
+ * 生成同步通知地址
+ */
+export function generateReturnUrl() {
+  return defHttp.get<Result<string>>({
+    url: '/wechat/pay/config/generateReturnUrl',
+  })
+}
+
+/**
  * 微信支付配置
  */
 export interface WechatPayConfig extends BaseEntity {

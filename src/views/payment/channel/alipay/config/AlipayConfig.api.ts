@@ -31,6 +31,23 @@ export function findPayWays() {
 }
 
 /**
+ * 生成异步通知地址
+ */
+export function generateNotifyUrl() {
+  return defHttp.get<Result<string>>({
+    url: '/alipay/config/generateNotifyUrl',
+  })
+}
+/**
+ * 生成同步通知地址
+ */
+export function generateReturnUrl() {
+  return defHttp.get<Result<string>>({
+    url: '/alipay/config/generateReturnUrl',
+  })
+}
+
+/**
  * 支付宝配置
  */
 export interface AlipayConfig extends BaseEntity {
