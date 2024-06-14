@@ -57,9 +57,11 @@
             <a-col :span="20">
               <a-form-item class="w-800px" name="limitAmount">
                 <template #label>
-                  <basic-title helpMessage="一次订单支付时最高可以支付的金额，支付通道同时配置以低的为准"> 订单限额(元) </basic-title>
+                  <basic-title helpMessage="每次发起支付的金额不能超过该值，如果同时配置了通道支付限额，则以额度低的为准">
+                    订单限额(元)
+                  </basic-title>
                 </template>
-                <a-input placeholder="请输入订单限额" v-model:value="form.limitAmount" :disabled="!edit" />
+                <a-input-number placeholder="请输入订单限额" v-model:value="form.limitAmount" :min="0.01" precision="2" :disabled="!edit" />
               </a-form-item>
             </a-col>
             <a-col :span="20">
@@ -138,6 +140,10 @@
     edit = false
     loading = true
     getConfig().then(({ data }) => {
+      // 分转元
+      if (data.limitAmount) {
+        data.limitAmount = data.limitAmount / 100
+      }
       form = data
       loading = false
     })
@@ -154,7 +160,12 @@
       content: '是否支付配置相关信息',
       onOk: async () => {
         loading = true
-        await update(form)
+        const updateFrom = { ...form }
+        // 元转分
+        if (updateFrom.limitAmount) {
+          updateFrom.limitAmount = updateFrom.limitAmount * 100
+        }
+        await update(updateFrom)
         edit = false
         createMessage.success('更新成功')
         initData()

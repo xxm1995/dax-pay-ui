@@ -28,8 +28,13 @@
         <a-form-item label="支持分账" name="allocation">
           <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.allocation" />
         </a-form-item>
-        <a-form-item label="单次支付限额(分)" name="singleLimit">
-          <a-input-number :precision="0" :min="1" v-model:value="form.singleLimit" placeholder="请输入单次支付限额(分)" />
+        <a-form-item name="limitAmount">
+          <template #label>
+            <basic-title helpMessage="每次发起支付的金额不能超过该值，如果同时配置了全局支付限额，则以额度低的为准">
+              支付限额(元)
+            </basic-title>
+          </template>
+          <a-input-number :precision="2" :min="0.01" v-model:value="form.limitAmount" placeholder="请输入支付限额(元)" />
         </a-form-item>
         <a-form-item name="notifyUrl">
           <template #label>
@@ -132,7 +137,7 @@
     id: null,
     enable: false,
     allocation: false,
-    singleLimit: 20000,
+    limitAmount: 20000,
     apiVersion: 'apiV2',
     wxMchId: '',
     wxAppId: '',
@@ -150,7 +155,7 @@
   const rules = computed(() => {
     return {
       wxMchId: [{ required: true, message: '请输入商户号' }],
-      singleLimit: [{ required: true, message: '请选择单次支付限额' }],
+      limitAmount: [{ required: true, message: '请输入单次支付限额' }],
       wxAppId: [{ required: true, message: '请输入应用编号' }],
       appSecret: [{ required: true, message: '请输入AppSecret' }],
       enable: [{ required: true, message: '请选择是否启用' }],
@@ -186,6 +191,10 @@
     })
     getConfig().then(({ data }) => {
       rawForm = { ...data }
+      // 分转元
+      if (data.limitAmount) {
+        data.limitAmount = data.limitAmount / 100
+      }
       form = data
       confirmLoading.value = false
     })
@@ -194,8 +203,13 @@
   function handleOk() {
     formRef?.validate().then(async () => {
       confirmLoading.value = true
+      const updateFrom = { ...form }
+      // 元转分
+      if (updateFrom.limitAmount) {
+        updateFrom.limitAmount = updateFrom.limitAmount * 100
+      }
       await update({
-        ...form,
+        ...updateFrom,
         ...diffForm(rawForm, form, 'wxMchId', 'wxAppId', 'p12', 'appSecret', 'apiKeyV2', 'apiKeyV3'),
       })
       confirmLoading.value = false

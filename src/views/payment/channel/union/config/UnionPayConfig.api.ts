@@ -59,7 +59,7 @@ export interface UnionPayConfig extends BaseEntity {
   // 是否启用
   enable: boolean
   // 支付限额
-  singleLimit: number
+  limitAmount?: number
   // 签名类型
   signType?: string
   // 是否为证书签名

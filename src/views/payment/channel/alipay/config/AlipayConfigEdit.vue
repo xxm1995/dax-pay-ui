@@ -30,6 +30,14 @@
         <a-form-item label="支持分账" name="allocation">
           <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.allocation" />
         </a-form-item>
+        <a-form-item name="limitAmount">
+          <template #label>
+            <basic-title helpMessage="每次发起支付的金额不能超过该值，如果同时配置了全局支付限额，则以额度低的为准">
+              支付限额(元)
+            </basic-title>
+          </template>
+          <a-input-number :precision="2" :min="0.01" v-model:value="form.limitAmount" placeholder="请输入支付限额(元)" />
+        </a-form-item>
         <a-form-item name="alipayUserId">
           <template #label>
             <basic-title
@@ -38,9 +46,6 @@
             </basic-title>
           </template>
           <a-input v-model:value="form.alipayUserId" placeholder="请输入合作者身份ID" />
-        </a-form-item>
-        <a-form-item label="单次支付限额(分)" name="singleLimit">
-          <a-input-number :precision="0" :min="1" v-model:value="form.singleLimit" placeholder="请输入单次支付限额(分)" />
         </a-form-item>
         <a-form-item name="notifyUrl">
           <template #label>
@@ -171,14 +176,7 @@
   import { computed, nextTick } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import {
-    update,
-    AlipayConfig,
-    findPayWays,
-    getConfig,
-    generateNotifyUrl,
-    generateReturnUrl
-  } from './AlipayConfig.api'
+  import { update, AlipayConfig, findPayWays, getConfig, generateNotifyUrl, generateReturnUrl } from './AlipayConfig.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { BasicDrawer } from '/@/components/Drawer'
   import { LabeledValue } from 'ant-design-vue/lib/select'
@@ -186,8 +184,7 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import Icon from '/@/components/Icon/src/Icon.vue'
   import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
-  const { handleCancel, search, diffForm, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, editable, showable } =
-    useFormEdit()
+  const { handleCancel, diffForm, labelCol, wrapperCol, confirmLoading, visible, showable } = useFormEdit()
   // 读取证书内容
   const { tokenHeader, uploadAction } = useUpload('/alipay/config/readPem')
   const { createMessage } = useMessage()
@@ -199,7 +196,7 @@
     appId: '',
     enable: false,
     allocation: false,
-    singleLimit: 20000,
+    limitAmount: 20000,
     notifyUrl: '',
     returnUrl: '',
     serverUrl: '',
@@ -221,7 +218,7 @@
       appId: [{ required: true, message: '请输入AppId' }],
       enable: [{ required: true, message: '请选择是否启用' }],
       allocation: [{ required: true, message: '请选择是否启用分账支持' }],
-      singleLimit: [{ required: true, message: '请选择单次支付限额' }],
+      limitAmount: [{ required: true, message: '请输入单次支付限额' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
       returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],
       serverUrl: [{ required: true, message: '请输入请求网关地址' }],
@@ -257,6 +254,10 @@
     })
     getConfig().then(({ data }) => {
       rawForm = { ...data }
+      // 分转元
+      if (data.limitAmount) {
+        data.limitAmount = data.limitAmount / 100
+      }
       form = data
       confirmLoading.value = false
     })
@@ -267,7 +268,13 @@
   function handleOk() {
     formRef?.validate().then(async () => {
       confirmLoading.value = true
+      const updateFrom = { ...form }
+      // 元转分
+      if (updateFrom.limitAmount) {
+        updateFrom.limitAmount = updateFrom.limitAmount * 100
+      }
       await update({
+        ...updateFrom,
         ...form,
         ...diffForm(rawForm, form, 'appId', 'alipayPublicKey', 'appCert', 'alipayCert', 'alipayRootCert', 'privateKey'),
       })

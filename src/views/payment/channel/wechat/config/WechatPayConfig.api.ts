@@ -60,7 +60,7 @@ export interface WechatPayConfig extends BaseEntity {
   // 是否支持分账
   allocation: boolean
   // 支付限额
-  singleLimit: number
+  limitAmount?: number
   // API 版本
   apiVersion: string
   // 商户平台「API安全」中的 APIv2 密钥

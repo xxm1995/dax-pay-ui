@@ -37,7 +37,7 @@ export interface WalletConfig extends BaseEntity {
   // 是否启用
   enable?: boolean
   // 单次支持支持多少钱
-  singleLimit?: number
+  limitAmount?: number
   // 支持的支付类型
   payWays?: string[]
   // 备注
