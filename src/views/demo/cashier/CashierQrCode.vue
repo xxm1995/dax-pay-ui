@@ -14,7 +14,6 @@
   import { $ref } from 'vue/macros'
 
   let visible = $ref(false)
-  let icon = $ref('')
   let bottomTitle = $ref('')
   let qrUrl = $ref('')
 
