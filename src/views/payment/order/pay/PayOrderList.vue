@@ -74,10 +74,10 @@
                   <a-menu-item v-if="[payStatus.PROGRESS].includes(row.status)">
                     <a-link @click="closeOrder(row)" danger>关闭</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="row.allocStatus === 'waiting'">
+                  <a-menu-item v-if="row.allocStatus === 'waiting' && payStatus.SUCCESS === row.status">
                     <a-link @click="allocation(row)">分账</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="[payStatus.SUCCESS, payStatus.PARTIAL_REFUND].includes(row.status) && row.refundableBalance > 0">
+                  <a-menu-item v-if="[payStatus.SUCCESS].includes(row.status) && row.refundableBalance > 0">
                     <a-link @click="refund(row)" danger>退款</a-link>
                   </a-menu-item>
                 </a-menu>
