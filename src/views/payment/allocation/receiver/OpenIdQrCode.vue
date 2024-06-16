@@ -2,6 +2,9 @@
   <a-modal :visible="visible" title="扫码获取OpenId" @cancel="handleClose" :footer="null" :width="300">
     <div style="display: flex; flex-direction: column; align-items: center; padding: 20px 0">
       <qr-code :options="{ margin: 0 }" :width="250" :value="qrUrl" />
+      <div class="mt-15px mb-15px" style="display: flex; flex-direction: row; align-items: center; justify-content: center">
+        {{ bottomTitle }}
+      </div>
     </div>
   </a-modal>
 </template>
@@ -12,13 +15,15 @@
 
   let visible = $ref(false)
   let qrUrl = $ref('')
+  let bottomTitle = $ref('')
 
   /**
    * 显示
    */
-  function init(url) {
+  function init(url, title) {
     visible = true
     qrUrl = url
+    bottomTitle = title
   }
 
   /**

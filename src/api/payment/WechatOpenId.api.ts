@@ -2,20 +2,39 @@ import { defHttp } from '/@/utils/http/axios'
 import { Result } from '/#/axios'
 
 /**
- * 微信OpenId服务类
+ * 获取微信授权认证地址
  */
-export function generateAuthUrl() {
-  return defHttp.post<Result<WeChatAuthUrlResult>>({
-    url: '/wechat/openId/generateAuthUrl',
+export function generateWxAuthUrl() {
+  return defHttp.post<Result<AuthUrlResult>>({
+    url: '/wechat/auth/generateAuthUrl',
   })
 }
 
 /**
- * 微信OpenId服务类
+ * 查询微信OpenId数据
  */
-export function queryOpenId(code: string) {
-  return defHttp.get<Result<WeChatOpenIdResult>>({
-    url: '/wechat/openId/queryOpenId',
+export function queryWxOpenId(code: string) {
+  return defHttp.get<Result<OpenIdResult>>({
+    url: '/wechat/auth/queryOpenId',
+    params: { code },
+  })
+}
+
+/**
+ * 获取支付宝授权认证地址
+ */
+export function generateAliAuthUrl() {
+  return defHttp.post<Result<AuthUrlResult>>({
+    url: '/alipay/auth/generateAuthUrl',
+  })
+}
+
+/**
+ * 查询支付宝OpenId
+ */
+export function queryAliOpenId(code: string) {
+  return defHttp.get<Result<OpenIdResult>>({
+    url: '/alipay/auth/queryOpenId',
     params: { code },
   })
 }
@@ -23,7 +42,7 @@ export function queryOpenId(code: string) {
 /**
  * 微信获取OpenId授权链接和查询标识返回类
  */
-export interface WeChatAuthUrlResult {
+export interface AuthUrlResult {
   /** 授权访问链接 */
   authUrl: string
   /** 标识码, 用于查询是否获取到了OpenId */
@@ -33,7 +52,7 @@ export interface WeChatAuthUrlResult {
 /**
  * 微信OpenId查询结果
  */
-export interface WeChatOpenIdResult {
+export interface OpenIdResult {
   /** OpenId */
   openId: string
   /**

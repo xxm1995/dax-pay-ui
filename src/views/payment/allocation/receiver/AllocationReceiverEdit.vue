@@ -88,7 +88,11 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import Icon from '/@/components/Icon'
-  import { generateAuthUrl, queryOpenId } from '/@/api/payment/WechatOpenId.api'
+  import {
+    generateAliAuthUrl,
+    generateWxAuthUrl, queryAliOpenId,
+    queryWxOpenId
+  } from "/@/api/payment/WechatOpenId.api";
   import OpenIdQrCode from './OpenIdQrCode.vue'
   import { useIntervalFn } from '@vueuse/shared'
 
@@ -204,24 +208,56 @@
   function showQrCode() {
     // 微信
     if (form.receiverType === 'wx_personal') {
-      getOpenId()
+      getWxOpenId()
     }
     if (form.receiverType === 'ali_open_id') {
-      createMessage.info('扫码获取支付宝商户ID开发中, 敬请期待')
+      getAliOpenId()
     }
   }
 
   /**
    * 获取微信OpenId
    */
-  async function getOpenId() {
+  async function getWxOpenId() {
     // 获取微信认证链接
-    const { data: urlResult } = await generateAuthUrl()
-    openIdQrCode.init(urlResult.authUrl)
+    const { data: urlResult } = await generateWxAuthUrl()
+    openIdQrCode.init(urlResult.authUrl, '请使用微信客户端"扫一扫"')
     // 轮训查询
     const { pause, resume } = useIntervalFn(
       () => {
-        queryOpenId(urlResult.code)
+        queryWxOpenId(urlResult.code)
+          .then((res) => {
+            // 成功
+            if (res.data.status === 'success') {
+              openIdQrCode.handleClose()
+              createMessage.success('获取OpenID成功')
+              form.receiverAccount = res.data.openId
+              pause()
+            }
+          })
+          .catch((err) => {
+            // 失败
+            openIdQrCode.handleClose()
+            pause()
+          })
+      },
+      1000 * 3,
+      { immediate: false },
+    )
+    resume()
+  }
+
+  /**
+   * 获取支付宝OpenId
+   */
+  async function getAliOpenId() {
+    // 获取支付宝认证链接
+    const { data: urlResult } = await generateAliAuthUrl()
+    openIdQrCode.init(urlResult.authUrl, '请使用支付宝客户端"扫一扫"')
+    // 轮训查询
+    const { pause, resume } = useIntervalFn(
+      () => {
+        queryAliOpenId(urlResult.code)
           .then((res) => {
             // 成功
             if (res.data.status === 'success') {
