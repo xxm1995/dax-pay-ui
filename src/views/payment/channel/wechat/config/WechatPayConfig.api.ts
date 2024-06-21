@@ -73,6 +73,8 @@ export interface WechatPayConfig extends BaseEntity {
   p12?: string | null
   // 应用域名，回调中会使用此参数
   domain?: string
+  // 授权回调地址
+  redirectUrl?: string
   // 服务器异步通知页面路径
   notifyUrl?: string
   // 页面跳转同步通知页面路径

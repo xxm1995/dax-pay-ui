@@ -61,7 +61,13 @@
                     订单限额(元)
                   </basic-title>
                 </template>
-                <a-input-number placeholder="请输入订单限额" v-model:value="form.limitAmount" :min="0.01" precision="2" :disabled="!edit" />
+                <a-input-number
+                  placeholder="请输入订单限额"
+                  v-model:value="form.limitAmount"
+                  :min="0.01"
+                  :precision="2"
+                  :disabled="!edit"
+                />
               </a-form-item>
             </a-col>
             <a-col :span="20">

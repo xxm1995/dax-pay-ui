@@ -1,5 +1,6 @@
 <template>
   <div style="background-color: #f5f5f7">
+    <!--  云闪付表单方式专用  -->
     <div v-html="payForm"></div>
     <div class="page paydemo">
       <div class="blog-container" id="container">

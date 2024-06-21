@@ -88,11 +88,7 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import Icon from '/@/components/Icon'
-  import {
-    generateAliAuthUrl,
-    generateWxAuthUrl, queryAliOpenId,
-    queryWxOpenId
-  } from "/@/api/payment/WechatOpenId.api";
+  import { generateAliAuthUrl, generateWxAuthUrl, queryAliOpenId, queryWxOpenId } from '/@/api/payment/WechatOpenId.api'
   import OpenIdQrCode from './OpenIdQrCode.vue'
   import { useIntervalFn } from '@vueuse/shared'
 

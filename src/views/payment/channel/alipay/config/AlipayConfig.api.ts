@@ -61,6 +61,8 @@ export interface AlipayConfig extends BaseEntity {
   limitAmount?: number
   // 商户账号ID
   alipayUserId?: string
+  // 授权回调地址
+  redirectUrl?: string
   // 服务器异步通知页面路径
   notifyUrl?: string
   // 页面跳转同步通知页面路径

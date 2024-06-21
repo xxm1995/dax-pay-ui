@@ -36,18 +36,29 @@
           </template>
           <a-input-number :precision="2" :min="0.01" v-model:value="form.limitAmount" placeholder="请输入支付限额(元)" />
         </a-form-item>
+        <a-form-item name="wxRedirectUrl">
+          <template #label>
+            <basic-title
+              helpMessage="不填写时默认使用平台配置中的系统地址，受到微信授权回调地址只可以配置两个的限制，我们有时需要通过代理转发来绕过这个限制，
+                  此时回调地址就会与系统地址不一致"
+            >
+              授权回调地址
+            </basic-title>
+          </template>
+          <a-input placeholder="请输入微信授权回调地址" v-model:value="form.redirectUrl" />
+        </a-form-item>
         <a-form-item name="notifyUrl">
           <template #label>
-            <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 异步通知地址 </basic-title>
+            <basic-title helpMessage="此处为本网关接收微信支付相关的回调数据的地址, 而不是业务系统所需的地址"> 异步通知地址 </basic-title>
           </template>
-          <a-input v-model:value="form.notifyUrl" placeholder="请输入异步通知URL" style="width: calc(100% - 80px)" />
+          <a-input v-model:value="form.notifyUrl" placeholder="请输入异步通知地址" style="width: calc(100% - 80px)" />
           <a-button class="w-80px" type="primary" @click="genNotifyUrl">自动生成</a-button>
         </a-form-item>
         <a-form-item name="returnUrl">
           <template #label>
-            <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 同步通知地址 </basic-title>
+            <basic-title helpMessage="此处为本网关接收微信支付同步跳转通知的地址, 而不是业务系统所需的地址"> 同步通知地址 </basic-title>
           </template>
-          <a-input v-model:value="form.returnUrl" placeholder="请输入同步通知URL" style="width: calc(100% - 80px)" />
+          <a-input v-model:value="form.returnUrl" placeholder="请输入同步通知地址" style="width: calc(100% - 80px)" />
           <a-button class="w-80px" type="primary" @click="genReturnUrl">自动生成</a-button>
         </a-form-item>
         <a-form-item label="支持支付方式" name="payWays">
