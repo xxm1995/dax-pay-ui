@@ -25,15 +25,15 @@ export function get(id) {
 /**
  * 获取单条
  */
-export function getByTransferNo(transferNo) {
-  return defHttp.get<Result<any>>({
-    url: '/order/transfer/findByTransferNo',
-    params: { transferNo },
+export function getByBizTransferNo(bizTransferNo) {
+  return defHttp.get<Result<TransferOrder>>({
+    url: '/order/transfer/findByBizTransferNo',
+    params: { bizTransferNo },
   })
 }
 
 /**
- * 发起退款
+ * 发起转账
  */
 export function transfer(params) {
   return defHttp.post<Result<void>>({
@@ -43,7 +43,7 @@ export function transfer(params) {
 }
 
 /**
- * 退款信息同步
+ * 转账信息同步
  */
 export function syncByTransferNo(transferNo) {
   return defHttp.post<Result<void>>({
@@ -53,7 +53,7 @@ export function syncByTransferNo(transferNo) {
 }
 
 /**
- * 退款重试
+ * 转账重试
  */
 export function resetTransfer(id) {
   return defHttp.post<Result<void>>({
@@ -73,7 +73,7 @@ export function getTotalAmount(param) {
 }
 
 /**
- * 退款记录
+ * 转账记录
  */
 export interface TransferOrder extends BaseEntity {
   // 商户转账号
@@ -94,8 +94,6 @@ export interface TransferOrder extends BaseEntity {
   transferType?: string
   // 付款方
   payer?: string
-  // 付款方显示名称
-  payerShowName?: number
   // 收款人类型
   payeeType?: string
   // 收款人账号

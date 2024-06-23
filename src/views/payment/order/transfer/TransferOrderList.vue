@@ -14,12 +14,11 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
-          <span style="font-size: 18px">退款金额: {{ totalAmount ? (totalAmount / 100).toFixed(2) : 0 }}元</span>
+          <span style="font-size: 18px">转账金额: {{ totalAmount ? (totalAmount / 100).toFixed(2) : 0 }}元</span>
         </template>
       </vxe-toolbar>
       <vxe-table
         row-id="id"
-        :cell-style="cellStyle"
         ref="xTable"
         :sort-config="{ remote: true, trigger: 'cell' }"
         :data="pagination.records"
@@ -27,22 +26,16 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="transferNo" title="退款号" :min-width="220">
+        <vxe-column field="transferNo" title="转账号" :min-width="220">
           <template #default="{ row }">
             <a @click="show(row)">
               {{ row.transferNo }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="title" title="原支付标题" :min-width="160" />
-        <vxe-column field="orderNo" title="支付订单号" :min-width="220">
-          <template #default="{ row }">
-            <a @click="showPayOrder(row)">
-              {{ row.orderNo }}
-            </a>
-          </template>
-        </vxe-column>
-        <vxe-column field="channel" title="支付通道" :min-width="120">
+        <vxe-column field="bizTransferNo" title="商户转账号" :min-width="220" />
+        <vxe-column field="title" title="标题" :min-width="160" />
+        <vxe-column field="channel" title="转账通道" :min-width="120">
           <template #default="{ row }">
             {{ dictConvert('PayChannel', row.channel) }}
           </template>
@@ -55,6 +48,7 @@
             {{ dictConvert('TransferStatus', row.status) }}
           </template>
         </vxe-column>
+        <vxe-column field="reason" title="转账原因" :min-width="160" />
         <vxe-column field="createTime" title="创建时间" sortable :min-width="220" />
         <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
           <template #default="{ row }">
@@ -62,7 +56,7 @@
             <a-divider type="vertical" />
             <a-link @click="sync(row)">同步</a-link>
             <a-divider type="vertical" />
-            <a-link :disabled="!(row.status === 'fail')" @click="reset(row)">重试</a-link>
+            <a-link @click="reset(row)">重试</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -75,7 +69,6 @@
         @page-change="handleTableChange"
       />
       <transfer-order-info ref="transferOrderInfo" @ok="queryPage" />
-      <pay-order-info ref="payOrderInfo" />
     </div>
   </div>
 </template>
@@ -91,7 +84,6 @@
   import { useMessage } from '/@/hooks/web/useMessage'
   import { LIST, QueryField, STRING } from '/@/components/Bootx/Query/Query'
   import { useDict } from '/@/hooks/bootx/useDict'
-  import PayOrderInfo from '/@/views/payment/order/pay/PayOrderInfo.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import ALink from '/@/components/Link/Link.vue'
 
@@ -111,10 +103,8 @@
       { field: 'bizTransferNo', type: STRING, name: '商户退款号', placeholder: '请输入商户退款号' },
       { field: 'transferNo', type: STRING, name: '退款号', placeholder: '请输入退款号' },
       { field: 'outTransferNo', type: STRING, name: '通道退款号', placeholder: '请输入通道退款号' },
-      { field: 'bizOrderNo', type: STRING, name: '商户订单号', placeholder: '请输入商户支付订单号' },
-      { field: 'orderNo', type: STRING, name: '订单号', placeholder: '请输入支付订单号' },
-      { field: 'outOrderNo', type: STRING, name: '通道订单号', placeholder: '请输入三方支付的通道订单号' },
-      { field: 'title', type: STRING, name: '原支付标题', placeholder: '请输入原支付标题' },
+      { field: 'title', type: STRING, name: '原支付标题', placeholder: '请输入转账标题' },
+      { field: 'payeeName', type: STRING, name: '收款人姓名', placeholder: '请输入收款人姓名' },
       { field: 'errorCode', name: '错误码', type: STRING },
       {
         field: 'status',
@@ -123,14 +113,13 @@
         placeholder: '请选择处理状态',
         selectList: transferStatusList,
       },
-      { field: 'channel', name: '支付通道', type: LIST, selectList: channelList },
+      { field: 'channel', name: '转账通道', type: LIST, selectList: channelList },
     ] as QueryField[]
   })
 
   const xTable = $ref<VxeTableInstance>()
   const xToolbar = $ref<VxeToolbarInstance>()
   const transferOrderInfo = $ref<any>()
-  const payOrderInfo = $ref<any>()
 
   onMounted(() => {
     initData()
@@ -171,87 +160,24 @@
   }
 
   /**
-   * 退款信息同步
+   * 信息同步
    */
   function sync(record) {
-    createConfirm({
-      iconType: 'warning',
-      title: '警告',
-      content: '是否同步退款信息',
-      onOk: () => {
-        loading.value = true
-        syncByTransferNo(record.transferNo).then(({ data }) => {
-          // TODO 后期可以根据返回结果进行相应的处理
-          createMessage.success('同步成功')
-          console.log(data)
-          queryPage()
-        })
-      },
-    })
+    createMessage.warn('下版本支持...')
   }
 
   /**
    * 退款重试
    */
   function reset(record) {
-    createConfirm({
-      iconType: 'warning',
-      title: '警告',
-      content: '是否同步退款信息',
-      onOk: () => {
-        loading.value = true
-        resetTransfer(record.id).then(() => {
-          createMessage.success('提交成功')
-          queryPage()
-        })
-      },
-    })
+    createMessage.warn('下版本支持...')
   }
 
   /**
    * 查看
    */
   function show(record) {
-    transferOrderInfo.init(record.transferNo)
-  }
-
-  /**
-   * 查看支付单信息
-   */
-  function showPayOrder(record) {
-    payOrderInfo.init(record.orderNo)
-  }
-
-  function cellStyle({ row, column }) {
-    if (column.field == 'transferStatus') {
-      if (row.status == 'success') {
-        return { color: 'green' }
-      }
-      if (row.status == 'fail') {
-        return { color: 'red' }
-      }
-      if (row.status == 'progress') {
-        return { color: 'orange' }
-      }
-      if (row.status == 'close') {
-        return { color: 'gray' }
-      }
-      return { color: 'red' }
-    }
-    if (column.field == 'async') {
-      if (row.asyncPay) {
-        return { color: 'green' }
-      } else {
-        return { color: 'gray' }
-      }
-    }
-    if (column.field == 'combinationPay') {
-      if (row.combinationPay) {
-        return { color: 'green' }
-      } else {
-        return { color: 'gray' }
-      }
-    }
+    transferOrderInfo.init(record.bizTransferNo)
   }
 </script>
 
