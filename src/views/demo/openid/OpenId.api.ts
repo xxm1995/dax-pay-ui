@@ -1,6 +1,5 @@
 import { defHttp } from '/@/utils/http/axios'
-import { PageResult, Result } from '/#/axios'
-import { BaseEntity } from '/#/web'
+import { Result } from '/#/axios'
 
 /**
  * 微信 返回获取OpenId授权页面地址和标识码
