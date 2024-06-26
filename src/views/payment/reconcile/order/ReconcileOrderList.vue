@@ -21,7 +21,7 @@
       >
         <vxe-column type="seq" title="序号" width="60" />
         <vxe-column field="date" title="对账日期" :min-width="100" />
-        <vxe-column field="reconcileNo" title="对账号" :min-width="220">
+        <vxe-column field="reconcileNo" title="对账号" :min-width="230">
           <template #default="{ row }">
             <a @click="show(row)">
               {{ row.reconcileNo }}

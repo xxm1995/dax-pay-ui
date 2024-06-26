@@ -73,7 +73,7 @@
         <a-button v-if="!showable" key="forward" :loading="confirmLoading" type="primary" @click="handleOk">保存</a-button>
       </a-space>
     </template>
-    <open-id-qr-code ref="openIdQrCode" />
+    <open-id-qr-code ref="openIdQrCode"  @close="pauseFun" />
   </basic-modal>
 </template>
 
@@ -91,6 +91,7 @@
   import { generateAliAuthUrl, generateWxAuthUrl, queryAliOpenId, queryWxOpenId } from '/@/api/payment/WechatOpenId.api'
   import OpenIdQrCode from './OpenIdQrCode.vue'
   import { useIntervalFn } from '@vueuse/shared'
+  import QrCode from "/@/components/Qrcode/src/Qrcode.vue";
 
   const {
     initFormEditType,
@@ -108,6 +109,7 @@
   const { createMessage } = useMessage()
   const { dictDropDown } = useDict()
 
+  let pauseFun = () => {}
   // 表单
   const formRef = $ref<FormInstance>()
   let form = $ref<AllocationReceiver>({})
@@ -240,6 +242,7 @@
       1000 * 3,
       { immediate: false },
     )
+    pauseFun = pause
     resume()
   }
 
@@ -272,6 +275,7 @@
       1000 * 3,
       { immediate: false },
     )
+    pauseFun = pause
     resume()
   }
 

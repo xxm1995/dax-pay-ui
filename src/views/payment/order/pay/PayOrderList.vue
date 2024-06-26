@@ -19,20 +19,20 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderNo" title="订单号" :min-width="220">
+        <vxe-column field="orderNo" title="订单号" :min-width="230">
           <template #default="{ row }">
             <a @click="show(row)">
               {{ row.orderNo }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="title" title="标题" :min-width="220" />
+        <vxe-column field="title" title="标题" :min-width="230" />
         <vxe-column field="channel" title="支付通道" :min-width="120">
           <template #default="{ row }">
             {{ dictConvert('PayChannel', row.channel) }}
           </template>
         </vxe-column>
-        <vxe-column field="bizOrderNo" title="商户订单号" :min-width="220" />
+        <vxe-column field="bizOrderNo" title="商户订单号" :min-width="230" />
         <vxe-column field="amount" title="金额(元)" :min-width="120" sortable>
           <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
         </vxe-column>
@@ -56,7 +56,7 @@
             {{ dictConvert('PayOrderAllocStatus', row.allocStatus) || '无' }}
           </template>
         </vxe-column>
-        <vxe-column field="createTime" title="创建时间" sortable :min-width="220" />
+        <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
         <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>

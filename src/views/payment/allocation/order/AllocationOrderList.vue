@@ -14,7 +14,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="allocNo" title="分账单号" :min-width="220">
+        <vxe-column field="allocNo" title="分账单号" :min-width="230">
           <template #default="{ row }">
             <a @click="show(row)">
               {{ row.allocNo }}
@@ -22,7 +22,7 @@
           </template>
         </vxe-column>
         <vxe-column field="title" title="订单标题" :min-width="150" />
-        <vxe-column field="orderNo" title="支付订单号" :min-width="220">
+        <vxe-column field="orderNo" title="支付订单号" :min-width="230">
           <template #default="{ row }">
             <a @click="showPayOrder(row)">
               {{ row.orderNo }}

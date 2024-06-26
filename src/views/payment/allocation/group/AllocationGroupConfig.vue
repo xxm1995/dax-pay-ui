@@ -23,7 +23,7 @@
           <a-tag>{{ dictConvert('AllocReceiverType', row.receiverType) }}</a-tag>
         </template>
       </vxe-column>
-      <vxe-column field="receiverAccount" title="接收方账号" :min-width="220" />
+      <vxe-column field="receiverAccount" title="接收方账号" :min-width="230" />
       <vxe-column field="receiverName" title="接收方姓名" :min-width="100" />
       <vxe-column field="rate" width="150" title="分账比例" :edit-render="{}" :min-width="100">
         <template #default="{ row }"> {{ row.rate / 100.0 }}% </template>

@@ -31,12 +31,12 @@
             <a-tag>{{ dictConvert('ReconcileDiffType', row.diffType) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="tradeNo" title="本地交易号" :min-width="220">
+        <vxe-column field="tradeNo" title="本地交易号" :min-width="230">
           <template #default="{ row }">
             <a-link @click="showTrade(row)">{{ row.tradeNo }}</a-link>
           </template>
         </vxe-column>
-        <vxe-column field="outTradeNo" title="通道交易号" :min-width="220" />
+        <vxe-column field="outTradeNo" title="通道交易号" :min-width="230" />
         <vxe-column field="amount" title="交易金额(元)" sortable :min-width="130">
           <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : '无' }} </template>
         </vxe-column>
@@ -44,7 +44,7 @@
           <template #default="{ row }"> {{ row.outAmount ? (row.outAmount / 100).toFixed(2) : '无' }} </template>
         </vxe-column>
         <vxe-column field="tradeTime" title="交易时间" sortable :min-width="150" />
-        <vxe-column field="reconcileNo" title="对账单号" :min-width="220">
+        <vxe-column field="reconcileNo" title="对账单号" :min-width="230">
           <template #default="{ row }">
             <a-link @click="showReconcile(row)">{{ row.reconcileNo }}</a-link>
           </template>

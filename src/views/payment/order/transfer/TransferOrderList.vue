@@ -26,14 +26,14 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="transferNo" title="转账号" :min-width="220">
+        <vxe-column field="transferNo" title="转账号" :min-width="230">
           <template #default="{ row }">
             <a @click="show(row)">
               {{ row.transferNo }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="bizTransferNo" title="商户转账号" :min-width="220" />
+        <vxe-column field="bizTransferNo" title="商户转账号" :min-width="230" />
         <vxe-column field="title" title="标题" :min-width="160" />
         <vxe-column field="channel" title="转账通道" :min-width="120">
           <template #default="{ row }">
@@ -49,7 +49,7 @@
           </template>
         </vxe-column>
         <vxe-column field="reason" title="转账原因" :min-width="160" />
-        <vxe-column field="createTime" title="创建时间" sortable :min-width="220" />
+        <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
         <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>

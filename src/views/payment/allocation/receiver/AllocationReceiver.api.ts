@@ -75,13 +75,12 @@ export function update(data: AllocationReceiver) {
 /**
  * 删除
  */
-export function del(id) {
+export function del(receiverNo) {
   return defHttp.post<Result<null>>({
     url: '/allocation/receiver/delete',
-    params: { id },
+    data: { receiverNo },
   })
 }
-
 
 /**
  * 分账接收方

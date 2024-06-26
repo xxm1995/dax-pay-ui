@@ -16,6 +16,7 @@
   let visible = $ref(false)
   let qrUrl = $ref('')
   let bottomTitle = $ref('')
+  const emit = defineEmits(['close'])
 
   /**
    * 显示
@@ -31,6 +32,7 @@
    */
   function handleClose() {
     visible = false
+    emit('close')
   }
   defineExpose({ init, handleClose })
 </script>

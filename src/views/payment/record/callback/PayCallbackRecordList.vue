@@ -14,7 +14,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="订单号" :min-width="220">
+        <vxe-column field="orderId" title="订单号" :min-width="230">
           <template #default="{ row }">
             <a @click="showOrder(row)">
               {{ row.tradeNo }}

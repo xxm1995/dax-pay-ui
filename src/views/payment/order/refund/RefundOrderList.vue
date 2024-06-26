@@ -27,7 +27,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="refundNo" title="退款号" :min-width="220">
+        <vxe-column field="refundNo" title="退款号" :min-width="230">
           <template #default="{ row }">
             <a @click="show(row)">
               {{ row.refundNo }}
@@ -35,7 +35,7 @@
           </template>
         </vxe-column>
         <vxe-column field="title" title="原支付标题" :min-width="160" />
-        <vxe-column field="orderNo" title="支付订单号" :min-width="220">
+        <vxe-column field="orderNo" title="支付订单号" :min-width="230">
           <template #default="{ row }">
             <a @click="showPayOrder(row)">
               {{ row.orderNo }}
@@ -55,7 +55,7 @@
             {{ dictConvert('RefundStatus', row.status) }}
           </template>
         </vxe-column>
-        <vxe-column field="createTime" title="创建时间" sortable :min-width="220" />
+        <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
         <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
