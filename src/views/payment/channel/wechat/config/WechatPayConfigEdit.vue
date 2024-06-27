@@ -28,20 +28,38 @@
         <a-form-item label="支持分账" name="allocation">
           <a-switch checked-children="启用" un-checked-children="停用" v-model:checked="form.allocation" />
         </a-form-item>
-        <a-form-item label="单次支付限额(分)" name="singleLimit">
-          <a-input-number :precision="0" :min="1" v-model:value="form.singleLimit" placeholder="请输入单次支付限额(分)" />
+        <a-form-item name="limitAmount">
+          <template #label>
+            <basic-title helpMessage="每次发起支付的金额不能超过该值，如果同时配置了全局支付限额，则以额度低的为准">
+              支付限额(元)
+            </basic-title>
+          </template>
+          <a-input-number :precision="2" :min="0.01" v-model:value="form.limitAmount" placeholder="请输入支付限额(元)" />
+        </a-form-item>
+        <a-form-item name="wxRedirectUrl">
+          <template #label>
+            <basic-title
+              helpMessage="不填写时默认使用平台配置中的系统地址，受到微信授权回调地址只可以配置两个的限制，我们有时需要通过代理转发来绕过这个限制，
+                  此时回调地址就会与系统地址不一致"
+            >
+              授权回调地址
+            </basic-title>
+          </template>
+          <a-input placeholder="请输入微信授权回调地址" v-model:value="form.redirectUrl" />
         </a-form-item>
         <a-form-item name="notifyUrl">
           <template #label>
-            <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 异步通知地址 </basic-title>
+            <basic-title helpMessage="此处为本网关接收微信支付相关的回调数据的地址, 而不是业务系统所需的地址"> 异步通知地址 </basic-title>
           </template>
-          <a-input v-model:value="form.notifyUrl" :disabled="showable" placeholder="请输入服务器异步通知地址" />
+          <a-input v-model:value="form.notifyUrl" placeholder="请输入异步通知地址" style="width: calc(100% - 80px)" />
+          <a-button class="w-80px" type="primary" @click="genNotifyUrl">自动生成</a-button>
         </a-form-item>
         <a-form-item name="returnUrl">
           <template #label>
-            <basic-title helpMessage="此处为本网关接收通知的地址, 而不是客户系统接收通知所需的地址"> 同步通知地址 </basic-title>
+            <basic-title helpMessage="此处为本网关接收微信支付同步跳转通知的地址, 而不是业务系统所需的地址"> 同步通知地址 </basic-title>
           </template>
-          <a-input v-model:value="form.returnUrl" :disabled="showable" placeholder="请输入页面跳转同步通知地址" />
+          <a-input v-model:value="form.returnUrl" placeholder="请输入同步通知地址" style="width: calc(100% - 80px)" />
+          <a-button class="w-80px" type="primary" @click="genReturnUrl">自动生成</a-button>
         </a-form-item>
         <a-form-item label="支持支付方式" name="payWays">
           <a-select
@@ -109,7 +127,7 @@
   import { computed, nextTick } from 'vue'
   import { $ref } from 'vue/macros'
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { getConfig, update, findPayWayList, WechatPayConfig } from './WechatPayConfig.api'
+  import { getConfig, update, findPayWayList, generateNotifyUrl, generateReturnUrl, WechatPayConfig } from './WechatPayConfig.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { BasicDrawer } from '/@/components/Drawer'
   import Icon from '/@/components/Icon/src/Icon.vue'
@@ -118,8 +136,7 @@
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import BasicTitle from '/@/components/Basic/src/BasicTitle.vue'
 
-  const { handleCancel, search, diffForm, labelCol, wrapperCol, modalWidth, title, confirmLoading, visible, editable, showable } =
-    useFormEdit()
+  const { handleCancel, diffForm, labelCol, wrapperCol, confirmLoading, visible, showable } = useFormEdit()
   // 文件上传
   const { tokenHeader, uploadAction } = useUpload('/wechat/pay/config/toBase64')
   const { createMessage } = useMessage()
@@ -131,7 +148,7 @@
     id: null,
     enable: false,
     allocation: false,
-    singleLimit: 20000,
+    limitAmount: 20000,
     apiVersion: 'apiV2',
     wxMchId: '',
     wxAppId: '',
@@ -149,7 +166,7 @@
   const rules = computed(() => {
     return {
       wxMchId: [{ required: true, message: '请输入商户号' }],
-      singleLimit: [{ required: true, message: '请选择单次支付限额' }],
+      limitAmount: [{ required: true, message: '请输入单次支付限额' }],
       wxAppId: [{ required: true, message: '请输入应用编号' }],
       appSecret: [{ required: true, message: '请输入AppSecret' }],
       enable: [{ required: true, message: '请选择是否启用' }],
@@ -185,6 +202,10 @@
     })
     getConfig().then(({ data }) => {
       rawForm = { ...data }
+      // 分转元
+      if (data.limitAmount) {
+        data.limitAmount = data.limitAmount / 100
+      }
       form = data
       confirmLoading.value = false
     })
@@ -193,8 +214,13 @@
   function handleOk() {
     formRef?.validate().then(async () => {
       confirmLoading.value = true
+      const updateFrom = { ...form }
+      // 元转分
+      if (updateFrom.limitAmount) {
+        updateFrom.limitAmount = updateFrom.limitAmount * 100
+      }
       await update({
-        ...form,
+        ...updateFrom,
         ...diffForm(rawForm, form, 'wxMchId', 'wxAppId', 'p12', 'appSecret', 'apiKeyV2', 'apiKeyV3'),
       })
       confirmLoading.value = false
@@ -227,6 +253,26 @@
       createMessage.error('上传失败')
     }
   }
+  /**
+   * 生成异步通知地址
+   */
+  function genNotifyUrl() {
+    generateNotifyUrl().then(({ data }) => {
+      form.notifyUrl = data
+      formRef?.validateFields(['notifyUrl'])
+    })
+  }
+
+  /**
+   * 生成同步通知地址
+   */
+  function genReturnUrl() {
+    generateReturnUrl().then(({ data }) => {
+      form.returnUrl = data
+      formRef?.validateFields(['returnUrl'])
+    })
+  }
+
   defineExpose({
     init,
   })

@@ -100,26 +100,16 @@ export interface PayOrder extends BaseEntity {
   refundableBalance?: number
   // 支付状态
   status?: string
+  // 退款状态
+  refundStatus?: string
   // 分账状态
-  allocationStatus?: string
+  allocStatus?: string
   // 支付时间
   payTime?: string
   // 过期时间
   expiredTime?: string
   // 关闭时间
   closeTime?: string
-  // 错误码
-  errorCode?: string
-  // 错误信息
-  errorMsg?: string
-}
-
-/**
- * 支付扩展信息
- */
-export interface PayOrderExtra {
-  // 是否不需要异步通知
-  notNotify?: string
   // 异步通知地址
   notifyUrl?: string
   // 商户扩展参数
@@ -130,4 +120,8 @@ export interface PayOrderExtra {
   reqTime?: string
   // 支付终端ip
   clientIp?: string
+  // 错误码
+  errorCode?: string
+  // 错误信息
+  errorMsg?: string
 }

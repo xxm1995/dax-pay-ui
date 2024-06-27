@@ -31,6 +31,23 @@ export function findPayWays() {
 }
 
 /**
+ * 生成异步通知地址
+ */
+export function generateNotifyUrl() {
+  return defHttp.get<Result<string>>({
+    url: '/alipay/config/generateNotifyUrl',
+  })
+}
+/**
+ * 生成同步通知地址
+ */
+export function generateReturnUrl() {
+  return defHttp.get<Result<string>>({
+    url: '/alipay/config/generateReturnUrl',
+  })
+}
+
+/**
  * 支付宝配置
  */
 export interface AlipayConfig extends BaseEntity {
@@ -41,9 +58,11 @@ export interface AlipayConfig extends BaseEntity {
   // 是否支持分账
   allocation: boolean
   // 支付限额
-  singleLimit: number
+  limitAmount?: number
   // 商户账号ID
   alipayUserId?: string
+  // 授权回调地址
+  redirectUrl?: string
   // 服务器异步通知页面路径
   notifyUrl?: string
   // 页面跳转同步通知页面路径

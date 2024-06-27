@@ -4,27 +4,16 @@
       <a-spin :spinning="confirmLoading">
         <a-list style="margin-left: 20px" :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 5, xxl: 6 }" :data-source="channelConfigs">
           <template #renderItem="{ item }">
-            <a-card hoverable style="max-width: 200px; margin-bottom: 50px" @click="setting(item)">
+            <a-card hoverable style="max-width: 200px; margin-bottom: 20px" @click="setting(item)">
               <template #cover>
                 <a-image
-                  style="width: 200px; height: 200px"
+                  style="width: 150px; height: 150px; margin-left: 25px"
                   :preview="false"
-                  :src="urlPrefix + String(item?.iconId)"
+                  :src="getIcon(item.code)"
                   :fallback="fallbackImg"
                 />
               </template>
-              <a-card-meta :title="item.name">
-                <template #description>
-                  <template v-if="item.enable">
-                    <a-badge dot color="green" />
-                    <span style="color: green">已启用</span>
-                  </template>
-                  <template v-else>
-                    <a-badge dot color="red" />
-                    <span style="color: red">停用</span>
-                  </template>
-                </template>
-              </a-card-meta>
+              <a-card-meta style="display: flex; justify-content: space-between" :title="item.name" />
             </a-card>
           </template>
         </a-list>
@@ -36,15 +25,17 @@
 
 <script setup lang="ts">
   import { $ref } from 'vue/macros'
-  import { getFilePreviewUrlPrefix } from '/@/api/common/FileUpload'
   import { findAll, PayChannelConfig } from '/@/views/payment/system/channel/ChannelConfig.api'
   import ChannelPayConfigEdit from '/@/views/payment/channel/config/ChannelPayConfigEdit.vue'
   import { onMounted } from 'vue'
+  import alipay from '/@/assets/payment/alipay.svg'
+  import wechat from '/@/assets/payment/wechat.svg'
+  import unionPay from '/@/assets/payment/unionPay.svg'
+  import wallet from '/@/assets/payment/wallet.svg'
+  import { payChannelEnum } from '/@/enums/payment/payChannelEnum'
 
   let confirmLoading = $ref(false)
-  let visible = $ref(false)
   let channelConfigs = $ref<PayChannelConfig[]>([])
-  let urlPrefix = $ref<string>()
 
   const channelPayConfigEdit = $ref<any>()
 
@@ -60,11 +51,7 @@
    * 初始化并展示
    */
   async function init() {
-    visible = true
     confirmLoading = true
-    // 图片地址前缀
-    const urlPrefixResult = await getFilePreviewUrlPrefix()
-    urlPrefix = urlPrefixResult.data
     // 列表信息
     const configResults = await findAll()
     channelConfigs = configResults.data
@@ -76,6 +63,24 @@
    */
   function setting(record: PayChannelConfig) {
     channelPayConfigEdit.show(record)
+  }
+
+  /**
+   * 获取icon
+   */
+  function getIcon(type: string) {
+    switch (type) {
+      case payChannelEnum.ALI:
+        return alipay
+      case payChannelEnum.WECHAT:
+        return wechat
+      case payChannelEnum.UNION_PAY:
+        return unionPay
+      case payChannelEnum.WALLET:
+        return wallet
+      default:
+        return ''
+    }
   }
 </script>
 

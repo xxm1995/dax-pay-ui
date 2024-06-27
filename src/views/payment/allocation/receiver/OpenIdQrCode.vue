@@ -1,7 +1,7 @@
 <template>
-  <a-modal :visible="visible" title="扫码支付" @cancel="handleCancel" :footer="null" :width="250">
-    <div style="display: flex; flex-direction: column; align-items: center; padding-top: 15px">
-      <qr-code :options="{ margin: 0 }" :width="180" :value="qrUrl" />
+  <a-modal :visible="visible" title="扫码获取OpenId" @cancel="handleClose" :footer="null" :width="300">
+    <div style="display: flex; flex-direction: column; align-items: center; padding: 20px 0">
+      <qr-code :options="{ margin: 0 }" :width="250" :value="qrUrl" />
       <div class="mt-15px mb-15px" style="display: flex; flex-direction: row; align-items: center; justify-content: center">
         {{ bottomTitle }}
       </div>
@@ -14,21 +14,25 @@
   import { $ref } from 'vue/macros'
 
   let visible = $ref(false)
-  let bottomTitle = $ref('')
   let qrUrl = $ref('')
+  let bottomTitle = $ref('')
+  const emit = defineEmits(['close'])
 
-  const emits = defineEmits(['cancel'])
+  /**
+   * 显示
+   */
   function init(url, title) {
     visible = true
     qrUrl = url
     bottomTitle = title
   }
-  function handleCancel() {
-    handleClose()
-    emits('cancel')
-  }
+
+  /**
+   * 关闭
+   */
   function handleClose() {
     visible = false
+    emit('close')
   }
   defineExpose({ init, handleClose })
 </script>

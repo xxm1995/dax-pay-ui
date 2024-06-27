@@ -31,6 +31,23 @@ export function findPayWayList() {
 }
 
 /**
+ * 生成异步通知地址
+ */
+export function generateNotifyUrl() {
+  return defHttp.get<Result<string>>({
+    url: '/wechat/pay/config/generateNotifyUrl',
+  })
+}
+/**
+ * 生成同步通知地址
+ */
+export function generateReturnUrl() {
+  return defHttp.get<Result<string>>({
+    url: '/wechat/pay/config/generateReturnUrl',
+  })
+}
+
+/**
  * 微信支付配置
  */
 export interface WechatPayConfig extends BaseEntity {
@@ -43,7 +60,7 @@ export interface WechatPayConfig extends BaseEntity {
   // 是否支持分账
   allocation: boolean
   // 支付限额
-  singleLimit: number
+  limitAmount?: number
   // API 版本
   apiVersion: string
   // 商户平台「API安全」中的 APIv2 密钥
@@ -56,6 +73,8 @@ export interface WechatPayConfig extends BaseEntity {
   p12?: string | null
   // 应用域名，回调中会使用此参数
   domain?: string
+  // 授权回调地址
+  redirectUrl?: string
   // 服务器异步通知页面路径
   notifyUrl?: string
   // 页面跳转同步通知页面路径

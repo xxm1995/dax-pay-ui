@@ -45,7 +45,7 @@
         </a-form-item>
         <a-form-item label="接收方账号" name="receiverAccount">
           <a-input v-model:value="form.receiverAccount" :disabled="!addable" placeholder="请输入接收方账号">
-            <template v-if="['wx_personal', 'ali_open_id'].includes(form.receiverType as string)" #suffix>
+            <template v-if="['wx_personal', 'ali_open_id'].includes(form.receiverType as string) && addable" #suffix>
               <icon icon="ant-design:qrcode-outlined" @click="showQrCode" />
             </template>
           </a-input>
@@ -73,12 +73,12 @@
         <a-button v-if="!showable" key="forward" :loading="confirmLoading" type="primary" @click="handleOk">保存</a-button>
       </a-space>
     </template>
+    <open-id-qr-code ref="openIdQrCode"  @close="pauseFun" />
   </basic-modal>
 </template>
 
 <script setup lang="ts">
   import useFormEdit from '/@/hooks/bootx/useFormEdit'
-  import { useValidate } from '/@/hooks/bootx/useValidate'
   import { useMessage } from '/@/hooks/web/useMessage'
   import { computed, nextTick } from 'vue'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
@@ -88,6 +88,10 @@
   import { useDict } from '/@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import Icon from '/@/components/Icon'
+  import { generateAliAuthUrl, generateWxAuthUrl, queryAliOpenId, queryWxOpenId } from '/@/api/payment/WechatOpenId.api'
+  import OpenIdQrCode from './OpenIdQrCode.vue'
+  import { useIntervalFn } from '@vueuse/shared'
+  import QrCode from "/@/components/Qrcode/src/Qrcode.vue";
 
   const {
     initFormEditType,
@@ -95,7 +99,6 @@
     diffForm,
     labelCol,
     wrapperCol,
-    modalWidth,
     title,
     confirmLoading,
     visible,
@@ -103,10 +106,10 @@
     showable,
     formEditType,
   } = useFormEdit()
-  const { existsByServer } = useValidate()
   const { createMessage } = useMessage()
-  const { dictConvert, dictDropDown } = useDict()
+  const { dictDropDown } = useDict()
 
+  let pauseFun = () => {}
   // 表单
   const formRef = $ref<FormInstance>()
   let form = $ref<AllocationReceiver>({})
@@ -114,6 +117,8 @@
   let payChannelList = $ref<LabeledValue[]>([])
   let receiverTypeList = $ref<LabeledValue[]>([])
   let relationTypeList = $ref<LabeledValue[]>([])
+
+  const openIdQrCode = $ref<any>()
 
   // 校验
   const rules = computed(() => {
@@ -199,7 +204,79 @@
    * 扫码绑定
    */
   function showQrCode() {
-    createMessage.info('扫码获取OpenID开发中, 敬请期待')
+    // 微信
+    if (form.receiverType === 'wx_personal') {
+      getWxOpenId()
+    }
+    if (form.receiverType === 'ali_open_id') {
+      getAliOpenId()
+    }
+  }
+
+  /**
+   * 获取微信OpenId
+   */
+  async function getWxOpenId() {
+    // 获取微信认证链接
+    const { data: urlResult } = await generateWxAuthUrl()
+    openIdQrCode.init(urlResult.authUrl, '请使用微信客户端"扫一扫"')
+    // 轮训查询
+    const { pause, resume } = useIntervalFn(
+      () => {
+        queryWxOpenId(urlResult.code)
+          .then((res) => {
+            // 成功
+            if (res.data.status === 'success') {
+              openIdQrCode.handleClose()
+              createMessage.success('获取OpenID成功')
+              form.receiverAccount = res.data.openId
+              pause()
+            }
+          })
+          .catch((err) => {
+            // 失败
+            openIdQrCode.handleClose()
+            pause()
+          })
+      },
+      1000 * 3,
+      { immediate: false },
+    )
+    pauseFun = pause
+    resume()
+  }
+
+  /**
+   * 获取支付宝OpenId
+   */
+  async function getAliOpenId() {
+    // 获取支付宝认证链接
+    const { data: urlResult } = await generateAliAuthUrl()
+    openIdQrCode.init(urlResult.authUrl, '请使用支付宝客户端"扫一扫获取OpenId或UserId"')
+    // 轮训查询
+    const { pause, resume } = useIntervalFn(
+      () => {
+        queryAliOpenId(urlResult.code)
+          .then((res) => {
+            // 成功
+            if (res.data.status === 'success') {
+              openIdQrCode.handleClose()
+              createMessage.success('获取OpenID成功')
+              form.receiverAccount = res.data.openId
+              pause()
+            }
+          })
+          .catch((err) => {
+            // 失败
+            openIdQrCode.handleClose()
+            pause()
+          })
+      },
+      1000 * 3,
+      { immediate: false },
+    )
+    pauseFun = pause
+    resume()
   }
 
   /**

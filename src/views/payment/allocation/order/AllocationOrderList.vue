@@ -14,15 +14,15 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="allocationNo" title="分账单号" :min-width="220">
+        <vxe-column field="allocNo" title="分账单号" :min-width="230">
           <template #default="{ row }">
             <a @click="show(row)">
-              {{ row.allocationNo }}
+              {{ row.allocNo }}
             </a>
           </template>
         </vxe-column>
         <vxe-column field="title" title="订单标题" :min-width="150" />
-        <vxe-column field="orderNo" title="支付订单号" :min-width="220">
+        <vxe-column field="orderNo" title="支付订单号" :min-width="230">
           <template #default="{ row }">
             <a @click="showPayOrder(row)">
               {{ row.orderNo }}
@@ -127,7 +127,7 @@
       { field: 'orderNo', type: STRING, name: '分账订单号', placeholder: '请输入分账订单号' },
       { field: 'paymentId', type: STRING, name: '支付订单ID', placeholder: '请输入支付订单ID' },
       { field: 'title', type: STRING, name: '支付订单标题', placeholder: '请输入支付订单标题' },
-      { field: 'allocationNo', type: STRING, name: '分账业务号', placeholder: '请输入分账业务号' },
+      { field: 'allocNo', type: STRING, name: '分账业务号', placeholder: '请输入分账业务号' },
     ] as QueryField[]
   })
   onMounted(() => {
@@ -154,7 +154,7 @@
    * 查看
    */
   function show(record) {
-    allocationOrderInfo.init(record.allocationNo, FormEditType.Show)
+    allocationOrderInfo.init(record.allocNo, FormEditType.Show)
   }
 
   /**
@@ -182,7 +182,7 @@
       title: '同步分账状态',
       content: '确定同步分账状态吗？',
       onOk: () => {
-        sync(record.allocationNo).then(() => {
+        sync(record.allocNo).then(() => {
           createMessage.success('同步成功')
           queryPage()
         })
@@ -199,7 +199,7 @@
       title: '分账重试',
       content: '确定分账重试吗？',
       onOk: () => {
-        retry(record.bizAllocationNo).then(() => {
+        retry(record.bizAllocNo).then(() => {
           createMessage.success('分账重试请求发送成功')
           queryPage()
         })
@@ -216,7 +216,7 @@
       title: '完结分账',
       content: '确定完结分账吗？',
       onOk: () => {
-        finish(record.allocationNo).then(() => {
+        finish(record.allocNo).then(() => {
           createMessage.success('完结请求发送成功')
           queryPage()
         })

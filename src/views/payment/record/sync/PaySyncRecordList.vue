@@ -7,14 +7,14 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="tradeNo" title="本地交易号" :min-width="220">
+        <vxe-column field="tradeNo" title="本地交易号" :min-width="230">
           <template #default="{ row }">
             <a @click="showOrder(row)">
               {{ row.tradeNo }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="bizTradeNo" title="商户交易号" :min-width="220" />
+        <vxe-column field="bizTradeNo" title="商户交易号" :min-width="230" />
         <vxe-column field="channel" title="同步类型" :min-width="120">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('PaymentType', row.syncType) }}</a-tag>

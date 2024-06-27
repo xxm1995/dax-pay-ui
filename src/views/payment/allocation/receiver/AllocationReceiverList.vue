@@ -35,7 +35,7 @@
             <a-tag>{{ dictConvert('AllocReceiverType', row.receiverType) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="receiverAccount" title="接收方账号" :min-width="220" />
+        <vxe-column field="receiverAccount" title="接收方账号" :min-width="230" />
         <vxe-column field="receiverName" title="接收方姓名" :min-width="160" />
         <vxe-column field="relationType" title="分账关系" :min-width="100">
           <template #default="{ row }">
@@ -165,7 +165,7 @@
       content: '是否确认删除该条数据?',
       onOk: () => {
         loading.value = true
-        del(record.id).then(({ data }) => {
+        del(record.receiverNo).then(({ data }) => {
           createMessage.success('删除成功')
           queryPage()
         })

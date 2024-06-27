@@ -7,7 +7,7 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="title" title="标题" :min-width="220" />
+        <vxe-column field="title" title="标题" :min-width="230" />
         <vxe-column field="amount" title="金额(元)" :min-width="120" sortable>
           <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
         </vxe-column>
@@ -21,15 +21,15 @@
             <a-tag>{{ dictConvert('AsyncPayChannel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="tradeNo" title="本地交易号" :min-width="220">
+        <vxe-column field="tradeNo" title="本地交易号" :min-width="230">
           <template #default="{ row }">
             <a @click="showOrder(row)">
               {{ row.tradeNo }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="bizTradeNo" title="商户交易号" :min-width="220" />
-        <vxe-column field="outTradeNo" title="通道交易号" :min-width="220" />
+        <vxe-column field="bizTradeNo" title="商户交易号" :min-width="230" />
+        <vxe-column field="outTradeNo" title="通道交易号" :min-width="230" />
         <vxe-column field="createTime" title="时间" :min-width="160" sortable />
         <vxe-column fixed="right" :min-width="60" :showOverflow="false" title="操作">
           <template #default="{ row }">

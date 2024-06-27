@@ -19,42 +19,44 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderNo" title="订单号" :min-width="220">
+        <vxe-column field="orderNo" title="订单号" :min-width="230">
           <template #default="{ row }">
             <a @click="show(row)">
               {{ row.orderNo }}
             </a>
           </template>
         </vxe-column>
-        <vxe-column field="title" title="标题" :min-width="220" />
+        <vxe-column field="title" title="标题" :min-width="230" />
         <vxe-column field="channel" title="支付通道" :min-width="120">
           <template #default="{ row }">
             {{ dictConvert('PayChannel', row.channel) }}
           </template>
         </vxe-column>
-        <vxe-column field="bizOrderNo" title="商户订单号" :min-width="220" />
+        <vxe-column field="bizOrderNo" title="商户订单号" :min-width="230" />
         <vxe-column field="amount" title="金额(元)" :min-width="120" sortable>
           <template #default="{ row }"> {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }} </template>
         </vxe-column>
-        <vxe-column field="refundableBalance" title="可退余额(元)" width="120" sortable>
+        <vxe-column field="refundableBalance" title="可退余额(元)" :min-width="120" sortable>
           <template #default="{ row }"> {{ row.refundableBalance ? (row.refundableBalance / 100).toFixed(2) : 0 }} </template>
         </vxe-column>
-        <vxe-column field="status" title="支付状态" width="120">
-          <template #default="{ row }">{{ dictConvert('PayStatus', row.status) }}</template>
+        <vxe-column field="status" title="支付状态" :min-width="120">
+          <template #default="{ row }">{{ dictConvert('PayStatus', row.status) || '无' }}</template>
         </vxe-column>
-
+        <vxe-column field="refundStatus" title="退款终态" :min-width="120">
+          <template #default="{ row }">{{ dictConvert('PayOrderRefundStatus', row.refundStatus) || '无' }}</template>
+        </vxe-column>
         <vxe-column field="allocation" title="分账" :min-width="160">
           <template #default="{ row }">
             <a-tag v-if="row.allocation" color="green">支持</a-tag>
             <a-tag v-else color="red">不支持</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="allocation" title="分账状态" :min-width="160">
+        <vxe-column field="allocStatus" title="分账状态" :min-width="160">
           <template #default="{ row }">
-            {{ dictConvert('PayOrderAllocationStatus', row.allocationStatus) }}
+            {{ dictConvert('PayOrderAllocStatus', row.allocStatus) || '无' }}
           </template>
         </vxe-column>
-        <vxe-column field="createTime" title="创建时间" sortable :min-width="220" />
+        <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
         <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <a-link @click="show(row)">查看</a-link>
@@ -72,10 +74,10 @@
                   <a-menu-item v-if="[payStatus.PROGRESS].includes(row.status)">
                     <a-link @click="closeOrder(row)" danger>关闭</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="row.allocationStatus === 'waiting'">
+                  <a-menu-item v-if="row.allocStatus === 'waiting' && payStatus.SUCCESS === row.status">
                     <a-link @click="allocation(row)">分账</a-link>
                   </a-menu-item>
-                  <a-menu-item v-if="[payStatus.SUCCESS, payStatus.PARTIAL_REFUND].includes(row.status) && row.refundableBalance > 0">
+                  <a-menu-item v-if="[payStatus.SUCCESS].includes(row.status) && row.refundableBalance > 0">
                     <a-link @click="refund(row)" danger>退款</a-link>
                   </a-menu-item>
                 </a-menu>
@@ -123,6 +125,8 @@
   let channelList = $ref<LabeledValue[]>([])
   let methodList = $ref<LabeledValue[]>([])
   let payStatusList = $ref<LabeledValue[]>([])
+  let payRefundStatusList = $ref<LabeledValue[]>([])
+  let payAllocStatusList = $ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
@@ -144,6 +148,8 @@
       { field: 'method', name: '支付方式', type: LIST, selectList: methodList },
       { field: 'errorCode', name: '错误码', type: STRING },
       { field: 'status', name: '支付状态', type: LIST, selectList: payStatusList },
+      { field: 'refundStatus', name: '退款状态', type: LIST, selectList: payRefundStatusList },
+      { field: 'allocStatus', name: '支付状态', type: LIST, selectList: payAllocStatusList },
     ] as QueryField[]
   })
 
@@ -167,8 +173,10 @@
    */
   async function initData() {
     channelList = await dictDropDown('PayChannel')
-    payStatusList = await dictDropDown('PayStatus')
     methodList = await dictDropDown('PayMethod')
+    payStatusList = await dictDropDown('PayStatus')
+    payRefundStatusList = await dictDropDown('PayOrderRefundStatus')
+    payAllocStatusList = await dictDropDown('PayOrderAllocStatus')
   }
   /**
    * 分页查询
@@ -274,20 +282,6 @@
         return { color: 'gray' }
       }
       return { color: 'red' }
-    }
-    if (column.field == 'asyncPay') {
-      if (row.asyncPay) {
-        return { color: 'green' }
-      } else {
-        return { color: 'gray' }
-      }
-    }
-    if (column.field == 'combinationPay') {
-      if (row.combinationPay) {
-        return { color: 'green' }
-      } else {
-        return { color: 'gray' }
-      }
     }
   }
 </script>

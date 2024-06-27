@@ -14,7 +14,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="本地交易号" :min-width="220">
+        <vxe-column field="orderId" title="本地交易号" :min-width="230">
           <template #default="{ row }">
             <a-link @click="showOrder(row)">
               {{ row.tradeNo }}
@@ -38,7 +38,7 @@
             <a-tag v-else color="red">否</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="sendCount" title="发送次数" sortable :min-width="170" />
+        <vxe-column field="sendCount" title="自动通知次数" sortable :min-width="170" />
         <vxe-column field="latestTime" title="最后发送时间" sortable :min-width="170" />
         <vxe-column field="createTime" title="创建时间" sortable :min-width="170" />
         <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">
@@ -143,7 +143,7 @@
     createConfirm({
       iconType: 'warning',
       title: '警告',
-      content: '是否重新发送通知消息？',
+      content: '是否重新发送通知消息？手动发送后，不会增加发送次数。',
       onOk: () => {
         loading.value = true
         resetSendNotice(record.id).then(({ data }) => {

@@ -31,6 +31,24 @@ export function findPayWayList() {
 }
 
 /**
+ * 生成异步通知地址
+ */
+export function generateNotifyUrl() {
+  return defHttp.get<Result<string>>({
+    url: '/union/pay/config/generateNotifyUrl',
+  })
+}
+/**
+ * 生成同步通知地址
+ */
+export function generateReturnUrl() {
+  return defHttp.get<Result<string>>({
+    url: '/union/pay/config/generateReturnUrl',
+  })
+}
+
+
+/**
  * 微信支付配置
  */
 export interface UnionPayConfig extends BaseEntity {
@@ -41,7 +59,7 @@ export interface UnionPayConfig extends BaseEntity {
   // 是否启用
   enable: boolean
   // 支付限额
-  singleLimit: number
+  limitAmount?: number
   // 签名类型
   signType?: string
   // 是否为证书签名

@@ -33,16 +33,6 @@ export function getByRefundNo(refundNo) {
 }
 
 /**
- * 获取订单扩展信息
- */
-export function getOrderExtra(id) {
-  return defHttp.get<Result<RefundOrderExtra>>({
-    url: '/order/refund/findExtraById',
-    params: { id },
-  })
-}
-
-/**
  * 发起退款
  */
 export function refund(params) {
@@ -112,18 +102,6 @@ export interface RefundOrder extends BaseEntity {
   finishTime?: string
   // 退款原因
   reason?: string
-  // 错误码
-  errorCode?: string
-  // 错误信息
-  errorMsg?: string
-}
-
-/**
- * 退款钉钉扩展信息
- */
-export interface RefundOrderExtra {
-  // 是否不需要异步通知
-  notNotify?: string
   // 异步通知地址
   notifyUrl?: string
   // 商户扩展参数
@@ -134,4 +112,8 @@ export interface RefundOrderExtra {
   reqTime?: string
   // 支付终端ip
   clientIp?: string
+  // 错误码
+  errorCode?: string
+  // 错误信息
+  errorMsg?: string
 }

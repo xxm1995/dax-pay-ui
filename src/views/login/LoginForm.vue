@@ -45,24 +45,12 @@
         </a-col>
       </a-row>
 
-      <a-form-item class="enter-x">
+      <a-form-item class="enter-x" style="margin-bottom: 8px">
         <a-button type="primary" size="large" block @click="handleLogin"> 登录 </a-button>
       </a-form-item>
       <a-row class="enter-x">
-        <a-col :md="8" :xs="24">
-          <a-button block @click="setLoginState(LoginStateEnum.MOBILE)"> 手机登录 </a-button>
-        </a-col>
-        <a-col :md="8" :xs="24" class="!my-2 !md:my-0 xs:mx-0 md:mx-2">
-          <a-button block @click="setLoginState(LoginStateEnum.QR_CODE)"> 二维码登录 </a-button>
-        </a-col>
-        <a-col :md="6" :xs="24">
-          <a-button block @click="setLoginState(LoginStateEnum.REGISTER)"> 注册 </a-button>
-        </a-col>
+        <a-button block @click="setLoginState(LoginStateEnum.REGISTER)"> 注册 </a-button>
       </a-row>
-      <a-divider class="enter-x">其他登录方式</a-divider>
-      <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
-        <third-login @loginLoading="loading = true" @loginFinish="loading = false" />
-      </div>
     </a-form>
   </a-spin>
 </template>
@@ -80,7 +68,6 @@
   import { findLoginTypeByCode, LoginType } from '/@/api/common/LoginAssist'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { LoginParams } from '/@/api/sys/model/userModel'
-  import ThirdLogin from '/@/views/login/third/ThirdLogin.vue'
 
   const { notification } = useMessage()
   const { prefixCls } = useDesign('login')

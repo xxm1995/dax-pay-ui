@@ -16,11 +16,9 @@
           <div class="my-auto">
             <img :alt="title" src="../../assets/svg/login-box-bg.svg" class="w-1/2 -mt-16 -enter-x" />
             <div class="mt-10 font-medium text-white -enter-x">
-              <span class="inline-block mt-4 text-3xl"> 开箱即用的支付网关系统</span>
+              <span class="inline-block mt-4 text-3xl"> 开箱即用的开源支付系统</span>
             </div>
-            <div class="mt-5 font-normal text-white dark:text-gray-500 -enter-x"
-              >基于Vite+Vue3打造，支持支付宝、微信支付、云闪付等支付方式的统一网关系统
-            </div>
+            <div class="mt-5 font-normal text-white dark:text-gray-500 -enter-x">支持支付宝、微信支付、云闪付 </div>
           </div>
         </div>
         <div class="flex w-full h-full py-5 xl:h-auto xl:py-0 xl:my-0 xl:w-6/12">
@@ -34,10 +32,6 @@
             <ForgetPasswordForm />
             <!--      注册      -->
             <RegisterForm />
-            <!--      手机登录      -->
-            <MobileForm />
-            <!--      扫码登录      -->
-            <QrCodeForm />
           </div>
         </div>
       </div>
@@ -51,8 +45,6 @@
   import LoginForm from './LoginForm.vue'
   import ForgetPasswordForm from './user/ForgetPasswordForm.vue'
   import RegisterForm from './user/RegisterForm.vue'
-  import MobileForm from './MobileForm.vue'
-  import QrCodeForm from './QrCodeForm.vue'
   import { useGlobSetting } from '/@/hooks/setting'
   import { useDesign } from '/@/hooks/web/useDesign'
 
