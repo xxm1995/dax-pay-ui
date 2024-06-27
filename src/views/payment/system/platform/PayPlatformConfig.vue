@@ -7,7 +7,7 @@
             <a-col :span="20">
               <a-form-item class="w-800px" name="websiteUrl">
                 <template #label>
-                  <basic-title helpMessage="本支付系统的访问地址"> 系统地址 </basic-title>
+                  <basic-title helpMessage="本支付系统的后台API的访问地址"> 系统地址 </basic-title>
                 </template>
                 <a-input placeholder="请输入支付系统的网站地址" v-model:value="form.websiteUrl" :disabled="!edit" />
               </a-form-item>

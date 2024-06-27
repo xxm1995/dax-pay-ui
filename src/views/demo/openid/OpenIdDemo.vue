@@ -10,8 +10,8 @@
     ><qr-code :options="{ margin: 0 }" :width="250" :value="url" />
     <div style="font-size: 26px"> {{}} </div>
     <a-form-item label="" style="margin-top: 30px">
-      <a-input v-model:value="openId" disabled placeholder="请扫码获取OpenID" style="width: 350px" />
-      <a-button type="primary" :disabled="!openId" @click="copy">复制OpenID</a-button>
+      <a-input v-model:value="openId" disabled placeholder="请扫码获取OpenID或UserId" style="width: 350px" />
+      <a-button type="primary" :disabled="!openId" @click="copy">复制</a-button>
     </a-form-item>
   </div>
 </template>

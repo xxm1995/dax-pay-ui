@@ -252,7 +252,7 @@
   async function getAliOpenId() {
     // 获取支付宝认证链接
     const { data: urlResult } = await generateAliAuthUrl()
-    openIdQrCode.init(urlResult.authUrl, '请使用支付宝客户端"扫一扫"')
+    openIdQrCode.init(urlResult.authUrl, '请使用支付宝客户端"扫一扫获取OpenId或UserId"')
     // 轮训查询
     const { pause, resume } = useIntervalFn(
       () => {
