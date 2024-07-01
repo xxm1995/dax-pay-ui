@@ -71,8 +71,6 @@
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
     "@iconify/iconify": "^3.1.1",
-    "@logicflow/core": "^1.2.26",
-    "@logicflow/extension": "^1.2.26",
     "@vben/hooks": "workspace:*",
     "@vue/shared": "^3.4.25",
     "@vueuse/core": "^10.9.0",
@@ -98,7 +96,6 @@
     "resize-observer-polyfill": "^1.5.1",
     "showdown": "^2.1.0",
     "sortablejs": "^1.15.2",
-    "tinymce": "^5.10.9",
     "unocss": "^0.59.4",
     "vditor": "^3.10.4",
     "vue": "^3.4.25",

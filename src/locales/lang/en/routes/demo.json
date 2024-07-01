@@ -35,14 +35,6 @@
     "cropperImage": "Cropper Image",
     "cardList": "Card List"
   },
-  "editor": {
-    "editor": "Editor",
-    "codeEditor": "Code editor",
-    "markdown": "Markdown editor",
-    "tinymce": "Rich text",
-    "tinymceBasic": "Basic",
-    "tinymceForm": "embedded form"
-  },
   "excel": {
     "excel": "Excel",
     "customExport": "Select export format",
@@ -82,10 +74,6 @@
     "requestDemo": "Retry request demo",
     "breadcrumbChildren": "Level mode",
     "breadcrumbChildrenDetail": "Level mode detail"
-  },
-  "flow": {
-    "name": "Graphics editor",
-    "flowChart": "FlowChart"
   },
   "form": {
     "form": "Form",
