@@ -27,7 +27,6 @@
     "CHANGELOG.md": true,
     "examples": true,
     "res": true,
-    "screenshots": true,
     "yarn-error.log": true,
     "**/.yarn": true
   },
@@ -108,7 +107,6 @@
     "antv",
     "brotli",
     "browserslist",
-    "codemirror",
     "commitlint",
     "cropperjs",
     "echarts",

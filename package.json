@@ -82,15 +82,12 @@
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.10",
     "echarts": "^5.5.0",
-    "exceljs": "^4.4.0",
-    "html2canvas": "^1.4.1",
     "lodash-es": "^4.17.21",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
     "path-to-regexp": "^6.2.2",
     "pinia": "2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
-    "print-js": "^1.6.0",
     "qrcode": "^1.5.3",
     "qs": "^6.12.1",
     "resize-observer-polyfill": "^1.5.1",
@@ -105,9 +102,7 @@
     "vue-types": "^5.1.1",
     "vuedraggable": "^4.1.0",
     "vxe-table": "^4.7.31",
-    "vxe-table-plugin-export-xlsx": "^4.0.2",
-    "xe-utils": "^3.5.25",
-    "xlsx": "^0.18.5"
+    "xe-utils": "^3.5.25"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",

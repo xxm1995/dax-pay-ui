@@ -24,14 +24,6 @@ const feat: AppRouteModule = {
       },
     },
     {
-      path: 'screenshot',
-      name: 'Screenshot',
-      component: () => import('@/views/demo/feat/screenshot/index.vue'),
-      meta: {
-        title: t('routes.demo.feat.screenShot'),
-      },
-    },
-    {
       path: 'ws',
       name: 'WebSocket',
       component: () => import('@/views/demo/feat/ws/index.vue'),
@@ -54,14 +46,6 @@ const feat: AppRouteModule = {
       component: () => import('@/views/demo/feat/session-timeout/index.vue'),
       meta: {
         title: t('routes.demo.feat.sessionTimeout'),
-      },
-    },
-    {
-      path: 'print',
-      name: 'Print',
-      component: () => import('@/views/demo/feat/print/index.vue'),
-      meta: {
-        title: t('routes.demo.feat.print'),
       },
     },
     {
@@ -227,51 +211,6 @@ const feat: AppRouteModule = {
       meta: {
         title: t('routes.demo.feat.errorLog'),
       },
-    },
-    {
-      path: 'excel',
-      name: 'Excel',
-      redirect: '/feat/excel/customExport',
-      component: getParentLayout('Excel'),
-      meta: {
-        // icon: 'mdi:microsoft-excel',
-        title: t('routes.demo.excel.excel'),
-      },
-
-      children: [
-        {
-          path: 'customExport',
-          name: 'CustomExport',
-          component: () => import('@/views/demo/excel/CustomExport.vue'),
-          meta: {
-            title: t('routes.demo.excel.customExport'),
-          },
-        },
-        {
-          path: 'jsonExport',
-          name: 'JsonExport',
-          component: () => import('@/views/demo/excel/JsonExport.vue'),
-          meta: {
-            title: t('routes.demo.excel.jsonExport'),
-          },
-        },
-        {
-          path: 'arrayExport',
-          name: 'ArrayExport',
-          component: () => import('@/views/demo/excel/ArrayExport.vue'),
-          meta: {
-            title: t('routes.demo.excel.arrayExport'),
-          },
-        },
-        {
-          path: 'importExcel',
-          name: 'ImportExcel',
-          component: () => import('@/views/demo/excel/ImportExcel.vue'),
-          meta: {
-            title: t('routes.demo.excel.importExcel'),
-          },
-        },
-      ],
     },
     {
       path: 'testTab/:id',
