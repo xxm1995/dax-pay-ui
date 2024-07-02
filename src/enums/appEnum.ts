@@ -30,11 +30,7 @@ export enum SessionTimeoutProcessingEnum {
  */
 export enum PermissionModeEnum {
   // 角色权限
-  ROLE = 'ROLE',
-  // 后端
   BACK = 'BACK',
-  // 路由映射
-  ROUTE_MAPPING = 'ROUTE_MAPPING',
 }
 
 // Route switching animation

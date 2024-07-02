@@ -55,7 +55,6 @@
     userStore.confirmLoginOut()
   }
 
-  // open doc
   function openDoc() {
     openWindow(DOC_URL)
   }
@@ -114,6 +113,11 @@
 
       .@{prefix-cls}__desc {
         color: @header-light-desc-color;
+      }
+    }
+    &-dropdown-overlay {
+      .ant-dropdown-menu-item {
+        min-width: 160px;
       }
     }
   }

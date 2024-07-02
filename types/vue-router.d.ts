@@ -35,7 +35,7 @@ declare module 'vue-router' {
     currentActiveMenu?: string
     // Never show in tab
     hideTab?: boolean
-    // Never show in menu
+    // 隐藏菜单
     hideMenu?: boolean
     isLink?: boolean
     // only build for Menu

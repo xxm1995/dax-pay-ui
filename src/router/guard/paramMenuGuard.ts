@@ -1,8 +1,5 @@
 import type { Router } from 'vue-router'
 import { configureDynamicParamsMenu } from '../helper/menuHelper'
-import { Menu } from '../types'
-import { PermissionModeEnum } from '@/enums/appEnum'
-import { useAppStoreWithOut } from '@/store/modules/app'
 
 import { usePermissionStoreWithOut } from '@/store/modules/permission'
 
@@ -21,27 +18,9 @@ export function createParamMenuGuard(router: Router) {
       return
     }
 
-    let menus: Menu[] = []
-    if (isBackMode()) {
-      menus = permissionStore.getBackMenuList
-    } else if (isRouteMappingMode()) {
-      menus = permissionStore.getFrontMenuList
-    }
+    const menus = permissionStore.getBackMenuList
     menus.forEach((item) => configureDynamicParamsMenu(item, to.params))
 
     next()
   })
-}
-
-const getPermissionMode = () => {
-  const appStore = useAppStoreWithOut()
-  return appStore.getProjectConfig.permissionMode
-}
-// 后端模式
-const isBackMode = () => {
-  return getPermissionMode() === PermissionModeEnum.BACK
-}
-// 路由映射
-const isRouteMappingMode = () => {
-  return getPermissionMode() === PermissionModeEnum.ROUTE_MAPPING
 }

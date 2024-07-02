@@ -14,7 +14,7 @@ import { APP_PRESET_COLOR_LIST } from './designSetting'
 // ! You need to clear the browser cache after the change
 const setting: ProjectConfig = {
   // 是否显示配置按钮
-  showSettingButton: true,
+  showSettingButton: false,
 
   // 是否显示主题切换按钮
   showDarkModeToggle: true,

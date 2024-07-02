@@ -16,15 +16,15 @@ export const INTERNAL: AppRouteModule = {
     // {
     //   path: '/account/setting',
     //   name: 'AccountSettingPage',
-    //   component: () => import('/@/views/account/setting/index.vue'),
+    //   component: () => import('@/views/account/setting/index.vue'),
     //   meta: { title: '个人设置' },
     // },
-    // {
-    //   path: '/about/index',
-    //   name: 'AboutPage',
-    //   component: () => import('/@/views/sys/about/index.vue'),
-    //   meta: { title: '关于' },
-    // },
+    {
+      path: '/about/index',
+      name: 'AboutPage',
+      component: () => import('@/views/sys/about/index.vue'),
+      meta: { title: '关于' },
+    },
   ],
 }
 
@@ -39,7 +39,7 @@ export const OUTSIDE: AppRouteModule = {
     // {
     //   path: '/cashier',
     //   name: 'cashier',
-    //   component: () => import('/@/views/demo/cashier/Cashier.vue'),
+    //   component: () => import('@/views/demo/cashier/Cashier.vue'),
     //   meta: { title: '收银台演示', ignoreAuth: true },
     // },
   ],

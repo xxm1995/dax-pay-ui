@@ -7,7 +7,7 @@ import { warn } from '@/utils/log'
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import XEUtils from 'xe-utils'
 
-const IFRAME = () => import('/@/views/sys/iframe/FrameBlank.vue')
+const IFRAME = () => import('@/views/sys/iframe/FrameBlank.vue')
 
 const LayoutMap = new Map<string, () => Promise<typeof import('*.vue')>>()
 
