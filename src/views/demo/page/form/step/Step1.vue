@@ -27,12 +27,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicForm, useForm } from '@/components/Form';
-  import { step1Schemas } from './data';
+  import { BasicForm, useForm } from '@/components/Form'
+  import { step1Schemas } from './data'
 
-  import { Select, Input, Divider } from 'ant-design-vue';
+  import { Select, Input, Divider } from 'ant-design-vue'
 
-  const emit = defineEmits(['next']);
+  const emit = defineEmits(['next'])
 
   const [register, { validate }] = useForm({
     labelWidth: 100,
@@ -45,12 +45,12 @@
       text: '下一步',
     },
     submitFunc: customSubmitFunc,
-  });
+  })
 
   async function customSubmitFunc() {
     try {
-      const values = await validate();
-      emit('next', values);
+      const values = await validate()
+      emit('next', values)
     } catch (error) {
       //
     }

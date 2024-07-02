@@ -4,9 +4,9 @@ import {
   ComponentPublicInstance,
   defineAsyncComponent,
   // FunctionalComponent, CSSProperties
-} from 'vue';
-import { Spin } from 'ant-design-vue';
-import { noop } from '@/utils';
+} from 'vue'
+import { Spin } from 'ant-design-vue'
+import { noop } from '@/utils'
 
 // const Loading: FunctionalComponent<{ size: 'small' | 'default' | 'large' }> = (props) => {
 //   const style: CSSProperties = {
@@ -23,19 +23,19 @@ import { noop } from '@/utils';
 // };
 
 interface Options {
-  size?: 'default' | 'small' | 'large';
-  delay?: number;
-  timeout?: number;
-  loading?: boolean;
-  retry?: boolean;
+  size?: 'default' | 'small' | 'large'
+  delay?: number
+  timeout?: number
+  loading?: boolean
+  retry?: boolean
 }
 
 export function createAsyncComponent<
   T extends Component = {
-    new (): ComponentPublicInstance;
+    new (): ComponentPublicInstance
   },
 >(loader: AsyncComponentLoader<T>, options: Options = {}) {
-  const { size = 'small', delay = 100, timeout = 30000, loading = false, retry = true } = options;
+  const { size = 'small', delay = 100, timeout = 30000, loading = false, retry = true } = options
   return defineAsyncComponent({
     loader,
     loadingComponent: loading ? <Spin spinning={true} size={size} /> : undefined,
@@ -59,12 +59,12 @@ export function createAsyncComponent<
       : (error, retry, fail, attempts) => {
           if (error.message.match(/fetch/) && attempts <= 3) {
             // retry on fetch errors, 3 max attempts
-            retry();
+            retry()
           } else {
             // Note that retry/fail are like resolve/reject of a promise:
             // one of them must be called for the error handling to continue.
-            fail();
+            fail()
           }
         },
-  });
+  })
 }

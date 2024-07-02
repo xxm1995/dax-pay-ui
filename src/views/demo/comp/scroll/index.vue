@@ -14,8 +14,8 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { ScrollContainer } from '@/components/Container';
-  import { PageWrapper } from '@/components/Page';
+  import { ScrollContainer } from '@/components/Container'
+  import { PageWrapper } from '@/components/Page'
 </script>
 <style lang="less" scoped>
   .scroll-wrap {

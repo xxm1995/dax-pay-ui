@@ -27,9 +27,9 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, BasicColumn, TableAction } from '@/components/Table';
+  import { BasicTable, useTable, BasicColumn, TableAction } from '@/components/Table'
 
-  import { demoListApi } from '@/api/demo/table';
+  import { demoListApi } from '@/api/demo/table'
 
   const columns: BasicColumn[] = [
     {
@@ -62,7 +62,7 @@
       dataIndex: 'endTime',
       width: 200,
     },
-  ];
+  ]
 
   const [registerTable] = useTable({
     title: 'TableAction组件及固定列示例',
@@ -75,11 +75,11 @@
       title: 'Action',
       dataIndex: 'action',
     },
-  });
+  })
   function handleDelete(record: Recordable) {
-    console.log('点击了删除', record);
+    console.log('点击了删除', record)
   }
   function handleOpen(record: Recordable) {
-    console.log('点击了启用', record);
+    console.log('点击了启用', record)
   }
 </script>

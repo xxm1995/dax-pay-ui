@@ -1,30 +1,30 @@
-import { FormSchema } from '@/components/Form';
+import { FormSchema } from '@/components/Form'
 
-type InputType = 'InputTextArea' | 'InputNumber' | 'Input';
+type InputType = 'InputTextArea' | 'InputNumber' | 'Input'
 export interface PromptProps {
-  title: string;
-  label?: string;
-  required?: boolean;
-  onOK?: Fn;
-  inputType?: InputType;
-  labelWidth?: number;
-  width?: string;
-  layout?: 'horizontal' | 'vertical' | 'inline';
-  defaultValue?: string | number;
+  title: string
+  label?: string
+  required?: boolean
+  onOK?: Fn
+  inputType?: InputType
+  labelWidth?: number
+  width?: string
+  layout?: 'horizontal' | 'vertical' | 'inline'
+  defaultValue?: string | number
 }
 
 interface genFormSchemasProps {
-  label?: string;
-  required?: boolean;
-  inputType?: InputType;
-  defaultValue?: string | number;
+  label?: string
+  required?: boolean
+  inputType?: InputType
+  defaultValue?: string | number
 }
 
 const inputTypeMap: {
   [key in InputType]: {
-    colProps: { span: number; offset?: number };
-    componentProps: FormSchema['componentProps'];
-  };
+    colProps: { span: number; offset?: number }
+    componentProps: FormSchema['componentProps']
+  }
 } = {
   InputTextArea: {
     colProps: { span: 23 },
@@ -49,7 +49,7 @@ const inputTypeMap: {
       min: 0,
     },
   },
-};
+}
 
 export function genFormSchemas({
   label = '备注信息',
@@ -64,6 +64,6 @@ export function genFormSchemas({
     defaultValue,
     required: Boolean(required),
     ...inputTypeMap[inputType],
-  };
-  return [formSchema];
+  }
+  return [formSchema]
 }

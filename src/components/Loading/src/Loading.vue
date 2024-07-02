@@ -9,11 +9,11 @@
   </section>
 </template>
 <script lang="ts" setup>
-  import type { PropType } from 'vue';
-  import { Spin } from 'ant-design-vue';
-  import { SizeEnum } from '@/enums/sizeEnum';
+  import type { PropType } from 'vue'
+  import { Spin } from 'ant-design-vue'
+  import { SizeEnum } from '@/enums/sizeEnum'
 
-  defineOptions({ name: 'Loading' });
+  defineOptions({ name: 'Loading' })
 
   defineProps({
     tip: {
@@ -24,7 +24,7 @@
       type: String as PropType<SizeEnum>,
       default: SizeEnum.LARGE,
       validator: (v: SizeEnum): boolean => {
-        return [SizeEnum.DEFAULT, SizeEnum.SMALL, SizeEnum.LARGE].includes(v);
+        return [SizeEnum.DEFAULT, SizeEnum.SMALL, SizeEnum.LARGE].includes(v)
       },
     },
     absolute: {
@@ -41,7 +41,7 @@
     theme: {
       type: String as PropType<'dark' | 'light'>,
     },
-  });
+  })
 </script>
 <style lang="less" scoped>
   .full-loading {

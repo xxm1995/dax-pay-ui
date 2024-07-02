@@ -1,8 +1,8 @@
-import { defineComponent } from 'vue';
-import { Card, Typography, Button, Space, message } from 'ant-design-vue';
-import { imitateApi } from './mock-api';
-import { useRequest } from '@vben/hooks';
-import { PageWrapper } from '@/components/Page';
+import { defineComponent } from 'vue'
+import { Card, Typography, Button, Space, message } from 'ant-design-vue'
+import { imitateApi } from './mock-api'
+import { useRequest } from '@vben/hooks'
+import { PageWrapper } from '@/components/Page'
 
 const Demo1 = defineComponent({
   setup() {
@@ -12,7 +12,7 @@ const Demo1 = defineComponent({
       // onSuccess() {
       //   console.log('不可见是否运行呢'); // 测试不可见时，是否还在执行
       // },
-    });
+    })
 
     return () => (
       <Card title="默认用法">
@@ -23,9 +23,7 @@ const Demo1 = defineComponent({
             ，进入轮询模式，useRequest 会定时触发 service 执行。
           </Typography.Paragraph>
           <Typography.Paragraph>
-            <Typography.Text code>
-              {`const { data, run, cancel } = useRequest(imitateApi, { pollingInterval: 3000 });`}
-            </Typography.Text>
+            <Typography.Text code>{`const { data, run, cancel } = useRequest(imitateApi, { pollingInterval: 3000 });`}</Typography.Text>
           </Typography.Paragraph>
         </Typography>
 
@@ -39,9 +37,9 @@ const Demo1 = defineComponent({
           </Space>
         </div>
       </Card>
-    );
+    )
   },
-});
+})
 
 const Demo2 = defineComponent({
   setup() {
@@ -51,9 +49,9 @@ const Demo2 = defineComponent({
       pollingErrorRetryCount: 3,
       pollingWhenHidden: false,
       onError: (error) => {
-        message.error(error.message);
+        message.error(error.message)
       },
-    });
+    })
 
     return () => (
       <Card title="轮询错误重试" class="mt-2">
@@ -80,9 +78,9 @@ const Demo2 = defineComponent({
           </Space>
         </div>
       </Card>
-    );
+    )
   },
-});
+})
 
 export default defineComponent({
   setup() {
@@ -91,6 +89,6 @@ export default defineComponent({
         <Demo1 />
         <Demo2 />
       </PageWrapper>
-    );
+    )
   },
-});
+})

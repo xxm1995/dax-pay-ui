@@ -1,29 +1,27 @@
-import type { PropType } from 'vue';
-import { BaseFileItem, FileBasicColumn } from './types/typing';
+import type { PropType } from 'vue'
+import { BaseFileItem, FileBasicColumn } from './types/typing'
 
-import type { Options } from 'sortablejs';
+import type { Options } from 'sortablejs'
 
-import { Merge } from '@/utils/types';
-import { propTypes } from '@/utils/propTypes';
-import { BasicColumn } from '@/components/Table';
+import { Merge } from '@/utils/types'
+import { propTypes } from '@/utils/propTypes'
+import { BasicColumn } from '@/components/Table'
 
 type SortableOptions = Merge<
   Omit<Options, 'onEnd'>,
   {
-    onAfterEnd?: <T = any, R = any>(params: T) => R;
+    onAfterEnd?: <T = any, R = any>(params: T) => R
     // ...可扩展
   }
->;
-export type handleFnKey = 'record' | 'valueKey' | 'uidKey';
+>
+export type handleFnKey = 'record' | 'valueKey' | 'uidKey'
 export type previewColumnsFnType = {
-  handleRemove: (record: Record<handleFnKey, any>) => any;
-  handleAdd: (record: Record<handleFnKey, any>) => any;
-};
+  handleRemove: (record: Record<handleFnKey, any>) => any
+  handleAdd: (record: Record<handleFnKey, any>) => any
+}
 export const previewType = {
   previewColumns: {
-    type: [Array, Function] as PropType<
-      BasicColumn[] | ((arg: previewColumnsFnType) => BasicColumn[])
-    >,
+    type: [Array, Function] as PropType<BasicColumn[] | ((arg: previewColumnsFnType) => BasicColumn[])>,
     required: false,
   },
   beforePreviewData: {
@@ -31,9 +29,9 @@ export const previewType = {
     default: null,
     required: false,
   },
-};
+}
 
-type ListType = 'text' | 'picture' | 'picture-card';
+type ListType = 'text' | 'picture' | 'picture-card'
 
 export const basicProps = {
   disabled: { type: Boolean, default: false },
@@ -92,7 +90,7 @@ export const basicProps = {
   },
   // support xxx.xxx.xx
   resultField: propTypes.string.def(''),
-};
+}
 
 export const uploadContainerProps = {
   value: {
@@ -109,7 +107,7 @@ export const uploadContainerProps = {
     default: false,
   },
   ...previewType,
-};
+}
 
 export const previewProps = {
   value: {
@@ -121,7 +119,7 @@ export const previewProps = {
     default: 1,
   },
   ...previewType,
-};
+}
 
 export const fileListProps = {
   columns: {
@@ -144,4 +142,4 @@ export const fileListProps = {
     type: Object as PropType<SortableOptions>,
     default: () => ({}),
   },
-};
+}

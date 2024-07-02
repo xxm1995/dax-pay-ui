@@ -10,22 +10,10 @@
         @reset="handleReset"
       >
         <template #selectA="{ model, field }">
-          <Select
-            :options="optionsA"
-            mode="multiple"
-            v-model:value="model[field]"
-            @change="valueSelectA = model[field]"
-            allowClear
-          />
+          <Select :options="optionsA" mode="multiple" v-model:value="model[field]" @change="valueSelectA = model[field]" allowClear />
         </template>
         <template #selectB="{ model, field }">
-          <Select
-            :options="optionsB"
-            mode="multiple"
-            v-model:value="model[field]"
-            @change="valueSelectB = model[field]"
-            allowClear
-          />
+          <Select :options="optionsB" mode="multiple" v-model:value="model[field]" @change="valueSelectB = model[field]" allowClear />
         </template>
         <template #localSearch="{ model, field }">
           <ApiSelect
@@ -56,39 +44,39 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { type Recordable } from '@vben/types';
-  import { computed, unref, ref } from 'vue';
-  import { BasicForm, ApiSelect, FormSchema } from '@/components/Form';
-  import { CollapseContainer } from '@/components/Container';
-  import { useMessage } from '@/hooks/web/useMessage';
-  import { PageWrapper } from '@/components/Page';
+  import { type Recordable } from '@vben/types'
+  import { computed, unref, ref } from 'vue'
+  import { BasicForm, ApiSelect, FormSchema } from '@/components/Form'
+  import { CollapseContainer } from '@/components/Container'
+  import { useMessage } from '@/hooks/web/useMessage'
+  import { PageWrapper } from '@/components/Page'
 
-  import { optionsListApi } from '@/api/demo/select';
-  import { useDebounceFn } from '@vueuse/core';
-  import { treeOptionsListApi } from '@/api/demo/tree';
-  import { Select, type SelectProps } from 'ant-design-vue';
-  import { cloneDeep } from 'lodash-es';
-  import { areaRecord } from '@/api/demo/cascader';
-  import { uploadApi } from '@/api/sys/upload';
+  import { optionsListApi } from '@/api/demo/select'
+  import { useDebounceFn } from '@vueuse/core'
+  import { treeOptionsListApi } from '@/api/demo/tree'
+  import { Select, type SelectProps } from 'ant-design-vue'
+  import { cloneDeep } from 'lodash-es'
+  import { areaRecord } from '@/api/demo/cascader'
+  import { uploadApi } from '@/api/sys/upload'
 
-  let debounceOptionsFn = useDebounceFn(onSearch, 300);
-  const valueSelectA = ref<string[]>([]);
-  const valueSelectB = ref<string[]>([]);
-  const options = ref<Required<SelectProps>['options']>([]);
-  for (let i = 1; i < 10; i++) options.value.push({ label: '选项' + i, value: `${i}` });
+  let debounceOptionsFn = useDebounceFn(onSearch, 300)
+  const valueSelectA = ref<string[]>([])
+  const valueSelectB = ref<string[]>([])
+  const options = ref<Required<SelectProps>['options']>([])
+  for (let i = 1; i < 10; i++) options.value.push({ label: '选项' + i, value: `${i}` })
 
   const optionsA = computed(() => {
     return cloneDeep(unref(options)).map((op) => {
-      op.disabled = unref(valueSelectB).indexOf(op.value as string) !== -1;
-      return op;
-    });
-  });
+      op.disabled = unref(valueSelectB).indexOf(op.value as string) !== -1
+      return op
+    })
+  })
   const optionsB = computed(() => {
     return cloneDeep(unref(options)).map((op) => {
-      op.disabled = unref(valueSelectA).indexOf(op.value as string) !== -1;
-      return op;
-    });
-  });
+      op.disabled = unref(valueSelectA).indexOf(op.value as string) !== -1
+      return op
+    })
+  })
 
   const provincesOptions = [
     {
@@ -103,7 +91,7 @@
       value: '2',
       key: '2',
     },
-  ];
+  ]
   const citiesOptionsData = {
     guangdong: [
       {
@@ -139,7 +127,7 @@
         key: '3',
       },
     ],
-  };
+  }
 
   const schemas: FormSchema[] = [
     {
@@ -154,7 +142,7 @@
       field: 'field1',
       component: 'Input',
       label: ({ model }) => {
-        return `字段1${model.field3 ? model.field3 : ''}`;
+        return `字段1${model.field3 ? model.field3 : ''}`
       },
 
       colProps: {
@@ -162,20 +150,20 @@
       },
       // can func
       componentProps: ({ schema, formModel }) => {
-        console.log('form:', schema);
-        console.log('formModel:', formModel);
+        console.log('form:', schema)
+        console.log('formModel:', formModel)
         return {
           placeholder: '自定义placeholder',
           onChange: (e: any) => {
-            console.log(e);
+            console.log(e)
           },
-        };
+        }
       },
       renderComponentContent: () => {
         return {
           prefix: () => 'pSlot',
           suffix: () => 'sSlot',
-        };
+        }
       },
     },
     {
@@ -188,7 +176,7 @@
       },
       componentProps: {
         onChange: (e: any) => {
-          console.log(e);
+          console.log(e)
         },
       },
       suffix: '天',
@@ -311,7 +299,7 @@
           },
         ],
         onChange: (e) => {
-          console.log(e);
+          console.log(e)
         },
       },
     },
@@ -420,11 +408,11 @@
         // not request untill to select
         immediate: true,
         onChange: (e, v) => {
-          console.log('ApiSelect====>:', e, v);
+          console.log('ApiSelect====>:', e, v)
         },
         // atfer request callback
         onOptionsChange: (options) => {
-          console.log('get options', options.length, options);
+          console.log('get options', options.length, options)
         },
       },
       colProps: {
@@ -450,10 +438,10 @@
           parentCode: '',
         },
         isLeaf: (record) => {
-          return !(record.levelType < 3);
+          return !(record.levelType < 3)
         },
         onChange: (e, ...v) => {
-          console.log('ApiCascader====>:', e, v);
+          console.log('ApiCascader====>:', e, v)
         },
       },
     },
@@ -492,7 +480,7 @@
         api: treeOptionsListApi,
         resultField: 'list',
         onChange: (e, v) => {
-          console.log('ApiTreeSelect====>:', e, v);
+          console.log('ApiTreeSelect====>:', e, v)
         },
       },
       colProps: {
@@ -513,29 +501,29 @@
                 title: 'Parent Node',
                 value: '0-0',
               },
-            ]);
-          });
+            ])
+          })
         },
         async: true,
         onChange: (e, v) => {
-          console.log('ApiTreeSelect====>:', e, v);
+          console.log('ApiTreeSelect====>:', e, v)
         },
         onLoadData: ({ treeData, resolve, treeNode }) => {
-          console.log('treeNode====>:', treeNode);
+          console.log('treeNode====>:', treeNode)
           setTimeout(() => {
             const children: Recordable[] = [
               { title: `Child Node ${treeNode.eventKey}-0`, value: `${treeNode.eventKey}-0` },
               { title: `Child Node ${treeNode.eventKey}-1`, value: `${treeNode.eventKey}-1` },
-            ];
+            ]
             children.forEach((item) => {
-              item.isLeaf = false;
-              item.children = [];
-            });
-            treeNode.dataRef.children = children;
-            treeData.value = [...treeData.value];
-            resolve();
-            return;
-          }, 300);
+              item.isLeaf = false
+              item.children = []
+            })
+            treeNode.dataRef.children = children
+            treeData.value = [...treeData.value]
+            resolve()
+            return
+          }, 300)
         },
       },
       colProps: {
@@ -582,7 +570,7 @@
         valueField: 'id',
         isBtn: true,
         onChange: (e) => {
-          console.log('ApiRadioGroup====>:', e);
+          console.log('ApiRadioGroup====>:', e)
         },
       },
       colProps: {
@@ -602,7 +590,7 @@
         },
         afterFetch: (v) => {
           //do something
-          return v;
+          return v
         },
         resultField: 'list',
       },
@@ -617,7 +605,7 @@
       componentProps: {
         render: (item) => item.label,
         api: async () => {
-          return Promise.resolve(citiesOptionsData.guangdong);
+          return Promise.resolve(citiesOptionsData.guangdong)
         },
       },
       defaultValue: ['1'],
@@ -644,24 +632,21 @@
           placeholder: '省份与城市联动',
           onChange: (e: any) => {
             // console.log(e)
-            let citiesOptions =
-              e == 1
-                ? citiesOptionsData[provincesOptions[0].id]
-                : citiesOptionsData[provincesOptions[1].id];
+            let citiesOptions = e == 1 ? citiesOptionsData[provincesOptions[0].id] : citiesOptionsData[provincesOptions[1].id]
             // console.log(citiesOptions)
             if (e === undefined) {
-              citiesOptions = [];
+              citiesOptions = []
             }
-            formModel.city = undefined; //  reset city value
-            const { updateSchema } = formActionType;
+            formModel.city = undefined //  reset city value
+            const { updateSchema } = formActionType
             updateSchema({
               field: 'city',
               componentProps: {
                 options: citiesOptions,
               },
-            });
+            })
           },
-        };
+        }
       },
     },
     {
@@ -792,9 +777,7 @@
       component: 'ImageUpload',
       label: '上传图片',
       required: true,
-      defaultValue: [
-        'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      ],
+      defaultValue: ['https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'],
       componentProps: {
         api: uploadApi,
         accept: ['png', 'jpeg', 'jpg'],
@@ -815,24 +798,24 @@
       //   },
       // ],
     },
-  ];
+  ]
 
-  const { createMessage } = useMessage();
-  const keyword = ref<string>('');
+  const { createMessage } = useMessage()
+  const keyword = ref<string>('')
   const searchParams = computed<Recordable<string>>(() => {
-    return { keyword: unref(keyword) };
-  });
+    return { keyword: unref(keyword) }
+  })
 
   function onSearch(value: string) {
-    keyword.value = value;
+    keyword.value = value
   }
 
   function handleReset() {
-    keyword.value = '';
+    keyword.value = ''
   }
 
   function handleSubmit(values: any) {
-    console.log('values', values);
-    createMessage.success('click search,values:' + JSON.stringify(values));
+    console.log('values', values)
+    createMessage.success('click search,values:' + JSON.stringify(values))
   }
 </script>

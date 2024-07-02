@@ -6,13 +6,13 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { RotateDragVerify } from '@/components/Verify';
+  import { RotateDragVerify } from '@/components/Verify'
 
-  import img from '@/assets/images/header.jpg';
+  import img from '@/assets/images/header.jpg'
 
-  import { PageWrapper } from '@/components/Page';
+  import { PageWrapper } from '@/components/Page'
 
   function handleSuccess() {
-    console.log('success!');
+    console.log('success!')
   }
 </script>

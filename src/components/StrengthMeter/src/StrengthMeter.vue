@@ -1,13 +1,6 @@
 <template>
   <div :class="prefixCls" class="relative">
-    <Input.Password
-      v-if="showInput"
-      v-bind="$attrs"
-      allowClear
-      :value="innerValueRef"
-      @change="handleChange"
-      :disabled="disabled"
-    >
+    <Input.Password v-if="showInput" v-bind="$attrs" allowClear :value="innerValueRef" @change="handleChange" :disabled="disabled">
       <template #[item]="data" v-for="item in Object.keys($slots)">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
@@ -19,49 +12,49 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, watch, unref, watchEffect } from 'vue';
-  import { Input } from 'ant-design-vue';
-  import { zxcvbn } from '@zxcvbn-ts/core';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { propTypes } from '@/utils/propTypes';
+  import { computed, ref, watch, unref, watchEffect } from 'vue'
+  import { Input } from 'ant-design-vue'
+  import { zxcvbn } from '@zxcvbn-ts/core'
+  import { useDesign } from '@/hooks/web/useDesign'
+  import { propTypes } from '@/utils/propTypes'
 
-  defineOptions({ name: 'StrengthMeter' });
+  defineOptions({ name: 'StrengthMeter' })
 
   const props = defineProps({
     value: propTypes.string,
     showInput: propTypes.bool.def(true),
     disabled: propTypes.bool,
-  });
+  })
 
-  const emit = defineEmits(['score-change', 'change']);
+  const emit = defineEmits(['score-change', 'change'])
 
-  const innerValueRef = ref('');
-  const { prefixCls } = useDesign('strength-meter');
+  const innerValueRef = ref('')
+  const { prefixCls } = useDesign('strength-meter')
 
   const getPasswordStrength = computed(() => {
-    const { disabled } = props;
-    if (disabled) return -1;
-    const innerValue = unref(innerValueRef);
-    const score = innerValue ? zxcvbn(unref(innerValueRef)).score : -1;
-    emit('score-change', score);
-    return score;
-  });
+    const { disabled } = props
+    if (disabled) return -1
+    const innerValue = unref(innerValueRef)
+    const score = innerValue ? zxcvbn(unref(innerValueRef)).score : -1
+    emit('score-change', score)
+    return score
+  })
 
   function handleChange(e) {
-    emit('change', e.target.value);
-    innerValueRef.value = e.target.value;
+    emit('change', e.target.value)
+    innerValueRef.value = e.target.value
   }
 
   watchEffect(() => {
-    innerValueRef.value = props.value || '';
-  });
+    innerValueRef.value = props.value || ''
+  })
 
   watch(
     () => unref(innerValueRef),
     (val) => {
-      emit('change', val);
+      emit('change', val)
     },
-  );
+  )
 </script>
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-strength-meter';

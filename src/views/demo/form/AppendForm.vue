@@ -4,9 +4,7 @@
       <BasicForm @register="register" @submit="handleSubmit">
         <template #add="{ field }">
           <a-button v-if="Number(field) === 0" @click="add">+</a-button>
-          <a-button class="ml-2" v-if="Number(field) === 0" @click="batchAdd">
-            批量添加表单配置
-          </a-button>
+          <a-button class="ml-2" v-if="Number(field) === 0" @click="batchAdd"> 批量添加表单配置 </a-button>
           <a-button v-if="Number(field) > 0" @click="() => del(field)">-</a-button>
         </template>
       </BasicForm>
@@ -20,15 +18,15 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { BasicForm, useForm } from '@/components/Form';
-  import { CollapseContainer } from '@/components/Container';
-  import { PageWrapper } from '@/components/Page';
+  import { ref } from 'vue'
+  import { BasicForm, useForm } from '@/components/Form'
+  import { CollapseContainer } from '@/components/Container'
+  import { PageWrapper } from '@/components/Page'
 
-  import { useMessage } from '@/hooks/web/useMessage';
+  import { useMessage } from '@/hooks/web/useMessage'
 
-  const { createMessage } = useMessage();
-  const count = ref(0);
+  const { createMessage } = useMessage()
+  const count = ref(0)
   const [register, { appendSchemaByField, removeSchemaByField, validate }] = useForm({
     schemas: [
       {
@@ -52,19 +50,19 @@
     labelWidth: 100,
     actionColOptions: { span: 24 },
     baseColProps: { span: 8 },
-  });
+  })
 
   async function handleSubmit() {
     try {
-      const data = await validate();
-      createMessage.success('请前往控制台查看输出');
-      console.log(data);
+      const data = await validate()
+      createMessage.success('请前往控制台查看输出')
+      console.log(data)
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
   }
 
-  const n = ref(1);
+  const n = ref(1)
 
   function add() {
     appendSchemaByField(
@@ -75,7 +73,7 @@
         required: true,
       },
       '',
-    );
+    )
     appendSchemaByField(
       {
         field: `field${n.value}b`,
@@ -84,7 +82,7 @@
         required: true,
       },
       '',
-    );
+    )
 
     appendSchemaByField(
       {
@@ -94,8 +92,8 @@
         slot: 'add',
       },
       '',
-    );
-    n.value++;
+    )
+    n.value++
   }
   /**
    * @description: 批量添加
@@ -123,13 +121,13 @@
         },
       ],
       '',
-    );
-    n.value++;
+    )
+    n.value++
   }
 
   function del(field: string) {
-    removeSchemaByField([`field${field}a`, `field${field}b`, `${field}`]);
-    n.value--;
+    removeSchemaByField([`field${field}a`, `field${field}b`, `${field}`])
+    n.value--
   }
   const [
     registerGroup,
@@ -157,10 +155,10 @@
     labelWidth: 100,
     actionColOptions: { span: 24 },
     baseColProps: { span: 8 },
-  });
+  })
 
   function addGroup() {
-    count.value++;
+    count.value++
     appendSchemaByFieldGroup(
       [
         {
@@ -177,12 +175,12 @@
         },
       ],
       '',
-    );
+    )
   }
 
   function delGroup() {
-    removeSchemaByFieldGroup([`field[${count.value}].a`, `field[${count.value}].b`]);
-    count.value--;
+    removeSchemaByFieldGroup([`field[${count.value}].a`, `field[${count.value}].b`])
+    count.value--
   }
 
   function setGroup() {
@@ -193,11 +191,11 @@
           b: '默认b',
         },
       ],
-    });
+    })
   }
 
   function handleSubmitGroup() {
-    createMessage.success('请前往控制台查看输出');
-    console.log(getFieldsValueGroup());
+    createMessage.success('请前往控制台查看输出')
+    console.log(getFieldsValueGroup())
   }
 </script>

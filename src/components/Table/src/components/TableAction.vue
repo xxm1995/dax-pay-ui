@@ -11,18 +11,9 @@
         <Icon :icon="action.icon" :class="{ 'mr-1': !!action.label }" v-if="action.icon" />
         <template v-if="action.label">{{ action.label }}</template>
       </PopConfirmButton>
-      <Divider
-        type="vertical"
-        class="action-divider"
-        v-if="divider && index < getActions.length - 1"
-      />
+      <Divider type="vertical" class="action-divider" v-if="divider && index < getActions.length - 1" />
     </template>
-    <Dropdown
-      :trigger="['hover']"
-      :dropMenuList="getDropdownList"
-      popconfirm
-      v-if="dropDownActions && getDropdownList.length > 0"
-    >
+    <Dropdown :trigger="['hover']" :dropMenuList="getDropdownList" popconfirm v-if="dropDownActions && getDropdownList.length > 0">
       <slot name="more"></slot>
       <a-button type="link" size="small" v-if="!$slots.more">
         <MoreOutlined class="icon-more" />
@@ -31,22 +22,22 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { PropType, computed, toRaw, unref } from 'vue';
-  import { MoreOutlined } from '@ant-design/icons-vue';
-  import { Divider, Tooltip, TooltipProps } from 'ant-design-vue';
-  import Icon from '@/components/Icon/Icon.vue';
-  import { ActionItem, TableActionType } from '@/components/Table';
-  import { PopConfirmButton } from '@/components/Button';
-  import { Dropdown } from '@/components/Dropdown';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { useTableContext } from '../hooks/useTableContext';
-  import { usePermission } from '@/hooks/web/usePermission';
-  import { isBoolean, isFunction, isString } from '@/utils/is';
-  import { propTypes } from '@/utils/propTypes';
-  import { ACTION_COLUMN_FLAG } from '../const';
-  import { omit } from 'lodash-es';
+  import { PropType, computed, toRaw, unref } from 'vue'
+  import { MoreOutlined } from '@ant-design/icons-vue'
+  import { Divider, Tooltip, TooltipProps } from 'ant-design-vue'
+  import Icon from '@/components/Icon/Icon.vue'
+  import { ActionItem, TableActionType } from '@/components/Table'
+  import { PopConfirmButton } from '@/components/Button'
+  import { Dropdown } from '@/components/Dropdown'
+  import { useDesign } from '@/hooks/web/useDesign'
+  import { useTableContext } from '../hooks/useTableContext'
+  import { usePermission } from '@/hooks/web/usePermission'
+  import { isBoolean, isFunction, isString } from '@/utils/is'
+  import { propTypes } from '@/utils/propTypes'
+  import { ACTION_COLUMN_FLAG } from '../const'
+  import { omit } from 'lodash-es'
 
-  defineOptions({ name: 'TableAction' });
+  defineOptions({ name: 'TableAction' })
 
   const props = defineProps({
     actions: {
@@ -60,36 +51,36 @@
     divider: propTypes.bool.def(true),
     outside: propTypes.bool,
     stopButtonPropagation: propTypes.bool.def(false),
-  });
+  })
 
-  const { prefixCls } = useDesign('basic-table-action');
-  let table: Partial<TableActionType> = {};
+  const { prefixCls } = useDesign('basic-table-action')
+  let table: Partial<TableActionType> = {}
   if (!props.outside) {
-    table = useTableContext();
+    table = useTableContext()
   }
 
-  const { hasPermission } = usePermission();
+  const { hasPermission } = usePermission()
   function isIfShow(action: ActionItem): boolean {
-    const ifShow = action.ifShow;
+    const ifShow = action.ifShow
 
-    let isIfShow = true;
+    let isIfShow = true
 
     if (isBoolean(ifShow)) {
-      isIfShow = ifShow;
+      isIfShow = ifShow
     }
     if (isFunction(ifShow)) {
-      isIfShow = ifShow(action);
+      isIfShow = ifShow(action)
     }
-    return isIfShow;
+    return isIfShow
   }
 
   const getActions = computed(() => {
     return (toRaw(props.actions) || [])
       .filter((action) => {
-        return hasPermission(action.auth) && isIfShow(action);
+        return hasPermission(action.auth) && isIfShow(action)
       })
       .map((action) => {
-        const { popConfirm } = action;
+        const { popConfirm } = action
         return {
           getPopupContainer: () => unref((table as any)?.wrapRef) ?? document.body,
           type: 'link',
@@ -99,16 +90,16 @@
           onConfirm: popConfirm?.confirm,
           onCancel: popConfirm?.cancel,
           enable: !!popConfirm,
-        };
-      });
-  });
+        }
+      })
+  })
 
   const getDropdownList = computed((): any[] => {
     const list = (toRaw(props.dropDownActions) || []).filter((action) => {
-      return hasPermission(action.auth) && isIfShow(action);
-    });
+      return hasPermission(action.auth) && isIfShow(action)
+    })
     return list.map((action, index) => {
-      const { label, popConfirm } = action;
+      const { label, popConfirm } = action
       return {
         ...action,
         ...popConfirm,
@@ -116,31 +107,31 @@
         onCancel: popConfirm?.cancel,
         text: label,
         divider: index < list.length - 1 ? props.divider : false,
-      };
-    });
-  });
+      }
+    })
+  })
 
   const getAlign = computed(() => {
-    const columns = (table as TableActionType)?.getColumns?.() || [];
-    const actionColumn = columns.find((item) => item.flag === ACTION_COLUMN_FLAG);
-    return actionColumn?.align ?? 'left';
-  });
+    const columns = (table as TableActionType)?.getColumns?.() || []
+    const actionColumn = columns.find((item) => item.flag === ACTION_COLUMN_FLAG)
+    return actionColumn?.align ?? 'left'
+  })
 
   function getTooltip(data: string | TooltipProps): TooltipProps {
     return {
       getPopupContainer: () => unref((table as any)?.wrapRef) ?? document.body,
       placement: 'bottom',
       ...(isString(data) ? { title: data } : data),
-    };
+    }
   }
 
   function onCellClick(e: MouseEvent) {
-    if (!props.stopButtonPropagation) return;
-    const path = e.composedPath() as HTMLElement[];
+    if (!props.stopButtonPropagation) return
+    const path = e.composedPath() as HTMLElement[]
     const isInButton = path.find((ele) => {
-      return ele.tagName?.toUpperCase() === 'BUTTON';
-    });
-    isInButton && e.stopPropagation();
+      return ele.tagName?.toUpperCase() === 'BUTTON'
+    })
+    isInButton && e.stopPropagation()
   }
 </script>
 <style lang="less">

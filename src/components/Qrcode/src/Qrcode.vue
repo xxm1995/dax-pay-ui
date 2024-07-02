@@ -4,13 +4,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { watch, PropType, ref, unref, onMounted } from 'vue';
-  import { toCanvas, QRCodeRenderersOptions, LogoType } from './qrcodePlus';
-  import { toDataURL } from 'qrcode';
-  import { downloadByUrl } from '@/utils/file/download';
-  import { QrcodeDoneEventParams } from './typing';
+  import { watch, PropType, ref, unref, onMounted } from 'vue'
+  import { toCanvas, QRCodeRenderersOptions, LogoType } from './qrcodePlus'
+  import { toDataURL } from 'qrcode'
+  import { downloadByUrl } from '@/utils/file/download'
+  import { QrcodeDoneEventParams } from './typing'
 
-  defineOptions({ name: 'QrCode' });
+  defineOptions({ name: 'QrCode' })
 
   const props = defineProps({
     value: {
@@ -38,21 +38,21 @@
       default: 'canvas',
       validator: (v: string) => ['canvas', 'img'].includes(v),
     },
-  });
+  })
 
   const emit = defineEmits({
     done: (data: QrcodeDoneEventParams) => !!data,
     error: (error: any) => !!error,
-  });
+  })
 
-  const wrapRef = ref<HTMLCanvasElement | HTMLImageElement | null>(null);
+  const wrapRef = ref<HTMLCanvasElement | HTMLImageElement | null>(null)
   async function createQrcode() {
     try {
-      const { tag, value, options = {}, width, logo } = props;
-      const renderValue = String(value);
-      const wrapEl = unref(wrapRef);
+      const { tag, value, options = {}, width, logo } = props
+      const renderValue = String(value)
+      const wrapEl = unref(wrapRef)
 
-      if (!wrapEl) return;
+      if (!wrapEl) return
 
       if (tag === 'canvas') {
         const url: string = await toCanvas({
@@ -61,9 +61,9 @@
           logo: logo as any,
           content: renderValue,
           options: options || {},
-        });
-        emit('done', { url, ctx: (wrapEl as HTMLCanvasElement).getContext('2d') });
-        return;
+        })
+        emit('done', { url, ctx: (wrapEl as HTMLCanvasElement).getContext('2d') })
+        return
       }
 
       if (tag === 'img') {
@@ -71,44 +71,44 @@
           errorCorrectionLevel: 'H',
           width,
           ...options,
-        });
-        (unref(wrapRef) as HTMLImageElement).src = url;
-        emit('done', { url });
+        })
+        ;(unref(wrapRef) as HTMLImageElement).src = url
+        emit('done', { url })
       }
     } catch (error) {
-      emit('error', error);
+      emit('error', error)
     }
   }
   /**
    * file download
    */
   function download(fileName?: string) {
-    let url = '';
-    const wrapEl = unref(wrapRef);
+    let url = ''
+    const wrapEl = unref(wrapRef)
     if (wrapEl instanceof HTMLCanvasElement) {
-      url = wrapEl.toDataURL();
+      url = wrapEl.toDataURL()
     } else if (wrapEl instanceof HTMLImageElement) {
-      url = wrapEl.src;
+      url = wrapEl.src
     }
-    if (!url) return;
+    if (!url) return
     downloadByUrl({
       url,
       fileName,
-    });
+    })
   }
 
-  onMounted(createQrcode);
+  onMounted(createQrcode)
 
   // 监听参数变化重新生成二维码
   watch(
     props,
     () => {
-      createQrcode();
+      createQrcode()
     },
     {
       deep: true,
     },
-  );
+  )
 
-  defineExpose({ download });
+  defineExpose({ download })
 </script>

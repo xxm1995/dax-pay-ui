@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import type { CSSProperties } from 'vue';
-  import { rafTimeout, cancelRaf } from './_utils';
+  import { ref } from 'vue'
+  import type { CSSProperties } from 'vue'
+  import { rafTimeout, cancelRaf } from './_utils'
 
   interface Props {
-    maxWidth?: number; // 提示框内容最大宽度，单位px
-    content?: string; // 展示的文本 string | slot
-    tooltip?: string; // 提示的文本 string | slot
-    fontSize?: number; // 提示文本字体大小，单位px，优先级高于 overlayStyle
-    color?: string; // 提示文本字体颜色，优先级高于 overlayStyle
-    backgroundColor?: string; // 提示框背景颜色，优先级高于 overlayStyle
-    overlayStyle?: CSSProperties; // 提示框内容区域样式
+    maxWidth?: number // 提示框内容最大宽度，单位px
+    content?: string // 展示的文本 string | slot
+    tooltip?: string // 提示的文本 string | slot
+    fontSize?: number // 提示文本字体大小，单位px，优先级高于 overlayStyle
+    color?: string // 提示文本字体颜色，优先级高于 overlayStyle
+    backgroundColor?: string // 提示框背景颜色，优先级高于 overlayStyle
+    overlayStyle?: CSSProperties // 提示框内容区域样式
   }
   withDefaults(defineProps<Props>(), {
     maxWidth: 120,
@@ -20,32 +20,32 @@
     color: '#FFF',
     backgroundColor: 'rgba(0, 0, 0, .85)',
     overlayStyle: () => ({}),
-  });
-  const visible = ref(false);
-  const hideTimer = ref();
-  const top = ref(0); // 提示框top定位
-  const left = ref(0); // 提示框left定位
-  const contentRef = ref(); // 声明一个同名的模板引用
-  const tooltipRef = ref(); // 声明一个同名的模板引用
+  })
+  const visible = ref(false)
+  const hideTimer = ref()
+  const top = ref(0) // 提示框top定位
+  const left = ref(0) // 提示框left定位
+  const contentRef = ref() // 声明一个同名的模板引用
+  const tooltipRef = ref() // 声明一个同名的模板引用
   function getPosition() {
-    const contentWidth = contentRef.value && contentRef.value.offsetWidth; // 展示文本宽度
-    const tooltipWidth = tooltipRef.value && tooltipRef.value.offsetWidth; // 提示文本宽度
-    const tooltipHeight = tooltipRef.value && tooltipRef.value.offsetHeight; // 提示文本高度
-    top.value = tooltipHeight + 4;
-    left.value = (tooltipWidth - contentWidth) / 2;
+    const contentWidth = contentRef.value && contentRef.value.offsetWidth // 展示文本宽度
+    const tooltipWidth = tooltipRef.value && tooltipRef.value.offsetWidth // 提示文本宽度
+    const tooltipHeight = tooltipRef.value && tooltipRef.value.offsetHeight // 提示文本高度
+    top.value = tooltipHeight + 4
+    left.value = (tooltipWidth - contentWidth) / 2
   }
-  const emit = defineEmits(['openChange']);
+  const emit = defineEmits(['openChange'])
   function onShow() {
-    getPosition();
-    cancelRaf(hideTimer.value);
-    visible.value = true;
-    emit('openChange', visible.value);
+    getPosition()
+    cancelRaf(hideTimer.value)
+    visible.value = true
+    emit('openChange', visible.value)
   }
   function onHide(): void {
     hideTimer.value = rafTimeout(() => {
-      visible.value = false;
-      emit('openChange', visible.value);
-    }, 100);
+      visible.value = false
+      emit('openChange', visible.value)
+    }, 100)
   }
 </script>
 <template>

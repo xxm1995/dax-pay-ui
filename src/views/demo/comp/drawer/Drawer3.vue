@@ -18,11 +18,11 @@
   </BasicDrawer>
 </template>
 <script lang="ts" setup>
-  import { BasicDrawer } from '@/components/Drawer';
+  import { BasicDrawer } from '@/components/Drawer'
 
   function handleOk() {
-    console.log('=====================');
-    console.log('ok');
-    console.log('======================');
+    console.log('=====================')
+    console.log('ok')
+    console.log('======================')
   }
 </script>

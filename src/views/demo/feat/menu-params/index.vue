@@ -14,18 +14,18 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { useRouter } from 'vue-router';
-  import { computed, ref, unref } from 'vue';
-  import { PageWrapper } from '@/components/Page';
+  import { useRouter } from 'vue-router'
+  import { computed, ref, unref } from 'vue'
+  import { PageWrapper } from '@/components/Page'
 
-  const value = ref('');
+  const value = ref('')
 
-  const { currentRoute, replace } = useRouter();
+  const { currentRoute, replace } = useRouter()
 
-  const computedParams = computed(() => unref(currentRoute).params);
+  const computedParams = computed(() => unref(currentRoute).params)
 
   const handleClickGo = () => {
-    const { name } = unref(currentRoute);
-    replace({ name: name!, params: { id: unref(value) } });
-  };
+    const { name } = unref(currentRoute)
+    replace({ name: name!, params: { id: unref(value) } })
+  }
 </script>

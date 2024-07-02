@@ -5,7 +5,7 @@
   </BasicDrawer>
 </template>
 <script lang="ts" setup>
-  import { BasicDrawer, useDrawerInner } from '@/components/Drawer';
+  import { BasicDrawer, useDrawerInner } from '@/components/Drawer'
 
-  const [register, { closeDrawer }] = useDrawerInner();
+  const [register, { closeDrawer }] = useDrawerInner()
 </script>

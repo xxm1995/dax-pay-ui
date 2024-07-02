@@ -21,8 +21,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { Result } from 'ant-design-vue';
-  import { CloseCircleOutlined } from '@ant-design/icons-vue';
+  import { Result } from 'ant-design-vue'
+  import { CloseCircleOutlined } from '@ant-design/icons-vue'
 </script>
 <style lang="less" scoped>
   .result-error {

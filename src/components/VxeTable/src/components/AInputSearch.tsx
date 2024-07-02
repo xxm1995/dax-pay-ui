@@ -5,7 +5,7 @@ import {
   createDefaultFilterRender,
   createFormItemRender,
   createToolbarToolRender,
-} from './common';
+} from './common'
 
 export default {
   renderDefault: createDefaultRender(),
@@ -14,4 +14,4 @@ export default {
   defaultFilterMethod: createDefaultFilterRender(),
   renderItemContent: createFormItemRender(),
   renderToolbarTool: createToolbarToolRender(),
-};
+}

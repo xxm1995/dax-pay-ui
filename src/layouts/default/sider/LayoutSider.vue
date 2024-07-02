@@ -1,10 +1,6 @@
 <template>
-  <div
-    v-if="getMenuFixed && !getIsMobile"
-    v-show="showClassSideBarRef"
-    :style="getHiddenDomStyle"
-  ></div>
-  <!-- 
+  <div v-if="getMenuFixed && !getIsMobile" v-show="showClassSideBarRef" :style="getHiddenDomStyle"></div>
+  <!--
     针对场景：菜单折叠按钮为“底部”时：
     关于 breakpoint，
     组件定义的是 lg: '992px'，
@@ -36,57 +32,48 @@
   </Layout.Sider>
 </template>
 <script lang="ts" setup>
-  import { Layout } from 'ant-design-vue';
-  import { computed, CSSProperties, h, ref, unref } from 'vue';
+  import { Layout } from 'ant-design-vue'
+  import { computed, CSSProperties, h, ref, unref } from 'vue'
 
-  import { MenuModeEnum, MenuSplitTyeEnum, TriggerEnum } from '@/enums/menuEnum';
-  import { useMenuSetting } from '@/hooks/setting/useMenuSetting';
-  import { useAppInject } from '@/hooks/web/useAppInject';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import LayoutTrigger from '@/layouts/default/trigger/index.vue';
+  import { MenuModeEnum, MenuSplitTyeEnum, TriggerEnum } from '@/enums/menuEnum'
+  import { useMenuSetting } from '@/hooks/setting/useMenuSetting'
+  import { useAppInject } from '@/hooks/web/useAppInject'
+  import { useDesign } from '@/hooks/web/useDesign'
+  import LayoutTrigger from '@/layouts/default/trigger/index.vue'
 
-  import LayoutMenu from '../menu/index.vue';
-  import DragBar from './DragBar.vue';
-  import { useDragLine, useSiderEvent, useTrigger } from './useLayoutSider';
+  import LayoutMenu from '../menu/index.vue'
+  import DragBar from './DragBar.vue'
+  import { useDragLine, useSiderEvent, useTrigger } from './useLayoutSider'
 
-  defineOptions({ name: 'LayoutSideBar' });
+  defineOptions({ name: 'LayoutSideBar' })
 
-  const dragBarRef = ref(null);
-  const sideRef = ref(null);
+  const dragBarRef = ref(null)
+  const sideRef = ref(null)
 
-  const {
-    getCollapsed,
-    getMenuWidth,
-    getSplit,
-    getMenuTheme,
-    getRealWidth,
-    getMenuHidden,
-    getMenuFixed,
-    getIsMixMode,
-    getTrigger,
-  } = useMenuSetting();
+  const { getCollapsed, getMenuWidth, getSplit, getMenuTheme, getRealWidth, getMenuHidden, getMenuFixed, getIsMixMode, getTrigger } =
+    useMenuSetting()
 
-  const { prefixCls } = useDesign('layout-sideBar');
+  const { prefixCls } = useDesign('layout-sideBar')
 
-  const { getIsMobile } = useAppInject();
+  const { getIsMobile } = useAppInject()
 
-  const { getTriggerAttr, getShowTrigger } = useTrigger(getIsMobile);
+  const { getTriggerAttr, getShowTrigger } = useTrigger(getIsMobile)
 
-  useDragLine(sideRef, dragBarRef);
+  useDragLine(sideRef, dragBarRef)
 
-  const { getCollapsedWidth, onBreakpointChange } = useSiderEvent();
+  const { getCollapsedWidth, onBreakpointChange } = useSiderEvent()
 
   const getMode = computed(() => {
-    return unref(getSplit) ? MenuModeEnum.INLINE : null;
-  });
+    return unref(getSplit) ? MenuModeEnum.INLINE : null
+  })
 
   const getSplitType = computed(() => {
-    return unref(getSplit) ? MenuSplitTyeEnum.LEFT : MenuSplitTyeEnum.NONE;
-  });
+    return unref(getSplit) ? MenuSplitTyeEnum.LEFT : MenuSplitTyeEnum.NONE
+  })
 
   const showClassSideBarRef = computed(() => {
-    return unref(getSplit) ? !unref(getMenuHidden) : true;
-  });
+    return unref(getSplit) ? !unref(getMenuHidden) : true
+  })
 
   const getSiderClass = computed(() => {
     return [
@@ -95,11 +82,11 @@
         [`${prefixCls}--fixed`]: unref(getMenuFixed),
         [`${prefixCls}--mix`]: unref(getIsMixMode) && !unref(getIsMobile),
       },
-    ];
-  });
+    ]
+  })
 
   const getHiddenDomStyle = computed((): CSSProperties => {
-    const width = `${unref(getRealWidth)}px`;
+    const width = `${unref(getRealWidth)}px`
     return {
       width,
       overflow: 'hidden',
@@ -107,12 +94,12 @@
       maxWidth: width,
       minWidth: width,
       transition: 'all 0.2s',
-    };
-  });
+    }
+  })
 
   // 在此处使用计算量可能会导致sider异常
   // andv 更新后，如果trigger插槽可用，则此处代码可废弃
-  const triggerVNode = h(LayoutTrigger);
+  const triggerVNode = h(LayoutTrigger)
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-layout-sideBar';

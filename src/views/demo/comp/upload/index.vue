@@ -7,9 +7,9 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import Upload1 from './Upload1.vue';
-  import Upload2 from './Upload2.vue';
-  import Upload3 from './Upload3.vue';
-  import Upload4 from './Upload4.vue';
-  import { PageWrapper } from '@/components/Page';
+  import Upload1 from './Upload1.vue'
+  import Upload2 from './Upload2.vue'
+  import Upload3 from './Upload3.vue'
+  import Upload4 from './Upload4.vue'
+  import { PageWrapper } from '@/components/Page'
 </script>

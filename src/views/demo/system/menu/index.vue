@@ -30,19 +30,19 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { nextTick } from 'vue';
+  import { nextTick } from 'vue'
 
-  import { BasicTable, useTable, TableAction } from '@/components/Table';
-  import { getMenuList } from '@/api/demo/system';
+  import { BasicTable, useTable, TableAction } from '@/components/Table'
+  import { getMenuList } from '@/api/demo/system'
 
-  import { useDrawer } from '@/components/Drawer';
-  import MenuDrawer from './MenuDrawer.vue';
+  import { useDrawer } from '@/components/Drawer'
+  import MenuDrawer from './MenuDrawer.vue'
 
-  import { columns, searchFormSchema } from './menu.data';
+  import { columns, searchFormSchema } from './menu.data'
 
-  defineOptions({ name: 'MenuManagement' });
+  defineOptions({ name: 'MenuManagement' })
 
-  const [registerDrawer, { openDrawer }] = useDrawer();
+  const [registerDrawer, { openDrawer }] = useDrawer()
   const [registerTable, { reload, expandAll }] = useTable({
     title: '菜单列表',
     api: getMenuList,
@@ -66,31 +66,31 @@
       // slots: { customRender: 'action' },
       fixed: undefined,
     },
-  });
+  })
 
   function handleCreate() {
     openDrawer(true, {
       isUpdate: false,
-    });
+    })
   }
 
   function handleEdit(record: Recordable) {
     openDrawer(true, {
       record,
       isUpdate: true,
-    });
+    })
   }
 
   function handleDelete(record: Recordable) {
-    console.log(record);
+    console.log(record)
   }
 
   function handleSuccess() {
-    reload();
+    reload()
   }
 
   function onFetchSuccess() {
     // 演示默认展开所有表项
-    nextTick(expandAll);
+    nextTick(expandAll)
   }
 </script>

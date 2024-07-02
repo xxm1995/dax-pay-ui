@@ -17,7 +17,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { Result, Descriptions } from 'ant-design-vue';
+  import { Result, Descriptions } from 'ant-design-vue'
 
-  const emit = defineEmits(['redo']);
+  const emit = defineEmits(['redo'])
 </script>

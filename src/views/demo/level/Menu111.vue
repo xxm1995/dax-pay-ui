@@ -6,5 +6,5 @@
   </div>
 </template>
 <script lang="ts" setup>
-  defineOptions({ name: 'Menu111Demo' });
+  defineOptions({ name: 'Menu111Demo' })
 </script>

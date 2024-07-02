@@ -1,16 +1,16 @@
-import { defineComponent, ref, unref } from 'vue';
-import { Card, Typography, Button, Space } from 'ant-design-vue';
-import { imitateApi } from './mock-api';
-import { useRequest } from '@vben/hooks';
-import { PageWrapper } from '@/components/Page';
+import { defineComponent, ref, unref } from 'vue'
+import { Card, Typography, Button, Space } from 'ant-design-vue'
+import { imitateApi } from './mock-api'
+import { useRequest } from '@vben/hooks'
+import { PageWrapper } from '@/components/Page'
 
 const Demo1 = defineComponent({
   setup() {
-    const ready = ref(false);
+    const ready = ref(false)
     const toggle = (bool?: boolean) => {
-      ready.value = bool ?? !ready.value;
-    };
-    const { data, loading } = useRequest(imitateApi, { ready });
+      ready.value = bool ?? !ready.value
+    }
+    const { data, loading } = useRequest(imitateApi, { ready })
 
     return () => (
       <Card title="自动模式">
@@ -18,8 +18,7 @@ const Demo1 = defineComponent({
           <Typography.Paragraph>
             以下示例演示了自动模式下
             <Typography.Text type="danger"> ready </Typography.Text> 的行为。每次
-            <Typography.Text type="danger"> ready </Typography.Text> 从 false 变为 true
-            时，都会重新发起请求。
+            <Typography.Text type="danger"> ready </Typography.Text> 从 false 变为 true 时，都会重新发起请求。
           </Typography.Paragraph>
         </Typography>
 
@@ -31,17 +30,17 @@ const Demo1 = defineComponent({
           <div>Username: {loading.value ? 'Loading' : unref(data)}</div>
         </div>
       </Card>
-    );
+    )
   },
-});
+})
 
 const Demo2 = defineComponent({
   setup() {
-    const ready = ref(false);
+    const ready = ref(false)
     const toggle = (bool?: boolean) => {
-      ready.value = bool ?? !ready.value;
-    };
-    const { data, loading, run } = useRequest(imitateApi, { manual: true, ready });
+      ready.value = bool ?? !ready.value
+    }
+    const { data, loading, run } = useRequest(imitateApi, { manual: true, ready })
 
     return () => (
       <Card title="手动模式" class="mt-2">
@@ -70,9 +69,9 @@ const Demo2 = defineComponent({
           </div>
         </div>
       </Card>
-    );
+    )
   },
-});
+})
 
 export default defineComponent({
   setup() {
@@ -81,6 +80,6 @@ export default defineComponent({
         <Demo1 />
         <Demo2 />
       </PageWrapper>
-    );
+    )
   },
-});
+})

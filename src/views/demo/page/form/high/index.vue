@@ -1,9 +1,5 @@
 <template>
-  <PageWrapper
-    class="high-form"
-    title="高级表单"
-    content=" 高级表单常见于一次性输入和提交大批量数据的场景。"
-  >
+  <PageWrapper class="high-form" title="高级表单" content=" 高级表单常见于一次性输入和提交大批量数据的场景。">
     <Card title="仓库管理" :bordered="false">
       <BasicForm @register="register" />
     </Card>
@@ -20,16 +16,16 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { BasicForm, useForm } from '@/components/Form';
-  import { ref } from 'vue';
-  import PersonTable from './PersonTable.vue';
-  import { PageWrapper } from '@/components/Page';
-  import { schemas, taskSchemas } from './data';
-  import { Card } from 'ant-design-vue';
+  import { BasicForm, useForm } from '@/components/Form'
+  import { ref } from 'vue'
+  import PersonTable from './PersonTable.vue'
+  import { PageWrapper } from '@/components/Page'
+  import { schemas, taskSchemas } from './data'
+  import { Card } from 'ant-design-vue'
 
-  defineOptions({ name: 'FormHightPage' });
+  defineOptions({ name: 'FormHightPage' })
 
-  const tableRef = ref<{ getDataSource: () => any } | null>(null);
+  const tableRef = ref<{ getDataSource: () => any } | null>(null)
 
   const [register, { validate }] = useForm({
     layout: 'vertical',
@@ -38,7 +34,7 @@
     },
     schemas: schemas,
     showActionButtonGroup: false,
-  });
+  })
 
   const [registerTask, { validate: validateTaskForm }] = useForm({
     layout: 'vertical',
@@ -47,18 +43,18 @@
     },
     schemas: taskSchemas,
     showActionButtonGroup: false,
-  });
+  })
 
   async function submitAll() {
     try {
       if (tableRef.value) {
-        console.log('table data:', tableRef.value.getDataSource());
+        console.log('table data:', tableRef.value.getDataSource())
       }
 
-      const [values, taskValues] = await Promise.all([validate(), validateTaskForm()]);
-      console.log('form data:', values, taskValues);
+      const [values, taskValues] = await Promise.all([validate(), validateTaskForm()])
+      console.log('form data:', values, taskValues)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 </script>

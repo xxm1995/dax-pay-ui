@@ -7,11 +7,7 @@
         </template>
         <template #colSlot_field5="{ model, field, disabled }">
           <FormItem :name="field" label="自定义colSlot" :rules="[{ required: true }]">
-            <a-input
-              v-model:value="model[field]"
-              :disabled="disabled"
-              placeholder="自定义colSlot"
-            />
+            <a-input v-model:value="model[field]" :disabled="disabled" placeholder="自定义colSlot" />
           </FormItem>
         </template>
       </BasicForm>
@@ -19,25 +15,25 @@
   </PageWrapper>
 </template>
 <script lang="tsx" setup>
-  import { h } from 'vue';
-  import { BasicForm, FormSchema, useForm } from '@/components/Form';
-  import { CollapseContainer } from '@/components/Container';
-  import { useMessage } from '@/hooks/web/useMessage';
-  import { Input, FormItem, FormItemRest, Select } from 'ant-design-vue';
-  import { PageWrapper } from '@/components/Page';
+  import { h } from 'vue'
+  import { BasicForm, FormSchema, useForm } from '@/components/Form'
+  import { CollapseContainer } from '@/components/Container'
+  import { useMessage } from '@/hooks/web/useMessage'
+  import { Input, FormItem, FormItemRest, Select } from 'ant-design-vue'
+  import { PageWrapper } from '@/components/Page'
 
   const custom_typeKey2typeValueRules = (model) => {
     return [
       {
         required: true,
         validator: async () => {
-          if (!model.typeKey) return Promise.reject('请选择类型');
-          if (!model.typeValue) return Promise.reject('请输入数据');
-          Promise.resolve();
+          if (!model.typeKey) return Promise.reject('请选择类型')
+          if (!model.typeValue) return Promise.reject('请输入数据')
+          Promise.resolve()
         },
       },
-    ];
-  };
+    ]
+  }
   const schemas: FormSchema[] = [
     {
       field: 'field1',
@@ -47,7 +43,7 @@
         span: 8,
       },
       dynamicDisabled: ({ values }) => {
-        return !!values.field_disabled;
+        return !!values.field_disabled
       },
       rules: [{ required: true }],
       render: ({ model, field }, { disabled }) => {
@@ -55,10 +51,10 @@
           placeholder: '请输入',
           value: model[field],
           onChange: (e) => {
-            model[field] = e.target.value;
+            model[field] = e.target.value
           },
           disabled,
-        });
+        })
       },
     },
     {
@@ -69,13 +65,13 @@
         span: 8,
       },
       dynamicDisabled: ({ values }) => {
-        return !!values.field_disabled;
+        return !!values.field_disabled
       },
       rules: [{ required: true }],
       renderComponentContent: (_, { disabled }) => {
         return {
           suffix: () => (disabled ? 'suffix_disabled' : 'suffix_default'),
-        };
+        }
       },
     },
     {
@@ -86,7 +82,7 @@
         span: 8,
       },
       dynamicDisabled: ({ values }) => {
-        return !!values.field_disabled;
+        return !!values.field_disabled
       },
       rules: [{ required: true }],
     },
@@ -100,13 +96,13 @@
           <FormItem name="field4" label="renderColContent渲染" rules={[{ required: true }]}>
             <Input placeholder="请输入" v-model:value={model[field]} disabled={disabled}></Input>
           </FormItem>
-        );
+        )
       },
       colProps: {
         span: 8,
       },
       dynamicDisabled: ({ values }) => {
-        return !!values.field_disabled;
+        return !!values.field_disabled
       },
     },
     {
@@ -119,7 +115,7 @@
         span: 8,
       },
       dynamicDisabled: ({ values }) => {
-        return !!values.field_disabled;
+        return !!values.field_disabled
       },
     },
     // 复合field 场景 自定义表单控件 一个控件包含多个表单录入 示例: 选择+输入
@@ -134,32 +130,23 @@
       render({ model, field }, { disabled }) {
         return (
           <Input.Group compact>
-            <Select
-              disabled={disabled}
-              style="width: 120px"
-              allowClear
-              v-model:value={model[field]}
-            >
+            <Select disabled={disabled} style="width: 120px" allowClear v-model:value={model[field]}>
               <Select.Option value="测试类型">测试类型</Select.Option>
               <Select.Option value="测试名称">测试名称</Select.Option>
             </Select>
             <FormItem name="typeValue2" class="local_typeValue" rules={[{ required: true }]}>
               <FormItemRest>
-                <Input
-                  placeholder="请输入"
-                  v-model:value={model['typeValue2']}
-                  disabled={disabled}
-                />
+                <Input placeholder="请输入" v-model:value={model['typeValue2']} disabled={disabled} />
               </FormItemRest>
             </FormItem>
           </Input.Group>
-        );
+        )
       },
       colProps: {
         span: 8,
       },
       dynamicDisabled: ({ values }) => {
-        return !!values.field_disabled;
+        return !!values.field_disabled
       },
     },
     // 复合field 场景 自定义表单控件 一个控件包含多个表单录入 示例: 选择+输入
@@ -173,18 +160,9 @@
       /**!!!renderColContent 没有FormItem 包裹, 若想要 Form 提交需要带上数据须 <FormItem name={}></FormItem> 包裹： 示例如下*/
       renderColContent({ model, field }, { disabled }) {
         return (
-          <FormItem
-            name="typeKey"
-            label="复合field renderColContent"
-            rules={custom_typeKey2typeValueRules(model)}
-          >
+          <FormItem name="typeKey" label="复合field renderColContent" rules={custom_typeKey2typeValueRules(model)}>
             <Input.Group compact>
-              <Select
-                allowClear
-                disabled={disabled}
-                style="width: 120px"
-                v-model:value={model[field]}
-              >
+              <Select allowClear disabled={disabled} style="width: 120px" v-model:value={model[field]}>
                 <Select.Option value="公司名称">公司名称</Select.Option>
                 <Select.Option value="产品名称">产品名称</Select.Option>
               </Select>
@@ -198,13 +176,13 @@
               </FormItemRest>
             </Input.Group>
           </FormItem>
-        );
+        )
       },
       colProps: {
         span: 16,
       },
       dynamicDisabled: ({ values }) => {
-        return !!values.field_disabled;
+        return !!values.field_disabled
       },
     },
     {
@@ -216,8 +194,8 @@
       },
       labelWidth: 200,
     },
-  ];
-  const { createMessage } = useMessage();
+  ]
+  const { createMessage } = useMessage()
 
   const [register] = useForm({
     labelWidth: 120,
@@ -225,11 +203,11 @@
     actionColOptions: {
       span: 24,
     },
-  });
+  })
 
   function handleSubmit(values: any) {
-    console.log('submit values', values);
-    createMessage.success('click search,values:' + JSON.stringify(values));
+    console.log('submit values', values)
+    createMessage.success('click search,values:' + JSON.stringify(values))
   }
 </script>
 

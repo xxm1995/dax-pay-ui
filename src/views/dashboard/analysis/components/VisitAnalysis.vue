@@ -2,15 +2,15 @@
   <div ref="chartRef" :style="{ height, width }"></div>
 </template>
 <script lang="ts" setup>
-  import { onMounted, ref, Ref } from 'vue';
-  import { useECharts } from '@/hooks/web/useECharts';
-  import { basicProps } from './props';
+  import { onMounted, ref, Ref } from 'vue'
+  import { useECharts } from '@/hooks/web/useECharts'
+  import { basicProps } from './props'
 
   defineProps({
     ...basicProps,
-  });
-  const chartRef = ref<HTMLDivElement | null>(null);
-  const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>);
+  })
+  const chartRef = ref<HTMLDivElement | null>(null)
+  const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>)
 
   onMounted(() => {
     setOptions({
@@ -60,8 +60,7 @@
         {
           smooth: true,
           data: [
-            111, 222, 4000, 18000, 33333, 55555, 66666, 33333, 14000, 36000, 66666, 44444, 22222,
-            11111, 4000, 2000, 500, 333, 222, 111,
+            111, 222, 4000, 18000, 33333, 55555, 66666, 33333, 14000, 36000, 66666, 44444, 22222, 11111, 4000, 2000, 500, 333, 222, 111,
           ],
           type: 'line',
           areaStyle: {},
@@ -71,10 +70,7 @@
         },
         {
           smooth: true,
-          data: [
-            33, 66, 88, 333, 3333, 5000, 18000, 3000, 1200, 13000, 22000, 11000, 2221, 1201, 390,
-            198, 60, 30, 22, 11,
-          ],
+          data: [33, 66, 88, 333, 3333, 5000, 18000, 3000, 1200, 13000, 22000, 11000, 2221, 1201, 390, 198, 60, 30, 22, 11],
           type: 'line',
           areaStyle: {},
           itemStyle: {
@@ -82,6 +78,6 @@
           },
         },
       ],
-    });
-  });
+    })
+  })
 </script>

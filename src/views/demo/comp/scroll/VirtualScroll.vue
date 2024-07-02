@@ -42,23 +42,23 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { PageWrapper } from '@/components/Page';
-  import { VScroll } from '@/components/VirtualScroll';
-  import { Divider, InputNumber } from 'ant-design-vue';
-  import { ref } from 'vue';
+  import { PageWrapper } from '@/components/Page'
+  import { VScroll } from '@/components/VirtualScroll'
+  import { Divider, InputNumber } from 'ant-design-vue'
+  import { ref } from 'vue'
 
-  const vScrollRef = ref<typeof VScroll>();
-  const scrollToItemIndex = ref(1000);
+  const vScrollRef = ref<typeof VScroll>()
+  const scrollToItemIndex = ref(1000)
 
   const data = (() => {
-    const arr: any[] = [];
+    const arr: any[] = []
     for (let index = 1; index < 20000; index++) {
       arr.push({
         title: '列表项' + index,
-      });
+      })
     }
-    return arr;
-  })();
+    return arr
+  })()
 </script>
 <style lang="less" scoped>
   .virtual-scroll-demo {

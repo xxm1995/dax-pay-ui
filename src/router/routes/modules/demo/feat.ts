@@ -1,7 +1,7 @@
-import type { AppRouteModule } from '@/router/types';
+import type { AppRouteModule } from '@/router/types'
 
-import { getParentLayout, LAYOUT } from '@/router/constant';
-import { t } from '@/hooks/web/useI18n';
+import { getParentLayout, LAYOUT } from '@/router/constant'
+import { t } from '@/hooks/web/useI18n'
 
 const feat: AppRouteModule = {
   path: '/feat',
@@ -274,6 +274,6 @@ const feat: AppRouteModule = {
       ],
     },
   ],
-};
+}
 
-export default feat;
+export default feat

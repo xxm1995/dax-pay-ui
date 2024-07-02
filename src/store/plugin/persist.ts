@@ -4,19 +4,19 @@
  * @link https://prazdevs.github.io/pinia-plugin-persistedstate/zh/guide/
  *
  */
-import type { Pinia } from 'pinia';
-import { createPersistedState, Serializer } from 'pinia-plugin-persistedstate';
-import type { PersistedStateFactoryOptions } from 'pinia-plugin-persistedstate';
-import { getCommonStoragePrefix } from '@/utils/env';
-import { Encryption, EncryptionFactory } from '@/utils/cipher';
-import { cacheCipher, SHOULD_ENABLE_STORAGE_ENCRYPTION } from '@/settings/encryptionSetting';
+import type { Pinia } from 'pinia'
+import { createPersistedState, Serializer } from 'pinia-plugin-persistedstate'
+import type { PersistedStateFactoryOptions } from 'pinia-plugin-persistedstate'
+import { getCommonStoragePrefix } from '@/utils/env'
+import { Encryption, EncryptionFactory } from '@/utils/cipher'
+import { cacheCipher, SHOULD_ENABLE_STORAGE_ENCRYPTION } from '@/settings/encryptionSetting'
 
-export const PERSIST_KEY_PREFIX = getCommonStoragePrefix();
+export const PERSIST_KEY_PREFIX = getCommonStoragePrefix()
 
 const persistEncryption: Encryption = EncryptionFactory.createAesEncryption({
   key: cacheCipher.key,
   iv: cacheCipher.iv,
-});
+})
 
 /**
  * Custom serializer for serialization and deserialization of storage data
@@ -29,23 +29,23 @@ function customSerializer(shouldEnableEncryption: boolean): Serializer {
   if (shouldEnableEncryption) {
     return {
       deserialize: (value) => {
-        const decrypted = persistEncryption.decrypt(value);
-        return JSON.parse(decrypted);
+        const decrypted = persistEncryption.decrypt(value)
+        return JSON.parse(decrypted)
       },
       serialize: (value) => {
-        const serialized = JSON.stringify(value);
-        return persistEncryption.encrypt(serialized);
+        const serialized = JSON.stringify(value)
+        return persistEncryption.encrypt(serialized)
       },
-    };
+    }
   } else {
     return {
       deserialize: (value) => {
-        return JSON.parse(value);
+        return JSON.parse(value)
       },
       serialize: (value) => {
-        return JSON.stringify(value);
+        return JSON.stringify(value)
       },
-    };
+    }
   }
 }
 
@@ -56,7 +56,7 @@ function customSerializer(shouldEnableEncryption: boolean): Serializer {
  * @param pinia Pinia instance Pinia 实例
  */
 export function registerPiniaPersistPlugin(pinia: Pinia) {
-  pinia.use(createPersistedState(createPersistedStateOptions(PERSIST_KEY_PREFIX)));
+  pinia.use(createPersistedState(createPersistedStateOptions(PERSIST_KEY_PREFIX)))
 }
 
 /**
@@ -71,5 +71,5 @@ export function createPersistedStateOptions(keyPrefix: string): PersistedStateFa
     storage: localStorage,
     key: (id) => `${keyPrefix}__${id}`,
     serializer: customSerializer(SHOULD_ENABLE_STORAGE_ENCRYPTION),
-  };
+  }
 }

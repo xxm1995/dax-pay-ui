@@ -30,17 +30,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, TableAction } from '@/components/Table';
-  import { getRoleListByPage } from '@/api/demo/system';
+  import { BasicTable, useTable, TableAction } from '@/components/Table'
+  import { getRoleListByPage } from '@/api/demo/system'
 
-  import { useDrawer } from '@/components/Drawer';
-  import RoleDrawer from './RoleDrawer.vue';
+  import { useDrawer } from '@/components/Drawer'
+  import RoleDrawer from './RoleDrawer.vue'
 
-  import { columns, searchFormSchema } from './role.data';
+  import { columns, searchFormSchema } from './role.data'
 
-  defineOptions({ name: 'RoleManagement' });
+  defineOptions({ name: 'RoleManagement' })
 
-  const [registerDrawer, { openDrawer }] = useDrawer();
+  const [registerDrawer, { openDrawer }] = useDrawer()
   const [registerTable, { reload }] = useTable({
     title: '角色列表',
     api: getRoleListByPage,
@@ -60,26 +60,26 @@
       // slots: { customRender: 'action' },
       fixed: undefined,
     },
-  });
+  })
 
   function handleCreate() {
     openDrawer(true, {
       isUpdate: false,
-    });
+    })
   }
 
   function handleEdit(record: Recordable) {
     openDrawer(true, {
       record,
       isUpdate: true,
-    });
+    })
   }
 
   function handleDelete(record: Recordable) {
-    console.log(record);
+    console.log(record)
   }
 
   function handleSuccess() {
-    reload();
+    reload()
   }
 </script>

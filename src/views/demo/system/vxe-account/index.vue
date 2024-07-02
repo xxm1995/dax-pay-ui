@@ -11,16 +11,16 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue';
-  import { ActionItem, TableAction } from '@/components/Table';
-  import { getAccountList } from '@/api/demo/system';
-  import { PageWrapper } from '@/components/Page';
-  import DeptTree from '../account/DeptTree.vue';
-  import { columns, searchFormSchema } from './vxeAccount.data';
-  import { BasicTableProps, VxeBasicTable, VxeGridInstance } from '@/components/VxeTable';
+  import { reactive, ref } from 'vue'
+  import { ActionItem, TableAction } from '@/components/Table'
+  import { getAccountList } from '@/api/demo/system'
+  import { PageWrapper } from '@/components/Page'
+  import DeptTree from '../account/DeptTree.vue'
+  import { columns, searchFormSchema } from './vxeAccount.data'
+  import { BasicTableProps, VxeBasicTable, VxeGridInstance } from '@/components/VxeTable'
 
-  const tableRef = ref<VxeGridInstance>();
-  const searchInfo = ref();
+  const tableRef = ref<VxeGridInstance>()
+  const searchInfo = ref()
   const gridOptions = reactive<BasicTableProps>({
     id: 'VxeTable',
     keepSource: true,
@@ -38,18 +38,18 @@
             pageSize: page.pageSize,
             ...form,
             searchInfo: searchInfo.value,
-          });
+          })
         },
       },
     },
-  });
+  })
 
   const handleSelect = (deptId = '') => {
-    searchInfo.value = deptId;
+    searchInfo.value = deptId
     if (tableRef.value) {
-      tableRef.value.commitProxy('query');
+      tableRef.value.commitProxy('query')
     }
-  };
+  }
 
   // 操作按钮（权限控制）
   const createActions = (record) => {
@@ -57,7 +57,7 @@
       {
         label: '详情',
         onClick: () => {
-          console.log(record);
+          console.log(record)
         },
       },
       {
@@ -70,14 +70,14 @@
         popConfirm: {
           title: '是否确认删除',
           confirm: () => {
-            tableRef.value?.remove(record);
+            tableRef.value?.remove(record)
           },
         },
       },
-    ];
+    ]
 
-    return actions;
-  };
+    return actions
+  }
 </script>
 <style lang="less" scope>
   .vxebasic-form-container {

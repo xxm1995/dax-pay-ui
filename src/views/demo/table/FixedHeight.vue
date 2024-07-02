@@ -20,12 +20,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable } from '@/components/Table';
-  import { getCustomHeaderColumns } from './tableData';
-  import { FormOutlined } from '@ant-design/icons-vue';
-  import { demoListApi } from '@/api/demo/table';
-  import { BasicHelp } from '@/components/Basic';
-  import HeaderCell from '@/components/Table/src/components/HeaderCell.vue';
+  import { BasicTable, useTable } from '@/components/Table'
+  import { getCustomHeaderColumns } from './tableData'
+  import { FormOutlined } from '@ant-design/icons-vue'
+  import { demoListApi } from '@/api/demo/table'
+  import { BasicHelp } from '@/components/Basic'
+  import HeaderCell from '@/components/Table/src/components/HeaderCell.vue'
 
   const [registerTable] = useTable({
     title: '定高/头部自定义',
@@ -33,5 +33,5 @@
     columns: getCustomHeaderColumns(),
     canResize: false,
     scroll: { y: 100 },
-  });
+  })
 </script>

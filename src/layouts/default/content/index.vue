@@ -1,32 +1,28 @@
 <template>
-  <div
-    :class="[prefixCls, getLayoutContentMode]"
-    v-loading="getOpenPageLoading && getPageLoading"
-    ref="content"
-  >
+  <div :class="[prefixCls, getLayoutContentMode]" v-loading="getOpenPageLoading && getPageLoading" ref="content">
     <PageLayout />
     <BackTop v-if="getUseOpenBackTop" :target="() => content" :visibilityHeight="100" />
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { BackTop } from 'ant-design-vue';
+  import { ref } from 'vue'
+  import { BackTop } from 'ant-design-vue'
 
-  import PageLayout from '@/layouts/page/index.vue';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { useRootSetting } from '@/hooks/setting/useRootSetting';
-  import { useTransitionSetting } from '@/hooks/setting/useTransitionSetting';
-  import { useContentViewHeight } from './useContentViewHeight';
+  import PageLayout from '@/layouts/page/index.vue'
+  import { useDesign } from '@/hooks/web/useDesign'
+  import { useRootSetting } from '@/hooks/setting/useRootSetting'
+  import { useTransitionSetting } from '@/hooks/setting/useTransitionSetting'
+  import { useContentViewHeight } from './useContentViewHeight'
 
-  defineOptions({ name: 'LayoutContent' });
+  defineOptions({ name: 'LayoutContent' })
 
-  const { prefixCls } = useDesign('layout-content');
-  const { getOpenPageLoading } = useTransitionSetting();
-  const { getLayoutContentMode, getPageLoading, getUseOpenBackTop } = useRootSetting();
+  const { prefixCls } = useDesign('layout-content')
+  const { getOpenPageLoading } = useTransitionSetting()
+  const { getLayoutContentMode, getPageLoading, getUseOpenBackTop } = useRootSetting()
 
-  useContentViewHeight();
+  useContentViewHeight()
 
-  const content = ref();
+  const content = ref()
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-layout-content';

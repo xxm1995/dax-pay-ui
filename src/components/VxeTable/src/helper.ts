@@ -1,22 +1,22 @@
-import { ComponentType } from './componentType';
-import { useI18n } from '@/hooks/web/useI18n';
-import XEUtils from 'xe-utils';
-import { ignoreTrimInputComponents } from './const';
+import { ComponentType } from './componentType'
+import { useI18n } from '@/hooks/web/useI18n'
+import XEUtils from 'xe-utils'
+import { ignoreTrimInputComponents } from './const'
 
-const { t } = useI18n();
+const { t } = useI18n()
 
 /**
  * @description: 生成placeholder
  */
 export function createPlaceholderMessage(component: ComponentType) {
-  if (!component) return;
+  if (!component) return
   if (component.includes('RangePicker')) {
-    return [t('common.chooseText'), t('common.chooseText')];
+    return [t('common.chooseText'), t('common.chooseText')]
   }
   if (component.includes('Input') || component.includes('Complete') || component.includes('Rate')) {
-    return t('common.inputText');
+    return t('common.inputText')
   } else {
-    return t('common.chooseText');
+    return t('common.chooseText')
   }
 }
 
@@ -26,7 +26,7 @@ export function createPlaceholderMessage(component: ComponentType) {
  */
 export function sanitizeInputWhitespace(component: ComponentType, value: string) {
   if (ignoreTrimInputComponents.includes(component)) {
-    return XEUtils.trim(value);
+    return XEUtils.trim(value)
   }
-  return value;
+  return value
 }

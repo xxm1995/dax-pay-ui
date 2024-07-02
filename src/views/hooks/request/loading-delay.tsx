@@ -1,21 +1,21 @@
-import { defineComponent, unref } from 'vue';
-import { Card, Typography, Button, Space } from 'ant-design-vue';
-import { useRequest } from '@vben/hooks';
-import { PageWrapper } from '@/components/Page';
-import { imitateApi } from './mock-api';
+import { defineComponent, unref } from 'vue'
+import { Card, Typography, Button, Space } from 'ant-design-vue'
+import { useRequest } from '@vben/hooks'
+import { PageWrapper } from '@/components/Page'
+import { imitateApi } from './mock-api'
 
 export default defineComponent({
   setup() {
-    const action = useRequest(imitateApi);
+    const action = useRequest(imitateApi)
 
     const withLoadingDelayAction = useRequest(imitateApi, {
       loadingDelay: 300,
-    });
+    })
 
     const trigger = () => {
-      action.run('lutz');
-      withLoadingDelayAction.run('lutz');
-    };
+      action.run('lutz')
+      withLoadingDelayAction.run('lutz')
+    }
 
     return () => (
       <PageWrapper>
@@ -30,14 +30,11 @@ export default defineComponent({
             </Typography.Paragraph>
 
             <Typography.Paragraph>
-              <Typography.Text code>
-                {`const { loading, data } = useRequest(imitateApi, { loadingDelay: 300 });`}
-              </Typography.Text>
+              <Typography.Text code>{`const { loading, data } = useRequest(imitateApi, { loadingDelay: 300 });`}</Typography.Text>
             </Typography.Paragraph>
 
             <Typography.Paragraph>
-              例如上面的场景，假如 imitateApi 在 300ms 内返回，则{' '}
-              <Typography.Text code>loading</Typography.Text> 不会变成{' '}
+              例如上面的场景，假如 imitateApi 在 300ms 内返回，则 <Typography.Text code>loading</Typography.Text> 不会变成{' '}
               <Typography.Text code>true</Typography.Text> Loading... 的情况。
             </Typography.Paragraph>
           </Typography>
@@ -47,15 +44,10 @@ export default defineComponent({
 
             <div>Username: {unref(action.loading) ? 'Loading...' : unref(action.data)}</div>
 
-            <div>
-              Username:{' '}
-              {unref(withLoadingDelayAction.loading)
-                ? 'Loading...'
-                : unref(withLoadingDelayAction.data)}
-            </div>
+            <div>Username: {unref(withLoadingDelayAction.loading) ? 'Loading...' : unref(withLoadingDelayAction.data)}</div>
           </Space>
         </Card>
       </PageWrapper>
-    );
+    )
   },
-});
+})

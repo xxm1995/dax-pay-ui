@@ -1,53 +1,53 @@
-import { createVNode, defineComponent, h, reactive, render, VNode } from 'vue';
-import type { LoadingProps } from './typing';
+import { createVNode, defineComponent, h, reactive, render, VNode } from 'vue'
+import type { LoadingProps } from './typing'
 
-import Loading from './Loading.vue';
+import Loading from './Loading.vue'
 
 export function createLoading(props?: Partial<LoadingProps>, target?: HTMLElement, wait = false) {
-  let vm: Nullable<VNode> = null;
+  let vm: Nullable<VNode> = null
   const data = reactive({
     tip: '',
     loading: true,
     ...props,
-  });
+  })
 
   const LoadingWrap = defineComponent({
     render() {
-      return h(Loading, { ...data });
+      return h(Loading, { ...data })
     },
-  });
+  })
 
-  vm = createVNode(LoadingWrap);
+  vm = createVNode(LoadingWrap)
 
-  let container: Nullable<HTMLElement> = null;
+  let container: Nullable<HTMLElement> = null
   if (wait) {
     setTimeout(() => {
-      render(vm, (container = document.createElement('div')));
-    }, 0);
+      render(vm, (container = document.createElement('div')))
+    }, 0)
   } else {
-    render(vm, (container = document.createElement('div')));
+    render(vm, (container = document.createElement('div')))
   }
 
   function close() {
     if (vm?.el && vm.el.parentNode) {
-      vm.el.parentNode.removeChild(vm.el);
+      vm.el.parentNode.removeChild(vm.el)
     }
   }
 
   function open(target: HTMLElement = document.body) {
     if (!vm || !vm.el) {
-      return;
+      return
     }
-    target.appendChild(vm.el as HTMLElement);
+    target.appendChild(vm.el as HTMLElement)
   }
 
   function destroy() {
-    container && render(null, container);
-    container = vm = null;
+    container && render(null, container)
+    container = vm = null
   }
 
   if (target) {
-    open(target);
+    open(target)
   }
   return {
     vm,
@@ -55,16 +55,16 @@ export function createLoading(props?: Partial<LoadingProps>, target?: HTMLElemen
     open,
     destroy,
     setTip: (tip: string) => {
-      data.tip = tip;
+      data.tip = tip
     },
     setLoading: (loading: boolean) => {
-      data.loading = loading;
+      data.loading = loading
     },
     get loading() {
-      return data.loading;
+      return data.loading
     },
     get $el() {
-      return vm?.el as HTMLElement;
+      return vm?.el as HTMLElement
     },
-  };
+  }
 }

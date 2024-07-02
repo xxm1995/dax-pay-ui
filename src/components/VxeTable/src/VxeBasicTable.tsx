@@ -1,9 +1,9 @@
-import { defineComponent, computed, ref, watch } from 'vue';
-import { BasicTableProps } from './types';
-import { basicProps } from './props';
-import { ignorePropKeys } from './const';
-import { basicEmits } from './emits';
-import XEUtils from 'xe-utils';
+import { defineComponent, computed, ref, watch } from 'vue'
+import { BasicTableProps } from './types'
+import { basicProps } from './props'
+import { ignorePropKeys } from './const'
+import { basicEmits } from './emits'
+import XEUtils from 'xe-utils'
 import {
   VxeGridInstance,
   VxeGridEventProps,
@@ -14,52 +14,52 @@ import {
   VxeUI,
   VxeGlobalThemeName,
   VxeGrid,
-} from 'vxe-table';
+} from 'vxe-table'
 
-import { extendSlots } from '@/utils/helper/tsxHelper';
-import { gridComponentMethodKeys } from './methods';
-import { omit } from 'lodash-es';
-import { useRootSetting } from '@/hooks/setting/useRootSetting';
+import { extendSlots } from '@/utils/helper/tsxHelper'
+import { gridComponentMethodKeys } from './methods'
+import { omit } from 'lodash-es'
+import { useRootSetting } from '@/hooks/setting/useRootSetting'
 
 export default defineComponent({
   name: 'VxeBasicTable',
   props: basicProps,
   emits: basicEmits,
   setup(props, { emit, attrs }) {
-    const tableElRef = ref<VxeGridInstance>();
-    const emitEvents: VxeGridEventProps = {};
-    const { getDarkMode } = useRootSetting();
+    const tableElRef = ref<VxeGridInstance>()
+    const emitEvents: VxeGridEventProps = {}
+    const { getDarkMode } = useRootSetting()
     watch(
       () => getDarkMode.value,
       () => {
-        VxeUI.setTheme(getDarkMode.value as VxeGlobalThemeName);
+        VxeUI.setTheme(getDarkMode.value as VxeGlobalThemeName)
       },
       { immediate: true },
-    );
+    )
     const extendTableMethods = (methodKeys) => {
-      const funcs: any = {};
+      const funcs: any = {}
       methodKeys.forEach((name) => {
         funcs[name] = (...args: any[]) => {
-          const $vxegrid: any = tableElRef.value;
+          const $vxegrid: any = tableElRef.value
           if ($vxegrid && $vxegrid[name]) {
-            return $vxegrid[name](...args);
+            return $vxegrid[name](...args)
           }
-        };
-      });
+        }
+      })
 
-      return funcs;
-    };
+      return funcs
+    }
 
     const gridExtendTableMethods = extendTableMethods(gridComponentMethodKeys) as GridMethods &
       TableMethods &
       TableEditMethods &
-      TableValidatorMethods;
+      TableValidatorMethods
 
     basicEmits.forEach((name) => {
-      const type = XEUtils.camelCase(`on-${name}`) as keyof VxeGridEventProps;
+      const type = XEUtils.camelCase(`on-${name}`) as keyof VxeGridEventProps
 
-      emitEvents[type] = (...args: any[]) => emit(name, ...args);
-    });
+      emitEvents[type] = (...args: any[]) => emit(name, ...args)
+    })
 
     /**
      * @description: 二次封装需要的所有属性
@@ -69,58 +69,53 @@ export default defineComponent({
       const propsData: BasicTableProps = {
         ...attrs,
         ...props,
-      };
+      }
 
-      return propsData;
-    });
+      return propsData
+    })
 
     /**
      * @description: Table 所有属性
      */
     const getBindGridValues = computed(() => {
-      const omitProps = omit(getBindValues.value, ignorePropKeys);
+      const omitProps = omit(getBindValues.value, ignorePropKeys)
 
       return {
         ...omitProps,
         ...getBindGridEvent,
-      };
-    });
+      }
+    })
 
     /**
      * @description: 组件外层class
      */
     const getWrapperClass = computed(() => {
-      return [attrs.class];
-    });
+      return [attrs.class]
+    })
 
     /**
      * @description: 重写Vxe-table 方法
      */
     const getBindGridEvent: VxeGridEventProps = {
       ...emitEvents,
-    };
+    }
 
     return {
       getWrapperClass,
       getBindGridValues,
       tableElRef,
       ...gridExtendTableMethods,
-    };
+    }
   },
   render() {
-    const { tableClass, tableStyle } = this.$props;
+    const { tableClass, tableStyle } = this.$props
 
     return (
       <div class={`h-full flex flex-col bg-white ${this.getWrapperClass}`}>
-        <VxeGrid
-          ref="tableElRef"
-          class={`vxe-grid_scrollbar px-6 py-4 ${tableClass}`}
-          style={tableStyle}
-          {...this.getBindGridValues}
-        >
+        <VxeGrid ref="tableElRef" class={`vxe-grid_scrollbar px-6 py-4 ${tableClass}`} style={tableStyle} {...this.getBindGridValues}>
           {extendSlots(this.$slots)}
         </VxeGrid>
       </div>
-    );
+    )
   },
-});
+})

@@ -7,17 +7,17 @@
   </Tooltip>
 </template>
 <script lang="ts" setup>
-  import { Tooltip } from 'ant-design-vue';
-  import { RedoOutlined } from '@ant-design/icons-vue';
-  import { useI18n } from '@/hooks/web/useI18n';
-  import { useTableContext } from '../../hooks/useTableContext';
+  import { Tooltip } from 'ant-design-vue'
+  import { RedoOutlined } from '@ant-design/icons-vue'
+  import { useI18n } from '@/hooks/web/useI18n'
+  import { useTableContext } from '../../hooks/useTableContext'
 
-  defineOptions({ name: 'RedoSetting' });
+  defineOptions({ name: 'RedoSetting' })
 
-  const table = useTableContext();
-  const { t } = useI18n();
+  const table = useTableContext()
+  const { t } = useI18n()
 
   function redo() {
-    table.reload();
+    table.reload()
   }
 </script>

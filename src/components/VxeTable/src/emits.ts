@@ -1,4 +1,4 @@
-import tableEmits from 'vxe-table/es/table/src/emits';
+import tableEmits from 'vxe-table/es/table/src/emits'
 
 export const basicEmits = [
   ...tableEmits,
@@ -14,4 +14,4 @@ export const basicEmits = [
 
   //... 如有缺少在此处追加
   // xxx
-];
+]

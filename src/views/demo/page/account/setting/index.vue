@@ -13,26 +13,26 @@
 </template>
 
 <script lang="ts" setup>
-  import { Tabs } from 'ant-design-vue';
-  import { ScrollContainer } from '@/components/Container';
-  import { settingList } from './data';
-  import BaseSetting from './BaseSetting.vue';
-  import SecureSetting from './SecureSetting.vue';
-  import AccountBind from './AccountBind.vue';
-  import MsgNotify from './MsgNotify.vue';
+  import { Tabs } from 'ant-design-vue'
+  import { ScrollContainer } from '@/components/Container'
+  import { settingList } from './data'
+  import BaseSetting from './BaseSetting.vue'
+  import SecureSetting from './SecureSetting.vue'
+  import AccountBind from './AccountBind.vue'
+  import MsgNotify from './MsgNotify.vue'
 
-  const TabPane = Tabs.TabPane;
+  const TabPane = Tabs.TabPane
   const tabs = {
     BaseSetting,
     SecureSetting,
     AccountBind,
     MsgNotify,
-  };
+  }
 
-  const prefixCls = 'account-setting';
+  const prefixCls = 'account-setting'
   const tabBarStyle = {
     width: '220px',
-  };
+  }
 </script>
 <style lang="less">
   .account-setting {

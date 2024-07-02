@@ -6,10 +6,7 @@
           <ListItemMeta>
             <template #title>
               {{ item.title }}
-              <div
-                class="float-right mt-10px mr-30px text-blue-500 text-font-normal cursor-pointer"
-                v-if="item.extra"
-              >
+              <div class="float-right mt-10px mr-30px text-blue-500 text-font-normal cursor-pointer" v-if="item.extra">
                 {{ item.extra }}
               </div>
             </template>
@@ -23,10 +20,10 @@
   </CollapseContainer>
 </template>
 <script lang="ts" setup>
-  import { CollapseContainer } from '@/components/Container';
-  import { List } from 'ant-design-vue';
-  import { secureSettingList } from './data';
+  import { CollapseContainer } from '@/components/Container'
+  import { List } from 'ant-design-vue'
+  import { secureSettingList } from './data'
 
-  const ListItem = List.Item;
-  const ListItemMeta = List.Item.Meta;
+  const ListItem = List.Item
+  const ListItemMeta = List.Item.Meta
 </script>

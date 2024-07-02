@@ -1,5 +1,5 @@
-import type { PropType } from 'vue';
-import type { PaginationProps } from './types/pagination';
+import type { PropType } from 'vue'
+import type { PaginationProps } from './types/pagination'
 import type {
   BasicColumn,
   FetchSetting,
@@ -9,12 +9,12 @@ import type {
   TableRowSelection,
   SizeType,
   BasicTableProps,
-} from './types/table';
-import type { FormProps } from '@/components/Form';
+} from './types/table'
+import type { FormProps } from '@/components/Form'
 
-import { DEFAULT_FILTER_FN, DEFAULT_SORT_FN, FETCH_SETTING, DEFAULT_SIZE } from './const';
-import { propTypes } from '@/utils/propTypes';
-import type { Key } from 'ant-design-vue/lib/table/interface';
+import { DEFAULT_FILTER_FN, DEFAULT_SORT_FN, FETCH_SETTING, DEFAULT_SIZE } from './const'
+import { propTypes } from '@/utils/propTypes'
+import type { Key } from 'ant-design-vue/lib/table/interface'
 
 export const basicProps = {
   clickToRowSelect: { type: Boolean, default: true },
@@ -62,7 +62,7 @@ export const basicProps = {
   fetchSetting: {
     type: Object as PropType<FetchSetting>,
     default: () => {
-      return FETCH_SETTING;
+      return FETCH_SETTING
     },
   },
   // 立即请求接口
@@ -137,12 +137,10 @@ export const basicProps = {
     type: Object as PropType<PropType<BasicTableProps['scroll']>>,
   },
   beforeEditSubmit: {
-    type: Function as PropType<
-      (data: { record: Recordable; index: number; key: Key; value: any }) => Promise<any>
-    >,
+    type: Function as PropType<(data: { record: Recordable; index: number; key: Key; value: any }) => Promise<any>>,
   },
   size: {
     type: String as PropType<SizeType>,
     default: DEFAULT_SIZE,
   },
-};
+}

@@ -10,14 +10,12 @@
       <Col :span="8">
         <Card title="hooks 错误重试">
           <Space>
-            <a-button @click="restRun" type="primary" :disabled="loading">
-              使用 hooks 发起重试
-            </a-button>
+            <a-button @click="restRun" type="primary" :disabled="loading"> 使用 hooks 发起重试 </a-button>
             <a-button @click="restCancel">取消</a-button>
           </Space>
           <div class="mt-4"
-            >错误重试，retryInterval 如果不设置，默认采用简易的指数退避算法，取 1000 * 2 **
-            retryCount，也就是第一次重试等待 2s，第二次重试等待 4s，以此类推，如果大于 30s，则取 30s
+            >错误重试，retryInterval 如果不设置，默认采用简易的指数退避算法，取 1000 * 2 ** retryCount，也就是第一次重试等待
+            2s，第二次重试等待 4s，以此类推，如果大于 30s，则取 30s
           </div>
         </Card>
       </Col>
@@ -26,22 +24,22 @@
 </template>
 
 <script lang="ts" setup>
-  import { PageWrapper } from '@/components/Page';
-  import { useRequest } from '@vben/hooks';
-  import { testRetry } from '@/api/sys/user';
-  import { Card, Col, Row, Space, message } from 'ant-design-vue';
+  import { PageWrapper } from '@/components/Page'
+  import { useRequest } from '@vben/hooks'
+  import { testRetry } from '@/api/sys/user'
+  import { Card, Col, Row, Space, message } from 'ant-design-vue'
 
   // @ts-ignore
   const handleClick = async () => {
-    await testRetry();
-  };
+    await testRetry()
+  }
 
   function apiError() {
     return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
-        reject(`TimeError: ${Date.now()}`);
-      }, 1300);
-    });
+        reject(`TimeError: ${Date.now()}`)
+      }, 1300)
+    })
   }
 
   // PS >> useRequest 代替不了API(如: axios)，但它使得开发更灵活
@@ -51,28 +49,28 @@
   // 兼容扩展，如：同时启用防抖、节流、loading状态、取消异步等功能
 
   // eg. 仅仅为了计数，restRun、restCancel 其实都可省略
-  let i = 0;
+  let i = 0
   const { loading, run, cancel } = useRequest(apiError, {
     manual: true,
     retryCount: 5,
     // retryInterval: undefined, // 重试时间间隔，单位为毫秒
     onError(error) {
       if (i === 0) {
-        message.error(`发现错误`);
-        i++;
+        message.error(`发现错误`)
+        i++
       }
-      const now = Date.now();
-      message.error(`第 ${i++} 次重试, Time:${now}`);
-      console.log(`Time: ${now}, Error: ${error}`);
+      const now = Date.now()
+      message.error(`第 ${i++} 次重试, Time:${now}`)
+      console.log(`Time: ${now}, Error: ${error}`)
     },
-  });
+  })
   const restRun = () => {
-    i = 0;
-    run();
-  };
+    i = 0
+    run()
+  }
   const restCancel = () => {
-    i = 0;
-    cancel();
-    message.info('已取消');
-  };
+    i = 0
+    cancel()
+    message.info('已取消')
+  }
 </script>

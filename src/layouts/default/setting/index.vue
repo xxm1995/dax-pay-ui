@@ -5,12 +5,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import SettingDrawer from './SettingDrawer';
-  import Icon from '@/components/Icon/Icon.vue';
+  import SettingDrawer from './SettingDrawer'
+  import Icon from '@/components/Icon/Icon.vue'
 
-  import { useDrawer } from '@/components/Drawer';
+  import { useDrawer } from '@/components/Drawer'
 
-  defineOptions({ name: 'SettingButton' });
+  defineOptions({ name: 'SettingButton' })
 
-  const [register, { openDrawer }] = useDrawer();
+  const [register, { openDrawer }] = useDrawer()
 </script>

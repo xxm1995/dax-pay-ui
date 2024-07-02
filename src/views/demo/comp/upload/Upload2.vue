@@ -4,12 +4,12 @@
 </template>
 
 <script setup lang="ts">
-  import { Alert } from 'ant-design-vue';
-  import { BasicForm, FormSchema, useForm } from '@/components/Form';
-  import { useMessage } from '@/hooks/web/useMessage';
-  import { uploadApi } from '@/api/sys/upload';
+  import { Alert } from 'ant-design-vue'
+  import { BasicForm, FormSchema, useForm } from '@/components/Form'
+  import { useMessage } from '@/hooks/web/useMessage'
+  import { uploadApi } from '@/api/sys/upload'
 
-  const { createMessage } = useMessage();
+  const { createMessage } = useMessage()
 
   const schemasValiate: FormSchema[] = [
     {
@@ -32,7 +32,7 @@
         api: uploadApi,
       },
     },
-  ];
+  ]
   const [registerValiate, { getFieldsValue: getFieldsValueValiate, validate }] = useForm({
     labelWidth: 160,
     schemas: schemasValiate,
@@ -43,14 +43,14 @@
       return new Promise((resolve) => {
         validate()
           .then(() => {
-            resolve();
-            console.log(getFieldsValueValiate());
-            createMessage.success(`请到控制台查看结果`);
+            resolve()
+            console.log(getFieldsValueValiate())
+            createMessage.success(`请到控制台查看结果`)
           })
           .catch(() => {
-            createMessage.error(`请输入必填项`);
-          });
-      });
+            createMessage.error(`请输入必填项`)
+          })
+      })
     },
-  });
+  })
 </script>

@@ -22,14 +22,14 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { reactive } from 'vue';
-  import { PageWrapper } from '@/components/Page';
-  import { Time } from '@/components/Time';
-  import { CollapseContainer } from '@/components/Container';
+  import { reactive } from 'vue'
+  import { PageWrapper } from '@/components/Page'
+  import { Time } from '@/components/Time'
+  import { CollapseContainer } from '@/components/Container'
 
-  const now = new Date().getTime();
+  const now = new Date().getTime()
   const state = reactive({
     time1: now - 60 * 3 * 1000,
     time2: now - 86400 * 3 * 1000,
-  });
+  })
 </script>

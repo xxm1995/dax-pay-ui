@@ -1,7 +1,7 @@
-import type { AppRouteModule } from '@/router/types';
+import type { AppRouteModule } from '@/router/types'
 
-import { LAYOUT } from '@/router/constant';
-import { t } from '@/hooks/web/useI18n';
+import { LAYOUT } from '@/router/constant'
+import { t } from '@/hooks/web/useI18n'
 
 const steps: AppRouteModule = {
   path: '/steps',
@@ -26,6 +26,6 @@ const steps: AppRouteModule = {
       },
     },
   ],
-};
+}
 
-export default steps;
+export default steps

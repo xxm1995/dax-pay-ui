@@ -28,10 +28,10 @@
   </div>
 </template>
 <script lang="tsx" setup>
-  import { h } from 'vue';
-  import { BasicTable, useTable, BasicColumn, TableImg } from '@/components/Table';
-  import { Tag, Avatar } from 'ant-design-vue';
-  import { demoListApi } from '@/api/demo/table';
+  import { h } from 'vue'
+  import { BasicTable, useTable, BasicColumn, TableImg } from '@/components/Table'
+  import { Tag, Avatar } from 'ant-design-vue'
+  import { demoListApi } from '@/api/demo/table'
 
   const columns: BasicColumn[] = [
     {
@@ -84,7 +84,7 @@
       title: '结束时间',
       dataIndex: 'endTime',
     },
-  ];
+  ]
 
   const [registerTable] = useTable({
     title: '自定义列内容',
@@ -93,5 +93,5 @@
     columns: columns,
     bordered: true,
     showTableSetting: true,
-  });
+  })
 </script>

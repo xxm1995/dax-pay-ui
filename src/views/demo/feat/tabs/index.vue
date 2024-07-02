@@ -18,39 +18,36 @@
     </CollapseContainer>
 
     <CollapseContainer class="mt-4" title="标签页复用超出限制自动关闭(使用场景: 动态路由)">
-      <a-button v-for="index in 6" :key="index" class="mr-2" @click="toDetail(index)">
-        打开{{ index }}详情页
-      </a-button>
+      <a-button v-for="index in 6" :key="index" class="mr-2" @click="toDetail(index)"> 打开{{ index }}详情页 </a-button>
     </CollapseContainer>
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref } from 'vue'
 
-  import { CollapseContainer } from '@/components/Container';
-  import { useTabs } from '@/hooks/web/useTabs';
-  import { PageWrapper } from '@/components/Page';
-  import { Alert } from 'ant-design-vue';
-  import { useMessage } from '@/hooks/web/useMessage';
-  import { useGo } from '@/hooks/web/usePage';
+  import { CollapseContainer } from '@/components/Container'
+  import { useTabs } from '@/hooks/web/useTabs'
+  import { PageWrapper } from '@/components/Page'
+  import { Alert } from 'ant-design-vue'
+  import { useMessage } from '@/hooks/web/useMessage'
+  import { useGo } from '@/hooks/web/usePage'
 
-  defineOptions({ name: 'TabsDemo' });
+  defineOptions({ name: 'TabsDemo' })
 
-  const go = useGo();
-  const title = ref<string>('');
-  const { closeAll, closeLeft, closeRight, closeOther, closeCurrent, refreshPage, setTitle } =
-    useTabs();
-  const { createMessage } = useMessage();
+  const go = useGo()
+  const title = ref<string>('')
+  const { closeAll, closeLeft, closeRight, closeOther, closeCurrent, refreshPage, setTitle } = useTabs()
+  const { createMessage } = useMessage()
 
   function setTabTitle() {
     if (title.value) {
-      setTitle(title.value);
+      setTitle(title.value)
     } else {
-      createMessage.error('请输入要设置的Tab标题！');
+      createMessage.error('请输入要设置的Tab标题！')
     }
   }
 
   function toDetail(index: number) {
-    go(`/feat/tabs/detail/${index}`);
+    go(`/feat/tabs/detail/${index}`)
   }
 </script>

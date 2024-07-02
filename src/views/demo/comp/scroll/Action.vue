@@ -20,25 +20,25 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { ref, unref } from 'vue';
-  import { ScrollContainer, ScrollActionType } from '@/components/Container';
-  import { PageWrapper } from '@/components/Page';
-  import { type Nullable } from '@vben/types';
+  import { ref, unref } from 'vue'
+  import { ScrollContainer, ScrollActionType } from '@/components/Container'
+  import { PageWrapper } from '@/components/Page'
+  import { type Nullable } from '@vben/types'
 
-  const scrollRef = ref<Nullable<ScrollActionType>>(null);
+  const scrollRef = ref<Nullable<ScrollActionType>>(null)
   const getScroll = () => {
-    const scroll = unref(scrollRef);
+    const scroll = unref(scrollRef)
     if (!scroll) {
-      throw new Error('scroll is Null');
+      throw new Error('scroll is Null')
     }
-    return scroll;
-  };
+    return scroll
+  }
 
   function scrollTo(top: number) {
-    getScroll().scrollTo(top);
+    getScroll().scrollTo(top)
   }
   function scrollBottom() {
-    getScroll().scrollBottom();
+    getScroll().scrollBottom()
   }
 </script>
 <style lang="less" scoped>

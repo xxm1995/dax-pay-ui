@@ -9,21 +9,21 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { unref, ref } from 'vue';
-  import { CollapseContainer } from '@/components/Container';
-  import { useMessage } from '@/hooks/web/useMessage';
-  import { PageWrapper } from '@/components/Page';
-  import { copyText } from '@/utils/copyTextToClipboard';
+  import { unref, ref } from 'vue'
+  import { CollapseContainer } from '@/components/Container'
+  import { useMessage } from '@/hooks/web/useMessage'
+  import { PageWrapper } from '@/components/Page'
+  import { copyText } from '@/utils/copyTextToClipboard'
 
-  const valueRef = ref('');
-  const { createMessage } = useMessage();
+  const valueRef = ref('')
+  const { createMessage } = useMessage()
 
   function handleCopy() {
-    const value = unref(valueRef);
+    const value = unref(valueRef)
     if (!value) {
-      createMessage.warning('请输入要拷贝的内容！');
-      return;
+      createMessage.warning('请输入要拷贝的内容！')
+      return
     }
-    copyText(value);
+    copyText(value)
   }
 </script>

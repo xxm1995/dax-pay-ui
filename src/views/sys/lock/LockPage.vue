@@ -1,8 +1,5 @@
 <template>
-  <div
-    :class="prefixCls"
-    class="fixed inset-0 flex h-screen w-screen bg-black items-center justify-center"
-  >
+  <div :class="prefixCls" class="fixed inset-0 flex h-screen w-screen bg-black items-center justify-center">
     <div
       :class="`${prefixCls}__unlock`"
       class="absolute top-0 left-1/2 flex pt-5 h-16 items-center justify-center sm:text-md xl:text-xl text-white flex-col cursor-pointer transform translate-x-1/2"
@@ -33,31 +30,15 @@
               {{ userInfo.realName }}
             </p>
           </div>
-          <InputPassword
-            :placeholder="t('sys.lock.placeholder')"
-            class="enter-x"
-            v-model:value="password"
-          />
+          <InputPassword :placeholder="t('sys.lock.placeholder')" class="enter-x" v-model:value="password" />
           <span :class="`${prefixCls}-entry__err-msg enter-x`" v-if="errMsg">
             {{ t('sys.lock.alert') }}
           </span>
           <div :class="`${prefixCls}-entry__footer enter-x`">
-            <a-button
-              type="link"
-              size="small"
-              class="mt-2 mr-2 enter-x"
-              :disabled="loading"
-              @click="handleShowForm(true)"
-            >
+            <a-button type="link" size="small" class="mt-2 mr-2 enter-x" :disabled="loading" @click="handleShowForm(true)">
               {{ t('common.back') }}
             </a-button>
-            <a-button
-              type="link"
-              size="small"
-              class="mt-2 mr-2 enter-x"
-              :disabled="loading"
-              @click="goLogin"
-            >
+            <a-button type="link" size="small" class="mt-2 mr-2 enter-x" :disabled="loading" @click="goLogin">
               {{ t('sys.lock.backToLogin') }}
             </a-button>
             <a-button class="mt-2" type="link" size="small" @click="unLock()" :loading="loading">
@@ -77,60 +58,60 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref, computed } from 'vue';
-  import { Input } from 'ant-design-vue';
-  import { useUserStore } from '@/store/modules/user';
-  import { useLockStore } from '@/store/modules/lock';
-  import { useI18n } from '@/hooks/web/useI18n';
-  import { useNow } from './useNow';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { LockOutlined } from '@ant-design/icons-vue';
-  import headerImg from '@/assets/images/header.jpg';
+  import { ref, computed } from 'vue'
+  import { Input } from 'ant-design-vue'
+  import { useUserStore } from '@/store/modules/user'
+  import { useLockStore } from '@/store/modules/lock'
+  import { useI18n } from '@/hooks/web/useI18n'
+  import { useNow } from './useNow'
+  import { useDesign } from '@/hooks/web/useDesign'
+  import { LockOutlined } from '@ant-design/icons-vue'
+  import headerImg from '@/assets/images/header.jpg'
 
-  const InputPassword = Input.Password;
+  const InputPassword = Input.Password
 
-  const password = ref('');
-  const loading = ref(false);
-  const errMsg = ref(false);
-  const showDate = ref(true);
+  const password = ref('')
+  const loading = ref(false)
+  const errMsg = ref(false)
+  const showDate = ref(true)
 
-  const { prefixCls } = useDesign('lock-page');
-  const lockStore = useLockStore();
-  const userStore = useUserStore();
+  const { prefixCls } = useDesign('lock-page')
+  const lockStore = useLockStore()
+  const userStore = useUserStore()
 
-  const { hour, month, minute, meridiem, year, day, week } = useNow(true);
+  const { hour, month, minute, meridiem, year, day, week } = useNow(true)
 
-  const { t } = useI18n();
+  const { t } = useI18n()
 
   const userInfo = computed(() => {
-    return userStore.getUserInfo || {};
-  });
+    return userStore.getUserInfo || {}
+  })
 
   /**
    * @description: unLock
    */
   async function unLock() {
     if (!password.value) {
-      return;
+      return
     }
-    let pwd = password.value;
+    let pwd = password.value
     try {
-      loading.value = true;
-      const res = await lockStore.unLock(pwd);
-      errMsg.value = !res;
+      loading.value = true
+      const res = await lockStore.unLock(pwd)
+      errMsg.value = !res
     } finally {
-      loading.value = false;
+      loading.value = false
     }
   }
 
   function goLogin() {
     // 主动登出，不带redirect地址
-    userStore.logout(true);
-    lockStore.resetLockInfo();
+    userStore.logout(true)
+    lockStore.resetLockInfo()
   }
 
   function handleShowForm(show = false) {
-    showDate.value = show;
+    showDate.value = show
   }
 </script>
 <style lang="less" scoped>

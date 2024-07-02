@@ -51,29 +51,29 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { BasicDragVerify, DragVerifyActionType, PassingData } from '@/components/Verify';
-  import { useMessage } from '@/hooks/web/useMessage';
-  import { BugOutlined, RightOutlined } from '@ant-design/icons-vue';
-  import { PageWrapper } from '@/components/Page';
-  import { type Nullable } from '@vben/types';
+  import { ref } from 'vue'
+  import { BasicDragVerify, DragVerifyActionType, PassingData } from '@/components/Verify'
+  import { useMessage } from '@/hooks/web/useMessage'
+  import { BugOutlined, RightOutlined } from '@ant-design/icons-vue'
+  import { PageWrapper } from '@/components/Page'
+  import { type Nullable } from '@vben/types'
 
-  const { createMessage } = useMessage();
-  const el1 = ref<Nullable<DragVerifyActionType>>(null);
-  const el2 = ref<Nullable<DragVerifyActionType>>(null);
-  const el3 = ref<Nullable<DragVerifyActionType>>(null);
-  const el4 = ref<Nullable<DragVerifyActionType>>(null);
-  const el5 = ref<Nullable<DragVerifyActionType>>(null);
+  const { createMessage } = useMessage()
+  const el1 = ref<Nullable<DragVerifyActionType>>(null)
+  const el2 = ref<Nullable<DragVerifyActionType>>(null)
+  const el3 = ref<Nullable<DragVerifyActionType>>(null)
+  const el4 = ref<Nullable<DragVerifyActionType>>(null)
+  const el5 = ref<Nullable<DragVerifyActionType>>(null)
 
   function handleSuccess(data: PassingData) {
-    const { time } = data;
-    createMessage.success(`校验成功,耗时${time}秒`);
+    const { time } = data
+    createMessage.success(`校验成功,耗时${time}秒`)
   }
 
   function handleBtnClick(elRef: Nullable<DragVerifyActionType>) {
     if (!elRef) {
-      return;
+      return
     }
-    elRef.resume();
+    elRef.resume()
   }
 </script>

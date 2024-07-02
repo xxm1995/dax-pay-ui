@@ -10,12 +10,12 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { PageWrapper } from '@/components/Page';
-  import { BasicForm, useForm } from '@/components/Form';
+  import { PageWrapper } from '@/components/Page'
+  import { BasicForm, useForm } from '@/components/Form'
 
-  import { formSchema } from './pwd.data';
+  import { formSchema } from './pwd.data'
 
-  defineOptions({ name: 'ChangePassword' });
+  defineOptions({ name: 'ChangePassword' })
 
   const [register, { validate, resetFields }] = useForm({
     size: 'large',
@@ -23,19 +23,19 @@
     labelWidth: 100,
     showActionButtonGroup: false,
     schemas: formSchema,
-  });
+  })
 
   async function handleSubmit() {
     try {
-      const values = await validate();
-      const { passwordOld, passwordNew } = values;
+      const values = await validate()
+      const { passwordOld, passwordNew } = values
 
       // TODO custom api
-      console.log(passwordOld, passwordNew);
+      console.log(passwordOld, passwordNew)
       // const { router } = useRouter();
       // router.push(pageEnum.BASE_LOGIN);
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 </script>

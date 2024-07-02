@@ -1,8 +1,8 @@
-import { FormSchema } from '@/components/Form';
+import { FormSchema } from '@/components/Form'
 
 const colProps = {
   span: 8,
-};
+}
 
 export const schemas: FormSchema[] = [
   {
@@ -115,7 +115,7 @@ export const schemas: FormSchema[] = [
       span: 8,
     },
     show: ({ model }) => {
-      return model.disclosure === '2';
+      return model.disclosure === '2'
     },
     componentProps: {
       placeholder: '公开给',
@@ -136,4 +136,4 @@ export const schemas: FormSchema[] = [
       ],
     },
   },
-];
+]

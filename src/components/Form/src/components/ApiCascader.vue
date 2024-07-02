@@ -19,27 +19,27 @@
   </Cascader>
 </template>
 <script lang="ts" setup>
-  import { type Recordable } from '@vben/types';
-  import { PropType, ref, unref, watch } from 'vue';
-  import { Cascader } from 'ant-design-vue';
-  import type { CascaderProps } from 'ant-design-vue';
-  import { propTypes } from '@/utils/propTypes';
-  import { isFunction } from '@/utils/is';
-  import { get, omit } from 'lodash-es';
-  import { useRuleFormItem } from '@/hooks/component/useFormItem';
-  import { LoadingOutlined } from '@ant-design/icons-vue';
-  import { useI18n } from '@/hooks/web/useI18n';
+  import { type Recordable } from '@vben/types'
+  import { PropType, ref, unref, watch } from 'vue'
+  import { Cascader } from 'ant-design-vue'
+  import type { CascaderProps } from 'ant-design-vue'
+  import { propTypes } from '@/utils/propTypes'
+  import { isFunction } from '@/utils/is'
+  import { get, omit } from 'lodash-es'
+  import { useRuleFormItem } from '@/hooks/component/useFormItem'
+  import { LoadingOutlined } from '@ant-design/icons-vue'
+  import { useI18n } from '@/hooks/web/useI18n'
 
   interface Option {
-    value?: string;
-    label?: string;
-    loading?: boolean;
-    isLeaf?: boolean;
-    children?: Option[];
-    [key: string]: any;
+    value?: string
+    label?: string
+    loading?: boolean
+    isLeaf?: boolean
+    children?: Option[]
+    [key: string]: any
   }
 
-  defineOptions({ name: 'ApiCascader' });
+  defineOptions({ name: 'ApiCascader' })
 
   const props = defineProps({
     value: {
@@ -77,138 +77,138 @@
       type: Function as PropType<Fn>,
       default: null,
     },
-  });
+  })
 
-  const emit = defineEmits(['change', 'defaultChange']);
+  const emit = defineEmits(['change', 'defaultChange'])
 
-  const apiData = ref<any[]>([]);
-  const options = ref<Option[]>([]);
-  const loading = ref<boolean>(false);
-  const emitData = ref<any[]>([]);
-  const isFirstLoad = ref(true);
-  const { t } = useI18n();
+  const apiData = ref<any[]>([])
+  const options = ref<Option[]>([])
+  const loading = ref<boolean>(false)
+  const emitData = ref<any[]>([])
+  const isFirstLoad = ref(true)
+  const { t } = useI18n()
   // Embedded in the form, just use the hook binding to perform form verification
-  const [state]: any = useRuleFormItem(props, 'value', 'change', emitData);
+  const [state]: any = useRuleFormItem(props, 'value', 'change', emitData)
 
   watch(
     apiData,
     (data) => {
-      const opts = generatorOptions(data);
-      options.value = opts;
+      const opts = generatorOptions(data)
+      options.value = opts
     },
     { deep: true },
-  );
+  )
 
   function generatorOptions(options: any[]): Option[] {
-    const { labelField, valueField, numberToString, childrenField, isLeaf } = props;
+    const { labelField, valueField, numberToString, childrenField, isLeaf } = props
     return options.reduce((prev, next: Recordable<any>) => {
       if (next) {
-        const value = next[valueField];
+        const value = next[valueField]
         const item = {
           ...omit(next, [labelField, valueField]),
           label: next[labelField],
           value: numberToString ? `${value}` : value,
           isLeaf: isLeaf && typeof isLeaf === 'function' ? isLeaf(next) : false,
-        };
-        const children = Reflect.get(next, childrenField);
-        if (children) {
-          Reflect.set(item, childrenField, generatorOptions(children));
         }
-        prev.push(item);
+        const children = Reflect.get(next, childrenField)
+        if (children) {
+          Reflect.set(item, childrenField, generatorOptions(children))
+        }
+        prev.push(item)
       }
-      return prev;
-    }, [] as Option[]);
+      return prev
+    }, [] as Option[])
   }
 
   async function fetch() {
-    let { api, beforeFetch, initFetchParams, afterFetch, resultField } = props;
-    if (!api || !isFunction(api)) return;
-    apiData.value = [];
-    loading.value = true;
+    let { api, beforeFetch, initFetchParams, afterFetch, resultField } = props
+    if (!api || !isFunction(api)) return
+    apiData.value = []
+    loading.value = true
     try {
       if (beforeFetch && isFunction(beforeFetch)) {
-        initFetchParams = (await beforeFetch(initFetchParams)) || initFetchParams;
+        initFetchParams = (await beforeFetch(initFetchParams)) || initFetchParams
       }
-      let res = await api(initFetchParams);
+      let res = await api(initFetchParams)
       if (afterFetch && isFunction(afterFetch)) {
-        res = (await afterFetch(res)) || res;
+        res = (await afterFetch(res)) || res
       }
       if (Array.isArray(res)) {
-        apiData.value = res;
-        return;
+        apiData.value = res
+        return
       }
       if (resultField) {
-        apiData.value = get(res, resultField) || [];
+        apiData.value = get(res, resultField) || []
       }
     } catch (error) {
-      console.warn(error);
+      console.warn(error)
     } finally {
-      loading.value = false;
+      loading.value = false
     }
   }
 
   const loadData: CascaderProps['loadData'] = async (selectedOptions) => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
-    targetOption.loading = true;
-    let { api, beforeFetch, afterFetch, resultField, apiParamKey } = props;
-    if (!api || !isFunction(api)) return;
+    const targetOption = selectedOptions[selectedOptions.length - 1]
+    targetOption.loading = true
+    let { api, beforeFetch, afterFetch, resultField, apiParamKey } = props
+    if (!api || !isFunction(api)) return
     try {
       let param = {
         [apiParamKey]: Reflect.get(targetOption, 'value'),
-      };
-      if (beforeFetch && isFunction(beforeFetch)) {
-        param = (await beforeFetch(param)) || param;
       }
-      let res = await api(param);
+      if (beforeFetch && isFunction(beforeFetch)) {
+        param = (await beforeFetch(param)) || param
+      }
+      let res = await api(param)
       if (afterFetch && isFunction(afterFetch)) {
-        res = (await afterFetch(res)) || res;
+        res = (await afterFetch(res)) || res
       }
       if (Array.isArray(res)) {
-        const children = generatorOptions(res);
-        targetOption.children = children;
-        return;
+        const children = generatorOptions(res)
+        targetOption.children = children
+        return
       }
       if (resultField) {
-        const children = generatorOptions(get(res, resultField) || []);
-        targetOption.children = children;
+        const children = generatorOptions(get(res, resultField) || [])
+        targetOption.children = children
       }
     } catch (e) {
-      console.error(e);
+      console.error(e)
     } finally {
-      targetOption.loading = false;
+      targetOption.loading = false
     }
-  };
+  }
 
   watch(
     () => props.immediate,
     () => {
-      props.immediate && fetch();
+      props.immediate && fetch()
     },
     {
       immediate: true,
     },
-  );
+  )
 
   watch(
     () => props.initFetchParams,
     () => {
-      !unref(isFirstLoad) && fetch();
+      !unref(isFirstLoad) && fetch()
     },
     { deep: true },
-  );
+  )
 
   function handleChange(keys, args) {
-    emitData.value = args;
-    emit('defaultChange', keys, args);
+    emitData.value = args
+    emit('defaultChange', keys, args)
   }
 
   const handleRenderDisplay: CascaderProps['displayRender'] = ({ labels, selectedOptions }) => {
     if (unref(emitData).length === selectedOptions?.length) {
-      return labels.join(' / ');
+      return labels.join(' / ')
     }
     if (props.displayRenderArray) {
-      return props.displayRenderArray.join(' / ');
+      return props.displayRenderArray.join(' / ')
     }
-    return '';
-  };
+    return ''
+  }
 </script>

@@ -5,15 +5,15 @@
   </span>
 </template>
 <script lang="ts" setup>
-  import SettingDrawer from '@/layouts/default/setting/SettingDrawer';
-  import Icon from '@/components/Icon/Icon.vue';
+  import SettingDrawer from '@/layouts/default/setting/SettingDrawer'
+  import Icon from '@/components/Icon/Icon.vue'
 
-  import { useDrawer } from '@/components/Drawer';
+  import { useDrawer } from '@/components/Drawer'
 
-  import { useDesign } from '@/hooks/web/useDesign';
+  import { useDesign } from '@/hooks/web/useDesign'
 
-  defineOptions({ name: 'SettingButton' });
+  defineOptions({ name: 'SettingButton' })
 
-  const [register, { openDrawer }] = useDrawer();
-  const { prefixCls } = useDesign('multiple-tabs-content');
+  const [register, { openDrawer }] = useDrawer()
+  const { prefixCls } = useDesign('multiple-tabs-content')
 </script>

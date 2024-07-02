@@ -2,10 +2,10 @@
   <div ref="chartRef" :style="{ height, width }"></div>
 </template>
 <script lang="ts" setup>
-  import { PropType, ref, Ref, onMounted } from 'vue';
-  import { useECharts } from '@/hooks/web/useECharts';
-  import { mapData } from './data';
-  import { registerMap } from 'echarts';
+  import { PropType, ref, Ref, onMounted } from 'vue'
+  import { useECharts } from '@/hooks/web/useECharts'
+  import { mapData } from './data'
+  import { registerMap } from 'echarts'
 
   defineProps({
     width: {
@@ -16,14 +16,14 @@
       type: String as PropType<string>,
       default: 'calc(100vh - 78px)',
     },
-  });
+  })
 
-  const chartRef = ref<HTMLDivElement | null>(null);
-  const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>);
+  const chartRef = ref<HTMLDivElement | null>(null)
+  const { setOptions } = useECharts(chartRef as Ref<HTMLDivElement>)
 
   onMounted(async () => {
-    const json = (await (await import('./china.json')).default) as any;
-    registerMap('china', json);
+    const json = (await (await import('./china.json')).default) as any
+    registerMap('china', json)
     setOptions({
       visualMap: [
         {
@@ -65,6 +65,6 @@
           data: mapData,
         },
       ],
-    });
-  });
+    })
+  })
 </script>

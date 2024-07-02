@@ -1,23 +1,18 @@
 <template>
   <div :class="prefixCls">
     <span> {{ title }}</span>
-    <InputNumber
-      v-bind="$attrs"
-      size="small"
-      :class="`${prefixCls}-input-number`"
-      @change="handleChange"
-    />
+    <InputNumber v-bind="$attrs" size="small" :class="`${prefixCls}-input-number`" @change="handleChange" />
   </div>
 </template>
 <script lang="ts" setup>
-  import { PropType } from 'vue';
+  import { PropType } from 'vue'
 
-  import { InputNumber } from 'ant-design-vue';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { baseHandler } from '../handler';
-  import { HandlerEnum } from '../enum';
+  import { InputNumber } from 'ant-design-vue'
+  import { useDesign } from '@/hooks/web/useDesign'
+  import { baseHandler } from '../handler'
+  import { HandlerEnum } from '../enum'
 
-  defineOptions({ name: 'InputNumberItem' });
+  defineOptions({ name: 'InputNumberItem' })
 
   const props = defineProps({
     event: {
@@ -26,12 +21,12 @@
     title: {
       type: String,
     },
-  });
+  })
 
-  const { prefixCls } = useDesign('setting-input-number-item');
+  const { prefixCls } = useDesign('setting-input-number-item')
 
   function handleChange(e) {
-    props.event && baseHandler(props.event, e);
+    props.event && baseHandler(props.event, e)
   }
 </script>
 <style lang="less" scoped>

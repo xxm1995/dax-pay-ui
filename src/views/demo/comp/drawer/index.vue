@@ -20,31 +20,31 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { Alert } from 'ant-design-vue';
-  import { useDrawer } from '@/components/Drawer';
-  import Drawer1 from './Drawer1.vue';
-  import Drawer2 from './Drawer2.vue';
-  import Drawer3 from './Drawer3.vue';
-  import Drawer4 from './Drawer4.vue';
-  import Drawer5 from './Drawer5.vue';
-  import { PageWrapper } from '@/components/Page';
+  import { Alert } from 'ant-design-vue'
+  import { useDrawer } from '@/components/Drawer'
+  import Drawer1 from './Drawer1.vue'
+  import Drawer2 from './Drawer2.vue'
+  import Drawer3 from './Drawer3.vue'
+  import Drawer4 from './Drawer4.vue'
+  import Drawer5 from './Drawer5.vue'
+  import { PageWrapper } from '@/components/Page'
 
-  const [register1, { openDrawer: openDrawer1, setDrawerProps }] = useDrawer();
-  const [register2, { openDrawer: openDrawer2 }] = useDrawer();
-  const [register3, { openDrawer: openDrawer3 }] = useDrawer();
-  const [register4, { openDrawer: openDrawer4 }] = useDrawer();
-  const [register5, { openDrawer: openDrawer5 }] = useDrawer();
+  const [register1, { openDrawer: openDrawer1, setDrawerProps }] = useDrawer()
+  const [register2, { openDrawer: openDrawer2 }] = useDrawer()
+  const [register3, { openDrawer: openDrawer3 }] = useDrawer()
+  const [register4, { openDrawer: openDrawer4 }] = useDrawer()
+  const [register5, { openDrawer: openDrawer5 }] = useDrawer()
   function send() {
     openDrawer4(true, {
       data: 'content',
       info: 'Info',
-    });
+    })
   }
   function openDrawerLoading() {
-    openDrawer1();
-    setDrawerProps({ loading: true });
+    openDrawer1()
+    setDrawerProps({ loading: true })
     setTimeout(() => {
-      setDrawerProps({ loading: false });
-    }, 2000);
+      setDrawerProps({ loading: false })
+    }, 2000)
   }
 </script>

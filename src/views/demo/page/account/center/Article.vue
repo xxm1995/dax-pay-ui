@@ -24,12 +24,7 @@
         <div>
           <template v-for="action in actions" :key="action.text">
             <div :class="`${prefixCls}__action`">
-              <Icon
-                v-if="action.icon"
-                :class="`${prefixCls}__action-icon`"
-                :icon="action.icon"
-                :color="action.color"
-              />
+              <Icon v-if="action.icon" :class="`${prefixCls}__action-icon`" :icon="action.icon" :color="action.color" />
               {{ action.text }}
             </div>
           </template>
@@ -40,14 +35,14 @@
   </List>
 </template>
 <script lang="ts" setup>
-  import { List, Tag } from 'ant-design-vue';
-  import Icon from '@/components/Icon/Icon.vue';
-  import { actions, articleList } from './data';
+  import { List, Tag } from 'ant-design-vue'
+  import Icon from '@/components/Icon/Icon.vue'
+  import { actions, articleList } from './data'
 
-  const ListItem = List.Item;
-  const ListItemMeta = List.Item.Meta;
+  const ListItem = List.Item
+  const ListItemMeta = List.Item.Meta
 
-  const prefixCls = 'account-center-article';
+  const prefixCls = 'account-center-article'
 </script>
 <style lang="less" scoped>
   .account-center-article {

@@ -36,7 +36,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { Result, Steps, Descriptions } from 'ant-design-vue';
+  import { Result, Steps, Descriptions } from 'ant-design-vue'
 </script>
 <style lang="less" scoped>
   .result-success {

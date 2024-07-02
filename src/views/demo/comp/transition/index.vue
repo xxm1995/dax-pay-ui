@@ -1,12 +1,7 @@
 <template>
   <PageWrapper title="动画组件示例">
     <div class="flex">
-      <Select
-        :options="options"
-        v-model:value="value"
-        placeholder="选择动画"
-        :style="{ width: '150px' }"
-      />
+      <Select :options="options" v-model:value="value" placeholder="选择动画" :style="{ width: '150px' }" />
       <a-button type="primary" class="ml-4" @click="start"> start </a-button>
     </div>
     <component :is="TransitionItem[value]">
@@ -15,9 +10,9 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { Select } from 'ant-design-vue';
-  import { PageWrapper } from '@/components/Page';
+  import { ref } from 'vue'
+  import { Select } from 'ant-design-vue'
+  import { PageWrapper } from '@/components/Page'
   import {
     FadeTransition,
     ScaleTransition,
@@ -32,7 +27,7 @@
     ScaleRotateTransition,
     ExpandXTransition,
     ExpandTransition,
-  } from '@/components/Transition';
+  } from '@/components/Transition'
 
   const TransitionItem = {
     FadeTransition,
@@ -48,24 +43,24 @@
     ScaleRotateTransition,
     ExpandXTransition,
     ExpandTransition,
-  };
+  }
 
   const options = Object.keys(TransitionItem).map((item) => {
-    const label = item.replace('Transition', '');
+    const label = item.replace('Transition', '')
     return {
       label,
       value: item,
       key: item,
-    };
-  });
+    }
+  })
 
-  const value = ref('FadeTransition');
-  const show = ref(true);
+  const value = ref('FadeTransition')
+  const show = ref(true)
   function start() {
-    show.value = false;
+    show.value = false
     setTimeout(() => {
-      show.value = true;
-    }, 300);
+      show.value = true
+    }, 300)
   }
 </script>
 <style lang="less" scoped>

@@ -1,5 +1,5 @@
-import { VxeFormItemProps, VxeGridPropTypes } from '@/components/VxeTable';
-import { deptMap } from '../account/account.data';
+import { VxeFormItemProps, VxeGridPropTypes } from '@/components/VxeTable'
+import { deptMap } from '../account/account.data'
 
 export const columns: VxeGridPropTypes.Columns = [
   {
@@ -32,7 +32,7 @@ export const columns: VxeGridPropTypes.Columns = [
     field: 'dept',
     slots: {
       default: ({ row }) => {
-        return deptMap[row.dept];
+        return deptMap[row.dept]
       },
     },
   },
@@ -47,7 +47,7 @@ export const columns: VxeGridPropTypes.Columns = [
     slots: { default: 'action' },
     fixed: 'right',
   },
-];
+]
 
 export const searchFormSchema: VxeFormItemProps[] = [
   {
@@ -81,4 +81,4 @@ export const searchFormSchema: VxeFormItemProps[] = [
       ],
     },
   },
-];
+]

@@ -10,16 +10,16 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { useMenuSetting } from '@/hooks/setting/useMenuSetting';
-  import { useDesign } from '@/hooks/web/useDesign';
+  import { useMenuSetting } from '@/hooks/setting/useMenuSetting'
+  import { useDesign } from '@/hooks/web/useDesign'
 
   defineOptions({
     name: 'PageFooter',
     inheritAttrs: false,
-  });
+  })
 
-  const { prefixCls } = useDesign('page-footer');
-  const { getCalcContentWidth } = useMenuSetting();
+  const { prefixCls } = useDesign('page-footer')
+  const { getCalcContentWidth } = useMenuSetting()
 </script>
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-page-footer';

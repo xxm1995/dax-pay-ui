@@ -22,49 +22,49 @@
   </CollapseContainer>
 </template>
 <script lang="ts" setup>
-  import { CollapseContainer } from '@/components/Container';
-  import { CropperAvatar } from '@/components/Cropper';
-  import { BasicForm, useForm } from '@/components/Form';
-  import { Col, Row } from 'ant-design-vue';
-  import { computed, onMounted } from 'vue';
+  import { CollapseContainer } from '@/components/Container'
+  import { CropperAvatar } from '@/components/Cropper'
+  import { BasicForm, useForm } from '@/components/Form'
+  import { Col, Row } from 'ant-design-vue'
+  import { computed, onMounted } from 'vue'
 
-  import { useMessage } from '@/hooks/web/useMessage';
+  import { useMessage } from '@/hooks/web/useMessage'
 
-  import { accountInfoApi } from '@/api/demo/account';
-  import { uploadApi } from '@/api/sys/upload';
-  import headerImg from '@/assets/images/header.jpg';
-  import { useUserStore } from '@/store/modules/user';
-  import { baseSetschemas } from './data';
+  import { accountInfoApi } from '@/api/demo/account'
+  import { uploadApi } from '@/api/sys/upload'
+  import headerImg from '@/assets/images/header.jpg'
+  import { useUserStore } from '@/store/modules/user'
+  import { baseSetschemas } from './data'
 
-  const { createMessage } = useMessage();
-  const userStore = useUserStore();
+  const { createMessage } = useMessage()
+  const userStore = useUserStore()
 
   const [register, { setFieldsValue }] = useForm({
     labelWidth: 120,
     schemas: baseSetschemas,
     showActionButtonGroup: false,
-  });
+  })
 
   onMounted(async () => {
-    const data = await accountInfoApi();
-    setFieldsValue(data);
-  });
+    const data = await accountInfoApi()
+    setFieldsValue(data)
+  })
 
   const avatar = computed(() => {
-    const { avatar } = userStore.getUserInfo;
-    console.log(avatar);
-    return avatar || headerImg;
-  });
+    const { avatar } = userStore.getUserInfo
+    console.log(avatar)
+    return avatar || headerImg
+  })
 
   function updateAvatar({ src, data }) {
-    const userinfo = userStore.getUserInfo;
-    userinfo.avatar = src;
-    userStore.setUserInfo(userinfo);
-    console.log('data', data);
+    const userinfo = userStore.getUserInfo
+    userinfo.avatar = src
+    userStore.setUserInfo(userinfo)
+    console.log('data', data)
   }
 
   function handleSubmit() {
-    createMessage.success('更新成功！');
+    createMessage.success('更新成功！')
   }
 </script>
 

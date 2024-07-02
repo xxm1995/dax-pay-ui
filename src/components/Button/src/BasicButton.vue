@@ -12,31 +12,31 @@
 </template>
 
 <script lang="ts" setup>
-  import { Button } from 'ant-design-vue';
-  import { ComponentOptionsMixin, computed, unref } from 'vue';
-  import Icon from '@/components/Icon/Icon.vue';
-  import { buttonProps } from './props';
-  import { useAttrs } from '@vben/hooks';
+  import { Button } from 'ant-design-vue'
+  import { ComponentOptionsMixin, computed, unref } from 'vue'
+  import Icon from '@/components/Icon/Icon.vue'
+  import { buttonProps } from './props'
+  import { useAttrs } from '@vben/hooks'
 
   defineOptions({
     name: 'AButton',
     extends: Button as ComponentOptionsMixin,
     inheritAttrs: false,
-  });
+  })
 
-  const props = defineProps(buttonProps);
+  const props = defineProps(buttonProps)
   // get component class
-  const attrs = useAttrs({ excludeDefaultKeys: false });
+  const attrs = useAttrs({ excludeDefaultKeys: false })
   const getButtonClass = computed(() => {
-    const { color, disabled } = props;
+    const { color, disabled } = props
     return [
       {
         [`ant-btn-${color}`]: !!color,
         [`is-disabled`]: disabled,
       },
-    ];
-  });
+    ]
+  })
 
   // get inherit binding value
-  const getBindValue = computed(() => ({ ...unref(attrs), ...props }));
+  const getBindValue = computed(() => ({ ...unref(attrs), ...props }))
 </script>

@@ -23,14 +23,14 @@
   </CollapseContainer>
 </template>
 <script lang="ts" setup>
-  import { CollapseContainer } from '@/components/Container';
-  import Icon from '@/components/Icon/Icon.vue';
-  import { List } from 'ant-design-vue';
+  import { CollapseContainer } from '@/components/Container'
+  import Icon from '@/components/Icon/Icon.vue'
+  import { List } from 'ant-design-vue'
 
-  import { accountBindList } from './data';
+  import { accountBindList } from './data'
 
-  const ListItem = List.Item;
-  const ListItemMeta = List.Item.Meta;
+  const ListItem = List.Item
+  const ListItemMeta = List.Item.Meta
 </script>
 <style lang="less" scoped>
   .avatar {

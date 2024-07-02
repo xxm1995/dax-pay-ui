@@ -11,14 +11,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import {
-    BasicTable,
-    useTable,
-    TableAction,
-    BasicColumn,
-    ActionItem,
-    EditRecordRow,
-  } from '@/components/Table';
+  import { BasicTable, useTable, TableAction, BasicColumn, ActionItem, EditRecordRow } from '@/components/Table'
 
   const columns: BasicColumn[] = [
     {
@@ -36,7 +29,7 @@
       dataIndex: 'dept',
       editRow: true,
     },
-  ];
+  ]
 
   const data: any[] = [
     {
@@ -54,7 +47,7 @@
       no: '00003',
       dept: 'New York No. 3Lake Park',
     },
-  ];
+  ]
   const [registerTable, { getDataSource }] = useTable({
     columns: columns,
     showIndexColumn: false,
@@ -67,33 +60,33 @@
     },
     scroll: { y: '100%' },
     pagination: false,
-  });
+  })
   // 暴露getDataSource 供父组件使用
-  defineExpose({ getDataSource });
+  defineExpose({ getDataSource })
 
   function handleEdit(record: EditRecordRow) {
-    record.onEdit?.(true);
+    record.onEdit?.(true)
   }
 
   function handleCancel(record: EditRecordRow) {
-    record.onEdit?.(false);
+    record.onEdit?.(false)
     if (record.isNew) {
-      const data = getDataSource();
-      const index = data.findIndex((item) => item.key === record.key);
-      data.splice(index, 1);
+      const data = getDataSource()
+      const index = data.findIndex((item) => item.key === record.key)
+      data.splice(index, 1)
     }
   }
 
   function handleSave(record: EditRecordRow) {
-    record.onEdit?.(false, true);
+    record.onEdit?.(false, true)
   }
 
   function handleEditChange(data: Recordable) {
-    console.log(data);
+    console.log(data)
   }
 
   function handleAdd() {
-    const data = getDataSource();
+    const data = getDataSource()
     const addRow: EditRecordRow = {
       name: '',
       no: '',
@@ -101,8 +94,8 @@
       editable: true,
       isNew: true,
       key: `${Date.now()}`,
-    };
-    data.push(addRow);
+    }
+    data.push(addRow)
   }
 
   function createActions(record: EditRecordRow): ActionItem[] {
@@ -115,7 +108,7 @@
         {
           label: '删除',
         },
-      ];
+      ]
     }
     return [
       {
@@ -129,6 +122,6 @@
           confirm: handleCancel.bind(null, record),
         },
       },
-    ];
+    ]
   }
 </script>

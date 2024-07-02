@@ -1,5 +1,5 @@
-import Vditor from 'vditor';
+import Vditor from 'vditor'
 
 export interface MarkDownActionType {
-  getVditor: () => Vditor;
+  getVditor: () => Vditor
 }

@@ -16,9 +16,9 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { BasicForm, FormSchema, useForm } from '@/components/Form';
-  import { CollapseContainer } from '@/components/Container';
-  import { PageWrapper } from '@/components/Page';
+  import { BasicForm, FormSchema, useForm } from '@/components/Form'
+  import { CollapseContainer } from '@/components/Container'
+  import { PageWrapper } from '@/components/Page'
 
   const schemas: FormSchema[] = [
     {
@@ -29,7 +29,7 @@
         span: 8,
       },
       show: ({ values }) => {
-        return !!values.field5;
+        return !!values.field5
       },
     },
     {
@@ -40,7 +40,7 @@
         span: 8,
       },
       ifShow: ({ values }) => {
-        return !!values.field6;
+        return !!values.field6
       },
     },
     {
@@ -51,7 +51,7 @@
         span: 8,
       },
       dynamicDisabled: ({ values }) => {
-        return !!values.field7;
+        return !!values.field7
       },
     },
     {
@@ -62,7 +62,7 @@
         span: 8,
       },
       dynamicRules: ({ values }) => {
-        return values.field8 ? [{ required: true, message: '字段4必填' }] : [];
+        return values.field8 ? [{ required: true, message: '字段4必填' }] : []
       },
       componentProps: {
         options: [
@@ -123,7 +123,7 @@
       },
       labelWidth: 200,
     },
-  ];
+  ]
 
   const schemas1: FormSchema[] = [
     {
@@ -138,9 +138,9 @@
         return {
           placeholder: '同步f2的值为f1',
           onChange: (e) => {
-            formModel.f2 = e.target.value;
+            formModel.f2 = e.target.value
           },
-        };
+        }
       },
     },
     {
@@ -166,16 +166,16 @@
         return {
           placeholder: '值改变时执行查询,查看控制台',
           onChange: async () => {
-            const { validate } = formActionType;
+            const { validate } = formActionType
             // tableAction只适用于在表格内开启表单的例子
             // const { reload } = tableAction;
-            const res = await validate();
-            console.log(res);
+            const res = await validate()
+            console.log(res)
           },
-        };
+        }
       },
     },
-  ];
+  ]
 
   const [register, { updateSchema, appendSchemaByField, removeSchemaByField }] = useForm({
     labelWidth: 120,
@@ -183,19 +183,19 @@
     actionColOptions: {
       span: 24,
     },
-  });
+  })
   const [register1] = useForm({
     labelWidth: 120,
     schemas: schemas1,
     actionColOptions: {
       span: 24,
     },
-  });
+  })
   function changeLabel3() {
     updateSchema({
       field: 'field3',
       label: '字段3 New',
-    });
+    })
   }
   function changeLabel34() {
     updateSchema([
@@ -207,7 +207,7 @@
         field: 'field4',
         label: '字段4 New++',
       },
-    ]);
+    ])
   }
 
   function appendField() {
@@ -221,9 +221,9 @@
         },
       },
       'field3',
-    );
+    )
   }
   function deleteField() {
-    removeSchemaByField('field11');
+    removeSchemaByField('field11')
   }
 </script>

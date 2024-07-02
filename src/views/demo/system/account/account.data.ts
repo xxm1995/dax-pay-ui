@@ -1,5 +1,5 @@
-import { getAllRoleList, isAccountExist } from '@/api/demo/system';
-import { BasicColumn, FormSchema } from '@/components/Table';
+import { getAllRoleList, isAccountExist } from '@/api/demo/system'
+import { BasicColumn, FormSchema } from '@/components/Table'
 
 /**
  * transform mock data
@@ -11,17 +11,17 @@ import { BasicColumn, FormSchema } from '@/components/Table';
  * }
  */
 export const deptMap = (() => {
-  const pDept = ['华东分部', '华南分部', '西北分部'];
-  const cDept = ['研发部', '市场部', '商务部', '财务部'];
+  const pDept = ['华东分部', '华南分部', '西北分部']
+  const cDept = ['研发部', '市场部', '商务部', '财务部']
 
   return pDept.reduce((map, p, pIdx) => {
-    map[pIdx] = p;
+    map[pIdx] = p
 
-    cDept.forEach((c, cIndex) => (map[`${pIdx}-${cIndex}`] = `${p}-${c}`));
+    cDept.forEach((c, cIndex) => (map[`${pIdx}-${cIndex}`] = `${p}-${c}`))
 
-    return map;
-  }, {});
-})();
+    return map
+  }, {})
+})()
 
 export const columns: BasicColumn[] = [
   {
@@ -53,14 +53,14 @@ export const columns: BasicColumn[] = [
     title: '所属部门',
     dataIndex: 'dept',
     customRender: ({ value }) => {
-      return deptMap[value];
+      return deptMap[value]
     },
   },
   {
     title: '备注',
     dataIndex: 'remark',
   },
-];
+]
 
 export const searchFormSchema: FormSchema[] = [
   {
@@ -75,7 +75,7 @@ export const searchFormSchema: FormSchema[] = [
     component: 'Input',
     colProps: { span: 8 },
   },
-];
+]
 
 export const accountFormSchema: FormSchema[] = [
   {
@@ -92,13 +92,13 @@ export const accountFormSchema: FormSchema[] = [
         trigger: 'blur',
         validator(_, value) {
           return new Promise((resolve, reject) => {
-            if (!value) return resolve();
+            if (!value) return resolve()
             isAccountExist(value)
               .then(resolve)
               .catch((err) => {
-                reject(err.message || '验证失败');
-              });
-          });
+                reject(err.message || '验证失败')
+              })
+          })
         },
       },
     ],
@@ -153,4 +153,4 @@ export const accountFormSchema: FormSchema[] = [
     field: 'remark',
     component: 'InputTextArea',
   },
-];
+]

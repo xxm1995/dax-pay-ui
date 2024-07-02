@@ -4,17 +4,9 @@
     <BasicTitle :helpMessage="helpMessage" v-if="!slots.headerTitle && title">
       {{ title }}
     </BasicTitle>
-    <div
-      class="flex items-center flex-1 cursor-pointer justify-self-stretch"
-      v-if="search || toolbar"
-    >
+    <div class="flex items-center flex-1 cursor-pointer justify-self-stretch" v-if="search || toolbar">
       <div :class="getInputSearchCls" v-if="search">
-        <InputSearch
-          :placeholder="t('common.searchText')"
-          size="small"
-          allowClear
-          v-model:value="searchValue"
-        />
+        <InputSearch :placeholder="t('common.searchText')" size="small" allowClear v-model:value="searchValue" />
       </div>
       <Dropdown @click.prevent v-if="toolbar">
         <Icon icon="ion:ellipsis-vertical" />
@@ -33,25 +25,18 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { type PropType, computed, ref, watch, useSlots } from 'vue';
-  import {
-    Dropdown,
-    Menu,
-    MenuItem,
-    MenuDivider,
-    InputSearch,
-    type MenuProps,
-  } from 'ant-design-vue';
-  import Icon from '@/components/Icon/Icon.vue';
-  import { BasicTitle } from '@/components/Basic';
-  import { useI18n } from '@/hooks/web/useI18n';
-  import { useDebounceFn } from '@vueuse/core';
-  import { createBEM } from '@/utils/bem';
-  import { ToolbarEnum } from '../types/tree';
+  import { type PropType, computed, ref, watch, useSlots } from 'vue'
+  import { Dropdown, Menu, MenuItem, MenuDivider, InputSearch, type MenuProps } from 'ant-design-vue'
+  import Icon from '@/components/Icon/Icon.vue'
+  import { BasicTitle } from '@/components/Basic'
+  import { useI18n } from '@/hooks/web/useI18n'
+  import { useDebounceFn } from '@vueuse/core'
+  import { createBEM } from '@/utils/bem'
+  import { ToolbarEnum } from '../types/tree'
 
-  const searchValue = ref('');
+  const searchValue = ref('')
 
-  const [bem] = createBEM('tree-header');
+  const [bem] = createBEM('tree-header')
 
   const props = defineProps({
     helpMessage: {
@@ -86,25 +71,25 @@
       type: Function,
       default: undefined,
     },
-  } as const);
-  const emit = defineEmits(['strictly-change', 'search']);
+  } as const)
+  const emit = defineEmits(['strictly-change', 'search'])
 
-  const slots = useSlots();
-  const { t } = useI18n();
+  const slots = useSlots()
+  const { t } = useI18n()
 
   const getInputSearchCls = computed(() => {
-    const titleExists = slots.headerTitle || props.title;
+    const titleExists = slots.headerTitle || props.title
     return [
       'mr-1',
       'w-full',
       {
         ['ml-5']: titleExists,
       },
-    ];
-  });
+    ]
+  })
 
   const toolbarList = computed(() => {
-    const { checkable } = props;
+    const { checkable } = props
     const defaultToolbarList = [
       { label: t('component.tree.expandAll'), value: ToolbarEnum.EXPAND_ALL },
       {
@@ -112,7 +97,7 @@
         value: ToolbarEnum.UN_EXPAND_ALL,
         divider: checkable,
       },
-    ];
+    ]
 
     return checkable
       ? [
@@ -126,51 +111,51 @@
           { label: t('component.tree.checkStrictly'), value: ToolbarEnum.CHECK_STRICTLY },
           { label: t('component.tree.checkUnStrictly'), value: ToolbarEnum.CHECK_UN_STRICTLY },
         ]
-      : defaultToolbarList;
-  });
+      : defaultToolbarList
+  })
 
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
     switch (key) {
       case ToolbarEnum.SELECT_ALL:
-        props.checkAll?.(true);
-        break;
+        props.checkAll?.(true)
+        break
       case ToolbarEnum.UN_SELECT_ALL:
-        props.checkAll?.(false);
-        break;
+        props.checkAll?.(false)
+        break
       case ToolbarEnum.EXPAND_ALL:
-        props.expandAll?.(true);
-        break;
+        props.expandAll?.(true)
+        break
       case ToolbarEnum.UN_EXPAND_ALL:
-        props.expandAll?.(false);
-        break;
+        props.expandAll?.(false)
+        break
       case ToolbarEnum.CHECK_STRICTLY:
-        emit('strictly-change', false);
-        break;
+        emit('strictly-change', false)
+        break
       case ToolbarEnum.CHECK_UN_STRICTLY:
-        emit('strictly-change', true);
-        break;
+        emit('strictly-change', true)
+        break
     }
-  };
-
-  function emitChange(value?: string): void {
-    emit('search', value);
   }
 
-  const debounceEmitChange = useDebounceFn(emitChange, 200);
+  function emitChange(value?: string): void {
+    emit('search', value)
+  }
+
+  const debounceEmitChange = useDebounceFn(emitChange, 200)
 
   watch(
     () => searchValue.value,
     (v) => {
-      debounceEmitChange(v);
+      debounceEmitChange(v)
     },
-  );
+  )
 
   watch(
     () => props.searchText,
     (v) => {
       if (v !== searchValue.value) {
-        searchValue.value = v;
+        searchValue.value = v
       }
     },
-  );
+  )
 </script>

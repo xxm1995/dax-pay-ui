@@ -11,22 +11,14 @@
       <a-button @click="setProps({ readonly: false })" class="mr-2"> 解除只读 </a-button>
       <a-button @click="setProps({ compact: true })" class="mr-2"> 紧凑表单 </a-button>
       <a-button @click="setProps({ compact: false })" class="mr-2"> 还原正常间距 </a-button>
-      <a-button @click="setProps({ actionColOptions: { span: 8 } })" class="mr-2">
-        操作按钮位置
-      </a-button>
+      <a-button @click="setProps({ actionColOptions: { span: 8 } })" class="mr-2"> 操作按钮位置 </a-button>
     </div>
     <div class="mb-4">
-      <a-button @click="setProps({ showActionButtonGroup: false })" class="mr-2">
-        隐藏操作按钮
-      </a-button>
-      <a-button @click="setProps({ showActionButtonGroup: true })" class="mr-2">
-        显示操作按钮
-      </a-button>
+      <a-button @click="setProps({ showActionButtonGroup: false })" class="mr-2"> 隐藏操作按钮 </a-button>
+      <a-button @click="setProps({ showActionButtonGroup: true })" class="mr-2"> 显示操作按钮 </a-button>
       <a-button @click="setProps({ showResetButton: false })" class="mr-2"> 隐藏重置按钮 </a-button>
       <a-button @click="setProps({ showResetButton: true })" class="mr-2"> 显示重置按钮 </a-button>
-      <a-button @click="setProps({ showSubmitButton: false })" class="mr-2">
-        隐藏查询按钮
-      </a-button>
+      <a-button @click="setProps({ showSubmitButton: false })" class="mr-2"> 隐藏查询按钮 </a-button>
       <a-button @click="setProps({ showSubmitButton: true })" class="mr-2"> 显示查询按钮 </a-button>
       <a-button
         @click="
@@ -56,23 +48,17 @@
       </a-button>
     </div>
     <CollapseContainer title="使用ref调用表单内部函数示例">
-      <BasicForm
-        :schemas="schemas"
-        ref="formElRef"
-        :labelWidth="100"
-        @submit="handleSubmit"
-        :actionColOptions="{ span: 24 }"
-      />
+      <BasicForm :schemas="schemas" ref="formElRef" :labelWidth="100" @submit="handleSubmit" :actionColOptions="{ span: 24 }" />
     </CollapseContainer>
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { nextTick, ref, unref } from 'vue';
-  import { BasicForm, FormSchema, FormActionType, FormProps } from '@/components/Form';
-  import { CollapseContainer } from '@/components/Container';
-  import { useMessage } from '@/hooks/web/useMessage';
-  import { PageWrapper } from '@/components/Page';
-  import { type Nullable } from '@vben/types';
+  import { nextTick, ref, unref } from 'vue'
+  import { BasicForm, FormSchema, FormActionType, FormProps } from '@/components/Form'
+  import { CollapseContainer } from '@/components/Container'
+  import { useMessage } from '@/hooks/web/useMessage'
+  import { PageWrapper } from '@/components/Page'
+  import { type Nullable } from '@vben/types'
 
   const schemas: FormSchema[] = [
     {
@@ -85,7 +71,7 @@
       componentProps: {
         placeholder: '自定义placeholder',
         onChange: (e: any) => {
-          console.log(e);
+          console.log(e)
         },
       },
     },
@@ -167,20 +153,20 @@
         ],
       },
     },
-  ];
+  ]
 
-  const formElRef = ref<Nullable<FormActionType>>(null);
-  const { createMessage } = useMessage();
+  const formElRef = ref<Nullable<FormActionType>>(null)
+  const { createMessage } = useMessage()
 
   function handleSubmit(values: any) {
-    createMessage.success('click search,values:' + JSON.stringify(values));
+    createMessage.success('click search,values:' + JSON.stringify(values))
   }
 
   async function setProps(props: FormProps) {
-    const formEl = unref(formElRef);
-    console.info(formEl);
-    if (!formEl) return;
-    await nextTick();
-    await formEl.setProps(props);
+    const formEl = unref(formElRef)
+    console.info(formEl)
+    if (!formEl) return
+    await nextTick()
+    await formEl.setProps(props)
   }
 </script>

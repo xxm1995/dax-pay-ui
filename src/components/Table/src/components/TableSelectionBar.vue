@@ -15,30 +15,30 @@
 </template>
 
 <script lang="ts" setup>
-  import { useI18n } from '@/hooks/web/useI18n';
-  import { useDesign } from '@/hooks/web/useDesign';
+  import { useI18n } from '@/hooks/web/useI18n'
+  import { useDesign } from '@/hooks/web/useDesign'
 
-  import type { TableActionType } from '../types/table';
-  import { Alert as AAlert } from 'ant-design-vue';
+  import type { TableActionType } from '../types/table'
+  import { Alert as AAlert } from 'ant-design-vue'
 
-  const { t } = useI18n();
+  const { t } = useI18n()
 
-  const { prefixCls } = useDesign('table-select-bar');
+  const { prefixCls } = useDesign('table-select-bar')
 
   defineOptions({
     name: 'TableSelectBar',
-  });
+  })
 
   const props = withDefaults(
     defineProps<{
-      count?: number;
+      count?: number
       //
-      clearSelectedRowKeys: TableActionType['clearSelectedRowKeys'];
+      clearSelectedRowKeys: TableActionType['clearSelectedRowKeys']
     }>(),
     {
       count: () => 0,
     },
-  );
+  )
 </script>
 
 <style lang="less" scoped>

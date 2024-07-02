@@ -6,11 +6,11 @@
   </span>
 </template>
 <script lang="ts" setup>
-  import { FormOutlined } from '@ant-design/icons-vue';
+  import { FormOutlined } from '@ant-design/icons-vue'
 
-  defineOptions({ name: 'EditTableHeaderIcon' });
+  defineOptions({ name: 'EditTableHeaderIcon' })
 
   defineProps({
     title: { type: String, default: '' },
-  });
+  })
 </script>

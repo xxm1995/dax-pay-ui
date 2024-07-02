@@ -1,8 +1,8 @@
-import type { AppRouteModule } from '@/router/types';
+import type { AppRouteModule } from '@/router/types'
 
-import { getParentLayout, LAYOUT } from '@/router/constant';
-import { RoleEnum } from '@/enums/roleEnum';
-import { t } from '@/hooks/web/useI18n';
+import { getParentLayout, LAYOUT } from '@/router/constant'
+import { RoleEnum } from '@/enums/roleEnum'
+import { t } from '@/hooks/web/useI18n'
 
 const permission: AppRouteModule = {
   path: '/permission',
@@ -87,6 +87,6 @@ const permission: AppRouteModule = {
       ],
     },
   ],
-};
+}
 
-export default permission;
+export default permission

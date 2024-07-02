@@ -56,14 +56,7 @@
       </CollapseContainer>
 
       <CollapseContainer title="扩展绘制示例" class="text-center w-1/5 mr-6">
-        <QrCode
-          :value="qrCodeUrl"
-          :width="200"
-          :options="{ margin: 5 }"
-          ref="qrDiyRef"
-          :logo="LogoImg"
-          @done="onQrcodeDone"
-        />
+        <QrCode :value="qrCodeUrl" :width="200" :options="{ margin: 5 }" ref="qrDiyRef" :logo="LogoImg" @done="onQrcodeDone" />
         <a-button class="mb-2" type="primary" @click="downloadDiy"> 下载 </a-button>
         <div class="msg">要进行扩展绘制则不能将tag设为img</div>
       </CollapseContainer>
@@ -79,36 +72,36 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import LogoImg from '@/assets/images/logo.png';
-  import { CollapseContainer } from '@/components/Container';
-  import { PageWrapper } from '@/components/Page';
-  import { QrCode, QrCodeActionType } from '@/components/Qrcode';
-  import { type Nullable } from '@vben/types';
-  import { QRCode } from 'ant-design-vue';
-  import { ref, unref } from 'vue';
+  import LogoImg from '@/assets/images/logo.png'
+  import { CollapseContainer } from '@/components/Container'
+  import { PageWrapper } from '@/components/Page'
+  import { QrCode, QrCodeActionType } from '@/components/Qrcode'
+  import { type Nullable } from '@vben/types'
+  import { QRCode } from 'ant-design-vue'
+  import { ref, unref } from 'vue'
 
-  const qrCodeUrl = 'https://www.vvbin.cn';
-  const qrRef = ref<Nullable<QrCodeActionType>>(null);
-  const qrDiyRef = ref<Nullable<QrCodeActionType>>(null);
+  const qrCodeUrl = 'https://www.vvbin.cn'
+  const qrRef = ref<Nullable<QrCodeActionType>>(null)
+  const qrDiyRef = ref<Nullable<QrCodeActionType>>(null)
   function download() {
-    const qrEl = unref(qrRef);
-    if (!qrEl) return;
-    qrEl.download('文件名');
+    const qrEl = unref(qrRef)
+    if (!qrEl) return
+    qrEl.download('文件名')
   }
   function downloadDiy() {
-    const qrEl = unref(qrDiyRef);
-    if (!qrEl) return;
-    qrEl.download('Qrcode');
+    const qrEl = unref(qrDiyRef)
+    if (!qrEl) return
+    qrEl.download('Qrcode')
   }
 
   function onQrcodeDone({ ctx }: any) {
     if (ctx instanceof CanvasRenderingContext2D) {
       // 额外绘制
-      ctx.fillStyle = 'black';
-      ctx.font = '16px "微软雅黑"';
-      ctx.textBaseline = 'bottom';
-      ctx.textAlign = 'center';
-      ctx.fillText('你帅你先扫', 100, 195, 200);
+      ctx.fillStyle = 'black'
+      ctx.font = '16px "微软雅黑"'
+      ctx.textBaseline = 'bottom'
+      ctx.textAlign = 'center'
+      ctx.fillText('你帅你先扫', 100, 195, 200)
     }
   }
 </script>

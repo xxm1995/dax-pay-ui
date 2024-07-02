@@ -48,9 +48,7 @@
           <Descriptions.Item label="会员卡号"> XX 32943898021309809423 </Descriptions.Item>
           <Descriptions.Item label="身份证"> 3321944288191034921 </Descriptions.Item>
           <Descriptions.Item label="联系方式"> 18112345678 </Descriptions.Item>
-          <Descriptions.Item label="联系地址" :span="2">
-            曲丽丽 18100000000 浙江省杭州市西湖区黄姑山路工专路交叉路口
-          </Descriptions.Item>
+          <Descriptions.Item label="联系地址" :span="2"> 曲丽丽 18100000000 浙江省杭州市西湖区黄姑山路工专路交叉路口 </Descriptions.Item>
         </Descriptions>
 
         <Descriptions title="信息组" :column="3">
@@ -74,8 +72,7 @@
           <Divider />
           <Descriptions title="组名称" :column="1">
             <Descriptions.Item label="学名">
-              Citrullus lanatus (Thunb.) Matsum. et
-              Nakai一年生蔓生藤本；茎、枝粗壮，具明显的棱。卷须较粗..
+              Citrullus lanatus (Thunb.) Matsum. et Nakai一年生蔓生藤本；茎、枝粗壮，具明显的棱。卷须较粗..
             </Descriptions.Item>
           </Descriptions>
           <Divider />
@@ -93,11 +90,11 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable } from '@/components/Table';
-  import { PageWrapper } from '@/components/Page';
-  import { Divider, Card, Empty, Descriptions, Steps, Tabs } from 'ant-design-vue';
+  import { BasicTable, useTable } from '@/components/Table'
+  import { PageWrapper } from '@/components/Page'
+  import { Divider, Card, Empty, Descriptions, Steps, Tabs } from 'ant-design-vue'
 
-  import { refundTimeTableSchema, refundTimeTableData } from './data';
+  import { refundTimeTableSchema, refundTimeTableData } from './data'
 
   const [registerTimeTable] = useTable({
     title: '退货进度',
@@ -106,5 +103,5 @@
     dataSource: refundTimeTableData,
     showIndexColumn: false,
     scroll: { y: 300 },
-  });
+  })
 </script>

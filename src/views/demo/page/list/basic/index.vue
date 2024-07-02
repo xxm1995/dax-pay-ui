@@ -51,17 +51,17 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { Progress, Row, Col, List } from 'ant-design-vue';
-  import Icon from '@/components/Icon/Icon.vue';
-  import { cardList } from './data';
-  import { PageWrapper } from '@/components/Page';
+  import { Progress, Row, Col, List } from 'ant-design-vue'
+  import Icon from '@/components/Icon/Icon.vue'
+  import { cardList } from './data'
+  import { PageWrapper } from '@/components/Page'
 
-  const prefixCls = 'list-basic';
+  const prefixCls = 'list-basic'
 
   const pagination = {
     show: true,
     pageSize: 3,
-  };
+  }
 </script>
 <style lang="less" scoped>
   .list-basic {

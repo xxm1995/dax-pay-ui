@@ -1,14 +1,14 @@
-import { defineComponent } from 'vue';
-import { Card, Typography, Spin } from 'ant-design-vue';
-import { imitateApi } from './mock-api';
-import { useRequest } from '@vben/hooks';
-import { PageWrapper } from '@/components/Page';
+import { defineComponent } from 'vue'
+import { Card, Typography, Spin } from 'ant-design-vue'
+import { imitateApi } from './mock-api'
+import { useRequest } from '@vben/hooks'
+import { PageWrapper } from '@/components/Page'
 
 const Demo1 = defineComponent({
   setup() {
     const { data, loading } = useRequest(imitateApi, {
       refreshOnWindowFocus: true,
-    });
+    })
 
     return () => (
       <Card title="屏幕聚焦重新请求">
@@ -19,14 +19,11 @@ const Demo1 = defineComponent({
           </Typography.Paragraph>
 
           <Typography.Paragraph>
-            <Typography.Text code>
-              {`const { data, run } = useRequest(imitateApi, { refreshOnWindowFocus: true });`}
-            </Typography.Text>
+            <Typography.Text code>{`const { data, run } = useRequest(imitateApi, { refreshOnWindowFocus: true });`}</Typography.Text>
           </Typography.Paragraph>
 
           <Typography.Paragraph>
-            你可以点击浏览器外部，再点击当前页面来体验效果（或者隐藏当前页面，重新展示）,如果和上一次请求间隔大于
-            5000ms, 则会重新请求一次。
+            你可以点击浏览器外部，再点击当前页面来体验效果（或者隐藏当前页面，重新展示）,如果和上一次请求间隔大于 5000ms, 则会重新请求一次。
           </Typography.Paragraph>
         </Typography>
 
@@ -35,9 +32,9 @@ const Demo1 = defineComponent({
           <div>Username: {data.value}</div>
         </Spin>
       </Card>
-    );
+    )
   },
-});
+})
 
 export default defineComponent({
   setup() {
@@ -45,6 +42,6 @@ export default defineComponent({
       <PageWrapper>
         <Demo1 />
       </PageWrapper>
-    );
+    )
   },
-});
+})

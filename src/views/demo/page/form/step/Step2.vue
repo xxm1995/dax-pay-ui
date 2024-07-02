@@ -12,11 +12,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicForm, useForm } from '@/components/Form';
-  import { step2Schemas } from './data';
-  import { Alert, Divider, Descriptions } from 'ant-design-vue';
+  import { BasicForm, useForm } from '@/components/Form'
+  import { step2Schemas } from './data'
+  import { Alert, Divider, Descriptions } from 'ant-design-vue'
 
-  const emit = defineEmits(['next', 'prev']);
+  const emit = defineEmits(['next', 'prev'])
 
   const [register, { validate, setProps }] = useForm({
     labelWidth: 80,
@@ -32,30 +32,30 @@
     },
     resetFunc: customResetFunc,
     submitFunc: customSubmitFunc,
-  });
+  })
 
   async function customResetFunc() {
-    emit('prev');
+    emit('prev')
   }
 
   async function customSubmitFunc() {
     try {
-      const values = await validate();
+      const values = await validate()
       setProps({
         submitButtonOptions: {
           loading: true,
         },
-      });
+      })
       setTimeout(() => {
         setProps({
           submitButtonOptions: {
             loading: false,
           },
-        });
-        emit('next', values);
-      }, 1500);
+        })
+        emit('next', values)
+      }, 1500)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 </script>

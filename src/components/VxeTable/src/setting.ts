@@ -1,4 +1,4 @@
-import { VxeUI } from '..';
-import componentSetting from '@/settings/componentSetting';
+import { VxeUI } from '..'
+import componentSetting from '@/settings/componentSetting'
 
-VxeUI.setConfig(componentSetting.vxeTable);
+VxeUI.setConfig(componentSetting.vxeTable)

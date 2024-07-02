@@ -17,15 +17,15 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import type { PropType } from 'vue';
-  import { CheckOutlined } from '@ant-design/icons-vue';
+  import type { PropType } from 'vue'
+  import { CheckOutlined } from '@ant-design/icons-vue'
 
-  import { useDesign } from '@/hooks/web/useDesign';
+  import { useDesign } from '@/hooks/web/useDesign'
 
-  import { baseHandler } from '../handler';
-  import { HandlerEnum } from '../enum';
+  import { baseHandler } from '../handler'
+  import { HandlerEnum } from '../enum'
 
-  defineOptions({ name: 'ThemeColorPicker' });
+  defineOptions({ name: 'ThemeColorPicker' })
 
   const props = defineProps({
     colorList: {
@@ -38,12 +38,12 @@
     def: {
       type: String,
     },
-  });
+  })
 
-  const { prefixCls } = useDesign('setting-theme-picker');
+  const { prefixCls } = useDesign('setting-theme-picker')
 
   function handleClick(color: string) {
-    props.event && baseHandler(props.event, color);
+    props.event && baseHandler(props.event, color)
   }
 </script>
 <style lang="less">

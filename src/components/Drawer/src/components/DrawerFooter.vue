@@ -6,14 +6,7 @@
         {{ cancelText }}
       </a-button>
       <slot name="centerFooter"></slot>
-      <a-button
-        :type="okType"
-        @click="handleOk"
-        v-bind="okButtonProps"
-        class="mr-2"
-        :loading="confirmLoading"
-        v-if="showOkBtn"
-      >
+      <a-button :type="okType" @click="handleOk" v-bind="okButtonProps" class="mr-2" :loading="confirmLoading" v-if="showOkBtn">
         {{ okText }}
       </a-button>
       <slot name="appendFooter"></slot>
@@ -25,12 +18,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import type { CSSProperties } from 'vue';
-  import { computed } from 'vue';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { footerProps } from '../props';
+  import type { CSSProperties } from 'vue'
+  import { computed } from 'vue'
+  import { useDesign } from '@/hooks/web/useDesign'
+  import { footerProps } from '../props'
 
-  defineOptions({ name: 'BasicDrawerFooter' });
+  defineOptions({ name: 'BasicDrawerFooter' })
 
   const props = defineProps({
     ...footerProps,
@@ -38,26 +31,26 @@
       type: String,
       default: '60px',
     },
-  });
+  })
 
-  const emit = defineEmits(['ok', 'close']);
+  const emit = defineEmits(['ok', 'close'])
 
-  const { prefixCls } = useDesign('basic-drawer-footer');
+  const { prefixCls } = useDesign('basic-drawer-footer')
 
   const getStyle = computed((): CSSProperties => {
-    const heightStr = `${props.height}`;
+    const heightStr = `${props.height}`
     return {
       height: heightStr,
       lineHeight: `calc(${heightStr} - 1px)`,
-    };
-  });
+    }
+  })
 
   function handleOk() {
-    emit('ok');
+    emit('ok')
   }
 
   function handleClose() {
-    emit('close');
+    emit('close')
   }
 </script>
 

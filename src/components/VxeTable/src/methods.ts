@@ -1,10 +1,4 @@
-import {
-  GridMethods,
-  TableMethods,
-  TableEditMethods,
-  TableValidatorMethods,
-  VxeGridConstructor,
-} from 'vxe-table';
+import { GridMethods, TableMethods, TableEditMethods, TableValidatorMethods, VxeGridConstructor } from 'vxe-table'
 
 export const gridComponentMethodKeys: (
   | keyof GridMethods
@@ -168,4 +162,4 @@ export const gridComponentMethodKeys: (
 
   //... 如有缺少在此处追加
   // xxx
-];
+]

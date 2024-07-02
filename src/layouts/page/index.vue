@@ -25,33 +25,33 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, unref } from 'vue';
+  import { computed, unref } from 'vue'
 
-  import FrameLayout from '@/layouts/iframe/index.vue';
+  import FrameLayout from '@/layouts/iframe/index.vue'
 
-  import { useRootSetting } from '@/hooks/setting/useRootSetting';
+  import { useRootSetting } from '@/hooks/setting/useRootSetting'
 
-  import { useTransitionSetting } from '@/hooks/setting/useTransitionSetting';
-  import { useMultipleTabSetting } from '@/hooks/setting/useMultipleTabSetting';
-  import { getTransitionName } from './transition';
+  import { useTransitionSetting } from '@/hooks/setting/useTransitionSetting'
+  import { useMultipleTabSetting } from '@/hooks/setting/useMultipleTabSetting'
+  import { getTransitionName } from './transition'
 
-  import { useMultipleTabStore } from '@/store/modules/multipleTab';
+  import { useMultipleTabStore } from '@/store/modules/multipleTab'
 
-  defineOptions({ name: 'PageLayout' });
+  defineOptions({ name: 'PageLayout' })
 
-  const { getShowMultipleTab } = useMultipleTabSetting();
-  const tabStore = useMultipleTabStore();
+  const { getShowMultipleTab } = useMultipleTabSetting()
+  const tabStore = useMultipleTabStore()
 
-  const { getOpenKeepAlive, getCanEmbedIFramePage } = useRootSetting();
+  const { getOpenKeepAlive, getCanEmbedIFramePage } = useRootSetting()
 
-  const { getBasicTransition, getEnableTransition } = useTransitionSetting();
+  const { getBasicTransition, getEnableTransition } = useTransitionSetting()
 
-  const openCache = computed(() => unref(getOpenKeepAlive) && unref(getShowMultipleTab));
+  const openCache = computed(() => unref(getOpenKeepAlive) && unref(getShowMultipleTab))
 
   const getCaches = computed((): string[] => {
     if (!unref(getOpenKeepAlive)) {
-      return [];
+      return []
     }
-    return tabStore.getCachedTabList;
-  });
+    return tabStore.getCachedTabList
+  })
 </script>

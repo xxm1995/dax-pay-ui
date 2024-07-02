@@ -30,17 +30,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable, TableAction } from '@/components/Table';
-  import { getDeptList } from '@/api/demo/system';
+  import { BasicTable, useTable, TableAction } from '@/components/Table'
+  import { getDeptList } from '@/api/demo/system'
 
-  import { useModal } from '@/components/Modal';
-  import DeptModal from './DeptModal.vue';
+  import { useModal } from '@/components/Modal'
+  import DeptModal from './DeptModal.vue'
 
-  import { columns, searchFormSchema } from './dept.data';
+  import { columns, searchFormSchema } from './dept.data'
 
-  defineOptions({ name: 'DeptManagement' });
+  defineOptions({ name: 'DeptManagement' })
 
-  const [registerModal, { openModal }] = useModal();
+  const [registerModal, { openModal }] = useModal()
   const [registerTable, { reload }] = useTable({
     title: '部门列表',
     api: getDeptList,
@@ -63,26 +63,26 @@
       // slots: { customRender: 'action' },
       fixed: undefined,
     },
-  });
+  })
 
   function handleCreate() {
     openModal(true, {
       isUpdate: false,
-    });
+    })
   }
 
   function handleEdit(record: Recordable) {
     openModal(true, {
       record,
       isUpdate: true,
-    });
+    })
   }
 
   function handleDelete(record: Recordable) {
-    console.log(record);
+    console.log(record)
   }
 
   function handleSuccess() {
-    reload();
+    reload()
   }
 </script>

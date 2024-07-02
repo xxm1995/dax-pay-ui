@@ -29,37 +29,37 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { BasicTable, ColumnChangeParam } from '@/components/Table';
-  import { getBasicColumns, getBasicData } from './tableData';
+  import { ref } from 'vue'
+  import { BasicTable, ColumnChangeParam } from '@/components/Table'
+  import { getBasicColumns, getBasicData } from './tableData'
 
-  const canResize = ref(false);
-  const loading = ref(false);
-  const striped = ref(true);
-  const border = ref(true);
-  const pagination = ref<any>(false);
+  const canResize = ref(false)
+  const loading = ref(false)
+  const striped = ref(true)
+  const border = ref(true)
+  const pagination = ref<any>(false)
 
-  const columns = getBasicColumns();
-  const data = getBasicData();
+  const columns = getBasicColumns()
+  const data = getBasicData()
 
   function toggleCanResize() {
-    canResize.value = !canResize.value;
+    canResize.value = !canResize.value
   }
   function toggleStriped() {
-    striped.value = !striped.value;
+    striped.value = !striped.value
   }
   function toggleLoading() {
-    loading.value = true;
+    loading.value = true
     setTimeout(() => {
-      loading.value = false;
-      pagination.value = { pageSize: 20 };
-    }, 3000);
+      loading.value = false
+      pagination.value = { pageSize: 20 }
+    }, 3000)
   }
   function toggleBorder() {
-    border.value = !border.value;
+    border.value = !border.value
   }
 
   function handleColumnChange(data: ColumnChangeParam[]) {
-    console.log('ColumnChanged', data);
+    console.log('ColumnChanged', data)
   }
 </script>

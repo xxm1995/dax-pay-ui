@@ -1,20 +1,9 @@
 <script lang="tsx">
-  import {
-    defineComponent,
-    computed,
-    ref,
-    unref,
-    reactive,
-    onMounted,
-    watch,
-    nextTick,
-    CSSProperties,
-    PropType,
-  } from 'vue';
-  import { useEventListener } from '@/hooks/event/useEventListener';
-  import { getSlot } from '@/utils/helper/tsxHelper';
+  import { defineComponent, computed, ref, unref, reactive, onMounted, watch, nextTick, CSSProperties, PropType } from 'vue'
+  import { useEventListener } from '@/hooks/event/useEventListener'
+  import { getSlot } from '@/utils/helper/tsxHelper'
 
-  type NumberOrNumberString = PropType<string | number | undefined>;
+  type NumberOrNumberString = PropType<string | number | undefined>
 
   const props = {
     height: [Number, String] as NumberOrNumberString,
@@ -35,17 +24,17 @@
       type: Array,
       default: () => [],
     },
-  };
+  }
 
-  const prefixCls = 'virtual-scroll';
+  const prefixCls = 'virtual-scroll'
 
   function convertToUnit(str: string | number | null | undefined, unit = 'px'): string | undefined {
     if (str == null || str === '') {
-      return undefined;
+      return undefined
     } else if (isNaN(+str!)) {
-      return String(str);
+      return String(str)
     } else {
-      return `${Number(str)}${unit}`;
+      return `${Number(str)}${unit}`
     }
   }
 
@@ -53,119 +42,119 @@
     name: 'VirtualScroll',
     props,
     setup(props, { slots, expose }) {
-      const wrapElRef = ref<HTMLDivElement | null>(null);
+      const wrapElRef = ref<HTMLDivElement | null>(null)
       const state = reactive({
         first: 0,
         last: 0,
         scrollTop: 0,
-      });
+      })
 
       const getBenchRef = computed(() => {
-        return parseInt(props.bench as string, 10);
-      });
+        return parseInt(props.bench as string, 10)
+      })
 
       const getItemHeightRef = computed(() => {
-        return parseInt(props.itemHeight as string, 10);
-      });
+        return parseInt(props.itemHeight as string, 10)
+      })
 
       const getFirstToRenderRef = computed(() => {
-        return Math.max(0, state.first - unref(getBenchRef));
-      });
+        return Math.max(0, state.first - unref(getBenchRef))
+      })
 
       const getLastToRenderRef = computed(() => {
-        return Math.min((props.items || []).length, state.last + unref(getBenchRef));
-      });
+        return Math.min((props.items || []).length, state.last + unref(getBenchRef))
+      })
 
       const getContainerStyleRef = computed((): CSSProperties => {
         return {
           height: convertToUnit((props.items || []).length * unref(getItemHeightRef)),
-        };
-      });
+        }
+      })
 
       const getWrapStyleRef = computed((): CSSProperties => {
-        const styles: Record<string, any> = {};
-        const height = convertToUnit(props.height);
-        const minHeight = convertToUnit(props.minHeight);
-        const minWidth = convertToUnit(props.minWidth);
-        const maxHeight = convertToUnit(props.maxHeight);
-        const maxWidth = convertToUnit(props.maxWidth);
-        const width = convertToUnit(props.width);
+        const styles: Record<string, any> = {}
+        const height = convertToUnit(props.height)
+        const minHeight = convertToUnit(props.minHeight)
+        const minWidth = convertToUnit(props.minWidth)
+        const maxHeight = convertToUnit(props.maxHeight)
+        const maxWidth = convertToUnit(props.maxWidth)
+        const width = convertToUnit(props.width)
 
-        if (height) styles.height = height;
-        if (minHeight) styles.minHeight = minHeight;
-        if (minWidth) styles.minWidth = minWidth;
-        if (maxHeight) styles.maxHeight = maxHeight;
-        if (maxWidth) styles.maxWidth = maxWidth;
-        if (width) styles.width = width;
-        return styles;
-      });
+        if (height) styles.height = height
+        if (minHeight) styles.minHeight = minHeight
+        if (minWidth) styles.minWidth = minWidth
+        if (maxHeight) styles.maxHeight = maxHeight
+        if (maxWidth) styles.maxWidth = maxWidth
+        if (width) styles.width = width
+        return styles
+      })
 
       watch([() => props.itemHeight, () => props.height], () => {
-        onScroll();
-      });
+        onScroll()
+      })
 
       function getLast(first: number): number {
-        const wrapEl = unref(wrapElRef);
+        const wrapEl = unref(wrapElRef)
         if (!wrapEl) {
-          return 0;
+          return 0
         }
-        const height = parseInt(props.height || 0, 10) || wrapEl.clientHeight;
+        const height = parseInt(props.height || 0, 10) || wrapEl.clientHeight
 
-        return first + Math.ceil(height / unref(getItemHeightRef));
+        return first + Math.ceil(height / unref(getItemHeightRef))
       }
 
       function getFirst(): number {
-        return Math.floor(state.scrollTop / unref(getItemHeightRef));
+        return Math.floor(state.scrollTop / unref(getItemHeightRef))
       }
 
       function onScroll() {
-        const wrapEl = unref(wrapElRef);
+        const wrapEl = unref(wrapElRef)
         if (!wrapEl) {
-          return;
+          return
         }
-        state.scrollTop = wrapEl.scrollTop;
-        state.first = getFirst();
-        state.last = getLast(state.first);
+        state.scrollTop = wrapEl.scrollTop
+        state.first = getFirst()
+        state.last = getLast(state.first)
       }
 
       function scrollToTop() {
-        const wrapEl = unref(wrapElRef);
+        const wrapEl = unref(wrapElRef)
         if (!wrapEl) {
-          return;
+          return
         }
-        wrapEl.scrollTop = 0;
+        wrapEl.scrollTop = 0
       }
 
       function scrollToBottom() {
-        const wrapEl = unref(wrapElRef);
+        const wrapEl = unref(wrapElRef)
         if (!wrapEl) {
-          return;
+          return
         }
-        wrapEl.scrollTop = wrapEl.scrollHeight;
+        wrapEl.scrollTop = wrapEl.scrollHeight
       }
 
       function scrollToItem(index: number) {
-        const wrapEl = unref(wrapElRef);
+        const wrapEl = unref(wrapElRef)
         if (!wrapEl) {
-          return;
+          return
         }
-        const i = index - 1 > 0 ? index - 1 : 0;
-        wrapEl.scrollTop = i * unref(getItemHeightRef);
+        const i = index - 1 > 0 ? index - 1 : 0
+        wrapEl.scrollTop = i * unref(getItemHeightRef)
       }
 
       function renderChildren() {
-        const { items = [] } = props;
-        return items.slice(unref(getFirstToRenderRef), unref(getLastToRenderRef)).map(genChild);
+        const { items = [] } = props
+        return items.slice(unref(getFirstToRenderRef), unref(getLastToRenderRef)).map(genChild)
       }
 
       function genChild(item: any, index: number) {
-        index += unref(getFirstToRenderRef);
-        const top = convertToUnit(index * unref(getItemHeightRef));
+        index += unref(getFirstToRenderRef)
+        const top = convertToUnit(index * unref(getItemHeightRef))
         return (
           <div class={`${prefixCls}__item`} style={{ top }} key={index}>
             {getSlot(slots, 'default', { index, item })}
           </div>
-        );
+        )
       }
 
       expose({
@@ -173,23 +162,23 @@
         scrollToTop,
         scrollToItem,
         scrollToBottom,
-      });
+      })
 
       onMounted(() => {
-        state.last = getLast(0);
+        state.last = getLast(0)
         nextTick(() => {
-          const wrapEl = unref(wrapElRef);
+          const wrapEl = unref(wrapElRef)
           if (!wrapEl) {
-            return;
+            return
           }
           useEventListener({
             el: wrapEl,
             name: 'scroll',
             listener: onScroll,
             wait: 0,
-          });
-        });
-      });
+          })
+        })
+      })
 
       return () => (
         <div class={prefixCls} style={unref(getWrapStyleRef)} ref={wrapElRef}>
@@ -197,9 +186,9 @@
             {renderChildren()}
           </div>
         </div>
-      );
+      )
     },
-  });
+  })
 </script>
 <style scoped lang="less">
   .virtual-scroll {

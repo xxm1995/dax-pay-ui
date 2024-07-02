@@ -4,12 +4,12 @@
 </template>
 
 <script setup lang="ts">
-  import { Alert } from 'ant-design-vue';
-  import { BasicForm, FormSchema, useForm } from '@/components/Form';
-  import { useMessage } from '@/hooks/web/useMessage';
-  import { uploadApi } from '@/api/sys/upload';
+  import { Alert } from 'ant-design-vue'
+  import { BasicForm, FormSchema, useForm } from '@/components/Form'
+  import { useMessage } from '@/hooks/web/useMessage'
+  import { uploadApi } from '@/api/sys/upload'
 
-  const { createMessage } = useMessage();
+  const { createMessage } = useMessage()
 
   const schemasCustom: FormSchema[] = [
     {
@@ -26,9 +26,9 @@
                 data3: {
                   url: uploadApiResponse.data.url,
                 },
-              });
-            });
-          });
+              })
+            })
+          })
         },
       },
     },
@@ -49,13 +49,13 @@
                 data4: {
                   url: uploadApiResponse.data.url,
                 },
-              });
-            });
-          });
+              })
+            })
+          })
         },
       },
     },
-  ];
+  ]
   const [registerCustom, { getFieldsValue: getFieldsValueCustom }] = useForm({
     labelWidth: 160,
     schemas: schemasCustom,
@@ -64,10 +64,10 @@
     },
     submitFunc: () => {
       return new Promise((resolve) => {
-        console.log(getFieldsValueCustom());
-        resolve();
-        createMessage.success(`请到控制台查看结果`);
-      });
+        console.log(getFieldsValueCustom())
+        resolve()
+        createMessage.success(`请到控制台查看结果`)
+      })
     },
-  });
+  })
 </script>

@@ -37,43 +37,35 @@
     </Authority>
 
     <Divider>函数方式方式判断权限(适用于函数内部过滤)</Divider>
-    <a-button v-if="hasPermission(RoleEnum.SUPER)" type="primary" class="mx-4">
-      拥有super角色权限可见
-    </a-button>
+    <a-button v-if="hasPermission(RoleEnum.SUPER)" type="primary" class="mx-4"> 拥有super角色权限可见 </a-button>
 
-    <a-button v-if="hasPermission(RoleEnum.TEST)" color="success" class="mx-4">
-      拥有test角色权限可见
-    </a-button>
+    <a-button v-if="hasPermission(RoleEnum.TEST)" color="success" class="mx-4"> 拥有test角色权限可见 </a-button>
 
-    <a-button v-if="hasPermission([RoleEnum.TEST, RoleEnum.SUPER])" color="error" class="mx-4">
-      拥有[test,super]角色权限可见
-    </a-button>
+    <a-button v-if="hasPermission([RoleEnum.TEST, RoleEnum.SUPER])" color="error" class="mx-4"> 拥有[test,super]角色权限可见 </a-button>
 
     <Divider>指令方式方式判断权限(该方式不能动态修改权限.)</Divider>
     <a-button v-auth="RoleEnum.SUPER" type="primary" class="mx-4"> 拥有super角色权限可见 </a-button>
 
     <a-button v-auth="RoleEnum.TEST" color="success" class="mx-4"> 拥有test角色权限可见 </a-button>
 
-    <a-button v-auth="[RoleEnum.TEST, RoleEnum.SUPER]" color="error" class="mx-4">
-      拥有[test,super]角色权限可见
-    </a-button>
+    <a-button v-auth="[RoleEnum.TEST, RoleEnum.SUPER]" color="error" class="mx-4"> 拥有[test,super]角色权限可见 </a-button>
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { computed } from 'vue';
-  import { Alert, Divider, Space } from 'ant-design-vue';
-  import CurrentPermissionMode from '../CurrentPermissionMode.vue';
-  import { useUserStore } from '@/store/modules/user';
-  import { RoleEnum } from '@/enums/roleEnum';
-  import { usePermission } from '@/hooks/web/usePermission';
-  import { Authority } from '@/components/Authority';
-  import { PageWrapper } from '@/components/Page';
+  import { computed } from 'vue'
+  import { Alert, Divider, Space } from 'ant-design-vue'
+  import CurrentPermissionMode from '../CurrentPermissionMode.vue'
+  import { useUserStore } from '@/store/modules/user'
+  import { RoleEnum } from '@/enums/roleEnum'
+  import { usePermission } from '@/hooks/web/usePermission'
+  import { Authority } from '@/components/Authority'
+  import { PageWrapper } from '@/components/Page'
 
-  const { changeRole, hasPermission } = usePermission();
-  const userStore = useUserStore();
+  const { changeRole, hasPermission } = usePermission()
+  const userStore = useUserStore()
 
-  const isSuper = computed(() => userStore.getRoleList.includes(RoleEnum.SUPER));
-  const isTest = computed(() => userStore.getRoleList.includes(RoleEnum.TEST));
+  const isSuper = computed(() => userStore.getRoleList.includes(RoleEnum.SUPER))
+  const isTest = computed(() => userStore.getRoleList.includes(RoleEnum.TEST))
 </script>
 <style lang="less" scoped>
   .demo {

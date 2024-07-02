@@ -11,8 +11,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, useTable } from '@/components/Table';
-  import { getBasicColumns, getTreeTableData } from './tableData';
+  import { BasicTable, useTable } from '@/components/Table'
+  import { getBasicColumns, getTreeTableData } from './tableData'
 
   const [register, { expandAll, collapseAll, expandRows, collapseRows }] = useTable({
     title: '树形表格',
@@ -23,9 +23,9 @@
       getCheckboxProps(record: Recordable) {
         // Demo: 第一行（id为0）的选择框禁用
         if (record.id === '0') {
-          return { disabled: true };
+          return { disabled: true }
         } else {
-          return { disabled: false };
+          return { disabled: false }
         }
       },
     },
@@ -34,5 +34,5 @@
     dataSource: getTreeTableData(),
     rowKey: 'id',
     showSelectionBar: true, // 显示多选状态栏
-  });
+  })
 </script>

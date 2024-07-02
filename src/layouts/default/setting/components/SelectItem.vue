@@ -12,14 +12,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { PropType, computed } from 'vue';
+  import { PropType, computed } from 'vue'
 
-  import { Select, type SelectProps } from 'ant-design-vue';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { baseHandler } from '../handler';
-  import { HandlerEnum } from '../enum';
+  import { Select, type SelectProps } from 'ant-design-vue'
+  import { useDesign } from '@/hooks/web/useDesign'
+  import { baseHandler } from '../handler'
+  import { HandlerEnum } from '../enum'
 
-  defineOptions({ name: 'SelectItem' });
+  defineOptions({ name: 'SelectItem' })
 
   const props = defineProps({
     event: {
@@ -41,16 +41,16 @@
       type: Array as PropType<LabelValueOptions>,
       default: () => [],
     },
-  });
+  })
 
-  const { prefixCls } = useDesign('setting-select-item');
+  const { prefixCls } = useDesign('setting-select-item')
   const getBindValue = computed(() => {
-    return props.def ? { value: props.def, defaultValue: props.initValue || props.def } : {};
-  });
+    return props.def ? { value: props.def, defaultValue: props.initValue || props.def } : {}
+  })
 
   const handleChange: SelectProps['onChange'] = (val) => {
-    props.event && baseHandler(props.event, val);
-  };
+    props.event && baseHandler(props.event, val)
+  }
 </script>
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-setting-select-item';

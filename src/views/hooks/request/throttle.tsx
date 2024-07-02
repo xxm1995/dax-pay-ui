@@ -1,17 +1,17 @@
-import { defineComponent, ref } from 'vue';
-import { Card, Typography, Input, Spin, Space } from 'ant-design-vue';
-import { imitateApi } from './mock-api';
-import { useRequest } from '@vben/hooks';
-import { PageWrapper } from '@/components/Page';
+import { defineComponent, ref } from 'vue'
+import { Card, Typography, Input, Spin, Space } from 'ant-design-vue'
+import { imitateApi } from './mock-api'
+import { useRequest } from '@vben/hooks'
+import { PageWrapper } from '@/components/Page'
 
 const Demo1 = defineComponent({
   setup() {
-    const search = ref('');
+    const search = ref('')
 
     const { data, loading } = useRequest(imitateApi, {
       throttleWait: 1000,
       refreshDeps: [search],
-    });
+    })
 
     return () => (
       <Card title="节流">
@@ -25,9 +25,7 @@ const Demo1 = defineComponent({
           </Typography.Paragraph>
 
           <Typography.Paragraph>
-            <Typography.Text code>
-              {`const { data, run } = useRequest(imitateApi, { throttleWait: 300, manual: true });`}
-            </Typography.Text>
+            <Typography.Text code>{`const { data, run } = useRequest(imitateApi, { throttleWait: 300, manual: true });`}</Typography.Text>
           </Typography.Paragraph>
 
           <Typography.Paragraph>
@@ -46,9 +44,9 @@ const Demo1 = defineComponent({
           </Space>
         </Spin>
       </Card>
-    );
+    )
   },
-});
+})
 
 export default defineComponent({
   setup() {
@@ -56,6 +54,6 @@ export default defineComponent({
       <PageWrapper>
         <Demo1 />
       </PageWrapper>
-    );
+    )
   },
-});
+})

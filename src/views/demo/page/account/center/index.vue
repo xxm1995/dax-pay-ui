@@ -53,27 +53,27 @@
 </template>
 
 <script lang="ts" setup>
-  import { CollapseContainer } from '@/components/Container';
-  import Icon from '@/components/Icon/Icon.vue';
-  import { Col, Row, Tabs, Tag } from 'ant-design-vue';
-  import { computed } from 'vue';
-  import Application from './Application.vue';
-  import Article from './Article.vue';
-  import Project from './Project.vue';
+  import { CollapseContainer } from '@/components/Container'
+  import Icon from '@/components/Icon/Icon.vue'
+  import { Col, Row, Tabs, Tag } from 'ant-design-vue'
+  import { computed } from 'vue'
+  import Application from './Application.vue'
+  import Article from './Article.vue'
+  import Project from './Project.vue'
 
-  import headerImg from '@/assets/images/header.jpg';
-  import { useUserStore } from '@/store/modules/user';
-  import { achieveList, details, tags, teams } from './data';
+  import headerImg from '@/assets/images/header.jpg'
+  import { useUserStore } from '@/store/modules/user'
+  import { achieveList, details, tags, teams } from './data'
 
-  const userStore = useUserStore();
-  const TabPane = Tabs.TabPane;
+  const userStore = useUserStore()
+  const TabPane = Tabs.TabPane
   const tabs = {
     Article,
     Application,
     Project,
-  };
-  const prefixCls = 'account-center';
-  const avatar = computed(() => userStore.getUserInfo.avatar || headerImg);
+  }
+  const prefixCls = 'account-center'
+  const avatar = computed(() => userStore.getUserInfo.avatar || headerImg)
 </script>
 <style lang="less" scoped>
   .account-center {

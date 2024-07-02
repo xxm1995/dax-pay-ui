@@ -33,12 +33,12 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import Icon from '@/components/Icon/Icon.vue';
-  import { cardList } from './data';
-  import { PageWrapper } from '@/components/Page';
-  import { Card, Row, Col, List } from 'ant-design-vue';
+  import Icon from '@/components/Icon/Icon.vue'
+  import { cardList } from './data'
+  import { PageWrapper } from '@/components/Page'
+  import { Card, Row, Col, List } from 'ant-design-vue'
 
-  const prefixCls = 'list-card';
+  const prefixCls = 'list-card'
 </script>
 <style lang="less" scoped>
   .list-card {

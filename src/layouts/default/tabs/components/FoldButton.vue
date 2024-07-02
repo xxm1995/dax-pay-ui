@@ -4,33 +4,31 @@
   </span>
 </template>
 <script lang="ts" setup>
-  import { unref, computed } from 'vue';
-  import Icon from '@/components/Icon/Icon.vue';
+  import { unref, computed } from 'vue'
+  import Icon from '@/components/Icon/Icon.vue'
 
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { useHeaderSetting } from '@/hooks/setting/useHeaderSetting';
-  import { useMenuSetting } from '@/hooks/setting/useMenuSetting';
-  import { triggerWindowResize } from '@/utils/event';
+  import { useDesign } from '@/hooks/web/useDesign'
+  import { useHeaderSetting } from '@/hooks/setting/useHeaderSetting'
+  import { useMenuSetting } from '@/hooks/setting/useMenuSetting'
+  import { triggerWindowResize } from '@/utils/event'
 
-  defineOptions({ name: 'FoldButton' });
+  defineOptions({ name: 'FoldButton' })
 
-  const { prefixCls } = useDesign('multiple-tabs-content');
-  const { getShowMenu, setMenuSetting } = useMenuSetting();
-  const { getShowHeader, setHeaderSetting } = useHeaderSetting();
+  const { prefixCls } = useDesign('multiple-tabs-content')
+  const { getShowMenu, setMenuSetting } = useMenuSetting()
+  const { getShowHeader, setHeaderSetting } = useHeaderSetting()
 
-  const getIsUnFold = computed(() => !unref(getShowMenu) && !unref(getShowHeader));
+  const getIsUnFold = computed(() => !unref(getShowMenu) && !unref(getShowHeader))
 
-  const getIcon = computed(() =>
-    unref(getIsUnFold) ? 'codicon:screen-normal' : 'codicon:screen-full',
-  );
+  const getIcon = computed(() => (unref(getIsUnFold) ? 'codicon:screen-normal' : 'codicon:screen-full'))
 
   function handleFold() {
-    const isUnFold = unref(getIsUnFold);
+    const isUnFold = unref(getIsUnFold)
     setMenuSetting({
       show: isUnFold,
       hidden: !isUnFold,
-    });
-    setHeaderSetting({ show: isUnFold });
-    triggerWindowResize();
+    })
+    setHeaderSetting({ show: isUnFold })
+    triggerWindowResize()
   }
 </script>

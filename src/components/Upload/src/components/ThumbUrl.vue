@@ -4,13 +4,13 @@
   </span>
 </template>
 <script lang="ts" setup>
-  import { propTypes } from '@/utils/propTypes';
-  import { Image } from 'ant-design-vue';
+  import { propTypes } from '@/utils/propTypes'
+  import { Image } from 'ant-design-vue'
 
   defineProps({
     fileUrl: propTypes.string.def(''),
     fileName: propTypes.string.def(''),
-  });
+  })
 </script>
 <style lang="less">
   .thumb {

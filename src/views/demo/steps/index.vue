@@ -5,15 +5,15 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { PageWrapper } from '@/components/Page';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { ref } from 'vue';
-  import { Tour, TourProps } from 'ant-design-vue';
+  import { PageWrapper } from '@/components/Page'
+  import { useDesign } from '@/hooks/web/useDesign'
+  import { ref } from 'vue'
+  import { Tour, TourProps } from 'ant-design-vue'
 
-  const open = ref<boolean>(false);
-  const { prefixVar } = useDesign('');
+  const open = ref<boolean>(false)
+  const { prefixVar } = useDesign('')
 
-  const current = ref(0);
+  const current = ref(0)
   const steps: TourProps['steps'] = [
     {
       title: 'Welcome',
@@ -29,10 +29,10 @@
       description: 'This is the user function area.',
       target: () => document.querySelector(`.${prefixVar}-layout-header-action`) as HTMLElement,
     },
-  ];
+  ]
 
   const handleOpen = (val: boolean): void => {
-    current.value = 0;
-    open.value = val;
-  };
+    current.value = 0
+    open.value = val
+  }
 </script>

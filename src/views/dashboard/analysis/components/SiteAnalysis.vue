@@ -1,10 +1,5 @@
 <template>
-  <Card
-    :tab-list="tabListTitle"
-    v-bind="$attrs"
-    :active-tab-key="activeKey"
-    @tab-change="onTabChange"
-  >
+  <Card :tab-list="tabListTitle" v-bind="$attrs" :active-tab-key="activeKey" @tab-change="onTabChange">
     <p v-if="activeKey === 'tab1'">
       <VisitAnalysis />
     </p>
@@ -14,12 +9,12 @@
   </Card>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { Card } from 'ant-design-vue';
-  import VisitAnalysis from './VisitAnalysis.vue';
-  import VisitAnalysisBar from './VisitAnalysisBar.vue';
+  import { ref } from 'vue'
+  import { Card } from 'ant-design-vue'
+  import VisitAnalysis from './VisitAnalysis.vue'
+  import VisitAnalysisBar from './VisitAnalysisBar.vue'
 
-  const activeKey = ref('tab1');
+  const activeKey = ref('tab1')
 
   const tabListTitle = [
     {
@@ -30,9 +25,9 @@
       key: 'tab2',
       tab: '访问量',
     },
-  ];
+  ]
 
   function onTabChange(key) {
-    activeKey.value = key;
+    activeKey.value = key
   }
 </script>

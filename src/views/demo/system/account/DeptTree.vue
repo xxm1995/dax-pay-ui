@@ -13,26 +13,26 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref } from 'vue'
 
-  import { BasicTree, TreeItem } from '@/components/Tree';
-  import { getDeptList } from '@/api/demo/system';
+  import { BasicTree, TreeItem } from '@/components/Tree'
+  import { getDeptList } from '@/api/demo/system'
 
-  defineOptions({ name: 'DeptTree' });
+  defineOptions({ name: 'DeptTree' })
 
-  const emit = defineEmits(['select']);
+  const emit = defineEmits(['select'])
 
-  const treeData = ref<TreeItem[]>([]);
+  const treeData = ref<TreeItem[]>([])
 
   async function fetch() {
-    treeData.value = (await getDeptList()) as unknown as TreeItem[];
+    treeData.value = (await getDeptList()) as unknown as TreeItem[]
   }
 
   function handleSelect(keys) {
-    emit('select', keys[0]);
+    emit('select', keys[0])
   }
 
   onMounted(() => {
-    fetch();
-  });
+    fetch()
+  })
 </script>

@@ -8,17 +8,17 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, unref } from 'vue';
-  import { useRouter } from 'vue-router';
+  import { computed, unref } from 'vue'
+  import { useRouter } from 'vue-router'
 
-  import { Input } from 'ant-design-vue';
-  import { PageWrapper } from '@/components/Page';
+  import { Input } from 'ant-design-vue'
+  import { PageWrapper } from '@/components/Page'
 
-  const { currentRoute } = useRouter();
+  const { currentRoute } = useRouter()
 
   defineOptions({
     name: 'TestTab',
-  });
+  })
 
-  const computedParams = computed(() => unref(currentRoute).params);
+  const computedParams = computed(() => unref(currentRoute).params)
 </script>

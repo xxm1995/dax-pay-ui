@@ -26,14 +26,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { CountTo } from '@/components/CountTo';
-  import Icon from '@/components/Icon/Icon.vue';
-  import { Tag, Card } from 'ant-design-vue';
-  import { growCardList } from '../data';
+  import { CountTo } from '@/components/CountTo'
+  import Icon from '@/components/Icon/Icon.vue'
+  import { Tag, Card } from 'ant-design-vue'
+  import { growCardList } from '../data'
 
   defineProps({
     loading: {
       type: Boolean,
     },
-  });
+  })
 </script>

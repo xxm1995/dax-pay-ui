@@ -1,12 +1,12 @@
 <script lang="tsx">
-  import { CollapseTransition } from '@/components/Transition';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { triggerWindowResize } from '@/utils/event';
-  import { useTimeoutFn } from '@vben/hooks';
-  import { Skeleton } from 'ant-design-vue';
-  import { isNil } from 'lodash-es';
-  import { defineComponent, ref, unref, type ExtractPropTypes, type PropType } from 'vue';
-  import CollapseHeader from './CollapseHeader.vue';
+  import { CollapseTransition } from '@/components/Transition'
+  import { useDesign } from '@/hooks/web/useDesign'
+  import { triggerWindowResize } from '@/utils/event'
+  import { useTimeoutFn } from '@vben/hooks'
+  import { Skeleton } from 'ant-design-vue'
+  import { isNil } from 'lodash-es'
+  import { defineComponent, ref, unref, type ExtractPropTypes, type PropType } from 'vue'
+  import CollapseHeader from './CollapseHeader.vue'
 
   const collapseContainerProps = {
     title: { type: String, default: '' },
@@ -31,9 +31,9 @@
      * Delayed loading time
      */
     lazyTime: { type: Number, default: 0 },
-  };
+  }
 
-  export type CollapseContainerProps = ExtractPropTypes<typeof collapseContainerProps>;
+  export type CollapseContainerProps = ExtractPropTypes<typeof collapseContainerProps>
 
   export default defineComponent({
     name: 'CollapseContainer',
@@ -41,19 +41,19 @@
     props: collapseContainerProps,
 
     setup(props, { expose, slots }) {
-      const { prefixCls } = useDesign('collapse-container');
+      const { prefixCls } = useDesign('collapse-container')
 
-      const show = ref(true);
+      const show = ref(true)
 
       const handleExpand = (val: boolean) => {
-        show.value = isNil(val) ? !show.value : val;
+        show.value = isNil(val) ? !show.value : val
         if (props.triggerWindowResize) {
           // 200 milliseconds here is because the expansion has animation,
-          useTimeoutFn(triggerWindowResize, 200);
+          useTimeoutFn(triggerWindowResize, 200)
         }
-      };
+      }
 
-      expose({ handleExpand });
+      expose({ handleExpand })
 
       return () => (
         <div class={unref(prefixCls)}>
@@ -82,9 +82,9 @@
 
           {slots.footer && <div class={`${prefixCls}__footer`}>{slots.footer()}</div>}
         </div>
-      );
+      )
     },
-  });
+  })
 </script>
 
 <style lang="less">

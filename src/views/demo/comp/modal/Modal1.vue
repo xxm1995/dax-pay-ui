@@ -21,33 +21,33 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-  import { ref, watch } from 'vue';
-  import { BasicModal, useModalInner } from '@/components/Modal';
+  import { ref, watch } from 'vue'
+  import { BasicModal, useModalInner } from '@/components/Modal'
 
-  const loading = ref(true);
-  const lines = ref(10);
-  const [register, { setModalProps, redoModalHeight }] = useModalInner();
+  const loading = ref(true)
+  const lines = ref(10)
+  const [register, { setModalProps, redoModalHeight }] = useModalInner()
 
   watch(
     () => lines.value,
     () => {
-      redoModalHeight();
+      redoModalHeight()
     },
-  );
+  )
 
   function handleShow(open: boolean) {
     if (open) {
-      loading.value = true;
-      setModalProps({ loading: true, confirmLoading: true });
+      loading.value = true
+      setModalProps({ loading: true, confirmLoading: true })
       setTimeout(() => {
-        lines.value = Math.round(Math.random() * 30 + 5);
-        loading.value = false;
-        setModalProps({ loading: false, confirmLoading: false });
-      }, 3000);
+        lines.value = Math.round(Math.random() * 30 + 5)
+        loading.value = false
+        setModalProps({ loading: false, confirmLoading: false })
+      }, 3000)
     }
   }
 
   function setLines() {
-    lines.value = Math.round(Math.random() * 20 + 10);
+    lines.value = Math.round(Math.random() * 20 + 10)
   }
 </script>

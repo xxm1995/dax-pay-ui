@@ -242,6 +242,6 @@ export function parserDynamicImport(str: MODE): () => Promise<any> {
     yacas: async () => await import('codemirror/mode/yacas/yacas'),
     yaml: async () => await import('codemirror/mode/yaml/yaml'),
     z80: async () => await import('codemirror/mode/z80/z80'),
-  };
-  return dynamicArray[str];
+  }
+  return dynamicArray[str]
 }

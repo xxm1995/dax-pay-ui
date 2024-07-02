@@ -9,14 +9,14 @@
   </PageWrapper>
 </template>
 <script lang="ts" setup>
-  import { BasicForm, useForm } from '@/components/Form';
-  import { schemas } from './data';
-  import { useMessage } from '@/hooks/web/useMessage';
-  import { PageWrapper } from '@/components/Page';
+  import { BasicForm, useForm } from '@/components/Form'
+  import { schemas } from './data'
+  import { useMessage } from '@/hooks/web/useMessage'
+  import { PageWrapper } from '@/components/Page'
 
-  defineOptions({ name: 'FormBasicPage' });
+  defineOptions({ name: 'FormBasicPage' })
 
-  const { createMessage } = useMessage();
+  const { createMessage } = useMessage()
   const [register, { validate, setProps }] = useForm({
     labelCol: {
       span: 8,
@@ -33,26 +33,26 @@
       text: '提交',
     },
     submitFunc: customSubmitFunc,
-  });
+  })
 
   async function customSubmitFunc() {
     try {
-      await validate();
+      await validate()
       setProps({
         submitButtonOptions: {
           loading: true,
         },
-      });
+      })
       setTimeout(() => {
         setProps({
           submitButtonOptions: {
             loading: false,
           },
-        });
-        createMessage.success('提交成功！');
-      }, 2000);
+        })
+        createMessage.success('提交成功！')
+      }, 2000)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 </script>

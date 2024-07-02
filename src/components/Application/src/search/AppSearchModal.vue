@@ -4,13 +4,7 @@
       <div :class="getClass" @click.stop v-if="visible">
         <div :class="`${prefixCls}-content`" v-click-outside="handleClose">
           <div :class="`${prefixCls}-input__wrapper`">
-            <a-input
-              :class="`${prefixCls}-input`"
-              :placeholder="t('common.searchText')"
-              ref="inputRef"
-              allow-clear
-              @change="handleSearch"
-            >
+            <a-input :class="`${prefixCls}-input`" :placeholder="t('common.searchText')" ref="inputRef" allow-clear @change="handleSearch">
               <template #prefix>
                 <SearchOutlined />
               </template>
@@ -44,11 +38,7 @@
               </div>
               <div :class="`${prefixCls}-list__item-text`">
                 <!-- 搜索结果包含的字符着色 -->
-                <span
-                  v-for="(each, i) in item.chars"
-                  :key="i"
-                  :class="{ highlight: each.highlight }"
-                >
+                <span v-for="(each, i) in item.chars" :key="i" :class="{ highlight: each.highlight }">
                   {{ each.char }}
                 </span>
               </div>
@@ -65,35 +55,34 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, unref, ref, watch, nextTick } from 'vue';
-  import { SearchOutlined } from '@ant-design/icons-vue';
-  import AppSearchFooter from './AppSearchFooter.vue';
-  import Icon from '@/components/Icon/Icon.vue';
-  import vClickOutside from '@/directives/clickOutside';
-  import { useDesign } from '@/hooks/web/useDesign';
-  import { useRefs } from '@vben/hooks';
-  import { useMenuSearch } from './useMenuSearch';
-  import { useI18n } from '@/hooks/web/useI18n';
-  import { useAppInject } from '@/hooks/web/useAppInject';
+  import { computed, unref, ref, watch, nextTick } from 'vue'
+  import { SearchOutlined } from '@ant-design/icons-vue'
+  import AppSearchFooter from './AppSearchFooter.vue'
+  import Icon from '@/components/Icon/Icon.vue'
+  import vClickOutside from '@/directives/clickOutside'
+  import { useDesign } from '@/hooks/web/useDesign'
+  import { useRefs } from '@vben/hooks'
+  import { useMenuSearch } from './useMenuSearch'
+  import { useI18n } from '@/hooks/web/useI18n'
+  import { useAppInject } from '@/hooks/web/useAppInject'
 
   const props = defineProps({
     visible: { type: Boolean },
-  });
+  })
 
-  const emit = defineEmits(['close']);
+  const emit = defineEmits(['close'])
 
-  const scrollWrap = ref(null);
-  const inputRef = ref<HTMLElement | null>(null);
+  const scrollWrap = ref(null)
+  const inputRef = ref<HTMLElement | null>(null)
 
-  const { t } = useI18n();
-  const { prefixCls } = useDesign('app-search-modal');
-  const { refs, setRefs } = useRefs();
-  const { getIsMobile } = useAppInject();
+  const { t } = useI18n()
+  const { prefixCls } = useDesign('app-search-modal')
+  const { refs, setRefs } = useRefs()
+  const { getIsMobile } = useAppInject()
 
-  const { handleSearch, searchResult, keyword, activeIndex, handleEnter, handleMouseenter } =
-    useMenuSearch(refs, scrollWrap, emit);
+  const { handleSearch, searchResult, keyword, activeIndex, handleEnter, handleMouseenter } = useMenuSearch(refs, scrollWrap, emit)
 
-  const getIsNotData = computed(() => !keyword || unref(searchResult).length === 0);
+  const getIsNotData = computed(() => !keyword || unref(searchResult).length === 0)
 
   const getClass = computed(() => {
     return [
@@ -101,22 +90,22 @@
       {
         [`${prefixCls}--mobile`]: unref(getIsMobile),
       },
-    ];
-  });
+    ]
+  })
 
   watch(
     () => props.visible,
     (visible: boolean) => {
       visible &&
         nextTick(() => {
-          unref(inputRef)?.focus();
-        });
+          unref(inputRef)?.focus()
+        })
     },
-  );
+  )
 
   function handleClose() {
-    searchResult.value = [];
-    emit('close');
+    searchResult.value = []
+    emit('close')
   }
 </script>
 <style lang="less" scoped>

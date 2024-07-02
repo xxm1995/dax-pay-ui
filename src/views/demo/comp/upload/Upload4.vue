@@ -4,13 +4,13 @@
 </template>
 
 <script setup lang="ts">
-  import { createVNode } from 'vue';
-  import { Alert, Button } from 'ant-design-vue';
-  import { BasicForm, FormSchema, useForm } from '@/components/Form';
-  import { useMessage } from '@/hooks/web/useMessage';
-  import { uploadApi } from '@/api/sys/upload';
+  import { createVNode } from 'vue'
+  import { Alert, Button } from 'ant-design-vue'
+  import { BasicForm, FormSchema, useForm } from '@/components/Form'
+  import { useMessage } from '@/hooks/web/useMessage'
+  import { uploadApi } from '@/api/sys/upload'
 
-  const { createMessage } = useMessage();
+  const { createMessage } = useMessage()
 
   const schemasPreview: FormSchema[] = [
     {
@@ -39,12 +39,12 @@
                 Button,
                 {
                   onclick: () => {
-                    console.log(record);
-                    createMessage.success(`请到控制台查看该行输出结果`);
+                    console.log(record)
+                    createMessage.success(`请到控制台查看该行输出结果`)
                   },
                 },
                 () => '点我输出该行信息',
-              );
+              )
             },
           },
         ],
@@ -53,16 +53,16 @@
             .filter((item) => !!item)
             .map((item) => {
               if (typeof item !== 'string') {
-                console.error('return value should be string');
-                return;
+                console.error('return value should be string')
+                return
               }
               return {
                 url5: item,
                 type5: item.split('.').pop() || '',
                 name5: item.split('/').pop() || '',
-              };
-            });
-          return data;
+              }
+            })
+          return data
         },
         resultField: 'data5.url',
         api: (file, progress) => {
@@ -73,9 +73,9 @@
                 data5: {
                   url: uploadApiResponse.data.url,
                 },
-              });
-            });
-          });
+              })
+            })
+          })
         },
       },
     },
@@ -113,7 +113,7 @@
                           },
                           uidKey: 'id6',
                           valueKey: 'url6',
-                        });
+                        })
                       },
                     },
                     () => '点我新增',
@@ -127,32 +127,32 @@
                           record: { url6: record.url6 },
                           uidKey: 'url6',
                           valueKey: 'url6',
-                        });
+                        })
                       },
                     },
                     () => '点我删除',
                   ),
-                ]);
+                ])
               },
             },
-          ];
+          ]
         },
         beforePreviewData: (arg) => {
           let data = arg
             .filter((item) => !!item)
             .map((item) => {
               if (typeof item !== 'object') {
-                console.error('return value should be object');
-                return;
+                console.error('return value should be object')
+                return
               }
               return {
                 uid: item?.uid,
                 url6: item?.url,
                 type6: item?.url?.split('.').pop() || '',
                 name6: item?.url?.split('/').pop() || '',
-              };
-            });
-          return data;
+              }
+            })
+          return data
         },
         resultField: 'data6.url',
         api: (file, progress) => {
@@ -163,13 +163,13 @@
                 data6: {
                   url: uploadApiResponse.data.url,
                 },
-              });
-            });
-          });
+              })
+            })
+          })
         },
       },
     },
-  ];
+  ]
   const [registerPreview, { getFieldsValue: getFieldsValuePreview }] = useForm({
     labelWidth: 160,
     schemas: schemasPreview,
@@ -178,10 +178,10 @@
     },
     submitFunc: () => {
       return new Promise((resolve) => {
-        console.log(getFieldsValuePreview());
-        resolve();
-        createMessage.success(`请到控制台查看结果`);
-      });
+        console.log(getFieldsValuePreview())
+        resolve()
+        createMessage.success(`请到控制台查看结果`)
+      })
     },
-  });
+  })
 </script>

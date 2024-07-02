@@ -4,17 +4,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
-  import { onClickOutside } from '@vueuse/core';
+  import { ref, onMounted } from 'vue'
+  import { onClickOutside } from '@vueuse/core'
 
-  const emit = defineEmits(['mounted', 'clickOutside']);
-  const wrap = ref(null);
+  const emit = defineEmits(['mounted', 'clickOutside'])
+  const wrap = ref(null)
 
   onClickOutside(wrap, () => {
-    emit('clickOutside');
-  });
+    emit('clickOutside')
+  })
 
   onMounted(() => {
-    emit('mounted');
-  });
+    emit('mounted')
+  })
 </script>

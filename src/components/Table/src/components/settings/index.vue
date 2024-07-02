@@ -12,27 +12,27 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import type { PropType } from 'vue';
-  import type { TableSetting, ColumnChangeParam } from '../../types/table';
-  import { computed, unref } from 'vue';
-  import ColumnSetting from './ColumnSetting.vue';
-  import SizeSetting from './SizeSetting.vue';
-  import RedoSetting from './RedoSetting.vue';
-  import FullScreenSetting from './FullScreenSetting.vue';
-  import { useTableContext } from '../../hooks/useTableContext';
+  import type { PropType } from 'vue'
+  import type { TableSetting, ColumnChangeParam } from '../../types/table'
+  import { computed, unref } from 'vue'
+  import ColumnSetting from './ColumnSetting.vue'
+  import SizeSetting from './SizeSetting.vue'
+  import RedoSetting from './RedoSetting.vue'
+  import FullScreenSetting from './FullScreenSetting.vue'
+  import { useTableContext } from '../../hooks/useTableContext'
 
-  defineOptions({ name: 'TableSetting' });
+  defineOptions({ name: 'TableSetting' })
 
   const props = defineProps({
     setting: {
       type: Object as PropType<TableSetting>,
       default: () => ({}),
     },
-  });
+  })
 
-  const emit = defineEmits(['columns-change']);
+  const emit = defineEmits(['columns-change'])
 
-  const table = useTableContext();
+  const table = useTableContext()
 
   const getSetting = computed((): TableSetting => {
     return {
@@ -42,15 +42,15 @@
       settingCache: false,
       fullScreen: false,
       ...props.setting,
-    };
-  });
+    }
+  })
 
   function handleColumnChange(data: ColumnChangeParam[]) {
-    emit('columns-change', data);
+    emit('columns-change', data)
   }
 
   function getTableContainer() {
-    return table ? unref(table.wrapRef) : document.body;
+    return table ? unref(table.wrapRef) : document.body
   }
 </script>
 <style lang="less">

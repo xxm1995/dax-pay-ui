@@ -1,12 +1,12 @@
-import { defineComponent, onMounted, ref, unref } from 'vue';
-import { Card, Spin, Typography, message, Input, Button, Space } from 'ant-design-vue';
-import { imitateApi } from './mock-api';
-import { useRequest } from '@vben/hooks';
-import { PageWrapper } from '@/components/Page';
+import { defineComponent, onMounted, ref, unref } from 'vue'
+import { Card, Spin, Typography, message, Input, Button, Space } from 'ant-design-vue'
+import { imitateApi } from './mock-api'
+import { useRequest } from '@vben/hooks'
+import { PageWrapper } from '@/components/Page'
 
 const Demo1 = defineComponent({
   setup() {
-    const { data, error, loading } = useRequest(imitateApi);
+    const { data, error, loading } = useRequest(imitateApi)
 
     return () => (
       <Card title="默认用法">
@@ -19,9 +19,7 @@ const Demo1 = defineComponent({
             <Typography.Text code>error</Typography.Text>
             等状态。
           </Typography.Paragraph>
-          <Typography.Text code>
-            {`const { data, error, loading } = useRequest(imitateApi);`}
-          </Typography.Text>
+          <Typography.Text code>{`const { data, error, loading } = useRequest(imitateApi);`}</Typography.Text>
         </Typography>
 
         {/* 基础案例 */}
@@ -29,26 +27,26 @@ const Demo1 = defineComponent({
           <div class="mt-4">{error.value ? 'failed to load' : `Username: ${data.value}`}</div>
         </Spin>
       </Card>
-    );
+    )
   },
-});
+})
 
 const Demo2 = defineComponent({
   setup() {
-    const search = ref('');
+    const search = ref('')
     const setSearch = (value: string) => {
-      search.value = value;
-    };
+      search.value = value
+    }
 
     const { loading, run } = useRequest(imitateApi, {
       manual: true,
       onSuccess: (result, params) => {
         if (result) {
-          setSearch('');
-          message.success(`The username was changed to "${params[0]}" !`);
+          setSearch('')
+          message.success(`The username was changed to "${params[0]}" !`)
         }
       },
-    });
+    })
 
     return () => (
       <Card title="手动触发" class="mt-2">
@@ -59,9 +57,7 @@ const Demo2 = defineComponent({
             ，则 useRequest 不会默认执行，需要通过
             <Typography.Text type="danger"> run </Typography.Text>来触发执行。
           </Typography.Paragraph>
-          <Typography.Text code>
-            {`const { loading, run } = useRequest(imitateApi, { manual: true });`}
-          </Typography.Text>
+          <Typography.Text code>{`const { loading, run } = useRequest(imitateApi, { manual: true });`}</Typography.Text>
         </Typography>
 
         {/* 手动触发 */}
@@ -72,35 +68,35 @@ const Demo2 = defineComponent({
           </Button>
         </Space>
       </Card>
-    );
+    )
   },
-});
+})
 
 const Demo3 = defineComponent({
   setup() {
-    const search = ref('');
+    const search = ref('')
     const setSearch = (value: string) => {
-      search.value = value;
-    };
+      search.value = value
+    }
 
     const { loading, run } = useRequest(imitateApi, {
       manual: true,
       onBefore: (params) => {
-        message.info(`Start Request: ${params[0]}`);
+        message.info(`Start Request: ${params[0]}`)
       },
       onSuccess: (result, params) => {
         if (result) {
-          setSearch('');
-          message.success(`The username was changed to "${params[0]}" !`);
+          setSearch('')
+          message.success(`The username was changed to "${params[0]}" !`)
         }
       },
       onError: (error) => {
-        message.error(error.message);
+        message.error(error.message)
       },
       onFinally: () => {
-        message.info(`Request finish`);
+        message.info(`Request finish`)
       },
-    });
+    })
 
     return () => (
       <Card title="生命周期" class="mt-2">
@@ -142,21 +138,21 @@ const Demo3 = defineComponent({
           </Button>
         </Space>
       </Card>
-    );
+    )
   },
-});
+})
 
 const Demo4 = defineComponent({
   setup() {
     const { data, loading, run, refresh } = useRequest(imitateApi, {
       manual: true,
-    });
+    })
 
-    onMounted(() => run('lutz'));
+    onMounted(() => run('lutz'))
 
     const changeData = () => {
-      data.value = `${Date.now()}`;
-    };
+      data.value = `${Date.now()}`
+    }
 
     return () => (
       <Card title="刷新（重复上一次请求）" class="mt-2">
@@ -164,8 +160,7 @@ const Demo4 = defineComponent({
           <Typography.Paragraph>
             <Typography.Text type="danger">useRequest </Typography.Text>
             提供了
-            <Typography.Text type="danger"> refresh </Typography.Text>和
-            <Typography.Text type="danger"> refreshAsync </Typography.Text>
+            <Typography.Text type="danger"> refresh </Typography.Text>和<Typography.Text type="danger"> refreshAsync </Typography.Text>
             方法，使我们可以使用上一次的参数，重新发起请求。
           </Typography.Paragraph>
         </Typography>
@@ -180,34 +175,33 @@ const Demo4 = defineComponent({
           </Space>
         </Spin>
       </Card>
-    );
+    )
   },
-});
+})
 
 const Demo5 = defineComponent({
   setup() {
-    const search = ref('');
+    const search = ref('')
     const setSearch = (value: string) => {
-      search.value = value;
-    };
+      search.value = value
+    }
 
     const { loading, run, cancel } = useRequest(imitateApi, {
       manual: true,
       onSuccess: (result, params) => {
         if (result) {
-          setSearch('');
-          message.success(`The username was changed to "${params[0]}" !`);
+          setSearch('')
+          message.success(`The username was changed to "${params[0]}" !`)
         }
       },
-    });
+    })
 
     return () => (
       <Card title="取消响应" class="mt-2">
         <Typography>
           <Typography.Paragraph>
             <Typography.Text type="danger"> useRequest </Typography.Text>提供了
-            <Typography.Text type="danger"> cancel </Typography.Text>函数，用于忽略当前 promise
-            返回的数据和错误
+            <Typography.Text type="danger"> cancel </Typography.Text>函数，用于忽略当前 promise 返回的数据和错误
           </Typography.Paragraph>
         </Typography>
 
@@ -222,13 +216,13 @@ const Demo5 = defineComponent({
           </Button>
         </Space>
       </Card>
-    );
+    )
   },
-});
+})
 
 const Demo6 = defineComponent({
   setup() {
-    const search = ref('');
+    const search = ref('')
 
     const {
       data: username,
@@ -237,11 +231,11 @@ const Demo6 = defineComponent({
       params,
     } = useRequest(imitateApi, {
       defaultParams: ['lutz'],
-    });
+    })
 
     const onChange = () => {
-      run(search.value);
-    };
+      run(search.value)
+    }
 
     return () => (
       <Card title="管理参数" class="mt-2">
@@ -275,9 +269,9 @@ const Demo6 = defineComponent({
           <div>Username: {unref(username)}</div>
         </div>
       </Card>
-    );
+    )
   },
-});
+})
 
 export default defineComponent({
   setup() {
@@ -286,10 +280,7 @@ export default defineComponent({
         v-slots={{
           headerContent: () => (
             <Typography>
-              <Typography.Link
-                href="https://ahooks.js.org/zh-CN/hooks/use-request/index"
-                target="_blank"
-              >
+              <Typography.Link href="https://ahooks.js.org/zh-CN/hooks/use-request/index" target="_blank">
                 ahooks{' '}
               </Typography.Link>
               useRequest 的 vue 版本，是一个强大的异步数据管理的 Hooks。
@@ -323,6 +314,6 @@ export default defineComponent({
         <Demo5 />
         <Demo6 />
       </PageWrapper>
-    );
+    )
   },
-});
+})
