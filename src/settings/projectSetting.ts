@@ -165,9 +165,6 @@ const setting: ProjectConfig = {
   // Whether to show the breadcrumb icon
   showBreadCrumbIcon: false,
 
-  // Use error-handler-plugin
-  useErrorHandle: false,
-
   // 是否打开返回顶部
   useOpenBackTop: true,
 

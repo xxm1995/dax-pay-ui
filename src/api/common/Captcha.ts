@@ -2,7 +2,7 @@ import { defHttp } from '@/utils/http/axios'
 import { Result } from '#/axios'
 
 /**
- * 获取文件预览地址
+ * 获取验证码
  */
 export const imgCaptcha = () => {
   return defHttp.post<Result<Captcha>>({

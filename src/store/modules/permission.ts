@@ -5,7 +5,7 @@ import { store } from '@/store'
 import { transformObjToRoute, flatMultiLevelRoutes } from '@/router/helper/routeHelper'
 import { transformRouteToMenu } from '@/router/helper/menuHelper'
 
-import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '@/router/routes/basic'
+import { PAGE_NOT_FOUND_ROUTE } from '@/router/routes/basic'
 
 import { filter } from '@/utils/helper/treeHelper'
 
@@ -216,7 +216,6 @@ export const usePermissionStore = defineStore({
       routes = [PAGE_NOT_FOUND_ROUTE, ...routeList]
 
       // 添加更多配置的路由菜单
-      routes.push(ERROR_LOG_ROUTE)
       routes.push(Dashboard)
       routes.push(...PROJECT_BASE)
       patchHomeAffix(routes)

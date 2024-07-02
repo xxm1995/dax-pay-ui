@@ -3,9 +3,16 @@
     <!-- left start -->
     <div :class="`${prefixCls}-left`">
       <!-- logo -->
-      <AppLogo v-if="getShowHeaderLogo || getIsMobile" :class="`${prefixCls}-logo`" :theme="getHeaderTheme" :style="getLogoWidth" />
+      <AppLogo
+        v-if="getShowHeaderLogo || getIsMobile"
+        :class="`${prefixCls}-logo`"
+        :theme="getHeaderTheme"
+        :style="getLogoWidth"
+      />
       <LayoutTrigger
-        v-if="(getShowContent && getShowHeaderTrigger && !getSplit && !getIsMixSidebar) || getIsMobile"
+        v-if="
+          (getShowContent && getShowHeaderTrigger && !getSplit && !getIsMixSidebar) || getIsMobile
+        "
         :theme="getHeaderTheme"
         :sider="false"
       />
@@ -15,7 +22,12 @@
 
     <!-- menu start -->
     <div v-if="getShowTopMenu && !getIsMobile" :class="`${prefixCls}-menu`">
-      <LayoutMenu :isHorizontal="true" :theme="getHeaderTheme" :splitType="getSplitType" :menuMode="getMenuMode" />
+      <LayoutMenu
+        :isHorizontal="true"
+        :theme="getHeaderTheme"
+        :splitType="getSplitType"
+        :menuMode="getMenuMode"
+      />
     </div>
     <!-- menu-end -->
 
@@ -23,13 +35,16 @@
     <div :class="`${prefixCls}-action`">
       <AppSearch v-if="getShowSearch" :class="`${prefixCls}-action__item `" />
 
-      <ErrorAction v-if="getUseErrorHandle" :class="`${prefixCls}-action__item error-action`" />
-
       <Notify v-if="getShowNotice" :class="`${prefixCls}-action__item notify-item`" />
 
       <FullScreen v-if="getShowFullScreen" :class="`${prefixCls}-action__item fullscreen-item`" />
 
-      <AppLocalePicker v-if="getShowLocalePicker" :reload="true" :showText="false" :class="`${prefixCls}-action__item`" />
+      <AppLocalePicker
+        v-if="getShowLocalePicker"
+        :reload="true"
+        :showText="false"
+        :class="`${prefixCls}-action__item`"
+      />
 
       <UserDropDown :theme="getHeaderTheme" />
 
@@ -55,7 +70,7 @@
 
   import LayoutMenu from '../menu/index.vue'
   import LayoutTrigger from '../trigger/index.vue'
-  import { ErrorAction, FullScreen, LayoutBreadcrumb, Notify, UserDropDown } from './components'
+  import { FullScreen, LayoutBreadcrumb, Notify, UserDropDown } from './components'
 
   const SettingDrawer = createAsyncComponent(() => import('@/layouts/default/setting/index.vue'), {
     loading: true,
@@ -66,8 +81,15 @@
     fixed: propTypes.bool,
   })
   const { prefixCls } = useDesign('layout-header')
-  const { getShowTopMenu, getShowHeaderTrigger, getSplit, getIsMixMode, getMenuWidth, getIsMixSidebar } = useMenuSetting()
-  const { getUseErrorHandle, getShowSettingButton, getSettingButtonPosition } = useRootSetting()
+  const {
+    getShowTopMenu,
+    getShowHeaderTrigger,
+    getSplit,
+    getIsMixMode,
+    getMenuWidth,
+    getIsMixSidebar,
+  } = useMenuSetting()
+  const { getShowSettingButton, getSettingButtonPosition } = useRootSetting()
 
   const {
     getHeaderTheme,

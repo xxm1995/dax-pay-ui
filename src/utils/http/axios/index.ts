@@ -12,7 +12,6 @@ import { useMessage } from '@/hooks/web/useMessage'
 import { RequestEnum, ResultEnum, ContentTypeEnum } from '@/enums/httpEnum'
 import { isString } from '@/utils/is'
 import { setObjToUrlParams, deepMerge } from '@/utils'
-import { useErrorLogStoreWithOut } from '@/store/modules/errorLog'
 import { joinTimestamp, formatRequestDate } from './helper'
 import { useUserStoreWithOut } from '@/store/modules/user'
 import { AxiosRetry } from '@/utils/http/axios/axiosRetry'
@@ -156,8 +155,6 @@ const transform: AxiosTransform = {
    * 响应错误处理
    */
   responseInterceptorsCatch: (axiosInstance: AxiosInstance, error: any) => {
-    const errorLogStore = useErrorLogStoreWithOut()
-    errorLogStore.addAjaxErrorInfo(error)
     const { response, code, message, config } = error || {}
     const errorMessageMode = config?.requestOptions?.errorMessageMode || 'none'
     const msg: string = response?.data?.error?.message ?? ''
