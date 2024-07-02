@@ -14,3 +14,4 @@ dist
 /bin
 Dockerfile
 package.json
+*.less
