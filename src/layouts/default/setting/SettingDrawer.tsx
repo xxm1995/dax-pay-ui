@@ -47,7 +47,6 @@ export default defineComponent({
       getFullContent,
       getColorWeak,
       getGrayMode,
-      getLockTime,
       getShowDarkModeToggle,
       // getThemeColor,
     } = useRootSetting()
@@ -145,7 +144,7 @@ export default defineComponent({
       return (
         <>
           <SwitchItem
-            title={t('layout.setting.splitMenu')}
+            title="分割菜单"
             event={HandlerEnum.MENU_SPLIT}
             def={unref(getSplit)}
             disabled={!unref(getShowMenuRef) || unref(getMenuType) !== MenuTypeEnum.MIX}
@@ -240,15 +239,6 @@ export default defineComponent({
             event={HandlerEnum.CONTENT_MODE}
             def={unref(getContentMode)}
             options={contentModeOptions}
-          />
-          <InputNumberItem
-            title={t('layout.setting.autoScreenLock')}
-            min={0}
-            event={HandlerEnum.LOCK_TIME}
-            defaultValue={unref(getLockTime)}
-            formatter={(value: string) => {
-              return parseInt(value) === 0 ? `0(${t('layout.setting.notAutoScreenLock')})` : `${value}${t('layout.setting.minute')}`
-            }}
           />
           <InputNumberItem
             title={t('layout.setting.expandedMenuWidth')}
@@ -347,7 +337,7 @@ export default defineComponent({
 
     return () => (
       <BasicDrawer {...attrs} title={t('layout.setting.drawerTitle')} width={330} class="setting-drawer">
-        {unref(getShowDarkModeToggle) && <Divider>{() => t('layout.setting.darkMode')}</Divider>}
+        {unref(getShowDarkModeToggle) && <Divider>{() => '主题'}</Divider>}
         {unref(getShowDarkModeToggle) && <AppDarkModeToggle class="mx-auto" />}
         <Divider>{() => t('layout.setting.navMode')}</Divider>
         {renderSidebar()}

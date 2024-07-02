@@ -11,7 +11,7 @@ const Dashboard: AppRouteModule = {
   meta: {
     orderNo: 10,
     icon: 'ion:grid-outline',
-    title: t('routes.dashboard.dashboard'),
+    title: 'dashboard',
   },
   children: [
     {
@@ -20,7 +20,7 @@ const Dashboard: AppRouteModule = {
       component: () => import('@/views/dashboard/analysis/index.vue'),
       meta: {
         // affix: true,
-        title: t('routes.dashboard.analysis'),
+        title: '分析页',
       },
     },
   ],

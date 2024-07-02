@@ -1,4 +1,3 @@
-import { useI18n } from '@/hooks/web/useI18n'
 import { useGo } from '@/hooks/web/usePage'
 import { getMenus } from '@/router/menus'
 import { type Menu } from '@/router/types'
@@ -36,7 +35,6 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref, emit: A
 
   let menuList: Menu[] = []
 
-  const { t } = useI18n()
   const go = useGo()
   const handleSearch = useDebounceFn(search, 200)
 
@@ -44,7 +42,7 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref, emit: A
     const list = await getMenus()
     menuList = cloneDeep(list)
     forEach(menuList, (item) => {
-      item.name = t(item.meta?.title || item.name)
+      item.name = item.meta?.title || item.name
     })
   })
 

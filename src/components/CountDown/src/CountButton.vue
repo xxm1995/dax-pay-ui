@@ -8,7 +8,6 @@
   import { Button } from 'ant-design-vue'
   import { useCountdown } from './useCountdown'
   import { isFunction } from '@/utils/is'
-  import { useI18n } from '@/hooks/web/useI18n'
 
   defineOptions({ name: 'CountButton' })
 
@@ -21,12 +20,11 @@
     },
   })
 
-  const { t } = useI18n()
   const loading = ref(false)
   const { currentCount, isStart, start, reset } = useCountdown(props.count)
 
   const getButtonText = computed(() => {
-    return !unref(isStart) ? t('component.countdown.normalText') : t('component.countdown.sendText', [unref(currentCount)])
+    return !unref(isStart) ? '获取验证码' : `${unref(currentCount)}秒后重新获取`
   })
 
   watchEffect(() => {

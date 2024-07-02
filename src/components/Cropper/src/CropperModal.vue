@@ -1,13 +1,5 @@
 <template>
-  <BasicModal
-    v-bind="$attrs"
-    @register="register"
-    :title="t('component.cropper.modalTitle')"
-    width="800px"
-    :canFullscreen="false"
-    @ok="handleOk"
-    :okText="t('component.cropper.okText')"
-  >
+  <BasicModal v-bind="$attrs" @register="register" title="头像上传" width="800px" :canFullscreen="false" @ok="handleOk" okText="确认并上传">
     <div :class="prefixCls">
       <div :class="`${prefixCls}-left`">
         <div :class="`${prefixCls}-cropper`">
@@ -16,12 +8,12 @@
 
         <div :class="`${prefixCls}-toolbar`">
           <Upload :fileList="[]" accept="image/*" :beforeUpload="handleBeforeUpload">
-            <Tooltip :title="t('component.cropper.selectImage')" placement="bottom">
+            <Tooltip :title="'选择图片'" placement="bottom">
               <a-button size="small" preIcon="ant-design:upload-outlined" type="primary" />
             </Tooltip>
           </Upload>
           <Space>
-            <Tooltip :title="t('component.cropper.btn_reset')" placement="bottom">
+            <Tooltip title="重置" placement="bottom">
               <a-button
                 type="primary"
                 preIcon="ant-design:reload-outlined"
@@ -30,7 +22,7 @@
                 @click="handlerToolbar('reset')"
               />
             </Tooltip>
-            <Tooltip :title="t('component.cropper.btn_rotate_left')" placement="bottom">
+            <Tooltip title="逆时针旋转" placement="bottom">
               <a-button
                 type="primary"
                 preIcon="ant-design:rotate-left-outlined"
@@ -39,7 +31,7 @@
                 @click="handlerToolbar('rotate', -45)"
               />
             </Tooltip>
-            <Tooltip :title="t('component.cropper.btn_rotate_right')" placement="bottom">
+            <Tooltip title="顺时针旋转" placement="bottom">
               <a-button
                 type="primary"
                 preIcon="ant-design:rotate-right-outlined"
@@ -48,13 +40,13 @@
                 @click="handlerToolbar('rotate', 45)"
               />
             </Tooltip>
-            <Tooltip :title="t('component.cropper.btn_scale_x')" placement="bottom">
+            <Tooltip title="水平翻转" placement="bottom">
               <a-button type="primary" preIcon="vaadin:arrows-long-h" size="small" :disabled="!src" @click="handlerToolbar('scaleX')" />
             </Tooltip>
-            <Tooltip :title="t('component.cropper.btn_scale_y')" placement="bottom">
+            <Tooltip title="垂直翻转" placement="bottom">
               <a-button type="primary" preIcon="vaadin:arrows-long-v" size="small" :disabled="!src" @click="handlerToolbar('scaleY')" />
             </Tooltip>
-            <Tooltip :title="t('component.cropper.btn_zoom_in')" placement="bottom">
+            <Tooltip title="放大" placement="bottom">
               <a-button
                 type="primary"
                 preIcon="ant-design:zoom-in-outlined"
@@ -63,7 +55,7 @@
                 @click="handlerToolbar('zoom', 0.1)"
               />
             </Tooltip>
-            <Tooltip :title="t('component.cropper.btn_zoom_out')" placement="bottom">
+            <Tooltip title="缩小" placement="bottom">
               <a-button
                 type="primary"
                 preIcon="ant-design:zoom-out-outlined"
@@ -77,7 +69,7 @@
       </div>
       <div :class="`${prefixCls}-right`">
         <div :class="`${prefixCls}-preview`">
-          <img :src="previewSource" v-if="previewSource" :alt="t('component.cropper.preview')" />
+          <img :src="previewSource" v-if="previewSource" :alt="'预览'" />
         </div>
         <template v-if="previewSource">
           <div :class="`${prefixCls}-group`">
@@ -101,7 +93,6 @@
   import { BasicModal, useModalInner } from '@/components/Modal'
   import { dataURLtoBlob } from '@/utils/file/base64Conver'
   import { isFunction } from '@/utils/is'
-  import { useI18n } from '@/hooks/web/useI18n'
 
   type apiFunParams = { file: Blob; name: string; filename: string }
 
@@ -127,12 +118,11 @@
 
   const { prefixCls } = useDesign('cropper-am')
   const [register, { closeModal, setModalProps }] = useModalInner()
-  const { t } = useI18n()
 
   // Block upload
   function handleBeforeUpload(file: File) {
     if (props.size && file.size > 1024 * 1024 * props.size) {
-      emit('uploadError', { msg: t('component.cropper.imageTooBig') })
+      emit('uploadError', { msg: '图片超限' })
       return false
     }
     const reader = new FileReader()

@@ -63,7 +63,6 @@
   import iconsData from '../data/icons.data'
   import { usePagination } from '@/hooks/web/usePagination'
   import { useDebounceFn } from '@vueuse/core'
-  import { useI18n } from '@/hooks/web/useI18n'
   import svgIcons from 'virtual:svg-icons-names'
   import { copyText } from '@/utils/copyTextToClipboard'
 
@@ -117,7 +116,6 @@
     }
   }
 
-  const { t } = useI18n()
   const { prefixCls } = useDesign('icon-picker')
 
   const debounceHandleSearchChange = useDebounceFn(handleSearchChange, 100)
@@ -142,7 +140,7 @@
   function handleClick(icon: string) {
     currentSelect.value = icon
     if (props.copy) {
-      copyText(icon, t('component.icon.copy'))
+      copyText(icon, '复制')
     }
   }
 

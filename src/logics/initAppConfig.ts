@@ -12,7 +12,6 @@ import { updateColorWeak } from '@/logics/theme/updateColorWeak'
 import { updateGrayMode } from '@/logics/theme/updateGrayMode'
 
 import { useAppStore } from '@/store/modules/app'
-import { useLocaleStore } from '@/store/modules/locale'
 
 import { getCommonStoragePrefix, getStorageShortName } from '@/utils/env'
 
@@ -22,7 +21,6 @@ import { Persistent } from '@/utils/cache/persistent'
 
 // Initial project configuration
 export function initAppConfigStore() {
-  const localeStore = useLocaleStore()
   const appStore = useAppStore()
   let projCfg: ProjectConfig = Persistent.getLocal(PROJ_CFG_KEY) as ProjectConfig
   projCfg = deepMerge(projectSetting, projCfg || {})
@@ -51,9 +49,6 @@ export function initAppConfigStore() {
     headerBgColor && updateHeaderBgColor(headerBgColor)
     bgColor && updateSidebarBgColor(bgColor)
   }
-  // init store
-  localeStore.initLocale()
-
   setTimeout(() => {
     clearObsoleteStorage()
   }, 16)

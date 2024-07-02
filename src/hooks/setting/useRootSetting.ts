@@ -42,8 +42,6 @@ export function useRootSetting() {
 
   const getGrayMode = computed(() => appStore.getProjectConfig.grayMode)
 
-  const getLockTime = computed(() => appStore.getProjectConfig.lockTime)
-
   const getShowDarkModeToggle = computed(() => appStore.getProjectConfig.showDarkModeToggle)
 
   const getDarkMode = computed(() => appStore.getDarkMode)
@@ -78,7 +76,6 @@ export function useRootSetting() {
     getShowSettingButton,
     getShowFooter,
     getContentMode,
-    getLockTime,
     getThemeColor,
     getDarkMode,
     setDarkMode,

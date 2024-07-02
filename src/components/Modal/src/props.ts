@@ -13,8 +13,8 @@ export const modalProps = {
   // open drag
   draggable: { type: Boolean, default: true },
   centered: { type: Boolean },
-  cancelText: { type: String, default: t('common.cancelText') },
-  okText: { type: String, default: t('common.okText') },
+  cancelText: { type: String, default: '取消' },
+  okText: { type: String, default: '确认' },
 
   closeFunc: Function as PropType<() => Promise<boolean>>,
 }

@@ -62,7 +62,7 @@ function createConfirm(options: ModalOptionsEx) {
 const getBaseOptions = () => {
   const { t } = useI18n()
   return {
-    okText: t('common.okText'),
+    okText: '确认',
     centered: true,
   }
 }

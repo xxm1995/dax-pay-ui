@@ -4,19 +4,15 @@
       <div :class="getClass" @click.stop v-if="visible">
         <div :class="`${prefixCls}-content`" v-click-outside="handleClose">
           <div :class="`${prefixCls}-input__wrapper`">
-            <a-input :class="`${prefixCls}-input`" :placeholder="t('common.searchText')" ref="inputRef" allow-clear @change="handleSearch">
+            <a-input :class="`${prefixCls}-input`" :placeholder="'搜索'" ref="inputRef" allow-clear @change="handleSearch">
               <template #prefix>
                 <SearchOutlined />
               </template>
             </a-input>
-            <span :class="`${prefixCls}-cancel`" @click="handleClose">
-              {{ t('common.cancelText') }}
-            </span>
+            <span :class="`${prefixCls}-cancel`" @click="handleClose"> 关闭 </span>
           </div>
 
-          <div :class="`${prefixCls}-not-data`" v-show="getIsNotData">
-            {{ t('component.app.searchNotData') }}
-          </div>
+          <div :class="`${prefixCls}-not-data`" v-show="getIsNotData"> 暂无搜索结果 </div>
 
           <ul :class="`${prefixCls}-list`" v-show="!getIsNotData" ref="scrollWrap">
             <li
@@ -63,7 +59,6 @@
   import { useDesign } from '@/hooks/web/useDesign'
   import { useRefs } from '@vben/hooks'
   import { useMenuSearch } from './useMenuSearch'
-  import { useI18n } from '@/hooks/web/useI18n'
   import { useAppInject } from '@/hooks/web/useAppInject'
 
   const props = defineProps({
@@ -75,7 +70,6 @@
   const scrollWrap = ref(null)
   const inputRef = ref<HTMLElement | null>(null)
 
-  const { t } = useI18n()
   const { prefixCls } = useDesign('app-search-modal')
   const { refs, setRefs } = useRefs()
   const { getIsMobile } = useAppInject()

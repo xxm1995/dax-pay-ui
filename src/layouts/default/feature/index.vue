@@ -1,5 +1,4 @@
 <template>
-  <LayoutLockPage />
   <SettingDrawer v-if="getIsFixedSettingDrawer && (!getShowMultipleTab || getFullContent)" :class="prefixCls" />
   <SessionTimeoutLogin v-if="getIsSessionTimeout" />
 </template>
@@ -20,7 +19,6 @@
 
   defineOptions({ name: 'LayoutFeatures' })
 
-  const LayoutLockPage = createAsyncComponent(() => import('@/views/sys/lock/index.vue'))
   const SettingDrawer = createAsyncComponent(() => import('@/layouts/default/setting/index.vue'))
 
   const { getShowSettingButton, getSettingButtonPosition, getFullContent } = useRootSetting()

@@ -62,18 +62,14 @@ const setting: ProjectConfig = {
     show: true,
     // 主题
     theme: ThemeEnum.LIGHT,
-    // 是否启用锁屏功能
-    useLockPage: true,
     // 是否显示全屏按钮
     showFullScreen: true,
     // 是否显示文档按钮
-    showDoc: false,
+    showDoc: true,
     // 是否显示通知按钮
     showNotice: false,
     // 是否显示搜索按钮
     showSearch: true,
-    // 显示API切换
-    showApi: false,
   },
 
   // 菜单配置
@@ -155,9 +151,6 @@ const setting: ProjectConfig = {
 
   // Whether to enable KeepAlive cache is best to close during development, otherwise the cache needs to be cleared every time
   openKeepAlive: true,
-
-  // Automatic screen lock time, 0 does not lock the screen. Unit minute default 0
-  lockTime: 0,
 
   // Whether to show breadcrumbs
   showBreadCrumb: true,

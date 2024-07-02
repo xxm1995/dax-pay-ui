@@ -6,6 +6,7 @@ import { PageEnum } from '@/enums/pageEnum'
 import { useUserStoreWithOut } from '@/store/modules/user'
 
 import { PAGE_NOT_FOUND_ROUTE } from '@/router/routes/basic'
+import { userLoginInitAction } from '@/store/action/userAction'
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN
 
@@ -66,7 +67,7 @@ export function createPermissionGuard(router: Router) {
       return
     }
     // 用户初始化等操作.
-    // userLoginInitAction()
+    userLoginInitAction().then()
 
     // 重载菜单, 进行路由菜单的组装并进行跳转
     console.log('重载菜单')

@@ -2,14 +2,6 @@ import { ErrorTypeEnum } from '@/enums/exceptionEnum'
 import { MenuModeEnum, MenuTypeEnum } from '@/enums/menuEnum'
 import { RoleInfo } from '@/api/sys/model/userModel'
 
-// Lock screen information
-export interface LockInfo {
-  // Password required
-  pwd?: string | undefined
-  // Is it locked?
-  isLock?: boolean
-}
-
 export interface ApiAddress {
   key: string
   val: string
@@ -36,13 +28,14 @@ export interface ErrorLogInfo {
 }
 
 export interface UserInfo {
-  userId: string | number
+  // 用户id
+  userId: number
+  // 名称
+  name: string
+  // 账号
   username: string
-  realName: string
+  // 头像图片id
   avatar: string
-  desc?: string
-  homePath?: string
-  roles: RoleInfo[]
 }
 
 export interface BeforeMiniState {
@@ -57,4 +50,13 @@ export interface TableSetting {
   showIndexColumn: Recordable<Nullable<boolean>>
   columns: Recordable<Nullable<Array<ColumnOptionsType>>>
   showRowSelection: Recordable<Nullable<boolean>>
+}
+
+/**
+ * 字典
+ */
+export interface Dict {
+  dictCode: string
+  code: string
+  name: string
 }

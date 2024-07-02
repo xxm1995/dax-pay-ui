@@ -11,7 +11,7 @@
       <slot name="title"></slot>
     </template>
 
-    <ScrollContainer :style="getScrollContentStyle" v-loading="getLoading" :loading-tip="loadingText || t('common.loadingText')">
+    <ScrollContainer :style="getScrollContentStyle" v-loading="getLoading" :loading-tip="loadingText || '加载中...'">
       <slot></slot>
     </ScrollContainer>
     <DrawerFooter v-bind="getProps" @close="onClose" @ok="handleOk" :height="getFooterHeight">
@@ -26,7 +26,6 @@
   import { ref, computed, watch, unref, nextTick, getCurrentInstance } from 'vue'
   import type { CSSProperties, Ref } from 'vue'
   import { Drawer } from 'ant-design-vue'
-  import { useI18n } from '@/hooks/web/useI18n'
   import { isFunction, isNumber } from '@/utils/is'
   import { deepMerge } from '@/utils'
   import DrawerFooter from './components/DrawerFooter.vue'
@@ -46,7 +45,6 @@
   const attrs = useAttrs()
   const propsRef = ref({}) as Ref<Partial<DrawerProps>>
 
-  const { t } = useI18n()
   const { prefixVar, prefixCls } = useDesign('basic-drawer')
 
   const drawerInstance: DrawerInstance = {

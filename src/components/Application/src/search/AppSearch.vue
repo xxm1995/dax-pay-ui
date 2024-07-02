@@ -3,13 +3,11 @@
   import { Tooltip } from 'ant-design-vue'
   import { SearchOutlined } from '@ant-design/icons-vue'
   import AppSearchModal from './AppSearchModal.vue'
-  import { useI18n } from '@/hooks/web/useI18n'
 
   export default defineComponent({
     name: 'AppSearch',
     setup() {
       const showModal = ref(false)
-      const { t } = useI18n()
 
       function changeModal(show: boolean) {
         showModal.value = show
@@ -20,7 +18,7 @@
           <div class="p-1" onClick={changeModal.bind(null, true)}>
             <Tooltip>
               {{
-                title: () => t('common.searchText'),
+                title: () => '搜索',
                 default: () => <SearchOutlined />,
               }}
             </Tooltip>
