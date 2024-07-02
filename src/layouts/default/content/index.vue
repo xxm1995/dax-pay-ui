@@ -1,5 +1,9 @@
 <template>
-  <div :class="[prefixCls, getLayoutContentMode]" v-loading="getOpenPageLoading && getPageLoading" ref="content">
+  <div
+    :class="[prefixCls, getLayoutContentMode]"
+    v-loading="getOpenPageLoading && getPageLoading"
+    ref="content"
+  >
     <PageLayout />
     <BackTop v-if="getUseOpenBackTop" :target="() => content" :visibilityHeight="100" />
   </div>

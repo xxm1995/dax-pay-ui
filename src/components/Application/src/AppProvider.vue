@@ -45,7 +45,12 @@
           if (!unref(isSetState)) {
             isSetState.value = true
             const {
-              menuSetting: { type: menuType, mode: menuMode, collapsed: menuCollapsed, split: menuSplit },
+              menuSetting: {
+                type: menuType,
+                mode: menuMode,
+                collapsed: menuCollapsed,
+                split: menuSplit,
+              },
             } = appStore.getProjectConfig
             appStore.setProjectConfig({
               menuSetting: {

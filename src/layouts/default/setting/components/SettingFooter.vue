@@ -2,7 +2,7 @@
   <div :class="prefixCls">
     <a-button type="primary" block @click="handleCopy">
       <CopyOutlined class="mr-2" />
-      拷贝'
+      拷贝
     </a-button>
 
     <a-button color="warning" block @click="handleResetSetting" class="my-3">

@@ -1,4 +1,11 @@
-import type { ComponentRenderProxy, VNode, VNodeChild, ComponentPublicInstance, FunctionalComponent, PropType as VuePropType } from 'vue'
+import type {
+  ComponentRenderProxy,
+  VNode,
+  VNodeChild,
+  ComponentPublicInstance,
+  FunctionalComponent,
+  PropType as VuePropType,
+} from 'vue'
 
 declare global {
   const __APP_INFO__: {
@@ -84,5 +91,7 @@ declare global {
 }
 
 declare module 'vue' {
-  export type JSXComponent<Props = any> = { new (): ComponentPublicInstance<Props> } | FunctionalComponent<Props>
+  export type JSXComponent<Props = any> =
+    | { new (): ComponentPublicInstance<Props> }
+    | FunctionalComponent<Props>
 }

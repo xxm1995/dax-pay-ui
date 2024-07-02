@@ -11,7 +11,8 @@
   defineOptions({ name: 'Time' })
 
   const props = defineProps({
-    value: propTypes.oneOfType([propTypes.number, propTypes.instanceOf(Date), propTypes.string]).isRequired,
+    value: propTypes.oneOfType([propTypes.number, propTypes.instanceOf(Date), propTypes.string])
+      .isRequired,
     step: propTypes.number.def(60),
     mode: propTypes.oneOf(['date', 'datetime', 'relative']).def('relative'),
   })

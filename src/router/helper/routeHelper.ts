@@ -56,7 +56,10 @@ function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
  * @param dynamicViewsModules
  * @param component
  */
-function dynamicImport(dynamicViewsModules: Record<string, () => Promise<Recordable>>, component: string) {
+function dynamicImport(
+  dynamicViewsModules: Record<string, () => Promise<Recordable>>,
+  component: string,
+) {
   // 路径集合
   const keys = Object.keys(dynamicViewsModules)
   // 查询配置路径对应的组件
@@ -72,10 +75,14 @@ function dynamicImport(dynamicViewsModules: Record<string, () => Promise<Recorda
     const matchKey = matchKeys[0]
     return dynamicViewsModules[matchKey]
   } else if (matchKeys?.length > 1) {
-    warn('请不要在views文件夹下的同一层次目录中创建具有相同文件名的 .vue 和 .TSX 文件。这将导致动态引入失败')
+    warn(
+      '请不要在views文件夹下的同一层次目录中创建具有相同文件名的 .vue 和 .TSX 文件。这将导致动态引入失败',
+    )
     return
   } else {
-    warn('在src/views/下找不到`' + component + '.vue` 或 `' + component + '.tsx`, 请检查路径是否正确!')
+    warn(
+      '在src/views/下找不到`' + component + '.vue` 或 `' + component + '.tsx`, 请检查路径是否正确!',
+    )
     return EXCEPTION_COMPONENT
   }
 }
@@ -148,7 +155,11 @@ function promoteRouteLevel(routeModule: AppRouteModule) {
 
 // Add all sub-routes to the secondary route
 // 将所有子路由添加到二级路由 弃用
-function addToChildren(routes: RouteRecordNormalized[], children: AppRouteRecordRaw[], routeModule: AppRouteModule) {
+function addToChildren(
+  routes: RouteRecordNormalized[],
+  children: AppRouteRecordRaw[],
+  routeModule: AppRouteModule,
+) {
   for (let index = 0; index < children.length; index++) {
     const child = children[index]
     const route = routes.find((item) => item.name === child.name)

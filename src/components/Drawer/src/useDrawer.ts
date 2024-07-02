@@ -1,5 +1,20 @@
-import type { UseDrawerReturnType, DrawerInstance, ReturnMethods, DrawerProps, UseDrawerInnerReturnType } from './typing'
-import { ref, getCurrentInstance, unref, reactive, watchEffect, nextTick, toRaw, computed } from 'vue'
+import type {
+  UseDrawerReturnType,
+  DrawerInstance,
+  ReturnMethods,
+  DrawerProps,
+  UseDrawerInnerReturnType,
+} from './typing'
+import {
+  ref,
+  getCurrentInstance,
+  unref,
+  reactive,
+  watchEffect,
+  nextTick,
+  toRaw,
+  computed,
+} from 'vue'
 import { isProdMode } from '@/utils/env'
 import { isFunction } from '@/utils/is'
 import { tryOnUnmounted } from '@vueuse/core'

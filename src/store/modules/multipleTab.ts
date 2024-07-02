@@ -157,7 +157,9 @@ export const useMultipleTabStore = defineStore({
           // const realName: string = path.match(/(\S*)\//)![1];
           const realPath = meta?.realPath ?? ''
           // 获取到已经打开的动态路由数, 判断是否大于某一个值
-          if (this.tabList.filter((e) => e.meta?.realPath ?? '' === realPath).length >= dynamicLevel) {
+          if (
+            this.tabList.filter((e) => e.meta?.realPath ?? '' === realPath).length >= dynamicLevel
+          ) {
             // 关闭第一个
             const index = this.tabList.findIndex((item) => item.meta.realPath === realPath)
             index !== -1 && this.tabList.splice(index, 1)

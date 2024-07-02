@@ -7,7 +7,12 @@ import { uniq } from 'lodash-es'
 import { useMenuSetting } from '@/hooks/setting/useMenuSetting'
 import { getAllParentPath } from '@/router/helper/menuHelper'
 
-export function useOpenKeys(menuState: MenuState, menus: Ref<MenuType[]>, mode: Ref<MenuModeEnum>, accordion: Ref<boolean>) {
+export function useOpenKeys(
+  menuState: MenuState,
+  menus: Ref<MenuType[]>,
+  mode: Ref<MenuModeEnum>,
+  accordion: Ref<boolean>,
+) {
   const { getCollapsed, getIsMixSidebar } = useMenuSetting()
 
   async function setOpenKeys(path: string) {

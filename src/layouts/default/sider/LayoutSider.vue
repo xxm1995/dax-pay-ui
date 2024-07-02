@@ -1,5 +1,9 @@
 <template>
-  <div v-if="getMenuFixed && !getIsMobile" v-show="showClassSideBarRef" :style="getHiddenDomStyle"></div>
+  <div
+    v-if="getMenuFixed && !getIsMobile"
+    v-show="showClassSideBarRef"
+    :style="getHiddenDomStyle"
+  ></div>
   <!--
     针对场景：菜单折叠按钮为“底部”时：
     关于 breakpoint，
@@ -50,8 +54,17 @@
   const dragBarRef = ref(null)
   const sideRef = ref(null)
 
-  const { getCollapsed, getMenuWidth, getSplit, getMenuTheme, getRealWidth, getMenuHidden, getMenuFixed, getIsMixMode, getTrigger } =
-    useMenuSetting()
+  const {
+    getCollapsed,
+    getMenuWidth,
+    getSplit,
+    getMenuTheme,
+    getRealWidth,
+    getMenuHidden,
+    getMenuFixed,
+    getIsMixMode,
+    getTrigger,
+  } = useMenuSetting()
 
   const { prefixCls } = useDesign('layout-sideBar')
 

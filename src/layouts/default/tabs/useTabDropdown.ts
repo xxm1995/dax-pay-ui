@@ -7,7 +7,6 @@ import { MenuEventEnum } from './types'
 import { useMultipleTabStore } from '@/store/modules/multipleTab'
 import { RouteLocationNormalized, useRouter } from 'vue-router'
 import { useTabs } from '@/hooks/web/useTabs'
-import { useI18n } from '@/hooks/web/useI18n'
 
 export function useTabDropdown(tabContentProps: TabContentProps, getIsTabs: ComputedRef<boolean>) {
   const state = reactive({
@@ -15,7 +14,6 @@ export function useTabDropdown(tabContentProps: TabContentProps, getIsTabs: Comp
     currentIndex: 0,
   })
 
-  const { t } = useI18n()
   const tabStore = useMultipleTabStore()
   const { currentRoute } = useRouter()
   const { refreshPage, closeAll, close, closeLeft, closeOther, closeRight } = useTabs()
@@ -47,45 +45,46 @@ export function useTabDropdown(tabContentProps: TabContentProps, getIsTabs: Comp
     const disabled = tabStore.getTabList.length === 1
 
     // Close right
-    const closeRightDisabled = !isCurItem || (index === tabStore.getTabList.length - 1 && tabStore.getLastDragEndIndex >= 0)
+    const closeRightDisabled =
+      !isCurItem || (index === tabStore.getTabList.length - 1 && tabStore.getLastDragEndIndex >= 0)
     const dropMenuList: DropMenu[] = [
       {
         icon: 'ion:reload-sharp',
         event: MenuEventEnum.REFRESH_PAGE,
-        text: t('layout.multipleTab.reload'),
+        text: '重新加载',
         disabled: refreshDisabled,
       },
       {
         icon: 'clarity:close-line',
         event: MenuEventEnum.CLOSE_CURRENT,
-        text: t('layout.multipleTab.close'),
+        text: '关闭标签页',
         disabled: !!meta?.affix || disabled,
         divider: true,
       },
       {
         icon: 'line-md:arrow-close-left',
         event: MenuEventEnum.CLOSE_LEFT,
-        text: t('layout.multipleTab.closeLeft'),
+        text: '关闭左侧标签页',
         disabled: closeLeftDisabled,
         divider: false,
       },
       {
         icon: 'line-md:arrow-close-right',
         event: MenuEventEnum.CLOSE_RIGHT,
-        text: t('layout.multipleTab.closeRight'),
+        text: '关闭右侧标签页',
         disabled: closeRightDisabled,
         divider: true,
       },
       {
         icon: 'dashicons:align-center',
         event: MenuEventEnum.CLOSE_OTHER,
-        text: t('layout.multipleTab.closeOther'),
+        text: '关闭其它标签页',
         disabled: disabled || !isCurItem,
       },
       {
         icon: 'clarity:minus-line',
         event: MenuEventEnum.CLOSE_ALL,
-        text: t('layout.multipleTab.closeAll'),
+        text: '关闭全部标签页',
         disabled: disabled,
       },
     ]

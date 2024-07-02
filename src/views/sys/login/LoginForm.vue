@@ -11,16 +11,31 @@
       @keypress.enter="handleLogin"
     >
       <a-form-item name="account" class="enter-x">
-        <a-input size="large" v-model:value="form.account" placeholder="账号/手机号/邮箱" class="fix-auto-fill" />
+        <a-input
+          size="large"
+          v-model:value="form.account"
+          placeholder="账号/手机号/邮箱"
+          class="fix-auto-fill"
+        />
       </a-form-item>
       <a-form-item name="password" class="enter-x">
-        <a-input-password size="large" visibilityToggle v-model:value="form.password" placeholder="密码" />
+        <a-input-password
+          size="large"
+          visibilityToggle
+          v-model:value="form.password"
+          placeholder="密码"
+        />
       </a-form-item>
 
       <a-row :span="12" class="enter-x" v-if="loginType.captcha">
         <a-col :span="16">
           <a-form-item name="captcha" class="enter-x">
-            <a-input size="large" placeholder="验证码" v-model:value="form.captcha" style="min-width: 100px" />
+            <a-input
+              size="large"
+              placeholder="验证码"
+              v-model:value="form.captcha"
+              style="min-width: 100px"
+            />
           </a-form-item>
         </a-col>
         <a-col :span="8" style="text-align: right">
@@ -40,7 +55,13 @@
         <a-col :span="12">
           <a-form-item :style="{ 'text-align': 'right' }">
             <!-- 没有逻辑，你需要自己处理 -->
-            <a-button type="link" size="small" @click="setLoginState(LoginStateEnum.RESET_PASSWORD)"> 忘记密码? </a-button>
+            <a-button
+              type="link"
+              size="small"
+              @click="setLoginState(LoginStateEnum.RESET_PASSWORD)"
+            >
+              忘记密码?
+            </a-button>
           </a-form-item>
         </a-col>
       </a-row>

@@ -31,7 +31,10 @@ export function useGo(_router?: Router) {
   function go(opt?: RouteLocationRawEx): void
   function go(opt: RouteLocationRawEx, isReplace: boolean): void
   function go(opt: RouteLocationRawEx, goType: GoType): void
-  function go(opt: RouteLocationRawEx = PageEnum.BASE_HOME, goTypeOrIsReplace: boolean | GoType = false) {
+  function go(
+    opt: RouteLocationRawEx = PageEnum.BASE_HOME,
+    goTypeOrIsReplace: boolean | GoType = false,
+  ) {
     if (!opt) {
       return
     }

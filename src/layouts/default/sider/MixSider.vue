@@ -31,7 +31,11 @@
           :key="item.path"
         >
           <SimpleMenuTag :item="item" collapseParent dot />
-          <img v-if="item.img" :src="item.img" :class="[`${prefixCls}-module__icon`, getCollapsed ? 'w-16px h-16px' : 'w-20px h-20px']" />
+          <img
+            v-if="item.img"
+            :src="item.img"
+            :class="[`${prefixCls}-module__icon`, getCollapsed ? 'w-16px h-16px' : 'w-20px h-20px']"
+          />
           <Icon
             v-else
             :class="`${prefixCls}-module__icon`"
@@ -39,7 +43,7 @@
             :icon="item.icon || (item.meta && item.meta.icon)"
           />
           <p :class="`${prefixCls}-module__name`">
-            {{ t(item?.meta?.title || item.name) }}
+            {{ item?.meta?.title || item.name }}
           </p>
         </li>
       </ul>
@@ -56,12 +60,26 @@
         ]"
       >
         <span class="text"> {{ title }}</span>
-        <Icon :size="16" :icon="getMixSideFixed ? 'ri:pushpin-2-fill' : 'ri:pushpin-2-line'" class="pushpin" @click="handleFixedMenu" />
+        <Icon
+          :size="16"
+          :icon="getMixSideFixed ? 'ri:pushpin-2-fill' : 'ri:pushpin-2-line'"
+          class="pushpin"
+          @click="handleFixedMenu"
+        />
       </div>
       <ScrollContainer :class="`${prefixCls}-menu-list__content`">
-        <SimpleMenu :items="childrenMenus" :theme="getMenuTheme" mixSider @menu-click="handleMenuClick" />
+        <SimpleMenu
+          :items="childrenMenus"
+          :theme="getMenuTheme"
+          mixSider
+          @menu-click="handleMenuClick"
+        />
       </ScrollContainer>
-      <div v-show="getShowDragBar && openMenu" :class="`${prefixCls}-drag-bar`" ref="dragBarRef"></div>
+      <div
+        v-show="getShowDragBar && openMenu"
+        :class="`${prefixCls}-drag-bar`"
+        ref="dragBarRef"
+      ></div>
     </div>
   </div>
 </template>
@@ -79,7 +97,6 @@
   import { useDragLine } from './useLayoutSider'
   import { useGlobSetting } from '@/hooks/setting'
   import { useDesign } from '@/hooks/web/useDesign'
-  import { useI18n } from '@/hooks/web/useI18n'
   import { useGo } from '@/hooks/web/usePage'
   import { SIDE_BAR_MINI_WIDTH, SIDE_BAR_SHOW_TIT_MINI_WIDTH } from '@/enums/appEnum'
   import vClickOutside from '@/directives/clickOutside'
@@ -88,7 +105,9 @@
   import LayoutTrigger from '../trigger/index.vue'
   import { createAsyncComponent } from '@/utils/factory/createAsyncComponent'
 
-  const SimpleMenuTag = createAsyncComponent(() => import('@/components/SimpleMenu/src/SimpleMenuTag.vue'))
+  const SimpleMenuTag = createAsyncComponent(
+    () => import('@/components/SimpleMenu/src/SimpleMenuTag.vue'),
+  )
 
   defineOptions({ name: 'LayoutMixSider' })
 
@@ -102,7 +121,6 @@
 
   const { prefixCls } = useDesign('layout-mix-sider')
   const go = useGo()
-  const { t } = useI18n()
   const {
     getMenuWidth,
     getCanDrag,

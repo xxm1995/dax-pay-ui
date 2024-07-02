@@ -8,7 +8,14 @@ export const drawLogo = ({ canvas, logo }: RenderQrCodeParams) => {
     })
   }
   const canvasWidth = (canvas as HTMLCanvasElement).width
-  const { logoSize = 0.15, bgColor = '#ffffff', borderSize = 0.05, crossOrigin, borderRadius = 8, logoRadius = 0 } = logo as LogoType
+  const {
+    logoSize = 0.15,
+    bgColor = '#ffffff',
+    borderSize = 0.05,
+    crossOrigin,
+    borderRadius = 8,
+    logoRadius = 0,
+  } = logo as LogoType
 
   const logoSrc: string = isString(logo) ? logo : logo.src
   const logoWidth = canvasWidth * logoSize

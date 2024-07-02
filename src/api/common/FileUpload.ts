@@ -40,7 +40,10 @@ export const getFileDownloadUrl = (id) => {
  * @param params
  * @param onUploadProgress
  */
-export function uploadFile(params: UploadFileParams, onUploadProgress: (progressEvent: AxiosProgressEvent) => void) {
+export function uploadFile(
+  params: UploadFileParams,
+  onUploadProgress: (progressEvent: AxiosProgressEvent) => void,
+) {
   return defHttp.uploadFile<UploadApiResult>(
     {
       url: VITE_GLOB_API_URL + VITE_GLOB_API_URL_PREFIX + '/file/upload',

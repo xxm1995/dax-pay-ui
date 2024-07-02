@@ -1,4 +1,10 @@
-import type { ProjectConfig, HeaderSetting, MenuSetting, TransitionSetting, MultiTabsSetting } from '#/config'
+import type {
+  ProjectConfig,
+  HeaderSetting,
+  MenuSetting,
+  TransitionSetting,
+  MultiTabsSetting,
+} from '#/config'
 import type { BeforeMiniState, ApiAddress } from '#/store'
 
 import { defineStore } from 'pinia'

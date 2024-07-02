@@ -1,8 +1,25 @@
 <script lang="tsx">
   import type { CSSProperties } from 'vue'
-  import type { FieldNames, TreeState, TreeItem, KeyType, CheckKeys, TreeActionType } from './types/tree'
+  import type {
+    FieldNames,
+    TreeState,
+    TreeItem,
+    KeyType,
+    CheckKeys,
+    TreeActionType,
+  } from './types/tree'
 
-  import { defineComponent, reactive, computed, unref, ref, watchEffect, toRaw, watch, onMounted } from 'vue'
+  import {
+    defineComponent,
+    reactive,
+    computed,
+    unref,
+    ref,
+    watchEffect,
+    toRaw,
+    watch,
+    onMounted,
+  } from 'vue'
   import TreeHeader from './components/TreeHeader.vue'
   import { Tree, Spin, Empty } from 'ant-design-vue'
   import { TreeIcon } from './TreeIcon'
@@ -93,7 +110,9 @@
         return omit(propsData, 'treeData', 'class') as TreeProps
       })
 
-      const getTreeSearchData = computed((): TreeItem[] => (searchState.startSearch ? searchState.searchData : unref(treeDataRef)))
+      const getTreeSearchData = computed((): TreeItem[] =>
+        searchState.startSearch ? searchState.searchData : unref(treeDataRef),
+      )
 
       const getNotFound = computed((): boolean => {
         return !getTreeSearchData.value || getTreeSearchData.value.length === 0
@@ -206,7 +225,8 @@
           searchState.startSearch = false
           return
         }
-        const { filterFn, checkable, expandOnSearch, checkOnSearch, selectedOnSearch } = unref(props)
+        const { filterFn, checkable, expandOnSearch, checkOnSearch, selectedOnSearch } =
+          unref(props)
         searchState.startSearch = true
         const { title: titleField, key: keyField } = unref(getFieldNames)
 
@@ -214,7 +234,9 @@
         searchState.searchData = filter(
           unref(treeDataRef),
           (node) => {
-            const result = filterFn ? filterFn(searchValue, node, unref(getFieldNames)) : node[titleField]?.includes(searchValue) ?? false
+            const result = filterFn
+              ? filterFn(searchValue, node, unref(getFieldNames))
+              : node[titleField]?.includes(searchValue) ?? false
             if (result) {
               matchedKeys.push(node[keyField])
             }
@@ -359,7 +381,8 @@
           const title = get(item, titleField)
 
           const searchIdx = searchText ? title.indexOf(searchText) : -1
-          const isHighlight = searchState.startSearch && !isEmpty(searchText) && highlight && searchIdx !== -1
+          const isHighlight =
+            searchState.startSearch && !isEmpty(searchText) && highlight && searchIdx !== -1
           const highlightStyle = `color: ${isBoolean(highlight) ? '#f50' : highlight}`
 
           const titleDom = isHighlight ? (
@@ -372,10 +395,17 @@
             title
           )
 
-          const iconDom = icon ? <TreeIcon icon={icon} /> : slots.icon ? <span class="mr-2">{getSlot(slots, 'icon')}</span> : null
+          const iconDom = icon ? (
+            <TreeIcon icon={icon} />
+          ) : slots.icon ? (
+            <span class="mr-2">{getSlot(slots, 'icon')}</span>
+          ) : null
 
           item[titleField] = (
-            <span class={`${bem('title')}`} onClick={handleClickNode.bind(null, item[keyField], item[childrenField])}>
+            <span
+              class={`${bem('title')}`}
+              onClick={handleClickNode.bind(null, item[keyField], item[childrenField])}
+            >
               {slots?.title ? (
                 <>
                   {iconDom}
@@ -419,13 +449,21 @@
                 {extendSlots(slots)}
               </TreeHeader>
             )}
-            <Spin wrapperClassName={unref(props.treeWrapperClassName)} spinning={unref(props.loading)} tip="加载中...">
+            <Spin
+              wrapperClassName={unref(props.treeWrapperClassName)}
+              spinning={unref(props.loading)}
+              tip="加载中..."
+            >
               <ScrollContainer style={scrollStyle} v-show={!unref(getNotFound)}>
                 <Tree {...unref(getBindValues)} showIcon={false} treeData={treeData.value}>
                   {extendSlots(slots, ['title'])}
                 </Tree>
               </ScrollContainer>
-              <Empty v-show={unref(getNotFound)} image={Empty.PRESENTED_IMAGE_SIMPLE} class="!mt-4" />
+              <Empty
+                v-show={unref(getNotFound)}
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                class="!mt-4"
+              />
             </Spin>
           </div>
         )

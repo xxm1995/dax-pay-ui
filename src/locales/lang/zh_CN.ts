@@ -9,7 +9,10 @@ export default {
     ...genMessage(modules as Recordable<Recordable>, 'zh-CN'),
     antdLocale: {
       ...antdLocale,
-      DatePicker: deepMerge(antdLocale.DatePicker, genMessage(modules as Recordable<Recordable>, 'zh-CN').antdLocale.DatePicker),
+      DatePicker: deepMerge(
+        antdLocale.DatePicker,
+        genMessage(modules as Recordable<Recordable>, 'zh-CN').antdLocale.DatePicker,
+      ),
     },
   },
 }

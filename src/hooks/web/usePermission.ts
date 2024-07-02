@@ -27,7 +27,9 @@ export function usePermission() {
   async function togglePermissionMode() {
     appStore.setProjectConfig({
       permissionMode:
-        projectSetting.permissionMode === PermissionModeEnum.BACK ? PermissionModeEnum.ROUTE_MAPPING : PermissionModeEnum.BACK,
+        projectSetting.permissionMode === PermissionModeEnum.BACK
+          ? PermissionModeEnum.ROUTE_MAPPING
+          : PermissionModeEnum.BACK,
     })
     location.reload()
   }

@@ -1,5 +1,10 @@
 <template>
-  <Scrollbar ref="scrollbarRef" class="scroll-container" :scrollHeight="scrollHeight" v-bind="$attrs">
+  <Scrollbar
+    ref="scrollbarRef"
+    class="scroll-container"
+    :scrollHeight="scrollHeight"
+    v-bind="$attrs"
+  >
     <slot></slot>
   </Scrollbar>
 </template>

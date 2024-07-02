@@ -13,7 +13,7 @@ export async function userLoginInitAction() {
   // 刷新登陆后用户信息
   userStore.refreshUserInfoAction().then()
   // 初始化 websocket连接.
-  initWebSocket().then()
+  // initWebSocket().then()
   // 检查密码情况
   // const check = await userPassWordCheck()
   // if (!check) {

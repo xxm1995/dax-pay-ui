@@ -60,7 +60,11 @@ function createBase64(str: string, waterMarkOptions: waterMarkOptionsType) {
   }
   return can.toDataURL('image/png')
 }
-const resetWatermarkStyle = (element: HTMLElement, watermarkText: string, waterMarkOptions: waterMarkOptionsType) => {
+const resetWatermarkStyle = (
+  element: HTMLElement,
+  watermarkText: string,
+  waterMarkOptions: waterMarkOptionsType,
+) => {
   element.className = '__' + watermarkSymbol
   element.style.pointerEvents = 'none'
   element.style.display = 'block'

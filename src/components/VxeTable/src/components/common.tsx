@@ -1,5 +1,9 @@
 import { ComponentOptions, h } from 'vue'
-import { FormItemContentRenderParams, FormItemRenderOptions, VxeGlobalRendererHandles } from 'vxe-table'
+import {
+  FormItemContentRenderParams,
+  FormItemRenderOptions,
+  VxeGlobalRendererHandles,
+} from 'vxe-table'
 import XEUtils from 'xe-utils'
 import { componentMap } from '../componentMap'
 import { ComponentType } from '../componentType'
@@ -130,7 +134,11 @@ export function createEvents(
 /**
  * @description: 获取属性
  */
-export function createProps(renderOpts: VxeGlobalRendererHandles.RenderOptions, value: any, defaultProps?: { [prop: string]: any }) {
+export function createProps(
+  renderOpts: VxeGlobalRendererHandles.RenderOptions,
+  value: any,
+  defaultProps?: { [prop: string]: any },
+) {
   const name = renderOpts.name as ComponentType
   return XEUtils.assign(
     {
@@ -155,7 +163,10 @@ export function createDefaultRender(
     params: VxeGlobalRendererHandles.RenderDefaultParams,
   ) => Record<string, any>,
 ) {
-  return function (renderOpts: VxeGlobalRendererHandles.RenderDefaultOptions, params: VxeGlobalRendererHandles.RenderDefaultParams) {
+  return function (
+    renderOpts: VxeGlobalRendererHandles.RenderDefaultOptions,
+    params: VxeGlobalRendererHandles.RenderDefaultParams,
+  ) {
     const { row, column, $table } = params
     const { name, attrs } = renderOpts
     const cellValue = XEUtils.get(row, column.field as string)
@@ -188,7 +199,10 @@ export function createEditRender(
     params: VxeGlobalRendererHandles.RenderEditParams,
   ) => Record<string, any>,
 ) {
-  return function (renderOpts: VxeGlobalRendererHandles.RenderEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
+  return function (
+    renderOpts: VxeGlobalRendererHandles.RenderEditOptions,
+    params: VxeGlobalRendererHandles.RenderEditParams,
+  ) {
     const { row, column, $table } = params
     const { name, attrs } = renderOpts
     const cellValue = XEUtils.get(row, column.field as string)
@@ -221,7 +235,10 @@ export function createFilterRender(
     params: VxeGlobalRendererHandles.RenderFilterParams,
   ) => Record<string, any>,
 ) {
-  return function (renderOpts: VxeGlobalRendererHandles.RenderFilterOptions, params: VxeGlobalRendererHandles.RenderFilterParams) {
+  return function (
+    renderOpts: VxeGlobalRendererHandles.RenderFilterOptions,
+    params: VxeGlobalRendererHandles.RenderFilterParams,
+  ) {
     const { column } = params
     const { name, attrs } = renderOpts
     const args = (callBack && callBack(renderOpts, params)) ?? {}
@@ -283,7 +300,10 @@ export function createDefaultFilterRender() {
  */
 export function createFormItemRender(
   defaultProps?: { [key: string]: any },
-  callBack?: (renderOpts: FormItemRenderOptions, params: FormItemContentRenderParams) => Record<string, any>,
+  callBack?: (
+    renderOpts: FormItemRenderOptions,
+    params: FormItemContentRenderParams,
+  ) => Record<string, any>,
 ) {
   return function (renderOpts: FormItemRenderOptions, params: FormItemContentRenderParams) {
     const args = (callBack && callBack(renderOpts, params)) ?? {}
@@ -323,9 +343,15 @@ export function createFormItemRender(
  */
 export function createCellRender(
   getSelectCellValue: Function,
-  callBack?: (renderOpts: VxeGlobalRendererHandles.RenderCellOptions, params: VxeGlobalRendererHandles.RenderCellParams) => Array<any>,
+  callBack?: (
+    renderOpts: VxeGlobalRendererHandles.RenderCellOptions,
+    params: VxeGlobalRendererHandles.RenderCellParams,
+  ) => Array<any>,
 ) {
-  return function (renderOpts: VxeGlobalRendererHandles.RenderCellOptions, params: VxeGlobalRendererHandles.RenderCellParams) {
+  return function (
+    renderOpts: VxeGlobalRendererHandles.RenderCellOptions,
+    params: VxeGlobalRendererHandles.RenderCellParams,
+  ) {
     const args = (callBack && callBack(renderOpts, params)) ?? []
     const cellLabel = getSelectCellValue && getSelectCellValue(renderOpts, params, ...args)
     const { placeholder } = renderOpts
@@ -381,7 +407,10 @@ export function createToolbarToolRender(
     params: VxeGlobalRendererHandles.RenderToolParams,
   ) => Record<string, any>,
 ) {
-  return function (renderOpts: VxeGlobalRendererHandles.RenderToolOptions, params: VxeGlobalRendererHandles.RenderToolParams) {
+  return function (
+    renderOpts: VxeGlobalRendererHandles.RenderToolOptions,
+    params: VxeGlobalRendererHandles.RenderToolParams,
+  ) {
     const { name, attrs } = renderOpts
     const args = (callBack && callBack(renderOpts, params)) ?? {}
 

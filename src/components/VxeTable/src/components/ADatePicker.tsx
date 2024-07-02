@@ -1,6 +1,11 @@
 import { VxeGlobalRendererHandles } from 'vxe-table'
 import XEUtils from 'xe-utils'
-import { createCellRender, createEditRender, createExportMethod, createFormItemRender } from './common'
+import {
+  createCellRender,
+  createEditRender,
+  createExportMethod,
+  createFormItemRender,
+} from './common'
 
 export function getDatePickerCellValue(
   renderOpts: VxeGlobalRendererHandles.RenderOptions,

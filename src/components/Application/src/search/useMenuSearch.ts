@@ -66,7 +66,11 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref, emit: A
     const ret: SearchResult[] = []
     filterMenu.forEach((item) => {
       const { name, path, icon, children, hideMenu, meta } = item
-      if (!hideMenu && reg.test(name?.toLowerCase() ?? '') && (!children?.length || meta?.hideChildrenInMenu)) {
+      if (
+        !hideMenu &&
+        reg.test(name?.toLowerCase() ?? '') &&
+        (!children?.length || meta?.hideChildrenInMenu)
+      ) {
         const chars: { char: string; highlight: boolean }[] = []
 
         // 显示字符串
@@ -84,7 +88,10 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref, emit: A
         // 优先查找完整关键词的匹配
         if (label.toLowerCase().includes(keyword.value.toLowerCase())) {
           while (includePointer < labelChars.length) {
-            if (label.toLowerCase().slice(includePointer, includePointer + keywordLength) === keyword.value.toLowerCase()) {
+            if (
+              label.toLowerCase().slice(includePointer, includePointer + keywordLength) ===
+              keyword.value.toLowerCase()
+            ) {
               chars.push(
                 ...label
                   .substring(labelPointer, includePointer)
@@ -116,7 +123,10 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref, emit: A
           keywordPointer = 0
           while (keywordPointer < keywordChars.length) {
             if (keywordChars[keywordPointer] !== void 0 && labelChars[labelPointer] !== void 0) {
-              if (keywordChars[keywordPointer].toLowerCase() === labelChars[labelPointer].toLowerCase()) {
+              if (
+                keywordChars[keywordPointer].toLowerCase() ===
+                labelChars[labelPointer].toLowerCase()
+              ) {
                 chars.push({
                   char: labelChars[labelPointer],
                   highlight: true,
@@ -148,12 +158,17 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref, emit: A
 
     // 排序
     return ret.sort((a, b) => {
-      if (a.name.toLowerCase().includes(keyword.value.toLowerCase()) && b.name.toLowerCase().includes(keyword.value.toLowerCase())) {
+      if (
+        a.name.toLowerCase().includes(keyword.value.toLowerCase()) &&
+        b.name.toLowerCase().includes(keyword.value.toLowerCase())
+      ) {
         // 两者都存在完整关键词的匹配
 
         // 匹配数量
-        const ca = a.name.toLowerCase().match(new RegExp(keyword.value.toLowerCase(), 'g'))?.length ?? 0
-        const cb = b.name.toLowerCase().match(new RegExp(keyword.value.toLowerCase(), 'g'))?.length ?? 0
+        const ca =
+          a.name.toLowerCase().match(new RegExp(keyword.value.toLowerCase(), 'g'))?.length ?? 0
+        const cb =
+          b.name.toLowerCase().match(new RegExp(keyword.value.toLowerCase(), 'g'))?.length ?? 0
 
         // 匹配数量越多的优先显示，数量相同的按字符串排序
         return ca === cb ? a.name.toLowerCase().localeCompare(b.name.toLowerCase()) : cb - ca

@@ -8,7 +8,11 @@ const { createMessage, createErrorModal } = useMessage()
 const error = createMessage.error!
 const stp = projectSetting.sessionTimeoutProcessing
 
-export function checkStatus(status: number, msg: string, errorMessageMode: ErrorMessageMode = 'message'): void {
+export function checkStatus(
+  status: number,
+  msg: string,
+  errorMessageMode: ErrorMessageMode = 'message',
+): void {
   const userStore = useUserStoreWithOut()
   let errMessage = ''
 

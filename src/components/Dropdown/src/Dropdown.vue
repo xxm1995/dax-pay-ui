@@ -6,8 +6,16 @@
     <template #overlay>
       <a-menu :selectedKeys="selectedKeys">
         <template v-for="item in dropMenuList" :key="`${item.event}`">
-          <a-menu-item v-bind="getAttr(item.event)" @click="handleClickMenu(item)" :disabled="item.disabled">
-            <a-popconfirm v-if="popconfirm && item.popConfirm" v-bind="getPopConfirmAttrs(item.popConfirm)" :disabled="item.disabled">
+          <a-menu-item
+            v-bind="getAttr(item.event)"
+            @click="handleClickMenu(item)"
+            :disabled="item.disabled"
+          >
+            <a-popconfirm
+              v-if="popconfirm && item.popConfirm"
+              v-bind="getPopConfirmAttrs(item.popConfirm)"
+              :disabled="item.disabled"
+            >
               <template #icon v-if="item.popConfirm.icon">
                 <Icon :icon="item.popConfirm.icon" />
               </template>
@@ -78,8 +86,10 @@
   const getPopConfirmAttrs = computed(() => {
     return (attrs) => {
       const originAttrs = omit(attrs, ['confirm', 'cancel', 'icon'])
-      if (!attrs.onConfirm && attrs.confirm && isFunction(attrs.confirm)) originAttrs['onConfirm'] = attrs.confirm
-      if (!attrs.onCancel && attrs.cancel && isFunction(attrs.cancel)) originAttrs['onCancel'] = attrs.cancel
+      if (!attrs.onConfirm && attrs.confirm && isFunction(attrs.confirm))
+        originAttrs['onConfirm'] = attrs.confirm
+      if (!attrs.onCancel && attrs.cancel && isFunction(attrs.cancel))
+        originAttrs['onCancel'] = attrs.cancel
       return originAttrs
     }
   })

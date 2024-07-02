@@ -1,37 +1,37 @@
-import { onUnmounted, ref, watchEffect } from 'vue';
+import { onUnmounted, ref, watchEffect } from 'vue'
 
-import type { UseRequestPlugin } from '../types';
-import { limit } from '../utils/limit';
-import subscribeFocus from '../utils/subscribeFocus';
+import type { UseRequestPlugin } from '../types'
+import { limit } from '../utils/limit'
+import subscribeFocus from '../utils/subscribeFocus'
 
 const useRefreshOnWindowFocusPlugin: UseRequestPlugin<any, any[]> = (
   fetchInstance,
   { refreshOnWindowFocus, focusTimespan = 5000 },
 ) => {
-  const unsubscribeRef = ref<() => void>();
+  const unsubscribeRef = ref<() => void>()
 
   const stopSubscribe = () => {
-    unsubscribeRef.value?.();
-  };
+    unsubscribeRef.value?.()
+  }
 
   watchEffect(() => {
     if (refreshOnWindowFocus) {
-      const limitRefresh = limit(fetchInstance.refresh.bind(fetchInstance), focusTimespan);
+      const limitRefresh = limit(fetchInstance.refresh.bind(fetchInstance), focusTimespan)
       unsubscribeRef.value = subscribeFocus(() => {
-        limitRefresh();
-      });
+        limitRefresh()
+      })
     }
 
     return () => {
-      stopSubscribe();
-    };
-  });
+      stopSubscribe()
+    }
+  })
 
   onUnmounted(() => {
-    stopSubscribe();
-  });
+    stopSubscribe()
+  })
 
-  return {};
-};
+  return {}
+}
 
-export default useRefreshOnWindowFocusPlugin;
+export default useRefreshOnWindowFocusPlugin

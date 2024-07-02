@@ -1,46 +1,46 @@
-import { ref, watch } from 'vue';
+import { ref, watch } from 'vue'
 
-import type { UseRequestPlugin, UseRequestTimeout } from '../types';
-import { isDocumentVisible } from '../utils/isDocumentVisible';
-import subscribeReVisible from '../utils/subscribeReVisible';
+import type { UseRequestPlugin, UseRequestTimeout } from '../types'
+import { isDocumentVisible } from '../utils/isDocumentVisible'
+import subscribeReVisible from '../utils/subscribeReVisible'
 
 const usePollingPlugin: UseRequestPlugin<any, any[]> = (
   fetchInstance,
   { pollingInterval, pollingWhenHidden = true, pollingErrorRetryCount = -1 },
 ) => {
-  const timerRef = ref<UseRequestTimeout>();
-  const unsubscribeRef = ref<() => void>();
-  const countRef = ref<number>(0);
+  const timerRef = ref<UseRequestTimeout>()
+  const unsubscribeRef = ref<() => void>()
+  const countRef = ref<number>(0)
 
   const stopPolling = () => {
     if (timerRef.value) {
-      clearTimeout(timerRef.value);
+      clearTimeout(timerRef.value)
     }
-    unsubscribeRef.value?.();
-  };
+    unsubscribeRef.value?.()
+  }
 
   watch(
     () => pollingInterval,
     () => {
       if (!pollingInterval) {
-        stopPolling();
+        stopPolling()
       }
     },
-  );
+  )
 
   if (!pollingInterval) {
-    return {};
+    return {}
   }
 
   return {
     onBefore: () => {
-      stopPolling();
+      stopPolling()
     },
     onError: () => {
-      countRef.value += 1;
+      countRef.value += 1
     },
     onSuccess: () => {
-      countRef.value = 0;
+      countRef.value = 0
     },
     onFinally: () => {
       if (
@@ -52,20 +52,20 @@ const usePollingPlugin: UseRequestPlugin<any, any[]> = (
           // if pollingWhenHidden = false && document is hidden, then stop polling and subscribe revisible
           if (!pollingWhenHidden && !isDocumentVisible()) {
             unsubscribeRef.value = subscribeReVisible(() => {
-              fetchInstance.refresh();
-            });
+              fetchInstance.refresh()
+            })
           } else {
-            fetchInstance.refresh();
+            fetchInstance.refresh()
           }
-        }, pollingInterval);
+        }, pollingInterval)
       } else {
-        countRef.value = 0;
+        countRef.value = 0
       }
     },
     onCancel: () => {
-      stopPolling();
+      stopPolling()
     },
-  };
-};
+  }
+}
 
-export default usePollingPlugin;
+export default usePollingPlugin

@@ -8,7 +8,9 @@
               <Typography.Paragraph
                 @click="handleTitleClick(item)"
                 :delete="!!item.titleDelete"
-                :ellipsis="titleRows && titleRows > 0 ? { rows: titleRows, tooltip: !!item.title } : false"
+                :ellipsis="
+                  titleRows && titleRows > 0 ? { rows: titleRows, tooltip: !!item.title } : false
+                "
                 :content="item.title"
               />
               <div class="extra" v-if="item.extra">
@@ -28,7 +30,11 @@
             <div>
               <div class="description" v-if="item.description">
                 <Typography.Paragraph
-                  :ellipsis="descRows && descRows > 0 ? { rows: descRows, tooltip: !!item.description } : false"
+                  :ellipsis="
+                    descRows && descRows > 0
+                      ? { rows: descRows, tooltip: !!item.description }
+                      : false
+                  "
                   :content="item.description"
                 />
               </div>

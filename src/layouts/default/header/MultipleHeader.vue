@@ -1,5 +1,9 @@
 <template>
-  <div :class="[`${prefixCls}__placeholder`]" :style="getPlaceholderDomStyle" v-if="getIsShowPlaceholderDom"></div>
+  <div
+    :class="[`${prefixCls}__placeholder`]"
+    :style="getPlaceholderDomStyle"
+    v-if="getIsShowPlaceholderDom"
+  ></div>
   <div :style="getWrapStyle" :class="getClass">
     <LayoutHeader v-if="getShowInsetHeaderRef" />
     <MultipleTabs v-if="getShowTabs" :key="tabStore.getLastDragEndIndex" />
@@ -32,7 +36,8 @@
 
   const { getCalcContentWidth, getSplit, getShowMenu } = useMenuSetting()
   const { getIsMobile } = useAppInject()
-  const { getFixed, getShowInsetHeaderRef, getShowFullHeaderRef, getHeaderTheme, getShowHeader } = useHeaderSetting()
+  const { getFixed, getShowInsetHeaderRef, getShowFullHeaderRef, getHeaderTheme, getShowHeader } =
+    useHeaderSetting()
 
   const { getFullContent } = useFullContent()
 
@@ -66,7 +71,11 @@
   const getPlaceholderDomStyle = computed((): CSSProperties => {
     let height = 0
     if (!(unref(getAutoCollapse) && unref(getIsUnFold))) {
-      if ((unref(getShowFullHeaderRef) || !unref(getSplit)) && unref(getShowHeader) && !unref(getFullContent)) {
+      if (
+        (unref(getShowFullHeaderRef) || !unref(getSplit)) &&
+        unref(getShowHeader) &&
+        !unref(getFullContent)
+      ) {
         height += HEADER_HEIGHT
       }
       if (unref(getShowMultipleTab) && !unref(getFullContent)) {
@@ -80,7 +89,11 @@
   })
 
   const getClass = computed(() => {
-    return [prefixCls, `${prefixCls}--${unref(getHeaderTheme)}`, { [`${prefixCls}--fixed`]: unref(getIsFixed) }]
+    return [
+      prefixCls,
+      `${prefixCls}--${unref(getHeaderTheme)}`,
+      { [`${prefixCls}--fixed`]: unref(getIsFixed) },
+    ]
   })
 </script>
 <style lang="less" scoped>

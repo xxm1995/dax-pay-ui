@@ -2,7 +2,8 @@
 export const cancelAnimationFrame = window.cancelAnimationFrame
 // 使用 requestAnimationFrame 模拟 setTimeout 和 setInterval
 export function rafTimeout(fn: Function, delay = 0, interval = false): object {
-  const requestAnimationFrame = typeof window !== 'undefined' ? window.requestAnimationFrame : () => {}
+  const requestAnimationFrame =
+    typeof window !== 'undefined' ? window.requestAnimationFrame : () => {}
   let start: any = null
   function timeElapse(timestamp: number) {
     /*
@@ -31,7 +32,8 @@ export function rafTimeout(fn: Function, delay = 0, interval = false): object {
 }
 // 用于取消 rafTimeout 函数
 export function cancelRaf(raf: { id: number }): void {
-  const cancelAnimationFrame = typeof window !== 'undefined' ? window.cancelAnimationFrame : () => {}
+  const cancelAnimationFrame =
+    typeof window !== 'undefined' ? window.cancelAnimationFrame : () => {}
   if (raf && raf.id) {
     cancelAnimationFrame(raf.id)
   }

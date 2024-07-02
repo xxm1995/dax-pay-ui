@@ -29,7 +29,12 @@ function getEventTargetNode(evnt: any, container: HTMLElement, className: string
   let targetElem
   let target = evnt.target
   while (target && target.nodeType && target !== document) {
-    if (className && target.className && target.className.split && target.className.split(' ').indexOf(className) > -1) {
+    if (
+      className &&
+      target.className &&
+      target.className.split &&
+      target.className.split(' ').indexOf(className) > -1
+    ) {
       targetElem = target
     } else if (target === container) {
       return { flag: className ? !!targetElem : true, container, targetElem: targetElem }

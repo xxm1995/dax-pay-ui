@@ -1,9 +1,24 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="register" title="头像上传" width="800px" :canFullscreen="false" @ok="handleOk" okText="确认并上传">
+  <BasicModal
+    v-bind="$attrs"
+    @register="register"
+    title="头像上传"
+    width="800px"
+    :canFullscreen="false"
+    @ok="handleOk"
+    okText="确认并上传"
+  >
     <div :class="prefixCls">
       <div :class="`${prefixCls}-left`">
         <div :class="`${prefixCls}-cropper`">
-          <CropperImage v-if="src" :src="src" height="300px" :circled="circled" @cropend="handleCropend" @ready="handleReady" />
+          <CropperImage
+            v-if="src"
+            :src="src"
+            height="300px"
+            :circled="circled"
+            @cropend="handleCropend"
+            @ready="handleReady"
+          />
         </div>
 
         <div :class="`${prefixCls}-toolbar`">
@@ -41,10 +56,22 @@
               />
             </Tooltip>
             <Tooltip title="水平翻转" placement="bottom">
-              <a-button type="primary" preIcon="vaadin:arrows-long-h" size="small" :disabled="!src" @click="handlerToolbar('scaleX')" />
+              <a-button
+                type="primary"
+                preIcon="vaadin:arrows-long-h"
+                size="small"
+                :disabled="!src"
+                @click="handlerToolbar('scaleX')"
+              />
             </Tooltip>
             <Tooltip title="垂直翻转" placement="bottom">
-              <a-button type="primary" preIcon="vaadin:arrows-long-v" size="small" :disabled="!src" @click="handlerToolbar('scaleY')" />
+              <a-button
+                type="primary"
+                preIcon="vaadin:arrows-long-v"
+                size="small"
+                :disabled="!src"
+                @click="handlerToolbar('scaleY')"
+              />
             </Tooltip>
             <Tooltip title="放大" placement="bottom">
               <a-button
@@ -192,8 +219,20 @@
     &-cropper {
       height: 300px;
       background: #eee;
-      background-image: linear-gradient(45deg, rgb(0 0 0 / 25%) 25%, transparent 0, transparent 75%, rgb(0 0 0 / 25%) 0),
-        linear-gradient(45deg, rgb(0 0 0 / 25%) 25%, transparent 0, transparent 75%, rgb(0 0 0 / 25%) 0);
+      background-image: linear-gradient(
+          45deg,
+          rgb(0 0 0 / 25%) 25%,
+          transparent 0,
+          transparent 75%,
+          rgb(0 0 0 / 25%) 0
+        ),
+        linear-gradient(
+          45deg,
+          rgb(0 0 0 / 25%) 25%,
+          transparent 0,
+          transparent 75%,
+          rgb(0 0 0 / 25%) 0
+        );
       background-position:
         0 0,
         12px 12px;

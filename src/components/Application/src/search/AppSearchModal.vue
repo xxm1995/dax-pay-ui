@@ -4,7 +4,13 @@
       <div :class="getClass" @click.stop v-if="visible">
         <div :class="`${prefixCls}-content`" v-click-outside="handleClose">
           <div :class="`${prefixCls}-input__wrapper`">
-            <a-input :class="`${prefixCls}-input`" :placeholder="'搜索'" ref="inputRef" allow-clear @change="handleSearch">
+            <a-input
+              :class="`${prefixCls}-input`"
+              :placeholder="'搜索'"
+              ref="inputRef"
+              allow-clear
+              @change="handleSearch"
+            >
               <template #prefix>
                 <SearchOutlined />
               </template>
@@ -34,7 +40,11 @@
               </div>
               <div :class="`${prefixCls}-list__item-text`">
                 <!-- 搜索结果包含的字符着色 -->
-                <span v-for="(each, i) in item.chars" :key="i" :class="{ highlight: each.highlight }">
+                <span
+                  v-for="(each, i) in item.chars"
+                  :key="i"
+                  :class="{ highlight: each.highlight }"
+                >
                   {{ each.char }}
                 </span>
               </div>
@@ -74,7 +84,8 @@
   const { refs, setRefs } = useRefs()
   const { getIsMobile } = useAppInject()
 
-  const { handleSearch, searchResult, keyword, activeIndex, handleEnter, handleMouseenter } = useMenuSearch(refs, scrollWrap, emit)
+  const { handleSearch, searchResult, keyword, activeIndex, handleEnter, handleMouseenter } =
+    useMenuSearch(refs, scrollWrap, emit)
 
   const getIsNotData = computed(() => !keyword || unref(searchResult).length === 0)
 

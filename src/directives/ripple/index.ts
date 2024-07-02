@@ -47,7 +47,12 @@ const RippleDirective: Directive & RippleProto = {
   },
 }
 
-function rippler({ event, el, zIndex, background }: { event: EventType; el: HTMLElement } & RippleProto) {
+function rippler({
+  event,
+  el,
+  zIndex,
+  background,
+}: { event: EventType; el: HTMLElement } & RippleProto) {
   const targetBorder = parseInt(getComputedStyle(el).borderWidth.replace('px', ''))
   const clientX = event.clientX || event.touches[0].clientX
   const clientY = event.clientY || event.touches[0].clientY
@@ -95,7 +100,8 @@ function rippler({ event, el, zIndex, background }: { event: EventType; el: HTML
     overflow: 'hidden',
   })
 
-  const storedTargetPosition = el.style.position.length > 0 ? el.style.position : getComputedStyle(el).position
+  const storedTargetPosition =
+    el.style.position.length > 0 ? el.style.position : getComputedStyle(el).position
 
   if (storedTargetPosition !== 'relative') {
     el.style.position = 'relative'
@@ -109,7 +115,12 @@ function rippler({ event, el, zIndex, background }: { event: EventType; el: HTML
     marginLeft: `${dx}px`,
   })
 
-  const { borderTopLeftRadius, borderTopRightRadius, borderBottomLeftRadius, borderBottomRightRadius } = style
+  const {
+    borderTopLeftRadius,
+    borderTopRightRadius,
+    borderBottomLeftRadius,
+    borderBottomRightRadius,
+  } = style
   Object.assign(rippleContainer.style, {
     width: `${width}px`,
     height: `${height}px`,

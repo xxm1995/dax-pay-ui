@@ -39,7 +39,9 @@ export const useTableSettingStore = defineStore({
     //
     getColumns(state) {
       return (routerName: string) => {
-        return state.setting?.columns && state.setting?.columns[routerName] ? state.setting?.columns[routerName] : null
+        return state.setting?.columns && state.setting?.columns[routerName]
+          ? state.setting?.columns[routerName]
+          : null
       }
     },
   },

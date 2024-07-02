@@ -19,9 +19,13 @@ export function useSplitMenu(splitType: Ref<MenuSplitTyeEnum>) {
 
   const throttleHandleSplitLeftMenu = useThrottleFn(handleSplitLeftMenu, 50)
 
-  const splitNotLeft = computed(() => unref(splitType) !== MenuSplitTyeEnum.LEFT && !unref(getIsHorizontal))
+  const splitNotLeft = computed(
+    () => unref(splitType) !== MenuSplitTyeEnum.LEFT && !unref(getIsHorizontal),
+  )
 
-  const getSplitLeft = computed(() => !unref(getSplit) || unref(splitType) !== MenuSplitTyeEnum.LEFT)
+  const getSplitLeft = computed(
+    () => !unref(getSplit) || unref(splitType) !== MenuSplitTyeEnum.LEFT,
+  )
 
   const getSpiltTop = computed(() => unref(splitType) === MenuSplitTyeEnum.TOP)
 

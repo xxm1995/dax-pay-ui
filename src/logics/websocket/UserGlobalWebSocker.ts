@@ -3,7 +3,12 @@
  */
 import { useWebSocket } from '@vueuse/core'
 import { useUserStoreWithOut } from '@/store/modules/user'
-import { EVENT_NOTICE, NOTIFICATION_ERROR, NOTIFICATION_INFO, NOTIFICATION_WARN } from '@/logics/websocket/WebSockerType'
+import {
+  EVENT_NOTICE,
+  NOTIFICATION_ERROR,
+  NOTIFICATION_INFO,
+  NOTIFICATION_WARN,
+} from '@/logics/websocket/WebSockerType'
 import { publishWsEvent } from '@/logics/websocket/WebsocketNotice'
 import { useMessage } from '@/hooks/web/useMessage'
 import { findByParamKey } from '@/api/common/Parameter'

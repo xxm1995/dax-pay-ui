@@ -1,40 +1,40 @@
-import { type AnyFunction } from '@vben/types';
-import { tryOnMounted, tryOnUnmounted, useDebounceFn } from '@vueuse/core';
+import { type AnyFunction } from '@vben/types'
+import { tryOnMounted, tryOnUnmounted, useDebounceFn } from '@vueuse/core'
 
 interface UseWindowSizeOptions {
-  wait?: number;
-  once?: boolean;
-  immediate?: boolean;
-  listenerOptions?: AddEventListenerOptions | boolean;
+  wait?: number
+  once?: boolean
+  immediate?: boolean
+  listenerOptions?: AddEventListenerOptions | boolean
 }
 
 function useWindowSizeFn(fn: AnyFunction, options: UseWindowSizeOptions = {}) {
-  const { wait = 150, immediate } = options;
+  const { wait = 150, immediate } = options
   let handler = () => {
-    fn();
-  };
-  const handleSize = useDebounceFn(handler, wait);
-  handler = handleSize;
+    fn()
+  }
+  const handleSize = useDebounceFn(handler, wait)
+  handler = handleSize
 
   const start = () => {
     if (immediate) {
-      handler();
+      handler()
     }
-    window.addEventListener('resize', handler);
-  };
+    window.addEventListener('resize', handler)
+  }
 
   const stop = () => {
-    window.removeEventListener('resize', handler);
-  };
+    window.removeEventListener('resize', handler)
+  }
 
   tryOnMounted(() => {
-    start();
-  });
+    start()
+  })
 
   tryOnUnmounted(() => {
-    stop();
-  });
-  return { start, stop };
+    stop()
+  })
+  return { start, stop }
 }
 
-export { useWindowSizeFn, type UseWindowSizeOptions };
+export { useWindowSizeFn, type UseWindowSizeOptions }

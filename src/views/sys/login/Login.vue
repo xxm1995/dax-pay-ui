@@ -17,7 +17,9 @@
             <div class="mt-10 font-medium text-white -enter-x">
               <span class="inline-block mt-4 text-3xl"> 开箱即用的开源支付系统</span>
             </div>
-            <div class="mt-5 font-normal text-white dark:text-gray-500 -enter-x">支持支付宝、微信支付、云闪付 </div>
+            <div class="mt-5 font-normal text-white dark:text-gray-500 -enter-x"
+              >支持支付宝、微信支付、云闪付
+            </div>
           </div>
         </div>
         <div class="flex w-full h-full py-5 xl:h-auto xl:py-0 xl:my-0 xl:w-6/12">

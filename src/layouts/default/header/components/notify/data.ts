@@ -62,7 +62,8 @@ export const tabListData: TabItem[] = [
       {
         id: '000000005',
         avatar: 'https://gw.alipayobjects.com/zos/rmsportal/GvqBnKhFgObvnSGkDsje.png',
-        title: '标题可以设置自动显示省略号，本例中标题行数已设为1行，如果内容超过1行将自动截断并支持tooltip显示完整标题。',
+        title:
+          '标题可以设置自动显示省略号，本例中标题行数已设为1行，如果内容超过1行将自动截断并支持tooltip显示完整标题。',
         description: '',
         datetime: '2017-08-07',
         type: '1',

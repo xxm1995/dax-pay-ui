@@ -1,41 +1,41 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { onMounted, onUnmounted, toRefs } from 'vue';
+import { onMounted, onUnmounted, toRefs } from 'vue'
 
-import Fetch from './Fetch';
-import type { Service, UseRequestOptions, UseRequestPlugin, UseRequestResult } from './types';
+import Fetch from './Fetch'
+import type { Service, UseRequestOptions, UseRequestPlugin, UseRequestResult } from './types'
 
 export function useRequestImplement<TData, TParams extends any[]>(
   service: Service<TData, TParams>,
   options: UseRequestOptions<TData, TParams> = {},
   plugins: UseRequestPlugin<TData, TParams>[] = [],
 ) {
-  const { manual = false, ...rest } = options;
-  const fetchOptions = { manual, ...rest };
+  const { manual = false, ...rest } = options
+  const fetchOptions = { manual, ...rest }
 
-  const initState = plugins.map((p) => p?.onInit?.(fetchOptions)).filter(Boolean);
+  const initState = plugins.map((p) => p?.onInit?.(fetchOptions)).filter(Boolean)
 
   const fetchInstance = new Fetch<TData, TParams>(
     service,
     fetchOptions,
     () => {},
     Object.assign({}, ...initState),
-  );
+  )
 
-  fetchInstance.options = fetchOptions;
+  fetchInstance.options = fetchOptions
   // run all plugins hooks
-  fetchInstance.pluginImpls = plugins.map((p) => p(fetchInstance, fetchOptions));
+  fetchInstance.pluginImpls = plugins.map((p) => p(fetchInstance, fetchOptions))
 
   onMounted(() => {
     if (!manual) {
-      const params = fetchInstance.state.params || options.defaultParams || [];
+      const params = fetchInstance.state.params || options.defaultParams || []
       // @ts-ignore
-      fetchInstance.run(...params);
+      fetchInstance.run(...params)
     }
-  });
+  })
 
   onUnmounted(() => {
-    fetchInstance.cancel();
-  });
+    fetchInstance.cancel()
+  })
 
   return {
     ...toRefs(fetchInstance.state),
@@ -45,5 +45,5 @@ export function useRequestImplement<TData, TParams extends any[]>(
     refreshAsync: fetchInstance.refreshAsync.bind(fetchInstance),
     run: fetchInstance.run.bind(fetchInstance),
     runAsync: fetchInstance.runAsync.bind(fetchInstance),
-  } as UseRequestResult<TData, TParams>;
+  } as UseRequestResult<TData, TParams>
 }

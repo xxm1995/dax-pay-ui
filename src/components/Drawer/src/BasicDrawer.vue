@@ -1,7 +1,12 @@
 <template>
   <Drawer v-bind="getBindValues" :class="prefixCls" @close="onClose">
     <template #title v-if="!$slots.title">
-      <DrawerHeader :title="getMergeProps.title" :isDetail="isDetail" :showDetailBack="showDetailBack" @close="onClose">
+      <DrawerHeader
+        :title="getMergeProps.title"
+        :isDetail="isDetail"
+        :showDetailBack="showDetailBack"
+        @close="onClose"
+      >
         <template #titleToolbar>
           <slot name="titleToolbar"></slot>
         </template>
@@ -11,7 +16,11 @@
       <slot name="title"></slot>
     </template>
 
-    <ScrollContainer :style="getScrollContentStyle" v-loading="getLoading" :loading-tip="loadingText || '加载中...'">
+    <ScrollContainer
+      :style="getScrollContentStyle"
+      v-loading="getLoading"
+      :loading-tip="loadingText || '加载中...'"
+    >
       <slot></slot>
     </ScrollContainer>
     <DrawerFooter v-bind="getProps" @close="onClose" @ok="handleOk" :height="getFooterHeight">

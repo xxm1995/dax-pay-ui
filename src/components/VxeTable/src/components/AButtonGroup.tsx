@@ -1,24 +1,38 @@
-import { FormItemContentRenderParams, FormItemRenderOptions, VxeGlobalRendererHandles } from 'vxe-table'
+import {
+  FormItemContentRenderParams,
+  FormItemRenderOptions,
+  VxeGlobalRendererHandles,
+} from 'vxe-table'
 import { createDefaultRender, createEditRender, createFormItemRender } from './AButton'
 
 function createEditButtonRender() {
-  return function (renderOpts: VxeGlobalRendererHandles.RenderEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
+  return function (
+    renderOpts: VxeGlobalRendererHandles.RenderEditOptions,
+    params: VxeGlobalRendererHandles.RenderEditParams,
+  ) {
     const buttonEditRender = createEditRender()
     const { children } = renderOpts
     if (children) {
-      return children.map((childRenderOpts: VxeGlobalRendererHandles.RenderEditOptions) => buttonEditRender(childRenderOpts, params)[0])
+      return children.map(
+        (childRenderOpts: VxeGlobalRendererHandles.RenderEditOptions) =>
+          buttonEditRender(childRenderOpts, params)[0],
+      )
     }
     return []
   }
 }
 
 function createDefaultButtonRender() {
-  return function (renderOpts: VxeGlobalRendererHandles.RenderDefaultOptions, params: VxeGlobalRendererHandles.RenderDefaultParams) {
+  return function (
+    renderOpts: VxeGlobalRendererHandles.RenderDefaultOptions,
+    params: VxeGlobalRendererHandles.RenderDefaultParams,
+  ) {
     const buttonDefaultRender = createDefaultRender()
     const { children } = renderOpts
     if (children) {
       return children.map(
-        (childRenderOpts: VxeGlobalRendererHandles.RenderDefaultOptions) => buttonDefaultRender(childRenderOpts, params)[0],
+        (childRenderOpts: VxeGlobalRendererHandles.RenderDefaultOptions) =>
+          buttonDefaultRender(childRenderOpts, params)[0],
       )
     }
     return []
@@ -30,7 +44,9 @@ function createButtonItemRender() {
     const buttonItemRender = createFormItemRender()
     const { children } = renderOpts
     if (children) {
-      return children.map((childRenderOpts: FormItemRenderOptions) => buttonItemRender(childRenderOpts, params)[0])
+      return children.map(
+        (childRenderOpts: FormItemRenderOptions) => buttonItemRender(childRenderOpts, params)[0],
+      )
     }
     return []
   }

@@ -1,6 +1,17 @@
 <template>
-  <SvgIcon :size="size" :name="getSvgIcon" v-if="isSvgIcon" :class="[$attrs.class, 'anticon']" :spin="spin" />
-  <span v-else ref="elRef" :class="[$attrs.class, 'app-iconify anticon', spin && 'app-iconify-spin']" :style="getWrapStyle"></span>
+  <SvgIcon
+    :size="size"
+    :name="getSvgIcon"
+    v-if="isSvgIcon"
+    :class="[$attrs.class, 'anticon']"
+    :spin="spin"
+  />
+  <span
+    v-else
+    ref="elRef"
+    :class="[$attrs.class, 'app-iconify anticon', spin && 'app-iconify-spin']"
+    :style="getWrapStyle"
+  ></span>
 </template>
 <script lang="ts" setup>
   import type { PropType } from 'vue'

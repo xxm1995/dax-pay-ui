@@ -1,4 +1,10 @@
-import type { AxiosRequestConfig, AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios'
+import type {
+  AxiosRequestConfig,
+  AxiosInstance,
+  AxiosResponse,
+  AxiosError,
+  InternalAxiosRequestConfig,
+} from 'axios'
 import type { RequestOptions, Result, UploadFileParams } from '#/axios'
 import type { CreateAxiosOptions } from './axiosTransform'
 import axios from 'axios'
@@ -71,14 +77,20 @@ export class VAxios {
     if (!transform) {
       return
     }
-    const { requestInterceptors, requestInterceptorsCatch, responseInterceptors, responseInterceptorsCatch } = transform
+    const {
+      requestInterceptors,
+      requestInterceptorsCatch,
+      responseInterceptors,
+      responseInterceptorsCatch,
+    } = transform
 
     const axiosCanceler = new AxiosCanceler()
 
     // Request interceptor configuration processing
     this.axiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
       // If cancel repeat request is turned on, then cancel repeat request is prohibited
-      const requestOptions = (config as unknown as any).requestOptions ?? this.options.requestOptions
+      const requestOptions =
+        (config as unknown as any).requestOptions ?? this.options.requestOptions
       const ignoreCancelToken = requestOptions?.ignoreCancelToken ?? true
 
       !ignoreCancelToken && axiosCanceler.addPending(config)

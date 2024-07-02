@@ -320,7 +320,11 @@
       })
 
       const handleMaskClick = (e: MouseEvent) => {
-        if (props.maskClosable && e.target && (e.target as HTMLDivElement).classList.contains(`${prefixCls}-content`)) {
+        if (
+          props.maskClosable &&
+          e.target &&
+          (e.target as HTMLDivElement).classList.contains(`${prefixCls}-content`)
+        ) {
           handleClose(e)
         }
       }
@@ -349,10 +353,16 @@
       const renderController = () => {
         return (
           <div class={`${prefixCls}__controller`}>
-            <div class={`${prefixCls}__controller-item`} onClick={() => scaleFunc(-getScaleStep.value)}>
+            <div
+              class={`${prefixCls}__controller-item`}
+              onClick={() => scaleFunc(-getScaleStep.value)}
+            >
               <img src={unScaleSvg} />
             </div>
-            <div class={`${prefixCls}__controller-item`} onClick={() => scaleFunc(getScaleStep.value)}>
+            <div
+              class={`${prefixCls}__controller-item`}
+              onClick={() => scaleFunc(getScaleStep.value)}
+            >
               <img src={scaleSvg} />
             </div>
             <div class={`${prefixCls}__controller-item`} onClick={resume}>
@@ -382,7 +392,12 @@
       return () => {
         return (
           imgState.show && (
-            <div class={prefixCls} ref={wrapElRef} onMouseup={handleMouseUp} onClick={handleMaskClick}>
+            <div
+              class={prefixCls}
+              ref={wrapElRef}
+              onMouseup={handleMouseUp}
+              onClick={handleMaskClick}
+            >
               <div class={`${prefixCls}-content`}>
                 {/*<Spin*/}
                 {/*  indicator={<LoadingOutlined style="font-size: 24px" spin />}*/}
@@ -396,7 +411,10 @@
                 {/*/>*/}
                 <img
                   style={unref(getImageStyle)}
-                  class={[`${prefixCls}-image`, imgState.status === StatueEnum.DONE ? '' : 'hidden']}
+                  class={[
+                    `${prefixCls}-image`,
+                    imgState.status === StatueEnum.DONE ? '' : 'hidden',
+                  ]}
                   ref={imgElRef}
                   src={imgState.currentUrl}
                   onMousedown={handleAddMoveListener}

@@ -40,7 +40,11 @@
   const { title } = useGlobSetting()
   const go = useGo()
 
-  const getAppLogoClass = computed(() => [prefixCls, props.theme, { 'collapsed-show-title': unref(getCollapsedShowTitle) }])
+  const getAppLogoClass = computed(() => [
+    prefixCls,
+    props.theme,
+    { 'collapsed-show-title': unref(getCollapsedShowTitle) },
+  ])
 
   const getTitleClass = computed(() => [
     `${prefixCls}__title`,

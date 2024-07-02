@@ -55,7 +55,15 @@ export function downloadByData(data: BlobPart, filename: string, mime?: string, 
  * Download file according to file address
  * @param {*} sUrl
  */
-export function downloadByUrl({ url, target = '_blank', fileName }: { url: string; target?: TargetContext; fileName?: string }): boolean {
+export function downloadByUrl({
+  url,
+  target = '_blank',
+  fileName,
+}: {
+  url: string
+  target?: TargetContext
+  fileName?: string
+}): boolean {
   const isChrome = window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1
   const isSafari = window.navigator.userAgent.toLowerCase().indexOf('safari') > -1
 

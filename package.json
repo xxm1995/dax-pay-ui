@@ -93,13 +93,12 @@
     "sortablejs": "^1.15.2",
     "unocss": "^0.59.4",
     "vue": "^3.4.25",
-    "vue-i18n": "^9.13.1",
     "vue-json-pretty": "^2.4.0",
     "vue-router": "^4.3.2",
     "vue-types": "^5.1.1",
     "vuedraggable": "^4.1.0",
     "vxe-table": "^4.7.31",
-    "xe-utils": "^3.5.25"
+    "xe-utils": "^3.5.28"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",

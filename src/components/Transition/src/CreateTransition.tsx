@@ -38,7 +38,11 @@ export function createSimpleTransition(name: string, origin = 'top center 0', mo
     },
   })
 }
-export function createJavascriptTransition(name: string, functions: Recordable, mode: Mode = 'in-out') {
+export function createJavascriptTransition(
+  name: string,
+  functions: Recordable,
+  mode: Mode = 'in-out',
+) {
   return defineComponent({
     name,
     props: {

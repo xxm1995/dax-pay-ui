@@ -1,5 +1,8 @@
 <template>
-  <SettingDrawer v-if="getIsFixedSettingDrawer && (!getShowMultipleTab || getFullContent)" :class="prefixCls" />
+  <SettingDrawer
+    v-if="getIsFixedSettingDrawer && (!getShowMultipleTab || getFullContent)"
+    :class="prefixCls"
+  />
   <SessionTimeoutLogin v-if="getIsSessionTimeout" />
 </template>
 <script lang="ts" setup>

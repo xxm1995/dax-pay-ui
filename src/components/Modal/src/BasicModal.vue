@@ -10,7 +10,11 @@
     </template>
 
     <template #title v-if="!$slots.title">
-      <ModalHeader :helpMessage="getProps.helpMessage" :title="getMergeProps.title" @dblclick="handleTitleDbClick" />
+      <ModalHeader
+        :helpMessage="getProps.helpMessage"
+        :title="getMergeProps.title"
+        @dblclick="handleTitleDbClick"
+      />
     </template>
 
     <template #footer v-if="!$slots.footer">
@@ -46,7 +50,17 @@
 </template>
 <script lang="ts" setup>
   import type { ModalProps, ModalMethods } from './typing'
-  import { computed, ref, watch, unref, watchEffect, toRef, getCurrentInstance, nextTick, useAttrs } from 'vue'
+  import {
+    computed,
+    ref,
+    watch,
+    unref,
+    watchEffect,
+    toRef,
+    getCurrentInstance,
+    nextTick,
+    useAttrs,
+  } from 'vue'
   import Modal from './components/Modal'
   import ModalWrapper from './components/ModalWrapper.vue'
   import ModalClose from './components/ModalClose.vue'
@@ -63,7 +77,15 @@
 
   const props = defineProps(basicProps)
 
-  const emit = defineEmits(['open-change', 'height-change', 'cancel', 'ok', 'register', 'update:open', 'fullscreen'])
+  const emit = defineEmits([
+    'open-change',
+    'height-change',
+    'cancel',
+    'ok',
+    'register',
+    'update:open',
+    'fullscreen',
+  ])
 
   const attrs = useAttrs()
   const openRef = ref(false)

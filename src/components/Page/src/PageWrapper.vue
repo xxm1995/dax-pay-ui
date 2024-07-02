@@ -1,6 +1,13 @@
 <template>
   <div :class="getClass" :style="getStyle" ref="wrapperRef">
-    <PageHeader :ghost="ghost" :title="title" v-bind="omit($attrs, 'class')" :style="getHeaderStyle" ref="headerRef" v-if="getShowHeader">
+    <PageHeader
+      :ghost="ghost"
+      :title="title"
+      v-bind="omit($attrs, 'class')"
+      :style="getHeaderStyle"
+      ref="headerRef"
+      v-if="getShowHeader"
+    >
       <template #default>
         <template v-if="content">
           {{ content }}
@@ -34,7 +41,17 @@
   import { PageHeader } from 'ant-design-vue'
   import { omit, debounce } from 'lodash-es'
   import { useElementSize } from '@vueuse/core'
-  import { CSSProperties, PropType, computed, provide, ref, unref, useAttrs, useSlots, watch } from 'vue'
+  import {
+    CSSProperties,
+    PropType,
+    computed,
+    provide,
+    ref,
+    unref,
+    useAttrs,
+    useSlots,
+    watch,
+  } from 'vue'
   import PageFooter from './PageFooter.vue'
 
   defineOptions({
@@ -122,7 +139,9 @@
     }
   })
 
-  const getShowHeader = computed(() => props.content || slots?.headerContent || props.title || getHeaderSlots.value.length)
+  const getShowHeader = computed(
+    () => props.content || slots?.headerContent || props.title || getHeaderSlots.value.length,
+  )
 
   const getShowFooter = computed(() => slots?.leftFooter || slots?.rightFooter)
 

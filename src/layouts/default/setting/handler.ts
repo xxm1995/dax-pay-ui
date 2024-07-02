@@ -29,7 +29,8 @@ export function handler(event: HandlerEnum, value: any): DeepPartial<ProjectConf
     case HandlerEnum.CHANGE_LAYOUT:
       const { mode, type, split } = value
       const isMixSidebar = type === MenuTypeEnum.MIX
-      const mixSideSplitOpt = menuSetting.type === MenuTypeEnum.MIX ? { split: menuSetting.split } : { split }
+      const mixSideSplitOpt =
+        menuSetting.type === MenuTypeEnum.MIX ? { split: menuSetting.split } : { split }
       const otherSplitOpt = { split: false }
       const splitOpt = isMixSidebar ? mixSideSplitOpt : otherSplitOpt
 

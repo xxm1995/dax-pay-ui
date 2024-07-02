@@ -1,12 +1,19 @@
 import { h } from 'vue'
-import { FormItemContentRenderParams, FormItemRenderOptions, VxeGlobalRendererHandles } from 'vxe-table'
+import {
+  FormItemContentRenderParams,
+  FormItemRenderOptions,
+  VxeGlobalRendererHandles,
+} from 'vxe-table'
 import XEUtils from 'xe-utils'
 import { cellText, createEvents, createProps, getComponent } from './common'
 
 const COMPONENT_NAME = 'AButton'
 
 export function createEditRender() {
-  return function (renderOpts: VxeGlobalRendererHandles.RenderEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
+  return function (
+    renderOpts: VxeGlobalRendererHandles.RenderEditOptions,
+    params: VxeGlobalRendererHandles.RenderEditParams,
+  ) {
     const { attrs } = renderOpts
     const Component = getComponent(COMPONENT_NAME)
 
@@ -21,7 +28,10 @@ export function createEditRender() {
 }
 
 export function createDefaultRender() {
-  return function (renderOpts: VxeGlobalRendererHandles.RenderEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
+  return function (
+    renderOpts: VxeGlobalRendererHandles.RenderEditOptions,
+    params: VxeGlobalRendererHandles.RenderEditParams,
+  ) {
     const { attrs } = renderOpts
     const Component = getComponent(COMPONENT_NAME)
 
@@ -77,7 +87,10 @@ export function createFormItemRender() {
 }
 
 function createToolbarButtonRender() {
-  return function (renderOpts: VxeGlobalRendererHandles.RenderToolOptions, params: VxeGlobalRendererHandles.RenderButtonParams) {
+  return function (
+    renderOpts: VxeGlobalRendererHandles.RenderToolOptions,
+    params: VxeGlobalRendererHandles.RenderButtonParams,
+  ) {
     const { attrs } = renderOpts
     const { button } = params
     const props = createProps(renderOpts, null)

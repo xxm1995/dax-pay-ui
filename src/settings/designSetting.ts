@@ -26,7 +26,6 @@ export const APP_PRESET_COLOR_LIST: string[] = [
   '#ff9800',
 ]
 
-
 // sider preset color
 export const SIDE_BAR_BG_COLOR_LIST: string[] = [
   '#001529',

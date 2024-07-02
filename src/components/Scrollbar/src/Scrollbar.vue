@@ -17,7 +17,16 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref, onMounted, onBeforeUnmount, nextTick, provide, unref, watch, type PropType } from 'vue'
+  import {
+    ref,
+    onMounted,
+    onBeforeUnmount,
+    nextTick,
+    provide,
+    unref,
+    watch,
+    type PropType,
+  } from 'vue'
   import type { StyleValue } from '@/utils/types'
   import { addResizeListener, removeResizeListener } from '@/utils/event'
   import componentSetting from '@/settings/componentSetting'

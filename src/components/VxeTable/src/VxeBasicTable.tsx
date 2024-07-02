@@ -112,7 +112,12 @@ export default defineComponent({
 
     return (
       <div class={`h-full flex flex-col bg-white ${this.getWrapperClass}`}>
-        <VxeGrid ref="tableElRef" class={`vxe-grid_scrollbar px-6 py-4 ${tableClass}`} style={tableStyle} {...this.getBindGridValues}>
+        <VxeGrid
+          ref="tableElRef"
+          class={`vxe-grid_scrollbar px-6 py-4 ${tableClass}`}
+          style={tableStyle}
+          {...this.getBindGridValues}
+        >
           {extendSlots(this.$slots)}
         </VxeGrid>
       </div>

@@ -6,9 +6,6 @@ import { useMultipleTabStore } from '@/store/modules/multipleTab'
 import { isNil } from '@/utils/is'
 import projectSetting from '@/settings/projectSetting'
 import { useRouter } from 'vue-router'
-import { useI18n } from '@/hooks/web/useI18n'
-
-const { t } = useI18n()
 
 export function initAffixTabs(): string[] {
   const affixList = ref<RouteLocationNormalized[]>([])
@@ -59,12 +56,14 @@ export function useTabsDrag(affixTextList: string[]) {
   const { prefixCls } = useDesign('multiple-tabs')
   nextTick(() => {
     if (!multiTabsSetting.canDrag) return
-    const el = document.querySelectorAll(`.${prefixCls} .ant-tabs-nav-wrap > div`)?.[0] as HTMLElement
+    const el = document.querySelectorAll(
+      `.${prefixCls} .ant-tabs-nav-wrap > div`,
+    )?.[0] as HTMLElement
     const { initSortable } = useSortable(el, {
       filter: (_evt, target: HTMLElement) => {
         const text = target.innerText
         if (!text) return false
-        return affixTextList.map((res) => t(res)).includes(text)
+        return affixTextList.map((res) => res).includes(text)
       },
       onEnd: (evt) => {
         const { oldIndex, newIndex } = evt

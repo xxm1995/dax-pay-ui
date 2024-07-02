@@ -1,8 +1,8 @@
-import { isBrowser } from './isBrowser';
+import { isBrowser } from './isBrowser'
 
 export function isDocumentVisible(): boolean {
   if (isBrowser) {
-    return document.visibilityState !== 'hidden';
+    return document.visibilityState !== 'hidden'
   }
-  return true;
+  return true
 }

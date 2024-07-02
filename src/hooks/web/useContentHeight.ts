@@ -49,7 +49,10 @@ export function useContentHeight(
     })
   }
 
-  function calcSubtractSpace(element: Element | null | undefined, direction: 'all' | 'top' | 'bottom' = 'all'): number {
+  function calcSubtractSpace(
+    element: Element | null | undefined,
+    direction: 'all' | 'top' | 'bottom' = 'all',
+  ): number {
     function numberPx(px: string) {
       return Number(px.replace(/[^\d]/g, ''))
     }
@@ -138,7 +141,12 @@ export function useContentHeight(
     }
 
     let height =
-      bottomIncludeBody - unref(layoutFooterHeightRef) - unref(offsetHeightRef) - subtractHeight - subtractSpaceHeight - upwardSpaceHeight
+      bottomIncludeBody -
+      unref(layoutFooterHeightRef) -
+      unref(offsetHeightRef) -
+      subtractHeight -
+      subtractSpaceHeight -
+      upwardSpaceHeight
 
     // compensation height
     const calcCompensationHeight = () => {

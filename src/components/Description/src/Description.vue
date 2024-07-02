@@ -8,7 +8,15 @@
   import { Descriptions } from 'ant-design-vue'
   import type { DescriptionsProps } from 'ant-design-vue/es/descriptions'
   import { get } from 'lodash-es'
-  import { computed, defineComponent, ref, toRefs, unref, type CSSProperties, type PropType } from 'vue'
+  import {
+    computed,
+    defineComponent,
+    ref,
+    toRefs,
+    unref,
+    type CSSProperties,
+    type PropType,
+  } from 'vue'
   import type { DescInstance, DescItem, DescriptionProps } from './typing'
 
   const props = {
