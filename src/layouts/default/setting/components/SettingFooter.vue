@@ -59,7 +59,7 @@
       updateSidebarBgColor()
       updateColorWeak(colorWeak)
       updateGrayMode(grayMode)
-      createMessage.success(t('layout.setting.resetSuccess'))
+      createMessage.success('重置成功')
     } catch (error: any) {
       createMessage.error(error)
     }

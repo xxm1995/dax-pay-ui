@@ -1,5 +1,5 @@
 <template>
-  <ConfigProvider :theme="themeConfig">
+  <ConfigProvider :locale="zhCN" :theme="themeConfig">
     <AppProvider>
       <RouterView />
     </AppProvider>
@@ -10,6 +10,7 @@
   import { AppProvider } from '@/components/Application'
   import { useTitle } from '@/hooks/web/useTitle'
   import { ConfigProvider } from 'ant-design-vue'
+  import zhCN from 'ant-design-vue/es/locale/zh_CN'
 
   import { useDarkModeTheme } from '@/hooks/setting/useDarkModeTheme'
   import 'dayjs/locale/zh-cn'

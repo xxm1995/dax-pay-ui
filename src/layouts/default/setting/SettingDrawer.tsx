@@ -379,10 +379,6 @@ export default defineComponent({
         {unref(getShowDarkModeToggle) && <AppDarkModeToggle class="mx-auto" />}
         <Divider>导航栏模式</Divider>
         {renderSidebar()}
-        {/* <Divider>{() => t('layout.setting.sysTheme')}</Divider>
-        {renderMainTheme()}
-        <Divider>{() => t('layout.setting.headerTheme')}</Divider>
-        {renderHeaderTheme()} */}
         <Divider>菜单主题</Divider>
         {renderSideBarTheme()}
         <Divider>界面功能</Divider>

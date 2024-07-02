@@ -15,7 +15,7 @@
           size="large"
           class="fix-auto-fill"
           v-model:value="formData.sms"
-          :placeholder="t('sys.login.smsCode')"
+          placeholder="短信验证码"
         />
       </FormItem>
 
