@@ -5,21 +5,24 @@
         <BreadcrumbItem>
           <Icon :icon="getIcon(routeItem)" v-if="getShowBreadCrumbIcon && getIcon(routeItem)" />
           <span v-if="!hasRedirect(routes, routeItem)">
-            {{ t((routeItem.meta.title || routeItem.name) as string) }}
+            {{ (routeItem.meta.title || routeItem.name) as string }}
           </span>
           <router-link v-else to="" @click="handleClick(routeItem)">
-            {{ t((routeItem.meta.title || routeItem.name) as string) }}
+            {{ (routeItem.meta.title || routeItem.name) as string }}
           </router-link>
           <template v-if="routeItem.children && !routeItem.meta?.hideChildrenInMenu" #overlay>
             <Menu>
               <template v-for="childItem in routeItem.children" :key="childItem.name">
                 <MenuItem>
-                  <Icon :icon="getIcon(childItem)" v-if="getShowBreadCrumbIcon && getIcon(childItem)" />
+                  <Icon
+                    :icon="getIcon(childItem)"
+                    v-if="getShowBreadCrumbIcon && getIcon(childItem)"
+                  />
                   <span v-if="!hasRedirect(routes, childItem)">
-                    {{ t((childItem.meta?.title || childItem.name) as string) }}
+                    {{ (childItem.meta?.title || childItem.name) as string }}
                   </span>
                   <router-link v-else to="" @click="handleClick(childItem)">
-                    {{ t((childItem.meta?.title || childItem.name) as string) }}
+                    {{ (childItem.meta?.title || childItem.name) as string }}
                   </router-link>
                 </MenuItem>
               </template>
@@ -42,7 +45,6 @@
   import { useDesign } from '@/hooks/web/useDesign'
   import { useRootSetting } from '@/hooks/setting/useRootSetting'
   import { useGo } from '@/hooks/web/usePage'
-  import { useI18n } from '@/hooks/web/useI18n'
 
   import { propTypes } from '@/utils/propTypes'
   import { isString } from '@/utils/is'
@@ -64,7 +66,6 @@
   const { getShowBreadCrumbIcon } = useRootSetting()
   const go = useGo()
 
-  const { t } = useI18n()
   watchEffect(async () => {
     if (currentRoute.value.name === REDIRECT_NAME) return
     const menus = await getMenus()

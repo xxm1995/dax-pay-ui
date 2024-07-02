@@ -11,9 +11,9 @@
 
     <template #overlay>
       <a-menu @click="handleMenuClick">
-        <MenuItem key="doc" text="文档" icon="ion:document-text-outline" v-if="getShowDoc" />
+        <MenuItem key="doc" text="在线文档" icon="ion:document-text-outline" v-if="getShowDoc" />
         <Menu.Divider v-if="getShowDoc" />
-        <MenuItem key="logout" text="退出" icon="ion:power-outline" />
+        <MenuItem key="logout" text="退出登录" icon="ion:power-outline" />
       </a-menu>
     </template>
   </Dropdown>
@@ -114,12 +114,6 @@
 
       .@{prefix-cls}__desc {
         color: @header-light-desc-color;
-      }
-    }
-
-    &-dropdown-overlay {
-      .ant-dropdown-menu-item {
-        min-width: 160px;
       }
     }
   }

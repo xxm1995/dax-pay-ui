@@ -2,17 +2,17 @@
   <div :class="prefixCls">
     <a-button type="primary" block @click="handleCopy">
       <CopyOutlined class="mr-2" />
-      {{ t('layout.setting.copyBtn') }}
+      拷贝'
     </a-button>
 
     <a-button color="warning" block @click="handleResetSetting" class="my-3">
       <RedoOutlined class="mr-2" />
-      {{ t('common.resetText') }}
+      重置
     </a-button>
 
     <a-button color="error" block @click="handleClearAndRedo">
       <RedoOutlined class="mr-2" />
-      {{ t('layout.setting.clearBtn') }}
+      清空缓存并返回登录页
     </a-button>
   </div>
 </template>
@@ -27,7 +27,6 @@
   import { useUserStore } from '@/store/modules/user'
 
   import { useDesign } from '@/hooks/web/useDesign'
-  import { useI18n } from '@/hooks/web/useI18n'
   import { useMessage } from '@/hooks/web/useMessage'
   import { copyText } from '@/utils/copyTextToClipboard'
   import { updateColorWeak } from '@/logics/theme/updateColorWeak'
@@ -39,7 +38,6 @@
 
   const permissionStore = usePermissionStore()
   const { prefixCls } = useDesign('setting-footer')
-  const { t } = useI18n()
   const { createSuccessModal, createMessage } = useMessage()
   const tabStore = useMultipleTabStore()
   const userStore = useUserStore()
@@ -48,8 +46,8 @@
   function handleCopy() {
     copyText(JSON.stringify(unref(appStore.getProjectConfig), null, 2), null).then(() => {
       createSuccessModal({
-        title: t('layout.setting.operatingTitle'),
-        content: t('layout.setting.operatingContent'),
+        title: '操作成功',
+        content: '复制成功,请到 src/settings/projectSetting.ts 中修改配置！',
       })
     })
   }

@@ -1,5 +1,10 @@
 <template>
-  <MenuItem :name="item.path" v-if="!menuHasChildren(item) && getShowMenu" v-bind="$props" :class="getLevelClass">
+  <MenuItem
+    :name="item.path"
+    v-if="!menuHasChildren(item) && getShowMenu"
+    v-bind="$props"
+    :class="getLevelClass"
+  >
     <img v-if="getImg" :src="getImg" class="w-16px h-16px align-top" />
     <Icon v-if="getIcon" :icon="getIcon" :size="16" />
     <div v-if="collapsedShowTitle && getIsCollapseParent" class="mt-1 collapse-title">
@@ -31,7 +36,10 @@
       </span>
       <SimpleMenuTag :item="item" :collapseParent="!!collapse && !!parent" />
     </template>
-    <template v-for="childrenItem in item.children || []" :key="childrenItem.paramPath || childrenItem.path">
+    <template
+      v-for="childrenItem in item.children || []"
+      :key="childrenItem.paramPath || childrenItem.path"
+    >
       <SimpleSubMenu v-bind="$props" :item="childrenItem" :parent="false" />
     </template>
   </SubMenu>
@@ -47,7 +55,6 @@
   import MenuItem from './components/MenuItem.vue'
   import SubMenu from './components/SubMenuItem.vue'
   import { propTypes } from '@/utils/propTypes'
-  import { useI18n } from '@/hooks/web/useI18n'
   import { createAsyncComponent } from '@/utils/factory/createAsyncComponent'
 
   const SimpleMenuTag = createAsyncComponent(() => import('./SimpleMenuTag.vue'))
@@ -65,13 +72,12 @@
     theme: propTypes.oneOf(['dark', 'light']),
   })
 
-  const { t } = useI18n()
   const { prefixCls } = useDesign('simple-menu')
 
   const getShowMenu = computed(() => !props.item?.meta?.hideMenu)
   const getIcon = computed(() => (props.item?.img ? undefined : props.item?.icon))
   const getImg = computed(() => props.item?.img)
-  const getI18nName = computed(() => t(props.item?.meta?.title || props.item?.name))
+  const getI18nName = computed(() => props.item?.meta?.title || props.item?.name)
   const getShowSubTitle = computed(() => !props.collapse || !props.parent)
   const getIsCollapseParent = computed(() => !!props.collapse && !!props.parent)
   const getLevelClass = computed(() => {

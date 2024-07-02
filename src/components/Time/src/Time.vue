@@ -3,7 +3,6 @@
 </template>
 <script lang="ts" setup>
   import { ref, watch } from 'vue'
-  import { useI18n } from '@/hooks/web/useI18n'
   import { useIntervalFn } from '@vueuse/core'
   import { formatToDateTime, formatToDate, dateUtil } from '@/utils/dateUtil'
   import { isNumber, isObject, isString } from '@/utils/is'
@@ -23,8 +22,6 @@
   const ONE_DAY = ONE_HOUR * 24
 
   const date = ref('')
-
-  const { t } = useI18n()
 
   useIntervalFn(setTime, props.step * ONE_SECONDS)
 
@@ -76,22 +73,22 @@
     }
 
     let resStr = ''
-    let dirStr = isBefore ? t('component.time.before') : t('component.time.after')
+    let dirStr = isBefore ? '前' : '后'
 
     if (diff < ONE_SECONDS) {
-      resStr = t('component.time.just')
+      resStr = '刚刚'
       // Less than or equal to 59 seconds
     } else if (diff < ONE_MINUTES) {
-      resStr = parseInt(diff / ONE_SECONDS) + t('component.time.seconds') + dirStr
+      resStr = parseInt(diff / ONE_SECONDS) + '秒' + dirStr
       // More than 59 seconds, less than or equal to 59 minutes and 59 seconds
     } else if (diff >= ONE_MINUTES && diff < ONE_HOUR) {
-      resStr = Math.floor(diff / ONE_MINUTES) + t('component.time.minutes') + dirStr
+      resStr = Math.floor(diff / ONE_MINUTES) + '分钟' + dirStr
       // More than 59 minutes and 59 seconds, less than or equal to 23 hours, 59 minutes and 59 seconds
     } else if (diff >= ONE_HOUR && diff < ONE_DAY) {
-      resStr = Math.floor(diff / ONE_HOUR) + t('component.time.hours') + dirStr
+      resStr = Math.floor(diff / ONE_HOUR) + '小时' + dirStr
       // More than 23 hours, 59 minutes and 59 seconds, less than or equal to 29 days, 59 minutes and 59 seconds
     } else if (diff >= ONE_DAY && diff < 2623860000) {
-      resStr = Math.floor(diff / ONE_DAY) + t('component.time.days') + dirStr
+      resStr = Math.floor(diff / ONE_DAY) + '天' + dirStr
       // More than 29 days, 59 minutes, 59 seconds, less than 364 days, 23 hours, 59 minutes, 59 seconds, and the incoming timestamp is earlier than the current
     } else if (diff >= 2623860000 && diff <= 31567860000 && isBefore) {
       resStr = dateUtil(timeStamp).format('MM-DD-HH-mm')

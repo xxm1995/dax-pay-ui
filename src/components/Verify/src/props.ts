@@ -1,7 +1,5 @@
 import type { PropType } from 'vue'
-import { useI18n } from '@/hooks/web/useI18n'
 
-const { t } = useI18n()
 export const basicProps = {
   value: {
     type: Boolean as PropType<boolean>,
@@ -15,11 +13,11 @@ export const basicProps = {
 
   text: {
     type: [String] as PropType<string>,
-    default: t('component.verify.dragText'),
+    default: '请按住滑块拖动',
   },
   successText: {
     type: [String] as PropType<string>,
-    default: t('component.verify.successText'),
+    default: '验证通过',
   },
   height: {
     type: [Number, String] as PropType<number | string>,

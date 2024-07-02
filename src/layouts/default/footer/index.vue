@@ -1,11 +1,11 @@
 <template>
   <Layout.Footer :class="prefixCls" v-if="getShowLayoutFooter" ref="footerRef">
     <div :class="`${prefixCls}__links`">
-      <a @click="openWindow(SITE_URL)">{{ t('layout.footer.onlinePreview') }}</a>
+      <a @click="openWindow(SITE_URL)">在线预览</a>
 
       <GithubFilled @click="openWindow(GITHUB_URL)" :class="`${prefixCls}__github`" />
 
-      <a @click="openWindow(DOC_URL)">{{ t('layout.footer.onlineDocument') }}</a>
+      <a @click="openWindow(DOC_URL)">在线文档</a>
     </div>
     <div>Copyright &copy;2020 Vben Admin</div>
   </Layout.Footer>
@@ -19,7 +19,6 @@
   import { DOC_URL, GITHUB_URL, SITE_URL } from '@/settings/siteSetting'
   import { openWindow } from '@/utils'
 
-  import { useI18n } from '@/hooks/web/useI18n'
   import { useRootSetting } from '@/hooks/setting/useRootSetting'
   import { useRouter } from 'vue-router'
   import { useDesign } from '@/hooks/web/useDesign'
@@ -27,7 +26,6 @@
 
   defineOptions({ name: 'LayoutFooter' })
 
-  const { t } = useI18n()
   const { getShowFooter } = useRootSetting()
   const { currentRoute } = useRouter()
   const { prefixCls } = useDesign('layout-footer')

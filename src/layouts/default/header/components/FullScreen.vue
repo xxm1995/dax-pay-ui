@@ -9,14 +9,12 @@
 <script lang="ts" setup>
   import { computed, unref } from 'vue'
   import { Tooltip } from 'ant-design-vue'
-  import { useI18n } from '@/hooks/web/useI18n'
   import { useFullscreen } from '@vueuse/core'
 
   import { FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons-vue'
 
   defineOptions({ name: 'FullScreen' })
 
-  const { t } = useI18n()
   const { toggle, isFullscreen } = useFullscreen()
   // 重新检查全屏状态
   isFullscreen.value = !!(
@@ -27,6 +25,6 @@
   )
 
   const getTitle = computed(() => {
-    return unref(isFullscreen) ? t('layout.header.tooltipExitFull') : t('layout.header.tooltipEntryFull')
+    return unref(isFullscreen) ? '退出全屏' : '全屏'
   })
 </script>

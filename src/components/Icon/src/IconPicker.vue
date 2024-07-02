@@ -1,7 +1,7 @@
 <template>
   <Input
     :style="{ width }"
-    :placeholder="t('component.icon.placeholder')"
+    placeholder="点击选择图标"
     :class="prefixCls"
     v-model:value="currentSelect"
     @click="triggerPopover"
@@ -9,10 +9,15 @@
     :readonly="props.readonly"
   >
     <template #addonAfter>
-      <Popover placement="bottomLeft" trigger="click" v-model="visible" :overlayClassName="`${prefixCls}-popover`">
+      <Popover
+        placement="bottomLeft"
+        trigger="click"
+        v-model="visible"
+        :overlayClassName="`${prefixCls}-popover`"
+      >
         <template #title>
           <div class="flex justify-between">
-            <Input :placeholder="t('component.icon.search')" @change="debounceHandleSearchChange" allowClear />
+            <Input placeholder="搜索" @change="debounceHandleSearchChange" allowClear />
           </div>
         </template>
 
@@ -34,7 +39,13 @@
               </ul>
             </ScrollContainer>
             <div class="flex py-2 items-center justify-center" v-if="getTotal >= pageSize">
-              <Pagination showLessItems size="small" :pageSize="pageSize" :total="getTotal" @change="handlePageChange" />
+              <Pagination
+                showLessItems
+                size="small"
+                :pageSize="pageSize"
+                :total="getTotal"
+                @change="handlePageChange"
+              />
             </div>
           </div>
           <template v-else>
@@ -43,10 +54,17 @@
         </template>
 
         <div ref="trigger">
-          <span class="cursor-pointer px-2 py-1 flex items-center" v-if="isSvgMode && currentSelect">
+          <span
+            class="cursor-pointer px-2 py-1 flex items-center"
+            v-if="isSvgMode && currentSelect"
+          >
             <SvgIcon :name="currentSelect" />
           </span>
-          <Icon :icon="currentSelect || 'ion:apps-outline'" class="cursor-pointer px-2 py-1" v-else />
+          <Icon
+            :icon="currentSelect || 'ion:apps-outline'"
+            class="cursor-pointer px-2 py-1"
+            v-else
+          />
         </div>
       </Popover>
     </template>
