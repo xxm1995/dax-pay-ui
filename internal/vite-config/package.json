@@ -52,7 +52,6 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-dts": "^3.9.0",
     "vite-plugin-html": "^3.2.2",
-    "vite-plugin-mock": "^2.9.6",
     "vite-plugin-purge-icons": "^0.10.0",
     "vite-plugin-svg-icons": "^2.0.1"
   }

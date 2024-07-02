@@ -14,7 +14,7 @@ import nProgress from 'nprogress'
 import projectSetting from '@/settings/projectSetting'
 import { createParamMenuGuard } from './paramMenuGuard'
 
-// Don't change the order of creation
+// 不要更改创建顺序
 export function setupRouterGuard(router: Router) {
   createPageGuard(router)
   createPageLoadingGuard(router)
@@ -47,7 +47,7 @@ function createPageGuard(router: Router) {
   })
 }
 
-// Used to handle page loading status
+// 用于处理页面加载状态
 function createPageLoadingGuard(router: Router) {
   const userStore = useUserStoreWithOut()
   const appStore = useAppStoreWithOut()
@@ -111,7 +111,7 @@ function createScrollGuard(router: Router) {
 }
 
 /**
- * Used to close the message instance when the route is switched
+ * 用于在切换路由时关闭消息实例
  * @param router
  */
 export function createMessageGuard(router: Router) {

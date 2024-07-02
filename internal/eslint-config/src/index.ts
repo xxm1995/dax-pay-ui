@@ -88,4 +88,4 @@ export default {
     // ],
   },
   globals: { defineOptions: 'readonly' },
-};
+}

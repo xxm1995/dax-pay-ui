@@ -8,7 +8,7 @@
     "strict": true,
     "declaration": true,
     "noImplicitOverride": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "esModuleInterop": true,
     "useUnknownInCatchVariables": false,
     "composite": false,

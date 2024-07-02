@@ -1,4 +1,4 @@
-import { defineApplicationConfig } from '@vben/vite-config';
+import { defineApplicationConfig } from '@vben/vite-config'
 
 export default defineApplicationConfig({
   overrides: {
@@ -24,17 +24,19 @@ export default defineApplicationConfig({
           // only https
           // secure: false
         },
-        '/upload': {
-          target: 'http://localhost:3300/upload',
+        '/server': {
+          target: 'http://localhost:9000',
           changeOrigin: true,
           ws: true,
-          rewrite: (path) => path.replace(new RegExp(`^/upload`), ''),
+          rewrite: (path) => path.replace(new RegExp(`^/server`), ''),
+          // only https
+          // secure: false
         },
       },
-      open: true, // 项目启动后，自动打开
+      open: false, // 项目启动后，自动打开
       warmup: {
         clientFiles: ['./index.html', './src/{views,components}/*'],
       },
     },
   },
-});
+})

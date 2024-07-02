@@ -54,4 +54,4 @@ export default {
     'vue/attributes-order': 'error',
     'vue/require-default-prop': 'error',
   },
-};
+}

@@ -10,7 +10,7 @@ import { router } from '@/router'
 import { PermissionModeEnum } from '@/enums/appEnum'
 import { pathToRegexp } from 'path-to-regexp'
 
-const modules = import.meta.glob('../routes/modules/**/*.ts', { eager: true })
+const modules = import.meta.glob('./modules/**/*.ts', { eager: true })
 
 const menuModules: MenuModule[] = []
 
@@ -45,31 +45,17 @@ const staticMenus: Menu[] = []
   menuModules.sort((a, b) => {
     return (a.orderNo || 0) - (b.orderNo || 0)
   })
-
   for (const menu of menuModules) {
     staticMenus.push(transformMenuModule(menu))
   }
 })()
 
+/**
+ * 获取菜单
+ */
 async function getAsyncMenus() {
   const permissionStore = usePermissionStore()
-  //递归过滤所有隐藏的菜单
-  const menuFilter = (items) => {
-    return items.filter((item) => {
-      const show = !item.meta?.hideMenu && !item.hideMenu
-      if (show && item.children) {
-        item.children = menuFilter(item.children)
-      }
-      return show
-    })
-  }
-  if (isBackMode()) {
-    return menuFilter(permissionStore.getBackMenuList)
-  }
-  if (isRouteMappingMode()) {
-    return menuFilter(permissionStore.getFrontMenuList)
-  }
-  return staticMenus
+  return permissionStore.getBackMenuList.filter((item) => !item.meta?.hideMenu && !item.hideMenu)
 }
 
 export const getMenus = async (): Promise<Menu[]> => {

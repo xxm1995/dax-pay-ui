@@ -29,13 +29,10 @@ export enum SessionTimeoutProcessingEnum {
  * 权限模式
  */
 export enum PermissionModeEnum {
-  // role
   // 角色权限
   ROLE = 'ROLE',
-  // back
   // 后端
   BACK = 'BACK',
-  // route mapping
   // 路由映射
   ROUTE_MAPPING = 'ROUTE_MAPPING',
 }

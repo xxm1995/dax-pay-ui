@@ -1,38 +1,35 @@
-import { RoleEnum } from '@/enums/roleEnum'
-
 export {}
 
 declare module 'vue-router' {
   interface RouteMeta extends Record<string | number | symbol, unknown> {
     orderNo?: number
-    // title
+    // 标题
     title: string
-    // dynamic router level.
+    // 动态路由器级别。
     dynamicLevel?: number
-    // dynamic router real route path (For performance).
+    // 动态路由器真实路由路径 (用于性能)。
     realPath?: string
-    // Whether to ignore permissions
+    // 是否忽略鉴权
     ignoreAuth?: boolean
-    // role info
+    // 角色
     roles?: RoleEnum[]
-    // Whether not to cache
+    // 是否不缓存
     ignoreKeepAlive?: boolean
-    // Is it fixed on tab
+    // 它固定在tab上吗
     affix?: boolean
-    // icon on tab
+    // 图标
     icon?: string
-    // img on tab
-    img?: string
+    // Iframe 打开的连接
     frameSrc?: string
-    // current page transition
+    // current page transition 当前页面转换
     transitionName?: string
-    // Whether the route has been dynamically added
+    // 路由是否已动态添加 Whether the route has been dynamically added
     hideBreadcrumb?: boolean
-    // Hide submenu
+    // 隐藏子菜单 Hide submenu
     hideChildrenInMenu?: boolean
-    // Carrying parameters
+    // 携带参数 Carrying parameters
     carryParam?: boolean
-    // Used internally to mark single-level menus
+    // 内部用于标记单层菜单 Used internally to mark single-level menus
     single?: boolean
     // Currently active menu
     currentActiveMenu?: string

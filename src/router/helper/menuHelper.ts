@@ -2,7 +2,7 @@ import { AppRouteModule } from '@/router/types'
 import type { MenuModule, Menu, AppRouteRecordRaw } from '@/router/types'
 import { findPath, treeMap } from '@/utils/helper/treeHelper'
 import { cloneDeep } from 'lodash-es'
-import { isHttpUrl } from '@/utils/is'
+import { isOutsideUrl } from '@/utils/is'
 import { RouteParams } from 'vue-router'
 import { toRaw } from 'vue'
 
@@ -11,18 +11,16 @@ export function getAllParentPath<T = Recordable>(treeData: T[], path: string) {
   return (menuList || []).map((item) => item.path)
 }
 
-// 路径处理
+/**
+ * 路径处理
+ */
 function joinParentPath(menus: Menu[], parentPath = '') {
   for (let index = 0; index < menus.length; index++) {
     const menu = menus[index]
-    // https://next.router.vuejs.org/guide/essentials/nested-routes.html
-    // Note that nested paths that start with / will be treated as a root path.
-    // 请注意，以 / 开头的嵌套路径将被视为根路径。
-    // This allows you to leverage the component nesting without having to use a nested URL.
-    // 这允许你利用组件嵌套，而无需使用嵌套 URL。
-    if (!(menu.path.startsWith('/') || isHttpUrl(menu.path))) {
+    // 请注意，以 / 开头的嵌套路径将被视为根路径。这允许你利用组件嵌套，而无需使用嵌套 URL。
+    if (!(menu.path.startsWith('/') || isOutsideUrl(menu.path))) {
       // path doesn't start with /, nor is it a url, join parent path
-      // 路径不以 / 开头，也不是 url，加入父路径
+      // 路径不以 / 开头，也不是外部打开的路径，加入父路径
       menu.path = `${parentPath}/${menu.path}`
     }
     if (menu?.children?.length) {
@@ -31,15 +29,21 @@ function joinParentPath(menus: Menu[], parentPath = '') {
   }
 }
 
-// Parsing the menu module
+/**
+ * 解析菜单模块
+ */
 export function transformMenuModule(menuModule: MenuModule): Menu {
-  const menuList = [menuModule]
+  // const { menu } = menuModule
+  const { menu } = menuModule
+  const menuList = [menu]
 
   joinParentPath(menuList)
   return menuList[0]
 }
 
-// 将路由转换成菜单
+/**
+ * 将路由转换成菜单
+ */
 export function transformRouteToMenu(routeModList: AppRouteModule[], routerMapping = false) {
   // 借助 lodash 深拷贝
   const cloneRouteModList = cloneDeep(routeModList)
@@ -61,12 +65,12 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
   // 提取树指定结构
   const list = treeMap(routeList, {
     conversion: (node: AppRouteRecordRaw) => {
-      const { meta: { hideMenu = false } = {}, name } = node
+      const { meta: { title, hideMenu = false } = {} } = node
 
       return {
         ...(node.meta || {}),
         meta: node.meta,
-        name,
+        name: title,
         hideMenu,
         path: node.path,
         ...(node.redirect ? { redirect: node.redirect } : {}),
@@ -81,7 +85,7 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
 /**
  * config menu with given params
  */
-const menuParamRegex = /(?::)([\s\S]+?)((?=\/)|$)/g
+const menuParamRegex = /:([\s\S]+?)((?=\/)|$)/g
 
 export function configureDynamicParamsMenu(menu: Menu, params: RouteParams) {
   const { path, paramPath } = toRaw(menu)

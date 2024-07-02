@@ -1,5 +1,5 @@
-import UnoCSS from 'unocss/vite';
-import { type UserConfig } from 'vite';
+import UnoCSS from 'unocss/vite'
+import { type UserConfig } from 'vite'
 
 const commonConfig: (mode: string) => UserConfig = (mode) => ({
   server: {
@@ -17,6 +17,6 @@ const commonConfig: (mode: string) => UserConfig = (mode) => ({
     },
   },
   plugins: [UnoCSS()],
-});
+})
 
-export { commonConfig };
+export { commonConfig }

@@ -1,3 +1,5 @@
+import { router } from '@/router'
+
 export {
   isArguments,
   isArrayBuffer,
@@ -69,4 +71,29 @@ export function isHttpUrl(path: string): boolean {
 export function isPascalCase(str: string): boolean {
   const regex = /^[A-Z][A-Za-z]*$/
   return regex.test(str)
+}
+
+/**
+ * 是否是网址
+ * @param path
+ */
+export function isUrl(path: string): boolean {
+  return isHttpUrl(path)
+}
+
+/**
+ * 是否从外部打开的链接
+ * @return 打开的地址, 为空字符则说明无法打开
+ */
+export function isOutsideUrl(path: string): string {
+  if (isUrl(path)) {
+    return path
+  }
+  if (path.startsWith('outside://')) {
+    // 转换成项目内路由地址
+    const routerPath = path.substring(10)
+    const to = router.resolve(routerPath)
+    return to.href
+  }
+  return ''
 }

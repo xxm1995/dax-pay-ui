@@ -8,6 +8,9 @@ export type Component<T = any> = ReturnType<typeof defineComponent> | (() => Pro
 export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
   name: string
   meta: RouteMeta
+  targetOutside?: boolean
+  redirect?: string
+  iframeUrl?: string
   component?: Component | string
   components?: Component
   children?: AppRouteRecordRaw[]
@@ -48,7 +51,10 @@ export interface Menu {
   hideMenu?: boolean
 }
 
-export type MenuModule = Menu
+export type MenuModule = {
+  orderNo?: number
+  menu: Menu
+}
 
 // export type AppRouteModule = RouteModule | AppRouteRecordRaw;
 export type AppRouteModule = AppRouteRecordRaw

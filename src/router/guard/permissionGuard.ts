@@ -7,124 +7,90 @@ import { useUserStoreWithOut } from '@/store/modules/user'
 
 import { PAGE_NOT_FOUND_ROUTE } from '@/router/routes/basic'
 
-import { RootRoute } from '@/router/routes'
-
 const LOGIN_PATH = PageEnum.BASE_LOGIN
-
-const ROOT_PATH = RootRoute.path
 
 const whitePathList: PageEnum[] = [LOGIN_PATH]
 
+/**
+ * 路由守卫: 处理下列情况
+ * 1. 载入菜单
+ * 2. 处理登录后用户提示
+ * @param router
+ */
 export function createPermissionGuard(router: Router) {
   const userStore = useUserStoreWithOut()
   const permissionStore = usePermissionStoreWithOut()
   router.beforeEach(async (to, from, next) => {
-    if (
-      from.path === ROOT_PATH &&
-      to.path === PageEnum.BASE_HOME &&
-      userStore.getUserInfo.homePath &&
-      userStore.getUserInfo.homePath !== PageEnum.BASE_HOME
-    ) {
-      next(userStore.getUserInfo.homePath)
-      return
-    }
-
     const token = userStore.getToken
-
-    // Whitelist can be directly entered
+    // 可以访问输入白名单中的页面
     if (whitePathList.includes(to.path as PageEnum)) {
+      // 如果在登录状态下访问登录页, 自动跳转到后续页面
       if (to.path === LOGIN_PATH && token) {
-        const isSessionTimeout = userStore.getSessionTimeout
         try {
-          await userStore.afterLoginAction()
-          if (!isSessionTimeout) {
-            next(decodeURIComponent((to.query?.redirect as string) || '/'))
-            return
-          }
+          // 如果参数未携带重定向路径则自动跳转到首页
+          next((to.query?.redirect as string) || '/')
+          return
         } catch {
-          //
+          /* empty */
         }
       }
       next()
       return
     }
-    // token or user does not exist
+
+    // token 不存在
     if (!token) {
-      // You can access without permission. You need to set the routing meta.ignoreAuth to true
+      // 您可以在未经许可的情况下访问。您需要将路由meta中的 忽略身份验证设置为 true
       if (to.meta.ignoreAuth) {
         next()
         return
       }
-
-      // redirect login page
+      //重定向登录页面
       const redirectData: { path: string; replace: boolean; query?: Recordable<string> } = {
         path: LOGIN_PATH,
         replace: true,
       }
-      if (to.fullPath) {
+      if (to.path) {
         redirectData.query = {
           ...redirectData.query,
-          redirect: to.fullPath,
+          redirect: to.path,
         }
       }
       next(redirectData)
       return
     }
 
-    // get userinfo while last fetch time is empty
-    if (userStore.getLastUpdateTime === 0) {
-      try {
-        await userStore.getUserInfoAction()
-      } catch (err) {
-        next()
-        return
-      }
-    }
-
-    // 动态路由加载（首次）
-    if (!permissionStore.getIsDynamicAddedRoute) {
-      const routes = await permissionStore.buildRoutesAction()
-      ;[...routes, PAGE_NOT_FOUND_ROUTE].forEach((route) => {
-        router.addRoute(route as unknown as RouteRecordRaw)
-      })
-      // 记录动态路由加载完成
-      permissionStore.setDynamicAddedRoute(true)
-
-      // 现在的to动态路由加载之前的，可能为PAGE_NOT_FOUND_ROUTE（例如，登陆后，刷新的时候）
-      // 此处应当重定向到fullPath，否则会加载404页面内容
-      next({ path: to.fullPath, replace: true, query: to.query })
+    // 路由是否初始化完毕, 完毕后直接直接跳转, 不再向下执行初始化操作
+    if (permissionStore.getIsDynamicAddedRoute) {
+      next()
       return
     }
+    // 用户初始化等操作.
+    // userLoginInitAction()
+
+    // 重载菜单, 进行路由菜单的组装并进行跳转
+    console.log('重载菜单')
+    const routes = await permissionStore.buildRoutesAction()
+    routes.forEach((route) => {
+      try {
+        router.addRoute(route as RouteRecordRaw)
+      } catch (e) {
+        console.error(e)
+      }
+    })
+
+    // 40x 系列路由
+    router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw)
+    permissionStore.setDynamicAddedRoute(true)
 
     if (to.name === PAGE_NOT_FOUND_ROUTE.name) {
-      // 遇到不存在页面，后续逻辑不再处理redirect（阻止下面else逻辑）
-      from.query.redirect = ''
-
-      if (from.path === LOGIN_PATH && to.fullPath !== (userStore.getUserInfo.homePath || PageEnum.BASE_HOME)) {
-        // 登陆重定向不存在路由，转去“首页”
-        next({ path: userStore.getUserInfo.homePath || PageEnum.BASE_HOME, replace: true })
-      } else {
-        // 正常前往“404”页面
-        next()
-      }
-    } else if (from.query.redirect) {
-      // 存在redirect
-      const redirect = decodeURIComponent((from.query.redirect as string) || '')
-
-      // 只处理一次 from.query.redirect
-      // 也避免某场景（指向路由定义了 redirect）下的死循环
-      from.query.redirect = ''
-
-      if (redirect === to.fullPath) {
-        // 已经被redirect
-        next()
-      } else {
-        // 指向redirect
-        next({ path: redirect, replace: true })
-      }
+      // 动态添加路由后，此处应当重定向到fullPath，否则会加载404页面内容
+      next({ path: to.fullPath, replace: true, query: to.query })
     } else {
-      // 正常访问
-      next()
+      const redirectPath = (from.query.redirect || to.path) as string
+      const redirect = decodeURIComponent(redirectPath)
+      const nextData = to.path === redirect ? { ...to, replace: true } : { path: redirect }
+      next(nextData)
     }
   })
 }

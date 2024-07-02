@@ -6,6 +6,10 @@ import { usePermissionStore } from '@/store/modules/permission'
 import { PageEnum } from '@/enums/pageEnum'
 import { removeTabChangeListener } from '@/logics/mitt/routeChange'
 
+/**
+ * 创建路由守卫
+ * @param router
+ */
 export function createStateGuard(router: Router) {
   router.afterEach((to) => {
     // Just enter the login page and clear the authentication information

@@ -1,21 +1,21 @@
-import { readPackageJSON } from 'pkg-types';
-import { defineConfig, mergeConfig, type UserConfig } from 'vite';
-import dts from 'vite-plugin-dts';
+import { readPackageJSON } from 'pkg-types'
+import { defineConfig, mergeConfig, type UserConfig } from 'vite'
+import dts from 'vite-plugin-dts'
 
-import { commonConfig } from './common';
+import { commonConfig } from './common'
 
 interface DefineOptions {
-  overrides?: UserConfig;
+  overrides?: UserConfig
   options?: {
     //
-  };
+  }
 }
 
 function definePackageConfig(defineOptions: DefineOptions = {}) {
-  const { overrides = {} } = defineOptions;
-  const root = process.cwd();
+  const { overrides = {} } = defineOptions
+  const root = process.cwd()
   return defineConfig(async ({ mode }) => {
-    const { dependencies = {}, peerDependencies = {} } = await readPackageJSON(root);
+    const { dependencies = {}, peerDependencies = {} } = await readPackageJSON(root)
     const packageConfig: UserConfig = {
       build: {
         lib: {
@@ -32,11 +32,11 @@ function definePackageConfig(defineOptions: DefineOptions = {}) {
           logLevel: 'error',
         }),
       ],
-    };
-    const mergedConfig = mergeConfig(commonConfig(mode), packageConfig);
+    }
+    const mergedConfig = mergeConfig(commonConfig(mode), packageConfig)
 
-    return mergeConfig(mergedConfig, overrides);
-  });
+    return mergeConfig(mergedConfig, overrides)
+  })
 }
 
-export { definePackageConfig };
+export { definePackageConfig }

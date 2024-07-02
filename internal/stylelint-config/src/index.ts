@@ -89,4 +89,4 @@ export default {
     ],
   },
   ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts'],
-};
+}
