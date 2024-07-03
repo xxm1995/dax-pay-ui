@@ -143,6 +143,10 @@ export interface GlobConfig {
   // Project abbreviation
   shortName: string
 }
+
+/**
+ * 环境配置
+ */
 export interface GlobEnvConfig {
   // 项目名称
   VITE_GLOB_APP_TITLE: string

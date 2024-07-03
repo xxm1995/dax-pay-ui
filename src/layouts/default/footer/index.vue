@@ -1,23 +1,11 @@
 <template>
   <Layout.Footer :class="prefixCls" v-if="getShowLayoutFooter" ref="footerRef">
-    <div :class="`${prefixCls}__links`">
-      <a @click="openWindow(SITE_URL)">在线预览</a>
-
-      <GithubFilled @click="openWindow(GITHUB_URL)" :class="`${prefixCls}__github`" />
-
-      <a @click="openWindow(DOC_URL)">在线文档</a>
-    </div>
-    <div>Copyright &copy;2020 Vben Admin</div>
+    <div>Copyright &copy;2021 济南易杯光年软件技术有限公司</div>
   </Layout.Footer>
 </template>
 <script lang="ts" setup>
   import { computed, unref, ref } from 'vue'
   import { Layout } from 'ant-design-vue'
-
-  import { GithubFilled } from '@ant-design/icons-vue'
-
-  import { DOC_URL, GITHUB_URL, SITE_URL } from '@/settings/siteSetting'
-  import { openWindow } from '@/utils'
 
   import { useRootSetting } from '@/hooks/setting/useRootSetting'
   import { useRouter } from 'vue-router'

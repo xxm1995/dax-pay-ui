@@ -14,10 +14,13 @@ export default defineApplicationConfig({
       ],
     },
     server: {
+      open: false, // 项目启动后，自动打开
+      host: true,
+      port: 3300,
       proxy: {
         // 运营管理端
         '/admin': {
-          target: 'http://localhost:9000',
+          target: 'http://localhost:9999',
           changeOrigin: true,
           ws: true,
           rewrite: (path) => path.replace(new RegExp(`^/server`), ''),
@@ -26,7 +29,7 @@ export default defineApplicationConfig({
         },
         // 商户端
         '/merchant': {
-          target: 'http://localhost:9000',
+          target: 'http://localhost:8888',
           changeOrigin: true,
           ws: true,
           rewrite: (path) => path.replace(new RegExp(`^/server`), ''),
@@ -34,7 +37,6 @@ export default defineApplicationConfig({
           // secure: false
         },
       },
-      open: false, // 项目启动后，自动打开
       warmup: {
         clientFiles: ['./index.html', './src/{views,components}/*'],
       },

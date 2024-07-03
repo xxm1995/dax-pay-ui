@@ -25,7 +25,7 @@ async function createPlugins({ isBuild, root, compress, enableAnalyze }: Options
   const appConfigPlugin = await createAppConfigPlugin({ root, isBuild })
   vitePlugins.push(appConfigPlugin)
 
-  vitePlugins.push(DevTools())
+  vitePlugins.push(DevTools() as any)
 
   // vite-plugin-html
   vitePlugins.push(configHtmlPlugin({ isBuild }))
