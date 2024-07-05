@@ -19,20 +19,14 @@ import { PermMenu } from '@/api/sys/model/menuModel'
 import { getAppEnvConfig } from '@/utils/env'
 
 interface PermissionState {
-  // Permission code list
   // 权限代码列表
   permCodeList: string[] | number[]
-  // Whether the route has been dynamically added
   // 路由是否动态添加
   isDynamicAddedRoute: boolean
-  // To trigger a menu update
   // 触发菜单更新
   lastBuildMenuTime: number
-  // Backstage menu list
   // 后台菜单列表
   backMenuList: Menu[]
-  // 菜单列表
-  frontMenuList: Menu[]
 }
 
 export const usePermissionStore = defineStore({
@@ -40,18 +34,12 @@ export const usePermissionStore = defineStore({
   state: (): PermissionState => ({
     // 权限代码列表
     permCodeList: [],
-    // Whether the route has been dynamically added
-    // 路由是否动态添加
+    // 路由是否加载完成
     isDynamicAddedRoute: false,
-    // To trigger a menu update
     // 触发菜单更新
     lastBuildMenuTime: 0,
-    // Backstage menu list
     // 后台菜单列表
     backMenuList: [],
-    // menu List
-    // 菜单列表
-    frontMenuList: [],
   }),
   getters: {
     getPermCodeList(): string[] | number[] {
@@ -59,9 +47,6 @@ export const usePermissionStore = defineStore({
     },
     getBackMenuList(): Menu[] {
       return this.backMenuList
-    },
-    getFrontMenuList(): Menu[] {
-      return this.frontMenuList
     },
     getLastBuildMenuTime(): number {
       return this.lastBuildMenuTime
@@ -74,14 +59,9 @@ export const usePermissionStore = defineStore({
     setPermCodeList(codeList: string[]) {
       this.permCodeList = codeList
     },
-
     setBackMenuList(list: Menu[]) {
       this.backMenuList = list
       list?.length > 0 && this.setLastBuildMenuTime()
-    },
-
-    setFrontMenuList(list: Menu[]) {
-      this.frontMenuList = list
     },
 
     setLastBuildMenuTime() {

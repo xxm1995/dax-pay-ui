@@ -44,6 +44,5 @@ export interface PermMenu {
   sortNo: number
   keepAlive: boolean
   targetOutside: boolean
-  hiddenHeaderContent: boolean
   children: Array<PermMenu>
 }

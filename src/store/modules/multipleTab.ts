@@ -198,12 +198,11 @@ export const useMultipleTabStore = defineStore({
 
       // If the current is the leftmost tab
       if (index === 0) {
-        // There is only one tab, then jump to the homepage, otherwise jump to the right tab
+        // 只有一个标签页，然后跳到主页，否则跳到右边标签页
         if (this.tabList.length === 1) {
-          const userStore = useUserStore()
-          toTarget = userStore.getUserInfo.homePath || PageEnum.BASE_HOME
+          toTarget = PageEnum.BASE_HOME
         } else {
-          //  Jump to the right tab
+          //  跳转到右侧标签页
           const page = this.tabList[index + 1]
           toTarget = getToTarget(page)
         }
