@@ -9,7 +9,7 @@ import { PAGE_NOT_FOUND_ROUTE } from '@/router/routes/basic'
 
 import { filter } from '@/utils/helper/treeHelper'
 
-import { getPermissions } from '@/api/sys/menu'
+import { getPermCodes, menuTree } from '@/api/sys/permission'
 
 import { useMessage } from '@/hooks/web/useMessage'
 import { PageEnum } from '@/enums/pageEnum'
@@ -82,12 +82,17 @@ export const usePermissionStore = defineStore({
      */
     async changeMenuAndPermCode(): Promise<PermMenu[]> {
       const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
-      const {
-        data: { menus, resourcePerms },
-      } = await getPermissions(VITE_GLOB_APP_CLIENT as string)
-      this.setPermCodeList(resourcePerms)
+      // 菜单
+      const { data: menus } = await menuTree(VITE_GLOB_APP_CLIENT)
+      // 权限码
+      const { data: permCode } = await getPermCodes()
+      this.setPermCodeList(permCode)
       return menus
     },
+
+    /**
+     * 获取菜单
+     */
 
     /**
      * 转换路由为系统中的菜单
@@ -131,7 +136,7 @@ export const usePermissionStore = defineStore({
       }
 
       /**
-       * @description 根据设置的首页path，修正routes中的affix标记（固定首页）
+       * 根据设置的首页path，修正routes中的affix标记（固定首页）
        * */
       const patchHomeAffix = (routes: AppRouteRecordRaw[]) => {
         if (!routes || routes.length === 0) return

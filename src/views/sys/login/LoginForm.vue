@@ -85,7 +85,6 @@
   import { LoginStateEnum, useLoginState } from '@/views/sys/login/useLogin'
   import { FormInstance } from 'ant-design-vue/lib/form/Form'
   import { LoginParams } from '@/api/sys/model/userModel'
-  import { findLoginTypeByCode, LoginType } from '@/api/common/LoginAssist'
   import { Rule } from 'ant-design-vue/lib/form'
   import { getAppEnvConfig } from '@/utils/env'
   import { imgCaptcha } from '@/api/common/Captcha'
@@ -137,14 +136,6 @@
     // 终端编码
     const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
     form.client = VITE_GLOB_APP_CLIENT
-    // 获取登录方式
-    findLoginTypeByCode(form.loginType).then(({ data }) => {
-      loginType.value = data
-      if (loginType && loginType.value.captcha && loginType.value.enable) {
-        console.log(loginType)
-        getCaptcha()
-      }
-    })
   }
 
   /**

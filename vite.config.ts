@@ -23,7 +23,7 @@ export default defineApplicationConfig({
           target: 'http://localhost:9999',
           changeOrigin: true,
           ws: true,
-          rewrite: (path) => path.replace(new RegExp(`^/server`), ''),
+          rewrite: (path) => path.replace(new RegExp(`^/admin`), ''),
           // only https
           // secure: false
         },
@@ -32,7 +32,7 @@ export default defineApplicationConfig({
           target: 'http://localhost:8888',
           changeOrigin: true,
           ws: true,
-          rewrite: (path) => path.replace(new RegExp(`^/server`), ''),
+          rewrite: (path) => path.replace(new RegExp(`^/merchant`), ''),
           // only https
           // secure: false
         },

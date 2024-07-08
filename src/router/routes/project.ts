@@ -46,6 +46,24 @@ export const OUTSIDE: AppRouteModule = {
 }
 
 /**
+ * TODO 临时功能开发
+ */
+export const TEMP: AppRouteModule = {
+  path: '/temp',
+  name: 'PROJECT_TEMP',
+  component: LAYOUT,
+  meta: { title: '临时功能' },
+  children: [
+    {
+      path: 'dict',
+      name: 'Dict',
+      component: () => import('@/views/baseapi/dict/DictList.vue'),
+      meta: { title: '字典' },
+    },
+  ],
+}
+
+/**
  * 项目基础路由
  */
-export const PROJECT_BASE = [INTERNAL, OUTSIDE]
+export const PROJECT_BASE = [INTERNAL, OUTSIDE, TEMP]
