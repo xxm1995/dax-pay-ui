@@ -1,6 +1,5 @@
 import 'uno.css'
 import '@/design/index.less'
-import '@/components/VxeTable/src/css/index.scss'
 import 'ant-design-vue/dist/reset.css'
 // Register icon sprite
 import 'virtual:svg-icons-register'
@@ -12,6 +11,7 @@ import { setupGlobDirectives } from '@/directives'
 import { initAppConfigStore } from '@/logics/initAppConfig'
 import { router, setupRouter } from '@/router'
 import { setupRouterGuard } from '@/router/guard'
+import { useTable } from '@/components/VxeTable'
 import { setupStore } from '@/store'
 
 import App from './App.vue'
@@ -30,6 +30,9 @@ async function bootstrap() {
   // Register global components
   // 注册全局组件
   registerGlobComp(app)
+
+  // add vxe-table
+  useTable(app)
 
   // Configure routing
   // 配置路由

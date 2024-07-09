@@ -1,5 +1,5 @@
 <template>
-  <a-form class="page-query" layout="inline">
+  <a-form class="page-query">
     <a-row :gutter="gutter">
       <query-item
         :key="i"

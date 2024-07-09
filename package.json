@@ -83,7 +83,8 @@
     "vue-router": "^4.4.0",
     "vue-types": "^5.1.2",
     "vuedraggable": "^4.1.0",
-    "vxe-table": "^4.7.40",
+    "vxe-table": "^v4.7",
+    "vxe-pc-ui": "^4.0.51",
     "xe-utils": "^3.5.28"
   },
   "devDependencies": {
