@@ -166,7 +166,6 @@ export function forEach<T = any>(
 }
 
 /**
- * @description: Extract tree specified structure
  * @description: 提取树指定结构
  */
 export function treeMap<T = any>(treeData: T[], opt: { children?: string; conversion: Fn }): T[] {
@@ -174,7 +173,6 @@ export function treeMap<T = any>(treeData: T[], opt: { children?: string; conver
 }
 
 /**
- * @description: Extract tree specified structure
  * @description: 提取树指定结构
  */
 export function treeMapEach(

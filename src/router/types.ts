@@ -1,5 +1,4 @@
 import type { RouteRecordRaw, RouteMeta } from 'vue-router'
-import { RoleEnum } from '@/enums/roleEnum'
 import { defineComponent } from 'vue'
 
 export type Component<T = any> =
@@ -12,6 +11,7 @@ export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
   name: string
   meta: RouteMeta
   targetOutside?: boolean
+  fullScreen?: boolean
   redirect?: string
   iframeUrl?: string
   component?: Component | string
@@ -36,7 +36,6 @@ export interface Menu {
 
   path: string
 
-  // path contains param, auto assignment.
   paramPath?: string
 
   disabled?: boolean
@@ -45,11 +44,13 @@ export interface Menu {
 
   orderNo?: number
 
-  roles?: RoleEnum[]
-
   meta?: Partial<RouteMeta>
 
   tag?: MenuTag
+
+  targetOutside?: boolean
+
+  fullScreen?: boolean
 
   hideMenu?: boolean
 }

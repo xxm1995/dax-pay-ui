@@ -18,39 +18,37 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
+      <vxe-table ref="xTable" key-field="id" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
         <vxe-column field="code" title="编码" />
         <vxe-column field="name" title="名称" />
-        <vxe-column field="groupTag" title="分类标签">
+        <vxe-column field="internal" title="系统内置">
           <template #default="{ row }">
-            <a-tag color="green">{{ row.groupTag || '空' }}</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="enable" title="启用状态">
-          <template #default="{ row }">
-            <a-tag v-if="row.enable" color="green">启用</a-tag>
-            <a-tag v-else color="red">停用</a-tag>
+            <a-tag v-if="row.internal" color="green">是</a-tag>
+            <a-tag v-else color="red">否</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="remark" title="备注" />
         <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="220" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
-              <a href="javascript:" @click="show(row)">查看</a>
+              <a-link @click="show(row)">查看</a-link>
             </span>
             <a-divider type="vertical" />
             <span>
-              <a href="javascript:" @click="edit(row)">编辑</a>
+              <a-link @click="edit(row)">编辑</a-link>
             </span>
             <a-divider type="vertical" />
-            <span>
-              <a href="javascript:" @click="itemList(row)">字典配置</a>
-            </span>
-            <a-divider type="vertical" />
-            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-              <a href="javascript:" style="color: red">删除</a>
+            <a-popconfirm
+              :disabled="row.internal"
+              title="是否删除"
+              @confirm="remove(row)"
+              okText="是"
+              cancelText="否"
+            >
+              <a-link v-if="!row.internal" style="color: red">删除</a-link>
+              <a-link v-else disabled>删除</a-link>
             </a-popconfirm>
           </template>
         </vxe-column>
@@ -63,30 +61,22 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
-      <dict-edit ref="dictEdit" @ok="queryPage" />
-      <dict-item-list ref="dictItemList" />
+      <ClientEdit ref="clientEdit" @ok="queryPage" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
-  import { del, page } from './Dict.api'
+  import { del, page } from './Client.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
-  import DictEdit from './DictEdit.vue'
-  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+  import ClientEdit from './ClientEdit.vue'
   import BQuery from '@/components/Bootx/Query/BQuery.vue'
+  import { STRING } from '@/components/Bootx/Query/Query'
   import { FormEditType } from '@/enums/formTypeEnum'
   import { useMessage } from '@/hooks/web/useMessage'
-  import { QueryField, STRING } from '@/components/Bootx/Query/Query'
-  import DictItemList from './DictItemList.vue'
-
-  interface RowVO {
-    id: number
-    name: string
-  }
-
-  const tableData = ref<RowVO[]>([{ id: 10001, name: 'Test1' }])
+  import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+  import ALink from '@/components/Link/Link.vue'
 
   // 使用hooks
   const {
@@ -98,24 +88,20 @@
     model,
     loading,
   } = useTablePage(queryPage)
-  const { createMessage } = useMessage()
-
   // 查询条件
   const fields = [
-    { field: 'code', type: STRING, name: '字典编码', placeholder: '请输入字典编码' },
-    { field: 'name', type: STRING, name: '字典名称', placeholder: '请输入字典名称' },
-    { field: 'groupTag', type: STRING, name: '分组标签', placeholder: '请输入分组标签' },
-  ] as QueryField[]
-
+    { field: 'code', formType: STRING, name: '编码', placeholder: '请输入终端编码' },
+    { field: 'name', formType: STRING, name: '名称', placeholder: '请输入终端名称' },
+  ]
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
-  const dictEdit = ref<any>()
-  const dictItemList = ref<any>()
+  const clientEdit: any = ref()
 
   onMounted(() => {
     vxeBind()
     queryPage()
   })
+
   function vxeBind() {
     xTable.value?.connect(xToolbar.value as VxeToolbarInstance)
   }
@@ -133,25 +119,22 @@
   }
   // 新增
   function add() {
-    dictEdit.value.init(null, FormEditType.Add)
+    clientEdit.value.init(null, FormEditType.Add)
   }
   // 查看
   function edit(record) {
-    dictEdit.value.init(record.id, FormEditType.Edit)
+    clientEdit.value.init(record.id, FormEditType.Edit)
   }
   // 查看
   function show(record) {
-    dictEdit.value.init(record.id, FormEditType.Show)
-  }
-  // 明细列表查看
-  function itemList(record) {
-    dictItemList.value.init(record)
+    clientEdit.value.init(record.id, FormEditType.Show)
   }
 
   // 删除
+  const { notification } = useMessage()
   function remove(record) {
     del(record.id).then(() => {
-      createMessage.success('删除成功')
+      notification.success({ message: '删除成功' })
       queryPage()
     })
   }

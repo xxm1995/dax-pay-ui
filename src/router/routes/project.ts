@@ -1,6 +1,7 @@
 import { AppRouteModule } from '@/router/types'
 import { LAYOUT } from '@/router/constant'
 
+const IFrame = () => import('@/views/sys/iframe/FrameBlank.vue')
 /**
  * 位于主框架内的页面, 通常需要登录
  */
@@ -20,7 +21,16 @@ export const INTERNAL: AppRouteModule = {
     //   meta: { title: '个人设置' },
     // },
     {
-      path: '/about/index',
+      path: '/antv',
+      name: 'Antv',
+      component: IFrame,
+      meta: {
+        frameSrc: 'https://www.antdv.com/docs/vue/introduce-cn/',
+        title: 'antv',
+      },
+    },
+    {
+      path: '/about',
       name: 'AboutPage',
       component: () => import('@/views/sys/about/index.vue'),
       meta: { title: '关于' },
@@ -46,24 +56,6 @@ export const OUTSIDE: AppRouteModule = {
 }
 
 /**
- * TODO 临时功能开发
- */
-export const TEMP: AppRouteModule = {
-  path: '/temp',
-  name: 'PROJECT_TEMP',
-  component: LAYOUT,
-  meta: { title: '临时功能' },
-  children: [
-    {
-      path: 'dict',
-      name: 'Dict',
-      component: () => import('@/views/baseapi/dict/DictList.vue'),
-      meta: { title: '字典' },
-    },
-  ],
-}
-
-/**
  * 项目基础路由
  */
-export const PROJECT_BASE = [INTERNAL, OUTSIDE, TEMP]
+export const PROJECT_BASE = [INTERNAL, OUTSIDE]

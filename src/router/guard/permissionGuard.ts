@@ -74,7 +74,10 @@ export function createPermissionGuard(router: Router) {
     const routes = await permissionStore.buildRoutesAction()
     routes.forEach((route) => {
       try {
-        router.addRoute(route as RouteRecordRaw)
+        // 如果路径不为空 且 不是 / 开头的不添加到路由表中
+        if (!route.path || route.path.startsWith('/')) {
+          router.addRoute(route as RouteRecordRaw)
+        }
       } catch (e) {
         console.error(e)
       }

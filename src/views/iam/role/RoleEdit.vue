@@ -1,8 +1,8 @@
 <template>
   <basic-modal
-    v-bind="$attrs"
     :loading="confirmLoading"
-    :width="modalWidth"
+    v-bind="$attrs"
+    :width="750"
     :title="title"
     :open="visible"
     :mask-closable="showable"
@@ -10,8 +10,8 @@
   >
     <a-form
       class="small-from-item"
-      ref="formRef"
       :model="form"
+      ref="formRef"
       :rules="rules"
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
@@ -19,30 +19,23 @@
       <a-form-item label="主键" name="id" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
+      <a-form-item v-show="addable" label="上级角色" name="pid">
+        <a-tree-select
+          style="width: 100%"
+          :tree-data="treeData"
+          v-model:value="form.pid"
+          placeholder="请选择上级角色"
+          :disabled="showable"
+        />
+      </a-form-item>
       <a-form-item label="编码" name="code">
         <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
       </a-form-item>
       <a-form-item label="名称" name="name">
         <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
       </a-form-item>
-      <a-form-item label="是否启用" name="enable">
-        <a-switch
-          checked-children="启用"
-          un-checked-children="停用"
-          v-model:checked="form.enable"
-          :disabled="showable"
-        />
-      </a-form-item>
-      <a-form-item label="分类标签" name="groupTag">
-        <a-input v-model:value="form.groupTag" :disabled="showable" placeholder="请输入分类标签" />
-      </a-form-item>
-      <a-form-item label="备注" name="remark">
-        <a-textarea
-          :rows="3"
-          v-model:value="form.remark"
-          :disabled="showable"
-          placeholder="请输入备注"
-        />
+      <a-form-item label="说明" name="remark">
+        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入说明" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -62,63 +55,98 @@
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, reactive, ref } from 'vue'
+  import { nextTick, reactive, ref, unref } from 'vue'
   import useFormEdit from '@/hooks/bootx/useFormEdit'
-  import { add, get, update, existsByCode, existsByCodeNotId, Dict } from './Dict.api'
+  import {
+    add,
+    get,
+    update,
+    existsByCode,
+    existsByCodeNotId,
+    existsByName,
+    existsByNameNotId,
+    Role,
+    tree,
+  } from './Role.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '@/enums/formTypeEnum'
   import { BasicModal } from '@/components/Modal'
   import { useValidate } from '@/hooks/bootx/useValidate'
+  import { treeDataTranslate } from '@/utils/dataUtil'
 
   const {
     initFormEditType,
     handleCancel,
     labelCol,
     wrapperCol,
-    modalWidth,
-    visible,
     title,
     confirmLoading,
+    visible,
+    addable,
     showable,
     formEditType,
   } = useFormEdit()
   const { existsByServer } = useValidate()
+
   // 表单
   const formRef = ref<FormInstance>()
-  let form = reactive({
+  let form = ref({
     id: null,
     code: '',
+    pid: undefined,
     name: '',
-    enable: true,
-    groupTag: '',
     remark: '',
-  } as Dict)
+  } as Role)
+
+  let treeData = ref<any[]>()
+
   // 校验
   const rules = reactive({
+    name: [
+      { required: true, message: '请输入角色名称', trigger: ['blur', 'change'] },
+      { validator: validateName, trigger: 'blur' },
+    ],
     code: [
-      { required: true, message: '请输入字典编码', trigger: ['blur', 'change'] },
+      { required: true, message: '请输入角色代码', trigger: ['blur', 'change'] },
       { validator: validateCode, trigger: 'blur' },
     ],
-    name: [{ required: true, message: '请输入字典名称', trigger: ['blur', 'change'] }],
   } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  function init(id, editType: FormEditType) {
+  function init(id, editType: FormEditType, roleId) {
+    initRoleTree()
     initFormEditType(editType)
     resetForm()
-    getInfo(id, editType)
+    getInfo(id, editType, roleId)
   }
-  // 获取信息
-  function getInfo(id, editType: FormEditType) {
+  /**
+   * 查询树
+   */
+  function initRoleTree() {
+    tree().then((res) => {
+      treeData.value = treeDataTranslate(res.data, 'id', 'name')
+    })
+  }
+
+  /**
+   * 获取信息
+   */
+  function getInfo(id, editType: FormEditType, roleId) {
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
       confirmLoading.value = true
       get(id).then(({ data }) => {
-        form = data
+        form.value = data
         confirmLoading.value = false
       })
-    } else {
+    } else if (editType === FormEditType.Add) {
       confirmLoading.value = false
+      // 添加下级
+      if (roleId) {
+        nextTick(() => {
+          form.value.pid = roleId
+        }).then()
+      }
     }
   }
   // 保存
@@ -126,9 +154,9 @@
     formRef.value?.validate().then(async () => {
       confirmLoading.value = true
       if (formEditType.value === FormEditType.Add) {
-        await add(form)
+        await add(unref(form))
       } else if (formEditType.value === FormEditType.Edit) {
-        await update(form)
+        await update(unref(form))
       }
       confirmLoading.value = false
       handleCancel()
@@ -138,15 +166,15 @@
 
   // 重置表单的校验
   function resetForm() {
-    nextTick(() => {
-      formRef.value?.resetFields()
-    })
+    nextTick(() => formRef.value?.resetFields())
   }
-
-  // 校验编码重复
   async function validateCode() {
-    const { code, id } = form
-    return existsByServer(code, id, formEditType, existsByCode, existsByCodeNotId)
+    const { code, id } = form.value
+    return existsByServer(code, id, formEditType.value, existsByCode, existsByCodeNotId)
+  }
+  async function validateName() {
+    const { name, id } = form.value
+    return existsByServer(name, id, formEditType.value, existsByName, existsByNameNotId)
   }
   defineExpose({
     init,

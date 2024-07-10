@@ -1,5 +1,6 @@
 import { reactive, toRefs } from 'vue'
 import { FormEditType } from '@/enums/formTypeEnum'
+import { setIcon } from 'vxe-table'
 
 export default function () {
   const model = reactive({
@@ -61,9 +62,12 @@ export default function () {
    */
   function handleCancel() {
     visible.value = false
-    addable.value = false
-    editable.value = false
-    showable.value = false
+    // 防止可以看到界面的的变化
+    setTimeout(() => {
+      addable.value = false
+      editable.value = false
+      showable.value = false
+    }, 200)
   }
 
   /**

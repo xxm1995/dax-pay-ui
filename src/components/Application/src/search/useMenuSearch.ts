@@ -69,7 +69,7 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref, emit: A
       if (
         !hideMenu &&
         reg.test(name?.toLowerCase() ?? '') &&
-        (!children?.length || meta?.hideChildrenInMenu)
+        (!children?.length || meta?.hideChildrenMenu)
       ) {
         const chars: { char: string; highlight: boolean }[] = []
 
@@ -151,7 +151,7 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref, emit: A
           icon,
         })
       }
-      if (!meta?.hideChildrenInMenu && Array.isArray(children) && children.length) {
+      if (!meta?.hideChildrenMenu && Array.isArray(children) && children.length) {
         ret.push(...handlerSearchResult(children, reg, item))
       }
     })

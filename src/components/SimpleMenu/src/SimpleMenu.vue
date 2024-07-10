@@ -29,7 +29,7 @@
   import { propTypes } from '@/utils/propTypes'
   import { REDIRECT_NAME } from '@/router/constant'
   import { useRouter } from 'vue-router'
-  import { isFunction, isOutsideUrl } from '@/utils/is'
+  import { isFunction, getOutsideUrl } from '@/utils/is'
   import { openWindow } from '@/utils'
   import { useOpenKeys } from './useOpenKeys'
 
@@ -127,7 +127,7 @@
 
   async function handleSelect(key: string) {
     // 判断是否需要通过外部打开
-    const path = isOutsideUrl(key)
+    const path = getOutsideUrl(key)
     if (path) {
       openWindow(path)
       return

@@ -91,10 +91,6 @@ export const usePermissionStore = defineStore({
     },
 
     /**
-     * 获取菜单
-     */
-
-    /**
      * 转换路由为系统中的菜单
      */
     convertMenus(permMenus: PermMenu[]): AppRouteRecordRaw[] {
@@ -112,7 +108,7 @@ export const usePermissionStore = defineStore({
               title: o.title,
               icon: o.icon,
               hideMenu: o.hidden,
-              hideChildrenInMenu: o.hideChildrenInMenu,
+              hideChildrenMenu: o.hideChildrenMenu,
               ignoreKeepAlive: !o.keepAlive,
             },
             children: this.convertMenus(o.children),
@@ -187,6 +183,7 @@ export const usePermissionStore = defineStore({
       }
       // 后端获取的菜单如果为空, 不进行处理
       if (routeList) {
+        // 将后端对象变成路由对象
         routeList = transformObjToRoute(routeList)
         //  后台路由到菜单结构
         const backMenuList = transformRouteToMenu(routeList)

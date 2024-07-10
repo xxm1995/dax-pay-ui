@@ -26,7 +26,7 @@ declare module 'vue-router' {
     // 路由是否已动态添加 Whether the route has been dynamically added
     hideBreadcrumb?: boolean
     // 隐藏子菜单 Hide submenu
-    hideChildrenInMenu?: boolean
+    hideChildrenMenu?: boolean
     // 携带参数 Carrying parameters
     carryParam?: boolean
     // 内部用于标记单层菜单 Used internally to mark single-level menus

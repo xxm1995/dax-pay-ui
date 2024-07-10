@@ -41,7 +41,6 @@ import {
   Descriptions,
   Space,
 } from 'ant-design-vue'
-import VXETable from 'vxe-table'
 
 export function registerGlobComp(app: App) {
   app.use(Input)
@@ -85,5 +84,4 @@ export function registerGlobComp(app: App) {
   app.use(Spin)
   app.use(Dropdown)
   app.use(Input)
-  app.use(VXETable)
 }

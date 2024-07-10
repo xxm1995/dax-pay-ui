@@ -37,13 +37,16 @@ const staticMenus: Menu[] = []
 })()
 
 /**
- * 获取菜单
+ * 获取菜单数据
  */
 async function getAsyncMenus() {
   const permissionStore = usePermissionStore()
   return permissionStore.getBackMenuList.filter((item) => !item.meta?.hideMenu && !item.hideMenu)
 }
 
+/**
+ * 获取菜单数据
+ */
 export const getMenus = async (): Promise<Menu[]> => {
   const menus = await getAsyncMenus()
   if (isRoleMode()) {
@@ -74,7 +77,7 @@ export async function getShallowMenus(): Promise<Menu[]> {
 export async function getChildrenMenus(parentPath: string) {
   const menus = await getMenus()
   const parent = menus.find((item) => item.path === parentPath)
-  if (!parent || !parent.children || !!parent?.meta?.hideChildrenInMenu) {
+  if (!parent || !parent.children || !!parent?.meta?.hideChildrenMenu) {
     return [] as Menu[]
   }
   if (isRoleMode()) {

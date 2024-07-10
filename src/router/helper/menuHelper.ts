@@ -2,7 +2,7 @@ import { AppRouteModule } from '@/router/types'
 import type { MenuModule, Menu, AppRouteRecordRaw } from '@/router/types'
 import { findPath, treeMap } from '@/utils/helper/treeHelper'
 import { cloneDeep } from 'lodash-es'
-import { isOutsideUrl } from '@/utils/is'
+import { getOutsideUrl } from '@/utils/is'
 import { RouteParams } from 'vue-router'
 import { toRaw } from 'vue'
 
@@ -18,8 +18,7 @@ function joinParentPath(menus: Menu[], parentPath = '') {
   for (let index = 0; index < menus.length; index++) {
     const menu = menus[index]
     // 请注意，以 / 开头的嵌套路径将被视为根路径。这允许你利用组件嵌套，而无需使用嵌套 URL。
-    if (!(menu.path.startsWith('/') || isOutsideUrl(menu.path))) {
-      // path doesn't start with /, nor is it a url, join parent path
+    if (!(menu.path.startsWith('/') || getOutsideUrl(menu.path))) {
       // 路径不以 / 开头，也不是外部打开的路径，加入父路径
       menu.path = `${parentPath}/${menu.path}`
     }
@@ -33,7 +32,6 @@ function joinParentPath(menus: Menu[], parentPath = '') {
  * 解析菜单模块
  */
 export function transformMenuModule(menuModule: MenuModule): Menu {
-  // const { menu } = menuModule
   const { menu } = menuModule
   const menuList = [menu]
 
@@ -48,10 +46,9 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
   // 借助 lodash 深拷贝
   const cloneRouteModList = cloneDeep(routeModList)
   const routeList: AppRouteRecordRaw[] = []
-
   // 对路由项进行修改
   cloneRouteModList.forEach((item) => {
-    if (routerMapping && item.meta.hideChildrenInMenu && typeof item.redirect === 'string') {
+    if (routerMapping && item.meta.hideChildrenMenu && typeof item.redirect === 'string') {
       item.path = item.redirect
     }
 
@@ -66,19 +63,19 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
   const list = treeMap(routeList, {
     conversion: (node: AppRouteRecordRaw) => {
       const { meta: { title, hideMenu = false } = {} } = node
-
       return {
         ...(node.meta || {}),
         meta: node.meta,
+        targetOutside: node.targetOutside,
+        fullScreen: node.fullScreen,
         name: title,
         hideMenu,
-        path: node.path,
+        path: getPath(node),
         ...(node.redirect ? { redirect: node.redirect } : {}),
       }
     },
   })
   // 路径处理
-  joinParentPath(list)
   return cloneDeep(list)
 }
 
@@ -105,4 +102,27 @@ export function configureDynamicParamsMenu(menu: Menu, params: RouteParams) {
   menu.path = realPath
   // children
   menu.children?.forEach((item) => configureDynamicParamsMenu(item, params))
+}
+
+/**
+ * 获取菜单路径
+ * @param node
+ */
+function getPath(node: AppRouteRecordRaw) {
+  // 是否从外部打开
+  let path = node.path
+  if (node?.targetOutside) {
+    path = `outside://${node.path}`
+  }
+  // 全屏打开
+  if (node?.fullScreen) {
+    if (getOutsideUrl(node.path)) {
+      path = `${node.path}?onlytab=1&__full__`
+    } else {
+      path = `outside://${node.path}?onlytab=1&__full__`
+    }
+  }
+  //
+  node.path = '/'
+  return path
 }

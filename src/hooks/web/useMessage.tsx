@@ -50,7 +50,7 @@ function createConfirm(options: ModalOptionsEx) {
   const iconType = options.iconType || 'warning'
   Reflect.deleteProperty(options, 'iconType')
   const opt: ModalFuncProps = {
-    centered: true,
+    centered: false,
     icon: getIcon(iconType),
     ...options,
     content: renderContent(options),

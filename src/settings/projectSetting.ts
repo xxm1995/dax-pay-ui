@@ -19,7 +19,7 @@ const setting: ProjectConfig = {
   // 是否显示主题切换按钮
   showDarkModeToggle: true,
 
-  // `Settings` 按钮位置
+  // 按钮位置
   settingButtonPosition: SettingButtonPositionEnum.AUTO,
 
   // 权限模式
@@ -34,7 +34,7 @@ const setting: ProjectConfig = {
   // 颜色
   themeColor: APP_PRESET_COLOR_LIST[0],
 
-  // 灰度迷失
+  // 灰度模式
   grayMode: false,
 
   // 色弱模式
@@ -50,7 +50,7 @@ const setting: ProjectConfig = {
   showLogo: true,
 
   // 是否显示页脚
-  showFooter: false,
+  showFooter: true,
 
   // 页头设置
   headerSetting: {
@@ -65,7 +65,7 @@ const setting: ProjectConfig = {
     // 是否显示全屏按钮
     showFullScreen: true,
     // 是否显示文档按钮
-    showDoc: true,
+    showDoc: false,
     // 是否显示通知按钮
     showNotice: false,
     // 是否显示搜索按钮

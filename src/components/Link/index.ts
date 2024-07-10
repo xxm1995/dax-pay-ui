@@ -1,4 +1,5 @@
+import ALink from './Link.vue'
 import { withInstall } from '@/utils'
-import link from './Link.vue'
 
-export const Link = withInstall(link)
+const Link = withInstall(ALink)
+export { ALink, Link }

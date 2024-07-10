@@ -8,7 +8,7 @@ const about: AppRouteModule = {
   component: LAYOUT,
   redirect: '/about/index',
   meta: {
-    hideChildrenInMenu: true,
+    hideChildrenMenu: true,
     icon: 'simple-icons:aboutdotme',
     title: '关于',
     orderNo: 100000,

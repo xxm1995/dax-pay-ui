@@ -4,7 +4,7 @@
     :loading="confirmLoading"
     :width="modalWidth"
     :title="title"
-    :visible="visible"
+    :open="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, reactive, ref } from 'vue'
+import { nextTick, reactive, ref, unref } from "vue";
   import useFormEdit from '@/hooks/bootx/useFormEdit'
   import { add, get, update, existsByCode, existsByCodeNotId, DictItem } from './DictItem.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
@@ -108,8 +108,8 @@
   function init(id, editType: FormEditType, dict: Dict) {
     initFormEditType(editType)
     resetForm()
-    form.dictId = dict.id as number
-    form.dictCode = dict.code
+    form.dictId = unref(dict).id as number
+    form.dictCode = unref(dict).code
     getInfo(id, editType)
   }
   // 获取信息
@@ -148,7 +148,7 @@
   // 重置表单的校验
   function resetForm() {
     nextTick(() => {
-      formRef?.resetFields()
+      formRef.value?.resetFields()
     })
   }
   defineExpose({

@@ -6,8 +6,8 @@ import { BaseEntity } from '#/web'
  * 分页
  */
 export const page = (params) => {
-  return defHttp.get<Result<PageResult<Dict>>>({
-    url: '/dict/page',
+  return defHttp.get<Result<PageResult<Client>>>({
+    url: '/client/page',
     params,
   })
 }
@@ -16,8 +16,8 @@ export const page = (params) => {
  * 获取单条
  */
 export const get = (id) => {
-  return defHttp.get<Result<Dict>>({
-    url: '/dict/findById',
+  return defHttp.get<Result<Client>>({
+    url: '/client/findById',
     params: { id },
   })
 }
@@ -25,9 +25,9 @@ export const get = (id) => {
 /**
  * 添加
  */
-export const add = (obj: Dict) => {
+export const add = (obj: Client) => {
   return defHttp.post({
-    url: '/dict/add',
+    url: '/client/add',
     data: obj,
   })
 }
@@ -35,9 +35,9 @@ export const add = (obj: Dict) => {
 /**
  * 更新
  */
-export const update = (obj: Dict) => {
+export const update = (obj: Client) => {
   return defHttp.post({
-    url: '/dict/update',
+    url: '/client/update',
     data: obj,
   })
 }
@@ -47,7 +47,7 @@ export const update = (obj: Dict) => {
  */
 export const del = (id) => {
   return defHttp.delete({
-    url: '/dict/delete',
+    url: '/client/delete',
     params: { id },
   })
 }
@@ -56,39 +56,38 @@ export const del = (id) => {
  * 查询全部
  */
 export const findAll = () => {
-  return defHttp.get<Result<Array<Dict>>>({
-    url: '/dict/findAll',
+  return defHttp.get<Result<Array<Client>>>({
+    url: '/client/findAll',
   })
 }
 
 /**
- * 编码是否存在
+ * 编码是否被使用
  */
-export function existsByCode(code) {
+export const existsByCode = (code: string) => {
   return defHttp.get<Result<boolean>>({
-    url: '/dict/existsByCode',
+    url: '/client/existsByCode',
+    method: 'GET',
     params: { code },
   })
 }
-export function existsByCodeNotId(code, id) {
+export const existsByCodeNotId = (code: string, id) => {
   return defHttp.get<Result<boolean>>({
-    url: '/dict/existsByCodeNotId',
+    url: '/client/existsByCodeNotId',
     params: { code, id },
   })
 }
 
 /**
- * 字典
+ * 终端
  */
-export interface Dict extends BaseEntity {
+export interface Client extends BaseEntity {
   // 编码
-  code?: string
+  code: string
   // 名称
-  name?: string
-  // 是否启用
-  enable?: boolean
-  // 分类标签
-  groupTag?: string
-  // 备注
-  remark?: string
+  name: string
+  // 是否系统内置
+  internal: boolean
+  // 描述
+  remark: string
 }

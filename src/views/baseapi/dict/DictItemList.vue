@@ -4,7 +4,7 @@
     v-bind="$attrs"
     title="字典列表"
     width="60%"
-    :visible="visible"
+    :open="visible"
     @close="visible = false"
   >
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
@@ -14,7 +14,7 @@
         </a-space>
       </template>
     </vxe-toolbar>
-    <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
+    <vxe-table ey-field="id" ref="xTable" :data="pagination.records" :loading="loading">
       <vxe-column type="seq" width="60" />
       <vxe-column field="code" title="字典项编码" />
       <vxe-column field="name" title="字典项名称" />
@@ -51,12 +51,12 @@
       :total="pagination.total"
       @page-change="handleTableChange"
     />
-    <dict-item-edit ref="dictItemEdit" @ok="queryPage" />
+    <DictItemEdit ref="dictItemEdit" @ok="queryPage" />
   </basic-drawer>
 </template>
 
 <script lang="ts" setup>
-  import { nextTick, ref } from 'vue'
+import { nextTick, ref, unref } from "vue";
   import { del, page } from './DictItem.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import DictItemEdit from './DictItemEdit.vue'
@@ -73,7 +73,7 @@
 
   // 查询条件
   let visible = ref(false)
-  let dictInfo = ref<Dict>()
+  let dictInfo: Dict
 
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
@@ -85,7 +85,7 @@
 
   function init(dict) {
     visible.value = true
-    dictInfo.value = dict
+    dictInfo = unref(dict)
     queryPage()
   }
 
@@ -95,7 +95,7 @@
     page({
       ...model.queryParam,
       ...pages,
-      dictId: dictInfo.value?.id,
+      dictId: dictInfo?.id,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })

@@ -82,18 +82,19 @@ export function isUrl(path: string): boolean {
 }
 
 /**
- * 是否从外部打开的链接
+ * 是否从外部打开的链接, 如果是网址
+ * 如果是则返回打开的地址, 否则返回空字符串
  * @return 打开的地址, 为空字符则说明无法打开
  */
-export function isOutsideUrl(path: string): string {
+export function getOutsideUrl(path: string): string {
   if (isUrl(path)) {
     return path
   }
   if (path.startsWith('outside://')) {
     // 转换成项目内路由地址
-    const routerPath = path.substring(10)
-    const to = router.resolve(routerPath)
-    return to.href
+    return path.substring(10)
+    // const to = router.resolve(routerPath)
+    // return to.href
   }
   return ''
 }

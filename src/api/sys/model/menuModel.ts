@@ -8,7 +8,7 @@ export interface PermMenu {
   effect: boolean
   icon: string
   hidden: boolean
-  hideChildrenInMenu: boolean
+  hideChildrenMenu: boolean
   component: string
   path: string
   iframeUrl: string
