@@ -27,7 +27,7 @@ export interface GetUserInfoModel {
   // 名称
   name: string
   // 账号
-  username: string
+  account: string
   // 头像
   avatar: string
 }

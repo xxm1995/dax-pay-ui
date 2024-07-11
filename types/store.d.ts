@@ -33,7 +33,7 @@ export interface UserInfo {
   // 名称
   name: string
   // 账号
-  username: string
+  account: string
   // 头像图片id
   avatar: string
 }
