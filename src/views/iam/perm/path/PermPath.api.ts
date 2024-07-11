@@ -6,7 +6,7 @@ import { BaseEntity } from '#/web'
  * 请求资源树
  */
 export const tree = (clientCode) => {
-  return defHttp.get<Result<PermPath[]>>({
+  return defHttp.get<Result<PermPathTree[]>>({
     url: '/perm/path/tree',
     params: { clientCode },
   })
@@ -51,6 +51,10 @@ export interface PermPath extends BaseEntity {
  * 请求权限树
  */
 export interface PermPathTree extends PermPath {
+  // 显示标题
+  title: string
+  // 上级id 角色分配时使用
+  pid: string
   // 子级
   children: PermPathTree[]
 }

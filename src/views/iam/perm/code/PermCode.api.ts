@@ -92,13 +92,14 @@ export interface PermCode extends BaseEntity {
   remark?: string
   // 是否为子节点
   leaf: boolean
-  // 显示标题, 纯显示用
-  title?: string
 }
 
 /**
  * 权限码树
  */
 export interface PermCodeTree extends PermCode {
+  // 显示标题, 纯显示用
+  title?: string
+  // 孩子倦色
   children: PermCodeTree[]
 }

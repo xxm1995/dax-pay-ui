@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, ref, unref } from "vue";
+  import { nextTick, ref, unref } from 'vue'
   import { del, page } from './DictItem.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import DictItemEdit from './DictItemEdit.vue'

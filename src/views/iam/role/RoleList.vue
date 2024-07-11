@@ -76,6 +76,7 @@
       <RoleEdit ref="roleEdit" @ok="queryPage" />
       <RoleMenuModal ref="roleMenuModal" />
       <RoleCodeModal ref="roleCodeModal" />
+      <RolePathModal ref="rolePathModal" />
     </div>
   </div>
 </template>
@@ -87,6 +88,7 @@
   import RoleEdit from './RoleEdit.vue'
   import RoleMenuModal from './RoleMenuModal.vue'
   import RoleCodeModal from './RoleCodeModal.vue'
+  import RolePathModal from './RolePathModal.vue'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { FormEditType } from '@/enums/formTypeEnum'
   import { useMessage } from '@/hooks/web/useMessage'

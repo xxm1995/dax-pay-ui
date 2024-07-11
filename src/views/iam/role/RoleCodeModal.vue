@@ -37,9 +37,6 @@
       </a-tree>
     </a-spin>
     <template #footer>
-      <a-select style="min-width: 100px" @change="clientSwitch" v-model:value="clientCode">
-        <a-select-option v-for="o in clients" :key="o.code">{{ o.name }}</a-select-option>
-      </a-select>
       <a-dropdown style="margin-left: 5px" :trigger="['click']" placement="top">
         <template #overlay>
           <a-menu>
@@ -64,25 +61,19 @@
 </template>
 <script setup lang="ts">
   import { BasicDrawer } from '@/components/Drawer'
-  import { getAppEnvConfig } from '@/utils/env'
   import { useMessage } from '@/hooks/web/useMessage'
   import { ref } from 'vue'
   import { RoleTree } from '@/views/iam/role/Role.api'
-  import { Client, findAll as findClients } from '@/views/iam/client/Client.api'
   import { Tree, treeDataTranslate } from '@/utils/dataUtil'
   import { findIdsByRoleCode, saveRoleCode, treeByRoleCode } from '@/views/iam/role/RolePerm.api'
   import XEUtils from 'xe-utils'
   import { PermCodeTree } from '@/views/iam/perm/code/PermCode.api'
 
-  const { VITE_GLOB_APP_CLIENT } = getAppEnvConfig()
   const { createMessage, createConfirm } = useMessage()
 
   let loading = ref(false)
   let currentRole = ref<RoleTree>({})
   let visible = ref(false)
-  // 终端列表
-  let clients = ref([] as Client[])
-  let clientCode = ref(VITE_GLOB_APP_CLIENT)
   let searchName = ref('')
   // 所有的key
   let allTreeKeys = ref<string[]>([])
@@ -97,17 +88,7 @@
 
   function init(record: RoleTree) {
     currentRole.value = record
-    initData()
     initAssign()
-  }
-
-  /**
-   * 初始化终端列表
-   */
-  function initData() {
-    findClients().then(({ data }) => {
-      clients.value = data
-    })
   }
 
   /**
@@ -205,7 +186,7 @@
           node.pid &&
           XEUtils.toValueString(node.name)?.toLowerCase()?.indexOf(value) > -1
         ) {
-          return node.name
+          return node.pid
         }
       })
       .filter((item, i, self) => item && self.indexOf(item) === i) as string[]
@@ -269,13 +250,6 @@
    */
   function cancelCheckALL() {
     checkedKeys.value = []
-  }
-  /**
-   * 终端切换
-   */
-  function clientSwitch(item) {
-    clientCode.value = item
-    initAssign()
   }
 
   defineExpose({ init })
