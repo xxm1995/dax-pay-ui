@@ -4,9 +4,9 @@ import { Result } from '#/axios'
 /**
  * 根据键名获取键值
  */
-export function findByParamKey(key) {
+export function findByKey(key) {
   return defHttp.get<Result<string>>({
-    url: `/system/param/findByParamKey`,
+    url: `/system/param/findByKey`,
     method: 'GET',
     params: { key },
   })

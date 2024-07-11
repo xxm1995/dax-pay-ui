@@ -168,10 +168,12 @@
       clientCode: clientCode.value,
       updateChildren,
       pathIds: checkedKeys.value,
-    }).then(() => {
-      createMessage.success('保存成功')
-      handleCancel()
     })
+      .then(() => {
+        createMessage.success('保存成功')
+        handleCancel()
+      })
+      .finally(() => (loading.value = false))
   }
 
   /**

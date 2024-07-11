@@ -171,10 +171,12 @@
       clientCode: clientCode.value,
       updateChildren,
       menuIds: checkedKeys.value,
-    }).then(() => {
-      createMessage.success('保存成功')
-      handleCancel()
     })
+      .then(() => {
+        createMessage.success('保存成功')
+        handleCancel()
+      })
+      .finally(() => (loading.value = false))
   }
 
   /**

@@ -19,18 +19,33 @@
       <a-form-item label="主键" name="id" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
-      <a-form-item label="字典编码" name="dictCode">
-        <a-input v-model:value="form.dictCode" disabled />
+      <a-form-item label="参数名称" name="name">
+        <a-input
+          v-model:value="form.name"
+          :disabled="showable || form.internal"
+          placeholder="请输入参数名称"
+        />
       </a-form-item>
-      <a-form-item label="字典项编码" name="code">
-        <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入字典项code" />
+      <a-form-item label="参数Key" name="key">
+        <a-input
+          v-model:value="form.key"
+          :disabled="showable || form.internal"
+          placeholder="请输入参数键名"
+        />
       </a-form-item>
-      <a-form-item label="字典项名称" name="name">
-        <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入字典项名称" />
+      <a-form-item label="参数值" name="value">
+        <a-input v-model:value="form.value" :disabled="showable" placeholder="请输入参数值" />
       </a-form-item>
-      <a-form-item label="排序" name="sortNo">
-        <a-input-number v-model:value="form.sortNo" :disabled="showable" placeholder="请输入排序" />
-      </a-form-item>
+<!--      <a-form-item label="参数类型" name="type">-->
+<!--        <a-select-->
+<!--          allowClear-->
+<!--          :options="paramTypeList"-->
+<!--          style="width: 220px"-->
+<!--          :disabled="showable"-->
+<!--          v-model:value="form.type"-->
+<!--          placeholder="请选择状态"-->
+<!--        />-->
+<!--      </a-form-item>-->
       <a-form-item label="是否启用" name="enable">
         <a-switch
           checked-children="启用"
@@ -39,8 +54,21 @@
           :disabled="showable"
         />
       </a-form-item>
+      <a-form-item v-if="showable" label="系统内置" name="internal">
+        <a-switch
+          checked-children="是"
+          un-checked-children="否"
+          v-model:checked="form.internal"
+          disabled
+        />
+      </a-form-item>
       <a-form-item label="备注" name="remark">
-        <a-textarea v-model:value="form.remark" :disabled="showable" placeholder="请输入备注" />
+        <a-textarea
+          :rows="3"
+          v-model:value="form.remark"
+          :disabled="showable"
+          placeholder="请输入备注"
+        />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -60,14 +88,15 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, reactive, ref, unref } from "vue";
+  import { nextTick, reactive, ref } from 'vue'
   import useFormEdit from '@/hooks/bootx/useFormEdit'
-  import { add, get, update, existsByCode, existsByCodeNotId, DictItem } from './DictItem.api'
+  import { add, get, update, existsByKey, existsByKeyNotId, SystemParam } from './SystemParam.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '@/enums/formTypeEnum'
   import { BasicModal } from '@/components/Modal'
-  import { Dict } from './Dict.api'
   import { useValidate } from '@/hooks/bootx/useValidate'
+  import { useDict } from '@/hooks/bootx/useDict'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
 
   const {
     initFormEditType,
@@ -82,42 +111,47 @@ import { nextTick, reactive, ref, unref } from "vue";
     formEditType,
   } = useFormEdit()
   const { existsByServer } = useValidate()
+  const { dictDropDownNumber } = useDict()
+
   // 表单
   const formRef = ref<FormInstance>()
-  let form = reactive({
+  let form = ref<SystemParam>({
     id: null,
-    dictId: null,
-    dictCode: null,
-    code: '',
     name: '',
+    key: '',
+    value: '',
     enable: true,
-    sortNo: 0,
+    type: undefined,
+    internal: false,
     remark: '',
-  } as DictItem)
+  })
+  // 参数类型
+  let paramTypeList = ref<LabeledValue[]>([])
   // 校验
   const rules = reactive({
-    code: [
-      { required: true, message: '请输入字典项编码', trigger: ['blur', 'change'] },
-      { validator: validateCode, trigger: 'blur' },
+    name: [{ required: true, message: '参数名称必填', trigger: ['blur', 'change'] }],
+    key: [
+      { required: true, message: '参数Key必填', trigger: ['blur', 'change'] },
+      { validator: validateKey, trigger: 'blur' },
     ],
-    name: [{ required: true, message: '请输入字典项名称', trigger: ['blur', 'change'] }],
+    value: [{ required: true, message: '参数内容必填', trigger: ['blur', 'change'] }],
+    // type: [{ required: true, message: '参数类型必填', trigger: ['blur', 'change'] }],
   } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
   // 入口
-  function init(id, editType: FormEditType, dict: Dict) {
+  function init(id, editType: FormEditType) {
     initFormEditType(editType)
     resetForm()
-    form.dictId = unref(dict).id as number
-    form.dictCode = unref(dict).code
     getInfo(id, editType)
+    dictDropDownNumber('ParamType').then((res) => (paramTypeList.value = res))
   }
   // 获取信息
   function getInfo(id, editType: FormEditType) {
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
       confirmLoading.value = true
       get(id).then(({ data }) => {
-        form = reactive(data)
+        form.value = data
         confirmLoading.value = false
       })
     } else {
@@ -129,19 +163,13 @@ import { nextTick, reactive, ref, unref } from "vue";
     formRef.value?.validate().then(async () => {
       confirmLoading.value = true
       if (formEditType.value === FormEditType.Add) {
-        await add(form).finally(() => (confirmLoading.value = false))
+        await add(form.value).finally(() => (confirmLoading.value = false))
       } else if (formEditType.value === FormEditType.Edit) {
-        await update(form).finally(() => (confirmLoading.value = false))
+        await update(form.value).finally(() => (confirmLoading.value = false))
       }
       handleCancel()
       emits('ok')
     })
-  }
-
-  // 校验编码重复
-  async function validateCode() {
-    const { code, id } = form
-    return existsByServer(code, id, formEditType, existsByCode, existsByCodeNotId)
   }
 
   // 重置表单的校验
@@ -149,6 +177,11 @@ import { nextTick, reactive, ref, unref } from "vue";
     nextTick(() => {
       formRef.value?.resetFields()
     })
+  }
+  // 校验key值
+  async function validateKey() {
+    const { key, id } = form.value
+    return existsByServer(key, id, formEditType.value, existsByKey, existsByKeyNotId, '该Key已存在')
   }
   defineExpose({
     init,

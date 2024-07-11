@@ -11,7 +11,7 @@ import {
 } from '@/logics/websocket/WebSockerType'
 import { publishWsEvent } from '@/logics/websocket/WebsocketNotice'
 import { useMessage } from '@/hooks/web/useMessage'
-import { findByParamKey } from '@/api/common/Parameter'
+import { findByKey } from '@/api/common/Parameter'
 import { authEcho } from '@/api/common/BaseApi.api'
 
 const { notification } = useMessage()
@@ -25,7 +25,7 @@ let wsClose: WebSocket['close']
 export async function initWebSocket() {
   const userStore = useUserStoreWithOut()
   const token = userStore.getToken
-  const { data: wsUrl } = await findByParamKey('WebsocketServerUrl')
+  const { data: wsUrl } = await findByKey('WebsocketServerUrl')
   // 判断token是否有效, 无效会自动退出
   await authEcho('')
   // 后端服务地址

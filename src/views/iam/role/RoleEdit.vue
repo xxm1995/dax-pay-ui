@@ -154,11 +154,10 @@
     formRef.value?.validate().then(async () => {
       confirmLoading.value = true
       if (formEditType.value === FormEditType.Add) {
-        await add(unref(form))
+        await add(unref(form)).finally(() => (confirmLoading.value = false))
       } else if (formEditType.value === FormEditType.Edit) {
-        await update(unref(form))
+        await update(unref(form)).finally(() => (confirmLoading.value = false))
       }
-      confirmLoading.value = false
       handleCancel()
       emits('ok')
     })
