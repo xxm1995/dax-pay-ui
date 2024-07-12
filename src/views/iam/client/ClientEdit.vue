@@ -21,7 +21,11 @@
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
         <a-form-item label="编码" validate-first name="code">
-          <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
+          <a-input
+            v-model:value="form.code"
+            :disabled="showable || form.internal"
+            placeholder="请输入编码"
+          />
         </a-form-item>
         <a-form-item label="名称" validate-first name="name">
           <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />

@@ -22,12 +22,12 @@
                   <a-menu-item>
                     <a @click="assignRolesBatch()">角色分配</a>
                   </a-menu-item>
-                  <a-menu-item>
-                    <a @click="lockUserConfirmBatch(true)">锁定账号</a>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a @click="lockUserConfirmBatch(false)">解锁账号</a>
-                  </a-menu-item>
+<!--                  <a-menu-item>-->
+<!--                    <a @click="lockUserConfirmBatch(true)">锁定账号</a>-->
+<!--                  </a-menu-item>-->
+<!--                  <a-menu-item>-->
+<!--                    <a @click="lockUserConfirmBatch(false)">解锁账号</a>-->
+<!--                  </a-menu-item>-->
                   <a-menu-item>
                     <a @click="resetPwdBatch()">重置密码</a>
                   </a-menu-item>
@@ -75,12 +75,6 @@
                     <a-link @click="assignRoles(row)">角色分配</a-link>
                   </a-menu-item>
                   <a-menu-item>
-                    <a-link @click="assignDept(row)">部门分配</a-link>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a-link @click="assignDataScope(row)">数据角色分配</a-link>
-                  </a-menu-item>
-                  <a-menu-item>
                     <a-link @click="resetPwd(row)">重置密码</a-link>
                   </a-menu-item>
                   <a-menu-item v-if="[1, 3].includes(row.status)">
@@ -108,6 +102,8 @@
       <UserAdd ref="userAdd" @ok="queryPage" />
       <UserEdit ref="userEdit" @ok="queryPage" />
       <UserShow ref="userShow" />
+      <UserRoleAssign ref="userRoleAssign" />
+      <UserResetPwd ref="userResetPwd" />
     </div>
   </div>
 </template>
@@ -125,7 +121,9 @@
   import UserAdd from './UserAdd.vue'
   import UserEdit from './UserEdit.vue'
   import UserShow from './UserShow.vue'
-  import ALink from "@/components/Link/Link.vue";
+  import UserResetPwd from './UserResetPwd.vue'
+  import UserRoleAssign from './role/UserRoleAssign.vue'
+  import ALink from '@/components/Link/Link.vue'
 
   // 使用hooks
   const {
@@ -152,13 +150,11 @@
   let userEdit = ref<any>()
   let userShow = ref<any>()
   let userRoleAssign = ref<any>()
-  let userRoleAssignBatch = ref<any>()
   let userDataScopeAssign = ref<any>()
   let userDataScopeAssignBatch = ref<any>()
   let userDeptAssign = ref<any>()
   let userDeptAssignBatch = ref<any>()
   let userResetPwd = ref<any>()
-  let userResetPwdBatch = ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -235,30 +231,12 @@
   }
   // 分配角色
   function assignRoles(record) {
-    userRoleAssign.value.init(record)
+    userRoleAssign.value.init(false, record.id)
   }
   // 批量分配角色
   function assignRolesBatch() {
     const userIds = xTable.value?.getCheckboxRecords().map((o) => o.id)
-    userRoleAssignBatch.value.init(userIds)
-  }
-  // 分配数据权限
-  function assignDataScope(record) {
-    userDataScopeAssign.value.init(record)
-  }
-  // 批量分配数据权限
-  function assignDataScopeBatch() {
-    const userIds = xTable.value?.getCheckboxRecords().map((o) => o.id)
-    userDataScopeAssignBatch.value.init(userIds)
-  }
-  // 分配部门
-  function assignDept(record) {
-    userDeptAssign.value.init(record.id)
-  }
-  // 批量分配部门
-  function assignDeptBatch() {
-    const userIds = xTable.value?.getCheckboxRecords().map((o) => o.id)
-    userDeptAssignBatch.value.init(userIds)
+    userRoleAssign.value.init(true, userIds)
   }
   function add() {
     userAdd.value.init()
@@ -279,14 +257,14 @@
    * 重置密码
    */
   function resetPwd(record) {
-    userResetPwd.value.init(record.id)
+    userResetPwd.value.init(false, record.id)
   }
   /**
    * 重置密码
    */
   function resetPwdBatch() {
     const userIds = xTable.value?.getCheckboxRecords().map((o) => o.id)
-    userResetPwdBatch.value.init(userIds)
+    userResetPwd.value.init(true,userIds)
   }
 </script>
 

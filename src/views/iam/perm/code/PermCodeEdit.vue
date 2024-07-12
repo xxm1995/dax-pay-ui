@@ -12,6 +12,7 @@
       class="small-from-item"
       ref="formRef"
       :model="form"
+      validate-trigger="['blur', 'change']"
       :rules="rules"
       :label-col="labelCol"
       :wrapper-col="wrapperCol"

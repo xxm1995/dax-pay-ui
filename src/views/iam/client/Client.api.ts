@@ -56,7 +56,7 @@ export const del = (id) => {
  * 查询全部
  */
 export const findAll = () => {
-  return defHttp.get<Result<Array<Client>>>({
+  return defHttp.get<Result<Client[]>>({
     url: '/client/findAll',
   })
 }

@@ -56,7 +56,7 @@ export function findAll() {
 export function restartPassword(userId, newPassword) {
   return defHttp.post({
     url: '/user/admin/restartPassword',
-    params: { userId, newPassword },
+    data: { userId, newPassword },
   })
 }
 
@@ -66,8 +66,7 @@ export function restartPassword(userId, newPassword) {
 export function restartPasswordBatch(userIds, newPassword) {
   return defHttp.post({
     url: '/user/admin/restartPasswordBatch',
-    data: userIds,
-    params: { newPassword },
+    data: { userIds, newPassword },
   })
 }
 

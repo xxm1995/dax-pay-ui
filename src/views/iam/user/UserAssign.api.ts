@@ -5,20 +5,20 @@ import { Role } from '@/views/iam/role/Role.api'
 /**
  * 获取用户拥有角色id集合
  */
-export function getRoleIds(id) {
+export function getRoleIds(userId) {
   return defHttp.get<Result<string[]>>({
     url: `/user/role/findRoleIdsByUser`,
-    params: { id },
+    params: { userId },
   })
 }
 
 /**
  * 获取用户拥有角色集合
  */
-export function getRoles(id) {
+export function getRoles(userId) {
   return defHttp.get<Result<Role[]>>({
     url: `/user/role/findRolesByUser`,
-    params: { id },
+    params: { userId },
   })
 }
 

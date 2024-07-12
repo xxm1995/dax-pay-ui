@@ -20,7 +20,7 @@
         v-model:checkedKeys="checkedKeys"
         v-model:expandedKeys="expandedKeys"
         :checkStrictly="checkStrictly"
-        :auto-expand-parent="autoExpandParent"
+        :auto-expand-parent="false"
         :tree-data="treeData"
         @check="onCheck"
         @expand="onExpand"
@@ -94,7 +94,6 @@
   let expandedKeys = ref<string[]>([])
   // 被选中的key
   let checkedKeys = ref<string[]>([])
-  let autoExpandParent = ref(false)
   //菜单树信息
   let treeData = ref<Tree[]>([])
   let treeList = ref<MenuTree[]>([])
@@ -208,7 +207,7 @@
     expandedKeys.value = treeList.value
       .map((node) => {
         if (
-          searchName &&
+          searchName.value &&
           node.pid &&
           XEUtils.toValueString(node.title).toLowerCase().indexOf(value) > -1
         ) {
@@ -245,7 +244,6 @@
    */
   function onExpand(keys) {
     expandedKeys.value = keys
-    autoExpandParent.value = false
   }
   /**
    * 点击复选框触发

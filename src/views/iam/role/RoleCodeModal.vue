@@ -19,7 +19,7 @@
         :checkable="true"
         v-model:checkedKeys="checkedKeys"
         v-model:expandedKeys="expandedKeys"
-        :auto-expand-parent="autoExpandParent"
+        :auto-expand-parent="true"
         :tree-data="treeData"
         @check="onCheck"
         @expand="onExpand"
@@ -81,7 +81,6 @@
   let expandedKeys = ref<string[]>([])
   // 被选中的key
   let checkedKeys = ref<string[]>([])
-  let autoExpandParent = ref(false)
   //权限码树信息
   let treeData = ref<Tree[]>([])
   let treeList = ref<PermCodeTree[]>([])
@@ -182,7 +181,7 @@
     expandedKeys.value = treeList.value
       .map((node) => {
         if (
-          searchName &&
+          searchName.value &&
           node.pid &&
           XEUtils.toValueString(node.name)?.toLowerCase()?.indexOf(value) > -1
         ) {
@@ -219,7 +218,6 @@
    */
   function onExpand(keys) {
     expandedKeys.value = keys
-    autoExpandParent.value = false
   }
   /**
    * 点击复选框触发

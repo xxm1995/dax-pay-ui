@@ -99,7 +99,7 @@ export interface Role extends BaseEntity {
   // 编码
   code?: string
   // 父ID
-  pid?: number
+  pid?: string
   // 名称
   name?: string
   // 是否系统内置

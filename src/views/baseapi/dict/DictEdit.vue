@@ -13,6 +13,7 @@
       ref="formRef"
       :model="form"
       :rules="rules"
+      validate-trigger="['blur', 'change']"
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
     >
