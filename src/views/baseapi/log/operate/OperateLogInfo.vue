@@ -30,7 +30,7 @@
   let confirmLoading = ref(false)
   let schema = [
     { field: 'id', label: '主键' },
-    { field: 'username', label: '操作人员账号' },
+    { field: 'account', label: '操作账号' },
     { field: 'title', label: '操作模块' },
     {
       field: 'client',

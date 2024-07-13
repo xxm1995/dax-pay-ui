@@ -20,15 +20,19 @@
       </vxe-toolbar>
       <vxe-table ref="xTable" key-field="id" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
-        <vxe-column field="code" title="编码" />
-        <vxe-column field="name" title="名称" />
-        <vxe-column field="internal" title="系统内置">
+        <vxe-column field="mchNo" title="编码" />
+        <vxe-column field="mchName" title="名称" />
+        <vxe-column field="companyName" title="公司名称" />
+        <vxe-column field="idType" title="证件类型">
           <template #default="{ row }">
-            <a-tag v-if="row.internal" color="green">是</a-tag>
-            <a-tag v-else color="red">否</a-tag>
+            <a-tag v-if="row.idType === '0'" color="green">身份证</a-tag>
+            <a-tag v-else-if="row.idType === '1'" color="blue">护照</a-tag>
+            <a-tag v-else-if="row.idType === '2'" color="red">港澳通行证</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="remark" title="备注" />
+        <vxe-column field="tel" title="联系方式" />
+        <vxe-column field="legalPerson" title="法人名称" />
+        <vxe-column field="tel" title="联系方式" />
         <vxe-column field="createTime" title="创建时间" />
         <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
           <template #default="{ row }">
@@ -40,16 +44,7 @@
               <a-link @click="edit(row)">编辑</a-link>
             </span>
             <a-divider type="vertical" />
-            <a-popconfirm
-              :disabled="row.internal"
-              title="是否删除"
-              @confirm="remove(row)"
-              okText="是"
-              cancelText="否"
-            >
-              <a-link v-if="!row.internal" style="color: red">删除</a-link>
-              <a-link v-else disabled>删除</a-link>
-            </a-popconfirm>
+            <a-link danger @click="remove(row)">删除</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -61,16 +56,16 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
-      <ClientEdit ref="clientEdit" @ok="queryPage" />
+      <MchAppEdit ref="mchApp" @ok="queryPage" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { onMounted, ref } from 'vue'
-  import { del, page } from './Client.api'
+  import { del, page } from './MchApp.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
-  import ClientEdit from './ClientEdit.vue'
+  import MchAppEdit from './MchAppEdit.vue'
   import BQuery from '@/components/Bootx/Query/BQuery.vue'
   import { STRING } from '@/components/Bootx/Query/Query'
   import { FormEditType } from '@/enums/formTypeEnum'
@@ -89,7 +84,6 @@
     loading,
   } = useTablePage(queryPage)
   const { createMessage, createConfirm } = useMessage()
-
   // 查询条件
   const fields = [
     { field: 'code', formType: STRING, name: '编码', placeholder: '请输入终端编码' },
@@ -97,7 +91,7 @@
   ]
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
-  const clientEdit: any = ref()
+  const mchApp: any = ref()
 
   onMounted(() => {
     vxeBind()
@@ -108,9 +102,7 @@
     xTable.value?.connect(xToolbar.value as VxeToolbarInstance)
   }
 
-  /**
-   * 分页查询
-   */
+  // 分页查询
   function queryPage() {
     loading.value = true
     page({
@@ -121,29 +113,20 @@
     })
     return Promise.resolve()
   }
-  /**
-   * 新增
-   */
+  // 新增
   function add() {
-    clientEdit.value.init(null, FormEditType.Add)
+    mchApp.value.init(null, FormEditType.Add)
   }
-  /**
-   * 编辑
-   */
+  // 查看
   function edit(record) {
-    clientEdit.value.init(record.id, FormEditType.Edit)
+    mchApp.value.init(record.id, FormEditType.Edit)
   }
-  /**
-   * 查看
-   */
+  // 查看
   function show(record) {
-    clientEdit.value.init(record.id, FormEditType.Show)
+    mchApp.value.init(record.id, FormEditType.Show)
   }
 
-  /**
-   * 删除
-   */
-  const { notification } = useMessage()
+  // 删除
   function remove(record) {
     createConfirm({
       iconType: 'warning',
@@ -151,7 +134,7 @@
       content: '是否删除该条数据',
       onOk: () => {
         del(record.id).then(() => {
-          notification.success({ message: '删除成功' })
+          createMessage.success('删除成功')
           queryPage()
         })
       },

@@ -41,7 +41,7 @@ export interface OperateLog extends BaseEntity {
   // 操作人员id
   operateId?: number
   // 操作人员账号
-  username?: string
+  account?: string
   // 业务类型
   businessType?: string
   // 请求方法

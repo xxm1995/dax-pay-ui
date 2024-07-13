@@ -264,7 +264,7 @@
    */
   function resetPwdBatch() {
     const userIds = xTable.value?.getCheckboxRecords().map((o) => o.id)
-    userResetPwd.value.init(true,userIds)
+    userResetPwd.value.init(true, userIds)
   }
 </script>
 

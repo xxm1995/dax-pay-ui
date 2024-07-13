@@ -26,7 +26,7 @@
       <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
         <vxe-column field="operateId" title="操作人员id" />
-        <vxe-column field="username" title="操作人员账号" />
+        <vxe-column field="account" title="操作账号" />
         <vxe-column field="title" title="操作模块" />
         <vxe-column field="success" title="是否成功">
           <template #default="{ row }">

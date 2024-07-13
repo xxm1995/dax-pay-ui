@@ -54,9 +54,10 @@
   /**
    * 初始化
    */
-  function init(batch: boolean, userIdOrIds: string | string[]) {
+  function init(b: boolean, userIdOrIds: string | string[]) {
     visible.value = true
-    if (!batch) {
+    batch.value = b
+    if (!b) {
       userId.value = userIdOrIds as string
     } else {
       userIds.value = userIdOrIds as never[]
@@ -72,9 +73,13 @@
         onOk: async () => {
           confirmLoading.value = true
           if (batch.value) {
-            await restartPasswordBatch(userIds.value, form.value.newPassword)
+            await restartPasswordBatch(userIds.value, form.value.newPassword).finally(
+              () => (confirmLoading.value = false),
+            )
           } else {
-            await restartPassword(userId.value, form.value.newPassword)
+            await restartPassword(userId.value, form.value.newPassword).finally(
+              () => (confirmLoading.value = false),
+            )
           }
           createMessage.success('保存成功')
           handleCancel()

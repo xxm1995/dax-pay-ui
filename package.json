@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "bootstrap": "pnpm install",
-    "build:analyze": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm vite build --mode admin",
+    "build:analyze": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm vite build --mode admin-build",
     "build:admin": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm vite build --mode admin",
-    "build:merchant": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm vite build --mode merchant",
+    "build:merchant": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm vite build --mode merchant-build",
     "dev:admin": "pnpm vite --mode admin",
     "dev:merchant": "pnpm vite --mode merchant",
     "preinstall": "npx only-allow pnpm",
