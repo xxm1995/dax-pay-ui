@@ -44,32 +44,22 @@
         <vxe-column title="操作" fixed="right" width="220" :showOverflow="false">
           <template #default="{ row }">
             <a href="javascript:" @click="show(row)">查看</a>
-            <template v-if="String(row.menuType) !== '2'">
-              <a-divider type="vertical" />
-              <a href="javascript:" v-if="!row.admin" @click="edit(row)">编辑</a>
-              <a href="javascript:" v-else disabled>编辑</a>
-              <a-divider type="vertical" />
-              <a-dropdown>
-                <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
-                <template #overlay>
-                  <a-menu>
-                    <a-menu-item>
-                      <a @click="addChildren(row)">添加下级</a>
-                    </a-menu-item>
-                    <a-menu-item>
-                      <a
-                        href="javascript:"
-                        v-if="!row.admin"
-                        @click="remove(row)"
-                        style="color: red"
-                        >删除</a
-                      >
-                      <a href="javascript:" v-else disabled>删除</a>
-                    </a-menu-item>
-                  </a-menu>
-                </template>
-              </a-dropdown>
-            </template>
+            <a-divider type="vertical" />
+            <a href="javascript:" @click="edit(row)">编辑</a>
+            <a-divider type="vertical" />
+            <a-dropdown>
+              <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item v-if="!row.leaf">
+                    <a-link @click="addChildren(row)">添加下级</a-link>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-link href="javascript:" danger>删除</a-link>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
           </template>
         </vxe-column>
       </vxe-table>
@@ -88,6 +78,7 @@
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '@/hooks/web/useMessage'
   import { Icon } from '@/components/Icon'
+  import ALink from '@/components/Link/Link.vue'
 
   const { createConfirm, notification } = useMessage()
 

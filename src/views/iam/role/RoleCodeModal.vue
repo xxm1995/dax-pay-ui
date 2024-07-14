@@ -145,7 +145,7 @@
     saveRoleCode({
       roleId: currentRole.value.id,
       updateChildren,
-      codes: checkedKeys.value,
+      codeIds: checkedKeys.value,
     }).then(() => {
       createMessage.success('保存成功')
       handleCancel()
