@@ -47,7 +47,7 @@ export const update = (obj: Menu) => {
  * 删除
  */
 export const del = (id) => {
-  return defHttp.delete({
+  return defHttp.post({
     url: '/perm/menu/delete',
     params: { id },
   })

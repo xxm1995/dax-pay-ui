@@ -26,7 +26,7 @@ export const get = (id) => {
  * 清除指定天数之前的日志
  */
 export const deleteByDay = (deleteDay) => {
-  return defHttp.delete<Result>({
+  return defHttp.post<Result>({
     url: '/log/operate/deleteByDay',
     params: { deleteDay },
   })

@@ -46,7 +46,7 @@ export const update = (obj: Client) => {
  * 删除
  */
 export const del = (id) => {
-  return defHttp.delete({
+  return defHttp.post({
     url: '/client/delete',
     params: { id },
   })

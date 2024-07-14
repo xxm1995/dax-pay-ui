@@ -46,7 +46,7 @@ export const update = (obj: DictItem) => {
  * 删除
  */
 export const del = (id) => {
-  return defHttp.delete({
+  return defHttp.post({
     url: '/dict/item/delete',
     params: { id },
   })

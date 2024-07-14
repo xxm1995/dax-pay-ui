@@ -55,7 +55,7 @@ export const update = (obj: PermCode) => {
  * 删除
  */
 export const del = (id) => {
-  return defHttp.delete({
+  return defHttp.post({
     url: '/perm/code/delete',
     params: { id },
   })

@@ -46,7 +46,7 @@ export const update = (obj: SystemParam) => {
  * 删除
  */
 export const del = (id) => {
-  return defHttp.delete({
+  return defHttp.post({
     url: '/system/param/delete',
     params: { id },
   })
