@@ -7,7 +7,7 @@
     :open="visible"
     @cancel="visible = false"
   >
-    <description :column="2" :data="data" :schema="schema" />
+    <description :column="2" size="default" :data="data" :schema="schema" />
     <template #footer>
       <a-button key="cancel" @click="visible = false">取消</a-button>
     </template>

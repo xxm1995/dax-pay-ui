@@ -2,12 +2,12 @@
   <basic-modal
     v-bind="$attrs"
     :loading="confirmLoading"
-    width="50%"
+    :width="1200"
     title="查看"
     :open="visible"
     @cancel="visible = false"
   >
-    <description :column="2" :data="data" :schema="schema" />
+    <description :column="1" size="small" :data="data" :schema="schema" />
     <template #footer>
       <a-space>
         <a-button key="cancel" @click="visible = false">取消</a-button>
@@ -29,7 +29,7 @@
   let visible = ref(false)
   let confirmLoading = ref(false)
   let schema = [
-    { field: 'id', label: '主键' },
+    { field: 'id', label: '主键', labelMinWidth: 100 },
     { field: 'account', label: '操作账号' },
     { field: 'title', label: '操作模块' },
     {

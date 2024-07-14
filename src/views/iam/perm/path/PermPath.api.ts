@@ -36,15 +36,17 @@ export function syncSystem() {
  */
 export interface PermPath extends BaseEntity {
   // 标识
-  code: string
+  code?: string
   // 上级标识
-  parentCode: string
+  parentCode?: string
   // 权限名称
-  name: string
+  name?: string
   // 请求类型
-  method: string
+  method?: string
   // 请求路径
-  path: string
+  path?: string
+  // 叶子节点
+  leaf?: boolean
 }
 
 /**

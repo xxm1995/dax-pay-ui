@@ -51,12 +51,15 @@
         :tree-config="{ childrenField: 'children' }"
         :data="tableData"
       >
-        <vxe-column field="name" title="名称" tree-node />
-        <vxe-column field="path" title="请求路径" />
-        <vxe-column title="操作" fixed="right" width="220" :showOverflow="false">
+        <vxe-column field="name" title="名称" :min-width="200" tree-node />
+        <vxe-column field="path" title="请求路径" :min-width="500">
           <template #default="{ row }">
-            <a href="javascript:" @click="show(row)">查看</a>
-            <template v-if="String(row.menuType) !== '2'"> </template>
+            {{ row.leaf ? `[${row.method}] ${row.path}` : '' }}
+          </template>
+        </vxe-column>
+        <vxe-column title="操作" fixed="right" :width="100" :showOverflow="false">
+          <template #default="{ row }">
+            <a-link v-if="row.leaf" @click="show(row)">查看</a-link>
           </template>
         </vxe-column>
       </vxe-table>
@@ -165,7 +168,7 @@
    * 查看
    */
   function show(record: PermPath) {
-    permPathInfo.value.init(record.id)
+    permPathInfo.value.show(record.id)
   }
 </script>
 
