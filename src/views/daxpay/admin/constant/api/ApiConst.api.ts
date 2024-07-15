@@ -7,7 +7,7 @@ import { BaseEntity } from '#/web'
  */
 export const page = (params) => {
   return defHttp.get<Result<PageResult<ChannelConst>>>({
-    url: '/const/method',
+    url: '/const/method/page',
     params,
   })
 }
@@ -17,20 +17,20 @@ export const page = (params) => {
  */
 export const get = (id) => {
   return defHttp.get<Result<ChannelConst>>({
-    url: '/const/method',
+    url: '/const/method/findById',
     params: { id },
   })
 }
 
 export interface ChannelConst extends BaseEntity {
   /** 编码 */
-  code: string
+  code?: string
   /** 名称 */
-  name: string
+  name?: string
   /** 接口地址 */
-  api: string
+  api?: string
   /** 是否启用 */
-  enable: boolean
+  enable?: boolean
   /** 备注 */
-  remark: string
+  remark?: string
 }

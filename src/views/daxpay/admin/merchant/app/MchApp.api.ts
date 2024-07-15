@@ -54,21 +54,21 @@ export const del = (id) => {
  */
 export interface MchApp extends BaseEntity {
   // 商户号
-  mchNo: string
+  mchNo?: string
   // 应用号
-  appId: string
+  appId?: string
   // 应用名称
-  appName: string
+  appName?: string
   // 签名方式
-  signType: string
+  signType?: string
   // 公钥
-  publicKey: string
+  publicKey?: string
   // 私钥
-  privateKey: string
+  privateKey?: string
   // 异步消息通知类型
-  notifyType: string
-  // 状态
-  notifyUrl: string
+  notifyType?: string
   // 通知地址, http/WebSocket 需要配置
-  status: string
+  notifyUrl?: string
+  // 状态
+  status?: string
 }

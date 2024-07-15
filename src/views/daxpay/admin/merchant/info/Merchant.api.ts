@@ -54,21 +54,21 @@ export const del = (id) => {
  */
 export interface Merchant extends BaseEntity {
   // 商户号
-  mchNo: string
+  mchNo?: string
   // 商户名称
-  mchName: string
+  mchName?: string
   // 公司名称
-  companyName: string
+  companyName?: string
   // 证件类型
-  idType: string
+  idType?: string
   // 证件号
-  idNo: string
+  idNo?: string
   // 联系方式
-  contact: string
+  contact?: string
   // 法人名称
-  legalPerson: string
+  legalPerson?: string
   // 法人证件号码
-  legalPersonIdNo: string
+  legalPersonIdNo?: string
   // 状态
-  status: string
+  status?: string
 }
