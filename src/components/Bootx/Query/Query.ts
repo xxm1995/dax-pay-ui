@@ -31,12 +31,10 @@ export interface QueryField {
   name?: string
   // 精度
   precision?: number
-  // 查询列表
+  // 下拉列表内容
   selectList?: LabeledValue[] | null
   // 时间格式化
   format?: string | null
-  // 默认值 未启用
-  defaultValue?: number | string
 }
 
 /**

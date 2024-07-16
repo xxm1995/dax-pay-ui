@@ -13,7 +13,7 @@
         ref="formRef"
         class="small-from-item"
         :model="form"
-        validate-trigger="['blur', 'change']"
+        :validate-trigger="['blur', 'change']"
         :rules="rules"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"

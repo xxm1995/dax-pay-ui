@@ -25,7 +25,7 @@ export const get = (id) => {
  */
 export const add = (obj) => {
   return defHttp.post<Result<void>>({
-    url: '/mch/app/save',
+    url: '/mch/app/add',
     data: obj,
   })
 }
@@ -60,17 +60,17 @@ export interface MchApp extends BaseEntity {
   // 应用名称
   appName?: string
   // 签名方式
-  signType?: string
+  signType: string
   // 签名秘钥
   signSecret?: string
   // 是否对请求进行验签
-  reqSign?: boolean
+  reqSign: boolean
   // 支付限额
-  limitAmount?: number
+  limitAmount: number
   // 订单默认超时时间(分钟)
   orderTimeout: number
   // 异步消息通知类型
-  notifyType?: string
+  notifyType: string
   // 通知地址, http/WebSocket 需要配置
   notifyUrl?: string
   // 状态

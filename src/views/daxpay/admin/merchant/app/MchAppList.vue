@@ -4,6 +4,7 @@
       <b-query
         :query-params="model.queryParam"
         :fields="fields"
+        :default-item-count="3"
         @query="queryPage"
         @reset="resetQueryParams"
       />
@@ -39,15 +40,13 @@
           </template>
         </vxe-column>
         <vxe-column field="createTime" title="创建时间" :min-width="120" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" :width="220" :showOverflow="false" title="操作">
           <template #default="{ row }">
-            <span>
-              <a-link @click="show(row)">查看</a-link>
-            </span>
+            <a-link @click="show(row)">查看</a-link>
             <a-divider type="vertical" />
-            <span>
-              <a-link @click="edit(row)">编辑</a-link>
-            </span>
+            <a-link @click="edit(row)">编辑</a-link>
+            <a-divider type="vertical" />
+            <a-link @click="showChannelSetup(row)">通道配置</a-link>
             <a-divider type="vertical" />
             <a-link danger @click="remove(row)">删除</a-link>
           </template>
@@ -62,22 +61,26 @@
         @page-change="handleTableChange"
       />
       <MchAppEdit ref="mchApp" @ok="queryPage" />
+      <ChannelSetup ref="channelSetup" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import { del, page } from './MchApp.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import MchAppEdit from './MchAppEdit.vue'
   import BQuery from '@/components/Bootx/Query/BQuery.vue'
-  import { STRING } from '@/components/Bootx/Query/Query'
+  import { LIST, QueryField, STRING } from '@/components/Bootx/Query/Query'
   import { FormEditType } from '@/enums/formTypeEnum'
   import { useMessage } from '@/hooks/web/useMessage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import ALink from '@/components/Link/Link.vue'
   import { useDict } from '@/hooks/bootx/useDict'
+  import { dropdown as merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
+  import ChannelSetup from '@/views/daxpay/admin/merchant/channel/ChannelSetup.vue'
 
   // 使用hooks
   const {
@@ -92,18 +95,39 @@
   const { createMessage, createConfirm } = useMessage()
   const { dictConvert } = useDict()
   // 查询条件
-  const fields = [
-    { field: 'code', formType: STRING, name: '编码', placeholder: '请输入终端编码' },
-    { field: 'name', formType: STRING, name: '名称', placeholder: '请输入终端名称' },
-  ]
+  const fields = computed(() => {
+    return [
+      {
+        field: 'mchNo',
+        type: LIST,
+        name: '商户',
+        selectList: mchNoOptions.value,
+        placeholder: '请选择商户',
+      },
+      { field: 'appId', type: STRING, name: '商户号', placeholder: '请输入应用号' },
+      { field: 'appName', type: STRING, name: '应用名称', placeholder: '请输入应用名称' },
+    ] as QueryField[]
+  })
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
   const mchApp: any = ref()
+  const channelSetup: any = ref()
+  const mchNoOptions = ref<LabeledValue[]>([])
 
   onMounted(() => {
     vxeBind()
+    initMerchant()
     queryPage()
   })
+
+  /**
+   * 初始化商户列表信息
+   */
+  function initMerchant() {
+    merchantDropdown().then(({ data }) => {
+      mchNoOptions.value = data
+    })
+  }
 
   function vxeBind() {
     xTable.value?.connect(xToolbar.value as VxeToolbarInstance)
@@ -131,6 +155,13 @@
   // 查看
   function show(record) {
     mchApp.value.init(record.id, FormEditType.Show)
+  }
+
+  /**
+   * channelSetup
+   */
+  function showChannelSetup(record) {
+    channelSetup.value.init(record.appId)
   }
 
   // 删除

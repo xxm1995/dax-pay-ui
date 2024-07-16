@@ -65,7 +65,7 @@
   import useTablePage from '@/hooks/bootx/useTablePage'
   import MerchantEdit from './MerchantEdit.vue'
   import BQuery from '@/components/Bootx/Query/BQuery.vue'
-  import { STRING } from '@/components/Bootx/Query/Query'
+  import {QueryField, STRING} from '@/components/Bootx/Query/Query'
   import { FormEditType } from '@/enums/formTypeEnum'
   import { useMessage } from '@/hooks/web/useMessage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -86,9 +86,9 @@
   const { dictConvert } = useDict()
   // 查询条件
   const fields = [
-    { field: 'code', formType: STRING, name: '编码', placeholder: '请输入终端编码' },
-    { field: 'name', formType: STRING, name: '名称', placeholder: '请输入终端名称' },
-  ]
+    { field: 'mchName', type: STRING, name: '商户名称', placeholder: '请输入商户名称' },
+    { field: 'companyName', type: STRING, name: '公司名称', placeholder: '请输入公司名称' },
+  ] as QueryField[]
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
   const merchantEdit: any = ref()

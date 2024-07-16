@@ -12,7 +12,7 @@
       class="small-from-item"
       :model="form"
       ref="formRef"
-      validate-trigger="['blur', 'change']"
+      :validate-trigger="['blur', 'change']"
       :rules="rules"
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
@@ -20,11 +20,16 @@
       <a-form-item label="主键" name="id" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
-      <a-form-item label="商户号" name="mchNo" v-show="!addable">
-        {{ form.mchNo }}
+      <a-form-item label="商户号" name="mchNo">
+        <a-select
+          v-model:value="form.mchNo"
+          :disabled="showable"
+          placeholder="请选择商户"
+          :options="mchNoOptions"
+        />
       </a-form-item>
       <a-form-item label="应用号" name="appId" v-if="!addable">
-        {{ form.appId }}
+        <a-tag> {{ form.appId }}</a-tag>
       </a-form-item>
       <a-form-item label="应用名称" name="appName">
         <a-input v-model:value="form.appName" :disabled="showable" placeholder="请输入应用名称" />
@@ -64,14 +69,15 @@
         <a-textarea v-model:value="form.signSecret" :disabled="showable" placeholder="请输入公钥" />
         <a-button type="link" @click="genSignSecret">生成秘钥</a-button>
       </a-form-item>
-      <a-form-item label="通知方式" name="noticeType">
-        <a-radio-group v-model:value="form.signType" button-style="solid">
+      <a-form-item label="通知方式" name="notifyType">
+        <a-radio-group v-model:value="form.notifyType" button-style="solid">
+          <a-radio-button value="none">不启用</a-radio-button>
           <a-radio-button value="http">http</a-radio-button>
           <a-radio-button value="websocket">websocket</a-radio-button>
           <a-radio-button disabled value="mq">消息队列</a-radio-button>
         </a-radio-group>
       </a-form-item>
-      <a-form-item label="通知地址" name="notifyUrl">
+      <a-form-item label="通知地址" name="notifyUrl" v-if="form.notifyType !== 'none'">
         <a-input v-model:value="form.notifyUrl" :disabled="showable" placeholder="请输入通知地址" />
       </a-form-item>
     </a-form>
@@ -98,7 +104,9 @@
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '@/enums/formTypeEnum'
   import { BasicDrawer } from '@/components/Drawer'
-  import { buildUUID } from "@/utils/uuid";
+  import { buildUUID } from '@/utils/uuid'
+  import { dropdown as merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
+  import { LabeledValue } from 'ant-design-vue/lib/select'
 
   const {
     initFormEditType,
@@ -115,25 +123,46 @@
 
   // 表单
   const formRef = ref<FormInstance>()
-  let form = ref<MchApp>({})
+  const form = ref<MchApp>({
+    notifyType: 'none',
+    signType: 'HMAC_SHA256',
+    limitAmount: 200.0,
+    orderTimeout: 5,
+    reqSign: true,
+  })
+  const mchNoOptions = ref<LabeledValue[]>([])
 
   // 校验
   const rules = reactive({
+    mchNo: [{ required: true, message: '请选择所属商户' }],
     appName: [{ required: true, message: '请输入应用名称' }],
     signType: [{ required: true, message: '请选择签名方式' }],
     signSecret: [{ required: true, message: '请输入签名秘钥' }],
     reqSign: [{ required: true, message: '请选择是否验签' }],
-    limitAmount: [{ required: true, message: '请选择是否验签' }],
-    orderTimeout: [{ required: true, message: '请选择是否验签' }],
-    notifyType: [{ required: true, message: '请选择是否验签' }],
+    limitAmount: [{ required: true, message: '请输入支付限额(元)' }],
+    orderTimeout: [{ required: true, message: '请输入订单默认超时时间(分钟)' }],
+    notifyType: [{ required: true, message: '请选择消息通知方式' }],
   } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
-  // 入口
+
+  /**
+   * 入口
+   */
   function init(id, editType: FormEditType) {
+    initMerchant()
     initFormEditType(editType)
     resetForm()
     getInfo(id, editType)
+  }
+
+  /**
+   * 初始化商户列表信息
+   */
+  function initMerchant() {
+    merchantDropdown().then(({ data }) => {
+      mchNoOptions.value = data
+    })
   }
 
   /**
@@ -169,7 +198,7 @@
    * 生成秘钥
    */
   function genSignSecret() {
-    form.value.signSecret = buildUUID()+buildUUID()
+    form.value.signSecret = buildUUID() + buildUUID()
   }
   /**
    * 重置表单的校验

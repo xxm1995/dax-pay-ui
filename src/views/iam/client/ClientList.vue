@@ -72,7 +72,7 @@
   import useTablePage from '@/hooks/bootx/useTablePage'
   import ClientEdit from './ClientEdit.vue'
   import BQuery from '@/components/Bootx/Query/BQuery.vue'
-  import { STRING } from '@/components/Bootx/Query/Query'
+  import {QueryField, STRING} from '@/components/Bootx/Query/Query'
   import { FormEditType } from '@/enums/formTypeEnum'
   import { useMessage } from '@/hooks/web/useMessage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
@@ -92,9 +92,9 @@
 
   // 查询条件
   const fields = [
-    { field: 'code', formType: STRING, name: '编码', placeholder: '请输入终端编码' },
-    { field: 'name', formType: STRING, name: '名称', placeholder: '请输入终端名称' },
-  ]
+    { field: 'code', type: STRING, name: '编码', placeholder: '请输入终端编码' },
+    { field: 'name', type: STRING, name: '名称', placeholder: '请输入终端名称' },
+  ] as QueryField[]
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
   const clientEdit: any = ref()

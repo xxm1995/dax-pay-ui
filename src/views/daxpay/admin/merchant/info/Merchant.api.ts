@@ -1,6 +1,7 @@
 import { defHttp } from '@/utils/http/axios'
 import { PageResult, Result } from '#/axios'
 import { BaseEntity } from '#/web'
+import { LabeledValue } from 'ant-design-vue/lib/select'
 
 /**
  * 分页
@@ -25,7 +26,7 @@ export const get = (id) => {
  */
 export const add = (obj) => {
   return defHttp.post<Result<void>>({
-    url: '/merchant/save',
+    url: '/merchant/add',
     data: obj,
   })
 }
@@ -36,6 +37,15 @@ export const update = (obj) => {
   return defHttp.post<Result<void>>({
     url: '/merchant/update',
     data: obj,
+  })
+}
+
+/**
+ * 商户下拉列表
+ */
+export const dropdown = () => {
+  return defHttp.get<Result<LabeledValue[]>>({
+    url: '/merchant/dropdown',
   })
 }
 
