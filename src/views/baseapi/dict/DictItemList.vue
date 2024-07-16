@@ -64,7 +64,7 @@
   import { FormEditType } from '@/enums/formTypeEnum'
   import { useMessage } from '@/hooks/web/useMessage'
   import { Dict } from '@/views/baseapi/dict/Dict.api'
-  import BasicDrawer from '@/components/Drawer/src/BasicDrawer.vue'
+  import { BasicDrawer } from '@/components/Drawer'
 
   // 使用hooks
   const { handleTableChange, pageQueryResHandel, pagination, pages, model, loading } =

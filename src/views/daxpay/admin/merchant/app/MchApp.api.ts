@@ -61,10 +61,14 @@ export interface MchApp extends BaseEntity {
   appName?: string
   // 签名方式
   signType?: string
-  // 公钥
-  publicKey?: string
-  // 私钥
-  privateKey?: string
+  // 签名秘钥
+  signSecret?: string
+  // 是否对请求进行验签
+  reqSign?: boolean
+  // 支付限额
+  limitAmount?: number
+  // 订单默认超时时间(分钟)
+  orderTimeout: number
   // 异步消息通知类型
   notifyType?: string
   // 通知地址, http/WebSocket 需要配置

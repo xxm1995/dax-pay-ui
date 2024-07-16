@@ -1,12 +1,12 @@
 <template>
-  <basic-modal
-    :loading="confirmLoading"
+  <basic-drawer
+    showFooter
     v-bind="$attrs"
-    :width="750"
+    width="50%"
     :title="title"
-    :open="visible"
     :mask-closable="showable"
-    @cancel="handleCancel"
+    :open="visible"
+    @close="handleCancel"
   >
     <a-form
       class="small-from-item"
@@ -30,7 +30,19 @@
         <a-input v-model:value="form.mchName" :disabled="showable" placeholder="请输入公司名称" />
       </a-form-item>
       <a-form-item label="证件类型" name="idType">
-        <a-input v-model:value="form.idType" :disabled="showable" placeholder="请输入证件类型" />
+        <a-select
+          v-model:value="form.idType"
+          :disabled="showable"
+          allow-clear
+          placeholder="请选择证件类型"
+        >
+          <a-select-option value="1">身份证</a-select-option>
+          <a-select-option value="2">护照</a-select-option>
+          <a-select-option value="3">港澳居民来往内地通行证</a-select-option>
+          <a-select-option value="4">台湾居民来往大陆通行证</a-select-option>
+          <a-select-option value="5">户口簿</a-select-option>
+          <a-select-option value="6">军人证</a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item label="证件号" name="idNo">
         <a-input v-model:value="form.idNo" :disabled="showable" placeholder="请输入证件号" />
@@ -66,7 +78,7 @@
         >
       </a-space>
     </template>
-  </basic-modal>
+  </basic-drawer>
 </template>
 
 <script lang="ts" setup>
@@ -75,7 +87,7 @@
   import { add, get, Merchant, update } from './Merchant.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '@/enums/formTypeEnum'
-  import { BasicModal } from '@/components/Modal'
+  import { BasicDrawer } from '@/components/Drawer'
 
   const {
     initFormEditType,

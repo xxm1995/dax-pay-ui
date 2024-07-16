@@ -20,20 +20,25 @@
       </vxe-toolbar>
       <vxe-table ref="xTable" key-field="id" :data="pagination.records" :loading="loading">
         <vxe-column type="seq" width="60" />
-        <vxe-column field="mchNo" title="编码" />
-        <vxe-column field="mchName" title="名称" />
-        <vxe-column field="companyName" title="公司名称" />
-        <vxe-column field="idType" title="证件类型">
+        <vxe-column field="appId" title="应用号" :min-width="100" />
+        <vxe-column field="appName" title="应用名称" :min-width="100" />
+        <vxe-column field="signType" title="签名方式" :min-width="80">
           <template #default="{ row }">
-            <a-tag v-if="row.idType === '0'" color="green">身份证</a-tag>
-            <a-tag v-else-if="row.idType === '1'" color="blue">护照</a-tag>
-            <a-tag v-else-if="row.idType === '2'" color="red">港澳通行证</a-tag>
+            <a-tag>{{ dictConvert('sign_type', row.signType) || '空' }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="tel" title="联系方式" />
-        <vxe-column field="legalPerson" title="法人名称" />
-        <vxe-column field="tel" title="联系方式" />
-        <vxe-column field="createTime" title="创建时间" />
+        <vxe-column field="notifyType" title="通知类型" :min-width="80">
+          <template #default="{ row }">
+            <a-tag>{{ dictConvert('notify_type', row.notifyType) || '空' }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="notifyUrl" title="通知地址" :min-width="220" />
+        <vxe-column field="status" title="状态" :min-width="80">
+          <template #default="{ row }">
+            <a-tag>{{ dictConvert('mach_app_status', row.status) || '空' }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="createTime" title="创建时间" :min-width="120" />
         <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
@@ -72,6 +77,7 @@
   import { useMessage } from '@/hooks/web/useMessage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import ALink from '@/components/Link/Link.vue'
+  import { useDict } from '@/hooks/bootx/useDict'
 
   // 使用hooks
   const {
@@ -84,6 +90,7 @@
     loading,
   } = useTablePage(queryPage)
   const { createMessage, createConfirm } = useMessage()
+  const { dictConvert } = useDict()
   // 查询条件
   const fields = [
     { field: 'code', formType: STRING, name: '编码', placeholder: '请输入终端编码' },

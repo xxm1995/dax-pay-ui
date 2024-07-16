@@ -25,7 +25,7 @@
         <vxe-column field="companyName" title="公司名称" :min-width="150" />
         <vxe-column field="idType" title="证件类型" :min-width="80">
           <template #default="{ row }">
-            <a-tag color="green">{{ dictConvert('idType', row.idType) }}</a-tag>
+            <a-tag color="green">{{ dictConvert('idType', row.idType) || '无' }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="tel" title="联系方式" :min-width="100" />

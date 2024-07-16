@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-  import BasicDrawer from '@/components/Drawer/src/BasicDrawer.vue'
+  import { BasicDrawer } from '@/components/Drawer'
   import useFormEdit from '@/hooks/bootx/useFormEdit'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { computed, nextTick, ref } from 'vue'

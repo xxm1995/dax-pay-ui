@@ -1,12 +1,12 @@
 <template>
-  <basic-modal
-    :loading="confirmLoading"
+  <basic-drawer
+    showFooter
     v-bind="$attrs"
-    :width="750"
+    width="50%"
     :title="title"
-    :open="visible"
     :mask-closable="showable"
-    @cancel="handleCancel"
+    :open="visible"
+    @close="handleCancel"
   >
     <a-form
       class="small-from-item"
@@ -21,36 +21,58 @@
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
       <a-form-item label="商户号" name="mchNo" v-show="!addable">
-        <a-input v-model:value="form.mchNo" disabled />
+        {{ form.mchNo }}
       </a-form-item>
-      <a-form-item label="商户名称" name="mchName">
-        <a-input v-model:value="form.mchName" :disabled="showable" placeholder="请输入商户名称" />
+      <a-form-item label="应用号" name="appId" v-if="!addable">
+        {{ form.appId }}
       </a-form-item>
-      <a-form-item label="公司名称" name="companyName">
-        <a-input v-model:value="form.mchName" :disabled="showable" placeholder="请输入公司名称" />
+      <a-form-item label="应用名称" name="appName">
+        <a-input v-model:value="form.appName" :disabled="showable" placeholder="请输入应用名称" />
       </a-form-item>
-      <a-form-item label="证件类型" name="idType">
-        <a-input v-model:value="form.idType" :disabled="showable" placeholder="请输入证件类型" />
-      </a-form-item>
-      <a-form-item label="证件号" name="idNo">
-        <a-input v-model:value="form.idNo" :disabled="showable" placeholder="请输入证件号" />
-      </a-form-item>
-      <a-form-item label="联系方式" name="contact">
-        <a-input v-model:value="form.contact" :disabled="showable" placeholder="请输入联系方式" />
-      </a-form-item>
-      <a-form-item label="法人名称" name="legalPerson">
-        <a-input
-          v-model:value="form.legalPerson"
-          :disabled="showable"
-          placeholder="请输入法人名称"
+      <a-form-item label="请求验签" name="reqSign">
+        <a-switch
+          v-model:checked="form.reqSign"
+          checked-children="启用"
+          un-checked-children="停用"
         />
       </a-form-item>
-      <a-form-item label="法人证件号码" name="legalPersonIdNo">
-        <a-input
-          v-model:value="form.legalPersonIdNo"
+      <a-form-item label="支付限额(元)" name="limitAmount">
+        <a-input-number
+          v-model:value="form.limitAmount"
+          :min="0.01"
+          :precision="2"
           :disabled="showable"
-          placeholder="请输入法人证件号码"
+          placeholder="请输入支付限额(元)"
         />
+      </a-form-item>
+      <a-form-item label="订单超时时间(分钟)" name="orderTimeout">
+        <a-input-number
+          v-model:value="form.orderTimeout"
+          :min="5"
+          :precision="0"
+          :disabled="showable"
+          placeholder="请输入订单默认超时时间(分钟)"
+        />
+      </a-form-item>
+      <a-form-item label="签名方式" name="signType">
+        <a-radio-group v-model:value="form.signType" button-style="solid">
+          <a-radio-button value="HMAC_SHA256">HMAC_SHA256</a-radio-button>
+          <a-radio-button value="SM3">SM3</a-radio-button>
+        </a-radio-group>
+      </a-form-item>
+      <a-form-item label="签名秘钥" name="signSecret">
+        <a-textarea v-model:value="form.signSecret" :disabled="showable" placeholder="请输入公钥" />
+        <a-button type="link" @click="genSignSecret">生成秘钥</a-button>
+      </a-form-item>
+      <a-form-item label="通知方式" name="noticeType">
+        <a-radio-group v-model:value="form.signType" button-style="solid">
+          <a-radio-button value="http">http</a-radio-button>
+          <a-radio-button value="websocket">websocket</a-radio-button>
+          <a-radio-button disabled value="mq">消息队列</a-radio-button>
+        </a-radio-group>
+      </a-form-item>
+      <a-form-item label="通知地址" name="notifyUrl">
+        <a-input v-model:value="form.notifyUrl" :disabled="showable" placeholder="请输入通知地址" />
       </a-form-item>
     </a-form>
     <template #footer>
@@ -66,7 +88,7 @@
         >
       </a-space>
     </template>
-  </basic-modal>
+  </basic-drawer>
 </template>
 
 <script lang="ts" setup>
@@ -75,7 +97,8 @@
   import { add, get, MchApp, update } from './MchApp.api'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
   import { FormEditType } from '@/enums/formTypeEnum'
-  import { BasicModal } from '@/components/Modal'
+  import { BasicDrawer } from '@/components/Drawer'
+  import { buildUUID } from "@/utils/uuid";
 
   const {
     initFormEditType,
@@ -96,8 +119,13 @@
 
   // 校验
   const rules = reactive({
-    mchName: [{ required: true, message: '请输入商户名称' }],
-    companyName: [{ required: true, message: '请输入公司名称' }],
+    appName: [{ required: true, message: '请输入应用名称' }],
+    signType: [{ required: true, message: '请选择签名方式' }],
+    signSecret: [{ required: true, message: '请输入签名秘钥' }],
+    reqSign: [{ required: true, message: '请选择是否验签' }],
+    limitAmount: [{ required: true, message: '请选择是否验签' }],
+    orderTimeout: [{ required: true, message: '请选择是否验签' }],
+    notifyType: [{ required: true, message: '请选择是否验签' }],
   } as Record<string, Rule[]>)
   // 事件
   const emits = defineEmits(['ok'])
@@ -119,6 +147,7 @@
         confirmLoading.value = false
       })
     } else if (editType === FormEditType.Add) {
+      genSignSecret()
       confirmLoading.value = false
     }
   }
@@ -136,6 +165,12 @@
     })
   }
 
+  /**
+   * 生成秘钥
+   */
+  function genSignSecret() {
+    form.value.signSecret = buildUUID()+buildUUID()
+  }
   /**
    * 重置表单的校验
    */
