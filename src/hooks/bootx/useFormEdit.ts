@@ -1,4 +1,4 @@
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, unref } from "vue";
 import { FormEditType } from '@/enums/formTypeEnum'
 import { setIcon } from 'vxe-table'
 
@@ -83,7 +83,7 @@ export default function () {
   function diffForm(rawForm, editForm, ...keys) {
     const form = {}
     for (const key of keys) {
-      form[key] = rawForm[key] === editForm[key] ? undefined : editForm[key]
+      form[key] = unref(rawForm)[key] === unref(editForm)[key] ? undefined : unref(editForm)[key]
     }
     return form
   }

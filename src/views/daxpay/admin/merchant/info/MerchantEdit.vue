@@ -8,63 +8,65 @@
     :open="visible"
     @close="handleCancel"
   >
-    <a-form
-      class="small-from-item"
-      :model="form"
-      ref="formRef"
-      :validate-trigger="['blur', 'change']"
-      :rules="rules"
-      :label-col="labelCol"
-      :wrapper-col="wrapperCol"
-    >
-      <a-form-item label="主键" name="id" :hidden="true">
-        <a-input v-model:value="form.id" :disabled="showable" />
-      </a-form-item>
-      <a-form-item label="商户号" name="mchNo" v-show="!addable">
-        <a-input v-model:value="form.mchNo" disabled />
-      </a-form-item>
-      <a-form-item label="商户名称" name="mchName">
-        <a-input v-model:value="form.mchName" :disabled="showable" placeholder="请输入商户名称" />
-      </a-form-item>
-      <a-form-item label="公司名称" name="companyName">
-        <a-input v-model:value="form.mchName" :disabled="showable" placeholder="请输入公司名称" />
-      </a-form-item>
-      <a-form-item label="证件类型" name="idType">
-        <a-select
-          v-model:value="form.idType"
-          :disabled="showable"
-          allow-clear
-          placeholder="请选择证件类型"
-        >
-          <a-select-option value="1">身份证</a-select-option>
-          <a-select-option value="2">护照</a-select-option>
-          <a-select-option value="3">港澳居民来往内地通行证</a-select-option>
-          <a-select-option value="4">台湾居民来往大陆通行证</a-select-option>
-          <a-select-option value="5">户口簿</a-select-option>
-          <a-select-option value="6">军人证</a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item label="证件号" name="idNo">
-        <a-input v-model:value="form.idNo" :disabled="showable" placeholder="请输入证件号" />
-      </a-form-item>
-      <a-form-item label="联系方式" name="contact">
-        <a-input v-model:value="form.contact" :disabled="showable" placeholder="请输入联系方式" />
-      </a-form-item>
-      <a-form-item label="法人名称" name="legalPerson">
-        <a-input
-          v-model:value="form.legalPerson"
-          :disabled="showable"
-          placeholder="请输入法人名称"
-        />
-      </a-form-item>
-      <a-form-item label="法人证件号码" name="legalPersonIdNo">
-        <a-input
-          v-model:value="form.legalPersonIdNo"
-          :disabled="showable"
-          placeholder="请输入法人证件号码"
-        />
-      </a-form-item>
-    </a-form>
+    <a-spin :spinning="confirmLoading">
+      <a-form
+        class="small-from-item"
+        :model="form"
+        ref="formRef"
+        :validate-trigger="['blur', 'change']"
+        :rules="rules"
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
+      >
+        <a-form-item label="主键" name="id" :hidden="true">
+          <a-input v-model:value="form.id" :disabled="showable" />
+        </a-form-item>
+        <a-form-item label="商户号" name="mchNo" v-show="!addable">
+          <a-input v-model:value="form.mchNo" disabled />
+        </a-form-item>
+        <a-form-item label="商户名称" name="mchName">
+          <a-input v-model:value="form.mchName" :disabled="showable" placeholder="请输入商户名称" />
+        </a-form-item>
+        <a-form-item label="公司名称" name="companyName">
+          <a-input v-model:value="form.mchName" :disabled="showable" placeholder="请输入公司名称" />
+        </a-form-item>
+        <a-form-item label="证件类型" name="idType">
+          <a-select
+            v-model:value="form.idType"
+            :disabled="showable"
+            allow-clear
+            placeholder="请选择证件类型"
+          >
+            <a-select-option value="1">身份证</a-select-option>
+            <a-select-option value="2">护照</a-select-option>
+            <a-select-option value="3">港澳居民来往内地通行证</a-select-option>
+            <a-select-option value="4">台湾居民来往大陆通行证</a-select-option>
+            <a-select-option value="5">户口簿</a-select-option>
+            <a-select-option value="6">军人证</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="证件号" name="idNo">
+          <a-input v-model:value="form.idNo" :disabled="showable" placeholder="请输入证件号" />
+        </a-form-item>
+        <a-form-item label="联系方式" name="contact">
+          <a-input v-model:value="form.contact" :disabled="showable" placeholder="请输入联系方式" />
+        </a-form-item>
+        <a-form-item label="法人名称" name="legalPerson">
+          <a-input
+            v-model:value="form.legalPerson"
+            :disabled="showable"
+            placeholder="请输入法人名称"
+          />
+        </a-form-item>
+        <a-form-item label="法人证件号码" name="legalPersonIdNo">
+          <a-input
+            v-model:value="form.legalPersonIdNo"
+            :disabled="showable"
+            placeholder="请输入法人证件号码"
+          />
+        </a-form-item>
+      </a-form>
+    </a-spin>
     <template #footer>
       <a-space>
         <a-button key="cancel" @click="handleCancel">取消</a-button>

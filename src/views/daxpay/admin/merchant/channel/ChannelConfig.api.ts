@@ -1,6 +1,7 @@
 import { defHttp } from '@/utils/http/axios'
 import { Result } from '#/axios'
-import { BaseEntity } from '#/web'
+import { MchEntity } from '#/web'
+import { unref } from 'vue'
 
 /**
  * 列表
@@ -9,7 +10,7 @@ export function findAll(appId) {
   return defHttp.get<Result<ChannelConfig[]>>({
     url: '/channel/config/findAllByAppId',
     params: {
-      appId,
+      appId: unref(appId),
     },
   })
 }
@@ -17,8 +18,7 @@ export function findAll(appId) {
 /**
  * 支付通道配着
  */
-export interface ChannelConfig extends BaseEntity {
-  // 通道编码
+export interface ChannelConfig extends MchEntity {
   channel?: string
   // 通道名称
   name?: string

@@ -8,79 +8,89 @@
     :open="visible"
     @close="handleCancel"
   >
-    <a-form
-      class="small-from-item"
-      :model="form"
-      ref="formRef"
-      :validate-trigger="['blur', 'change']"
-      :rules="rules"
-      :label-col="labelCol"
-      :wrapper-col="wrapperCol"
-    >
-      <a-form-item label="主键" name="id" :hidden="true">
-        <a-input v-model:value="form.id" :disabled="showable" />
-      </a-form-item>
-      <a-form-item label="商户号" name="mchNo">
-        <a-select
-          v-model:value="form.mchNo"
-          :disabled="showable"
-          placeholder="请选择商户"
-          :options="mchNoOptions"
-        />
-      </a-form-item>
-      <a-form-item label="应用号" name="appId" v-if="!addable">
-        <a-tag> {{ form.appId }}</a-tag>
-      </a-form-item>
-      <a-form-item label="应用名称" name="appName">
-        <a-input v-model:value="form.appName" :disabled="showable" placeholder="请输入应用名称" />
-      </a-form-item>
-      <a-form-item label="请求验签" name="reqSign">
-        <a-switch
-          v-model:checked="form.reqSign"
-          checked-children="启用"
-          un-checked-children="停用"
-        />
-      </a-form-item>
-      <a-form-item label="支付限额(元)" name="limitAmount">
-        <a-input-number
-          v-model:value="form.limitAmount"
-          :min="0.01"
-          :precision="2"
-          :disabled="showable"
-          placeholder="请输入支付限额(元)"
-        />
-      </a-form-item>
-      <a-form-item label="订单超时时间(分钟)" name="orderTimeout">
-        <a-input-number
-          v-model:value="form.orderTimeout"
-          :min="5"
-          :precision="0"
-          :disabled="showable"
-          placeholder="请输入订单默认超时时间(分钟)"
-        />
-      </a-form-item>
-      <a-form-item label="签名方式" name="signType">
-        <a-radio-group v-model:value="form.signType" button-style="solid">
-          <a-radio-button value="HMAC_SHA256">HMAC_SHA256</a-radio-button>
-          <a-radio-button value="SM3">SM3</a-radio-button>
-        </a-radio-group>
-      </a-form-item>
-      <a-form-item label="签名秘钥" name="signSecret">
-        <a-textarea v-model:value="form.signSecret" :disabled="showable" placeholder="请输入公钥" />
-        <a-button type="link" @click="genSignSecret">生成秘钥</a-button>
-      </a-form-item>
-      <a-form-item label="通知方式" name="notifyType">
-        <a-radio-group v-model:value="form.notifyType" button-style="solid">
-          <a-radio-button value="none">不启用</a-radio-button>
-          <a-radio-button value="http">http</a-radio-button>
-          <a-radio-button value="websocket">websocket</a-radio-button>
-          <a-radio-button disabled value="mq">消息队列</a-radio-button>
-        </a-radio-group>
-      </a-form-item>
-      <a-form-item label="通知地址" name="notifyUrl" v-if="form.notifyType !== 'none'">
-        <a-input v-model:value="form.notifyUrl" :disabled="showable" placeholder="请输入通知地址" />
-      </a-form-item>
-    </a-form>
+    <a-spin :spinning="confirmLoading">
+      <a-form
+        class="small-from-item"
+        :model="form"
+        ref="formRef"
+        :validate-trigger="['blur', 'change']"
+        :rules="rules"
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
+      >
+        <a-form-item label="主键" name="id" :hidden="true">
+          <a-input v-model:value="form.id" :disabled="showable" />
+        </a-form-item>
+        <a-form-item label="商户号" name="mchNo">
+          <a-select
+            v-model:value="form.mchNo"
+            :disabled="showable"
+            placeholder="请选择商户"
+            :options="mchNoOptions"
+          />
+        </a-form-item>
+        <a-form-item label="应用号" name="appId" v-if="!addable">
+          <a-tag> {{ form.appId }}</a-tag>
+        </a-form-item>
+        <a-form-item label="应用名称" name="appName">
+          <a-input v-model:value="form.appName" :disabled="showable" placeholder="请输入应用名称" />
+        </a-form-item>
+        <a-form-item label="请求验签" name="reqSign">
+          <a-switch
+            v-model:checked="form.reqSign"
+            checked-children="启用"
+            un-checked-children="停用"
+          />
+        </a-form-item>
+        <a-form-item label="支付限额(元)" name="limitAmount">
+          <a-input-number
+            v-model:value="form.limitAmount"
+            :min="0.01"
+            :precision="2"
+            :disabled="showable"
+            placeholder="请输入支付限额(元)"
+          />
+        </a-form-item>
+        <a-form-item label="订单超时时间(分钟)" name="orderTimeout">
+          <a-input-number
+            v-model:value="form.orderTimeout"
+            :min="5"
+            :precision="0"
+            :disabled="showable"
+            placeholder="请输入订单默认超时时间(分钟)"
+          />
+        </a-form-item>
+        <a-form-item label="签名方式" name="signType">
+          <a-radio-group v-model:value="form.signType" button-style="solid">
+            <a-radio-button value="HMAC_SHA256">HMAC_SHA256</a-radio-button>
+            <a-radio-button value="SM3">SM3</a-radio-button>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item label="签名秘钥" name="signSecret">
+          <a-textarea
+            v-model:value="form.signSecret"
+            :disabled="showable"
+            placeholder="请输入公钥"
+          />
+          <a-button type="link" @click="genSignSecret">生成秘钥</a-button>
+        </a-form-item>
+        <a-form-item label="通知方式" name="notifyType">
+          <a-radio-group v-model:value="form.notifyType" button-style="solid">
+            <a-radio-button value="none">不启用</a-radio-button>
+            <a-radio-button value="http">http</a-radio-button>
+            <a-radio-button value="websocket">websocket</a-radio-button>
+            <a-radio-button disabled value="mq">消息队列</a-radio-button>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item label="通知地址" name="notifyUrl" v-if="form.notifyType !== 'none'">
+          <a-input
+            v-model:value="form.notifyUrl"
+            :disabled="showable"
+            placeholder="请输入通知地址"
+          />
+        </a-form-item>
+      </a-form>
+    </a-spin>
     <template #footer>
       <a-space>
         <a-button key="cancel" @click="handleCancel">取消</a-button>

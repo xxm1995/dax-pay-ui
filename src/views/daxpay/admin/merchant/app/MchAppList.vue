@@ -60,8 +60,8 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
-      <MchAppEdit ref="mchApp" @ok="queryPage" />
-      <ChannelSetup ref="channelSetup" />
+      <mch-app-edit ref="mchApp" @ok="queryPage" />
+      <channel-config-list ref="channelSetup" />
     </div>
   </div>
 </template>
@@ -80,7 +80,7 @@
   import { useDict } from '@/hooks/bootx/useDict'
   import { dropdown as merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { LabeledValue } from 'ant-design-vue/lib/select'
-  import ChannelSetup from '@/views/daxpay/admin/merchant/channel/ChannelSetup.vue'
+  import ChannelConfigList from '@/views/daxpay/admin/merchant/channel/ChannelConfigList.vue'
 
   // 使用hooks
   const {
