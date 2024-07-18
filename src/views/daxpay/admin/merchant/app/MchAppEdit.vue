@@ -37,6 +37,7 @@
         </a-form-item>
         <a-form-item label="请求验签" name="reqSign">
           <a-switch
+            :disabled="showable"
             v-model:checked="form.reqSign"
             checked-children="启用"
             un-checked-children="停用"
@@ -61,7 +62,7 @@
           />
         </a-form-item>
         <a-form-item label="签名方式" name="signType">
-          <a-radio-group v-model:value="form.signType" button-style="solid">
+          <a-radio-group v-model:value="form.signType" :disabled="showable" button-style="solid">
             <a-radio-button value="HMAC_SHA256">HMAC_SHA256</a-radio-button>
             <a-radio-button value="SM3">SM3</a-radio-button>
           </a-radio-group>
@@ -72,10 +73,10 @@
             :disabled="showable"
             placeholder="请输入公钥"
           />
-          <a-button type="link" @click="genSignSecret">生成秘钥</a-button>
+          <a-button v-if="addable" type="link" @click="genSignSecret">生成秘钥</a-button>
         </a-form-item>
         <a-form-item label="通知方式" name="notifyType">
-          <a-radio-group v-model:value="form.notifyType" button-style="solid">
+          <a-radio-group v-model:value="form.notifyType" :disabled="showable" button-style="solid">
             <a-radio-button value="none">不启用</a-radio-button>
             <a-radio-button value="http">http</a-radio-button>
             <a-radio-button value="websocket">websocket</a-radio-button>

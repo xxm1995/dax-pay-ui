@@ -7,7 +7,7 @@ import { BaseEntity } from '#/web'
  */
 export const page = (params) => {
   return defHttp.get<Result<PageResult<ChannelConst>>>({
-    url: '/const/method/page',
+    url: '/const/api/page',
     params,
   })
 }
@@ -17,7 +17,7 @@ export const page = (params) => {
  */
 export const get = (id) => {
   return defHttp.get<Result<ChannelConst>>({
-    url: '/const/method/findById',
+    url: '/const/api/findById',
     params: { id },
   })
 }

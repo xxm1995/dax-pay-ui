@@ -32,7 +32,7 @@ export interface AlipayConfig extends MchEntity {
   // 商户AppId
   appId?: string
   // 支付宝商户appId
-  outAppId?: string
+  aliAppId?: string
   // 是否启用
   enable: boolean
   // 支付限额

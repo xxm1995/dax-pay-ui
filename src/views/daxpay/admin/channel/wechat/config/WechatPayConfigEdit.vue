@@ -24,7 +24,7 @@
         <a-form-item label="商户号" name="wxMchId">
           <a-input v-model:value="form.wxMchId" :disabled="showable" placeholder="请输入商户号" />
         </a-form-item>
-        <a-form-item label="应用编号" name="wxAppId">
+        <a-form-item label="应用编号(AppId)" name="wxAppId">
           <a-input
             v-model:value="form.wxAppId"
             :disabled="showable"
@@ -69,7 +69,14 @@
             <a-radio-button value="apiV3"> Api_V3 </a-radio-button>
           </a-radio-group>
         </a-form-item>
-        <a-form-item label="APIv2密钥" name="apiKeyV2">
+        <a-form-item name="apiKeyV2">
+          <template #label>
+            <basic-title
+              helpMessage="付款码支付方式只支持微信支付V2版, 使用V3时也需要进行配置, 否则无法使用付款码支付"
+            >
+              APIv2密钥
+            </basic-title>
+          </template>
           <a-textarea
             :rows="3"
             :disabled="showable"
@@ -84,6 +91,75 @@
             v-model:value="form.apiKeyV3"
             placeholder="请输入APIv3密钥"
           />
+        </a-form-item>
+        <a-form-item label="证书序列号" name="certSerialNo">
+          <a-input
+            :disabled="showable"
+            v-model:value="form.certSerialNo"
+            placeholder="请输入证书序列号"
+          />
+        </a-form-item>
+        <a-form-item name="privateKey">
+          <template #label>
+            <basic-title helpMessage="微信商户平台Api接口中的apiclient_key.pem证书">
+              私钥Key
+            </basic-title>
+          </template>
+          <a-upload
+            v-if="!form.privateKey"
+            :disabled="showable"
+            name="file"
+            :multiple="false"
+            :action="uploadAction"
+            :headers="tokenHeader"
+            :showUploadList="false"
+            @change="(info) => handleChange(info, 'privateKey')"
+          >
+            <a-button type="primary" preIcon="carbon:cloud-upload"> 私钥Key上传 </a-button>
+          </a-upload>
+          <a-input v-else defaultValue="apiclient_key.pem" disabled>
+            <template #addonAfter v-if="!showable">
+              <a-tooltip>
+                <template #title> 删除上传的证书文件 </template>
+                <icon
+                  @click="form.privateKey = ''"
+                  icon="ant-design:close-circle-outlined"
+                  :size="20"
+                />
+              </a-tooltip>
+            </template>
+          </a-input>
+        </a-form-item>
+        <a-form-item name="privateCert">
+          <template #label>
+            <basic-title helpMessage="微信商户平台Api接口中的apiclient_cert.pem证书">
+              私钥证书
+            </basic-title>
+          </template>
+          <a-upload
+            v-if="!form.privateCert"
+            :disabled="showable"
+            name="file"
+            :multiple="false"
+            :action="uploadAction"
+            :headers="tokenHeader"
+            :showUploadList="false"
+            @change="(info) => handleChange(info, 'privateCert')"
+          >
+            <a-button type="primary" preIcon="carbon:cloud-upload"> 私钥Key上传 </a-button>
+          </a-upload>
+          <a-input v-else defaultValue="apiclient_cert.pem" disabled>
+            <template #addonAfter v-if="!showable">
+              <a-tooltip>
+                <template #title> 删除上传的证书文件 </template>
+                <icon
+                  @click="form.privateCert = ''"
+                  icon="ant-design:close-circle-outlined"
+                  :size="20"
+                />
+              </a-tooltip>
+            </template>
+          </a-input>
         </a-form-item>
         <a-form-item name="p12">
           <template #label>
@@ -145,7 +221,7 @@
   const { handleCancel, diffForm, labelCol, wrapperCol, confirmLoading, visible, showable } =
     useFormEdit()
   // 文件上传
-  const { tokenHeader, uploadAction } = useUpload('/wechat/pay/config/toBase64')
+  const { tokenHeader, uploadAction } = useUpload('/readBase64')
   const { createMessage } = useMessage()
 
   // 表单
@@ -176,7 +252,7 @@
       wxMchId: [{ required: true, message: '请输入商户号' }],
       limitAmount: [{ required: true, message: '请输入单次支付限额' }],
       wxAppId: [{ required: true, message: '请输入应用编号' }],
-      appSecret: [{ required: true, message: '请输入AppSecret' }],
+      // appSecret: [{ required: true, message: '请输入AppSecret' }],
       enable: [{ required: true, message: '请选择是否启用' }],
       notifyUrl: [{ required: true, message: '请输入异步通知页面地址' }],
       returnUrl: [{ required: true, message: '请输入同步通知页面地址' }],
@@ -184,7 +260,19 @@
       apiVersion: [{ required: true, message: '请选择支付API版本' }],
       apiKeyV2: [{ required: form.value.apiVersion === 'apiV2', message: '请输入V2秘钥' }],
       apiKeyV3: [{ required: form.value.apiVersion === 'apiV3', message: '请输入V3秘钥' }],
-      // p12: [{ required: true, message: '请上传p12证书' }],
+      certSerialNo: [{ required: form.value.apiVersion === 'apiV3', message: '请输入证书序列号' }],
+      privateKey: [
+        {
+          required: form.value.apiVersion === 'apiV3',
+          message: '请上传私钥证书(apiclient_key.pem)',
+        },
+      ],
+      privateCert: [
+        {
+          required: form.value.apiVersion === 'apiV3',
+          message: '请上传私钥Key(apiclient_cert.pem)',
+        },
+      ],
       payWays: [{ required: true, message: '请选择支持的支付类型' }],
     } as Record<string, Rule[]>
   })
@@ -220,19 +308,19 @@
     formRef.value?.validate().then(() => {
       confirmLoading.value = true
       saveOrUpdate({
-        mchNo: channelConfig.value.mchNo,
-        appId: channelConfig.value.appId,
         ...form.value,
         ...diffForm(
           rawForm,
           form.value,
-          'wxMchId',
-          'wxAppId',
           'p12',
           'appSecret',
           'apiKeyV2',
           'apiKeyV3',
+          'privateKey',
+          'privateCert',
         ),
+        mchNo: channelConfig.value.mchNo,
+        appId: channelConfig.value.appId,
       })
         .then(() => {
           handleCancel()
@@ -259,7 +347,7 @@
     if (info.file.status === 'done') {
       const res = info.file.response
       if (!res.code) {
-        form[fieldName] = res.data
+        form.value[fieldName] = res.data
         createMessage.success(`${info.file.name} 上传成功!`)
       } else {
         createMessage.error(`${res.msg}`)

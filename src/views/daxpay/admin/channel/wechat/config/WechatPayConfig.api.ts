@@ -42,6 +42,12 @@ export interface WechatPayConfig extends MchEntity {
   apiKeyV3?: string
   // APPID对应的接口密码，用于获取接口调用凭证access_token时使用
   appSecret?: string
+  // 私钥Key
+  privateKey?: string
+  // 私钥证书
+  privateCert?: string
+  // 证书序列号
+  certSerialNo?: string
   // p12的文件id
   p12?: string | null
   // 应用域名，回调中会使用此参数

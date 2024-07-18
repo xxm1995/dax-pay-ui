@@ -21,8 +21,8 @@
         <a-form-item label="主键" name="id" :hidden="true">
           <a-input v-model:value="form.id" />
         </a-form-item>
-        <a-form-item label="AppId" name="outAppId">
-          <a-input v-model:value="form.outAppId" placeholder="请输入支付宝商户AppId" />
+        <a-form-item label="AppId" name="aliAppId">
+          <a-input v-model:value="form.aliAppId" placeholder="请输入支付宝商户AppId" />
         </a-form-item>
         <a-form-item label="是否启用" name="enable">
           <a-switch
@@ -203,14 +203,14 @@
   const { handleCancel, diffForm, labelCol, wrapperCol, confirmLoading, visible, showable } =
     useFormEdit()
   // 读取证书内容
-  const { tokenHeader, uploadAction } = useUpload('/alipay/config/readPem')
+  const { tokenHeader, uploadAction } = useUpload('/readText')
   const { createMessage } = useMessage()
 
   const formRef = ref<FormInstance>()
   const channelConfig = ref<ChannelConfig>({})
 
   const form = ref({
-    outAppId: '',
+    aliAppId: '',
     enable: false,
     limitAmount: 20000,
     notifyUrl: '',
@@ -230,7 +230,7 @@
   // 校验
   const rules = computed(() => {
     return {
-      outAppId: [{ required: true, message: '请输入AppId' }],
+      aliAppId: [{ required: true, message: '请输入AppId' }],
       enable: [{ required: true, message: '请选择是否启用' }],
       limitAmount: [{ required: true, message: '请输入单次支付限额' }],
       serverUrl: [{ required: true, message: '请输入请求网关地址' }],
@@ -279,8 +279,6 @@
     formRef.value?.validate().then(() => {
       confirmLoading.value = true
       saveOrUpdate({
-        mchNo: channelConfig.value.mchNo,
-        appId: channelConfig.value.appId,
         ...form.value,
         ...diffForm(
           rawForm,
@@ -291,6 +289,8 @@
           'alipayRootCert',
           'privateKey',
         ),
+        mchNo: channelConfig.value.mchNo,
+        appId: channelConfig.value.appId,
       })
         .then(() => {
           createMessage.success('保存成功')
