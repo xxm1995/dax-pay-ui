@@ -29,50 +29,52 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table
-        resizable
-        :height="650"
-        :stripe="false"
-        ref="xTable"
-        border="inner"
-        :loading="loading"
-        :tree-config="{ childrenField: 'children' }"
-        :data="tableData"
-      >
-        <vxe-column field="name" title="名称" :min-width="200" tree-node>
-          <template #default="{ row }">
-            <a-link @click="show(row)">{{ row.name }}</a-link>
-          </template>
-        </vxe-column>
-        <vxe-column field="code" title="编码" :min-width="150" />
-        <vxe-column field="remark" title="备注" :min-width="200" />
-        <vxe-column fixed="right" width="270" :showOverflow="false" title="操作">
-          <template #default="{ row }">
-            <a-link @click="addChildren(row)">添加子角色</a-link>
-            <a-divider type="vertical" />
-            <a-link @click="edit(row)">编辑</a-link>
-            <a-divider type="vertical" />
-            <a-link danger @click="remove(row)">删除</a-link>
-            <a-divider type="vertical" />
-            <a-dropdown>
-              <a> 授权 <Icon icon="ant-design:down-outlined" :size="12" :min-width="280" /> </a>
-              <template #overlay>
-                <a-menu>
-                  <a-menu-item>
-                    <a-link @click="handleRoleMenu(row)">菜单权限</a-link>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a-link @click="handleRolePath(row)">请求权限</a-link>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a-link @click="handleRoleCode(row)">权限码</a-link>
-                  </a-menu-item>
-                </a-menu>
-              </template>
-            </a-dropdown>
-          </template>
-        </vxe-column>
-      </vxe-table>
+      <div class="h-70vh">
+        <vxe-table
+          resizable
+          height="auto"
+          :stripe="false"
+          ref="xTable"
+          border="inner"
+          :loading="loading"
+          :tree-config="{ childrenField: 'children' }"
+          :data="tableData"
+        >
+          <vxe-column field="name" title="名称" :min-width="200" tree-node>
+            <template #default="{ row }">
+              <a-link @click="show(row)">{{ row.name }}</a-link>
+            </template>
+          </vxe-column>
+          <vxe-column field="code" title="编码" :min-width="150" />
+          <vxe-column field="remark" title="备注" :min-width="200" />
+          <vxe-column fixed="right" width="270" :showOverflow="false" title="操作">
+            <template #default="{ row }">
+              <a-link @click="addChildren(row)">添加子角色</a-link>
+              <a-divider type="vertical" />
+              <a-link @click="edit(row)">编辑</a-link>
+              <a-divider type="vertical" />
+              <a-link danger @click="remove(row)">删除</a-link>
+              <a-divider type="vertical" />
+              <a-dropdown>
+                <a> 授权 <Icon icon="ant-design:down-outlined" :size="12" :min-width="280" /> </a>
+                <template #overlay>
+                  <a-menu>
+                    <a-menu-item>
+                      <a-link @click="handleRoleMenu(row)">菜单权限</a-link>
+                    </a-menu-item>
+                    <a-menu-item>
+                      <a-link @click="handleRolePath(row)">请求权限</a-link>
+                    </a-menu-item>
+                    <a-menu-item>
+                      <a-link @click="handleRoleCode(row)">权限码</a-link>
+                    </a-menu-item>
+                  </a-menu>
+                </template>
+              </a-dropdown>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <RoleEdit ref="roleEdit" @ok="queryPage" />
       <RoleMenuModal ref="roleMenuModal" />
       <RoleCodeModal ref="roleCodeModal" />

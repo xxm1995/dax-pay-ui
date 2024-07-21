@@ -16,93 +16,98 @@
           >
         </template>
       </vxe-toolbar>
-      <vxe-table
-        row-id="id"
-        ref="xTable"
-        :cell-style="cellStyle"
-        :data="pagination.records"
-        :loading="loading"
-        :sort-config="{ remote: true, trigger: 'cell' }"
-        @sort-change="sortChange"
-      >
-        <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderNo" title="订单号" :min-width="230">
-          <template #default="{ row }">
-            <a @click="show(row)">
-              {{ row.orderNo }}
-            </a>
-          </template>
-        </vxe-column>
-        <vxe-column field="title" title="标题" :min-width="230" />
-        <vxe-column field="channel" title="支付通道" :min-width="120">
-          <template #default="{ row }">
-            {{ dictConvert('PayChannel', row.channel) }}
-          </template>
-        </vxe-column>
-        <vxe-column field="bizOrderNo" title="商户订单号" :min-width="230" />
-        <vxe-column field="amount" title="金额(元)" :min-width="120" sortable>
-          <template #default="{ row }">
-            {{ row.amount }}
-          </template>
-        </vxe-column>
-        <vxe-column field="refundableBalance" title="可退余额(元)" :min-width="120" sortable>
-          <template #default="{ row }">
-            {{ row.refundableBalance }}
-          </template>
-        </vxe-column>
-        <vxe-column field="status" title="支付状态" :min-width="120">
-          <template #default="{ row }">{{ dictConvert('PayStatus', row.status) || '无' }}</template>
-        </vxe-column>
-        <vxe-column field="refundStatus" title="退款终态" :min-width="120">
-          <template #default="{ row }">{{
-            dictConvert('PayOrderRefundStatus', row.refundStatus) || '无'
-          }}</template>
-        </vxe-column>
-        <vxe-column field="allocation" title="分账" :min-width="160">
-          <template #default="{ row }">
-            <a-tag v-if="row.allocation" color="green">支持</a-tag>
-            <a-tag v-else color="red">不支持</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="allocStatus" title="分账状态" :min-width="160">
-          <template #default="{ row }">
-            {{ dictConvert('PayOrderAllocStatus', row.allocStatus) || '无' }}
-          </template>
-        </vxe-column>
-        <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
-        <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
-          <template #default="{ row }">
-            <a-link @click="show(row)">查看</a-link>
-            <a-divider type="vertical" />
-            <a-dropdown>
-              <a>
-                更多
-                <icon icon="ant-design:down-outlined" :size="12" />
+      <div class="h-65vh">
+        <vxe-table
+          height="auto"
+          row-id="id"
+          ref="xTable"
+          :cell-style="cellStyle"
+          :data="pagination.records"
+          :loading="loading"
+          :sort-config="{ remote: true, trigger: 'cell' }"
+          @sort-change="sortChange"
+        >
+          <vxe-column type="seq" title="序号" width="60" />
+          <vxe-column field="orderNo" title="订单号" :min-width="230">
+            <template #default="{ row }">
+              <a @click="show(row)">
+                {{ row.orderNo }}
               </a>
-              <template #overlay>
-                <a-menu>
-<!--                  <a-menu-item>-->
-<!--                    <a-link @click="sync(row)">同步</a-link>-->
-<!--                  </a-menu-item>-->
-<!--                  <a-menu-item v-if="[payStatus.PROGRESS].includes(row.status)">-->
-<!--                    <a-link @click="closeOrder(row)" danger>关闭</a-link>-->
-<!--                  </a-menu-item>-->
-<!--                  <a-menu-item-->
-<!--                    v-if="row.allocStatus === 'waiting' && payStatus.SUCCESS === row.status"-->
-<!--                  >-->
-<!--                    <a-link @click="allocation(row)">分账</a-link>-->
-<!--                  </a-menu-item>-->
-<!--                  <a-menu-item-->
-<!--                    v-if="[payStatus.SUCCESS].includes(row.status) && row.refundableBalance > 0"-->
-<!--                  >-->
-<!--                    <a-link @click="refund(row)" danger>退款</a-link>-->
-<!--                  </a-menu-item>-->
-                </a-menu>
-              </template>
-            </a-dropdown>
-          </template>
-        </vxe-column>
-      </vxe-table>
+            </template>
+          </vxe-column>
+          <vxe-column field="title" title="标题" :min-width="230" />
+          <vxe-column field="channel" title="支付通道" :min-width="120">
+            <template #default="{ row }">
+              {{ dictConvert('PayChannel', row.channel) }}
+            </template>
+          </vxe-column>
+          <vxe-column field="bizOrderNo" title="商户订单号" :min-width="230" />
+          <vxe-column field="amount" title="金额(元)" :min-width="120" sortable>
+            <template #default="{ row }">
+              {{ row.amount }}
+            </template>
+          </vxe-column>
+          <vxe-column field="refundableBalance" title="可退余额(元)" :min-width="120" sortable>
+            <template #default="{ row }">
+              {{ row.refundableBalance }}
+            </template>
+          </vxe-column>
+          <vxe-column field="status" title="支付状态" :min-width="120">
+            <template #default="{ row }">{{
+              dictConvert('PayStatus', row.status) || '无'
+            }}</template>
+          </vxe-column>
+          <vxe-column field="refundStatus" title="退款终态" :min-width="120">
+            <template #default="{ row }">{{
+              dictConvert('PayOrderRefundStatus', row.refundStatus) || '无'
+            }}</template>
+          </vxe-column>
+          <vxe-column field="allocation" title="分账" :min-width="160">
+            <template #default="{ row }">
+              <a-tag v-if="row.allocation" color="green">支持</a-tag>
+              <a-tag v-else color="red">不支持</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="allocStatus" title="分账状态" :min-width="160">
+            <template #default="{ row }">
+              {{ dictConvert('PayOrderAllocStatus', row.allocStatus) || '无' }}
+            </template>
+          </vxe-column>
+          <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
+          <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
+            <template #default="{ row }">
+              <a-link @click="show(row)">查看</a-link>
+              <a-divider type="vertical" />
+              <a-dropdown>
+                <a>
+                  更多
+                  <icon icon="ant-design:down-outlined" :size="12" />
+                </a>
+                <template #overlay>
+                  <a-menu>
+                    <!--                  <a-menu-item>-->
+                    <!--                    <a-link @click="sync(row)">同步</a-link>-->
+                    <!--                  </a-menu-item>-->
+                    <!--                  <a-menu-item v-if="[payStatus.PROGRESS].includes(row.status)">-->
+                    <!--                    <a-link @click="closeOrder(row)" danger>关闭</a-link>-->
+                    <!--                  </a-menu-item>-->
+                    <!--                  <a-menu-item-->
+                    <!--                    v-if="row.allocStatus === 'waiting' && payStatus.SUCCESS === row.status"-->
+                    <!--                  >-->
+                    <!--                    <a-link @click="allocation(row)">分账</a-link>-->
+                    <!--                  </a-menu-item>-->
+                    <!--                  <a-menu-item-->
+                    <!--                    v-if="[payStatus.SUCCESS].includes(row.status) && row.refundableBalance > 0"-->
+                    <!--                  >-->
+                    <!--                    <a-link @click="refund(row)" danger>退款</a-link>-->
+                    <!--                  </a-menu-item>-->
+                  </a-menu>
+                </template>
+              </a-dropdown>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <vxe-pager
         size="medium"
         :loading="loading"
@@ -128,7 +133,7 @@
   import { VxeTableInstance, VxeToolbarInstance, VxeTable, VxeToolbar } from 'vxe-table'
   import ALink from '@/components/Link/Link.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
-  import {Icon} from "@/components/Icon";
+  import { Icon } from '@/components/Icon'
 
   const payStatus = ref('')
   // 使用hooks

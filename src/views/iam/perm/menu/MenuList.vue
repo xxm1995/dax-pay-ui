@@ -41,63 +41,65 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table
-        resizable
-        :height="650"
-        ref="xTable"
-        border="inner"
-        :stripe="false"
-        :loading="loading"
-        :tree-config="{ childrenField: 'children' }"
-        :data="tableData"
-      >
-        <vxe-column field="title" title="菜单名称" tree-node />
-        <vxe-column field="name" title="路由名称" />
-        <vxe-column field="path" title="请求路径" />
-        <vxe-column field="sortNo" title="排序" :visible="false" />
-        <vxe-column field="component" title="组件" />
-        <vxe-column field="icon" title="图标">
-          <template #default="{ row }">
-            <div v-if="row.icon">
-              <icon :icon="row.icon" />
-            </div>
-          </template>
-        </vxe-column>
-        <vxe-column title="操作" fixed="right" width="220" :showOverflow="false">
-          <template #default="{ row }">
-            <a href="javascript:" @click="show(row)">查看</a>
-            <template v-if="String(row.menuType) !== '2'">
-              <a-divider type="vertical" />
-              <a href="javascript:" v-if="!row.internal" @click="edit(row)">编辑</a>
-              <a href="javascript:" v-else disabled>编辑</a>
-              <a-divider type="vertical" />
-              <a-dropdown>
-                <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
-                <template #overlay>
-                  <a-menu>
-                    <a-menu-item>
-                      <a @click="addChildren(row)">添加下级</a>
-                    </a-menu-item>
-                    <a-menu-item>
-                      <a @click="copy(row.id)">复制</a>
-                    </a-menu-item>
-                    <a-menu-item>
-                      <a
-                        href="javascript:"
-                        v-if="!row.internal"
-                        @click="remove(row)"
-                        style="color: red"
-                        >删除</a
-                      >
-                      <a href="javascript:" v-else disabled>删除</a>
-                    </a-menu-item>
-                  </a-menu>
-                </template>
-              </a-dropdown>
+      <div class="h-70vh">
+        <vxe-table
+          resizable
+          height="auto"
+          ref="xTable"
+          border="inner"
+          :stripe="false"
+          :loading="loading"
+          :tree-config="{ childrenField: 'children' }"
+          :data="tableData"
+        >
+          <vxe-column field="title" title="菜单名称" tree-node />
+          <vxe-column field="name" title="路由名称" />
+          <vxe-column field="path" title="请求路径" />
+          <vxe-column field="sortNo" title="排序" :visible="false" />
+          <vxe-column field="component" title="组件" />
+          <vxe-column field="icon" title="图标">
+            <template #default="{ row }">
+              <div v-if="row.icon">
+                <icon :icon="row.icon" />
+              </div>
             </template>
-          </template>
-        </vxe-column>
-      </vxe-table>
+          </vxe-column>
+          <vxe-column title="操作" fixed="right" width="220" :showOverflow="false">
+            <template #default="{ row }">
+              <a href="javascript:" @click="show(row)">查看</a>
+              <template v-if="String(row.menuType) !== '2'">
+                <a-divider type="vertical" />
+                <a href="javascript:" v-if="!row.internal" @click="edit(row)">编辑</a>
+                <a href="javascript:" v-else disabled>编辑</a>
+                <a-divider type="vertical" />
+                <a-dropdown>
+                  <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
+                  <template #overlay>
+                    <a-menu>
+                      <a-menu-item>
+                        <a @click="addChildren(row)">添加下级</a>
+                      </a-menu-item>
+                      <a-menu-item>
+                        <a @click="copy(row.id)">复制</a>
+                      </a-menu-item>
+                      <a-menu-item>
+                        <a
+                          href="javascript:"
+                          v-if="!row.internal"
+                          @click="remove(row)"
+                          style="color: red"
+                          >删除</a
+                        >
+                        <a href="javascript:" v-else disabled>删除</a>
+                      </a-menu-item>
+                    </a-menu>
+                  </template>
+                </a-dropdown>
+              </template>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <MenuEdit ref="menuEdit" @ok="queryPage" />
     </div>
   </div>

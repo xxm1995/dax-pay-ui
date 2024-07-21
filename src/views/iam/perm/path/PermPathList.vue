@@ -41,28 +41,30 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table
-        resizable
-        :height="650"
-        ref="xTable"
-        border="inner"
-        :stripe="false"
-        :loading="loading"
-        :tree-config="{ childrenField: 'children' }"
-        :data="tableData"
-      >
-        <vxe-column field="name" title="名称" :min-width="200" tree-node />
-        <vxe-column field="path" title="请求路径" :min-width="500">
-          <template #default="{ row }">
-            {{ row.leaf ? `[${row.method}] ${row.path}` : '' }}
-          </template>
-        </vxe-column>
-        <vxe-column title="操作" fixed="right" :width="100" :showOverflow="false">
-          <template #default="{ row }">
-            <a-link v-if="row.leaf" @click="show(row)">查看</a-link>
-          </template>
-        </vxe-column>
-      </vxe-table>
+      <div class="h-70vh">
+        <vxe-table
+          resizable
+          height="auto"
+          ref="xTable"
+          border="inner"
+          :stripe="false"
+          :loading="loading"
+          :tree-config="{ childrenField: 'children' }"
+          :data="tableData"
+        >
+          <vxe-column field="name" title="名称" :min-width="200" tree-node />
+          <vxe-column field="path" title="请求路径" :min-width="500">
+            <template #default="{ row }">
+              {{ row.leaf ? `[${row.method}] ${row.path}` : '' }}
+            </template>
+          </vxe-column>
+          <vxe-column title="操作" fixed="right" :width="100" :showOverflow="false">
+            <template #default="{ row }">
+              <a-link v-if="row.leaf" @click="show(row)">查看</a-link>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
     </div>
     <PermPathInfo ref="permPathInfo" />
   </div>

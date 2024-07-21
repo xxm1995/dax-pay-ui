@@ -29,40 +29,42 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table
-        resizable
-        :height="650"
-        ref="xTable"
-        border="inner"
-        :stripe="false"
-        :loading="loading"
-        :tree-config="{ childrenField: 'children' }"
-        :data="tableData"
-      >
-        <vxe-column field="name" title="名称" tree-node />
-        <vxe-column field="code" title="权限码" />
-        <vxe-column title="操作" fixed="right" width="220" :showOverflow="false">
-          <template #default="{ row }">
-            <a href="javascript:" @click="show(row)">查看</a>
-            <a-divider type="vertical" />
-            <a href="javascript:" @click="edit(row)">编辑</a>
-            <a-divider type="vertical" />
-            <a-dropdown>
-              <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
-              <template #overlay>
-                <a-menu>
-                  <a-menu-item v-if="!row.leaf">
-                    <a-link @click="addChildren(row)">添加下级</a-link>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a-link href="javascript:" danger>删除</a-link>
-                  </a-menu-item>
-                </a-menu>
-              </template>
-            </a-dropdown>
-          </template>
-        </vxe-column>
-      </vxe-table>
+      <div class="h-70vh">
+        <vxe-table
+          resizable
+          height="auto"
+          ref="xTable"
+          border="inner"
+          :stripe="false"
+          :loading="loading"
+          :tree-config="{ childrenField: 'children' }"
+          :data="tableData"
+        >
+          <vxe-column field="name" title="名称" tree-node />
+          <vxe-column field="code" title="权限码" />
+          <vxe-column title="操作" fixed="right" width="220" :showOverflow="false">
+            <template #default="{ row }">
+              <a href="javascript:" @click="show(row)">查看</a>
+              <a-divider type="vertical" />
+              <a href="javascript:" @click="edit(row)">编辑</a>
+              <a-divider type="vertical" />
+              <a-dropdown>
+                <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
+                <template #overlay>
+                  <a-menu>
+                    <a-menu-item v-if="!row.leaf">
+                      <a-link @click="addChildren(row)">添加下级</a-link>
+                    </a-menu-item>
+                    <a-menu-item>
+                      <a-link href="javascript:" danger>删除</a-link>
+                    </a-menu-item>
+                  </a-menu>
+                </template>
+              </a-dropdown>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <PermCodeEdit ref="codeEdit" @ok="queryPage" />
     </div>
   </div>

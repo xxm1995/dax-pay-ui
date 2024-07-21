@@ -9,7 +9,7 @@ export default function <T>(queryPageCallback: CallableFunction) {
   // 数据内容
   const model = reactive({
     pages: {
-      size: 10,
+      size: 15,
       current: 1,
     },
     queryParam: {},
