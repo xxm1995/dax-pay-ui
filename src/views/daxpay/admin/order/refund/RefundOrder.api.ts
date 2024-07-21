@@ -1,64 +1,64 @@
 import { defHttp } from '@/utils/http/axios'
 import { PageResult, Result } from '#/axios'
-import {BaseEntity, MchEntity} from '#/web'
+import { MchEntity } from '#/web'
 
 /**
  * 分页
  */
 export function page(params) {
-  return defHttp.get<Result<PageResult<PayOrder>>>({
-    url: '/order/pay/page',
+  return defHttp.get<Result<PageResult<RefundOrder>>>({
+    url: '/order/refund/page',
     params,
   })
 }
 
 /**
- * 获取订单
+ * 获取单条
  */
-export function getOrder(id: number) {
-  return defHttp.get<Result<PayOrder>>({
-    url: '/order/pay/findById',
+export function get(id) {
+  return defHttp.get<Result<RefundOrder>>({
+    url: '/order/refund/findById',
     params: { id },
   })
 }
 
 /**
- * 获取订单
+ * 获取单条
  */
-export function getOrderByOrderNo(orderNo: string) {
-  return defHttp.get<Result>({
-    url: '/order/pay/findByOrderNo',
-    params: { orderNo },
+export function getByRefundNo(refundNo) {
+  return defHttp.get<Result<any>>({
+    url: '/order/refund/findByRefundNo',
+    params: { refundNo },
   })
 }
 
 /**
- * 根据订单号同步支付状态
+ * 发起退款
  */
-export function syncByOrderNo(orderNo: string) {
-  return defHttp.post<Result>({
-    url: '/order/pay/syncByOrderNo',
-    params: { orderNo },
-  })
-}
-
-/**
- * 关闭支付记录
- */
-export function close(orderNo) {
+export function refund(params) {
   return defHttp.post<Result<void>>({
-    url: '/order/pay/close',
-    params: { orderNo },
+    url: '/order/refund/refund',
+    data: params,
   })
 }
 
 /**
- * 触发分账
+ * 退款信息同步
  */
-export function allocationByOrderNo(orderNo) {
+export function syncByRefundNo(refundNo) {
   return defHttp.post<Result<void>>({
-    url: '/order/pay/allocation',
-    params: { orderNo },
+    url: '/order/refund/syncByRefundNo',
+    params: { refundNo },
+  })
+}
+
+/**
+ * 退款重试
+ */
+export function resetRefund(id) {
+  return defHttp.post<Result<void>>({
+    url: '/order/refund/resetRefund',
+    params: { id },
   })
 }
 
@@ -67,49 +67,41 @@ export function allocationByOrderNo(orderNo) {
  */
 export function getTotalAmount(param) {
   return defHttp.get<Result<number>>({
-    url: '/order/pay/getTotalAmount',
+    url: '/order/refund/getTotalAmount',
     params: param,
   })
 }
 
 /**
- * 支付记录
+ * 退款记录
  */
-export interface PayOrder extends MchEntity {
-  // 标题
-  title?: string
-  // 商户订单号
-  bizOrderNo?: string
+export interface RefundOrder extends MchEntity {
+  // 支付订单ID
+  orderId?: string
   // 支付订单号
   orderNo?: string
-  // 三方系统交易号
-  outOrderNo?: string
-  // 描述
-  description?: any
-  // 是否支持分账
-  allocation?: boolean
-  // 自动分账
-  autoAllocation?: boolean
-  // 支付通道
-  channel?: string
-  // 支付方式
-  method?: string
-  // 金额
+  // 商户支付订单号
+  bizOrderNo?: string
+  // 支付标题
+  title?: string
+  // 退款号
+  refundNo?: string
+  // 商户退款号
+  bizRefundNo?: string
+  // 通道退款号
+  outRefundNo?: string
+  // 订单金额
+  orderAmount?: number
+  // 退款金额
   amount?: number
-  // 可退款余额
-  refundableBalance?: number
-  // 支付状态
-  status?: string
+  // 退款通道
+  channel?: string
   // 退款状态
-  refundStatus?: string
-  // 分账状态
-  allocStatus?: string
-  // 支付时间
-  payTime?: string
-  // 过期时间
-  expiredTime?: string
-  // 关闭时间
-  closeTime?: string
+  status?: string
+  // 退款结束时间
+  finishTime?: string
+  // 退款原因
+  reason?: string
   // 异步通知地址
   notifyUrl?: string
   // 商户扩展参数
