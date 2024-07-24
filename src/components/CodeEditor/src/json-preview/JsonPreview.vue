@@ -10,3 +10,8 @@
     data: Object,
   })
 </script>
+<style lang="less" scoped>
+  :deep(.vjs-key) {
+    white-space: nowrap;
+  }
+</style>

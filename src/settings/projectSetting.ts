@@ -50,7 +50,7 @@ const setting: ProjectConfig = {
   showLogo: true,
 
   // 是否显示页脚
-  showFooter: true,
+  showFooter: false,
 
   // 页头设置
   headerSetting: {

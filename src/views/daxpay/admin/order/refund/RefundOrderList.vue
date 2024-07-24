@@ -20,9 +20,10 @@
         </template>
       </vxe-toolbar>
       <vxe-table
+        height="auto"
         row-id="id"
-        :cell-style="cellStyle"
         ref="xTable"
+        :cell-style="cellStyle"
         :sort-config="{ remote: true, trigger: 'cell' }"
         :data="pagination.records"
         :loading="loading"

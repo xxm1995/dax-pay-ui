@@ -1,0 +1,45 @@
+import { defHttp } from '@/utils/http/axios'
+import { PageResult, Result } from '#/axios'
+import { MchEntity } from '#/web'
+
+/**
+ * 分页
+ */
+export function page(params) {
+  return defHttp.get<Result<PageResult<TradeCallbackRecord>>>({
+    url: '/record/callback/page',
+    params,
+  })
+}
+
+/**
+ * 获取单条
+ */
+export function get(id) {
+  return defHttp.get<Result<TradeCallbackRecord>>({
+    url: '/record/callback/findById',
+    params: { id },
+  })
+}
+
+/**
+ * 支付回调记录
+ */
+export interface TradeCallbackRecord extends MchEntity {
+  // 交易号
+  tradeNo?: string
+  // 通道交易号
+  outTradeNo?: string
+  // 支付通道
+  channel?: string
+  // 回调类型
+  callbackType?: string
+  // 通知消息
+  notifyInfo?: string
+  // 回调处理状态
+  status?: string
+  // 修复号
+  repairNo?: string
+  // 提示信息
+  errorMsg?: string
+}

@@ -3,7 +3,6 @@
     <div class="m-3 p-3 pt-5 bg-white">
       <b-query
         :query-params="model.queryParam"
-        :default-item-count="3"
         :fields="fields"
         @query="queryPage"
         @reset="resetQueryParams"
@@ -18,35 +17,35 @@
           ref="xTable"
           :data="pagination.records"
           :loading="loading"
+          :sort-config="{ remote: true, trigger: 'cell' }"
+          @sort-change="sortChange"
         >
           <vxe-column type="seq" title="序号" width="60" />
-          <vxe-column field="title" title="标题" :min-width="230" />
-          <vxe-column field="amount" title="金额(元)" :min-width="120" sortable>
-            <template #default="{ row }">
-              {{ row.amount || '空' }}
-            </template>
-          </vxe-column>
-          <vxe-column field="type" title="流水类型" :min-width="120">
-            <template #default="{ row }">
-              <a-tag>{{ dictConvert('TradeFlowRecordType', row.type) || '无' }}</a-tag>
-            </template>
-          </vxe-column>
-          <vxe-column field="channel" title="交易通道" :min-width="100">
-            <template #default="{ row }">
-              <a-tag>{{ dictConvert('AsyncPayChannel', row.channel) || '无' }}</a-tag>
-            </template>
-          </vxe-column>
-          <vxe-column field="tradeNo" title="本地交易号" :min-width="230">
+          <vxe-column field="orderId" title="订单号" :min-width="230">
             <template #default="{ row }">
               <a @click="showOrder(row)">
                 {{ row.tradeNo }}
               </a>
             </template>
           </vxe-column>
-          <vxe-column field="bizTradeNo" title="商户交易号" :min-width="230" />
-          <vxe-column field="outTradeNo" title="通道交易号" :min-width="230" />
-          <vxe-column field="createTime" title="时间" :min-width="160" sortable />
-          <vxe-column fixed="right" :min-width="60" :showOverflow="false" title="操作">
+          <vxe-column field="channel" title="支付通道" :min-width="100">
+            <template #default="{ row }">
+              <a-tag>{{ dictConvert('PayChannel', row.channel) || '无' }}</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="callbackType" title="回调类型" :min-width="100">
+            <template #default="{ row }">
+              <a-tag>{{ dictConvert('PaymentType', row.callbackType) || '无' }}</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="status" title="处理状态" :min-width="100">
+            <template #default="{ row }">
+              <a-tag>{{ dictConvert('PayCallbackStatus', row.status) || '无' }}</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="msg" title="提示信息" :min-width="250" />
+          <vxe-column field="createTime" title="通知时间" sortable :min-width="100" />
+          <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <span>
                 <a-link @click="show(row)">查看</a-link>
@@ -63,26 +62,25 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
+      <CallbackRecordInfo ref="callbackRecordInfo" />
+      <PayOrderInfo ref="payOrderInfo" />
+      <RefundOrderInfo ref="refundOrderInfo" />
     </div>
-    <TradeFlowRecordInfo ref="tradeFlowRecordInfo" />
-    <PayOrderInfo ref="payOrderInfo" />
-    <RefundOrderInfo ref="refundOrderInfo" />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue'
-  import { page } from './TradeFlowRecord.api'
+  import { page, TradeCallbackRecord } from './TradeCallbackRecord.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
-  import BQuery from '@/components/Bootx/Query/BQuery.vue'
+  import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { LIST, QueryField, STRING } from '@/components/Bootx/Query/Query'
   import { useDict } from '@/hooks/bootx/useDict'
+  import CallbackRecordInfo from './TradeCallbackRecordInfo.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import PayOrderInfo from '@/views/daxpay/admin/order/pay/PayOrderInfo.vue'
   import RefundOrderInfo from '@/views/daxpay/admin/order/refund/RefundOrderInfo.vue'
-  import ALink from '@/components/Link/Link.vue'
-  import TradeFlowRecordInfo from './TradeFlowRecordInfo.vue'
 
   // 使用hooks
   const {
@@ -90,47 +88,47 @@
     pageQueryResHandel,
     resetQueryParams,
     pagination,
+    sortChange,
+    sortParam,
     pages,
     model,
     loading,
   } = useTablePage(queryPage)
   const { dictConvert, dictDropDown } = useDict()
 
-  const payChannelList = ref<LabeledValue[]>([])
-  const tradeFlowRecordTypeList = ref<LabeledValue[]>([])
+  let asyncPayChannelList = ref<LabeledValue[]>([])
+  let PayCallbackStatusList = ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'title', type: STRING, name: '订单标题', placeholder: '请输入订单标题' },
       { field: 'tradeNo', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
-      { field: 'bizTradeNo', type: STRING, name: '商户交易号', placeholder: '请输入商户交易号' },
       { field: 'outTradeNo', type: STRING, name: '通道交易号', placeholder: '请输入通道交易号' },
-      {
-        field: 'type',
-        type: LIST,
-        name: '流水类型',
-        placeholder: '请选择流水类型',
-        selectList: tradeFlowRecordTypeList.value,
-      },
       {
         field: 'channel',
         type: LIST,
-        name: '交易通道',
-        placeholder: '请选择交易通道',
-        selectList: payChannelList.value,
+        name: '支付通道',
+        placeholder: '请选择支付通道',
+        selectList: asyncPayChannelList.value,
+      },
+      {
+        field: 'status',
+        type: LIST,
+        name: '处理状态',
+        placeholder: '请选择消息处理状态',
+        selectList: PayCallbackStatusList.value,
       },
     ] as QueryField[]
   })
 
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
+  const callbackRecordInfo = ref<any>()
   const payOrderInfo = ref<any>()
   const refundOrderInfo = ref<any>()
-  const tradeFlowRecordInfo = ref<any>()
 
   onMounted(() => {
-    init()
+    initData()
     vxeBind()
     queryPage()
   })
@@ -141,9 +139,9 @@
   /**
    * 初始化
    */
-  async function init() {
-    tradeFlowRecordTypeList.value = await dictDropDown('TradeFlowRecordType')
-    payChannelList.value = await dictDropDown('PayChannel')
+  async function initData() {
+    asyncPayChannelList.value = await dictDropDown('AsyncPayChannel')
+    PayCallbackStatusList.value = await dictDropDown('PayCallbackStatus')
   }
 
   /**
@@ -154,6 +152,7 @@
     page({
       ...model.queryParam,
       ...pages,
+      ...sortParam,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
@@ -163,16 +162,16 @@
    * 查看
    */
   function show(record) {
-    tradeFlowRecordInfo.value.init(record.id)
+    callbackRecordInfo.value.init(record.id)
   }
 
   /**
-   * 查看支付单信息
+   * 查看订单单信息
    */
-  function showOrder(record) {
-    if (record.type === 'pay') {
+  function showOrder(record: TradeCallbackRecord) {
+    if (record.callbackType === 'pay') {
       payOrderInfo.value.init(record.tradeNo)
-    } else if (record.type === 'refund') {
+    } else {
       refundOrderInfo.value.init(record.tradeNo)
     }
   }

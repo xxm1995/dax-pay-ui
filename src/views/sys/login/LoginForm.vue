@@ -69,7 +69,7 @@
       <a-form-item class="enter-x" style="margin-bottom: 8px">
         <a-button type="primary" size="large" block @click="handleLogin"> 登录 </a-button>
       </a-form-item>
-      <a-row class="enter-x">
+      <a-row v-if="false" class="enter-x">
         <a-button block @click="setLoginState(LoginStateEnum.REGISTER)"> 注册 </a-button>
       </a-row>
     </a-form>
