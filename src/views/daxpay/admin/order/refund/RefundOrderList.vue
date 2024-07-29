@@ -19,59 +19,61 @@
           >
         </template>
       </vxe-toolbar>
-      <vxe-table
-        height="auto"
-        row-id="id"
-        ref="xTable"
-        :cell-style="cellStyle"
-        :sort-config="{ remote: true, trigger: 'cell' }"
-        :data="pagination.records"
-        :loading="loading"
-        @sort-change="sortChange"
-      >
-        <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="refundNo" title="退款号" :min-width="230">
-          <template #default="{ row }">
-            <a @click="show(row)">
-              {{ row.refundNo }}
-            </a>
-          </template>
-        </vxe-column>
-        <vxe-column field="title" title="原支付标题" :min-width="160" />
-        <vxe-column field="orderNo" title="支付订单号" :min-width="230">
-          <template #default="{ row }">
-            <a @click="showPayOrder(row)">
-              {{ row.orderNo }}
-            </a>
-          </template>
-        </vxe-column>
-        <vxe-column field="channel" title="支付通道" :min-width="120">
-          <template #default="{ row }">
-            {{ dictConvert('PayChannel', row.channel) }}
-          </template>
-        </vxe-column>
-        <vxe-column field="amount" title="退款金额(元)" :min-width="140">
-          <template #default="{ row }">
-            {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }}
-          </template>
-        </vxe-column>
-        <vxe-column field="refundStatus" title="状态" :min-width="80">
-          <template #default="{ row }">
-            {{ dictConvert('RefundStatus', row.status) }}
-          </template>
-        </vxe-column>
-        <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
-          <template #default="{ row }">
-            <a-link @click="show(row)">查看</a-link>
-            <a-divider type="vertical" />
-            <!--      钱包不可以同步      -->
-            <a-link @click="sync(row)">同步</a-link>
-            <a-divider type="vertical" />
-            <a-link :disabled="!(row.status === 'fail')" @click="reset(row)">重试</a-link>
-          </template>
-        </vxe-column>
-      </vxe-table>
+      <div class="h-65vh">
+        <vxe-table
+          height="auto"
+          row-id="id"
+          ref="xTable"
+          :cell-style="cellStyle"
+          :sort-config="{ remote: true, trigger: 'cell' }"
+          :data="pagination.records"
+          :loading="loading"
+          @sort-change="sortChange"
+        >
+          <vxe-column type="seq" title="序号" width="60" />
+          <vxe-column field="refundNo" title="退款号" :min-width="230">
+            <template #default="{ row }">
+              <a @click="show(row)">
+                {{ row.refundNo }}
+              </a>
+            </template>
+          </vxe-column>
+          <vxe-column field="title" title="原支付标题" :min-width="160" />
+          <vxe-column field="orderNo" title="支付订单号" :min-width="230">
+            <template #default="{ row }">
+              <a @click="showPayOrder(row)">
+                {{ row.orderNo }}
+              </a>
+            </template>
+          </vxe-column>
+          <vxe-column field="channel" title="支付通道" :min-width="120">
+            <template #default="{ row }">
+              {{ dictConvert('PayChannel', row.channel) }}
+            </template>
+          </vxe-column>
+          <vxe-column field="amount" title="退款金额(元)" :min-width="140">
+            <template #default="{ row }">
+              {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }}
+            </template>
+          </vxe-column>
+          <vxe-column field="refundStatus" title="状态" :min-width="80">
+            <template #default="{ row }">
+              {{ dictConvert('RefundStatus', row.status) }}
+            </template>
+          </vxe-column>
+          <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
+          <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+            <template #default="{ row }">
+              <a-link @click="show(row)">查看</a-link>
+              <a-divider type="vertical" />
+              <!--      钱包不可以同步      -->
+              <a-link @click="sync(row)">同步</a-link>
+              <a-divider type="vertical" />
+              <a-link :disabled="!(row.status === 'fail')" @click="reset(row)">重试</a-link>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <vxe-pager
         size="medium"
         :loading="loading"

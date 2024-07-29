@@ -136,4 +136,9 @@
     justify-content: center;
     align-items: center;
   }
+  :deep(.ant-card-meta-description) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>

@@ -65,18 +65,11 @@
         </a-form-item>
         <a-form-item label="API版本" name="apiVersion">
           <a-radio-group v-model:value="form.apiVersion" button-style="solid">
-            <a-radio-button value="apiV2"> Api_V2 </a-radio-button>
-            <a-radio-button value="apiV3"> Api_V3 </a-radio-button>
+            <a-radio-button value="apiV2"> API_V2 </a-radio-button>
+            <a-radio-button value="apiV3"> API_V3 </a-radio-button>
           </a-radio-group>
         </a-form-item>
-        <a-form-item name="apiKeyV2">
-          <template #label>
-            <basic-title
-              helpMessage="付款码支付方式只支持微信支付V2版, 使用V3时也需要进行配置, 否则无法使用付款码支付"
-            >
-              APIv2密钥
-            </basic-title>
-          </template>
+        <a-form-item name="apiKeyV2" label="APIv2密钥">
           <a-textarea
             :rows="3"
             :disabled="showable"
@@ -163,7 +156,7 @@
         </a-form-item>
         <a-form-item name="p12">
           <template #label>
-            <basic-title helpMessage="例如退款、转账时，必须要配置p12证书才可以执行">
+            <basic-title helpMessage="V2版本中例如退款、转账时，必须要配置p12证书才可以执行">
               p12证书
             </basic-title>
           </template>
