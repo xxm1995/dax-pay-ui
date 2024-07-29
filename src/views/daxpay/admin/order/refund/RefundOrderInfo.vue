@@ -25,7 +25,7 @@
         {{ order.bizOrderNo }}
       </a-descriptions-item>
       <a-descriptions-item label="退款金额(元)" :span="2">
-        {{ order.amount ? (order.amount / 100).toFixed(2) : 0 }}
+        {{ order.amount ? order.amount : 0 }}
       </a-descriptions-item>
       <a-descriptions-item label="退款发起时间" :span="2">
         {{ order.createTime }}

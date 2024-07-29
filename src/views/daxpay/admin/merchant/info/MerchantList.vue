@@ -18,34 +18,42 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table ref="xTable" key-field="id" :data="pagination.records" :loading="loading">
-        <vxe-column type="seq" :width="60" />
-        <vxe-column field="mchNo" title="编码" :min-width="100" />
-        <vxe-column field="mchName" title="名称" :min-width="100" />
-        <vxe-column field="companyName" title="公司名称" :min-width="150" />
-        <vxe-column field="idType" title="证件类型" :min-width="80">
-          <template #default="{ row }">
-            <a-tag color="green">{{ dictConvert('idType', row.idType) || '无' }}</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="tel" title="联系方式" :min-width="100" />
-        <vxe-column field="legalPerson" title="法人名称" :min-width="80" />
-        <vxe-column field="tel" title="联系方式" :min-width="100" />
-        <vxe-column field="createTime" title="创建时间" :min-width="80" />
-        <vxe-column fixed="right" :width="150" :showOverflow="false" title="操作">
-          <template #default="{ row }">
-            <span>
-              <a-link @click="show(row)">查看</a-link>
-            </span>
-            <a-divider type="vertical" />
-            <span>
-              <a-link @click="edit(row)">编辑</a-link>
-            </span>
-            <a-divider type="vertical" />
-            <a-link danger @click="remove(row)">删除</a-link>
-          </template>
-        </vxe-column>
-      </vxe-table>
+      <div class="h-65vh">
+        <vxe-table
+          height="auto"
+          ref="xTable"
+          key-field="id"
+          :data="pagination.records"
+          :loading="loading"
+        >
+          <vxe-column type="seq" :width="60" />
+          <vxe-column field="mchNo" title="编码" :min-width="100" />
+          <vxe-column field="mchName" title="名称" :min-width="100" />
+          <vxe-column field="companyName" title="公司名称" :min-width="150" />
+          <vxe-column field="idType" title="证件类型" :min-width="80">
+            <template #default="{ row }">
+              <a-tag color="green">{{ dictConvert('idType', row.idType) || '无' }}</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="tel" title="联系方式" :min-width="100" />
+          <vxe-column field="legalPerson" title="法人名称" :min-width="80" />
+          <vxe-column field="tel" title="联系方式" :min-width="100" />
+          <vxe-column field="createTime" title="创建时间" :min-width="80" />
+          <vxe-column fixed="right" :width="150" :showOverflow="false" title="操作">
+            <template #default="{ row }">
+              <span>
+                <a-link @click="show(row)">查看</a-link>
+              </span>
+              <a-divider type="vertical" />
+              <span>
+                <a-link @click="edit(row)">编辑</a-link>
+              </span>
+              <a-divider type="vertical" />
+              <a-link danger @click="remove(row)">删除</a-link>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <vxe-pager
         size="medium"
         :loading="loading"
@@ -65,7 +73,7 @@
   import useTablePage from '@/hooks/bootx/useTablePage'
   import MerchantEdit from './MerchantEdit.vue'
   import BQuery from '@/components/Bootx/Query/BQuery.vue'
-  import {QueryField, STRING} from '@/components/Bootx/Query/Query'
+  import { QueryField, STRING } from '@/components/Bootx/Query/Query'
   import { FormEditType } from '@/enums/formTypeEnum'
   import { useMessage } from '@/hooks/web/useMessage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'

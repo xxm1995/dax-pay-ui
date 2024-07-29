@@ -18,43 +18,51 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
-        <vxe-column type="seq" width="60" />
-        <vxe-column field="code" title="编码" />
-        <vxe-column field="name" title="名称" />
-        <vxe-column field="groupTag" title="分类标签">
-          <template #default="{ row }">
-            <a-tag color="green">{{ row.groupTag || '空' }}</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="enable" title="启用状态">
-          <template #default="{ row }">
-            <a-tag v-if="row.enable" color="green">启用</a-tag>
-            <a-tag v-else color="red">停用</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="remark" title="备注" />
-        <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="220" :showOverflow="false" title="操作">
-          <template #default="{ row }">
-            <span>
-              <a href="javascript:" @click="show(row)">查看</a>
-            </span>
-            <a-divider type="vertical" />
-            <span>
-              <a href="javascript:" @click="edit(row)">编辑</a>
-            </span>
-            <a-divider type="vertical" />
-            <span>
-              <a href="javascript:" @click="itemList(row)">字典配置</a>
-            </span>
-            <a-divider type="vertical" />
-            <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-              <a href="javascript:" style="color: red">删除</a>
-            </a-popconfirm>
-          </template>
-        </vxe-column>
-      </vxe-table>
+      <div class="h-65vh">
+        <vxe-table
+          height="auto"
+          row-id="id"
+          ref="xTable"
+          :data="pagination.records"
+          :loading="loading"
+        >
+          <vxe-column type="seq" width="60" />
+          <vxe-column field="code" title="编码" />
+          <vxe-column field="name" title="名称" />
+          <vxe-column field="groupTag" title="分类标签">
+            <template #default="{ row }">
+              <a-tag color="green">{{ row.groupTag || '空' }}</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="enable" title="启用状态">
+            <template #default="{ row }">
+              <a-tag v-if="row.enable" color="green">启用</a-tag>
+              <a-tag v-else color="red">停用</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="remark" title="备注" />
+          <vxe-column field="createTime" title="创建时间" />
+          <vxe-column fixed="right" width="220" :showOverflow="false" title="操作">
+            <template #default="{ row }">
+              <span>
+                <a href="javascript:" @click="show(row)">查看</a>
+              </span>
+              <a-divider type="vertical" />
+              <span>
+                <a href="javascript:" @click="edit(row)">编辑</a>
+              </span>
+              <a-divider type="vertical" />
+              <span>
+                <a href="javascript:" @click="itemList(row)">字典配置</a>
+              </span>
+              <a-divider type="vertical" />
+              <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
+                <a href="javascript:" style="color: red">删除</a>
+              </a-popconfirm>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <vxe-pager
         size="medium"
         :loading="loading"

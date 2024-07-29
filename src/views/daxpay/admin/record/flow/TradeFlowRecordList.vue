@@ -10,7 +10,16 @@
       />
     </div>
     <div class="m-3 p-3 bg-white">
-      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
+      <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
+        <template #buttons>
+          <span style="font-size: 18px"
+            >收入金额: {{ totalAmount.incomeAmount ? totalAmount.incomeAmount : 0 }}元</span
+          >
+          <span style="font-size: 18px; margin-left: 50px"
+            >支出金额: {{ totalAmount.outlayAmount ? totalAmount.outlayAmount : 0 }}元</span
+          >
+        </template>
+      </vxe-toolbar>
       <div class="h-65vh">
         <vxe-table
           height="auto"
@@ -128,6 +137,10 @@
   const payOrderInfo = ref<any>()
   const refundOrderInfo = ref<any>()
   const tradeFlowRecordInfo = ref<any>()
+  const totalAmount = ref({
+    incomeAmount: 0.0,
+    outlayAmount: 0.0,
+  })
 
   onMounted(() => {
     init()

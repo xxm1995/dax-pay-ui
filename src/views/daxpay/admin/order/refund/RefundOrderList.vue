@@ -15,7 +15,7 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
           <span style="font-size: 18px"
-            >退款金额: {{ totalAmount ? (totalAmount / 100).toFixed(2) : 0 }}元</span
+            >退款金额: {{ totalAmount ? totalAmoun : 0 }}元</span
           >
         </template>
       </vxe-toolbar>
@@ -53,7 +53,7 @@
           </vxe-column>
           <vxe-column field="amount" title="退款金额(元)" :min-width="140">
             <template #default="{ row }">
-              {{ row.amount ? (row.amount / 100).toFixed(2) : 0 }}
+              {{ row.amount ? row.amount : 0 }}
             </template>
           </vxe-column>
           <vxe-column field="refundStatus" title="状态" :min-width="80">

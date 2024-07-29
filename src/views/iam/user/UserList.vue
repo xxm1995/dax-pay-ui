@@ -37,60 +37,63 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table
-        ref="xTable"
-        size="medium"
-        @checkbox-all="selectAllEvent"
-        @checkbox-change="selectChangeEvent"
-        :loading="loading"
-        :data="pagination.records"
-      >
-        <vxe-column type="checkbox" width="50" />
-        <vxe-column field="name" title="姓名" />
-        <vxe-column field="account" title="账号" />
-        <vxe-column field="phone" title="手机号" />
-        <vxe-column field="email" title="邮箱" />
-        <vxe-column field="administrator" title="是否管理员">
-          <template #default="{ row }">
-            <a-tag v-if="row.administrator" color="green">是</a-tag>
-            <a-tag v-else color="red">否</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="status" title="用户状态">
-          <template #default="{ row }">
-            {{ dictConvert('UserStatusCode', row.status) || '无' }}
-          </template>
-        </vxe-column>
-        <vxe-column fixed="right" width="170" :showOverflow="false" title="操作">
-          <template #default="{ row }">
-            <a href="javascript:" @click="show(row)">查看</a>
-            <a-divider type="vertical" />
-            <a href="javascript:" @click="edit(row)">编辑</a>
-            <a-divider type="vertical" />
-            <a-dropdown>
-              <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
-              <template #overlay>
-                <a-menu>
-                  <a-menu-item>
-                    <a-link @click="assignRoles(row)">角色分配</a-link>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a-link @click="resetPwd(row)">重置密码</a-link>
-                  </a-menu-item>
-                  <a-menu-item v-if="[1, 3].includes(row.status)">
-                    <a-link v-if="row.status === 1" @click="lockUserConfirm(row.id, true)"
+      <div class="h-65vh">
+        <vxe-table
+          ref="xTable"
+          height="auto"
+          size="medium"
+          @checkbox-all="selectAllEvent"
+          @checkbox-change="selectChangeEvent"
+          :loading="loading"
+          :data="pagination.records"
+        >
+          <vxe-column type="checkbox" width="50" />
+          <vxe-column field="name" title="姓名" />
+          <vxe-column field="account" title="账号" />
+          <vxe-column field="phone" title="手机号" />
+          <vxe-column field="email" title="邮箱" />
+          <vxe-column field="administrator" title="是否管理员">
+            <template #default="{ row }">
+              <a-tag v-if="row.administrator" color="green">是</a-tag>
+              <a-tag v-else color="red">否</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="status" title="用户状态">
+            <template #default="{ row }">
+              {{ dictConvert('UserStatusCode', row.status) || '无' }}
+            </template>
+          </vxe-column>
+          <vxe-column fixed="right" width="170" :showOverflow="false" title="操作">
+            <template #default="{ row }">
+              <a href="javascript:" @click="show(row)">查看</a>
+              <a-divider type="vertical" />
+              <a href="javascript:" @click="edit(row)">编辑</a>
+              <a-divider type="vertical" />
+              <a-dropdown>
+                <a> 更多 <icon icon="ant-design:down-outlined" :size="12" /> </a>
+                <template #overlay>
+                  <a-menu>
+                    <a-menu-item>
+                      <a-link @click="assignRoles(row)">角色分配</a-link>
+                    </a-menu-item>
+                    <a-menu-item>
+                      <a-link @click="resetPwd(row)">重置密码</a-link>
+                    </a-menu-item>
+                    <a-menu-item v-if="[1, 3].includes(row.status)">
+                      <a-link v-if="row.status === 1" @click="lockUserConfirm(row.id, true)"
                       >封禁账号</a-link
-                    >
-                    <a-link v-if="row.status === 3" @click="lockUserConfirm(row.id, false)"
+                      >
+                      <a-link v-if="row.status === 3" @click="lockUserConfirm(row.id, false)"
                       >解锁账号</a-link
-                    >
-                  </a-menu-item>
-                </a-menu>
-              </template>
-            </a-dropdown>
-          </template>
-        </vxe-column>
-      </vxe-table>
+                      >
+                    </a-menu-item>
+                  </a-menu>
+                </template>
+              </a-dropdown>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <vxe-pager
         size="medium"
         :loading="loading"

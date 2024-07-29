@@ -18,48 +18,56 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
-        <vxe-column type="seq" :min-width="60" />
-        <vxe-column field="name" title="参数名称" :min-width="200" />
-        <vxe-column field="key" title="参数Key" :min-width="150" />
-        <vxe-column field="value" title="参数值" :min-width="200" />
-        <vxe-column field="type" title="参数类型" :min-width="80">
-          <template #default="{ row }">
-            <a-tag>{{ dictConvert('ParamType', row.type) || '无' }}</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="enable" title="启用状态" :min-width="80">
-          <template #default="{ row }">
-            <a-tag v-if="row.enable" color="green">启用</a-tag>
-            <a-tag v-else color="red">停用</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="internal" title="内置参数" :min-width="80">
-          <template #default="{ row }">
-            <a-tag v-if="row.internal" color="red">是</a-tag>
-            <a-tag v-else color="green">否</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="remark" title="备注" :min-width="220" />
-        <vxe-column field="createTime" title="创建时间" :min-width="160" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作" :min-width="150">
-          <template #default="{ row }">
-            <span>
-              <a href="javascript:" @click="show(row)">查看</a>
-            </span>
-            <a-divider type="vertical" />
-            <span>
-              <a href="javascript:" @click="edit(row)">编辑</a>
-            </span>
-            <template v-if="!row.internal">
-              <a-divider type="vertical" />
-              <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
-                <a href="javascript:" style="color: red">删除</a>
-              </a-popconfirm>
+      <div class="h-65vh">
+        <vxe-table
+          height="auto"
+          row-id="id"
+          ref="xTable"
+          :data="pagination.records"
+          :loading="loading"
+        >
+          <vxe-column type="seq" :min-width="60" />
+          <vxe-column field="name" title="参数名称" :min-width="200" />
+          <vxe-column field="key" title="参数Key" :min-width="150" />
+          <vxe-column field="value" title="参数值" :min-width="200" />
+          <vxe-column field="type" title="参数类型" :min-width="80">
+            <template #default="{ row }">
+              <a-tag>{{ dictConvert('ParamType', row.type) || '无' }}</a-tag>
             </template>
-          </template>
-        </vxe-column>
-      </vxe-table>
+          </vxe-column>
+          <vxe-column field="enable" title="启用状态" :min-width="80">
+            <template #default="{ row }">
+              <a-tag v-if="row.enable" color="green">启用</a-tag>
+              <a-tag v-else color="red">停用</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="internal" title="内置参数" :min-width="80">
+            <template #default="{ row }">
+              <a-tag v-if="row.internal" color="red">是</a-tag>
+              <a-tag v-else color="green">否</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="remark" title="备注" :min-width="220" />
+          <vxe-column field="createTime" title="创建时间" :min-width="160" />
+          <vxe-column fixed="right" width="150" :showOverflow="false" title="操作" :min-width="150">
+            <template #default="{ row }">
+              <span>
+                <a href="javascript:" @click="show(row)">查看</a>
+              </span>
+              <a-divider type="vertical" />
+              <span>
+                <a href="javascript:" @click="edit(row)">编辑</a>
+              </span>
+              <template v-if="!row.internal">
+                <a-divider type="vertical" />
+                <a-popconfirm title="是否删除" @confirm="remove(row)" okText="是" cancelText="否">
+                  <a href="javascript:" style="color: red">删除</a>
+                </a-popconfirm>
+              </template>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <vxe-pager
         size="medium"
         :loading="loading"

@@ -23,33 +23,41 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
-        <vxe-column type="seq" width="60" />
-        <vxe-column field="operateId" title="操作人员id" />
-        <vxe-column field="account" title="操作账号" />
-        <vxe-column field="title" title="操作模块" />
-        <vxe-column field="success" title="是否成功">
-          <template #default="{ row }">
-            <a-tag v-if="row.success" color="green">成功</a-tag>
-            <a-tag v-else color="red">失败</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="businessType" title="业务类型">
-          <template #default="{ row }">
-            {{ dictConvert('LogBusinessType', row.businessType) }}
-          </template>
-        </vxe-column>
-        <vxe-column field="operateIp" title="操作ip" />
-        <vxe-column field="errorMsg" title="错误提示" />
-        <vxe-column field="operateTime" title="操作时间" />
-        <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
-          <template #default="{ row }">
-            <span>
-              <a href="javascript:" @click="show(row)">查看</a>
-            </span>
-          </template>
-        </vxe-column>
-      </vxe-table>
+      <div class="h-65vh">
+        <vxe-table
+          height="auto"
+          row-id="id"
+          ref="xTable"
+          :data="pagination.records"
+          :loading="loading"
+        >
+          <vxe-column type="seq" width="60" />
+          <vxe-column field="operateId" title="操作人员id" />
+          <vxe-column field="account" title="操作账号" />
+          <vxe-column field="title" title="操作模块" />
+          <vxe-column field="success" title="是否成功">
+            <template #default="{ row }">
+              <a-tag v-if="row.success" color="green">成功</a-tag>
+              <a-tag v-else color="red">失败</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="businessType" title="业务类型">
+            <template #default="{ row }">
+              {{ dictConvert('LogBusinessType', row.businessType) }}
+            </template>
+          </vxe-column>
+          <vxe-column field="operateIp" title="操作ip" />
+          <vxe-column field="errorMsg" title="错误提示" />
+          <vxe-column field="operateTime" title="操作时间" />
+          <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
+            <template #default="{ row }">
+              <span>
+                <a href="javascript:" @click="show(row)">查看</a>
+              </span>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <vxe-pager
         size="medium"
         :loading="loading"

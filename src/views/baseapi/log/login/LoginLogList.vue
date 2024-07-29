@@ -23,34 +23,42 @@
           </a-space>
         </template>
       </vxe-toolbar>
-      <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
-        <vxe-column type="seq" width="60" />
-        <vxe-column field="userId" title="用户id" />
-        <vxe-column field="account" title="用户名称" />
-        <vxe-column field="login" title="登录成功状态">
-          <template #default="{ row }">
-            <a-tag v-if="row.login" color="green">成功</a-tag>
-            <a-tag v-else color="red">失败</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="client" title="终端">
-          <template #default="{ row }">
-            {{ getClient(row.client) }}
-          </template>
-        </vxe-column>
-        <vxe-column field="ip" title="登录IP地址" />
-        <vxe-column field="os" title="操作系统" />
-        <vxe-column field="browser" title="浏览器类型" />
-        <vxe-column field="msg" title="提示消息" />
-        <vxe-column field="loginTime" title="访问时间" />
-        <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
-          <template #default="{ row }">
-            <span>
-              <a href="javascript:" @click="show(row)">查看</a>
-            </span>
-          </template>
-        </vxe-column>
-      </vxe-table>
+      <div class="h-65vh">
+        <vxe-table
+          height="auto"
+          row-id="id"
+          ref="xTable"
+          :data="pagination.records"
+          :loading="loading"
+        >
+          <vxe-column type="seq" width="60" />
+          <vxe-column field="userId" title="用户id" />
+          <vxe-column field="account" title="用户名称" />
+          <vxe-column field="login" title="登录成功状态">
+            <template #default="{ row }">
+              <a-tag v-if="row.login" color="green">成功</a-tag>
+              <a-tag v-else color="red">失败</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="client" title="终端">
+            <template #default="{ row }">
+              {{ getClient(row.client) }}
+            </template>
+          </vxe-column>
+          <vxe-column field="ip" title="登录IP地址" />
+          <vxe-column field="os" title="操作系统" />
+          <vxe-column field="browser" title="浏览器类型" />
+          <vxe-column field="msg" title="提示消息" />
+          <vxe-column field="loginTime" title="访问时间" />
+          <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
+            <template #default="{ row }">
+              <span>
+                <a href="javascript:" @click="show(row)">查看</a>
+              </span>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <vxe-pager
         size="medium"
         :loading="loading"
@@ -59,7 +67,7 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
-      <LoginLogInfo :clients="clients" :login-types="loginTypes" ref="loginLogInfo" />
+      <LoginLogInfo :clients="clients" ref="loginLogInfo" />
     </div>
   </div>
 </template>

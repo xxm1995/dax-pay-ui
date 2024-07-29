@@ -10,18 +10,26 @@
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
-      <vxe-table row-id="id" ref="xTable" :data="pagination.records" :loading="loading">
-        <vxe-column type="seq" width="60" />
-        <vxe-column field="code" title="编码" />
-        <vxe-column field="name" title="名称" />
-        <vxe-column field="enable" title="是否启用">
-          <template #default="{ row }">
-            <a-tag v-if="row.enable" color="green">启用</a-tag>
-            <a-tag v-else color="red">停用</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="remark" title="备注" />
-      </vxe-table>
+      <div class="h-65vh">
+        <vxe-table
+          height="auto"
+          row-id="id"
+          ref="xTable"
+          :data="pagination.records"
+          :loading="loading"
+        >
+          <vxe-column type="seq" width="60" />
+          <vxe-column field="code" title="编码" />
+          <vxe-column field="name" title="名称" />
+          <vxe-column field="enable" title="是否启用">
+            <template #default="{ row }">
+              <a-tag v-if="row.enable" color="green">启用</a-tag>
+              <a-tag v-else color="red">停用</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="remark" title="备注" />
+        </vxe-table>
+      </div>
       <vxe-pager
         size="medium"
         :loading="loading"

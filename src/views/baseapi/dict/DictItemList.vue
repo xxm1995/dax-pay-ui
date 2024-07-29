@@ -14,7 +14,8 @@
         </a-space>
       </template>
     </vxe-toolbar>
-    <vxe-table ey-field="id" ref="xTable" :data="pagination.records" :loading="loading">
+    <div class="h-65vh">
+    <vxe-table height="auto" ey-field="id" ref="xTable" :data="pagination.records" :loading="loading">
       <vxe-column type="seq" width="60" />
       <vxe-column field="code" title="字典项编码" />
       <vxe-column field="name" title="字典项名称" />
@@ -43,6 +44,7 @@
         </template>
       </vxe-column>
     </vxe-table>
+    </div>
     <vxe-pager
       size="medium"
       :loading="loading"
