@@ -11,15 +11,6 @@ export const page = (params) => {
     params,
   })
 }
-/**
- * 详情
- */
-export const get = (id) => {
-  return defHttp.get<Result<MethodConst>>({
-    url: '/const/method/findById',
-    params: { id },
-  })
-}
 
 export interface MethodConst extends BaseEntity {
   /** 编码 */

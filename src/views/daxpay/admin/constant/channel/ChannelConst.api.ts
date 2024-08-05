@@ -11,15 +11,6 @@ export const page = (params) => {
     params,
   })
 }
-/**
- * 详情
- */
-export const get = (id) => {
-  return defHttp.get<Result<ChannelConst>>({
-    url: '/const/channel/findById',
-    params: { id },
-  })
-}
 
 export interface ChannelConst extends BaseEntity {
   /** 编码 */
