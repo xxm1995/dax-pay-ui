@@ -1,6 +1,5 @@
-import { reactive, toRefs, unref } from "vue";
+import { reactive, toRefs, unref } from 'vue'
 import { FormEditType } from '@/enums/formTypeEnum'
-import { setIcon } from 'vxe-table'
 
 export default function () {
   const model = reactive({
