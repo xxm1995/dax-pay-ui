@@ -104,7 +104,7 @@
   import { dropdown as merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import ChannelConfigList from '@/views/daxpay/admin/merchant/channel/ChannelConfigList.vue'
-  import MerchantNotifyConfigList from '../../config/notify/MerchantNotifyConfigList.vue'
+  import MerchantNotifyConfigList from '../notify/MerchantNotifyConfigList.vue'
   import Icon from '@/components/Icon/Icon.vue'
 
   // 使用hooks
