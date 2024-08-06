@@ -22,12 +22,12 @@
                   <a-menu-item>
                     <a @click="assignRolesBatch()">角色分配</a>
                   </a-menu-item>
-<!--                  <a-menu-item>-->
-<!--                    <a @click="lockUserConfirmBatch(true)">锁定账号</a>-->
-<!--                  </a-menu-item>-->
-<!--                  <a-menu-item>-->
-<!--                    <a @click="lockUserConfirmBatch(false)">解锁账号</a>-->
-<!--                  </a-menu-item>-->
+                  <!--                  <a-menu-item>-->
+                  <!--                    <a @click="lockUserConfirmBatch(true)">锁定账号</a>-->
+                  <!--                  </a-menu-item>-->
+                  <!--                  <a-menu-item>-->
+                  <!--                    <a @click="lockUserConfirmBatch(false)">解锁账号</a>-->
+                  <!--                  </a-menu-item>-->
                   <a-menu-item>
                     <a @click="resetPwdBatch()">重置密码</a>
                   </a-menu-item>
@@ -81,10 +81,10 @@
                     </a-menu-item>
                     <a-menu-item v-if="[1, 3].includes(row.status)">
                       <a-link v-if="row.status === 1" @click="lockUserConfirm(row.id, true)"
-                      >封禁账号</a-link
+                        >封禁账号</a-link
                       >
                       <a-link v-if="row.status === 3" @click="lockUserConfirm(row.id, false)"
-                      >解锁账号</a-link
+                        >解锁账号</a-link
                       >
                     </a-menu-item>
                   </a-menu>

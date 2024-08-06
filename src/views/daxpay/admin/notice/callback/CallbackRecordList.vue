@@ -4,7 +4,7 @@
     v-bind="$attrs"
     title="通知明细列表"
     width="60%"
-    :visible="visible"
+    :open="visible"
     @close="visible = false"
   >
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />

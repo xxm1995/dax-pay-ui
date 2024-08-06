@@ -47,15 +47,29 @@
             </template>
           </vxe-column>
           <vxe-column field="createTime" title="创建时间" :min-width="120" />
-          <vxe-column fixed="right" :width="220" :showOverflow="false" title="操作">
+          <vxe-column fixed="right" :width="180" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <a-link @click="show(row)">查看</a-link>
               <a-divider type="vertical" />
               <a-link @click="edit(row)">编辑</a-link>
               <a-divider type="vertical" />
-              <a-link @click="showChannelSetup(row)">通道配置</a-link>
+              <a-dropdown>
+                <a> 更多 <Icon icon="ant-design:down-outlined" :size="12" /> </a>
+                <template #overlay>
+                  <a-menu>
+                    <a-menu-item>
+                      <a-link @click="showChannelSetup(row)">通道配置</a-link>
+                    </a-menu-item>
+                    <a-menu-item>
+                      <a-link @click="showNotifyConfig(row)">订阅配置</a-link>
+                    </a-menu-item>
+                    <a-menu-item>
+                      <a-link danger @click="remove(row)">删除</a-link>
+                    </a-menu-item>
+                  </a-menu>
+                </template>
+              </a-dropdown>
               <a-divider type="vertical" />
-              <a-link danger @click="remove(row)">删除</a-link>
             </template>
           </vxe-column>
         </vxe-table>
@@ -70,6 +84,7 @@
       />
       <mch-app-edit ref="mchApp" @ok="queryPage" />
       <channel-config-list ref="channelSetup" />
+      <MerchantNotifyConfigList ref="merchantNotifyConfigList" />
     </div>
   </div>
 </template>
@@ -89,6 +104,8 @@
   import { dropdown as merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import ChannelConfigList from '@/views/daxpay/admin/merchant/channel/ChannelConfigList.vue'
+  import MerchantNotifyConfigList from '../../config/notify/MerchantNotifyConfigList.vue'
+  import Icon from '@/components/Icon/Icon.vue'
 
   // 使用hooks
   const {
@@ -120,6 +137,7 @@
   const xToolbar = ref<VxeToolbarInstance>()
   const mchApp: any = ref()
   const channelSetup: any = ref()
+  const merchantNotifyConfigList: any = ref()
   const mchNoOptions = ref<LabeledValue[]>([])
 
   onMounted(() => {
@@ -166,13 +184,21 @@
   }
 
   /**
-   * channelSetup
+   * 通道配置
    */
   function showChannelSetup(record) {
     channelSetup.value.init(record.appId)
   }
+  /**
+   * 通知配置
+   */
+  function showNotifyConfig(record) {
+    merchantNotifyConfigList.value.init(record.appId)
+  }
 
-  // 删除
+  /**
+   * 删除
+   */
   function remove(record) {
     createConfirm({
       iconType: 'warning',
