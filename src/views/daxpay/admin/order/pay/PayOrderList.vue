@@ -176,12 +176,17 @@
           { label: '不支持', value: false },
         ],
       },
-      { field: 'channel', name: '支付通道', type: LIST, selectList: channelList },
-      { field: 'method', name: '支付方式', type: LIST, selectList: methodList },
+      { field: 'channel', name: '支付通道', type: LIST, selectList: channelList.value },
+      { field: 'method', name: '支付方式', type: LIST, selectList: methodList.value },
       { field: 'errorCode', name: '错误码', type: STRING },
-      { field: 'status', name: '支付状态', type: LIST, selectList: payStatusList },
-      { field: 'refundStatus', name: '退款状态', type: LIST, selectList: payRefundStatusList },
-      { field: 'allocStatus', name: '支付状态', type: LIST, selectList: payAllocStatusList },
+      { field: 'status', name: '支付状态', type: LIST, selectList: payStatusList.value },
+      {
+        field: 'refundStatus',
+        name: '退款状态',
+        type: LIST,
+        selectList: payRefundStatusList.value,
+      },
+      { field: 'allocStatus', name: '支付状态', type: LIST, selectList: payAllocStatusList.value },
     ] as QueryField[]
   })
 
