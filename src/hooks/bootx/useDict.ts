@@ -58,6 +58,8 @@ async function dictDropDownNumber(dictCode: string): Promise<LabeledValue[]> {
  * 字典hooks
  */
 export function useDict() {
+  // 初始化
+  getDict().then()
   return {
     dictConvert,
     dictDropDown,

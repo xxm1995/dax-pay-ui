@@ -8,7 +8,6 @@ import { doLogout, login } from '@/api/sys/login'
 import { useMessage } from '@/hooks/web/useMessage'
 import { router } from '@/router'
 import { h } from 'vue'
-import { getFilePreviewUrlPrefix } from '@/api/common/FileUpload'
 import { getUserInfo } from '@/api/sys/user'
 import { userLogoutAction } from '@/store/action/userAction'
 import { TOKEN_KEY, USER_INFO_KEY } from '@/enums/cacheEnum'
@@ -81,8 +80,6 @@ export const useUserStore = defineStore({
       if (!this.getToken) return null
       const { data: userInfo } = await getUserInfo()
       // 设置头像
-      const { data: urlPrefix } = await getFilePreviewUrlPrefix()
-      userInfo.avatar = userInfo.avatar ? urlPrefix + userInfo.avatar : ''
       this.setUserInfo(userInfo as any)
     },
     /**

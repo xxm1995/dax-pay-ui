@@ -21,6 +21,7 @@ export function useUpload(uploadUrl: string) {
   const uploadAction = computed(() => {
     return VITE_GLOB_API_URL + VITE_GLOB_API_URL_PREFIX + uploadUrl
   })
+
   return {
     tokenHeader,
     uploadAction,

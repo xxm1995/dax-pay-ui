@@ -60,3 +60,12 @@ export interface Dict {
   code: string
   name: string
 }
+
+/**
+ * 存储平台
+ */
+export interface FilePlatform {
+  type: string
+  url: string
+  defaultPlatform: boolean
+}

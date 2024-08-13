@@ -30,6 +30,7 @@
   import { propTypes } from '@/utils/propTypes'
   import { openWindow } from '@/utils'
   import { createAsyncComponent } from '@/utils/factory/createAsyncComponent'
+  import { useFilePlatform } from '@/hooks/bootx/useFilePlatform'
 
   type MenuEvent = 'logout' | 'doc' | 'lock' | 'api'
 
@@ -44,9 +45,11 @@
   const { prefixCls } = useDesign('header-user-dropdown')
   const { getShowDoc } = useHeaderSetting()
   const userStore = useUserStore()
+  const { getFileUrl } = useFilePlatform()
 
   const getUserInfo = computed(() => {
-    const { name = '', avatar } = userStore.getUserInfo || {}
+    let { name = '', avatar } = userStore.getUserInfo || {}
+    avatar = avatar ? getFileUrl(avatar) : ''
     return { name, avatar: avatar || headerImg }
   })
 

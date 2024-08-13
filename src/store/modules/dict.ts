@@ -35,10 +35,3 @@ export const useDictStore = defineStore({
     },
   },
 })
-// Need to be used outside the setup
-export function useDictStoreWithOut() {
-  return useDictStore(store)
-}
-
-// 初始化字典
-useDictStoreWithOut().initDict().then()
