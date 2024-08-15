@@ -30,7 +30,7 @@
     { field: 'url', label: '存储和访问路径' },
     { field: 'ext', label: '文件扩展名' },
     { field: 'contentType', label: 'MIME类型' },
-    { field: 'platform', label: '存储平台' },
+    { field: 'platformName', label: '存储平台' },
     { field: 'createTime', label: '创建时间' },
   ] as DescItem[]
 

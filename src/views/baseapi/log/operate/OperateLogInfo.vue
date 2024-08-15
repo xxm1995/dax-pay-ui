@@ -35,7 +35,7 @@
     {
       field: 'client',
       label: '业务类型',
-      render: (businessType) => dictConvert('LogBusinessType', businessType),
+      render: (businessType) => dictConvert('log_business_type', businessType),
     },
     { field: 'requestMethod', label: '请求方式' },
     { field: 'operateUrl', label: '请求url' },

@@ -42,17 +42,6 @@ async function dictDropDown(dictCode: string): Promise<LabeledValue[]> {
       return { label: o.name, value: o.code }
     })
 }
-/**
- * 获取字典下拉框数据列表(value值为数字)
- */
-async function dictDropDownNumber(dictCode: string): Promise<LabeledValue[]> {
-  const list = (await getDict()) || []
-  return list
-    .filter((dict) => dictCode === dict.dictCode)
-    .map((o) => {
-      return { label: o.name, value: Number(o.code) }
-    })
-}
 
 /**
  * 字典hooks
@@ -63,6 +52,5 @@ export function useDict() {
   return {
     dictConvert,
     dictDropDown,
-    dictDropDownNumber,
   }
 }

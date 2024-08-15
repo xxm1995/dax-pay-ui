@@ -32,23 +32,23 @@
           :loading="loading"
         >
           <vxe-column type="seq" width="60" />
-          <vxe-column field="operateId" title="操作人员id" />
-          <vxe-column field="account" title="操作账号" />
-          <vxe-column field="title" title="操作模块" />
-          <vxe-column field="success" title="是否成功">
+          <vxe-column field="operateId" title="操作人员id" :min-width="120" />
+          <vxe-column field="account" title="操作账号" :min-width="120" />
+          <vxe-column field="title" title="操作模块" :min-width="100" />
+          <vxe-column field="success" title="是否成功" :min-width="70">
             <template #default="{ row }">
               <a-tag v-if="row.success" color="green">成功</a-tag>
               <a-tag v-else color="red">失败</a-tag>
             </template>
           </vxe-column>
-          <vxe-column field="businessType" title="业务类型">
+          <vxe-column field="businessType" title="业务类型" :min-width="100">
             <template #default="{ row }">
-              {{ dictConvert('LogBusinessType', row.businessType) }}
+              {{ dictConvert('log_business_type', row.businessType) }}
             </template>
           </vxe-column>
-          <vxe-column field="operateIp" title="操作ip" />
-          <vxe-column field="errorMsg" title="错误提示" />
-          <vxe-column field="operateTime" title="操作时间" />
+          <vxe-column field="operateIp" title="操作ip" :min-width="100" />
+          <vxe-column field="errorMsg" title="错误提示" :min-width="150" />
+          <vxe-column field="operateTime" title="操作时间" :min-width="170" />
           <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <span>

@@ -41,7 +41,7 @@
           </vxe-column>
           <vxe-column field="ext" title="扩展名" :min-width="50" />
           <vxe-column field="contentType" title="文件类型" :min-width="100" />
-          <vxe-column field="platform" title="存储平台" :min-width="70" />
+          <vxe-column field="platformName" title="存储平台" :min-width="70" />
           <vxe-column field="fileSize" title="文件大小" :min-width="120" />
           <vxe-column field="createTime" title="创建时间" :min-width="170" />
           <vxe-column fixed="right" :width="170" :showOverflow="false" title="操作">

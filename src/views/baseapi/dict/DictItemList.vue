@@ -23,18 +23,18 @@
         :loading="loading"
       >
         <vxe-column type="seq" width="60" />
-        <vxe-column field="code" title="字典项编码" />
-        <vxe-column field="name" title="字典项名称" />
-        <vxe-column field="enable" title="启用状态">
+        <vxe-column field="code" title="字典项编码" :min-width="150" />
+        <vxe-column field="name" title="字典项名称" :min-width="150" />
+        <vxe-column field="enable" title="启用状态" :min-width="80">
           <template #default="{ row }">
             <a-tag v-if="row.enable" color="green">启用</a-tag>
             <a-tag v-else color="red">停用</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="sortNo" title="排序" />
-        <vxe-column field="remark" title="备注" />
-        <vxe-column field="createTime" title="创建时间" />
-        <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+        <vxe-column field="sortNo" title="排序" :min-width="50" />
+        <vxe-column field="remark" title="备注" :min-width="170" />
+        <vxe-column field="createTime" title="创建时间" :min-width="170" />
+        <vxe-column fixed="right" :width="150" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
               <a href="javascript:" @click="show(row)">查看</a>

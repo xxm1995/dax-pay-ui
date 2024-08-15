@@ -63,8 +63,9 @@
         </a-form-item>
         <a-form-item label="签名方式" name="signType">
           <a-radio-group v-model:value="form.signType" :disabled="showable" button-style="solid">
-            <a-radio-button value="HMAC_SHA256">HMAC_SHA256</a-radio-button>
-            <a-radio-button value="SM3">SM3</a-radio-button>
+            <a-radio-button v-for="item in signTypes" :key="item.value" :value="item.value">{{
+              item.label
+            }}</a-radio-button>
           </a-radio-group>
         </a-form-item>
         <a-form-item label="签名秘钥" name="signSecret">
@@ -77,10 +78,12 @@
         </a-form-item>
         <a-form-item label="通知方式" name="notifyType">
           <a-radio-group v-model:value="form.notifyType" :disabled="showable" button-style="solid">
-            <a-radio-button value="none">不启用</a-radio-button>
-            <a-radio-button value="http">http</a-radio-button>
-            <a-radio-button value="websocket">websocket</a-radio-button>
-            <a-radio-button disabled value="mq">消息队列</a-radio-button>
+            <a-radio-button
+              v-for="item in merchantNotifyTypes"
+              :key="item.value"
+              :value="item.value"
+              >{{ item.label }}</a-radio-button
+            >
           </a-radio-group>
         </a-form-item>
         <a-form-item label="通知地址" name="notifyUrl" v-if="form.notifyType !== 'none'">
@@ -118,6 +121,7 @@
   import { buildUUID } from '@/utils/uuid'
   import { dropdown as merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { LabeledValue } from 'ant-design-vue/lib/select'
+  import { useDict } from '@/hooks/bootx/useDict'
 
   const {
     initFormEditType,
@@ -131,16 +135,19 @@
     showable,
     formEditType,
   } = useFormEdit()
+  const { dictDropDown } = useDict()
 
   // 表单
   const formRef = ref<FormInstance>()
   const form = ref<MchApp>({
     notifyType: 'none',
-    signType: 'HMAC_SHA256',
+    signType: 'hmac_sha256',
     limitAmount: 200.0,
     orderTimeout: 5,
     reqSign: true,
   })
+  const signTypes = ref<LabeledValue[]>([])
+  const merchantNotifyTypes = ref<LabeledValue[]>([])
   const mchNoOptions = ref<LabeledValue[]>([])
 
   // 校验
@@ -161,7 +168,7 @@
    * 入口
    */
   function init(id, editType: FormEditType) {
-    initMerchant()
+    initData()
     initFormEditType(editType)
     resetForm()
     getInfo(id, editType)
@@ -170,9 +177,18 @@
   /**
    * 初始化商户列表信息
    */
-  function initMerchant() {
+  function initData() {
+    // 商户
     merchantDropdown().then(({ data }) => {
       mchNoOptions.value = data
+    })
+    // 签名方式
+    dictDropDown('sign_type').then((data) => {
+      signTypes.value = data
+    })
+    // 商户通知方式
+    dictDropDown('merchant_notify_type').then((data) => {
+      merchantNotifyTypes.value = data
     })
   }
 

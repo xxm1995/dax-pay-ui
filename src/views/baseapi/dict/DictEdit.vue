@@ -20,10 +20,10 @@
       <a-form-item label="主键" name="id" :hidden="true">
         <a-input v-model:value="form.id" :disabled="showable" />
       </a-form-item>
-      <a-form-item label="编码" name="code">
+      <a-form-item label="编码" validate-first name="code">
         <a-input v-model:value="form.code" :disabled="showable" placeholder="请输入编码" />
       </a-form-item>
-      <a-form-item label="名称" name="name">
+      <a-form-item label="名称" validate-first name="name">
         <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入名称" />
       </a-form-item>
       <a-form-item label="是否启用" name="enable">
@@ -86,7 +86,7 @@
   const { existsByServer } = useValidate()
   // 表单
   const formRef = ref<FormInstance>()
-  let form = reactive({
+  let form = ref({
     id: null,
     code: '',
     name: '',
@@ -115,7 +115,7 @@
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
       confirmLoading.value = true
       get(id).then(({ data }) => {
-        form = data
+        form.value = data
         confirmLoading.value = false
       })
     } else {
@@ -127,9 +127,9 @@
     formRef.value?.validate().then(async () => {
       confirmLoading.value = true
       if (formEditType.value === FormEditType.Add) {
-        await add(form).finally(() => (confirmLoading.value = false))
+        await add(form.value).finally(() => (confirmLoading.value = false))
       } else if (formEditType.value === FormEditType.Edit) {
-        await update(form).finally(() => (confirmLoading.value = false))
+        await update(form.value).finally(() => (confirmLoading.value = false))
       }
       handleCancel()
       emits('ok')

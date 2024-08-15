@@ -36,7 +36,7 @@
           <vxe-column field="title" title="标题" :min-width="230" />
           <vxe-column field="channel" title="支付通道" :min-width="120">
             <template #default="{ row }">
-              {{ dictConvert('PayChannel', row.channel) }}
+              {{ dictConvert('channel', row.channel) }}
             </template>
           </vxe-column>
           <vxe-column field="bizOrderNo" title="商户订单号" :min-width="230" />
@@ -52,12 +52,12 @@
           </vxe-column>
           <vxe-column field="status" title="支付状态" :min-width="120">
             <template #default="{ row }">{{
-              dictConvert('PayStatus', row.status) || '无'
+              dictConvert('pay_status', row.status) || '无'
             }}</template>
           </vxe-column>
           <vxe-column field="refundStatus" title="退款终态" :min-width="120">
             <template #default="{ row }">{{
-              dictConvert('PayOrderRefundStatus', row.refundStatus) || '无'
+              dictConvert('pay_order_refund_status', row.refundStatus) || '无'
             }}</template>
           </vxe-column>
           <vxe-column field="allocation" title="分账" :min-width="160">

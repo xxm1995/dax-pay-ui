@@ -27,18 +27,12 @@
           :loading="loading"
         >
           <vxe-column type="seq" :width="60" />
-          <vxe-column field="mchNo" title="编码" :min-width="100" />
-          <vxe-column field="mchName" title="名称" :min-width="100" />
-          <vxe-column field="companyName" title="公司名称" :min-width="150" />
-          <vxe-column field="idType" title="证件类型" :min-width="80">
-            <template #default="{ row }">
-              <a-tag color="green">{{ dictConvert('idType', row.idType) || '无' }}</a-tag>
-            </template>
-          </vxe-column>
-          <vxe-column field="tel" title="联系方式" :min-width="100" />
-          <vxe-column field="legalPerson" title="法人名称" :min-width="80" />
-          <vxe-column field="tel" title="联系方式" :min-width="100" />
-          <vxe-column field="createTime" title="创建时间" :min-width="80" />
+          <vxe-column field="mchNo" title="商户号" :min-width="150" />
+          <vxe-column field="mchName" title="商户名称" :min-width="150" />
+          <vxe-column field="companyName" title="公司名称" :min-width="180" />
+          <vxe-column field="companyContact" title="联系方式" :min-width="120" />
+          <vxe-column field="companyCode" title="信用编码" :min-width="180" />
+          <vxe-column field="createTime" title="创建时间" :min-width="170" />
           <vxe-column fixed="right" :width="150" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <span>
@@ -91,7 +85,6 @@
     loading,
   } = useTablePage(queryPage)
   const { createMessage, createConfirm } = useMessage()
-  const { dictConvert } = useDict()
   // 查询条件
   const fields = [
     { field: 'mchName', type: STRING, name: '商户名称', placeholder: '请输入商户名称' },

@@ -69,16 +69,20 @@ export interface Merchant extends BaseEntity {
   mchName?: string
   // 公司名称
   companyName?: string
-  // 证件类型
-  idType?: string
-  // 证件号
-  idNo?: string
-  // 联系方式
-  contact?: string
+  // 公司联系方式
+  companyContact?: string
+  // 公司地址
+  companyAddress?: string
+  // 公司信用编码
+  companyCode?: string
   // 法人名称
   legalPerson?: string
-  // 法人证件号码
-  legalPersonIdNo?: string
+  // 法人证件类型
+  idType?: string
+  // 法人证件号
+  idNo?: string
+  // 法人联系方式
+  contact?: string
   // 状态
   status?: string
 }
