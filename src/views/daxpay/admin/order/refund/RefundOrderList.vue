@@ -15,7 +15,7 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
           <span style="font-size: 18px"
-            >退款金额: {{ totalAmount ? totalAmoun : 0 }}元</span
+            >退款金额: {{ totalAmount ? totalAmount : 0 }}元</span
           >
         </template>
       </vxe-toolbar>
@@ -48,7 +48,7 @@
           </vxe-column>
           <vxe-column field="channel" title="支付通道" :min-width="120">
             <template #default="{ row }">
-              {{ dictConvert('PayChannel', row.channel) }}
+              {{ dictConvert('channel', row.channel) }}
             </template>
           </vxe-column>
           <vxe-column field="amount" title="退款金额(元)" :min-width="140">
@@ -58,7 +58,7 @@
           </vxe-column>
           <vxe-column field="refundStatus" title="状态" :min-width="80">
             <template #default="{ row }">
-              {{ dictConvert('RefundStatus', row.status) }}
+              {{ dictConvert('refund_status', row.status) }}
             </template>
           </vxe-column>
           <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
@@ -138,7 +138,7 @@
         field: 'outOrderNo',
         type: STRING,
         name: '通道订单号',
-        placeholder: '请输入三方支付的通道订单号',
+        placeholder: '请输入通道订单号',
       },
       { field: 'title', type: STRING, name: '原支付标题', placeholder: '请输入原支付标题' },
       { field: 'errorCode', name: '错误码', type: STRING },

@@ -1,6 +1,11 @@
 import { defHttp } from '@/utils/http/axios'
 import { PageResult, Result } from '#/axios'
 import { MchEntity } from '#/web'
+import {
+  PayAllocStatusEnum,
+  PayRefundStatusEnum,
+  PayStatusEnum,
+} from '@/enums/daxpay/TradeStatusEnum'
 
 /**
  * 分页
@@ -70,6 +75,55 @@ export function getTotalAmount(param) {
     url: '/order/pay/getTotalAmount',
     params: param,
   })
+}
+
+/**
+ * 显示样式优化
+ */
+export function cellStyle({ row, column }) {
+  // 支付状态
+  if (column.field == 'status') {
+    switch (row.status) {
+      case PayStatusEnum.SUCCESS:
+        return { color: 'green' }
+      case PayStatusEnum.FAIL:
+        return { color: 'red' }
+      case PayStatusEnum.PROGRESS:
+        return { color: 'orange' }
+      case PayStatusEnum.CLOSE:
+        return { color: 'gray' }
+      case PayStatusEnum.CANCEL:
+        return { color: 'gray' }
+      default:
+        return { color: 'red' }
+    }
+  }
+  // 分账状态
+  if (column.field == 'allocStatus') {
+    switch (row.allocStatus) {
+      case PayAllocStatusEnum.WAITING:
+        return { color: 'orange' }
+      case PayAllocStatusEnum.ALLOCATION:
+        return { color: 'green' }
+      default:
+        return { color: 'red' }
+    }
+  }
+  // 退款状态
+  if (column.field == 'refundStatus') {
+    switch (row.refundStatus) {
+      case PayRefundStatusEnum.NO_REFUND:
+        return { color: 'gray' }
+      case PayRefundStatusEnum.REFUNDED:
+        return { color: 'green' }
+      case PayRefundStatusEnum.REFUNDING:
+        return { color: 'orange' }
+      case PayRefundStatusEnum.PARTIAL_REFUND:
+        return { color: 'gray' }
+      default:
+        return { color: 'red' }
+    }
+  }
 }
 
 /**

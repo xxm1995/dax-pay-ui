@@ -20,22 +20,22 @@
           {{ order.refundableBalance }}
         </a-descriptions-item>
         <a-descriptions-item label="支付状态" :span="8">
-          {{ dictConvert('PayStatus', order.status) }}
+          {{ dictConvert('pay_status', order.status) }}
         </a-descriptions-item>
         <a-descriptions-item label="订单号" :span="16">
           {{ order.orderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="分账状态" :span="8">
-          {{ dictConvert('PayOrderAllocStatus', order.allocStatus) || '无' }}
+          {{ dictConvert('pay_alloc_status', order.allocStatus) || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="通道交易号" :span="16">
           {{ order.outOrderNo || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="退款状态" :span="8">
-          {{ dictConvert('PayOrderRefundStatus', order.refundStatus) || '无' }}
+          {{ dictConvert('pay_refund_status', order.refundStatus) || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="商户订单号" :span="16">
-          {{ dictConvert('PayOrderRefundStatus', order.refundStatus) || '无' }}
+          {{ order.bizOrderNo || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="自动分账" :span="8">
           {{ order.autoAllocation || '无' }}

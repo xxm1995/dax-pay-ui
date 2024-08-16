@@ -37,7 +37,7 @@ export function getByRefundNo(refundNo) {
  */
 export function refund(params) {
   return defHttp.post<Result<void>>({
-    url: '/order/refund/refund',
+    url: '/order/refund/create',
     data: params,
   })
 }

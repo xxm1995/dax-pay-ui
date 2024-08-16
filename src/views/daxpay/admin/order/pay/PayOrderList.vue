@@ -55,9 +55,9 @@
               dictConvert('pay_status', row.status) || '无'
             }}</template>
           </vxe-column>
-          <vxe-column field="refundStatus" title="退款终态" :min-width="120">
+          <vxe-column field="refundStatus" title="退款状态" :min-width="120">
             <template #default="{ row }">{{
-              dictConvert('pay_order_refund_status', row.refundStatus) || '无'
+              dictConvert('pay_refund_status', row.refundStatus) || ''
             }}</template>
           </vxe-column>
           <vxe-column field="allocation" title="分账" :min-width="160">
@@ -68,7 +68,7 @@
           </vxe-column>
           <vxe-column field="allocStatus" title="分账状态" :min-width="160">
             <template #default="{ row }">
-              {{ dictConvert('PayOrderAllocStatus', row.allocStatus) || '无' }}
+              {{ dictConvert('pay_alloc_status', row.allocStatus) || '无' }}
             </template>
           </vxe-column>
           <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
@@ -83,22 +83,27 @@
                 </a>
                 <template #overlay>
                   <a-menu>
-                    <!--                  <a-menu-item>-->
-                    <!--                    <a-link @click="sync(row)">同步</a-link>-->
-                    <!--                  </a-menu-item>-->
-                    <!--                  <a-menu-item v-if="[payStatus.PROGRESS].includes(row.status)">-->
-                    <!--                    <a-link @click="closeOrder(row)" danger>关闭</a-link>-->
-                    <!--                  </a-menu-item>-->
-                    <!--                  <a-menu-item-->
-                    <!--                    v-if="row.allocStatus === 'waiting' && payStatus.SUCCESS === row.status"-->
-                    <!--                  >-->
-                    <!--                    <a-link @click="allocation(row)">分账</a-link>-->
-                    <!--                  </a-menu-item>-->
-                    <!--                  <a-menu-item-->
-                    <!--                    v-if="[payStatus.SUCCESS].includes(row.status) && row.refundableBalance > 0"-->
-                    <!--                  >-->
-                    <!--                    <a-link @click="refund(row)" danger>退款</a-link>-->
-                    <!--                  </a-menu-item>-->
+                    <a-menu-item>
+                      <a-link @click="sync(row)">同步</a-link>
+                    </a-menu-item>
+                    <a-menu-item v-if="[PayStatusEnum.PROGRESS].includes(row.status)">
+                      <a-link @click="closeOrder(row)" danger>关闭</a-link>
+                    </a-menu-item>
+                    <a-menu-item
+                      v-if="
+                        row.allocStatus === PayAllocStatusEnum.WAITING &&
+                        PayStatusEnum.SUCCESS === row.status
+                      "
+                    >
+                      <a-link @click="allocation(row)">分账</a-link>
+                    </a-menu-item>
+                    <a-menu-item
+                      v-if="
+                        [PayStatusEnum.SUCCESS].includes(row.status) && row.refundableBalance > 0
+                      "
+                    >
+                      <a-link @click="refund(row)" danger>退款</a-link>
+                    </a-menu-item>
                   </a-menu>
                 </template>
               </a-dropdown>
@@ -115,16 +120,25 @@
         @page-change="handleTableChange"
       />
       <PayOrderInfo ref="payOrderInfo" />
+      <RefundModel ref="refundModel" @ok="queryPage" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue'
-  import { allocationByOrderNo, close, getTotalAmount, page, syncByOrderNo } from './PayOrder.api'
+  import {
+    allocationByOrderNo,
+    close,
+    getTotalAmount,
+    page,
+    syncByOrderNo,
+    cellStyle,
+  } from './PayOrder.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import PayOrderInfo from './PayOrderInfo.vue'
   import BQuery from '@/components/Bootx/Query/BQuery.vue'
+  import RefundModel from './RefundModel.vue'
   import { useMessage } from '@/hooks/web/useMessage'
   import { LIST, QueryField, STRING } from '@/components/Bootx/Query/Query'
   import { useDict } from '@/hooks/bootx/useDict'
@@ -132,8 +146,8 @@
   import ALink from '@/components/Link/Link.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { Icon } from '@/components/Icon'
+  import { PayAllocStatusEnum, PayStatusEnum } from '@/enums/daxpay/TradeStatusEnum'
 
-  const payStatus = ref('')
   // 使用hooks
   const {
     handleTableChange,
@@ -178,7 +192,6 @@
       },
       { field: 'channel', name: '支付通道', type: LIST, selectList: channelList.value },
       { field: 'method', name: '支付方式', type: LIST, selectList: methodList.value },
-      { field: 'errorCode', name: '错误码', type: STRING },
       { field: 'status', name: '支付状态', type: LIST, selectList: payStatusList.value },
       {
         field: 'refundStatus',
@@ -209,11 +222,11 @@
    * 初始化数据
    */
   async function initData() {
-    channelList.value = await dictDropDown('PayChannel')
-    methodList.value = await dictDropDown('PayMethod')
-    payStatusList.value = await dictDropDown('PayStatus')
-    payRefundStatusList.value = await dictDropDown('PayOrderRefundStatus')
-    payAllocStatusList.value = await dictDropDown('PayOrderAllocStatus')
+    channelList.value = await dictDropDown('channel')
+    methodList.value = await dictDropDown('pay_method')
+    payStatusList.value = await dictDropDown('pay_status')
+    payRefundStatusList.value = await dictDropDown('pay_refund_status')
+    payAllocStatusList.value = await dictDropDown('pay_alloc_status')
   }
   /**
    * 分页查询
@@ -299,27 +312,6 @@
         })
       },
     })
-  }
-
-  /**
-   * 显示样式优化
-   */
-  function cellStyle({ row, column }) {
-    if (column.field == 'status') {
-      if (row.status == 'success') {
-        return { color: 'green' }
-      }
-      if (row.status == 'fail') {
-        return { color: 'red' }
-      }
-      if (row.status == 'progress') {
-        return { color: 'orange' }
-      }
-      if (row.status == 'close') {
-        return { color: 'gray' }
-      }
-      return { color: 'red' }
-    }
   }
 </script>
 
