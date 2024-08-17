@@ -38,22 +38,32 @@ export function getOrderByOrderNo(orderNo: string) {
 }
 
 /**
- * 根据订单号同步支付状态
+ * 同步支付状态
  */
-export function syncByOrderNo(orderNo: string) {
+export function syncOrder(id: string) {
   return defHttp.post<Result>({
-    url: '/order/pay/syncByOrderNo',
-    params: { orderNo },
+    url: '/order/pay/sync',
+    params: { id },
   })
 }
 
 /**
  * 关闭支付记录
  */
-export function close(orderNo) {
+export function close(id) {
   return defHttp.post<Result<void>>({
     url: '/order/pay/close',
-    params: { orderNo },
+    params: { id },
+  })
+}
+
+/**
+ * 关闭支付记录
+ */
+export function cancel(id) {
+  return defHttp.post<Result<void>>({
+    url: '/order/pay/cancel',
+    params: { id },
   })
 }
 

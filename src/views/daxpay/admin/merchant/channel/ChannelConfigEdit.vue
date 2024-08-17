@@ -4,7 +4,7 @@
 </template>
 <script setup lang="ts">
   import { useMessage } from '@/hooks/web/useMessage'
-  import { ChannelEnum } from '@/enums/daxpay/ChannelEnum'
+  import { PaymentEnum } from '@/enums/daxpay/PaymentEnum'
   import { ChannelConfig } from './ChannelConfig.api'
   import AlipayConfigEdit from '@/views/daxpay/admin/channel/alipay/config/AlipayConfigEdit.vue'
   import WechatPayConfigEdit from '@/views/daxpay/admin/channel/wechat/config/WechatPayConfigEdit.vue'
@@ -22,15 +22,15 @@
    */
   function show(record: ChannelConfig) {
     switch (record.channel) {
-      case ChannelEnum.ALI: {
+      case PaymentEnum.ALI: {
         alipay.value.init(record)
         break
       }
-      case ChannelEnum.WECHAT: {
+      case PaymentEnum.WECHAT: {
         wechat.value.init(record)
         break
       }
-      case ChannelEnum.UNION_PAY: {
+      case PaymentEnum.UNION_PAY: {
         union.value.init(record)
         break
       }

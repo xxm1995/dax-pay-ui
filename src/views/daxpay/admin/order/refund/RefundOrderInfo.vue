@@ -40,7 +40,7 @@
         {{ order.errorMsg }}
       </a-descriptions-item>
       <a-descriptions-item label="退款状态" :span="2">
-        <a-tag>{{ dictConvert('RefundStatus', order.status) || '空' }}</a-tag>
+        <a-tag>{{ dictConvert('refund_status', order.status) || '空' }}</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="退款终端ip">
         {{ order.clientIp }}

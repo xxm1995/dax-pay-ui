@@ -113,17 +113,16 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'bizTransferNo', type: STRING, name: '商户退款号', placeholder: '请输入商户退款号' },
-      { field: 'transferNo', type: STRING, name: '退款号', placeholder: '请输入退款号' },
-      { field: 'outTransferNo', type: STRING, name: '通道退款号', placeholder: '请输入通道退款号' },
+      { field: 'bizTransferNo', type: STRING, name: '商户转账号', placeholder: '请输入商户转账号' },
+      { field: 'transferNo', type: STRING, name: '转账号', placeholder: '请输入转账号' },
+      { field: 'outTransferNo', type: STRING, name: '通道转账号', placeholder: '请输入通道转账号' },
       { field: 'title', type: STRING, name: '原支付标题', placeholder: '请输入转账标题' },
       { field: 'payeeName', type: STRING, name: '收款人姓名', placeholder: '请输入收款人姓名' },
-      { field: 'errorCode', name: '错误码', type: STRING },
       {
         field: 'status',
         type: LIST,
-        name: '处理状态',
-        placeholder: '请选择处理状态',
+        name: '转账状态',
+        placeholder: '请选择转账状态',
         selectList: transferStatusList.value,
       },
       { field: 'channel', name: '转账通道', type: LIST, selectList: channelList.value },
@@ -147,8 +146,8 @@
    * 初始化数据
    */
   async function initData() {
-    transferStatusList.value = await dictDropDown('TransferStatus')
-    channelList.value = await dictDropDown('PayChannel')
+    transferStatusList.value = await dictDropDown('transfer_status')
+    channelList.value = await dictDropDown('channel')
   }
 
   /**
@@ -176,13 +175,36 @@
    * 信息同步
    */
   function sync(record) {
-    createMessage.warn('下版本支持...')
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '是否同步退款信息',
+      onOk: () => {
+        loading.value = true
+        syncByTransferNo(record.transferNo).then(() => {
+          createMessage.success('同步成功')
+          queryPage()
+        })
+      },
+    })
   }
 
   /**
-   * 退款重试
+   * 转账重试
    */
   function reset(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '是否同步退款信息',
+      onOk: () => {
+        loading.value = true
+        resetTransfer(record.id).then(() => {
+          createMessage.success('提交成功')
+          queryPage()
+        })
+      },
+    })
     createMessage.warn('下版本支持...')
   }
 

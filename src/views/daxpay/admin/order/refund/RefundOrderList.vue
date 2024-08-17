@@ -14,9 +14,7 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
-          <span style="font-size: 18px"
-            >退款金额: {{ totalAmount ? totalAmount : 0 }}元</span
-          >
+          <span style="font-size: 18px">退款金额: {{ totalAmount ? totalAmount : 0 }}元</span>
         </template>
       </vxe-toolbar>
       <div class="h-65vh">
@@ -62,14 +60,33 @@
             </template>
           </vxe-column>
           <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
-          <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+          <vxe-column fixed="right" width="130" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <a-link @click="show(row)">查看</a-link>
               <a-divider type="vertical" />
-              <!--      钱包不可以同步      -->
-              <a-link @click="sync(row)">同步</a-link>
-              <a-divider type="vertical" />
-              <a-link :disabled="!(row.status === 'fail')" @click="reset(row)">重试</a-link>
+              <a-dropdown>
+                <a>
+                  更多
+                  <icon icon="ant-design:down-outlined" :size="12" />
+                </a>
+                <template #overlay>
+                  <a-menu>
+                    <a-menu-item
+                      v-if="[RefundStatusEnum.PROGRESS, RefundStatusEnum.FAIL].includes(row.status)"
+                    >
+                      <a-link @click="sync(row)">同步</a-link>
+                    </a-menu-item>
+                    <a-menu-item
+                      v-if="[RefundStatusEnum.PROGRESS, RefundStatusEnum.FAIL].includes(row.status)"
+                    >
+                      <a-link @click="reset(row)">重试</a-link>
+                    </a-menu-item>
+                    <a-menu-item v-if="[RefundStatusEnum.FAIL].includes(row.status)">
+                      <a-link @click="closeOrder(row)" danger>关闭</a-link>
+                    </a-menu-item>
+                  </a-menu>
+                </template>
+              </a-dropdown>
             </template>
           </vxe-column>
         </vxe-table>
@@ -90,7 +107,7 @@
 
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue'
-  import { getTotalAmount, page, resetRefund, syncByRefundNo } from './RefundOrder.api'
+  import { closeRefund, getTotalAmount, page, retryRefund, syncOrder } from './RefundOrder.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import RefundOrderInfo from './RefundOrderInfo.vue'
   import { VxeTable, VxeTableInstance, VxeToolbar, VxeToolbarInstance } from 'vxe-table'
@@ -101,6 +118,12 @@
   import PayOrderInfo from '../pay/PayOrderInfo.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import ALink from '@/components/Link/Link.vue'
+  import {
+    PayAllocStatusEnum,
+    PayStatusEnum,
+    RefundStatusEnum,
+  } from '@/enums/daxpay/TradeStatusEnum'
+  import { Icon } from '@/components/Icon'
 
   // 使用hooks
   const {
@@ -141,12 +164,11 @@
         placeholder: '请输入通道订单号',
       },
       { field: 'title', type: STRING, name: '原支付标题', placeholder: '请输入原支付标题' },
-      { field: 'errorCode', name: '错误码', type: STRING },
       {
         field: 'status',
         type: LIST,
-        name: '处理状态',
-        placeholder: '请选择处理状态',
+        name: '退款状态',
+        placeholder: '请选择退款状态',
         selectList: refundStatusList.value,
       },
       { field: 'channel', name: '支付通道', type: LIST, selectList: channelList.value },
@@ -206,10 +228,27 @@
       content: '是否同步退款信息',
       onOk: () => {
         loading.value = true
-        syncByRefundNo(record.refundNo).then(({ data }) => {
-          // TODO 后期可以根据返回结果进行相应的处理
+        syncOrder(record.id).then(({ data }) => {
           createMessage.success('同步成功')
           console.log(data)
+          queryPage()
+        })
+      },
+    })
+  }
+
+  /**
+   * 退款关闭
+   */
+  function closeOrder(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '请确定该退款订单是否处理失败并结束！',
+      onOk: () => {
+        loading.value = true
+        closeRefund(record.id).then(() => {
+          createMessage.success('关闭成功')
           queryPage()
         })
       },
@@ -223,10 +262,10 @@
     createConfirm({
       iconType: 'warning',
       title: '警告',
-      content: '是否同步退款信息',
+      content: '是否重新发起退款请求',
       onOk: () => {
         loading.value = true
-        resetRefund(record.id).then(() => {
+        retryRefund(record.id).then(() => {
           createMessage.success('提交成功')
           queryPage()
         })

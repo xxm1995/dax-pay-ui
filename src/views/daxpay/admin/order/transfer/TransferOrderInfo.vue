@@ -36,11 +36,8 @@
       <a-descriptions-item label="收款人账号" :span="2">
         {{ order.payeeAccount }}
       </a-descriptions-item>
-      <a-descriptions-item label="转账类型" :span="2">
-        <a-tag>{{ dictConvert('TransferType', order.transferType) || '空' }}</a-tag>
-      </a-descriptions-item>
       <a-descriptions-item label="状态" :span="2">
-        <a-tag>{{ dictConvert('TransferStatus', order.status) || '空' }}</a-tag>
+        <a-tag>{{ dictConvert('transfer_status', order.status) || '空' }}</a-tag>
       </a-descriptions-item>
       <a-descriptions-item label="转账时间" :span="2">
         {{ order.createTime }}

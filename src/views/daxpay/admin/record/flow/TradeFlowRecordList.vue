@@ -45,7 +45,7 @@
               <a-tag>{{ dictConvert('AsyncPayChannel', row.channel) || '无' }}</a-tag>
             </template>
           </vxe-column>
-          <vxe-column field="tradeNo" title="本地交易号" :min-width="230">
+          <vxe-column field="tradeNo" title="平台交易号" :min-width="230">
             <template #default="{ row }">
               <a @click="showOrder(row)">
                 {{ row.tradeNo }}
@@ -112,7 +112,7 @@
   const fields = computed(() => {
     return [
       { field: 'title', type: STRING, name: '订单标题', placeholder: '请输入订单标题' },
-      { field: 'tradeNo', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
+      { field: 'tradeNo', type: STRING, name: '平台交易号', placeholder: '请输入平台交易号' },
       { field: 'bizTradeNo', type: STRING, name: '商户交易号', placeholder: '请输入商户交易号' },
       { field: 'outTradeNo', type: STRING, name: '通道交易号', placeholder: '请输入通道交易号' },
       {

@@ -1,7 +1,7 @@
 /**
  * 支付状态
  */
-export enum PayStatusEnum{
+export enum PayStatusEnum {
   /**
    * 支付中
    */
@@ -31,7 +31,7 @@ export enum PayStatusEnum{
 /**
  * 支付订单的退款状态
  */
-export enum PayRefundStatusEnum{
+export enum PayRefundStatusEnum {
   /**
    * 未退款
    */
@@ -53,8 +53,7 @@ export enum PayRefundStatusEnum{
 /**
  * 支付订单的分账状态
  */
-export enum PayAllocStatusEnum{
-
+export enum PayAllocStatusEnum {
   /**
    * 待分账
    */
@@ -68,7 +67,7 @@ export enum PayAllocStatusEnum{
 /**
  * 退款状态枚举
  */
-export enum RefundStatusEnum{
+export enum RefundStatusEnum {
   /**
    * 退款中
    */
@@ -90,7 +89,7 @@ export enum RefundStatusEnum{
 /**
  * 转账状态
  */
-export enum TransferStatusEnum{
+export enum TransferStatusEnum {
   /** 转账中 */
   PROGRESS = 'progress',
   /** 转账成功 */

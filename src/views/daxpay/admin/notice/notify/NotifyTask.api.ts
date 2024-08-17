@@ -61,7 +61,7 @@ export function getRecord(id) {
 export interface NotifyTask extends MchEntity {
   // 本地交易ID
   tradeId?: string
-  // 本地交易号
+  // 平台交易号
   tradeNo?: string
   // 交易类型
   tradeType?: string

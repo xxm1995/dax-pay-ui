@@ -24,11 +24,12 @@
       <a-form-item label="商户订单号">
         <a-tag>{{ order.bizOrderNo }}</a-tag>
       </a-form-item>
-      <a-form-item label="退款金额" name="amount">
+      <a-form-item label="退款金额(元)" name="amount">
         <a-input-number
           :min="0.01"
           :max="order.refundableBalance"
           :precision="2"
+          placeholder="请输入退款金额(元)"
           v-model:value="form.amount"
         />
       </a-form-item>

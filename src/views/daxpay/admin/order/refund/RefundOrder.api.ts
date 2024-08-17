@@ -45,19 +45,29 @@ export function refund(params) {
 /**
  * 退款信息同步
  */
-export function syncByRefundNo(refundNo) {
+export function syncOrder(id) {
   return defHttp.post<Result<void>>({
-    url: '/order/refund/syncByRefundNo',
-    params: { refundNo },
+    url: '/order/refund/sync',
+    params: { id },
   })
 }
 
 /**
  * 退款重试
  */
-export function resetRefund(id) {
+export function retryRefund(id) {
   return defHttp.post<Result<void>>({
-    url: '/order/refund/resetRefund',
+    url: '/order/refund/retry',
+    params: { id },
+  })
+}
+
+/**
+ * 退款关闭
+ */
+export function closeRefund(id) {
+  return defHttp.post<Result<void>>({
+    url: '/order/refund/close',
     params: { id },
   })
 }

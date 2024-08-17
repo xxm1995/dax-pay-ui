@@ -102,7 +102,7 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'tradeNo', type: STRING, name: '本地交易号', placeholder: '请输入本地交易号' },
+      { field: 'tradeNo', type: STRING, name: '平台交易号', placeholder: '请输入平台交易号' },
       { field: 'outTradeNo', type: STRING, name: '通道交易号', placeholder: '请输入通道交易号' },
       {
         field: 'channel',

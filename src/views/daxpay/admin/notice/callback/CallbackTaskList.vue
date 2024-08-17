@@ -19,7 +19,7 @@
         @sort-change="sortChange"
       >
         <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="本地交易号" :min-width="230">
+        <vxe-column field="orderId" title="平台交易号" :min-width="230">
           <template #default="{ row }">
             <a-link @click="showOrder(row)">
               {{ row.tradeNo }}
@@ -80,8 +80,8 @@
   import ALink from '@/components/Link/Link.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import CallbackTaskInfo from './CallbackTaskInfo.vue'
-  import PayOrderInfo from '../../order/pay/PayOrderInfo.vue'
-  import TransferOrderInfo from '../../order/transfer/TransferOrderInfo.vue'
+  import PayOrderInfo from '@/views/daxpay/admin/order/pay/PayOrderInfo.vue'
+  import TransferOrderInfo from '@/views/daxpay/admin/order/transfer/TransferOrderInfo.vue'
   import CallbackRecordList from './CallbackRecordList.vue'
 
   // 使用hooks
@@ -103,7 +103,7 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'tradeNo', type: STRING, name: '本地交易号', placeholder: '请输入完整本地交易号' },
+      { field: 'tradeNo', type: STRING, name: '平台交易号', placeholder: '请输入完整平台交易号' },
       {
         field: 'noticeType',
         type: LIST,

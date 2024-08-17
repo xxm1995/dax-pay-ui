@@ -43,10 +43,10 @@
         <a-descriptions-item label="通知地址" :span="16">
           {{ order.notifyUrl || '无' }}
         </a-descriptions-item>
-        <a-descriptions-item label="错误编码" :span="8">
+        <a-descriptions-item label="错误编码" v-if="order.errorMsg" :span="8">
           {{ order.errorCode || '无' }}
         </a-descriptions-item>
-        <a-descriptions-item label="错误信息" :span="16">
+        <a-descriptions-item label="错误信息" v-if="order.errorMsg" :span="16">
           {{ order.errorMsg || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="客户IP" :span="8">

@@ -10,7 +10,7 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-descriptions bordered title="">
-        <a-descriptions-item label="本地交易号" :span="2">
+        <a-descriptions-item label="平台交易号" :span="2">
           {{ form.tradeNo }}
         </a-descriptions-item>
         <a-descriptions-item label="通道交易号" :span="2">

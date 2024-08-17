@@ -89,6 +89,9 @@
                     <a-menu-item v-if="[PayStatusEnum.PROGRESS].includes(row.status)">
                       <a-link @click="closeOrder(row)" danger>关闭</a-link>
                     </a-menu-item>
+                    <a-menu-item v-if="[PayStatusEnum.PROGRESS].includes(row.status)">
+                      <a-link @click="cancelOrder(row)" danger>撤销</a-link>
+                    </a-menu-item>
                     <a-menu-item
                       v-if="
                         row.allocStatus === PayAllocStatusEnum.WAITING &&
@@ -99,7 +102,12 @@
                     </a-menu-item>
                     <a-menu-item
                       v-if="
-                        [PayStatusEnum.SUCCESS].includes(row.status) && row.refundableBalance > 0
+                        [PayStatusEnum.SUCCESS].includes(row.status) &&
+                        row.refundableBalance > 0 &&
+                        [
+                          PayRefundStatusEnum.NO_REFUND,
+                          PayRefundStatusEnum.PARTIAL_REFUND,
+                        ].includes(row.refundStatus)
                       "
                     >
                       <a-link @click="refund(row)" danger>退款</a-link>
@@ -132,8 +140,9 @@
     close,
     getTotalAmount,
     page,
-    syncByOrderNo,
+    syncOrder,
     cellStyle,
+    cancel,
   } from './PayOrder.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import PayOrderInfo from './PayOrderInfo.vue'
@@ -146,7 +155,11 @@
   import ALink from '@/components/Link/Link.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { Icon } from '@/components/Icon'
-  import { PayAllocStatusEnum, PayStatusEnum } from '@/enums/daxpay/TradeStatusEnum'
+  import {
+    PayAllocStatusEnum,
+    PayRefundStatusEnum,
+    PayStatusEnum,
+  } from '@/enums/daxpay/TradeStatusEnum'
 
   // 使用hooks
   const {
@@ -264,10 +277,10 @@
     createConfirm({
       iconType: 'warning',
       title: '警告',
-      content: '是否同步支付信息',
+      content: '是否同步支付信息，只有状态支付中的订单才会对状态进行更新',
       onOk: () => {
         loading.value = true
-        syncByOrderNo(record.orderNo).then(() => {
+        syncOrder(record.id).then(() => {
           createMessage.success('同步成功')
           queryPage()
         })
@@ -283,8 +296,24 @@
       title: '警告',
       content: '是否关闭支付订单',
       onOk: () => {
-        close(record.orderNo).then(() => {
+        close(record.id).then(() => {
           createMessage.success('关闭成功')
+          queryPage()
+        })
+      },
+    })
+  }
+  /**
+   * 撤销订单
+   */
+  function cancelOrder(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '只有部分类型的订单支持撤销操作，请注意!',
+      onOk: () => {
+        cancel(record.id).then(() => {
+          createMessage.success('撤销成功')
           queryPage()
         })
       },
