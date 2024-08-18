@@ -21,7 +21,7 @@
           </template>
         </vxe-column>
         <vxe-column field="bizTradeNo" title="商户交易号" :min-width="230" />
-        <vxe-column field="outTradeNo" title="通道交易号" :min-width="230" />
+        <vxe-column field="outTradeNo" title="通道交易号" :min-width="250" />
         <vxe-column field="outTradeStatus" title="通道状态" :min-width="150" />
         <vxe-column field="type" title="同步类型" :min-width="120">
           <template #default="{ row }">
@@ -41,7 +41,7 @@
         </vxe-column>
         <vxe-column field="errorMsg" title="错误消息" :min-width="160" />
         <vxe-column field="createTime" title="同步时间" :min-width="160" />
-        <vxe-column fixed="right" :min-width="60" :showOverflow="false" title="操作">
+        <vxe-column fixed="right" :min-width="50" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
               <a-link @click="show(row)">查看</a-link>

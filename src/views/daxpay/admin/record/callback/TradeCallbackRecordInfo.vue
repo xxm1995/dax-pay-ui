@@ -17,13 +17,13 @@
           {{ form.outTradeNo }}
         </a-descriptions-item>
         <a-descriptions-item label="支付通道" :span="2">
-          <a-tag>{{ dictConvert('PayChannel', form.channel) || '无' }}</a-tag>
+          <a-tag>{{ dictConvert('channel', form.channel) || '无' }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="回调类型" :span="2">
-          <a-tag>{{ dictConvert('PaymentType', form.callbackType) || '无' }}</a-tag>
+          <a-tag>{{ dictConvert('trade_type', form.callbackType) || '无' }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="状态" :span="2">
-          {{ dictConvert('PayCallbackStatus', form.status) || '无' }}
+        <a-descriptions-item label="处理状态" :span="2">
+          {{ dictConvert('callback_status', form.status) || '无' }}
         </a-descriptions-item>
         <a-descriptions-item label="通知时间">
           {{ form.createTime }}

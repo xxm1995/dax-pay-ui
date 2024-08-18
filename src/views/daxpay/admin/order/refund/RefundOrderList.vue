@@ -54,7 +54,7 @@
               {{ row.amount ? row.amount : 0 }}
             </template>
           </vxe-column>
-          <vxe-column field="refundStatus" title="状态" :min-width="80">
+          <vxe-column field="status" title="状态" :min-width="100">
             <template #default="{ row }">
               {{ dictConvert('refund_status', row.status) }}
             </template>
@@ -107,7 +107,14 @@
 
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue'
-  import { closeRefund, getTotalAmount, page, retryRefund, syncOrder } from './RefundOrder.api'
+  import {
+    closeRefund,
+    getTotalAmount,
+    page,
+    retryRefund,
+    syncOrder,
+    cellStyle,
+  } from './RefundOrder.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import RefundOrderInfo from './RefundOrderInfo.vue'
   import { VxeTable, VxeTableInstance, VxeToolbar, VxeToolbarInstance } from 'vxe-table'
@@ -118,11 +125,7 @@
   import PayOrderInfo from '../pay/PayOrderInfo.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import ALink from '@/components/Link/Link.vue'
-  import {
-    PayAllocStatusEnum,
-    PayStatusEnum,
-    RefundStatusEnum,
-  } from '@/enums/daxpay/TradeStatusEnum'
+  import { RefundStatusEnum } from '@/enums/daxpay/TradeStatusEnum'
   import { Icon } from '@/components/Icon'
 
   // 使用hooks
@@ -244,7 +247,7 @@
     createConfirm({
       iconType: 'warning',
       title: '警告',
-      content: '请确定该退款订单是否处理失败并结束！',
+      content: '请确定该退款订单处理失败并处理完成！',
       onOk: () => {
         loading.value = true
         closeRefund(record.id).then(() => {
@@ -285,38 +288,6 @@
    */
   function showPayOrder(record) {
     payOrderInfo.value.init(record.orderNo)
-  }
-
-  function cellStyle({ row, column }) {
-    if (column.field == 'refundStatus') {
-      if (row.status == 'success') {
-        return { color: 'green' }
-      }
-      if (row.status == 'fail') {
-        return { color: 'red' }
-      }
-      if (row.status == 'progress') {
-        return { color: 'orange' }
-      }
-      if (row.status == 'close') {
-        return { color: 'gray' }
-      }
-      return { color: 'red' }
-    }
-    if (column.field == 'async') {
-      if (row.asyncPay) {
-        return { color: 'green' }
-      } else {
-        return { color: 'gray' }
-      }
-    }
-    if (column.field == 'combinationPay') {
-      if (row.combinationPay) {
-        return { color: 'green' }
-      } else {
-        return { color: 'gray' }
-      }
-    }
   }
 </script>
 

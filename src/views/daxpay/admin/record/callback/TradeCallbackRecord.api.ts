@@ -1,6 +1,7 @@
 import { defHttp } from '@/utils/http/axios'
 import { PageResult, Result } from '#/axios'
 import { MchEntity } from '#/web'
+import { CallbackStatusEnum } from '@/enums/daxpay/TradeStatusEnum'
 
 /**
  * 分页
@@ -20,6 +21,27 @@ export function get(id) {
     url: '/record/callback/findById',
     params: { id },
   })
+}
+
+/**
+ * 显示样式优化
+ */
+export function cellStyle({ row, column }) {
+  // 支付状态
+  if (column.field == 'status') {
+    if (row.status == CallbackStatusEnum.SUCCESS) {
+      return { color: 'green' }
+    }
+    if (row.status == CallbackStatusEnum.FAIL || row.status == CallbackStatusEnum.EXCEPTION) {
+      return { color: 'red' }
+    }
+    if (row.status == CallbackStatusEnum.NOT_FOUND) {
+      return { color: 'orange' }
+    }
+    if (row.status == CallbackStatusEnum.IGNORE) {
+      return { color: 'gray' }
+    }
+  }
 }
 
 /**

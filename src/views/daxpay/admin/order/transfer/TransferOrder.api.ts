@@ -1,6 +1,7 @@
 import { defHttp } from '@/utils/http/axios'
 import { PageResult, Result } from '#/axios'
-import { BaseEntity } from '#/web'
+import { MchEntity} from '#/web'
+import { TransferStatusEnum } from '@/enums/daxpay/TradeStatusEnum'
 
 /**
  * 分页
@@ -45,19 +46,29 @@ export function transfer(params) {
 /**
  * 转账信息同步
  */
-export function syncByTransferNo(transferNo) {
+export function syncByTransferNo(id) {
   return defHttp.post<Result<void>>({
-    url: '/order/transfer/syncByTransferNo',
-    params: { transferNo },
+    url: '/order/transfer/sync',
+    params: { id },
   })
 }
 
 /**
  * 转账重试
  */
-export function resetTransfer(id) {
+export function retryTransfer(id) {
   return defHttp.post<Result<void>>({
-    url: '/order/transfer/resetTransfer',
+    url: '/order/transfer/retry',
+    params: { id },
+  })
+}
+
+/**
+ * 关闭转账订单
+ */
+export function closeTransfer(id) {
+  return defHttp.post<Result<void>>({
+    url: '/order/transfer/close',
     params: { id },
   })
 }
@@ -73,9 +84,29 @@ export function getTotalAmount(param) {
 }
 
 /**
+ * 显示样式优化
+ */
+export function cellStyle({ row, column }) {
+  if (column.field == 'status') {
+    if (row.status == TransferStatusEnum.SUCCESS) {
+      return { color: 'green' }
+    }
+    if (row.status == TransferStatusEnum.FAIL) {
+      return { color: 'red' }
+    }
+    if (row.status == TransferStatusEnum.PROGRESS) {
+      return { color: 'orange' }
+    }
+    if (row.status == TransferStatusEnum.CLOSE) {
+      return { color: 'gray' }
+    }
+  }
+}
+
+/**
  * 转账记录
  */
-export interface TransferOrder extends BaseEntity {
+export interface TransferOrder extends MchEntity {
   // 商户转账号
   bizTransferNo?: string
   // 转账号
@@ -100,8 +131,8 @@ export interface TransferOrder extends BaseEntity {
   payeeName?: string
   // 状态
   status?: string
-  // 成功时间
-  successTime?: string
+  // 完成时间
+  finishTime?: string
   // 异步通知地址
   notifyUrl?: string
   // 商户扩展参数

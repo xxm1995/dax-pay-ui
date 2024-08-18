@@ -22,6 +22,7 @@
           height="auto"
           row-id="id"
           ref="xTable"
+          :cell-style="cellStyle"
           :sort-config="{ remote: true, trigger: 'cell' }"
           :data="pagination.records"
           :loading="loading"
@@ -39,7 +40,7 @@
           <vxe-column field="title" title="标题" :min-width="160" />
           <vxe-column field="channel" title="转账通道" :min-width="120">
             <template #default="{ row }">
-              {{ dictConvert('PayChannel', row.channel) }}
+              {{ dictConvert('channel', row.channel) }}
             </template>
           </vxe-column>
           <vxe-column field="amount" title="金额(元)" :min-width="140">
@@ -49,18 +50,42 @@
           </vxe-column>
           <vxe-column field="status" title="状态" :min-width="80">
             <template #default="{ row }">
-              {{ dictConvert('TransferStatus', row.status) }}
+              {{ dictConvert('transfer_status', row.status) }}
             </template>
           </vxe-column>
           <vxe-column field="reason" title="转账原因" :min-width="160" />
           <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
-          <vxe-column fixed="right" width="150" :showOverflow="false" title="操作">
+          <vxe-column fixed="right" :width="120" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <a-link @click="show(row)">查看</a-link>
               <a-divider type="vertical" />
-              <a-link @click="sync(row)">同步</a-link>
-              <a-divider type="vertical" />
-              <a-link @click="reset(row)">重试</a-link>
+              <a-dropdown>
+                <a>
+                  更多
+                  <icon icon="ant-design:down-outlined" :size="12" />
+                </a>
+                <template #overlay>
+                  <a-menu>
+                    <a-menu-item
+                      v-if="
+                        [TransferStatusEnum.FAIL, TransferStatusEnum.PROGRESS].includes(row.status)
+                      "
+                    >
+                      <a-link @click="sync(row)">同步</a-link>
+                    </a-menu-item>
+                    <a-menu-item
+                      v-if="
+                        [TransferStatusEnum.FAIL, TransferStatusEnum.PROGRESS].includes(row.status)
+                      "
+                    >
+                      <a-link @click="reset(row)">重试</a-link>
+                    </a-menu-item>
+                    <a-menu-item v-if="[TransferStatusEnum.FAIL].includes(row.status)">
+                      <a-link @click="closeOrder(row)" danger>关闭</a-link>
+                    </a-menu-item>
+                  </a-menu>
+                </template>
+              </a-dropdown>
             </template>
           </vxe-column>
         </vxe-table>
@@ -80,7 +105,14 @@
 
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue'
-  import { getTotalAmount, page, resetTransfer, syncByTransferNo } from './TransferOrder.api'
+  import {
+    closeTransfer,
+    getTotalAmount,
+    page,
+    retryTransfer,
+    syncByTransferNo,
+    cellStyle
+  } from './TransferOrder.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import TransferOrderInfo from './TransferOrderInfo.vue'
   import { VxeTable, VxeTableInstance, VxeToolbar, VxeToolbarInstance } from 'vxe-table'
@@ -90,6 +122,8 @@
   import { useDict } from '@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import ALink from '/@/components/Link/Link.vue'
+  import { TransferStatusEnum } from '@/enums/daxpay/TradeStatusEnum'
+  import { Icon } from '@/components/Icon'
 
   // 使用hooks
   const {
@@ -162,7 +196,9 @@
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
-    // 汇总数据
+    /**
+     * 汇总数据
+     */
     getTotalAmount({
       ...model.queryParam,
     }).then(({ data }) => {
@@ -196,16 +232,33 @@
     createConfirm({
       iconType: 'warning',
       title: '警告',
-      content: '是否同步退款信息',
+      content: '是否重新发起转账请求信息',
       onOk: () => {
         loading.value = true
-        resetTransfer(record.id).then(() => {
+        retryTransfer(record.id).then(() => {
           createMessage.success('提交成功')
           queryPage()
         })
       },
     })
-    createMessage.warn('下版本支持...')
+  }
+
+  /**
+   * 关闭转账订单
+   */
+  function closeOrder(record) {
+    createConfirm({
+      iconType: 'warning',
+      title: '警告',
+      content: '请确定该转账订单处理失败并处理完成！',
+      onOk: () => {
+        loading.value = true
+        closeTransfer(record.id).then(() => {
+          createMessage.success('关闭成功')
+          queryPage()
+        })
+      },
+    })
   }
 
   /**

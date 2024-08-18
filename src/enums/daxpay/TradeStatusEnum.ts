@@ -94,8 +94,24 @@ export enum TransferStatusEnum {
   PROGRESS = 'progress',
   /** 转账成功 */
   SUCCESS = 'success',
-  /** 转账关闭 */
-  FAIL = 'fail',
   /** 转账失败 */
+  FAIL = 'fail',
+  /** 转账关闭 */
   CLOSE = 'close',
+}
+
+/**
+ * 支付回调处理状态
+ */
+export enum CallbackStatusEnum {
+  /** 成功 */
+  SUCCESS = 'success',
+  /** 失败 */
+  FAIL = 'fail',
+  /** 忽略 */
+  IGNORE = 'ignore',
+  /** 异常 */
+  EXCEPTION = 'exception',
+  /** 未找到 */
+  NOT_FOUND = 'not_found',
 }

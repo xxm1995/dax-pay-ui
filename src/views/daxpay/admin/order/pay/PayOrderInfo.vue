@@ -49,7 +49,7 @@
         <a-descriptions-item label="错误信息" v-if="order.errorMsg" :span="16">
           {{ order.errorMsg || '无' }}
         </a-descriptions-item>
-        <a-descriptions-item label="客户IP" :span="8">
+        <a-descriptions-item label="终端IP" :span="8">
           {{ order.clientIp }}
         </a-descriptions-item>
         <a-descriptions-item label="描述" :span="16">

@@ -15,6 +15,7 @@
           height="auto"
           row-id="id"
           ref="xTable"
+          :cell-style="cellStyle"
           :data="pagination.records"
           :loading="loading"
           :sort-config="{ remote: true, trigger: 'cell' }"
@@ -30,17 +31,17 @@
           </vxe-column>
           <vxe-column field="channel" title="支付通道" :min-width="100">
             <template #default="{ row }">
-              <a-tag>{{ dictConvert('PayChannel', row.channel) || '无' }}</a-tag>
+              <a-tag>{{ dictConvert('channel', row.channel) || '无' }}</a-tag>
             </template>
           </vxe-column>
           <vxe-column field="callbackType" title="回调类型" :min-width="100">
             <template #default="{ row }">
-              <a-tag>{{ dictConvert('PaymentType', row.callbackType) || '无' }}</a-tag>
+              <a-tag>{{ dictConvert('trade_type', row.callbackType) || '无' }}</a-tag>
             </template>
           </vxe-column>
           <vxe-column field="status" title="处理状态" :min-width="100">
             <template #default="{ row }">
-              <a-tag>{{ dictConvert('PayCallbackStatus', row.status) || '无' }}</a-tag>
+              {{ dictConvert('callback_status', row.status) || '无' }}
             </template>
           </vxe-column>
           <vxe-column field="msg" title="提示信息" :min-width="250" />
@@ -71,7 +72,7 @@
 
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue'
-  import { page, TradeCallbackRecord } from './TradeCallbackRecord.api'
+  import { page, TradeCallbackRecord, cellStyle } from './TradeCallbackRecord.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'

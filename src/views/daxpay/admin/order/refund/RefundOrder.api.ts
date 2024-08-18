@@ -1,6 +1,12 @@
 import { defHttp } from '@/utils/http/axios'
 import { PageResult, Result } from '#/axios'
 import { MchEntity } from '#/web'
+import {
+  PayAllocStatusEnum,
+  PayRefundStatusEnum,
+  PayStatusEnum,
+  RefundStatusEnum,
+} from '@/enums/daxpay/TradeStatusEnum'
 
 /**
  * 分页
@@ -80,6 +86,27 @@ export function getTotalAmount(param) {
     url: '/order/refund/getTotalAmount',
     params: param,
   })
+}
+
+/**
+ * 显示样式优化
+ */
+export function cellStyle({ row, column }) {
+  // 支付状态
+  if (column.field == 'status') {
+    if (row.status == RefundStatusEnum.SUCCESS) {
+      return { color: 'green' }
+    }
+    if (row.status == RefundStatusEnum.FAIL) {
+      return { color: 'red' }
+    }
+    if (row.status == RefundStatusEnum.PROGRESS) {
+      return { color: 'orange' }
+    }
+    if (row.status == RefundStatusEnum.CLOSE) {
+      return { color: 'gray' }
+    }
+  }
 }
 
 /**

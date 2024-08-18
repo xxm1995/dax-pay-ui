@@ -33,17 +33,17 @@
       <a-descriptions-item label="收款人姓名" :span="2">
         {{ order.payeeName || '空' }}
       </a-descriptions-item>
-      <a-descriptions-item label="收款人账号" :span="2">
+      <a-descriptions-item label="收款人账号" :span="4">
         {{ order.payeeAccount }}
       </a-descriptions-item>
       <a-descriptions-item label="状态" :span="2">
         <a-tag>{{ dictConvert('transfer_status', order.status) || '空' }}</a-tag>
       </a-descriptions-item>
-      <a-descriptions-item label="转账时间" :span="2">
+      <a-descriptions-item label="创建时间" :span="2">
         {{ order.createTime }}
       </a-descriptions-item>
       <a-descriptions-item label="完成时间" :span="2">
-        {{ order.successTime }}
+        {{ order.finishTime }}
       </a-descriptions-item>
       <a-descriptions-item v-if="order.errorCode" label="错误码" :span="2">
         {{ order.errorCode }}
@@ -51,8 +51,17 @@
       <a-descriptions-item v-if="order.errorMsg" label="错误信息" :span="2">
         {{ order.errorMsg }}
       </a-descriptions-item>
-      <a-descriptions-item label="终端ip">
+      <a-descriptions-item label="终端ip" :span="4">
         {{ order.clientIp }}
+      </a-descriptions-item>
+      <a-descriptions-item label="商户号" :span="2">
+        {{ order.mchNo }}
+      </a-descriptions-item>
+      <a-descriptions-item label="应用AppId" :span="2">
+        {{ order.appId }}
+      </a-descriptions-item>
+      <a-descriptions-item label="商户扩展参数" :span="4">
+        {{ order.attach || '无' }}
       </a-descriptions-item>
     </a-descriptions>
     <template #footer>
