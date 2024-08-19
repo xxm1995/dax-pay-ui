@@ -265,7 +265,7 @@
    * 查看
    */
   function show(record) {
-    transferOrderInfo.value.init(record.bizTransferNo)
+    transferOrderInfo.value.init(record.transferNo)
   }
 </script>
 

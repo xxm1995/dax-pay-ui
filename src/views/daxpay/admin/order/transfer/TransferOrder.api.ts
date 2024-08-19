@@ -1,6 +1,6 @@
 import { defHttp } from '@/utils/http/axios'
 import { PageResult, Result } from '#/axios'
-import { MchEntity} from '#/web'
+import { MchEntity } from '#/web'
 import { TransferStatusEnum } from '@/enums/daxpay/TradeStatusEnum'
 
 /**
@@ -26,10 +26,10 @@ export function get(id) {
 /**
  * 获取单条
  */
-export function getByBizTransferNo(bizTransferNo) {
+export function findByTransferNo(transferNo) {
   return defHttp.get<Result<TransferOrder>>({
-    url: '/order/transfer/findByBizTransferNo',
-    params: { bizTransferNo },
+    url: '/order/transfer/findByTransferNo',
+    params: { transferNo },
   })
 }
 

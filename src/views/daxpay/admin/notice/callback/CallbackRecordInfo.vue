@@ -9,7 +9,7 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
+      <a-descriptions bordered title="" :column="1">
         <a-descriptions-item label="主键">
           {{ info.id }}
         </a-descriptions-item>

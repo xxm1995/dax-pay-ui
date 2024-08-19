@@ -9,7 +9,7 @@
     @cancel="handleCancel"
   >
     <a-descriptions bordered>
-      <a-descriptions-item label="退款号" :span="2">
+      <a-descriptions-item label="退款号" :column="{ lg: 2, md: 1 }">
         {{ order.refundNo }}
       </a-descriptions-item>
       <a-descriptions-item label="商户退款号" :span="2">

@@ -22,7 +22,6 @@
         </vxe-column>
         <vxe-column field="bizTradeNo" title="商户交易号" :min-width="230" />
         <vxe-column field="outTradeNo" title="通道交易号" :min-width="250" />
-        <vxe-column field="outTradeStatus" title="通道状态" :min-width="150" />
         <vxe-column field="type" title="同步类型" :min-width="120">
           <template #default="{ row }">
             <a-tag>{{ dictConvert('trade_type', row.tradeType) }}</a-tag>
@@ -33,6 +32,7 @@
             <a-tag>{{ dictConvert('channel', row.channel) }}</a-tag>
           </template>
         </vxe-column>
+        <vxe-column field="outTradeStatus" title="通道状态" :min-width="150" />
         <vxe-column field="repairOrder" title="是否调整" width="170">
           <template #default="{ row }">
             <a-tag v-if="row.adjust" color="green"> 已调整 </a-tag>
@@ -71,7 +71,6 @@
   import useTablePage from '@/hooks/bootx/useTablePage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '@/components/Bootx/Query/BQuery.vue'
-  import { useMessage } from '@/hooks/web/useMessage'
   import { LIST, QueryField, STRING } from '@/components/Bootx/Query/Query'
   import { useDict } from '@/hooks/bootx/useDict'
   import { TradeTypeEnum } from '@/enums/daxpay/PaymentEnum'
@@ -92,7 +91,6 @@
     model,
     loading,
   } = useTablePage(queryPage)
-  const { notification, createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
   let syncStatusList = ref<LabeledValue[]>([])

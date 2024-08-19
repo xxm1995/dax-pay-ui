@@ -12,11 +12,12 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
-          <span style="font-size: 18px"
-            >收入金额: {{ totalAmount.incomeAmount ? totalAmount.incomeAmount : 0 }}元</span
+          <span style="font-size: 18px">收入金额: {{ totalAmount.incomeAmount }}元</span>
+          <span style="font-size: 18px; margin-left: 50px"
+            >退款金额: {{ totalAmount.refundAmount }}元</span
           >
           <span style="font-size: 18px; margin-left: 50px"
-            >支出金额: {{ totalAmount.outlayAmount ? totalAmount.outlayAmount : 0 }}元</span
+            >转账金额: {{ totalAmount.transferAmount }}元</span
           >
         </template>
       </vxe-toolbar>
@@ -37,12 +38,12 @@
           </vxe-column>
           <vxe-column field="type" title="流水类型" :min-width="120">
             <template #default="{ row }">
-              <a-tag>{{ dictConvert('TradeFlowRecordType', row.type) || '无' }}</a-tag>
+              <a-tag>{{ dictConvert('trade_type', row.type) || '无' }}</a-tag>
             </template>
           </vxe-column>
-          <vxe-column field="channel" title="交易通道" :min-width="100">
+          <vxe-column field="channel" title="交易通道" :min-width="150">
             <template #default="{ row }">
-              <a-tag>{{ dictConvert('AsyncPayChannel', row.channel) || '无' }}</a-tag>
+              <a-tag>{{ dictConvert('channel', row.channel) || '无' }}</a-tag>
             </template>
           </vxe-column>
           <vxe-column field="tradeNo" title="平台交易号" :min-width="230">
@@ -76,12 +77,13 @@
     <TradeFlowRecordInfo ref="tradeFlowRecordInfo" />
     <PayOrderInfo ref="payOrderInfo" />
     <RefundOrderInfo ref="refundOrderInfo" />
+    <TransferOrderInfo ref="transferOrderInfo" />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue'
-  import { page } from './TradeFlowRecord.api'
+  import { page, TradeFlowRecord } from './TradeFlowRecord.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '@/components/Bootx/Query/BQuery.vue'
@@ -90,8 +92,10 @@
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import PayOrderInfo from '@/views/daxpay/admin/order/pay/PayOrderInfo.vue'
   import RefundOrderInfo from '@/views/daxpay/admin/order/refund/RefundOrderInfo.vue'
+  import TransferOrderInfo from '@/views/daxpay/admin/order/transfer/TransferOrderInfo.vue'
   import ALink from '@/components/Link/Link.vue'
   import TradeFlowRecordInfo from './TradeFlowRecordInfo.vue'
+  import { TradeTypeEnum } from '@/enums/daxpay/PaymentEnum'
 
   // 使用hooks
   const {
@@ -136,10 +140,12 @@
   const xToolbar = ref<VxeToolbarInstance>()
   const payOrderInfo = ref<any>()
   const refundOrderInfo = ref<any>()
+  const transferOrderInfo = ref<any>()
   const tradeFlowRecordInfo = ref<any>()
   const totalAmount = ref({
     incomeAmount: 0.0,
-    outlayAmount: 0.0,
+    refundAmount: 0.0,
+    transferAmount: 0.0,
   })
 
   onMounted(() => {
@@ -182,11 +188,13 @@
   /**
    * 查看支付单信息
    */
-  function showOrder(record) {
-    if (record.type === 'pay') {
+  function showOrder(record: TradeFlowRecord) {
+    if (record.type === TradeTypeEnum.PAY) {
       payOrderInfo.value.init(record.tradeNo)
-    } else if (record.type === 'refund') {
+    } else if (record.type === TradeTypeEnum.REFUND) {
       refundOrderInfo.value.init(record.tradeNo)
+    } else if (record.type === TradeTypeEnum.TRANSFER) {
+      transferOrderInfo.value.init(record.tradeNo)
     }
   }
 </script>

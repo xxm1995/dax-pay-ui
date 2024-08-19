@@ -1,6 +1,6 @@
 <template>
   <basic-modal
-    title="退款订单"
+    title="转账订单"
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="1200"
@@ -8,7 +8,7 @@
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-descriptions bordered :column="4">
+    <a-descriptions bordered :column="{ lg: 4, md: 1 }">
       <a-descriptions-item label="转账号" :span="2">
         {{ order.transferNo }}
       </a-descriptions-item>
@@ -72,7 +72,7 @@
 
 <script lang="ts" setup>
   import useFormEdit from '@/hooks/bootx/useFormEdit'
-  import { getByBizTransferNo, TransferOrder } from './TransferOrder.api'
+  import { findByTransferNo, TransferOrder } from './TransferOrder.api'
   import { BasicModal } from '@/components/Modal'
   import { useDict } from '@/hooks/bootx/useDict'
   import { ref } from 'vue'
@@ -83,10 +83,10 @@
   const order = ref<TransferOrder>({})
 
   // 入口
-  async function init(bizTransferNo) {
+  async function init(transferNo) {
     visible.value = true
     confirmLoading.value = true
-    getByBizTransferNo(bizTransferNo).then(({ data }) => {
+    findByTransferNo(transferNo).then(({ data }) => {
       order.value = data
       confirmLoading.value = false
     })

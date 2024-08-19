@@ -31,7 +31,7 @@
           <vxe-column field="bizOrderNo" title="商户订单号" :min-width="180" />
           <vxe-column field="closeType" title="关闭类型" :min-width="80">
             <template #default="{ row }">
-              {{ dictConvert('PayCloseType', row.closeType) }}
+              <a-tag>{{ dictConvert('close_type', row.closeType) }}</a-tag>
             </template>
           </vxe-column>
           <vxe-column field="closed" title="关闭状态" :min-width="80">
@@ -42,7 +42,7 @@
           </vxe-column>
           <vxe-column field="channel" title="支付通道" :min-width="100">
             <template #default="{ row }">
-              {{ dictConvert('PayChannel', row.channel) }}
+              {{ dictConvert('channel', row.channel) }}
             </template>
           </vxe-column>
           <vxe-column field="errorMsg" title="错误消息" :min-width="180" />

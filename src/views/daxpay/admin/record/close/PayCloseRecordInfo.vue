@@ -3,13 +3,13 @@
     title="查看"
     v-bind="$attrs"
     :loading="confirmLoading"
-    :width="modalWidth"
+    :width="1200"
     :open="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-descriptions bordered title="" :column="{ md: 1, sm: 1, xs: 1 }">
+      <a-descriptions bordered title="" :column="{ lg: 2, md: 1 }">
         <a-descriptions-item label="订单号">
           {{ record.orderNo }}
         </a-descriptions-item>
@@ -17,13 +17,13 @@
           {{ record.bizOrderNo }}
         </a-descriptions-item>
         <a-descriptions-item label="支付通道">
-          {{ dictConvert('PayChannel', record.channel) }}
+          {{ dictConvert('channel', record.channel) }}
         </a-descriptions-item>
         <a-descriptions-item label="关闭类型">
-          {{ dictConvert('PayCloseType', record.closeType) }}
+          <a-tag>{{ dictConvert('close_type', record.closeType) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="是否关闭成功">
-          {{ record.closed ? '是' : '否' }}
+          <a-tag>{{ record.closed ? '成功' : '失败' }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="错误编码" v-if="record.errorCode">
           {{ record.errorMsg }}
@@ -36,6 +36,12 @@
         </a-descriptions-item>
         <a-descriptions-item label="关闭时间">
           {{ record.createTime }}
+        </a-descriptions-item>
+        <a-descriptions-item label="商户号">
+          {{ record.mchNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="应用AppId">
+          {{ record.appId }}
         </a-descriptions-item>
       </a-descriptions>
     </a-spin>
@@ -52,7 +58,7 @@
   import { useDict } from '@/hooks/bootx/useDict'
   import { ref } from 'vue'
 
-  const { handleCancel, modalWidth, confirmLoading, visible, showable } = useFormEdit()
+  const { handleCancel, confirmLoading, visible, showable } = useFormEdit()
   const { dictConvert } = useDict()
 
   // 表单

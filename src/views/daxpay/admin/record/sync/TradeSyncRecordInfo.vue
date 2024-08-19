@@ -8,7 +8,7 @@
     :mask-closable="showable"
     @cancel="handleCancel"
   >
-    <a-spin :spinning="confirmLoading">
+    <a-spin :column="{ lg: 4, md: 1 }" :spinning="confirmLoading">
       <a-descriptions title="" bordered>
         <a-descriptions-item label="平台交易号" :span="4">
           {{ form.tradeNo }}
@@ -39,6 +39,12 @@
         </a-descriptions-item>
         <a-descriptions-item label="错误信息" v-if="form.errorMsg" :span="2">
           {{ form.errorMsg }}
+        </a-descriptions-item>
+        <a-descriptions-item label="商户号" :span="2">
+          {{ form.mchNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="应用AppId" :span="2">
+          {{ form.appId }}
         </a-descriptions-item>
         <a-descriptions-item label="同步消息" :span="4">
           <json-preview :data="XEUtils.toStringJSON(form.syncInfo || '{}')" />

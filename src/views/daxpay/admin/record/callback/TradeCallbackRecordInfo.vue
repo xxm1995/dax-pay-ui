@@ -9,7 +9,7 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-descriptions bordered title="">
+      <a-descriptions bordered title="" :column="{ lg: 2, md: 1 }">
         <a-descriptions-item label="平台交易号" :span="2">
           {{ form.tradeNo }}
         </a-descriptions-item>
@@ -19,7 +19,7 @@
         <a-descriptions-item label="支付通道" :span="2">
           <a-tag>{{ dictConvert('channel', form.channel) || '无' }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="回调类型" :span="2">
+        <a-descriptions-item label="交易类型" :span="2">
           <a-tag>{{ dictConvert('trade_type', form.callbackType) || '无' }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="处理状态" :span="2">
@@ -30,6 +30,12 @@
         </a-descriptions-item>
         <a-descriptions-item label="提示消息" v-if="form.errorMsg" :span="4">
           {{ form.errorMsg }}
+        </a-descriptions-item>
+        <a-descriptions-item label="商户号" :span="2">
+          {{ form.mchNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="应用AppId" :span="2">
+          {{ form.appId }}
         </a-descriptions-item>
         <a-descriptions-item label="通知消息" :span="4">
           <json-preview :data="JSON.parse(form.notifyInfo || '{}')" />

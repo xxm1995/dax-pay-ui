@@ -9,7 +9,7 @@
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-descriptions title="" :column="24" bordered>
+      <a-descriptions title="" :column="{ lg: 24, md: 1 }" bordered>
         <a-descriptions-item label="标题" :span="8">
           {{ order.title }}
         </a-descriptions-item>

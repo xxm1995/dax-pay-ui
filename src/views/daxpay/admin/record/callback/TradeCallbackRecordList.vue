@@ -22,19 +22,20 @@
           @sort-change="sortChange"
         >
           <vxe-column type="seq" title="序号" width="60" />
-          <vxe-column field="orderId" title="订单号" :min-width="230">
+          <vxe-column field="tradeNo" title="交易号" :min-width="230">
             <template #default="{ row }">
               <a @click="showOrder(row)">
                 {{ row.tradeNo }}
               </a>
             </template>
           </vxe-column>
+          <vxe-column field="outTradeNo" title="通道交易号" :min-width="230" />
           <vxe-column field="channel" title="支付通道" :min-width="100">
             <template #default="{ row }">
               <a-tag>{{ dictConvert('channel', row.channel) || '无' }}</a-tag>
             </template>
           </vxe-column>
-          <vxe-column field="callbackType" title="回调类型" :min-width="100">
+          <vxe-column field="callbackType" title="交易类型" :min-width="100">
             <template #default="{ row }">
               <a-tag>{{ dictConvert('trade_type', row.callbackType) || '无' }}</a-tag>
             </template>
@@ -45,7 +46,7 @@
             </template>
           </vxe-column>
           <vxe-column field="msg" title="提示信息" :min-width="250" />
-          <vxe-column field="createTime" title="通知时间" sortable :min-width="100" />
+          <vxe-column field="createTime" title="通知时间" sortable :min-width="170" />
           <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <span>
@@ -66,6 +67,7 @@
       <CallbackRecordInfo ref="callbackRecordInfo" />
       <PayOrderInfo ref="payOrderInfo" />
       <RefundOrderInfo ref="refundOrderInfo" />
+      <TransferOrderInfo ref="transferOrderInfo" />
     </div>
   </div>
 </template>
@@ -82,6 +84,8 @@
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import PayOrderInfo from '@/views/daxpay/admin/order/pay/PayOrderInfo.vue'
   import RefundOrderInfo from '@/views/daxpay/admin/order/refund/RefundOrderInfo.vue'
+  import TransferOrderInfo from '@/views/daxpay/admin/order/transfer/TransferOrderInfo.vue'
+  import { TradeTypeEnum } from '@/enums/daxpay/PaymentEnum'
 
   // 使用hooks
   const {
@@ -97,27 +101,35 @@
   } = useTablePage(queryPage)
   const { dictConvert, dictDropDown } = useDict()
 
-  let asyncPayChannelList = ref<LabeledValue[]>([])
-  let PayCallbackStatusList = ref<LabeledValue[]>([])
+  let channelList = ref<LabeledValue[]>([])
+  let callbackTypeList = ref<LabeledValue[]>([])
+  let callbackStatusList = ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'tradeNo', type: STRING, name: '平台交易号', placeholder: '请输入平台交易号' },
+      { field: 'tradeNo', type: STRING, name: '交易号', placeholder: '请输入平台交易号' },
       { field: 'outTradeNo', type: STRING, name: '通道交易号', placeholder: '请输入通道交易号' },
       {
         field: 'channel',
         type: LIST,
         name: '支付通道',
         placeholder: '请选择支付通道',
-        selectList: asyncPayChannelList.value,
+        selectList: channelList.value,
+      },
+      {
+        field: 'callbackType',
+        type: LIST,
+        name: '交易类型',
+        placeholder: '请选择交易类型',
+        selectList: callbackTypeList.value,
       },
       {
         field: 'status',
         type: LIST,
         name: '处理状态',
         placeholder: '请选择消息处理状态',
-        selectList: PayCallbackStatusList.value,
+        selectList: callbackStatusList.value,
       },
     ] as QueryField[]
   })
@@ -127,6 +139,7 @@
   const callbackRecordInfo = ref<any>()
   const payOrderInfo = ref<any>()
   const refundOrderInfo = ref<any>()
+  const transferOrderInfo = ref<any>()
 
   onMounted(() => {
     initData()
@@ -141,8 +154,9 @@
    * 初始化
    */
   async function initData() {
-    asyncPayChannelList.value = await dictDropDown('AsyncPayChannel')
-    PayCallbackStatusList.value = await dictDropDown('PayCallbackStatus')
+    channelList.value = await dictDropDown('channel')
+    callbackTypeList.value = await dictDropDown('trade_type')
+    callbackStatusList.value = await dictDropDown('callback_status')
   }
 
   /**
@@ -170,10 +184,12 @@
    * 查看订单单信息
    */
   function showOrder(record: TradeCallbackRecord) {
-    if (record.callbackType === 'pay') {
+    if (record.callbackType === TradeTypeEnum.PAY) {
       payOrderInfo.value.init(record.tradeNo)
-    } else {
+    } else if (record.callbackType === TradeTypeEnum.REFUND) {
       refundOrderInfo.value.init(record.tradeNo)
+    } else if (record.callbackType === TradeTypeEnum.TRANSFER) {
+      transferOrderInfo.value.init(record.tradeNo)
     }
   }
 </script>
