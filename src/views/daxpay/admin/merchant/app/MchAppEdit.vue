@@ -23,6 +23,7 @@
         </a-form-item>
         <a-form-item label="商户号" name="mchNo">
           <a-select
+            :filter-option="search"
             v-model:value="form.mchNo"
             :disabled="showable"
             placeholder="请选择商户"
@@ -119,13 +120,14 @@
   import { FormEditType } from '@/enums/formTypeEnum'
   import { BasicDrawer } from '@/components/Drawer'
   import { buildUUID } from '@/utils/uuid'
-  import { dropdown as merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
+  import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { useDict } from '@/hooks/bootx/useDict'
 
   const {
     initFormEditType,
     handleCancel,
+    search,
     labelCol,
     wrapperCol,
     title,

@@ -1,6 +1,7 @@
 import { defHttp } from '@/utils/http/axios'
 import { PageResult, Result } from '#/axios'
 import { BaseEntity } from '#/web'
+import {LabeledValue} from "ant-design-vue/lib/select";
 
 /**
  * 分页
@@ -46,6 +47,16 @@ export const del = (id) => {
   return defHttp.post<Result<void>>({
     url: '/mch/app/delete',
     params: { id },
+  })
+}
+
+/**
+ * 查询商户下的应用列表
+ */
+export function mchAppDropdown(mchNo) {
+  return defHttp.get<Result<LabeledValue[]>>({
+    url: '/mch/app/dropdown',
+    params: { mchNo },
   })
 }
 

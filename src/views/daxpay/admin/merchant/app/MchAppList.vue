@@ -96,7 +96,7 @@
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import ALink from '@/components/Link/Link.vue'
   import { useDict } from '@/hooks/bootx/useDict'
-  import { dropdown as merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
+  import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import ChannelConfigList from '@/views/daxpay/admin/merchant/channel/ChannelConfigList.vue'
   import MerchantNotifyConfigList from '../notify/MerchantNotifyConfigList.vue'
@@ -124,7 +124,7 @@
         selectList: mchNoOptions.value,
         placeholder: '请选择商户',
       },
-      { field: 'appId', type: STRING, name: '商户号', placeholder: '请输入应用号' },
+      { field: 'appId', type: STRING, name: '应用号', placeholder: '请输入应用号' },
       { field: 'appName', type: STRING, name: '应用名称', placeholder: '请输入应用名称' },
     ] as QueryField[]
   })

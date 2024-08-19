@@ -34,15 +34,27 @@ export function create(params: ReconcileCreatParam) {
 }
 
 /**
- * 手动触发对账文件下载
+ * 下载对账单
  */
+export function downAndSave(id: any) {
+  return defHttp.post<any>({
+    url: '/order/reconcile/downAndSave',
+    params: { id },
+  })
+}
 
 /**
- * 手动触发交易对账单比对
+ * 对账单比对
  */
+export function compare(id: any) {
+  return defHttp.post<any>({
+    url: '/order/reconcile/compare',
+    params: { id },
+  })
+}
 
 /**
- * 对账差异记录
+ * 对账记录
  */
 export interface ReconcileStatement extends MchEntity {
   /** 对账单ID */
@@ -99,13 +111,24 @@ export interface ReconcileStatement extends MchEntity {
   channelTradeTime?: string
 }
 
+/**
+ * 对账创建参数
+ */
 export interface ReconcileCreatParam {
   /** 名称 */
-  name?: string
+  title?: string
 
   /** 对账日期 */
-  reconcileDate?: string
+  date?: string
 
   /** 支付通道 */
   channel?: string
+  /**
+   * 商户号
+   */
+  mchNo?: string
+  /**
+   * 应用AppId
+   */
+  appId?: string
 }

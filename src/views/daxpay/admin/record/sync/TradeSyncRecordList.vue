@@ -40,7 +40,9 @@
           </template>
         </vxe-column>
         <vxe-column field="errorMsg" title="错误消息" :min-width="160" />
-        <vxe-column field="createTime" title="同步时间" :min-width="160" />
+        <vxe-column field="createTime" title="同步时间" :min-width="170" />
+        <vxe-column field="mchNo" title="商户号" :min-width="150" />
+        <vxe-column field="appId" title="商户号" :min-width="150" />
         <vxe-column fixed="right" :min-width="50" :showOverflow="false" title="操作">
           <template #default="{ row }">
             <span>
@@ -124,6 +126,8 @@
         placeholder: '请选择同步通道',
         selectList: payChannelList.value,
       },
+      { field: 'mchNo', type: STRING, name: '商户号', placeholder: '请输入商户号' },
+      { field: 'appId', type: STRING, name: '应用号', placeholder: '请输入应用号' },
     ] as QueryField[]
   })
 

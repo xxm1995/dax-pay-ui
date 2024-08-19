@@ -55,7 +55,9 @@
           </vxe-column>
           <vxe-column field="bizTradeNo" title="商户交易号" :min-width="230" />
           <vxe-column field="outTradeNo" title="通道交易号" :min-width="230" />
-          <vxe-column field="createTime" title="时间" :min-width="160" sortable />
+          <vxe-column field="createTime" title="时间" :min-width="170" sortable />
+          <vxe-column field="mchNo" title="商户号" :min-width="150" />
+          <vxe-column field="appId" title="商户号" :min-width="150" />
           <vxe-column fixed="right" :min-width="60" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <span>
@@ -133,6 +135,8 @@
         placeholder: '请选择交易通道',
         selectList: payChannelList.value,
       },
+      { field: 'mchNo', type: STRING, name: '商户号', placeholder: '请输入商户号' },
+      { field: 'appId', type: STRING, name: '应用号', placeholder: '请输入应用号' },
     ] as QueryField[]
   })
 

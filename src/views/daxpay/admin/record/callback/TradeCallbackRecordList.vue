@@ -47,6 +47,8 @@
           </vxe-column>
           <vxe-column field="msg" title="提示信息" :min-width="250" />
           <vxe-column field="createTime" title="通知时间" sortable :min-width="170" />
+          <vxe-column field="mchNo" title="商户号" :min-width="150" />
+          <vxe-column field="appId" title="商户号" :min-width="150" />
           <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <span>
@@ -114,7 +116,7 @@
         field: 'channel',
         type: LIST,
         name: '支付通道',
-        placeholder: '请选择支付通道',
+        placeholder: '请选择通道',
         selectList: channelList.value,
       },
       {
@@ -131,6 +133,8 @@
         placeholder: '请选择消息处理状态',
         selectList: callbackStatusList.value,
       },
+      { field: 'mchNo', type: STRING, name: '商户号', placeholder: '请输入商户号' },
+      { field: 'appId', type: STRING, name: '应用号', placeholder: '请输入应用号' },
     ] as QueryField[]
   })
 

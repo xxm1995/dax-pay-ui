@@ -60,7 +60,10 @@
             </template>
           </vxe-column>
           <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
-          <vxe-column fixed="right" width="130" :showOverflow="false" title="操作">
+
+          <vxe-column field="mchNo" title="商户号" :min-width="150" />
+          <vxe-column field="appId" title="商户号" :min-width="150" />
+          <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <a-link @click="show(row)">查看</a-link>
               <a-divider type="vertical" />
@@ -175,6 +178,8 @@
         selectList: refundStatusList.value,
       },
       { field: 'channel', name: '支付通道', type: LIST, selectList: channelList.value },
+      { field: 'mchNo', type: STRING, name: '商户号', placeholder: '请输入商户号' },
+      { field: 'appId', type: STRING, name: '应用号', placeholder: '请输入应用号' },
     ] as QueryField[]
   })
 

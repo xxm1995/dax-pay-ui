@@ -43,7 +43,7 @@ export const update = (obj) => {
 /**
  * 商户下拉列表
  */
-export const dropdown = () => {
+export const merchantDropdown = () => {
   return defHttp.get<Result<LabeledValue[]>>({
     url: '/merchant/dropdown',
   })
