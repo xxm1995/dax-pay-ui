@@ -26,20 +26,26 @@
             </a-link>
           </template>
         </vxe-column>
-        <vxe-column field="noticeType" title="交易类型" :min-width="80">
+        <vxe-column field="noticeType" title="交易类型" :min-width="120" align="center">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('TradeType', row.tradeType) }}</a-tag>
+            <a-tag>{{ dictConvert('trade_type', row.tradeType) }}</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="success" title="发送成功" sortable :min-width="80">
+        <vxe-column field="success" title="发送成功" sortable :min-width="120" align="center">
           <template #default="{ row }">
-            <a-tag v-if="row.success" color="green">是</a-tag>
-            <a-tag v-else color="red">否</a-tag>
+            <a-tag v-if="row.success" color="green">成功</a-tag>
+            <a-tag v-else color="red">失败</a-tag>
           </template>
         </vxe-column>
-        <vxe-column field="sendCount" title="发送次数" sortable :min-width="70" />
+        <vxe-column field="sendCount" title="发送次数" sortable :min-width="110" align="center" />
         <vxe-column field="nextTime" title="下次发送时间" sortable :min-width="170" />
-        <vxe-column field="delayCount" title="延迟重试次数" sortable :min-width="70" />
+        <vxe-column
+          field="delayCount"
+          title="延迟重试次数"
+          sortable
+          :min-width="130"
+          align="center"
+        />
         <vxe-column field="latestTime" title="最后发送时间" sortable :min-width="170" />
         <vxe-column field="createTime" title="创建时间" sortable :min-width="170" />
         <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">

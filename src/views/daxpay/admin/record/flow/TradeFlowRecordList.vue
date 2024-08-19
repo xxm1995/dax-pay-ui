@@ -83,7 +83,7 @@
 
 <script lang="ts" setup>
   import { computed, onMounted, ref } from 'vue'
-  import { page, TradeFlowRecord } from './TradeFlowRecord.api'
+  import { amountSummary, page, TradeFlowRecord } from './TradeFlowRecord.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import BQuery from '@/components/Bootx/Query/BQuery.vue'
@@ -161,8 +161,8 @@
    * 初始化
    */
   async function init() {
-    tradeFlowRecordTypeList.value = await dictDropDown('TradeFlowRecordType')
-    payChannelList.value = await dictDropDown('PayChannel')
+    tradeFlowRecordTypeList.value = await dictDropDown('trade_type')
+    payChannelList.value = await dictDropDown('channel')
   }
 
   /**
@@ -170,14 +170,20 @@
    */
   function queryPage() {
     loading.value = true
+    // 分页查询
     page({
       ...model.queryParam,
       ...pages,
     }).then(({ data }) => {
       pageQueryResHandel(data)
     })
+    // 金额汇总
+    amountSummary(model.queryParam).then(({ data }) => {
+      totalAmount.value = data
+    })
     return Promise.resolve()
   }
+
   /**
    * 查看
    */

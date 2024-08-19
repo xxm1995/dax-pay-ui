@@ -63,8 +63,8 @@ export interface NotifyTask extends MchEntity {
   tradeId?: string
   // 平台交易号
   tradeNo?: string
-  // 交易类型
-  tradeType?: string
+  // 通知类型
+  notifyType?: string
   // 消息内容
   content?: string
   // 是否发送成功

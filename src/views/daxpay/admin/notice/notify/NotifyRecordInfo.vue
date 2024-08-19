@@ -4,7 +4,7 @@
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="modalWidth"
-    :visible="visible"
+    :open="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >

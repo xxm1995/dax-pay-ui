@@ -4,41 +4,47 @@
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="1200"
-    :visible="visible"
+    :open="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
     <a-spin :spinning="confirmLoading">
-      <a-descriptions title="" bordered>
-        <a-descriptions-item label="本地订单号" :span="2">
+      <a-descriptions title="" bordered :column="{ lg: 2, md: 1 }">
+        <a-descriptions-item label="平台订单号" :span="2">
           <a-tag>{{ task.tradeNo }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="交易类型" :span="2">
-          <a-tag>{{ dictConvert('tradeType', task.tradeType) }}</a-tag>
+        <a-descriptions-item label="通知类型" :span="1">
+          <a-tag>{{ dictConvert('notify_content_type', task.notifyType) }}</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="是否发送成功" :span="2">
+        <a-descriptions-item label="是否发送成功" :span="1">
           <a-tag v-if="task.success" color="green">是</a-tag>
           <a-tag v-else color="red">否</a-tag>
         </a-descriptions-item>
-        <a-descriptions-item label="发送次数" :span="2">
+        <a-descriptions-item label="发送次数" :span="1">
           {{ task.sendCount }}
         </a-descriptions-item>
-        <a-descriptions-item label="下次发送时间" :span="2">
-          {{ task.nextTime }}
+        <a-descriptions-item label="下次发送时间" :span="1">
+          {{ task.nextTime || '空' }}
         </a-descriptions-item>
-        <a-descriptions-item label="延迟重试次数" :span="2">
-          {{ task.delayCount }}
+        <a-descriptions-item label="延迟重试次数" :span="1">
+          {{ task.delayCount || 0 }}
         </a-descriptions-item>
-        <a-descriptions-item label="发送地址" :span="2">
-          {{ task.url }}
+        <a-descriptions-item label="发送地址" :span="1">
+          {{ task.url || '无' }}
         </a-descriptions-item>
-        <a-descriptions-item label="最后发送时间" :span="2">
-          {{ task.latestTime }}
+        <a-descriptions-item label="最后发送时间" :span="1">
+          {{ task.latestTime || '空' }}
         </a-descriptions-item>
-        <a-descriptions-item label="创建时间" :span="2">
+        <a-descriptions-item label="创建时间" :span="1">
           {{ task.createTime }}
         </a-descriptions-item>
-        <a-descriptions-item label="消息内容" :span="4">
+        <a-descriptions-item label="商户号" :span="1">
+          {{ task.mchNo }}
+        </a-descriptions-item>
+        <a-descriptions-item label="应用AppId" :span="1">
+          {{ task.appId }}
+        </a-descriptions-item>
+        <a-descriptions-item label="消息内容" :span="2">
           <json-preview :data="JSON.parse(task.content || '{}')" />
         </a-descriptions-item>
       </a-descriptions>

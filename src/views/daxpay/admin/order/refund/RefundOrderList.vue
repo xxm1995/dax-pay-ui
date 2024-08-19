@@ -197,7 +197,7 @@
    */
   async function initData() {
     refundStatusList.value = await dictDropDown('RefundStatus')
-    channelList.value = await dictDropDown('PayChannel')
+    channelList.value = await dictDropDown('channel')
   }
 
   /**

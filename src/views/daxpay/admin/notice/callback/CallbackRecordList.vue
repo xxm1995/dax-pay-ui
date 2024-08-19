@@ -24,13 +24,13 @@
       </vxe-column>
       <vxe-column field="channel" title="是否成功">
         <template #default="{ row }">
-          <a-tag v-if="row.success" color="green">是</a-tag>
-          <a-tag v-else color="red">否</a-tag>
+          <a-tag v-if="row.success" color="green">成功</a-tag>
+          <a-tag v-else color="red">失败</a-tag>
         </template>
       </vxe-column>
       <vxe-column field="sendType" title="发送类型">
         <template #default="{ row }">
-          <a-tag>{{ dictConvert('ClientNoticeSendType', row.sendType) }}</a-tag>
+          <a-tag>{{ dictConvert('notice_send_type', row.sendType) }}</a-tag>
         </template>
       </vxe-column>
       <vxe-column field="errorMsg" title="错误信息" max-width="200" />

@@ -150,8 +150,8 @@
    * 初始化
    */
   async function init() {
-    payChannelList.value = await dictDropDown('PayChannel')
-    closeTypeList.value = await dictDropDown('PayCloseType')
+    payChannelList.value = await dictDropDown('channel')
+    closeTypeList.value = await dictDropDown('close_type')
   }
 
   /**

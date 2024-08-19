@@ -77,7 +77,7 @@
 </script>
 
 <style lang="less" scoped>
-  /deep/ .ant-descriptions-item-label {
+  :deep(.ant-descriptions-item-label) {
     width: 170px;
   }
 </style>

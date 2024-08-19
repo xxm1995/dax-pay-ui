@@ -24,3 +24,17 @@ export enum TradeTypeEnum {
    */
   TRANSFER = 'transfer',
 }
+
+/**
+ * 客户通知内容类型
+ */
+export enum NotifyContentTypeEnum {
+  /** 支付订单变动通知 */
+  PAY = 'PAY',
+
+  /** 退款订单变动通知 */
+  REFUND = 'refund',
+
+  /** 支付订单变动通知 */
+  TRANSFER = 'transfer',
+}

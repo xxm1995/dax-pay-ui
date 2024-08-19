@@ -10,48 +10,51 @@
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
-      <vxe-table
-        row-id="id"
-        ref="xTable"
-        :data="pagination.records"
-        :loading="loading"
-        :sort-config="{ remote: true, trigger: 'cell' }"
-        @sort-change="sortChange"
-      >
-        <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="平台交易号" :min-width="230">
-          <template #default="{ row }">
-            <a-link @click="showOrder(row)">
-              {{ row.tradeNo }}
-            </a-link>
-          </template>
-        </vxe-column>
-        <vxe-column field="noticeType" title="交易类型" :min-width="80">
-          <template #default="{ row }">
-            <a-tag>{{ dictConvert('TradeType', row.tradeType) }}</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="success" title="发送成功" sortable :min-width="80">
-          <template #default="{ row }">
-            <a-tag v-if="row.success" color="green">是</a-tag>
-            <a-tag v-else color="red">否</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="sendCount" title="发送次数" sortable :min-width="70" />
-        <vxe-column field="nextTime" title="下次发送时间" sortable :min-width="170" />
-        <vxe-column field="delayCount" title="延迟重试次数" sortable :min-width="70" />
-        <vxe-column field="latestTime" title="最后发送时间" sortable :min-width="170" />
-        <vxe-column field="createTime" title="创建时间" sortable :min-width="170" />
-        <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">
-          <template #default="{ row }">
-            <a-link @click="show(row)">查看</a-link>
-            <a-divider type="vertical" />
-            <a-link @click="showRecord(row)">记录列表</a-link>
-            <a-divider type="vertical" />
-            <a-link @click="resetSend(row)">重发</a-link>
-          </template>
-        </vxe-column>
-      </vxe-table>
+      <div class="h-65vh">
+        <vxe-table
+          row-id="id"
+          ref="xTable"
+          height="auto"
+          :data="pagination.records"
+          :loading="loading"
+          :sort-config="{ remote: true, trigger: 'cell' }"
+          @sort-change="sortChange"
+        >
+          <vxe-column type="seq" title="序号" width="60" />
+          <vxe-column field="orderId" title="平台交易号" :min-width="230">
+            <template #default="{ row }">
+              <a-link @click="showOrder(row)">
+                {{ row.tradeNo }}
+              </a-link>
+            </template>
+          </vxe-column>
+          <vxe-column field="notifyType" title="通知类型" :min-width="180">
+            <template #default="{ row }">
+              <a-tag>{{ dictConvert('notify_content_type', row.notifyType) }}</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="success" title="发送成功" sortable :min-width="120">
+            <template #default="{ row }">
+              <a-tag v-if="row.success" color="green">成功</a-tag>
+              <a-tag v-else color="red">失败</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="sendCount" title="发送次数" sortable :min-width="120" />
+          <vxe-column field="nextTime" title="下次发送时间" sortable :min-width="170" />
+          <vxe-column field="delayCount" title="延迟重试次数" sortable :min-width="150" />
+          <vxe-column field="latestTime" title="最后发送时间" sortable :min-width="170" />
+          <vxe-column field="createTime" title="创建时间" sortable :min-width="170" />
+          <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">
+            <template #default="{ row }">
+              <a-link @click="show(row)">查看</a-link>
+              <a-divider type="vertical" />
+              <a-link @click="showRecord(row)">记录列表</a-link>
+              <a-divider type="vertical" />
+              <a-link @click="resetSend(row)">重发</a-link>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <vxe-pager
         size="medium"
         :loading="loading"
@@ -61,10 +64,11 @@
         @page-change="handleTableChange"
       />
     </div>
-    <NotifyTaskInfo ref="noticeTaskInfo" />
+    <NotifyTaskInfo ref="notifyTaskInfo" />
     <PayOrderInfo ref="payOrderInfo" />
+    <RefundOrderInfo ref="refundOrderInfo" />
     <TransferOrderInfo ref="transferOrderInfo" />
-    <NotifyRecordList ref="noticeRecordList" />
+    <NotifyRecordList ref="notifyRecordList" />
   </div>
 </template>
 
@@ -83,6 +87,8 @@
   import PayOrderInfo from '@/views/daxpay/admin/order/pay/PayOrderInfo.vue'
   import TransferOrderInfo from '@/views/daxpay/admin/order/transfer/TransferOrderInfo.vue'
   import NotifyRecordList from './NotifyRecordList.vue'
+  import { NotifyContentTypeEnum } from '@/enums/daxpay/PaymentEnum'
+  import RefundOrderInfo from '@/views/daxpay/admin/order/refund/RefundOrderInfo.vue'
 
   // 使用hooks
   const {
@@ -114,8 +120,8 @@
     ] as QueryField[]
   })
 
-  const noticeRecordList = ref<any>()
-  const noticeTaskInfo = ref<any>()
+  const notifyRecordList = ref<any>()
+  const notifyTaskInfo = ref<any>()
   const payOrderInfo = ref<any>()
   const refundOrderInfo = ref<any>()
   const transferOrderInfo = ref<any>()
@@ -174,23 +180,23 @@
    * 查看
    */
   function show(record) {
-    noticeTaskInfo.value.init(record)
+    notifyTaskInfo.value.init(record)
   }
   /**
    * 查看记录列表
    */
   function showRecord(record) {
-    noticeRecordList.value.init(record)
+    notifyRecordList.value.init(record)
   }
   /**
    * 查看订单信息
    */
   function showOrder(record: NotifyTask) {
-    if (record.tradeType === 'pay') {
+    if (record.notifyType === NotifyContentTypeEnum.PAY) {
       payOrderInfo.value.init(record.tradeNo)
-    } else if (record.tradeType === 'refund') {
+    } else if (record.notifyType === NotifyContentTypeEnum.REFUND) {
       refundOrderInfo.value.init(record.tradeNo)
-    } else {
+    } else if (record.notifyType === NotifyContentTypeEnum.TRANSFER) {
       transferOrderInfo.value.init(record.tradeNo)
     }
   }

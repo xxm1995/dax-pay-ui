@@ -23,6 +23,16 @@ export function get(id) {
 }
 
 /**
+ * 金额汇总
+ */
+export function amountSummary(params) {
+  return defHttp.get<Result<any>>({
+    url: '/record/flow/summary',
+    params,
+  })
+}
+
+/**
  * 支付同步记录
  */
 export interface TradeFlowRecord extends MchEntity {

@@ -164,7 +164,7 @@
   async function initData() {
     tradeTypeList.value = await dictDropDown('PaymentType')
     diffTypeList.value = await dictDropDown('ReconcileDiffType')
-    payChannelList.value = await dictDropDown('PayChannel')
+    payChannelList.value = await dictDropDown('channel')
   }
   /**
    * 入口

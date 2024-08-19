@@ -4,45 +4,48 @@
     v-bind="$attrs"
     title="通知明细列表"
     width="60%"
-    :visible="visible"
+    :open="visible"
     @close="visible = false"
   >
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
-    <vxe-table
-      row-id="id"
-      ref="xTable"
-      :data="pagination.records"
-      :loading="loading"
-      :sort-config="{ remote: true, trigger: 'cell' }"
-      @sort-change="sortChange"
-    >
-      <vxe-column type="seq" width="60" />
-      <vxe-column field="reqCount" title="请求次数">
-        <template #default="{ row }">
-          <a-tag color="green">{{ row.reqCount || '空' }}</a-tag>
-        </template>
-      </vxe-column>
-      <vxe-column field="channel" title="是否成功">
-        <template #default="{ row }">
-          <a-tag v-if="row.success" color="green">是</a-tag>
-          <a-tag v-else color="red">否</a-tag>
-        </template>
-      </vxe-column>
-      <vxe-column field="sendType" title="发送类型">
-        <template #default="{ row }">
-          <a-tag>{{ dictConvert('ClientNoticeSendType', row.sendType) }}</a-tag>
-        </template>
-      </vxe-column>
-      <vxe-column field="errorMsg" title="错误信息" max-width="200" />
-      <vxe-column field="createTime" title="发送时间" />
-      <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
-        <template #default="{ row }">
-          <span>
-            <a href="javascript:" @click="show(row)">查看</a>
-          </span>
-        </template>
-      </vxe-column>
-    </vxe-table>
+    <div class="h-70vh">
+      <vxe-table
+        row-id="id"
+        ref="xTable"
+        height="auto"
+        :data="pagination.records"
+        :loading="loading"
+        :sort-config="{ remote: true, trigger: 'cell' }"
+        @sort-change="sortChange"
+      >
+        <vxe-column type="seq" width="60" />
+        <vxe-column field="reqCount" title="请求次数">
+          <template #default="{ row }">
+            <a-tag color="green">{{ row.reqCount || '空' }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="channel" title="是否成功">
+          <template #default="{ row }">
+            <a-tag v-if="row.success" color="green">是</a-tag>
+            <a-tag v-else color="red">否</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="sendType" title="发送类型">
+          <template #default="{ row }">
+            <a-tag>{{ dictConvert('ClientNoticeSendType', row.sendType) }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="errorMsg" title="错误信息" max-width="200" />
+        <vxe-column field="createTime" title="发送时间" />
+        <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
+          <template #default="{ row }">
+            <span>
+              <a href="javascript:" @click="show(row)">查看</a>
+            </span>
+          </template>
+        </vxe-column>
+      </vxe-table>
+    </div>
     <vxe-pager
       size="medium"
       :loading="loading"
