@@ -4,7 +4,7 @@
     v-bind="$attrs"
     :loading="confirmLoading"
     :width="modalWidth"
-    :visible="visible"
+    :open="visible"
     :mask-closable="showable"
     @cancel="handleCancel"
   >
@@ -16,24 +16,24 @@
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
     >
-      <a-form-item label="标题" name="name">
+      <a-form-item label="标题" name="title">
         <a-input v-model:value="form.title" placeholder="请输入对账名称" />
       </a-form-item>
       <a-form-item label="商户" name="mchNo">
         <a-select
           :filter-option="search"
+          :options="merchantList"
           v-model:value="form.mchNo"
-          :disabled="showable"
           placeholder="请选择商户"
+          @change="merchantChange"
         />
       </a-form-item>
       <a-form-item label="商户应用" name="appId" v-show="form.mchNo">
         <a-select
           :filter-option="search"
-          :disabled="showable"
+          :options="mchAppList"
           v-model:value="form.appId"
           placeholder="请选择商户应用"
-          @change="merchantChange"
         />
       </a-form-item>
       <a-form-item label="对账日期" name="date">
@@ -122,6 +122,7 @@
     // 商户
     merchantDropdown().then(({ data }) => {
       merchantList.value = data
+      console.log(merchantList)
     })
   }
 

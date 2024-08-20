@@ -11,65 +11,69 @@
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
-      <vxe-table
-        row-id="id"
-        ref="xTable"
-        :data="pagination.records"
-        :loading="loading"
-        :sort-config="{ remote: true, trigger: 'cell' }"
-        @sort-change="sortChange"
-      >
-        <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="title" title="订单标题" :min-width="120" />
-        <vxe-column field="reconcileDate" title="对账日期" sortable :min-width="120" />
-        <vxe-column field="channel" title="通道" :min-width="120">
-          <template #default="{ row }">
-            <a-tag>{{ dictConvert('channel', row.channel) }}</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="tradeType" title="交易类型" :min-width="120">
-          <template #default="{ row }">
-            <a-tag>{{ dictConvert('trade_type', row.tradeType) }}</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="discrepancyType" title="差异类型" :min-width="120">
-          <template #default="{ row }">
-            <a-tag>{{ dictConvert('reconcile_discrepancy_type', row.discrepancyType) }}</a-tag>
-          </template>
-        </vxe-column>
-
-        <vxe-colgroup title="平台信息">
-          <vxe-column field="tradeNo" title="交易号" :min-width="230">
+      <div class="h-65vh">
+        <vxe-table
+          row-id="id"
+          height="auto"
+          align="center"
+          ref="xTable"
+          :data="pagination.records"
+          :loading="loading"
+          :sort-config="{ remote: true, trigger: 'cell' }"
+          @sort-change="sortChange"
+        >
+          <vxe-column type="seq" title="序号" width="60" />
+          <vxe-column field="title" title="订单标题" :min-width="120" />
+          <vxe-column field="reconcileDate" title="对账日期" sortable :min-width="120" />
+          <vxe-column field="channel" title="通道" :min-width="120">
             <template #default="{ row }">
-              <a-link @click="showTrade(row)">{{ row.tradeNo }}</a-link>
+              <a-tag>{{ dictConvert('channel', row.channel) }}</a-tag>
             </template>
           </vxe-column>
-          <vxe-column field="amount" title="交易金额(元)" sortable :min-width="130">
+          <vxe-column field="tradeType" title="交易类型" :min-width="120">
             <template #default="{ row }">
-              {{ row.amount ? (row.amount / 100).toFixed(2) : '无' }}
+              <a-tag>{{ dictConvert('trade_type', row.tradeType) }}</a-tag>
             </template>
           </vxe-column>
-          <vxe-column field="tradeTime" title="交易时间" sortable :min-width="150" />
-          <vxe-column field="tradeStatus" title="交易状态" :min-width="150" />
-        </vxe-colgroup>
-        <vxe-colgroup title="通道信息">
-          <vxe-column field="channelTradeNo" title="交易号" :min-width="230" />
-          <vxe-column field="channelTradeAmount" title="交易金额(元)" sortable :min-width="150" />
-          <vxe-column field="channelTradeTime" title="交易时间" sortable :min-width="150" />
-          <vxe-column field="channelTradeStatus" title="交易状态" :min-width="150" />
-        </vxe-colgroup>
+          <vxe-column field="discrepancyType" title="差异类型" :min-width="120">
+            <template #default="{ row }">
+              <a-tag>{{ dictConvert('reconcile_discrepancy_type', row.discrepancyType) }}</a-tag>
+            </template>
+          </vxe-column>
 
-        <vxe-column field="reconcileNo" title="对账单号" :min-width="230">
-          <template #default="{ row }">
-            <a-link @click="showReconcile(row)">{{ row.reconcileNo }}</a-link>
-          </template>
-        </vxe-column>
-        <vxe-column fixed="right" width="100" :showOverflow="false" title="操作">
-          <template #default="{ row }">
-            <a-link @click="show(row)">查看</a-link>
-          </template>
-        </vxe-column>
-      </vxe-table>
+          <vxe-colgroup title="平台信息">
+            <vxe-column field="tradeNo" title="交易号" :min-width="230">
+              <template #default="{ row }">
+                <a-link @click="showTrade(row)">{{ row.tradeNo }}</a-link>
+              </template>
+            </vxe-column>
+            <vxe-column field="amount" title="交易金额(元)" sortable :min-width="130">
+              <template #default="{ row }">
+                {{ row.amount ? (row.amount / 100).toFixed(2) : '无' }}
+              </template>
+            </vxe-column>
+            <vxe-column field="tradeTime" title="交易时间" sortable :min-width="150" />
+            <vxe-column field="tradeStatus" title="交易状态" :min-width="150" />
+          </vxe-colgroup>
+          <vxe-colgroup title="通道信息">
+            <vxe-column field="channelTradeNo" title="交易号" :min-width="230" />
+            <vxe-column field="channelTradeAmount" title="交易金额(元)" sortable :min-width="150" />
+            <vxe-column field="channelTradeTime" title="交易时间" sortable :min-width="150" />
+            <vxe-column field="channelTradeStatus" title="交易状态" :min-width="150" />
+          </vxe-colgroup>
+
+          <vxe-column field="reconcileNo" title="对账单号" :min-width="230">
+            <template #default="{ row }">
+              <a-link @click="showReconcile(row)">{{ row.reconcileNo }}</a-link>
+            </template>
+          </vxe-column>
+          <vxe-column fixed="right" width="100" :showOverflow="false" title="操作">
+            <template #default="{ row }">
+              <a-link @click="show(row)">查看</a-link>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <vxe-pager
         size="medium"
         :loading="loading"

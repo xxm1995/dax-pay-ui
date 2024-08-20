@@ -38,7 +38,7 @@ export function create(params: ReconcileCreatParam) {
  */
 export function downAndSave(id: any) {
   return defHttp.post<any>({
-    url: '/order/reconcile/downAndSave',
+    url: '/reconcile/statement/downAndSave',
     params: { id },
   })
 }
@@ -48,7 +48,7 @@ export function downAndSave(id: any) {
  */
 export function compare(id: any) {
   return defHttp.post<any>({
-    url: '/order/reconcile/compare',
+    url: '/reconcile/statement/compare',
     params: { id },
   })
 }

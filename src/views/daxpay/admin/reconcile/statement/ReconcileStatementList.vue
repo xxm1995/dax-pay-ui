@@ -23,6 +23,8 @@
         <vxe-table
           row-id="id"
           ref="xTable"
+          height="auto"
+          align="center"
           :data="pagination.records"
           :loading="loading"
           :sort-config="{ remote: true, trigger: 'cell' }"
@@ -37,7 +39,7 @@
               </a>
             </template>
           </vxe-column>
-          <vxe-column field="channel" title="对账通道" :min-width="100">
+          <vxe-column field="channel" title="对账通道" :min-width="150">
             <template #default="{ row }">
               <a-tag>{{ dictConvert('channel', row.channel) }}</a-tag>
             </template>
@@ -79,7 +81,7 @@
           </vxe-colgroup>
           <vxe-column field="errorMsg" title="错误信息" :min-width="160" />
           <vxe-column field="createTime" title="创建时间" :min-width="160" />
-          <vxe-column fixed="right" width="100" :showOverflow="false" title="操作">
+          <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <a-link @click="show(row)">查看</a-link>
               <a-divider type="vertical" />
@@ -111,7 +113,7 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
-      <ReconcileStatementCreate ref="reconcileStatementCreate" />
+      <ReconcileStatementCreate ref="reconcileStatementCreate" @ok="queryPage"/>
     </div>
   </div>
 </template>
@@ -122,14 +124,13 @@
   import useTablePage from '@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '@/hooks/web/useMessage'
-  import { LIST, QueryField, STRING } from '@/components/Bootx/Query/Query'
+  import { QueryField, STRING } from '@/components/Bootx/Query/Query'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { useDict } from '@/hooks/bootx/useDict'
   import { Icon } from '@/components/Icon'
   import ALink from '@/components/Link/Link.vue'
   import ReconcileStatementCreate from './ReconcileStatementCreate.vue'
-  import { useUpload } from '@/hooks/bootx/useUpload'
 
   // 使用hooks
   const {
