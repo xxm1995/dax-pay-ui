@@ -31,6 +31,7 @@
           @sort-change="sortChange"
         >
           <vxe-column type="seq" title="序号" width="60" />
+          <vxe-column field="name" title="标题" :min-width="230" />
           <vxe-column field="date" title="对账日期" :min-width="100" />
           <vxe-column field="reconcileNo" title="对账号" :min-width="230">
             <template #default="{ row }">
@@ -113,7 +114,8 @@
         :total="pagination.total"
         @page-change="handleTableChange"
       />
-      <ReconcileStatementCreate ref="reconcileStatementCreate" @ok="queryPage"/>
+      <ReconcileStatementCreate ref="reconcileStatementCreate" @ok="queryPage" />
+      <Reconcile-statement-info ref="reconcileStatementInfo" />
     </div>
   </div>
 </template>
@@ -124,13 +126,15 @@
   import useTablePage from '@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import { useMessage } from '@/hooks/web/useMessage'
-  import { QueryField, STRING } from '@/components/Bootx/Query/Query'
+  import { LIST, QueryField, STRING } from '@/components/Bootx/Query/Query'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { useDict } from '@/hooks/bootx/useDict'
   import { Icon } from '@/components/Icon'
   import ALink from '@/components/Link/Link.vue'
   import ReconcileStatementCreate from './ReconcileStatementCreate.vue'
+  import ReconcileStatementInfo from './ReconcileStatementInfo.vue'
+  import { useFilePlatform } from '@/hooks/bootx/useFilePlatform'
 
   // 使用hooks
   const {
@@ -146,23 +150,47 @@
   } = useTablePage(queryPage)
   const { dictDropDown, dictConvert } = useDict()
   const { createMessage, createConfirm } = useMessage()
+  const { getFileUrl } = useFilePlatform()
 
-  let tradeTypeList = ref<LabeledValue[]>([])
   let channelList = ref<LabeledValue[]>([])
+  let resultList = ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
     return [
-      { field: 'reconcileNo', type: STRING, name: '对账单号', placeholder: '请输入对账单号' },
-      { field: 'title', type: STRING, name: '订单名称', placeholder: '请输入订单名称' },
-      { field: 'tradeNo', type: STRING, name: '平台交易号', placeholder: '请输入平台交易号' },
-      { field: 'outOrderNo', type: STRING, name: '通道交易号', placeholder: '请输入通道交易号' },
+      { field: 'name', type: STRING, name: '标题', placeholder: '请输入对账标题' },
+      { field: 'reconcileNo', type: STRING, name: '对账号', placeholder: '请输入对账号' },
+      { field: 'channel', name: '对账通道', type: LIST, selectList: channelList.value },
+      { field: 'result', name: '对账结果', type: LIST, selectList: resultList.value },
+      {
+        field: 'downOrUpload',
+        name: '下载',
+        type: LIST,
+        placeholder: '请选择是否已经下载对账文件',
+        selectList: [
+          { label: '已完成', value: true },
+          { label: '未完成', value: false },
+        ],
+      },
+      {
+        field: 'compare',
+        name: '比对完成',
+        type: LIST,
+        placeholder: '请选择是否已经对账比对完成',
+        selectList: [
+          { label: '已完成', value: true },
+          { label: '未完成', value: false },
+        ],
+      },
+      { field: 'mchNo', type: STRING, name: '商户号', placeholder: '请输入商户号' },
+      { field: 'appId', type: STRING, name: '应用号', placeholder: '请输入应用号' },
     ] as QueryField[]
   })
 
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
   const reconcileStatementCreate = ref<any>()
+  const reconcileStatementInfo = ref<any>()
 
   nextTick(() => {
     xTable.value?.connect(xToolbar.value as VxeToolbarInstance)
@@ -177,8 +205,8 @@
    * 初始化基础数据
    */
   async function initData() {
-    tradeTypeList.value = await dictDropDown('trade_type')
     channelList.value = await dictDropDown('channel')
+    resultList.value = await dictDropDown('reconcile_result')
   }
   /**
    * 入口
@@ -256,7 +284,7 @@
    * 查看
    */
   function show(record) {
-    reconcileDiffInfo.value.init(record)
+    reconcileStatementInfo.value.init(record.id)
   }
 
   /**
@@ -266,8 +294,11 @@
     createConfirm({
       iconType: 'info',
       title: '提示',
-      content: '从三方支付系统中获取的交易对账单文件，未经过处理，确定要下载吗？',
-      onOk: () => {},
+      content: '从三方支付系统中获取的交易对账单文件，确定要下载吗？',
+      onOk: () => {
+        const url = getFileUrl(record.channelFileUrl)
+        window.open(url)
+      },
     })
   }
 
@@ -278,8 +309,11 @@
     createConfirm({
       iconType: 'info',
       title: '提示',
-      content: '通过本系统中订单生成的对账单，确定要下载吗？',
-      onOk: () => {},
+      content: '是否要下载系统平台的对账单？',
+      onOk: () => {
+        const url = getFileUrl(record.platformFileUrl)
+        window.open(url)
+      },
     })
   }
 

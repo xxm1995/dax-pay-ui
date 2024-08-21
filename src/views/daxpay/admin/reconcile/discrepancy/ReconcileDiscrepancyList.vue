@@ -23,50 +23,64 @@
           @sort-change="sortChange"
         >
           <vxe-column type="seq" title="序号" width="60" />
-          <vxe-column field="title" title="订单标题" :min-width="120" />
-          <vxe-column field="reconcileDate" title="对账日期" sortable :min-width="120" />
-          <vxe-column field="channel" title="通道" :min-width="120">
-            <template #default="{ row }">
-              <a-tag>{{ dictConvert('channel', row.channel) }}</a-tag>
-            </template>
-          </vxe-column>
-          <vxe-column field="tradeType" title="交易类型" :min-width="120">
-            <template #default="{ row }">
-              <a-tag>{{ dictConvert('trade_type', row.tradeType) }}</a-tag>
-            </template>
-          </vxe-column>
-          <vxe-column field="discrepancyType" title="差异类型" :min-width="120">
-            <template #default="{ row }">
-              <a-tag>{{ dictConvert('reconcile_discrepancy_type', row.discrepancyType) }}</a-tag>
-            </template>
-          </vxe-column>
-
-          <vxe-colgroup title="平台信息">
-            <vxe-column field="tradeNo" title="交易号" :min-width="230">
-              <template #default="{ row }">
-                <a-link @click="showTrade(row)">{{ row.tradeNo }}</a-link>
-              </template>
-            </vxe-column>
-            <vxe-column field="amount" title="交易金额(元)" sortable :min-width="130">
-              <template #default="{ row }">
-                {{ row.amount ? (row.amount / 100).toFixed(2) : '无' }}
-              </template>
-            </vxe-column>
-            <vxe-column field="tradeTime" title="交易时间" sortable :min-width="150" />
-            <vxe-column field="tradeStatus" title="交易状态" :min-width="150" />
-          </vxe-colgroup>
-          <vxe-colgroup title="通道信息">
-            <vxe-column field="channelTradeNo" title="交易号" :min-width="230" />
-            <vxe-column field="channelTradeAmount" title="交易金额(元)" sortable :min-width="150" />
-            <vxe-column field="channelTradeTime" title="交易时间" sortable :min-width="150" />
-            <vxe-column field="channelTradeStatus" title="交易状态" :min-width="150" />
-          </vxe-colgroup>
-
+          <vxe-column field="name" title="对账标题" :min-width="120" />
           <vxe-column field="reconcileNo" title="对账单号" :min-width="230">
             <template #default="{ row }">
               <a-link @click="showReconcile(row)">{{ row.reconcileNo }}</a-link>
             </template>
           </vxe-column>
+          <vxe-column field="reconcileDate" title="对账日期" sortable :min-width="180" />
+          <vxe-column field="channel" title="通道" :min-width="150">
+            <template #default="{ row }">
+              <a-tag>{{ dictConvert('channel', row.channel) }}</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="discrepancyType" title="差异类型" :min-width="180">
+            <template #default="{ row }">
+              <a-tag>{{ dictConvert('reconcile_discrepancy_type', row.discrepancyType) }}</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-colgroup title="平台信息">
+            <vxe-column field="tradeNo" title="交易号" :min-width="230">
+              <template #default="{ row }">
+                <a-link v-if="row.tradeNo" @click="showTrade(row)">{{ row.tradeNo }}</a-link>
+              </template>
+            </vxe-column>
+            <vxe-column field="outTradeNo" title="通道交易号" :min-width="230" />
+            <vxe-column field="bizTradeNo" title="商户交易号" :min-width="230" />
+            <vxe-column field="tradeType" title="交易类型" :min-width="120">
+              <template #default="{ row }">
+                {{ dictConvert('trade_type', row.tradeType) || '无' }}
+              </template>
+            </vxe-column>
+            <vxe-column field="tradeAmount" title="交易金额(元)" sortable :min-width="130" />
+            <vxe-column field="tradeTime" title="交易时间" sortable :min-width="150" />
+            <vxe-column field="tradeStatus" title="交易状态" :min-width="150">
+              <template #default="{ row }">
+                <a-tag v-if="row.tradeStatus">{{
+                  dictConvert('trade_status', row.tradeStatus)
+                }}</a-tag>
+              </template>
+            </vxe-column>
+          </vxe-colgroup>
+          <vxe-colgroup title="通道信息">
+            <vxe-column field="channelOutTradeNo" title="平台交易号" :min-width="230" />
+            <vxe-column field="channelTradeNo" title="通道交易号" :min-width="230" />
+            <vxe-column field="channelTradeAmount" title="交易金额(元)" sortable :min-width="150">
+              <template #default="{ row }">
+                {{ row.channelTradeAmount || '无' }}
+              </template>
+            </vxe-column>
+            <vxe-column field="channelTradeTime" title="交易时间" sortable :min-width="150" />
+            <vxe-column field="channelTradeStatus" title="交易状态" :min-width="150">
+              <template #default="{ row }">
+                <a-tag v-if="row.channelTradeStatus">{{
+                  dictConvert('trade_status', row.channelTradeStatus)
+                }}</a-tag>
+              </template>
+            </vxe-column>
+          </vxe-colgroup>
+
           <vxe-column fixed="right" width="100" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <a-link @click="show(row)">查看</a-link>
@@ -83,6 +97,11 @@
         @page-change="handleTableChange"
       />
     </div>
+    <ReconcileDiscrepancyInfo ref="reconcileDiscrepancyInfo" />
+    <ReconcileStatementInfo ref="reconcileStatementInfo" />
+    <PayOrderInfo ref="payOrderInfo" />
+    <RefundOrderInfo ref="refundOrderInfo" />
+    <TransferOrderInfo ref="transferOrderInfo" />
   </div>
 </template>
 
@@ -91,11 +110,16 @@
   import { page } from './ReconcileDiscrepancy.api'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import { VxeTable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
-  import { useMessage } from '@/hooks/web/useMessage'
   import { LIST, QueryField, STRING } from '@/components/Bootx/Query/Query'
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { useDict } from '@/hooks/bootx/useDict'
+  import { TradeTypeEnum } from '@/enums/daxpay/PaymentEnum'
+  import ReconcileDiscrepancyInfo from './ReconcileDiscrepancyInfo.vue'
+  import ReconcileStatementInfo from '../statement/ReconcileStatementInfo.vue'
+  import PayOrderInfo from '@/views/daxpay/admin/order/pay/PayOrderInfo.vue'
+  import RefundOrderInfo from '@/views/daxpay/admin/order/refund/RefundOrderInfo.vue'
+  import TransferOrderInfo from '@/views/daxpay/admin/order/transfer/TransferOrderInfo.vue'
 
   // 使用hooks
   const {
@@ -111,47 +135,92 @@
   } = useTablePage(queryPage)
   const { dictDropDown, dictConvert } = useDict()
 
+  let channelList = ref<LabeledValue[]>([])
+  let discrepancyTypeList = ref<LabeledValue[]>([])
+  let tradeStatusList = ref<LabeledValue[]>([])
   let tradeTypeList = ref<LabeledValue[]>([])
-  let diffTypeList = ref<LabeledValue[]>([])
-  let payChannelList = ref<LabeledValue[]>([])
 
   // 查询条件
   const fields = computed(() => {
     return [
       { field: 'reconcileNo', type: STRING, name: '对账单号', placeholder: '请输入对账单号' },
-      { field: 'title', type: STRING, name: '订单名称', placeholder: '请输入订单名称' },
-      {
-        field: 'tradeType',
-        type: LIST,
-        name: '交易类型',
-        placeholder: '请选择交易类型',
-        selectList: tradeTypeList,
-      },
-      {
-        field: 'diffType',
-        type: LIST,
-        name: '差异类型',
-        placeholder: '请选择差异类型',
-        selectList: diffTypeList,
-      },
       {
         field: 'channel',
         type: LIST,
         name: '对账通道',
-        placeholder: '请选择对账',
-        selectList: payChannelList,
+        placeholder: '请选择对账通道',
+        selectList: channelList.value,
       },
-      { field: 'tradeNo', type: STRING, name: '平台交易号', placeholder: '请输入平台交易号' },
-      { field: 'outOrderNo', type: STRING, name: '通道交易号', placeholder: '请输入通道交易号' },
+      {
+        field: 'discrepancyType',
+        type: LIST,
+        name: '差异类型',
+        placeholder: '请选择对账差异类型',
+        selectList: discrepancyTypeList.value,
+      },
+      { field: 'tradeNo', type: STRING, name: '交易号(平台)', placeholder: '请输入交易号(平台)' },
+      {
+        field: 'bizTradeNo',
+        type: STRING,
+        name: '商户交易号(平台)',
+        placeholder: '请输入商户交易号(平台)',
+      },
+      {
+        field: 'outTradeNo',
+        type: STRING,
+        name: '通道交易号(平台)',
+        placeholder: '请输入通道交易号(平台)',
+      },
+      {
+        field: 'tradeType',
+        type: LIST,
+        name: '交易类型(平台)',
+        placeholder: '请选择交易类型(平台)',
+        selectList: tradeTypeList.value,
+      },
+      {
+        field: 'tradeStatus',
+        type: LIST,
+        name: '交易状态(平台)',
+        placeholder: '请选择交易状态(平台)',
+        selectList: tradeStatusList.value,
+      },
+      {
+        field: 'channelTradeNo',
+        type: STRING,
+        name: '交易号(通道)',
+        placeholder: '请输入交易号(通道)',
+      },
+      {
+        field: 'channelOutTradeNo',
+        type: STRING,
+        name: '平台交易号(通道)',
+        placeholder: '请输入平台交易号(通道)',
+      },
+      {
+        field: 'channelTradeType',
+        type: LIST,
+        name: '交易类型(通道)',
+        placeholder: '请选择交易类型(通道)',
+        selectList: tradeTypeList.value,
+      },
+      {
+        field: 'channelTradeStatus',
+        type: LIST,
+        name: '交易状态(通道)',
+        placeholder: '请选择交易状态(通道)',
+        selectList: tradeStatusList.value,
+      },
     ] as QueryField[]
   })
 
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
-  const reconcileDiffInfo = ref<any>()
+  const reconcileDiscrepancyInfo = ref<any>()
+  const reconcileStatementInfo = ref<any>()
   const payOrderInfo = ref<any>()
   const refundOrderInfo = ref<any>()
-  const reconcileDetailInfo = ref<any>()
+  const transferInfo = ref<any>()
 
   nextTick(() => {
     xTable.value?.connect(xToolbar.value as VxeToolbarInstance)
@@ -166,9 +235,10 @@
    * 初始化基础数据
    */
   async function initData() {
-    tradeTypeList.value = await dictDropDown('PaymentType')
-    diffTypeList.value = await dictDropDown('ReconcileDiffType')
-    payChannelList.value = await dictDropDown('channel')
+    discrepancyTypeList.value = await dictDropDown('reconcile_discrepancy_type')
+    channelList.value = await dictDropDown('channel')
+    tradeStatusList.value = await dictDropDown('trade_status')
+    tradeTypeList.value = await dictDropDown('trade_type')
   }
   /**
    * 入口
@@ -196,31 +266,27 @@
    * 查看
    */
   function show(record) {
-    reconcileDiffInfo.value.init(record)
+    reconcileDiscrepancyInfo.value.init(record.id)
   }
 
   /**
    * 查看对账单
    */
   function showReconcile(record) {
-    reconcileDiffInfo.value.init(record)
+    reconcileDiscrepancyInfo.value.init(record.reconcileId)
   }
 
   /**
    * 查看交易单
    */
   function showTrade(record) {
-    if (record.callbackType === 'pay') {
+    if (record?.tradeType === TradeTypeEnum.PAY) {
       payOrderInfo.value.init(record.tradeNo)
-    } else {
+    } else if (record?.tradeType === TradeTypeEnum.REFUND) {
       refundOrderInfo.value.init(record.tradeNo)
+    } else if (record?.tradeType === TradeTypeEnum.TRANSFER) {
+      transferInfo.value.init(record.tradeNo)
     }
-  }
-  /**
-   * 查看通道交易信息
-   */
-  function showOutTrade(record) {
-    reconcileDetailInfo.value.init(record.outTradeNo)
   }
   defineExpose({
     init,

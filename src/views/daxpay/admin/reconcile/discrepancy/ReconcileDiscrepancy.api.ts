@@ -27,6 +27,9 @@ export function get(id) {
  * 对账差异记录
  */
 export interface ReconcileDiscrepancy extends MchEntity {
+  /** 对账名称 */
+  name?: string
+
   /** 对账单ID */
   reconcileId?: string
 
@@ -44,10 +47,13 @@ export interface ReconcileDiscrepancy extends MchEntity {
 
   /* 平台侧信息 */
   /** 平台交易号 */
-  TradeNo?: string
+  tradeNo?: string
 
   /** 商户订单号 */
   bizTradeNo?: string
+
+  /** 商户关联平台订单号 */
+  outTradeNo?: string
 
   /**
    * 交易类型
@@ -67,6 +73,9 @@ export interface ReconcileDiscrepancy extends MchEntity {
   /* 通道侧信息 */
   /** 通道交易号 */
   channelTradeNo?: string
+
+  /** 通道关联平台交易号 */
+  channelOutTradeNo?: string
 
   /** 通道交易类型 */
   channelTradeType?: string
