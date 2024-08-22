@@ -27,8 +27,7 @@
       <a-descriptions-item label="交易号(平台)" :span="1">
         {{ discrepancy.tradeNo }}
       </a-descriptions-item>
-      <a-descriptions-item label="平台交易号(通道)" :span="1">
-        {{ discrepancy.channelTradeNo }}
+      <a-descriptions-item label="" :span="1">
       </a-descriptions-item>
       <a-descriptions-item label="通道交易号(平台)" :span="1">
         {{ discrepancy.outTradeNo }}

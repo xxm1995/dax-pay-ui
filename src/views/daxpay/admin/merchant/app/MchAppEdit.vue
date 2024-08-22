@@ -36,14 +36,6 @@
         <a-form-item label="应用名称" name="appName">
           <a-input v-model:value="form.appName" :disabled="showable" placeholder="请输入应用名称" />
         </a-form-item>
-        <a-form-item label="请求验签" name="reqSign">
-          <a-switch
-            :disabled="showable"
-            v-model:checked="form.reqSign"
-            checked-children="启用"
-            un-checked-children="停用"
-          />
-        </a-form-item>
         <a-form-item label="支付限额(元)" name="limitAmount">
           <a-input-number
             v-model:value="form.limitAmount"
@@ -60,6 +52,14 @@
             :precision="0"
             :disabled="showable"
             placeholder="请输入订单默认超时时间(分钟)"
+          />
+        </a-form-item>
+        <a-form-item label="请求验签" name="reqSign">
+          <a-switch
+            :disabled="showable"
+            v-model:checked="form.reqSign"
+            checked-children="启用"
+            un-checked-children="停用"
           />
         </a-form-item>
         <a-form-item label="签名方式" name="signType">

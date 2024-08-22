@@ -40,17 +40,16 @@
               <a-tag>{{ dictConvert('reconcile_discrepancy_type', row.discrepancyType) }}</a-tag>
             </template>
           </vxe-column>
+          <vxe-column field="tradeNo" title="平台交易号" :min-width="230">
+            <template #default="{ row }">
+              <a-link v-if="row.tradeNo" @click="showTrade(row)">{{ row.tradeNo }}</a-link>
+            </template>
+          </vxe-column>
           <vxe-colgroup title="平台信息">
-            <vxe-column field="tradeNo" title="交易号" :min-width="230">
-              <template #default="{ row }">
-                <a-link v-if="row.tradeNo" @click="showTrade(row)">{{ row.tradeNo }}</a-link>
-              </template>
-            </vxe-column>
-            <vxe-column field="outTradeNo" title="通道交易号" :min-width="230" />
             <vxe-column field="bizTradeNo" title="商户交易号" :min-width="230" />
             <vxe-column field="tradeType" title="交易类型" :min-width="120">
               <template #default="{ row }">
-                {{ dictConvert('trade_type', row.tradeType) || '无' }}
+                {{ dictConvert('trade_type', row.tradeType) }}
               </template>
             </vxe-column>
             <vxe-column field="tradeAmount" title="交易金额(元)" sortable :min-width="130" />
@@ -62,9 +61,9 @@
                 }}</a-tag>
               </template>
             </vxe-column>
+            <vxe-column field="outTradeNo" title="通道交易号" :min-width="230" />
           </vxe-colgroup>
           <vxe-colgroup title="通道信息">
-            <vxe-column field="channelOutTradeNo" title="平台交易号" :min-width="230" />
             <vxe-column field="channelTradeNo" title="通道交易号" :min-width="230" />
             <vxe-column field="channelTradeAmount" title="交易金额(元)" sortable :min-width="150">
               <template #default="{ row }">
@@ -72,6 +71,11 @@
               </template>
             </vxe-column>
             <vxe-column field="channelTradeTime" title="交易时间" sortable :min-width="150" />
+            <vxe-column field="channelTradeType" title="交易类型" :min-width="120">
+              <template #default="{ row }">
+                {{ dictConvert('trade_type', row.channelTradeType) }}
+              </template>
+            </vxe-column>
             <vxe-column field="channelTradeStatus" title="交易状态" :min-width="150">
               <template #default="{ row }">
                 <a-tag v-if="row.channelTradeStatus">{{
@@ -158,7 +162,7 @@
         placeholder: '请选择对账差异类型',
         selectList: discrepancyTypeList.value,
       },
-      { field: 'tradeNo', type: STRING, name: '交易号(平台)', placeholder: '请输入交易号(平台)' },
+      { field: 'tradeNo', type: STRING, name: '平台交易号', placeholder: '请输入平台交易号' },
       {
         field: 'bizTradeNo',
         type: STRING,
@@ -190,12 +194,6 @@
         type: STRING,
         name: '交易号(通道)',
         placeholder: '请输入交易号(通道)',
-      },
-      {
-        field: 'channelOutTradeNo',
-        type: STRING,
-        name: '平台交易号(通道)',
-        placeholder: '请输入平台交易号(通道)',
       },
       {
         field: 'channelTradeType',
@@ -263,7 +261,7 @@
     })
   }
   /**
-   * 查看
+   * 查看差异记录
    */
   function show(record) {
     reconcileDiscrepancyInfo.value.init(record.id)
@@ -273,7 +271,7 @@
    * 查看对账单
    */
   function showReconcile(record) {
-    reconcileDiscrepancyInfo.value.init(record.reconcileId)
+    reconcileStatementInfo.value.init(record.reconcileId)
   }
 
   /**
