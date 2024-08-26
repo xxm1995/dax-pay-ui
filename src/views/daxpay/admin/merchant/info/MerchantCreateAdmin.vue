@@ -1,7 +1,7 @@
 <template>
   <basic-drawer
     showFooter
-    title="添加用户"
+    title="创建商户管理员"
     v-bind="$attrs"
     :width="modalWidth"
     :open="visible"
@@ -18,11 +18,17 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-item label="用户账号" name="account" validate-first>
-          <a-input v-model:value="form.account" placeholder="请输入用户账号" />
+        <a-form-item label="商户名称">
+          <a-tag color="green">{{ merchant.mchName }}</a-tag>
         </a-form-item>
-        <a-form-item label="用户名称" name="name">
-          <a-input v-model:value="form.name" placeholder="请输入用户名称" />
+        <a-form-item label="商户号">
+          <a-tag color="green">{{ merchant.mchNo }}</a-tag>
+        </a-form-item>
+        <a-form-item label="管理员账号" name="account" validate-first>
+          <a-input v-model:value="form.account" placeholder="请输入管理员账号" />
+        </a-form-item>
+        <a-form-item label="管理员名称" name="name">
+          <a-input v-model:value="form.name" placeholder="请输入管理员名称" />
         </a-form-item>
         <a-form-item label="登录密码" name="password" validate-first>
           <strength-meter
@@ -61,13 +67,15 @@
   import StrengthMeter from '/@/components/StrengthMeter/src/StrengthMeter.vue'
   import { validateEmail, validateMobile } from '@/utils/validate'
   import { existsAccount, existsEmail, existsPhone } from '@/api/sys/userAssist'
-  import { add, UserInfo } from './User.api'
   import { useMessage } from '@/hooks/web/useMessage'
+  import { createMerchantAdmin, Merchant, MerchantAdmin } from './Merchant.api'
 
   const { handleCancel, labelCol, wrapperCol, modalWidth, confirmLoading, visible } = useFormEdit()
   const { createMessage } = useMessage()
+
+  const merchant = ref<Merchant>({})
   const formRef = ref<FormInstance>()
-  let form = ref<UserInfo>({
+  const form = ref<MerchantAdmin>({
     name: '',
     account: '',
     phone: '',
@@ -96,7 +104,12 @@
   // 事件
   const emits = defineEmits(['ok'])
 
-  function init() {
+  /**
+   * 入口
+   */
+  function init(record: Merchant) {
+    merchant.value = record
+    form.value.mchNo = record.mchNo
     visible.value = true
     confirmLoading.value = false
     nextTick(() => {
@@ -107,7 +120,7 @@
   function handleOk() {
     formRef.value?.validate().then(async () => {
       confirmLoading.value = true
-      await add(form.value).finally(() => (confirmLoading.value = false))
+      await createMerchantAdmin(form.value).finally(() => (confirmLoading.value = false))
       createMessage.success('添加用户成功')
       confirmLoading.value = false
       emits('ok')

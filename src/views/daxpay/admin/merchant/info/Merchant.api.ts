@@ -60,6 +60,16 @@ export const del = (id) => {
 }
 
 /**
+ * 创建商户管理员
+ */
+export const createMerchantAdmin = (obj: MerchantAdmin) => {
+  return defHttp.post<Result<void>>({
+    url: '/merchant/createAdmin',
+    data: obj,
+  })
+}
+
+/**
  * 商户
  */
 export interface Merchant extends BaseEntity {
@@ -85,4 +95,24 @@ export interface Merchant extends BaseEntity {
   contact?: string
   // 状态
   status?: string
+}
+
+/**
+ * 商户管理员创建参数
+ */
+export interface MerchantAdmin {
+  // 商户号
+  mchNo?: string
+  // 管理员名称
+  name?: string
+  // 商户管理员账号
+  account?: string
+  // 商户管理员密码
+  password?: string
+  // 重复密码
+  confirmPassword?: string
+  // 手机号
+  phone?: string
+  // 邮箱
+  email?: string
 }

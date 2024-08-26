@@ -52,13 +52,19 @@
           <vxe-column field="account" title="账号" />
           <vxe-column field="phone" title="手机号" />
           <vxe-column field="email" title="邮箱" />
-          <vxe-column field="administrator" title="是否管理员">
+          <vxe-column field="administrator" title="是否管理员" align="center">
             <template #default="{ row }">
               <a-tag v-if="row.administrator" color="green">是</a-tag>
               <a-tag v-else color="red">否</a-tag>
             </template>
           </vxe-column>
-          <vxe-column field="status" title="用户状态">
+          <vxe-column field="avatar" title="头像" align="center">
+            <template #default="{ row }">
+              <Avatar size="large" :src="getFileUrl(row.avatar)" />
+            </template>
+          </vxe-column>
+
+          <vxe-column field="status" title="用户状态" align="center">
             <template #default="{ row }">
               {{ dictConvert('UserStatusCode', row.status) || '无' }}
             </template>
@@ -113,6 +119,7 @@
 
 <script lang="ts" setup>
   import BQuery from '/@/components/Bootx/Query/BQuery.vue'
+  import { Avatar } from 'ant-design-vue'
   import useTablePage from '@/hooks/bootx/useTablePage'
   import { useMessage } from '@/hooks/web/useMessage'
   import { onMounted, ref } from 'vue'
@@ -127,6 +134,7 @@
   import UserResetPwd from './UserResetPwd.vue'
   import UserRoleAssign from './role/UserRoleAssign.vue'
   import ALink from '@/components/Link/Link.vue'
+  import { useFilePlatform } from "@/hooks/bootx/useFilePlatform";
 
   // 使用hooks
   const {
@@ -141,6 +149,7 @@
   } = useTablePage(queryPage)
   const { createConfirm } = useMessage()
   const { dictConvert } = useDict()
+  const {getFileUrl} = useFilePlatform()
 
   // 查询条件
   const fields = [

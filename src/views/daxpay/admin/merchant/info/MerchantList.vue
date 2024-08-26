@@ -32,6 +32,12 @@
           <vxe-column field="companyName" title="公司名称" :min-width="180" />
           <vxe-column field="companyContact" title="联系方式" :min-width="120" />
           <vxe-column field="companyCode" title="信用编码" :min-width="180" />
+          <vxe-column field="administrator" title="关联管理员" :min-width="120">
+            <template #default="{ row }">
+              <a-tag v-if="row.administrator" color="green">已关联</a-tag>
+              <a-link danger @click="createAdmin(row)" v-else>创建管理员</a-link>
+            </template>
+          </vxe-column>
           <vxe-column field="createTime" title="创建时间" :min-width="170" />
           <vxe-column fixed="right" :width="150" :showOverflow="false" title="操作">
             <template #default="{ row }">
@@ -57,6 +63,7 @@
         @page-change="handleTableChange"
       />
       <MerchantEdit ref="merchantEdit" @ok="queryPage" />
+      <MerchantCreateAdmin ref="merchantCreateAdmin" />
     </div>
   </div>
 </template>
@@ -72,7 +79,7 @@
   import { useMessage } from '@/hooks/web/useMessage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import ALink from '@/components/Link/Link.vue'
-  import { useDict } from '@/hooks/bootx/useDict'
+  import MerchantCreateAdmin from './MerchantCreateAdmin.vue'
 
   // 使用hooks
   const {
@@ -92,7 +99,8 @@
   ] as QueryField[]
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
-  const merchantEdit: any = ref()
+  const merchantEdit = ref<any>()
+  const merchantCreateAdmin = ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -140,6 +148,13 @@
         })
       },
     })
+  }
+
+  /**
+   * 创建管理员用户
+   */
+  function createAdmin(record) {
+    merchantCreateAdmin.value.init(record)
   }
 </script>
 

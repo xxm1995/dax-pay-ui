@@ -5,7 +5,7 @@
     title="消息订阅配置"
     :open="visible"
     :mask-closable="false"
-    @cancel="handleCancel"
+    @close="handleCancel"
   >
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <div class="h-80vh">

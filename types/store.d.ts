@@ -34,7 +34,7 @@ export interface UserInfo {
   name: string
   // 账号
   account: string
-  // 头像图片id
+  // 头像图片url
   avatar: string
 }
 

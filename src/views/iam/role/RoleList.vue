@@ -52,8 +52,10 @@
               <a-link @click="addChildren(row)">添加子角色</a-link>
               <a-divider type="vertical" />
               <a-link @click="edit(row)">编辑</a-link>
-              <a-divider type="vertical" />
-              <a-link danger @click="remove(row)">删除</a-link>
+              <template v-if="!row.internal">
+                <a-divider type="vertical" />
+                <a-link danger @click="remove(row)">删除</a-link>
+              </template>
               <a-divider type="vertical" />
               <a-dropdown>
                 <a> 授权 <Icon icon="ant-design:down-outlined" :size="12" :min-width="280" /> </a>
