@@ -85,7 +85,12 @@
           />
         </a-form-item>
         <a-form-item label="菜单图标" name="icon">
-          <icon-picker v-model:value="form.icon" :disabled="showable" />
+          <icon-picker v-if="!showable" v-model:value="form.icon" :readonly="showable" />
+          <a-input v-else v-model:value="form.icon" disabled>
+            <template #addonAfter>
+              <Icon :icon="form.icon" />
+            </template>
+          </a-input>
         </a-form-item>
         <a-form-item label="排序" name="sortNo">
           <a-input-number
@@ -171,6 +176,7 @@
   import { IconPicker } from '@/components/Icon'
   import { BasicTitle } from '@/components/Basic'
   import { BasicDrawer } from '@/components/Drawer'
+  import Icon from '../../../../components/Icon/Icon.vue'
 
   defineComponent({
     name: 'MenuEdit',

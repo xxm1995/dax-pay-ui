@@ -17,7 +17,7 @@ export interface TablePageModel<T = any> {
   // 分页参数
   pages: PageParam
   // 查询参数
-  queryParam: object
+  queryParam: any
   // 结果
   pagination: PageResult<T>
 }

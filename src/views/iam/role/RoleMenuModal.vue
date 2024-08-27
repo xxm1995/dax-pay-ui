@@ -38,7 +38,12 @@
       </a-tree>
     </a-spin>
     <template #footer>
-      <a-select style="min-width: 100px" @change="clientSwitch" v-model:value="clientCode">
+      <a-select
+        style="min-width: 100px"
+        @change="clientSwitch"
+        v-model:value="clientCode"
+        v-if="isAdmin()"
+      >
         <a-select-option v-for="o in clients" :key="o.code">{{ o.name }}</a-select-option>
       </a-select>
       <a-dropdown style="margin-left: 5px" :trigger="['click']" placement="top">
@@ -67,7 +72,7 @@
 <script lang="ts" setup>
   import { BasicDrawer } from '@/components/Drawer'
   import { findAll as findClients, Client } from '@/views/iam/client/Client.api'
-  import { getAppEnvConfig } from '@/utils/env'
+  import { getAppEnvConfig, isAdmin } from '@/utils/env'
   import { RoleTree } from './Role.api'
   import { Tree, treeDataTranslate } from '@/utils/dataUtil'
   import XEUtils from 'xe-utils'
