@@ -111,8 +111,8 @@
       <UserAdd ref="userAdd" @ok="queryPage" />
       <UserEdit ref="userEdit" @ok="queryPage" />
       <UserShow ref="userShow" />
-      <UserRoleAssign ref="userRoleAssign" />
       <UserResetPwd ref="userResetPwd" />
+      <UserRoleAssign ref="userRoleAssign" />
     </div>
   </div>
 </template>
@@ -134,7 +134,7 @@
   import UserResetPwd from './UserResetPwd.vue'
   import UserRoleAssign from './role/UserRoleAssign.vue'
   import ALink from '@/components/Link/Link.vue'
-  import { useFilePlatform } from "@/hooks/bootx/useFilePlatform";
+  import { useFilePlatform } from '@/hooks/bootx/useFilePlatform'
 
   // 使用hooks
   const {
@@ -149,7 +149,7 @@
   } = useTablePage(queryPage)
   const { createConfirm } = useMessage()
   const { dictConvert } = useDict()
-  const {getFileUrl} = useFilePlatform()
+  const { getFileUrl } = useFilePlatform()
 
   // 查询条件
   const fields = [
