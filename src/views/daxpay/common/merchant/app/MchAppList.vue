@@ -30,12 +30,12 @@
           <vxe-column type="seq" width="60" />
           <vxe-column field="appId" title="应用号" :min-width="100" />
           <vxe-column field="appName" title="应用名称" :min-width="100" />
-          <vxe-column field="signType" title="签名方式" :min-width="80">
+          <vxe-column field="signType" title="签名方式" :min-width="150">
             <template #default="{ row }">
               <a-tag>{{ dictConvert('sign_type', row.signType) || '空' }}</a-tag>
             </template>
           </vxe-column>
-          <vxe-column field="notifyType" title="通知类型" :min-width="80">
+          <vxe-column field="notifyType" title="通知类型" :min-width="100">
             <template #default="{ row }">
               <a-tag>{{ dictConvert('merchant_notify_type', row.notifyType) || '空' }}</a-tag>
             </template>
