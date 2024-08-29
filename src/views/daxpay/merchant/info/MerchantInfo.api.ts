@@ -10,3 +10,10 @@ export const get = () => {
     url: '/merchant/get',
   })
 }
+
+export const update = (data: Merchant) => {
+  return defHttp.post<Result<Merchant>>({
+    url: '/merchant/update',
+    data,
+  })
+}

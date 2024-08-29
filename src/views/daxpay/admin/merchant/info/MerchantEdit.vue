@@ -62,11 +62,12 @@
             placeholder="请输入法人名称"
           />
         </a-form-item>
-        <a-form-item label="证件号" name="idNo">
-          <a-input v-model:value="form.idNo" :disabled="showable" placeholder="请输入证件号" />
-        </a-form-item>
-        <a-form-item label="联系方式" name="contact">
-          <a-input v-model:value="form.contact" :disabled="showable" placeholder="请输入联系方式" />
+        <a-form-item label="法人联系方式" name="contact">
+          <a-input
+            v-model:value="form.contact"
+            :disabled="showable"
+            placeholder="请输入法人联系方式"
+          />
         </a-form-item>
 
         <a-form-item label="法人证件号码" name="idNo">
