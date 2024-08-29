@@ -32,10 +32,12 @@
           <vxe-column field="companyName" title="公司名称" :min-width="180" />
           <vxe-column field="companyContact" title="联系方式" :min-width="120" />
           <vxe-column field="companyCode" title="信用编码" :min-width="180" />
-          <vxe-column field="administrator" title="关联管理员" :min-width="120">
+          <vxe-column field="administrator" title="关联管理员" :min-width="120" align="center">
             <template #default="{ row }">
-              <a-tag v-if="row.administrator" color="green">已关联</a-tag>
-              <a-link danger @click="createAdmin(row)" v-else>创建管理员</a-link>
+              <a-tag v-if="row.administrator" @click="showAdmin(row)" color="green"
+                ><a-link>查看管理员</a-link></a-tag
+              >
+              <a-tag v-else><a-link danger @click="createAdmin(row)">创建管理员</a-link></a-tag>
             </template>
           </vxe-column>
           <vxe-column field="createTime" title="创建时间" :min-width="170" />
@@ -64,6 +66,7 @@
       />
       <MerchantEdit ref="merchantEdit" @ok="queryPage" />
       <MerchantCreateAdmin ref="merchantCreateAdmin" />
+      <UserShow ref="userShow" />
     </div>
   </div>
 </template>
@@ -80,6 +83,7 @@
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import ALink from '@/components/Link/Link.vue'
   import MerchantCreateAdmin from './MerchantCreateAdmin.vue'
+  import UserShow from '@/views/iam/user/UserShow.vue'
 
   // 使用hooks
   const {
@@ -100,6 +104,7 @@
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
   const merchantEdit = ref<any>()
+  const userShow = ref<any>()
   const merchantCreateAdmin = ref<any>()
 
   onMounted(() => {
@@ -155,6 +160,13 @@
    */
   function createAdmin(record) {
     merchantCreateAdmin.value.init(record)
+  }
+
+  /**
+   *
+   */
+  function showAdmin(record) {
+    userShow.value.init(record.adminUserId)
   }
 </script>
 
