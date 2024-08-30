@@ -145,7 +145,7 @@
     notifyType: 'none',
     signType: 'hmac_sha256',
     limitAmount: 200.0,
-    orderTimeout: 5,
+    orderTimeout: 30,
     reqSign: true,
   })
   const signTypes = ref<LabeledValue[]>([])

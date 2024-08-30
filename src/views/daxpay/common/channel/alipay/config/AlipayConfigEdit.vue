@@ -55,9 +55,6 @@
           </template>
           <a-input v-model:value="form.alipayUserId" placeholder="请输入合作者身份ID" />
         </a-form-item>
-        <a-form-item label="支付网关地址" name="serverUrl">
-          <a-input v-model:value="form.serverUrl" placeholder="请输入支付网关地址" />
-        </a-form-item>
         <a-form-item label="沙箱环境" name="sandbox">
           <a-switch checked-children="是" un-checked-children="否" v-model:checked="form.sandbox" />
         </a-form-item>
@@ -89,7 +86,7 @@
             placeholder="请输入支付宝公钥"
           />
         </a-form-item>
-        <a-form-item label="应用私钥" v-show="form.authType === 'key'" name="privateKey">
+        <a-form-item label="应用私钥" name="privateKey">
           <a-textarea :rows="5" v-model:value="form.privateKey" placeholder="请输入应用私钥" />
         </a-form-item>
         <a-form-item v-show="form.authType === 'cart'" label="应用公钥证书" name="appCert">
@@ -215,7 +212,6 @@
     limitAmount: 20000,
     notifyUrl: '',
     returnUrl: '',
-    serverUrl: '',
     authType: 'key',
     signType: 'RSA2',
     alipayPublicKey: '',
@@ -233,11 +229,10 @@
       aliAppId: [{ required: true, message: '请输入AppId' }],
       enable: [{ required: true, message: '请选择是否启用' }],
       limitAmount: [{ required: true, message: '请输入单次支付限额' }],
-      serverUrl: [{ required: true, message: '请输入请求网关地址' }],
       authType: [{ required: true, message: '请选择认证方式' }],
       signType: [{ required: true, message: '请选择加密类型' }],
       alipayPublicKey: [{ required: form.value.authType === 'key', message: '请输入支付宝公钥' }],
-      privateKey: [{ required: form.value.authType === 'key', message: '请输入支付私钥' }],
+      privateKey: [{ required: true, message: '请输入应用私钥' }],
       appCert: [{ required: form.value.authType === 'cart', message: '请输入应用证书' }],
       alipayCert: [{ required: form.value.authType === 'cart', message: '请输入支付宝证书' }],
       alipayRootCert: [

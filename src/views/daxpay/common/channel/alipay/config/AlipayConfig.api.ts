@@ -45,15 +45,13 @@ export interface AlipayConfig extends MchEntity {
   notifyUrl?: string
   // 页面跳转同步通知页面路径
   returnUrl?: string
-  // 请求网关地址
-  serverUrl?: string
   // 认证方式
   authType?: string
   // 签名类型
   signType?: string
   // 支付宝公钥
   alipayPublicKey?: string
-  // 私钥
+  // 应用私钥
   privateKey?: string
   // 应用公钥
   appCert?: string
