@@ -32,7 +32,7 @@
         </vxe-column>
         <vxe-column field="sendType" title="发送类型">
           <template #default="{ row }">
-            <a-tag>{{ dictConvert('ClientNoticeSendType', row.sendType) }}</a-tag>
+            <a-tag>{{ dictConvert('notice_send_type', row.sendType) }}</a-tag>
           </template>
         </vxe-column>
         <vxe-column field="errorMsg" title="错误信息" max-width="200" />

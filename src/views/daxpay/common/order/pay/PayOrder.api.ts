@@ -129,7 +129,7 @@ export function cellStyle({ row, column }) {
       case PayRefundStatusEnum.REFUNDING:
         return { color: 'orange' }
       case PayRefundStatusEnum.PARTIAL_REFUND:
-        return { color: 'gray' }
+        return { color: 'LightSkyBlue' }
       default:
         return { color: 'red' }
     }

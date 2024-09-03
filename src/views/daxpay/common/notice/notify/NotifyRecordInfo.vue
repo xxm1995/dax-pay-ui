@@ -17,7 +17,7 @@
           {{ info.reqCount || '空' }}
         </a-descriptions-item>
         <a-descriptions-item label="发送类型">
-          <a-tag>{{ dictConvert('SendType', info.sendType) }}</a-tag>
+          <a-tag>{{ dictConvert('notice_send_type', info.sendType) }}</a-tag>
         </a-descriptions-item>
         <a-descriptions-item label="是否发送成功">
           <a-tag v-if="info.success" color="green">是</a-tag>
