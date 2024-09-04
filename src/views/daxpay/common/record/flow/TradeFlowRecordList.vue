@@ -12,12 +12,12 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
-          <span style="font-size: 18px">收入金额: {{ totalAmount.incomeAmount }}元</span>
+          <span style="font-size: 18px">收入金额: {{ totalAmount.incomeAmount || 0 }} 元</span>
           <span style="font-size: 18px; margin-left: 50px"
-            >退款金额: {{ totalAmount.refundAmount }}元</span
+            >退款金额: {{ totalAmount.refundAmount || 0 }} 元</span
           >
           <span style="font-size: 18px; margin-left: 50px"
-            >转账金额: {{ totalAmount.transferAmount }}元</span
+            >转账金额: {{ totalAmount.transferAmount || 0 }} 元</span
           >
         </template>
       </vxe-toolbar>

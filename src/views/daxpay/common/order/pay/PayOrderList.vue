@@ -11,7 +11,7 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
-          <span style="font-size: 18px">收款金额: {{ totalAmount ? totalAmount : 0 }}元</span>
+          <span style="font-size: 18px">收款金额: {{ totalAmount || 0 }}元</span>
         </template>
       </vxe-toolbar>
       <div class="h-65vh">

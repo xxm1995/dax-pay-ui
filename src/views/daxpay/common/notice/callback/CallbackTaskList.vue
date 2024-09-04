@@ -10,56 +10,59 @@
     </div>
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
-      <vxe-table
-        row-id="id"
-        ref="xTable"
-        :data="pagination.records"
-        :loading="loading"
-        :sort-config="{ remote: true, trigger: 'cell' }"
-        @sort-change="sortChange"
-      >
-        <vxe-column type="seq" title="序号" width="60" />
-        <vxe-column field="orderId" title="平台交易号" :min-width="230">
-          <template #default="{ row }">
-            <a-link @click="showOrder(row)">
-              {{ row.tradeNo }}
-            </a-link>
-          </template>
-        </vxe-column>
-        <vxe-column field="tradeType" title="交易类型" :min-width="120" align="center">
-          <template #default="{ row }">
-            <a-tag>{{ dictConvert('trade_type', row.tradeType) }}</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="success" title="发送成功" sortable :min-width="120" align="center">
-          <template #default="{ row }">
-            <a-tag v-if="row.success" color="green">成功</a-tag>
-            <a-tag v-else color="red">失败</a-tag>
-          </template>
-        </vxe-column>
-        <vxe-column field="sendCount" title="发送次数" sortable :min-width="110" align="center" />
-        <vxe-column field="nextTime" title="下次发送时间" sortable :min-width="170" />
-        <vxe-column
-          field="delayCount"
-          title="延迟重试次数"
-          sortable
-          :min-width="130"
-          align="center"
-        />
-        <vxe-column field="latestTime" title="最后发送时间" sortable :min-width="170" />
-        <vxe-column field="createTime" title="创建时间" sortable :min-width="170" />
-        <vxe-column field="mchNo" title="商户号" :min-width="150" />
-        <vxe-column field="appId" title="应用号" :min-width="150" />
-        <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">
-          <template #default="{ row }">
-            <a-link @click="show(row)">查看</a-link>
-            <a-divider type="vertical" />
-            <a-link @click="showRecord(row)">记录列表</a-link>
-            <a-divider type="vertical" />
-            <a-link @click="resetSend(row)">重发</a-link>
-          </template>
-        </vxe-column>
-      </vxe-table>
+      <div class="h-65vh">
+        <vxe-table
+          row-id="id"
+          height="auto"
+          ref="xTable"
+          :data="pagination.records"
+          :loading="loading"
+          :sort-config="{ remote: true, trigger: 'cell' }"
+          @sort-change="sortChange"
+        >
+          <vxe-column type="seq" title="序号" width="60" />
+          <vxe-column field="orderId" title="平台交易号" :min-width="230">
+            <template #default="{ row }">
+              <a-link @click="showOrder(row)">
+                {{ row.tradeNo }}
+              </a-link>
+            </template>
+          </vxe-column>
+          <vxe-column field="tradeType" title="交易类型" :min-width="120" align="center">
+            <template #default="{ row }">
+              <a-tag>{{ dictConvert('trade_type', row.tradeType) }}</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="success" title="发送成功" sortable :min-width="120" align="center">
+            <template #default="{ row }">
+              <a-tag v-if="row.success" color="green">成功</a-tag>
+              <a-tag v-else color="red">失败</a-tag>
+            </template>
+          </vxe-column>
+          <vxe-column field="sendCount" title="发送次数" sortable :min-width="110" align="center" />
+          <vxe-column field="nextTime" title="下次发送时间" sortable :min-width="170" />
+          <vxe-column
+            field="delayCount"
+            title="延迟重试次数"
+            sortable
+            :min-width="130"
+            align="center"
+          />
+          <vxe-column field="latestTime" title="最后发送时间" sortable :min-width="170" />
+          <vxe-column field="createTime" title="创建时间" sortable :min-width="170" />
+          <vxe-column field="mchNo" title="商户号" :min-width="150" />
+          <vxe-column field="appId" title="应用号" :min-width="150" />
+          <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">
+            <template #default="{ row }">
+              <a-link @click="show(row)">查看</a-link>
+              <a-divider type="vertical" />
+              <a-link @click="showRecord(row)">记录列表</a-link>
+              <a-divider type="vertical" />
+              <a-link @click="resetSend(row)">重发</a-link>
+            </template>
+          </vxe-column>
+        </vxe-table>
+      </div>
       <vxe-pager
         size="medium"
         :loading="loading"

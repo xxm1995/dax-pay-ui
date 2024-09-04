@@ -14,7 +14,7 @@
     <div class="m-3 p-3 bg-white">
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }">
         <template #buttons>
-          <span style="font-size: 18px">转账金额: {{ totalAmount }}元</span>
+          <span style="font-size: 18px">转账金额: {{ totalAmount || 0 }} 元</span>
         </template>
       </vxe-toolbar>
       <div class="h-64vh">
@@ -149,7 +149,7 @@
   const mchAppOptions = ref<LabeledValue[]>([])
   let channelList = ref<LabeledValue[]>([])
   let transferStatusList = ref<LabeledValue[]>([])
-  let totalAmount = ref<number>(0.0)
+  let totalAmount = ref<number>(0)
 
   // 查询条件
   const fields = computed(() => {

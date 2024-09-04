@@ -8,7 +8,7 @@
     @close="visible = false"
   >
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
-    <div class="h-70vh">
+    <div class="h-75vh">
       <vxe-table
         row-id="id"
         ref="xTable"
@@ -68,7 +68,7 @@
   import NotifyRecordInfo from './NotifyRecordInfo.vue'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, sortChange, pagination, sortParam, loading } =
+  const { handleTableChange, pageQueryResHandel, sortChange, pages, pagination, sortParam, loading } =
     useTablePage(queryPage)
   const { dictConvert } = useDict()
 
@@ -98,6 +98,7 @@
     loading.value = true
     pageRecord({
       taskId: task.value.id,
+      ...pages,
       ...sortParam,
     }).then(({ data }) => {
       pageQueryResHandel(data)

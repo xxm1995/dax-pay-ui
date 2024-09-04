@@ -8,41 +8,44 @@
     @close="visible = false"
   >
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
-    <vxe-table
-      row-id="id"
-      ref="xTable"
-      :data="pagination.records"
-      :loading="loading"
-      :sort-config="{ remote: true, trigger: 'cell' }"
-      @sort-change="sortChange"
-    >
-      <vxe-column type="seq" width="60" />
-      <vxe-column field="reqCount" title="请求次数">
-        <template #default="{ row }">
-          <a-tag color="green">{{ row.reqCount || '空' }}</a-tag>
-        </template>
-      </vxe-column>
-      <vxe-column field="channel" title="是否成功">
-        <template #default="{ row }">
-          <a-tag v-if="row.success" color="green">成功</a-tag>
-          <a-tag v-else color="red">失败</a-tag>
-        </template>
-      </vxe-column>
-      <vxe-column field="sendType" title="发送类型">
-        <template #default="{ row }">
-          <a-tag>{{ dictConvert('notice_send_type', row.sendType) }}</a-tag>
-        </template>
-      </vxe-column>
-      <vxe-column field="errorMsg" title="错误信息" max-width="200" />
-      <vxe-column field="createTime" title="发送时间" />
-      <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
-        <template #default="{ row }">
-          <span>
-            <a href="javascript:" @click="show(row)">查看</a>
-          </span>
-        </template>
-      </vxe-column>
-    </vxe-table>
+    <div class="h-75vh">
+      <vxe-table
+        row-id="id"
+        height="auto"
+        ref="xTable"
+        :data="pagination.records"
+        :loading="loading"
+        :sort-config="{ remote: true, trigger: 'cell' }"
+        @sort-change="sortChange"
+      >
+        <vxe-column type="seq" width="60" />
+        <vxe-column field="reqCount" title="请求次数">
+          <template #default="{ row }">
+            <a-tag color="green">{{ row.reqCount || '空' }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="channel" title="是否成功">
+          <template #default="{ row }">
+            <a-tag v-if="row.success" color="green">成功</a-tag>
+            <a-tag v-else color="red">失败</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="sendType" title="发送类型">
+          <template #default="{ row }">
+            <a-tag>{{ dictConvert('notice_send_type', row.sendType) }}</a-tag>
+          </template>
+        </vxe-column>
+        <vxe-column field="errorMsg" title="错误信息" max-width="200" />
+        <vxe-column field="createTime" title="发送时间" />
+        <vxe-column fixed="right" width="60" :showOverflow="false" title="操作">
+          <template #default="{ row }">
+            <span>
+              <a href="javascript:" @click="show(row)">查看</a>
+            </span>
+          </template>
+        </vxe-column>
+      </vxe-table>
+    </div>
     <vxe-pager
       size="medium"
       :loading="loading"
@@ -65,8 +68,15 @@
   import CallbackRecordInfo from './CallbackRecordInfo.vue'
 
   // 使用hooks
-  const { handleTableChange, pageQueryResHandel, sortChange, pagination, sortParam, loading } =
-    useTablePage(queryPage)
+  const {
+    handleTableChange,
+    pageQueryResHandel,
+    sortChange,
+    pages,
+    pagination,
+    sortParam,
+    loading,
+  } = useTablePage(queryPage)
   const { dictConvert } = useDict()
 
   let visible = ref(false)
@@ -95,6 +105,7 @@
     loading.value = true
     pageRecord({
       taskId: task.value.id,
+      ...pages,
       ...sortParam,
     }).then(({ data }) => {
       pageQueryResHandel(data)
