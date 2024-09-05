@@ -40,7 +40,7 @@
               <a-tag v-else color="red">失败</a-tag>
             </template>
           </vxe-column>
-          <vxe-column field="channel" title="支付通道" :min-width="100">
+          <vxe-column field="channel" title="支付通道" :min-width="150">
             <template #default="{ row }">
               {{ dictConvert('channel', row.channel) }}
             </template>

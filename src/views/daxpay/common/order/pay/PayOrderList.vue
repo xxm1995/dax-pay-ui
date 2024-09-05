@@ -34,7 +34,7 @@
             </template>
           </vxe-column>
           <vxe-column field="title" title="标题" :min-width="230" />
-          <vxe-column field="channel" title="支付通道" :min-width="120">
+          <vxe-column field="channel" title="支付通道" :min-width="150">
             <template #default="{ row }">
               {{ dictConvert('channel', row.channel) }}
             </template>

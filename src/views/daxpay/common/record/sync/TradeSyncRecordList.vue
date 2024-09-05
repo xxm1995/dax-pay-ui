@@ -34,7 +34,7 @@
               <a-tag>{{ dictConvert('trade_type', row.tradeType) }}</a-tag>
             </template>
           </vxe-column>
-          <vxe-column field="channel" title="同步通道" :min-width="100">
+          <vxe-column field="channel" title="同步通道" :min-width="150">
             <template #default="{ row }">
               <a-tag>{{ dictConvert('channel', row.channel) }}</a-tag>
             </template>

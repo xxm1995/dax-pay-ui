@@ -30,7 +30,7 @@
             </template>
           </vxe-column>
           <vxe-column field="outTradeNo" title="通道交易号" :min-width="230" />
-          <vxe-column field="channel" title="支付通道" :min-width="100">
+          <vxe-column field="channel" title="支付通道" :min-width="150">
             <template #default="{ row }">
               <a-tag>{{ dictConvert('channel', row.channel) || '无' }}</a-tag>
             </template>
