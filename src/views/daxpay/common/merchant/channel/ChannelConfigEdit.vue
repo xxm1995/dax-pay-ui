@@ -1,14 +1,16 @@
 <template>
   <alipay-config-edit ref="alipay" @ok="ok" />
   <wechat-pay-config-edit ref="wechat" @ok="ok" />
+  <union-pay-config-edit ref="union" @ok="ok" />
 </template>
 <script setup lang="ts">
+  import { ref } from 'vue'
   import { useMessage } from '@/hooks/web/useMessage'
   import { PaymentEnum } from '@/enums/daxpay/PaymentEnum'
   import { ChannelConfig } from './ChannelConfig.api'
   import AlipayConfigEdit from '@/views/daxpay/common/channel/alipay/config/AlipayConfigEdit.vue'
   import WechatPayConfigEdit from '@/views/daxpay/common/channel/wechat/config/WechatPayConfigEdit.vue'
-  import { ref } from 'vue'
+  import UnionPayConfigEdit from '@/views/daxpay/common/channel/union/config/UnionPayConfigEdit.vue'
 
   const { createMessage } = useMessage()
 

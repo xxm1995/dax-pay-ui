@@ -28,7 +28,11 @@
           :loading="loading"
         >
           <vxe-column type="seq" width="60" />
-          <vxe-column field="appId" title="应用号" :min-width="100" />
+          <vxe-column field="appId" title="应用号" :min-width="100" >
+            <template #default="{ row }">
+              <a-link @click="show(row)">{{ row.appId }}</a-link>
+            </template>
+          </vxe-column>
           <vxe-column field="appName" title="应用名称" :min-width="100" />
           <vxe-column field="signType" title="签名方式" :min-width="150">
             <template #default="{ row }">
@@ -42,19 +46,16 @@
           </vxe-column>
           <vxe-column field="notifyUrl" title="通知地址" :min-width="220" />
           <vxe-column field="createTime" title="创建时间" :min-width="120" />
-          <vxe-column fixed="right" :width="180" :showOverflow="false" title="操作">
+          <vxe-column fixed="right" :width="200" :showOverflow="false" title="操作">
             <template #default="{ row }">
-              <a-link @click="show(row)">查看</a-link>
-              <a-divider type="vertical" />
               <a-link @click="edit(row)">编辑</a-link>
+              <a-divider type="vertical" />
+              <a-link @click="showChannelSetup(row)">通道配置</a-link>
               <a-divider type="vertical" />
               <a-dropdown>
                 <a> 更多 <Icon icon="ant-design:down-outlined" :size="12" /> </a>
                 <template #overlay>
                   <a-menu>
-                    <a-menu-item>
-                      <a-link @click="showChannelSetup(row)">通道配置</a-link>
-                    </a-menu-item>
                     <a-menu-item>
                       <a-link @click="showNotifyConfig(row)">订阅配置</a-link>
                     </a-menu-item>
@@ -64,7 +65,6 @@
                   </a-menu>
                 </template>
               </a-dropdown>
-              <a-divider type="vertical" />
             </template>
           </vxe-column>
         </vxe-table>
