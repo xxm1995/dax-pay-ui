@@ -97,7 +97,7 @@
   import TransferOrderInfo from '@/views/daxpay/common/order/transfer/TransferOrderInfo.vue'
   import ALink from '@/components/Link/Link.vue'
   import TradeFlowRecordInfo from './TradeFlowRecordInfo.vue'
-  import { TradeTypeEnum } from '@/enums/daxpay/PaymentEnum'
+  import { TradeTypeEnum } from '@/enums/daxpay/ChannelEnum'
   import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { mchAppDropdown } from '@/views/daxpay/common/merchant/app/MchApp.api'
 
