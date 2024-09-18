@@ -61,7 +61,7 @@ function createConfirm(options: ModalOptionsEx) {
 const getBaseOptions = () => {
   return {
     okText: '确认',
-    centered: true,
+    centered: false,
   }
 }
 

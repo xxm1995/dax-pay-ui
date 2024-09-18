@@ -5,7 +5,7 @@ import { Result } from '#/axios'
  * 支付参数签名
  */
 export function paySign(param: PayParam) {
-  return defHttp.post<Result<string>>({ url: '/develop/trade/pay/sign', data: param })
+  return defHttp.post<Result<string>>({ url: '/develop/trade/sign/pay', data: param })
 }
 
 /**
@@ -19,7 +19,7 @@ export function tradePay(params) {
  * 退款参数签名
  */
 export function refundSign(param: RefundParam) {
-  return defHttp.post<Result<string>>({ url: '/develop/trade/refund/sign', data: param })
+  return defHttp.post<Result<string>>({ url: '/develop/trade/sign/refund', data: param })
 }
 
 /**
@@ -33,7 +33,7 @@ export function tradeRefund(params) {
  * 转账签名
  */
 export function transferSign(param: TransferParam) {
-  return defHttp.post<Result<string>>({ url: '/develop/trade/transfer/sign', data: param })
+  return defHttp.post<Result<string>>({ url: '/develop/trade/sign/transfer', data: param })
 }
 
 /**
@@ -75,6 +75,8 @@ export interface PayParam {
   quitUrl?: string
   /** 异步通知地址 */
   notifyUrl?: string
+  /** 终端IP */
+  clientIp?: string
   /** 商户号 */
   mchNo?: string
   /** 应用号 */
@@ -83,6 +85,8 @@ export interface PayParam {
   nonceStr?: string
   /** 签名 */
   sign?: string
+  /** 请求时间 */
+  reqTime?: string
 }
 
 /**
@@ -127,6 +131,8 @@ export interface RefundParam {
   attach?: string
   /** 异步通知地址 */
   notifyUrl?: string
+  /** 终端IP */
+  clientIp?: string
   /** 商户号 */
   mchNo?: string
   /** 应用号 */
@@ -135,6 +141,8 @@ export interface RefundParam {
   nonceStr?: string
   /** 签名 */
   sign?: string
+  /** 请求时间 */
+  reqTime?: string
 }
 
 /**
@@ -166,7 +174,7 @@ export interface TransferParam {
   /** 支付通道 */
   channel?: string
   /** 转账金额 */
-  amount?: string
+  amount?: number
   /** 标题 */
   title?: string
   /** 转账原因 */
@@ -177,10 +185,14 @@ export interface TransferParam {
   payeeAccount?: string
   /** 收款人姓名 */
   payeeName?: string
+  /** 转账扩展参数 */
+  extraParam?: string
   /** 商户扩展参数 */
   attach?: string
   /** 异步通知地址 */
   notifyUrl?: string
+  /** 终端IP */
+  clientIp?: string
   /** 商户号 */
   mchNo?: string
   /** 应用号 */
@@ -189,6 +201,8 @@ export interface TransferParam {
   nonceStr?: string
   /** 签名 */
   sign?: string
+  /** 请求时间 */
+  reqTime?: string
 }
 /**
  * 转账返回结果

@@ -218,7 +218,7 @@
         type: LIST,
         selectList: payRefundStatusList.value,
       },
-      { field: 'allocStatus', name: '支付状态', type: LIST, selectList: payAllocStatusList.value },
+      { field: 'allocStatus', name: '分账状态', type: LIST, selectList: payAllocStatusList.value },
       {
         field: 'mchNo',
         type: LIST,
