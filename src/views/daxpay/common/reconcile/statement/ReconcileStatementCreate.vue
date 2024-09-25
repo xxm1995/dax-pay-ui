@@ -122,7 +122,6 @@
     // 商户
     merchantDropdown().then(({ data }) => {
       merchantList.value = data
-      console.log(merchantList)
     })
   }
 

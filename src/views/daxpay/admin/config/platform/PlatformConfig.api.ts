@@ -16,6 +16,14 @@ export function update(data: PlatformConfig) {
  * 平台配置
  */
 export interface PlatformConfig extends BaseEntity {
-  // 网关地址
+  // 网关服务地址
   gatewayServiceUrl?: string
+  // 网关移动端是否为嵌入式
+  mobileEmbedded?: boolean
+  // 网关移动端地址
+  gatewayMobileUrl?: string
+  // 网关PC端是否为嵌入式
+  pcEmbedded?: boolean
+  // 网关PC端地址
+  gatewayPcUrl?: string
 }

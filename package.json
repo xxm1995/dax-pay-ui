@@ -59,6 +59,7 @@
     "@vben/hooks": "workspace:*",
     "@vue/shared": "^3.5.8",
     "@vueuse/core": "^10.11.1",
+    "@vueuse/shared": "^10.11.1",
     "@zxcvbn-ts/core": "^3.0.4",
     "ant-design-vue": "^4.2.5",
     "axios": "^1.7.7",

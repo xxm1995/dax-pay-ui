@@ -38,3 +38,15 @@ export enum NotifyContentTypeEnum {
   /** 支付订单变动通知 */
   TRANSFER = 'transfer',
 }
+
+/**
+ * 通道认证状态
+ */
+export enum ChannelAuthStatusEnum {
+  /** 获取中 */
+  WAITING = 'waiting',
+  /** 获取成功 */
+  SUCCESS = 'success',
+  /** 数据不存在 */
+  NOT_EXIST = 'not_exist',
+}
