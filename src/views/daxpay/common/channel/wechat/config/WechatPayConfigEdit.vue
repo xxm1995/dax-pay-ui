@@ -31,11 +31,11 @@
             placeholder="请输入微信应用AppId"
           />
         </a-form-item>
-        <a-form-item label="AppSecret" name="appSecret">
+        <a-form-item label="公众号AppSecret" name="appSecret">
           <a-input
             v-model:value="form.appSecret"
             :disabled="showable"
-            placeholder="APPID对应的接口密码，用于获取接口调用凭证时使用"
+            placeholder="用于获取接口调用凭证时使用, 如OpenId/AccessToken等"
           />
         </a-form-item>
         <a-form-item label="是否启用" name="enable">

@@ -38,6 +38,7 @@
             placeholder="请选择对账通道"
           />
           <a-button
+            :loading="loading"
             :disabled="!form.channel"
             style="margin-top: 15px"
             type="primary"
@@ -48,6 +49,7 @@
       </a-form-item>
     </a-form>
     <qr-code
+      style="margin-bottom: 20px"
       :options="{ margin: 0 }"
       :width="250"
       :value="authUrl.authUrl"
@@ -105,6 +107,7 @@
   const form = ref<GenerateAuthUrlParam>({})
   const authResult = ref<AuthResult>({})
   const authUrl = ref<AuthUrlResult>({ authUrl: '' })
+  let loading = ref(false)
   let pause: any = () => {}
 
   onMounted(() => {
@@ -138,7 +141,6 @@
    */
   function copy(value) {
     copyText(value)
-    createMessage.info('已复制到剪贴板中')
   }
 
   /**
@@ -146,11 +148,17 @@
    */
   function getUrl() {
     pause()
-    createMessage.info('正在生成链接，请稍等.....')
-    generateAuthUrl(form.value).then((res) => {
-      authUrl.value = res.data
-      query()
-    })
+    authResult.value = {}
+    loading.value = true
+    authUrl.value = {}
+    generateAuthUrl(form.value)
+      .then((res) => {
+        authUrl.value = res.data
+        query()
+      })
+      .finally(() => {
+        loading.value = false
+      })
   }
 
   /**
