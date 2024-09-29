@@ -1,7 +1,7 @@
 /**
  * 支付通道
  */
-export enum ChannelEnum {
+export enum DaxpayEnum {
   ALI = 'ali_pay',
   WECHAT = 'wechat_pay',
   UNION_PAY = 'union_pay',
@@ -49,4 +49,12 @@ export enum ChannelAuthStatusEnum {
   SUCCESS = 'success',
   /** 数据不存在 */
   NOT_EXIST = 'not_exist',
+}
+
+/**
+ * 收银台类型
+ */
+export enum CashierTypeEnum {
+  WECHAT_PAY = 'wechat_pay',
+  ALIPAY = 'alipay',
 }

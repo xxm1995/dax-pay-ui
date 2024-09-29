@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
-  import { TradeTypeEnum } from '@/enums/daxpay/ChannelEnum'
+  import { TradeTypeEnum } from '@/enums/daxpay/daxpayEnum'
   import { useDict } from '@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import DevelopTradePay from './DevelopTradePay.vue'

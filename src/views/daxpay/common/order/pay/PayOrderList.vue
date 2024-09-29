@@ -161,7 +161,7 @@
     PayAllocStatusEnum,
     PayRefundStatusEnum,
     PayStatusEnum,
-  } from '@/enums/daxpay/TradeStatusEnum'
+  } from '@/enums/daxpay/tradeStatusEnum'
   import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { mchAppDropdown } from '@/views/daxpay/common/merchant/app/MchApp.api'
 

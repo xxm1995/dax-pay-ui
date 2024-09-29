@@ -28,7 +28,7 @@
           :loading="loading"
         >
           <vxe-column type="seq" width="60" />
-          <vxe-column field="appId" title="应用号" :min-width="100" >
+          <vxe-column field="appId" title="应用号" :min-width="100">
             <template #default="{ row }">
               <a-link @click="show(row)">{{ row.appId }}</a-link>
             </template>
@@ -60,6 +60,12 @@
                       <a-link @click="showNotifyConfig(row)">订阅配置</a-link>
                     </a-menu-item>
                     <a-menu-item>
+                      <a-link @click="showCashierConfig(row)">收银配置</a-link>
+                    </a-menu-item>
+                    <a-menu-item>
+                      <a-link @click="showCashierQrCOde(row)">收银码牌</a-link>
+                    </a-menu-item>
+                    <a-menu-item>
                       <a-link danger @click="remove(row)">删除</a-link>
                     </a-menu-item>
                   </a-menu>
@@ -79,6 +85,8 @@
       />
       <mch-app-edit ref="mchApp" @ok="queryPage" />
       <channel-config-list ref="channelSetup" />
+      <ChannelCashierConfigList ref="channelCashierConfigList" />
+      <ChannelCashierQrCode ref="channelCashierQrCode" />
       <MerchantNotifyConfigList ref="merchantNotifyConfigList" />
     </div>
   </div>
@@ -101,6 +109,8 @@
   import ChannelConfigList from '@/views/daxpay/common/merchant/channel/ChannelConfigList.vue'
   import MerchantNotifyConfigList from '@/views/daxpay/common/merchant/notify/MerchantNotifyConfigList.vue'
   import Icon from '@/components/Icon/Icon.vue'
+  import ChannelCashierConfigList from '@/views/daxpay/common/merchant/cashier/ChannelCashierConfigList.vue'
+  import ChannelCashierQrCode from '@/views/daxpay/common/merchant/cashier/ChannelCashierQrCode.vue'
 
   // 使用hooks
   const {
@@ -128,12 +138,15 @@
       { field: 'appName', type: STRING, name: '应用名称', placeholder: '请输入应用名称' },
     ] as QueryField[]
   })
+  const mchNoOptions = ref<LabeledValue[]>([])
+
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
-  const mchApp: any = ref()
-  const channelSetup: any = ref()
-  const merchantNotifyConfigList: any = ref()
-  const mchNoOptions = ref<LabeledValue[]>([])
+  const mchApp = ref<any>()
+  const channelSetup = ref<any>()
+  const merchantNotifyConfigList = ref<any>()
+  const channelCashierConfigList = ref<any>()
+  const channelCashierQrCode = ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -189,6 +202,20 @@
    */
   function showNotifyConfig(record) {
     merchantNotifyConfigList.value.init(record.appId)
+  }
+
+  /**
+   * 收银配置
+   */
+  function showCashierConfig(record) {
+    channelCashierConfigList.value.init(record.appId)
+  }
+
+  /**
+   * 收银码牌
+   */
+  function showCashierQrCOde(record) {
+    channelCashierQrCode.value.init(record.appId)
   }
 
   /**

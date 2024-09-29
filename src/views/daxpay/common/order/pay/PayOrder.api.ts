@@ -5,7 +5,7 @@ import {
   PayAllocStatusEnum,
   PayRefundStatusEnum,
   PayStatusEnum,
-} from '@/enums/daxpay/TradeStatusEnum'
+} from '@/enums/daxpay/tradeStatusEnum'
 
 /**
  * 分页

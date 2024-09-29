@@ -93,7 +93,7 @@
   import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { mchAppDropdown } from '@/views/daxpay/common/merchant/app/MchApp.api'
   import { useDict } from '@/hooks/bootx/useDict'
-  import { ChannelAuthStatusEnum } from '@/enums/daxpay/ChannelEnum'
+  import { ChannelAuthStatusEnum } from '@/enums/daxpay/daxpayEnum'
 
   const { createMessage } = useMessage()
   const { dictDropDown } = useDict()

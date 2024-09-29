@@ -128,7 +128,7 @@
   import PayOrderInfo from '../pay/PayOrderInfo.vue'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import ALink from '@/components/Link/Link.vue'
-  import { RefundStatusEnum } from '@/enums/daxpay/TradeStatusEnum'
+  import { RefundStatusEnum } from '@/enums/daxpay/tradeStatusEnum'
   import { Icon } from '@/components/Icon'
   import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { mchAppDropdown } from '@/views/daxpay/common/merchant/app/MchApp.api'

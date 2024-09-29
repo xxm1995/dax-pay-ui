@@ -1,7 +1,7 @@
 import { defHttp } from '@/utils/http/axios'
 import { PageResult, Result } from '#/axios'
 import { MchEntity } from '#/web'
-import { CallbackStatusEnum } from '@/enums/daxpay/TradeStatusEnum'
+import { CallbackStatusEnum } from '@/enums/daxpay/tradeStatusEnum'
 
 /**
  * 分页
