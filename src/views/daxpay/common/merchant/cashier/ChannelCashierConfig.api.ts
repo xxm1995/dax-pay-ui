@@ -5,8 +5,11 @@ import { MchEntity } from '#/web'
 /**
  * 配置列表
  */
-export function findAll() {
-  return defHttp.get<Result<MchEntity>>({ url: '/channel/cashier/config/list' })
+export function findAll(appId) {
+  return defHttp.get<Result<ChannelCashierConfig[]>>({
+    url: '/channel/cashier/config/findByAppId',
+    params: { appId },
+  })
 }
 
 /**
@@ -20,9 +23,29 @@ export function get(id) {
 }
 
 /**
+ * 配置是否存在
+ */
+export function existsByType(appId, type) {
+  return defHttp.get<Result<boolean>>({
+    url: '/channel/cashier/config/existsByType',
+    params: { appId, type },
+  })
+}
+
+/**
+ * 配置是否存在
+ */
+export function existsByTypeNotId(appId, type, id) {
+  return defHttp.get<Result<boolean>>({
+    url: '/channel/cashier/config/existsByTypeNotId',
+    params: { appId, type, id },
+  })
+}
+
+/**
  * 配置保存
  */
-export function save(data: ChannelCashierConfig) {
+export function add(data: ChannelCashierConfig) {
   return defHttp.post<Result<ChannelCashierConfig>>({
     url: '/channel/cashier/config/save',
     data,
@@ -44,19 +67,25 @@ export function update(data: ChannelCashierConfig) {
  */
 export function remove(id) {
   return defHttp.post<Result<ChannelCashierConfig>>({
-    url: '/channel/cashier/config/remove',
+    url: '/channel/cashier/config/delete',
     params: { id },
+  })
+}
+
+/**
+ * 获取码牌地址
+ */
+export function getQrCodeUrl(appId) {
+  return defHttp.get<Result<string>>({
+    url: '/channel/cashier/config/qrCodeUrl',
+    params: { appId },
   })
 }
 
 /**
  * 通道收银台配置
  */
-export interface ChannelCashierConfig {
-  // 商户号
-  mchNo?: string
-  // 应用号
-  appId?: string
+export interface ChannelCashierConfig extends MchEntity {
   // 收银台类型
   cashierType?: string
   // 收银台名称
@@ -69,4 +98,6 @@ export interface ChannelCashierConfig {
   allocation?: boolean
   // 自动分账
   autoAllocation?: boolean
+  // 备注
+  remark?: string
 }

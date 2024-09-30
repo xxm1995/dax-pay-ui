@@ -112,7 +112,7 @@
   function add() {
     dictItemEdit.value.init(null, FormEditType.Add, dictInfo)
   }
-  // 查看
+  // 编辑
   function edit(record) {
     dictItemEdit.value.init(record.id, FormEditType.Edit, dictInfo)
   }

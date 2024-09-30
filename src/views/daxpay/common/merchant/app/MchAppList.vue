@@ -208,7 +208,7 @@
    * 收银配置
    */
   function showCashierConfig(record) {
-    channelCashierConfigList.value.init(record.appId)
+    channelCashierConfigList.value.init(record)
   }
 
   /**

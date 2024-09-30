@@ -19,6 +19,13 @@
         <a-descriptions-item label="可退余额(元)" :span="8">
           {{ order.refundableBalance }}
         </a-descriptions-item>
+        <a-descriptions-item label="支付通道" :span="8">
+          {{ dictConvert('channel', order.channel) }}
+        </a-descriptions-item>
+        <a-descriptions-item label="支付方式" :span="8">
+          {{ dictConvert('pay_method', order.method) }}
+        </a-descriptions-item>
+        <a-descriptions-item label="" :span="8" />
         <a-descriptions-item label="支付状态" :span="8">
           {{ dictConvert('pay_status', order.status) }}
         </a-descriptions-item>

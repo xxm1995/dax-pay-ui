@@ -37,7 +37,12 @@
       </a-tree>
     </a-spin>
     <template #footer>
-      <a-select v-if="isAdmin()" style="min-width: 100px" @change="clientSwitch" v-model:value="clientCode">
+      <a-select
+        v-if="isAdmin()"
+        style="min-width: 100px"
+        @change="clientSwitch"
+        v-model:value="clientCode"
+      >
         <a-select-option v-for="o in clients" :key="o.code">{{ o.name }}</a-select-option>
       </a-select>
       <a-dropdown style="margin-left: 5px" :trigger="['click']" placement="top">

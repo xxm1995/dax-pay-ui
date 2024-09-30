@@ -7,6 +7,7 @@ import {
   Image,
   Badge,
   Popover,
+  QRCode,
   InputNumber,
   Empty,
   Popconfirm,
@@ -55,6 +56,7 @@ export function registerGlobComp(app: App) {
   app.use(Upload)
   app.use(Badge)
   app.use(Popover)
+  app.use(QRCode)
   app.use(Checkbox)
   app.use(List)
   app.use(Space)
