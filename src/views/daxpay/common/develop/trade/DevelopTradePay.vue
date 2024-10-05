@@ -172,6 +172,7 @@
       new Date(new Date().getTime() + 30 * 60 * 1000),
       'yyyy-MM-dd HH:mm:ss',
     )
+    initMchApp()
     genNonceStr()
     genBizOrderNo()
     updateReqTime()

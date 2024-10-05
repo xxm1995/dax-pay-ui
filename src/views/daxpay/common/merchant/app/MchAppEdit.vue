@@ -143,7 +143,6 @@
 
   // 校验
   const rules = reactive({
-    mchNo: [{ required: true, message: '请选择所属商户' }],
     appName: [{ required: true, message: '请输入应用名称' }],
     signType: [{ required: true, message: '请选择签名方式' }],
     signSecret: [{ required: true, message: '请输入签名秘钥' }],

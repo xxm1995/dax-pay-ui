@@ -255,7 +255,6 @@
           'acpMiddleCert',
           'acpRootCert',
         ),
-        mchNo: channelConfig.value.mchNo,
         appId: channelConfig.value.appId,
       }).finally(() => {
         confirmLoading.value = false

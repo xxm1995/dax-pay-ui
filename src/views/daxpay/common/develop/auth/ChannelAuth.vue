@@ -11,8 +11,9 @@
   >
     <a-alert style="width: 400px" message="请选择参数后生成授权链接进行扫码" type="info" />
     <a-form class="small-from-item mt-15px mb-15px" ref="formRef" :model="form">
-      <a-form-item label="商户应用" name="appId" v-show="form.mchNo">
+      <a-form-item label="商户应用" name="appId">
         <a-select
+          style="width: 320px"
           :filter-option="search"
           :options="mchAppList"
           v-model:value="form.appId"
@@ -89,7 +90,6 @@
   const { search } = useFormEdit()
 
   const channels = ref<LabeledValue[]>([])
-  const merchantList = ref<LabeledValue[]>([])
   const mchAppList = ref<LabeledValue[]>([])
 
   const formRef = ref<FormInstance>()

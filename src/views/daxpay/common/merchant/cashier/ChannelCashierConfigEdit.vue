@@ -170,7 +170,6 @@
     initFormEditType(editType)
     resetForm()
     form.value.appId = unref(mchApp.appId)
-    form.value.mchNo = unref(mchApp.mchNo)
     getInfo(id, editType)
   }
   /**

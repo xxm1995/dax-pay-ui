@@ -132,7 +132,7 @@
     return {
       appId: [{ required: true, message: '应用号不可为空' }],
       channel: [{ required: true, message: '支付通道不可为空' }],
-      bizRefundNo: [{ required: true, message: '商户转账号不可为空' }],
+      bizTransferNo: [{ required: true, message: '商户转账号不可为空' }],
       title: [{ required: true, message: '转账标题不可为空' }],
       amount: [{ required: true, message: '转账金额不可为空' }],
       payeeType: [{ required: true, message: '转账账号类型不可为空' }],

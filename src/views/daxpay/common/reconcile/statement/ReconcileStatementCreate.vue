@@ -19,7 +19,7 @@
       <a-form-item label="标题" name="title">
         <a-input v-model:value="form.title" placeholder="请输入对账名称" />
       </a-form-item>
-      <a-form-item label="商户应用" name="appId" v-show="form.mchNo">
+      <a-form-item label="商户应用" name="appId">
         <a-select
           :filter-option="search"
           :options="mchAppList"
@@ -87,12 +87,10 @@
     title: [{ required: true, message: '请输入对账标题' }],
     date: [{ required: true, message: '请选择对账日期' }],
     channel: [{ required: true, message: '请选择对账通道' }],
-    mchNo: [{ required: true, message: '请选择商户' }],
     appId: [{ required: true, message: '请选择商户应用' }],
   } as Record<string, Rule[]>
 
   const channels = ref<LabeledValue[]>([])
-  const merchantList = ref<LabeledValue[]>([])
   const mchAppList = ref<LabeledValue[]>([])
 
   const formRef = ref<FormInstance>()

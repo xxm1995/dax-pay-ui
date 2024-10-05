@@ -312,7 +312,6 @@
           'privateKey',
           'privateCert',
         ),
-        mchNo: channelConfig.value.mchNo,
         appId: channelConfig.value.appId,
       })
         .then(() => {
