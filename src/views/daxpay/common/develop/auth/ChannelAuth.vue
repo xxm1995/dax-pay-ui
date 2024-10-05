@@ -11,16 +11,6 @@
   >
     <a-alert style="width: 400px" message="请选择参数后生成授权链接进行扫码" type="info" />
     <a-form class="small-from-item mt-15px mb-15px" ref="formRef" :model="form">
-      <a-form-item label="商户" name="mchNo">
-        <a-select
-          style="width: 320px"
-          :filter-option="search"
-          :options="merchantList"
-          v-model:value="form.mchNo"
-          placeholder="请选择商户"
-          @change="merchantChange"
-        />
-      </a-form-item>
       <a-form-item label="商户应用" name="appId" v-show="form.mchNo">
         <a-select
           :filter-option="search"
@@ -90,7 +80,6 @@
     queryAuthResult,
   } from './ChannelAuth.api'
   import useFormEdit from '@/hooks/bootx/useFormEdit'
-  import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { mchAppDropdown } from '@/views/daxpay/common/merchant/app/MchApp.api'
   import { useDict } from '@/hooks/bootx/useDict'
   import { ChannelAuthStatusEnum } from '@/enums/daxpay/daxpayEnum'
@@ -120,18 +109,14 @@
   async function initData() {
     // 通道
     channels.value = await dictDropDown('channel')
-    // 商户
-    merchantDropdown().then(({ data }) => {
-      merchantList.value = data
-    })
+    initMchApp()
   }
 
   /**
    * 商户变动时刷新应用列表
    */
-  function merchantChange() {
-    form.value.appId = undefined
-    mchAppDropdown(form.value.mchNo).then(({ data }) => {
+  function initMchApp() {
+    mchAppDropdown().then(({ data }) => {
       mchAppList.value = data
     })
   }

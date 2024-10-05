@@ -37,9 +37,6 @@
         <a-descriptions-item label="关闭时间">
           {{ record.createTime }}
         </a-descriptions-item>
-        <a-descriptions-item label="商户号">
-          {{ record.mchNo }}
-        </a-descriptions-item>
         <a-descriptions-item label="应用AppId">
           {{ record.appId }}
         </a-descriptions-item>

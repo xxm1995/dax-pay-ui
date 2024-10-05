@@ -44,7 +44,6 @@
           <vxe-column field="delayCount" title="延迟重试次数" sortable :min-width="150" />
           <vxe-column field="latestTime" title="最后发送时间" sortable :min-width="170" />
           <vxe-column field="createTime" title="创建时间" sortable :min-width="170" />
-          <vxe-column field="mchNo" title="商户号" :min-width="150" />
           <vxe-column field="appId" title="应用号" :min-width="150" />
           <vxe-column fixed="right" width="180" :showOverflow="false" title="操作">
             <template #default="{ row }">
@@ -91,7 +90,6 @@
   import NotifyRecordList from './NotifyRecordList.vue'
   import { NotifyContentTypeEnum } from '@/enums/daxpay/daxpayEnum'
   import RefundOrderInfo from '@/views/daxpay/common/order/refund/RefundOrderInfo.vue'
-  import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { mchAppDropdown } from '@/views/daxpay/common/merchant/app/MchApp.api'
 
   // 使用hooks
@@ -122,24 +120,16 @@
         selectList: noticeTypeList.value,
       },
       {
-        field: 'mchNo',
-        type: LIST,
-        name: '商户号',
-        placeholder: '请选择商户号',
-        selectList: mchNoOptions.value,
-      },
-      {
         field: 'appId',
         type: LIST,
         name: '应用号',
         placeholder: '请先选择商户后选择应用号',
-        selectList: mchAppOptions.value,
+        selectList: mchAppList.value,
       },
     ] as QueryField[]
   })
 
-  const mchNoOptions = ref<LabeledValue[]>([])
-  const mchAppOptions = ref<LabeledValue[]>([])
+  const mchAppList = ref<LabeledValue[]>([])
   const notifyRecordList = ref<any>()
   const notifyTaskInfo = ref<any>()
   const payOrderInfo = ref<any>()
@@ -156,32 +146,21 @@
   function vxeBind() {
     xTable.value?.connect(xToolbar.value as VxeToolbarInstance)
   }
-  watch(
-    () => model.queryParam?.mchNo,
-    (value) => changeMch(value),
-  )
 
   /**
    * 初始化
    */
   async function initData() {
-    merchantDropdown().then(({ data }) => {
-      mchNoOptions.value = data
-    })
     noticeTypeList.value = await dictDropDown('notify_content_type')
+    initMchApp()
   }
   /**
-   * 商户变动后更新应用列表
+   * 初始化商户应用列表
    */
-  function changeMch(mchNo) {
-    if (mchNo) {
-      mchAppDropdown(mchNo).then(({ data }) => {
-        mchAppOptions.value = data
-      })
-    } else {
-      mchAppOptions.value = []
-      model.queryParam.appId = undefined
-    }
+  function initMchApp() {
+    mchAppDropdown().then(({ data }) => {
+      mchAppList.value = data
+    })
   }
   /**
    * 分页查询

@@ -19,20 +19,11 @@ export default defineApplicationConfig({
       port: 3300,
       proxy: {
         // 运营管理端
-        '/admin': {
+        '/server': {
           target: 'http://localhost:9999',
           changeOrigin: true,
           ws: true,
-          rewrite: (path) => path.replace(new RegExp(`^/admin`), ''),
-          // only https
-          // secure: false
-        },
-        // 商户端
-        '/merchant': {
-          target: 'http://localhost:8888',
-          changeOrigin: true,
-          ws: true,
-          rewrite: (path) => path.replace(new RegExp(`^/merchant`), ''),
+          rewrite: (path) => path.replace(new RegExp(`^/server`), ''),
           // only https
           // secure: false
         },

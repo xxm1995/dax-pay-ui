@@ -10,19 +10,10 @@
         :wrapperCol="{ span: 18 }"
         :validate-trigger="['blur', 'change']"
       >
-        <a-form-item label="商户号" name="mchNo">
-          <a-select
-            :filter-option="search"
-            v-model:value="form.mchNo"
-            placeholder="请选择商户"
-            :options="mchNoOptions"
-            @change="merchantChange"
-          />
-        </a-form-item>
         <a-form-item label="应用号" name="appId">
           <a-select
             :filter-option="search"
-            :options="mchAppOptions"
+            :options="mchAppList"
             v-model:value="form.appId"
             placeholder="请选择商户应用"
           />
@@ -106,7 +97,6 @@
   import { Modal } from 'ant-design-vue'
   import { refundSign, RefundParam, tradeRefund } from './DevelopTrade.api'
   import { LabeledValue } from 'ant-design-vue/lib/select'
-  import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import useFormEdit from '@/hooks/bootx/useFormEdit'
   import { mchAppDropdown } from '@/views/daxpay/common/merchant/app/MchApp.api'
   import XEUtils from 'xe-utils'
@@ -122,7 +112,6 @@
   })
   const rules = computed(() => {
     return {
-      mchNo: [{ required: true, message: '商户号不可为空' }],
       appId: [{ required: true, message: '应用号不可为空' }],
       bizRefundNo: [{ required: true, message: '商户退款号不可为空' }],
       title: [{ required: true, message: '退款标题不可为空' }],
@@ -133,8 +122,7 @@
     } as Record<string, Rule[]>
   })
 
-  const mchNoOptions = ref<LabeledValue[]>([])
-  const mchAppOptions = ref<LabeledValue[]>([])
+  const mchAppList = ref<LabeledValue[]>([])
 
   onMounted(() => {
     initData()
@@ -145,10 +133,7 @@
    */
   async function initData() {
     confirmLoading.value = false
-    merchantDropdown().then(({ data }) => {
-      mchNoOptions.value = data
-    })
-    // 时间默认30M后
+    initMchApp()
     genNonceStr()
     genBizOrderNo()
     updateReqTime()
@@ -157,10 +142,9 @@
   /**
    * 商户变动时刷新应用列表
    */
-  function merchantChange() {
-    form.appId = undefined
-    mchAppDropdown(form.mchNo).then(({ data }) => {
-      mchAppOptions.value = data
+  function initMchApp() {
+    mchAppDropdown().then(({ data }) => {
+      mchAppList.value = data
     })
   }
 

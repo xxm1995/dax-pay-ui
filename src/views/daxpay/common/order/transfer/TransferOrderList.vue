@@ -55,8 +55,6 @@
           </vxe-column>
           <vxe-column field="reason" title="转账原因" :min-width="160" />
           <vxe-column field="createTime" title="创建时间" sortable :min-width="170" />
-
-          <vxe-column field="mchNo" title="商户号" :min-width="150" />
           <vxe-column field="appId" title="应用号" :min-width="150" />
           <vxe-column fixed="right" :width="120" :showOverflow="false" title="操作">
             <template #default="{ row }">
@@ -145,8 +143,7 @@
   const { createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
-  const mchNoOptions = ref<LabeledValue[]>([])
-  const mchAppOptions = ref<LabeledValue[]>([])
+  const mchAppList = ref<LabeledValue[]>([])
   let channelList = ref<LabeledValue[]>([])
   let transferStatusList = ref<LabeledValue[]>([])
   let totalAmount = ref<number>(0)
@@ -168,18 +165,11 @@
       },
       { field: 'channel', name: '转账通道', type: LIST, selectList: channelList.value },
       {
-        field: 'mchNo',
-        type: LIST,
-        name: '商户号',
-        placeholder: '请选择商户号',
-        selectList: mchNoOptions.value,
-      },
-      {
         field: 'appId',
         type: LIST,
         name: '应用号',
         placeholder: '请先选择商户后选择应用号',
-        selectList: mchAppOptions.value,
+        selectList: mchAppList.value,
       },
     ] as QueryField[]
   })
@@ -187,11 +177,6 @@
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
   const transferOrderInfo = ref<any>()
-
-  watch(
-    () => model.queryParam?.mchNo,
-    (value) => changeMch(value),
-  )
 
   onMounted(() => {
     initData()
@@ -206,25 +191,17 @@
    * 初始化数据
    */
   async function initData() {
-    merchantDropdown().then(({ data }) => {
-      mchNoOptions.value = data
-    })
     transferStatusList.value = await dictDropDown('transfer_status')
     channelList.value = await dictDropDown('channel')
   }
 
   /**
-   * 商户变动后更新应用列表
+   * 初始化商户应用列表
    */
-  function changeMch(mchNo) {
-    if (mchNo) {
-      mchAppDropdown(mchNo).then(({ data }) => {
-        mchAppOptions.value = data
-      })
-    } else {
-      mchAppOptions.value = []
-      model.queryParam.appId = undefined
-    }
+  function initMchApp() {
+    mchAppDropdown().then(({ data }) => {
+      mchAppList.value = data
+    })
   }
   /**
    * 分页查询

@@ -104,7 +104,6 @@
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import ALink from '@/components/Link/Link.vue'
   import { useDict } from '@/hooks/bootx/useDict'
-  import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import ChannelConfigList from '@/views/daxpay/common/merchant/channel/ChannelConfigList.vue'
   import MerchantNotifyConfigList from '@/views/daxpay/common/merchant/notify/MerchantNotifyConfigList.vue'
@@ -127,18 +126,10 @@
   // 查询条件
   const fields = computed(() => {
     return [
-      {
-        field: 'mchNo',
-        type: LIST,
-        name: '商户',
-        selectList: mchNoOptions.value,
-        placeholder: '请选择商户',
-      },
       { field: 'appId', type: STRING, name: '应用号', placeholder: '请输入应用号' },
       { field: 'appName', type: STRING, name: '应用名称', placeholder: '请输入应用名称' },
     ] as QueryField[]
   })
-  const mchNoOptions = ref<LabeledValue[]>([])
 
   const xTable = ref<VxeTableInstance>()
   const xToolbar = ref<VxeToolbarInstance>()
@@ -150,18 +141,8 @@
 
   onMounted(() => {
     vxeBind()
-    initMerchant()
     queryPage()
   })
-
-  /**
-   * 初始化商户列表信息
-   */
-  function initMerchant() {
-    merchantDropdown().then(({ data }) => {
-      mchNoOptions.value = data
-    })
-  }
 
   function vxeBind() {
     xTable.value?.connect(xToolbar.value as VxeToolbarInstance)

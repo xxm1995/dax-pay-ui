@@ -38,7 +38,6 @@
     </a-spin>
     <template #footer>
       <a-select
-        v-if="isAdmin()"
         style="min-width: 100px"
         @change="clientSwitch"
         v-model:value="clientCode"
@@ -71,7 +70,7 @@
 <script lang="ts" setup>
   import { BasicDrawer } from '@/components/Drawer'
   import { findAll as findClients, Client } from '@/views/iam/client/Client.api'
-  import { getAppEnvConfig, isAdmin } from "@/utils/env";
+  import { getAppEnvConfig } from "@/utils/env";
   import { RoleTree } from './Role.api'
   import { Tree, treeDataTranslate } from '@/utils/dataUtil'
   import XEUtils from 'xe-utils'

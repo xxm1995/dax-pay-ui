@@ -124,7 +124,6 @@
   import PayOrderInfo from '@/views/daxpay/common/order/pay/PayOrderInfo.vue'
   import RefundOrderInfo from '@/views/daxpay/common/order/refund/RefundOrderInfo.vue'
   import TransferOrderInfo from '@/views/daxpay/common/order/transfer/TransferOrderInfo.vue'
-  import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { mchAppDropdown } from '@/views/daxpay/common/merchant/app/MchApp.api'
 
   // 使用hooks
@@ -141,8 +140,7 @@
   } = useTablePage(queryPage)
   const { dictDropDown, dictConvert } = useDict()
 
-  const mchNoOptions = ref<LabeledValue[]>([])
-  const mchAppOptions = ref<LabeledValue[]>([])
+  const mchAppList = ref<LabeledValue[]>([])
   let channelList = ref<LabeledValue[]>([])
   let discrepancyTypeList = ref<LabeledValue[]>([])
   let tradeStatusList = ref<LabeledValue[]>([])
@@ -214,18 +212,11 @@
         selectList: tradeStatusList.value,
       },
       {
-        field: 'mchNo',
-        type: LIST,
-        name: '商户号',
-        placeholder: '请选择商户号',
-        selectList: mchNoOptions.value,
-      },
-      {
         field: 'appId',
         type: LIST,
         name: '应用号',
         placeholder: '请先选择商户后选择应用号',
-        selectList: mchAppOptions.value,
+        selectList: mchAppList.value,
       },
     ] as QueryField[]
   })
@@ -246,35 +237,24 @@
     initData()
     init()
   })
-  watch(
-    () => model.queryParam?.mchNo,
-    (value) => changeMch(value),
-  )
   /**
    * 初始化基础数据
    */
   async function initData() {
-    merchantDropdown().then(({ data }) => {
-      mchNoOptions.value = data
-    })
     discrepancyTypeList.value = await dictDropDown('reconcile_discrepancy_type')
     channelList.value = await dictDropDown('channel')
     tradeStatusList.value = await dictDropDown('trade_status')
     tradeTypeList.value = await dictDropDown('trade_type')
+    initMchApp()
   }
 
   /**
-   * 商户变动后更新应用列表
+   * 初始化商户应用列表
    */
-  function changeMch(mchNo) {
-    if (mchNo) {
-      mchAppDropdown(mchNo).then(({ data }) => {
-        mchAppOptions.value = data
-      })
-    } else {
-      mchAppOptions.value = []
-      model.queryParam.appId = undefined
-    }
+  function initMchApp() {
+    mchAppDropdown().then(({ data }) => {
+      mchAppList.value = data
+    })
   }
   /**
    * 入口

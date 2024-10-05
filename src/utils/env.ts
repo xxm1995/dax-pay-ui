@@ -1,7 +1,6 @@
 import type { GlobEnvConfig } from '#/config'
 import pkg from '../../package.json'
 import { API_ADDRESS } from '@/enums/cacheEnum'
-import { DaxPayClientEnum } from "@/enums/daxpay/daxpayClientEnum";
 
 export function getCommonStoragePrefix() {
   const { VITE_GLOB_APP_TITLE } = getAppEnvConfig()
@@ -77,11 +76,4 @@ export function isDevMode(): boolean {
  */
 export function isProdMode(): boolean {
   return import.meta.env.PROD
-}
-
-/**
- * 是否为运营端
- */
-export function isAdmin() {
-  return import.meta.env.VITE_GLOB_APP_CLIENT === DaxPayClientEnum.ADMIN
 }

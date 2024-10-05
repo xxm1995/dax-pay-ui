@@ -72,7 +72,6 @@
             </template>
           </vxe-column>
           <vxe-column field="createTime" title="创建时间" sortable :min-width="230" />
-          <vxe-column field="mchNo" title="商户号" :min-width="150" />
           <vxe-column field="appId" title="应用号" :min-width="150" />
           <vxe-column fixed="right" width="120" :showOverflow="false" title="操作">
             <template #default="{ row }">
@@ -162,7 +161,6 @@
     PayRefundStatusEnum,
     PayStatusEnum,
   } from '@/enums/daxpay/tradeStatusEnum'
-  import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { mchAppDropdown } from '@/views/daxpay/common/merchant/app/MchApp.api'
 
   // 使用hooks
@@ -180,8 +178,7 @@
   const { createMessage, createConfirm } = useMessage()
   const { dictConvert, dictDropDown } = useDict()
 
-  const mchNoOptions = ref<LabeledValue[]>([])
-  const mchAppOptions = ref<LabeledValue[]>([])
+  const mchAppList = ref<LabeledValue[]>([])
   const channelList = ref<LabeledValue[]>([])
   const methodList = ref<LabeledValue[]>([])
   const payStatusList = ref<LabeledValue[]>([])
@@ -220,18 +217,11 @@
       },
       { field: 'allocStatus', name: '分账状态', type: LIST, selectList: payAllocStatusList.value },
       {
-        field: 'mchNo',
-        type: LIST,
-        name: '商户号',
-        placeholder: '请选择商户号',
-        selectList: mchNoOptions.value,
-      },
-      {
         field: 'appId',
         type: LIST,
         name: '应用号',
         placeholder: '请先选择商户后选择应用号',
-        selectList: mchAppOptions.value,
+        selectList: mchAppList.value,
       },
     ] as QueryField[]
   })
@@ -241,12 +231,6 @@
   const payOrderInfo = ref<any>()
   const refundModel = ref<any>()
   const totalAmount = ref<number>(0.0)
-
-  // 提供一个 getter 函数
-  watch(
-    () => model.queryParam?.mchNo,
-    (value) => changeMch(value),
-  )
 
   onMounted(() => {
     initData()
@@ -261,28 +245,21 @@
    * 初始化数据
    */
   async function initData() {
-    merchantDropdown().then(({ data }) => {
-      mchNoOptions.value = data
-    })
     channelList.value = await dictDropDown('channel')
     methodList.value = await dictDropDown('pay_method')
     payStatusList.value = await dictDropDown('pay_status')
     payRefundStatusList.value = await dictDropDown('pay_refund_status')
     payAllocStatusList.value = await dictDropDown('pay_alloc_status')
+    initMchApp()
   }
 
   /**
-   * 商户变动后更新应用列表
+   * 初始化商户应用列表
    */
-  function changeMch(mchNo) {
-    if (mchNo) {
-      mchAppDropdown(mchNo).then(({ data }) => {
-        mchAppOptions.value = data
-      })
-    } else {
-      mchAppOptions.value = []
-      model.queryParam.appId = undefined
-    }
+  function initMchApp() {
+    mchAppDropdown().then(({ data }) => {
+      mchAppList.value = data
+    })
   }
 
   /**

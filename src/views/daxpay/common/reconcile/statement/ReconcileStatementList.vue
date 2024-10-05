@@ -135,7 +135,6 @@
   import ReconcileStatementCreate from './ReconcileStatementCreate.vue'
   import ReconcileStatementInfo from './ReconcileStatementInfo.vue'
   import { useFilePlatform } from '@/hooks/bootx/useFilePlatform'
-  import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { mchAppDropdown } from '@/views/daxpay/common/merchant/app/MchApp.api'
 
   // 使用hooks
@@ -154,8 +153,7 @@
   const { createMessage, createConfirm } = useMessage()
   const { getFileUrl } = useFilePlatform()
 
-  const mchNoOptions = ref<LabeledValue[]>([])
-  const mchAppOptions = ref<LabeledValue[]>([])
+  const mchAppList = ref<LabeledValue[]>([])
   let channelList = ref<LabeledValue[]>([])
   let resultList = ref<LabeledValue[]>([])
 
@@ -187,18 +185,11 @@
         ],
       },
       {
-        field: 'mchNo',
-        type: LIST,
-        name: '商户号',
-        placeholder: '请选择商户号',
-        selectList: mchNoOptions.value,
-      },
-      {
         field: 'appId',
         type: LIST,
         name: '应用号',
         placeholder: '请先选择商户后选择应用号',
-        selectList: mchAppOptions.value,
+        selectList: mchAppList.value,
       },
     ] as QueryField[]
   })
@@ -211,10 +202,6 @@
   nextTick(() => {
     xTable.value?.connect(xToolbar.value as VxeToolbarInstance)
   })
-  watch(
-    () => model.queryParam?.mchNo,
-    (value) => changeMch(value),
-  )
   onMounted(() => {
     initData()
     init()
@@ -224,25 +211,18 @@
    * 初始化基础数据
    */
   async function initData() {
-    merchantDropdown().then(({ data }) => {
-      mchNoOptions.value = data
-    })
     channelList.value = await dictDropDown('channel')
     resultList.value = await dictDropDown('reconcile_result')
+    initMchApp()
   }
 
   /**
-   * 商户变动后更新应用列表
+   * 初始化商户应用列表
    */
-  function changeMch(mchNo) {
-    if (mchNo) {
-      mchAppDropdown(mchNo).then(({ data }) => {
-        mchAppOptions.value = data
-      })
-    } else {
-      mchAppOptions.value = []
-      model.queryParam.appId = undefined
-    }
+  function initMchApp() {
+    mchAppDropdown().then(({ data }) => {
+      mchAppList.value = data
+    })
   }
   /**
    * 入口

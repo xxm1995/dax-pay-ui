@@ -53,10 +53,9 @@ export const del = (id) => {
 /**
  * 查询商户下的应用列表
  */
-export function mchAppDropdown(mchNo) {
+export function mchAppDropdown() {
   return defHttp.get<Result<LabeledValue[]>>({
     url: '/mch/app/dropdown',
-    params: { mchNo },
   })
 }
 
@@ -64,8 +63,6 @@ export function mchAppDropdown(mchNo) {
  * 商户应用
  */
 export interface MchApp extends BaseEntity {
-  // 商户号
-  mchNo?: string
   // 应用号
   appId?: string
   // 应用名称

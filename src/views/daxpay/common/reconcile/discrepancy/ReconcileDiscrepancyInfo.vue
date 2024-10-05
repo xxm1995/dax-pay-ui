@@ -62,10 +62,6 @@
       <a-descriptions-item label="交易时间(通道)" :span="1">
         {{ discrepancy.channelTradeTime }}
       </a-descriptions-item>
-
-      <a-descriptions-item label="商户号" :span="1">
-        {{ discrepancy.mchNo }}
-      </a-descriptions-item>
       <a-descriptions-item label="应用AppId" :span="1">
         {{ discrepancy.appId }}
       </a-descriptions-item>

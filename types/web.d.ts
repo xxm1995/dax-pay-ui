@@ -34,8 +34,6 @@ export interface BaseEntity {
  * 商户应用基础实体对象
  */
 export interface MchEntity extends BaseEntity {
-  // 商户号
-  mchNo?: string
   // 应用号
   appId?: string
 }

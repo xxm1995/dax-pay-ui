@@ -31,9 +31,6 @@
         <a-descriptions-item label="提示消息" v-if="form.errorMsg" :span="4">
           {{ form.errorMsg }}
         </a-descriptions-item>
-        <a-descriptions-item label="商户号" :span="2">
-          {{ form.mchNo }}
-        </a-descriptions-item>
         <a-descriptions-item label="应用AppId" :span="2">
           {{ form.appId }}
         </a-descriptions-item>

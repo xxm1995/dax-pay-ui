@@ -21,15 +21,6 @@
         <a-form-item label="主键" name="id" :hidden="true">
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
-        <a-form-item label="商户号" name="mchNo">
-          <a-select
-            :filter-option="search"
-            v-model:value="form.mchNo"
-            :disabled="showable"
-            placeholder="请选择商户"
-            :options="mchNoOptions"
-          />
-        </a-form-item>
         <a-form-item label="应用号" name="appId" v-if="!addable">
           <a-tag> {{ form.appId }}</a-tag>
         </a-form-item>
@@ -120,7 +111,6 @@
   import { FormEditType } from '@/enums/formTypeEnum'
   import { BasicDrawer } from '@/components/Drawer'
   import { buildUUID } from '@/utils/uuid'
-  import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { useDict } from '@/hooks/bootx/useDict'
 
@@ -150,7 +140,6 @@
   })
   const signTypes = ref<LabeledValue[]>([])
   const merchantNotifyTypes = ref<LabeledValue[]>([])
-  const mchNoOptions = ref<LabeledValue[]>([])
 
   // 校验
   const rules = reactive({
@@ -180,10 +169,6 @@
    * 初始化商户列表信息
    */
   function initData() {
-    // 商户
-    merchantDropdown().then(({ data }) => {
-      mchNoOptions.value = data
-    })
     // 签名方式
     dictDropDown('sign_type').then((data) => {
       signTypes.value = data

@@ -19,15 +19,6 @@
       <a-form-item label="标题" name="title">
         <a-input v-model:value="form.title" placeholder="请输入对账名称" />
       </a-form-item>
-      <a-form-item label="商户" name="mchNo">
-        <a-select
-          :filter-option="search"
-          :options="merchantList"
-          v-model:value="form.mchNo"
-          placeholder="请选择商户"
-          @change="merchantChange"
-        />
-      </a-form-item>
       <a-form-item label="商户应用" name="appId" v-show="form.mchNo">
         <a-select
           :filter-option="search"
@@ -75,7 +66,6 @@
   import dayjs, { Dayjs } from 'dayjs'
   import XEUtils from 'xe-utils'
   import { create, ReconcileCreatParam } from './ReconcileStatement.api'
-  import { merchantDropdown } from '@/views/daxpay/admin/merchant/info/Merchant.api'
   import { mchAppDropdown } from '@/views/daxpay/common/merchant/app/MchApp.api'
 
   const {
@@ -119,18 +109,14 @@
   async function initData() {
     // 通道
     channels.value = await dictDropDown('channel')
-    // 商户
-    merchantDropdown().then(({ data }) => {
-      merchantList.value = data
-    })
+    initMchApp()
   }
 
   /**
    * 商户变动时刷新应用列表
    */
-  function merchantChange() {
-    form.appId = undefined
-    mchAppDropdown(form.mchNo).then(({ data }) => {
+  function initMchApp() {
+    mchAppDropdown().then(({ data }) => {
       mchAppList.value = data
     })
   }

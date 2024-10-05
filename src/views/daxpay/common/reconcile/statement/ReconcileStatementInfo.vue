@@ -61,9 +61,6 @@
       <a-descriptions-item v-if="statement.errorMsg" label="错误信息" :span="1">
         {{ statement.errorMsg }}
       </a-descriptions-item>
-      <a-descriptions-item label="商户号" :span="1">
-        {{ statement.mchNo }}
-      </a-descriptions-item>
       <a-descriptions-item label="应用AppId" :span="1">
         {{ statement.appId }}
       </a-descriptions-item>

@@ -80,9 +80,6 @@
         <a-descriptions-item label="创建时间" :span="8">
           {{ order.createTime }}
         </a-descriptions-item>
-        <a-descriptions-item label="商户号" :span="8">
-          {{ order.mchNo }}
-        </a-descriptions-item>
         <a-descriptions-item label="应用AppId" :span="8">
           {{ order.appId }}
         </a-descriptions-item>
