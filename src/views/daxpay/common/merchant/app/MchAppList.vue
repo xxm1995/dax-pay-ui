@@ -66,6 +66,15 @@
                       <a-link @click="showCashierQrCOde(row)">收银码牌</a-link>
                     </a-menu-item>
                     <a-menu-item>
+                      <a-link @click="showAllocConfig(row)">分账配置</a-link>
+                    </a-menu-item>
+                    <a-menu-item>
+                      <a-link @click="showAllocReceiver(row)">分账接收方</a-link>
+                    </a-menu-item>
+                    <a-menu-item>
+                      <a-link @click="showAllocGroup(row)">分账组</a-link>
+                    </a-menu-item>
+                    <a-menu-item>
                       <a-link danger @click="remove(row)">删除</a-link>
                     </a-menu-item>
                   </a-menu>
@@ -88,6 +97,8 @@
       <ChannelCashierConfigList ref="channelCashierConfigList" />
       <ChannelCashierQrCode ref="channelCashierQrCode" />
       <MerchantNotifyConfigList ref="merchantNotifyConfigList" />
+      <AllocationReceiverList ref="allocationReceiverList"/>
+<!--      <AllocationGroupList ref="allocationGroupList"/>-->
     </div>
   </div>
 </template>
@@ -98,18 +109,19 @@
   import useTablePage from '@/hooks/bootx/useTablePage'
   import MchAppEdit from './MchAppEdit.vue'
   import BQuery from '@/components/Bootx/Query/BQuery.vue'
-  import { LIST, QueryField, STRING } from '@/components/Bootx/Query/Query'
+  import { QueryField, STRING } from '@/components/Bootx/Query/Query'
   import { FormEditType } from '@/enums/formTypeEnum'
   import { useMessage } from '@/hooks/web/useMessage'
   import { VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
   import ALink from '@/components/Link/Link.vue'
   import { useDict } from '@/hooks/bootx/useDict'
-  import { LabeledValue } from 'ant-design-vue/lib/select'
   import ChannelConfigList from '@/views/daxpay/common/merchant/channel/ChannelConfigList.vue'
   import MerchantNotifyConfigList from '@/views/daxpay/common/merchant/notify/MerchantNotifyConfigList.vue'
   import Icon from '@/components/Icon/Icon.vue'
   import ChannelCashierConfigList from '@/views/daxpay/common/merchant/cashier/ChannelCashierConfigList.vue'
   import ChannelCashierQrCode from '@/views/daxpay/common/merchant/cashier/ChannelCashierQrCode.vue'
+  import AllocationReceiverList from "@/views/daxpay/common/allocation/receiver/AllocationReceiverList.vue";
+  // import AllocationGroupList from "@/views/daxpay/common/allocation/group/AllocationGroupList.vue"
 
   // 使用hooks
   const {
@@ -138,6 +150,8 @@
   const merchantNotifyConfigList = ref<any>()
   const channelCashierConfigList = ref<any>()
   const channelCashierQrCode = ref<any>()
+  const allocationReceiverList = ref<any>()
+  const allocationGroupList = ref<any>()
 
   onMounted(() => {
     vxeBind()
@@ -159,15 +173,21 @@
     })
     return Promise.resolve()
   }
-  // 新增
+  /**
+   * 新增
+   */
   function add() {
     mchApp.value.init(null, FormEditType.Add)
   }
-  // 查看
+  /**
+   * 编辑
+   */
   function edit(record) {
     mchApp.value.init(record.id, FormEditType.Edit)
   }
-  // 查看
+  /**
+   * 查看
+   */
   function show(record) {
     mchApp.value.init(record.id, FormEditType.Show)
   }
@@ -184,21 +204,36 @@
   function showNotifyConfig(record) {
     merchantNotifyConfigList.value.init(record.appId)
   }
-
   /**
    * 收银配置
    */
   function showCashierConfig(record) {
     channelCashierConfigList.value.init(record)
   }
-
   /**
    * 收银码牌
    */
   function showCashierQrCOde(record) {
     channelCashierQrCode.value.init(record.appId)
   }
-
+  /**
+   * 分账配置
+   */
+  function showAllocConfig(record) {
+    // TODO
+  }
+  /**
+   * 分账接收方
+   */
+  function showAllocReceiver(record) {
+    allocationReceiverList.value.init(record.appId)
+  }
+  /**
+   * 分账组
+   */
+  function showAllocGroup(record) {
+    allocationGroupList.value.init(record.appId)
+  }
   /**
    * 删除
    */
