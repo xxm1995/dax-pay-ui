@@ -1,12 +1,12 @@
 import { defHttp } from '@/utils/http/axios'
 import { PageResult, Result } from '#/axios'
-import { BaseEntity } from '#/web'
+import { BaseEntity, MchEntity } from "#/web";
 
 /**
  * 分页查询
  */
 export function page(params) {
-  return defHttp.get<Result<PageResult<AllocationGroup>>>({
+  return defHttp.get<Result<PageResult<AllocGroup>>>({
     url: '/allocation/group/page',
     params,
   })
@@ -16,7 +16,7 @@ export function page(params) {
  * 查询详情
  */
 export function get(id) {
-  return defHttp.get<Result<AllocationGroup>>({
+  return defHttp.get<Result<AllocGroup>>({
     url: '/allocation/group/findById',
     params: { id },
   })
@@ -26,7 +26,7 @@ export function get(id) {
  * 查询分账接收方信息
  */
 export function getReceivers(groupId) {
-  return defHttp.get<Result<AllocationGroupReceiver[]>>({
+  return defHttp.get<Result<AllocGroupReceiver[]>>({
     url: '/allocation/group/findReceiversByGroups',
     params: { groupId },
   })
@@ -35,8 +35,8 @@ export function getReceivers(groupId) {
 /**
  * 创建
  */
-export function add(data: AllocationGroup) {
-  return defHttp.post<Result<AllocationGroup>>({
+export function add(data: AllocGroup) {
+  return defHttp.post<Result<AllocGroup>>({
     url: '/allocation/group/create',
     data,
   })
@@ -45,8 +45,8 @@ export function add(data: AllocationGroup) {
 /**
  * 修改
  */
-export function update(data: AllocationGroup) {
-  return defHttp.post<Result<AllocationGroup>>({
+export function update(data: AllocGroup) {
+  return defHttp.post<Result<AllocGroup>>({
     url: '/allocation/group/update',
     data,
   })
@@ -105,10 +105,10 @@ export function updateRate(receiverId, rate: number) {
 /**
  * 编码是否存在
  */
-export function existsByNo(receiverNo) {
+export function existsByNo(groupNo, appId) {
   return defHttp.get<Result<boolean>>({
     url: '/allocation/group/existsByGroupNo',
-    params: { receiverNo },
+    params: { groupNo, appId },
   })
 }
 
@@ -135,7 +135,7 @@ export function cancelDefaultGroup(id) {
 /**
  * 分账组
  */
-export interface AllocationGroup extends BaseEntity {
+export interface AllocGroup extends MchEntity {
   /**
    * 分账组编号
    */
@@ -153,6 +153,10 @@ export interface AllocationGroup extends BaseEntity {
    */
   totalRate?: number
   /**
+   * 是否为默认分账组
+   */
+  defaultGroup?: boolean
+  /**
    * 分账组描述
    */
   remark?: string
@@ -161,15 +165,11 @@ export interface AllocationGroup extends BaseEntity {
 /**
  * 分账组接收方信息
  */
-export interface AllocationGroupReceiver extends BaseEntity {
+export interface AllocGroupReceiver extends BaseEntity {
   /**
    * 分账接收方ID
    */
   receiverId?: string
-  /**
-   * 默认分账组
-   */
-  defaultGroup?: boolean
   /**
    * 分账比例
    */

@@ -21,7 +21,7 @@
       </vxe-toolbar>
       <div class="h-65vh">
         <vxe-table
-          row-id="id"
+          key-field="id"
           ref="xTable"
           height="auto"
           align="center"

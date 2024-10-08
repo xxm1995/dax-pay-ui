@@ -22,10 +22,11 @@
           <a-input v-model:value="form.id" :disabled="showable" />
         </a-form-item>
         <a-form-item label="分账组编号" name="groupNo">
-          <a-input v-model:value="form.groupNo" :disabled="!addable" placeholder="请输入分账组编号" />
-        </a-form-item>
-        <a-form-item label="分账组名称" name="name">
-          <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入分账组名称" />
+          <a-input
+            v-model:value="form.groupNo"
+            :disabled="!addable"
+            placeholder="请输入分账组编号"
+          />
         </a-form-item>
         <a-form-item label="所属通道" name="channel">
           <a-select
@@ -36,7 +37,10 @@
             placeholder="请选择所属通道"
           />
         </a-form-item>
-        <a-form-item label="默认分账组" name="defaultGroup">
+        <a-form-item label="分账组名称" name="name">
+          <a-input v-model:value="form.name" :disabled="showable" placeholder="请输入分账组名称" />
+        </a-form-item>
+        <a-form-item label="默认分账组" name="defaultGroup" v-if="!addable">
           <a-tag color="green" v-if="form.defaultGroup">是</a-tag>
           <a-tag v-else>否</a-tag>
         </a-form-item>
@@ -48,7 +52,14 @@
     <template #footer>
       <a-space>
         <a-button key="cancel" @click="handleCancel">取消</a-button>
-        <a-button v-if="!showable" key="forward" :loading="confirmLoading" type="primary" @click="handleOk">保存</a-button>
+        <a-button
+          v-if="!showable"
+          key="forward"
+          :loading="confirmLoading"
+          type="primary"
+          @click="handleOk"
+          >保存</a-button
+        >
       </a-space>
     </template>
   </basic-modal>
@@ -56,12 +67,11 @@
 
 <script setup lang="ts">
   import useFormEdit from '@/hooks/bootx/useFormEdit'
-  import { computed, nextTick } from 'vue'
+  import { computed, nextTick, ref } from 'vue'
   import { FormInstance, Rule } from 'ant-design-vue/lib/form'
-  import { get, add, update, AllocationGroup, existsByNo } from './AllocationGroup.api'
+  import { get, add, update, AllocGroup, existsByNo } from './AllocationGroup.api'
   import { FormEditType } from '@/enums/formTypeEnum'
   import { BasicModal } from '@/components/Modal'
-  import { useDict } from '@/hooks/bootx/useDict'
   import { LabeledValue } from 'ant-design-vue/lib/select'
   import { findChannels } from '../receiver/AllocationReceiver.api'
 
@@ -78,11 +88,10 @@
     showable,
     formEditType,
   } = useFormEdit()
-  const { dictConvert, dictDropDown } = useDict()
 
   // 表单
   const formRef = ref<FormInstance>()
-  let form = ref<AllocationGroup>({})
+  let form = ref<AllocGroup>({})
   let payChannelList = ref<LabeledValue[]>([])
 
   // 校验
@@ -101,10 +110,11 @@
   /**
    * 入口
    */
-  function init(record, editType: FormEditType) {
+  function init(record, editType: FormEditType, appId) {
     initFormEditType(editType)
     resetForm()
     initData()
+    form.value.appId = appId
     getInfo(record, editType)
   }
 
@@ -112,33 +122,31 @@
    * 初始化数据
    */
   async function initData() {
-    findChannels().then(({ data }) => (payChannelList = data))
+    findChannels().then(({ data }) => (payChannelList.value = data))
   }
 
   /**
    * 获取信息
    */
-  async function getInfo(record: AllocationGroup, editType: FormEditType) {
+  async function getInfo(record: AllocGroup, editType: FormEditType) {
     if ([FormEditType.Edit, FormEditType.Show].includes(editType)) {
       confirmLoading.value = true
-      await get(record.id).then(({ data }) => (form = data))
-      confirmLoading.value = false
-    } else {
-      confirmLoading.value = false
+      await get(record.id).then(({ data }) => (form.value = data))
     }
+    confirmLoading.value = false
   }
 
   /**
    * 保存
    */
   function handleOk() {
-    formRef?.validate().then(async () => {
+    formRef.value?.validate().then(async () => {
       confirmLoading.value = true
       try {
         if (formEditType.value === FormEditType.Add) {
-          await add(form)
+          await add(form.value)
         } else if (formEditType.value === FormEditType.Edit) {
-          await update(form)
+          await update(form.value)
         }
         emits('ok')
       } catch (error) {
@@ -152,8 +160,8 @@
    * 校验编码重复
    */
   async function validateCode() {
-    const { groupNo } = form
-    const res = await existsByNo(groupNo)
+    const { groupNo, appId } = form.value
+    const res = await existsByNo(groupNo, appId)
     return res.data ? Promise.reject('该分账组编号已经存在') : Promise.resolve()
   }
 
@@ -162,7 +170,7 @@
    */
   function resetForm() {
     nextTick(() => {
-      formRef?.resetFields()
+      formRef.value?.resetFields()
     })
   }
   defineExpose({

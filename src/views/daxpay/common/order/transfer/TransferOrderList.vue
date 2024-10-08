@@ -20,7 +20,7 @@
       <div class="h-64vh">
         <vxe-table
           height="auto"
-          row-id="id"
+          key-field="id"
           ref="xTable"
           :cell-style="cellStyle"
           :sort-config="{ remote: true, trigger: 'cell' }"

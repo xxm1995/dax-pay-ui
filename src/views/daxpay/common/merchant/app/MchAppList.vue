@@ -46,14 +46,14 @@
           </vxe-column>
           <vxe-column field="notifyUrl" title="通知地址" :min-width="220" />
           <vxe-column field="createTime" title="创建时间" :min-width="120" />
-          <vxe-column fixed="right" :width="200" :showOverflow="false" title="操作">
+          <vxe-column fixed="right" :width="220" :showOverflow="false" title="操作">
             <template #default="{ row }">
               <a-link @click="edit(row)">编辑</a-link>
               <a-divider type="vertical" />
               <a-link @click="showChannelSetup(row)">通道配置</a-link>
               <a-divider type="vertical" />
               <a-dropdown>
-                <a> 更多 <Icon icon="ant-design:down-outlined" :size="12" /> </a>
+                <a style="color:red"> 其他配置 <Icon icon="ant-design:down-outlined" :size="12" /> </a>
                 <template #overlay>
                   <a-menu>
                     <a-menu-item>
@@ -75,7 +75,7 @@
                       <a-link @click="showAllocGroup(row)">分账组</a-link>
                     </a-menu-item>
                     <a-menu-item>
-                      <a-link danger @click="remove(row)">删除</a-link>
+                      <a-link danger @click="remove(row)">删除应用</a-link>
                     </a-menu-item>
                   </a-menu>
                 </template>
@@ -97,8 +97,8 @@
       <ChannelCashierConfigList ref="channelCashierConfigList" />
       <ChannelCashierQrCode ref="channelCashierQrCode" />
       <MerchantNotifyConfigList ref="merchantNotifyConfigList" />
-      <AllocationReceiverList ref="allocationReceiverList"/>
-<!--      <AllocationGroupList ref="allocationGroupList"/>-->
+      <AllocationReceiverList ref="allocationReceiverList" />
+      <AllocationGroupList ref="allocationGroupList" />
     </div>
   </div>
 </template>
@@ -120,8 +120,8 @@
   import Icon from '@/components/Icon/Icon.vue'
   import ChannelCashierConfigList from '@/views/daxpay/common/merchant/cashier/ChannelCashierConfigList.vue'
   import ChannelCashierQrCode from '@/views/daxpay/common/merchant/cashier/ChannelCashierQrCode.vue'
-  import AllocationReceiverList from "@/views/daxpay/common/allocation/receiver/AllocationReceiverList.vue";
-  // import AllocationGroupList from "@/views/daxpay/common/allocation/group/AllocationGroupList.vue"
+  import AllocationReceiverList from '@/views/daxpay/common/allocation/receiver/AllocationReceiverList.vue'
+  import AllocationGroupList from '@/views/daxpay/common/allocation/group/AllocationGroupList.vue'
 
   // 使用hooks
   const {

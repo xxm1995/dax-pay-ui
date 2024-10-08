@@ -12,19 +12,11 @@
             :wrapperCol="{ span: 18 }"
             :validate-trigger="['blur', 'change']"
           >
-            <a-form-item label="网关地址" name="gatewayServiceUrl">
+            <a-form-item label="网关服务地址" name="gatewayServiceUrl">
               <a-input
                 :disabled="!edit"
                 v-model:value="form.gatewayServiceUrl"
-                placeholder="请输入网关地址"
-              />
-            </a-form-item>
-            <a-form-item label="网关H5端部署方式" name="mobileEmbedded">
-              <a-switch
-                :disabled="!edit"
-                checked-children="嵌入"
-                un-checked-children="独立"
-                v-model:checked="form.mobileEmbedded"
+                placeholder="请输入网关服务地址"
               />
             </a-form-item>
             <a-form-item label="网关H5端地址" name="gatewayMobileUrl">
@@ -32,14 +24,6 @@
                 :disabled="!edit"
                 v-model:value="form.gatewayMobileUrl"
                 placeholder="请输入网关H5端地址"
-              />
-            </a-form-item>
-            <a-form-item label="网关PC端部署方式" name="pcEmbedded">
-              <a-switch
-                :disabled="!edit"
-                checked-children="嵌入"
-                un-checked-children="独立"
-                v-model:checked="form.pcEmbedded"
               />
             </a-form-item>
             <a-form-item label="网关PC端地址" name="gatewayPcUrl">
@@ -72,10 +56,7 @@
   const { createMessage } = useMessage()
   const confirmLoading = ref(false)
   const formRef = ref<FormInstance>()
-  const form = ref<PlatformConfig>({
-    mobileEmbedded: false,
-    pcEmbedded: false,
-  })
+  const form = ref<PlatformConfig>({})
   const edit = ref<boolean>(false)
   const rules = {} as Record<string, Rule[]>
 

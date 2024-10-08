@@ -14,7 +14,7 @@
       <div class="h-65vh">
         <vxe-table
           height="auto"
-          row-id="id"
+          key-field="id"
           ref="xTable"
           :data="pagination.records"
           :loading="loading"

@@ -13,7 +13,7 @@
       <div class="h-70vh">
         <vxe-table
           height="auto"
-          row-id="id"
+          key-field="id"
           ref="xTable"
           keep-source
           :data="records"

@@ -10,7 +10,7 @@
     <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
     <div class="h-75vh">
       <vxe-table
-        row-id="id"
+        key-field="id"
         ref="xTable"
         height="auto"
         :data="pagination.records"

@@ -13,7 +13,7 @@
       <vxe-toolbar ref="xToolbar" custom :refresh="{ queryMethod: queryPage }" />
       <div class="h-65vh">
         <vxe-table
-          row-id="id"
+          key-field="id"
           height="auto"
           align="center"
           ref="xTable"

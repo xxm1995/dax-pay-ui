@@ -62,7 +62,7 @@
             placeholder="请选择分账关系类型"
           />
         </a-form-item>
-        <a-form-item v-if="form.relationType === 'CUSTOM'" label="接收者关系名称" name="relationName">
+        <a-form-item v-if="form.relationType === 'custom'" label="接收者关系名称" name="relationName">
           <a-input v-model:value="form.relationName" :disabled="!addable" placeholder="请输入接收者关系名称" />
         </a-form-item>
       </a-form>
@@ -128,7 +128,7 @@
       receiverType: [{ required: true, message: '请选择分账接收方类型' }],
       receiverAccount: [{ required: true, message: '请输入接收方账号' }],
       relationType: [{ required: true, message: '请选择分账关系类型' }],
-      relationName: [{ required: form.value.relationType === 'CUSTOM', message: '请输入类型关系名称' }],
+      relationName: [{ required: form.value.relationType === 'custom', message: '请输入类型关系名称' }],
     } as Record<string, Rule[]>
   })
 
@@ -150,7 +150,7 @@
    */
   async function initData() {
     findChannels().then(({ data }) => (payChannelList.value = data))
-    relationTypeList.value = await dictDropDown('AllocRelationType')
+    relationTypeList.value = await dictDropDown('alloc_relation_type')
   }
 
   /**
@@ -164,7 +164,9 @@
         rawForm.value = { ...form.value }
       })
       confirmLoading.value = false
-      findReceiverTypeByChannel(form.value.channel).then(({ data }) => (receiverTypeList.value = data))
+      findReceiverTypeByChannel(form.value.channel).then(
+        ({ data }) => (receiverTypeList.value = data),
+      )
     } else {
       confirmLoading.value = false
     }
