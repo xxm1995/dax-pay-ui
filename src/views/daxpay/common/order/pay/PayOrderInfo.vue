@@ -104,7 +104,9 @@
   const { dictConvert } = useDict()
 
   let order = ref<PayOrder>({})
-  // 入口
+  /**
+   * 入口
+   */
   async function init(orderNo: string) {
     visible.value = true
     confirmLoading.value = true

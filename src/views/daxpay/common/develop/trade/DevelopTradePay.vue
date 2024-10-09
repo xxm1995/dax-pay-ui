@@ -62,7 +62,11 @@
           <a-textarea v-model:value="form.extraParam" :rows="3" placeholder="请输入支付扩展参数" />
         </a-form-item>
         <a-form-item label="商户扩展参数" name="attach">
-          <a-textarea v-model:value="form.attach" :rows="3" placeholder="请输入商户扩展参数" />
+          <a-textarea
+            v-model:value="form.attach"
+            :rows="3"
+            placeholder="请输入商户扩展参数, 会原样回调返回"
+          />
         </a-form-item>
         <a-form-item label="异步通知地址" name="notifyUrl">
           <a-input v-model:value="form.notifyUrl" placeholder="请输入异步通知地址" />

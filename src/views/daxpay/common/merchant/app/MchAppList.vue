@@ -220,7 +220,7 @@
    * 分账配置
    */
   function showAllocConfig(record) {
-    // TODO
+    createMessage.warn('暂未开放')
   }
   /**
    * 分账接收方
