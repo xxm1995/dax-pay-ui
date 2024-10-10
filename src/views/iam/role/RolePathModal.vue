@@ -122,6 +122,7 @@
     loading.value = true
     searchName.value = ''
     expandedKeys.value = []
+    treeList.value = []
     // 当前角色的请求路径
     await treeByRolePath(currentRole.value.id, clientCode).then((res) => {
       treeData.value = treeDataTranslate(res.data, 'id', 'title')

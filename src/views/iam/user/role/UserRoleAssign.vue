@@ -101,6 +101,9 @@
     modal.visible = true
     modal.batch = batch
     modal.loading = true
+
+    modal.treeList = []
+    modal.checkedKeys = []
     // 初始化角色树
     await initRoles()
     if (!batch) {

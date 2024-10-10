@@ -38,11 +38,7 @@
       </a-tree>
     </a-spin>
     <template #footer>
-      <a-select
-        style="min-width: 100px"
-        @change="clientSwitch"
-        v-model:value="clientCode"
-      >
+      <a-select style="min-width: 100px" @change="clientSwitch" v-model:value="clientCode">
         <a-select-option v-for="o in clients" :key="o.code">{{ o.name }}</a-select-option>
       </a-select>
       <a-dropdown style="margin-left: 5px" :trigger="['click']" placement="top">
@@ -125,6 +121,7 @@
     loading.value = true
     searchName.value = ''
     expandedKeys.value = []
+    treeList.value = []
     // 当前角色的菜单
     await treeByRoleMenu(currentRole.value.id, clientCode).then((res) => {
       treeData.value = treeDataTranslate(res.data, 'id', 'title')
