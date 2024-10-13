@@ -9,7 +9,7 @@
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm vite build --mode build",
     "build:analyze": "cross-env NODE_OPTIONS=--max-old-space-size=8192 pnpm vite build --mode analyze",
     "build:no-cache": "pnpm store prune && npm run build",
-    "dev": "pnpm vite --mode admin --port=13000",
+    "dev": "pnpm vite --mode admin --port=13333",
     "preinstall": "npx only-allow pnpm",
     "postinstall": "turbo run stub",
     "lint": "turbo run lint",
