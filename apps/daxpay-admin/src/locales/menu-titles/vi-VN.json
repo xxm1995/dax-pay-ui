@@ -104,7 +104,6 @@
   "menu.plugin.easypay.refund": "Hoàn tiền EasyPay",
   "menu.payment.merchant.gatewayPayConfig": "Cấu hình thanh toán Gateway",
   "menu.payment.merchant.notifyConfig": "Cấu hình Thông báo Bất đồng bộ",
-  "menu.payment.merchant.riskConfig": "Kiểm soát rủi ro",
   "menu.trade.transfer": "Đơn chuyển khoản",
   "menu.trade.transfer.wechat": "Chuyển khoản WeChat",
   "menu.trade.transfer.alipay": "Chuyển khoản Alipay",

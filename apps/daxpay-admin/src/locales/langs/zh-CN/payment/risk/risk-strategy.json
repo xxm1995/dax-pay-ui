@@ -6,21 +6,14 @@
     "disabled": "风控：已关闭",
     "blockOn": "命中：拦截下单",
     "blockOff": "命中：仅记录",
-    "afterOn": "事后补录：开",
-    "afterOff": "事后补录：关",
-    "levelNormal": "拦截级别：正常",
-    "levelEnhanced": "拦截级别：增强",
     "overseasOn": "海外 IP：拦截",
     "regionOn": "地区拦截：开",
-    "blacklistOn": "黑名单：开",
-    "geoFenceOn": "围栏：开",
-    "strategy": "策略："
+    "blacklistOn": "黑名单：开"
   },
   "section": {
     "common": "公共设置",
     "blacklist": "名单拦截",
     "region": "地域限制",
-    "fence": "门店围栏",
     "strategy": "拦截策略"
   },
   "riskEnabled": {
@@ -29,21 +22,11 @@
   },
   "blacklistEnabled": {
     "label": "黑名单拦截",
-    "desc": "开启后执行 IP 与用户标识（支付宝 userId / 微信 openId）黑名单检查。"
+    "desc": "开启后执行 IP 黑名单检查。"
   },
   "riskBlockBeforePay": {
     "label": "命中阻断下单",
     "desc": "开启后，支付前命中任何风控规则（黑名单、省份、海外 IP 等）将拒绝下单；关闭则仅记录命中，不拦截交易。"
-  },
-  "riskCheckAfterPay": {
-    "label": "事后补录命中",
-    "desc": "开启后，支付成功后会补充记录命中情况，用于事后分析，不影响资金态。"
-  },
-  "riskOpenIdLevel": {
-    "label": "用户标识拦截级别",
-    "desc": "正常拦截：仅对 JSAPI/小程序等原生方式拦截；增强拦截：对 H5/主扫等可识别环境也强制 OAuth 取用户标识拦截。",
-    "normal": "正常拦截",
-    "enhanced": "增强拦截"
   },
   "blockOverseasIp": {
     "label": "海外 IP 拦截",
@@ -55,20 +38,7 @@
   },
   "ipv6MatchEnabled": {
     "label": "IPv6 地区匹配",
-    "desc": "默认关闭。开启后，省级、市级、海外、地理围栏四项地域检查会对 IPv6 地址执行匹配。由于开源 IPv6 离线数据精度有限，默认不启用；如需更高可靠性可接入商用 IP 数据库。",
+    "desc": "默认关闭。开启后，省级、市级、海外 IP 三项地域检查会对 IPv6 地址执行匹配。由于开源 IPv6 离线数据精度有限，默认不启用；如需更高可靠性可接入商用 IP 数据库。",
     "precisionHint": "IPv6 离线数据精度有限，部分地址段可能定位偏差较大。如对可靠性要求较高，建议购买商用 IP 数据库（如 ip2region 商用版、纯真 IP 等）替换默认数据源。"
-  },
-  "geoFenceEnabled": {
-    "label": "地理围栏",
-    "desc": "门店市级围栏开关，开启后比对支付 IP 归属城市与门店所在城市，不一致时按拦截策略处理。门店需录入行政区划地址，未录地址的门店放行（fail-open）。平台开启后，还需在各商户风控配置中单独为商户开启围栏。围栏策略在下方统一配置。"
-  },
-  "geoFenceStrategy": {
-    "label": "围栏策略",
-    "strict": "严格",
-    "strictDesc": "仅允许门店所在市",
-    "balanced": "平衡",
-    "balancedDesc": "门店市 + 接壤邻市（推荐）",
-    "loose": "宽松",
-    "looseDesc": "门店市 + 邻市 + 同省"
   }
 }

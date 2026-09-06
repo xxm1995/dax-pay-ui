@@ -42,7 +42,6 @@
         { label: $t('payment.risk.hit.hitType.overseas_ip'), value: 'overseas_ip' },
         { label: $t('payment.risk.hit.hitType.province'), value: 'province' },
         { label: $t('payment.risk.hit.hitType.city'), value: 'city' },
-        { label: $t('payment.risk.hit.hitType.geo_fence'), value: 'geo_fence' },
       ],
     },
     {
@@ -105,16 +104,7 @@
     if (type === 'overseas_ip') return $t('payment.risk.hit.hitType.overseas_ip');
     if (type === 'province') return $t('payment.risk.hit.hitType.province');
     if (type === 'city') return $t('payment.risk.hit.hitType.city');
-    if (type === 'geo_fence') return $t('payment.risk.hit.hitType.geo_fence');
     return type || '';
-  }
-
-  /** 围栏策略展示 */
-  function strategyLabel(strategy?: string) {
-    if (strategy === 'strict') return $t('payment.risk.hit.strategy.strict');
-    if (strategy === 'balanced') return $t('payment.risk.hit.strategy.balanced');
-    if (strategy === 'loose') return $t('payment.risk.hit.strategy.loose');
-    return strategy || '';
   }
 
   onMounted(() => {
@@ -146,12 +136,6 @@
           <vxe-column field="hitValue" :title="$t('payment.risk.hit.field.hitValue')" :min-width="160" />
           <!-- IP归属城市 -->
           <vxe-column field="clientCity" :title="$t('payment.risk.hit.field.clientCity')" :min-width="110" />
-          <!-- 门店城市 -->
-          <vxe-column field="storeCity" :title="$t('payment.risk.hit.field.storeCity')" :min-width="110" />
-          <!-- 围栏策略 -->
-          <vxe-column field="geoFenceStrategy" :title="$t('payment.risk.hit.field.geoFenceStrategy')" :min-width="100">
-            <template #default="{ row }">{{ strategyLabel(row.geoFenceStrategy) }}</template>
-          </vxe-column>
           <!-- 交易号 -->
           <vxe-column field="tradeNo" :title="$t('payment.risk.hit.field.tradeNo')" :min-width="140" />
           <!-- 商户: 名称上 + 号下小字两排 -->

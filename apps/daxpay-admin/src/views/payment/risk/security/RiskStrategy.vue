@@ -33,14 +33,6 @@
       formState.value.riskBlockBeforePay
         ? $t('payment.risk.risk-strategy.summary.blockOn')
         : $t('payment.risk.risk-strategy.summary.blockOff'),
-      // 事后补录：开 / 关
-      formState.value.riskCheckAfterPay
-        ? $t('payment.risk.risk-strategy.summary.afterOn')
-        : $t('payment.risk.risk-strategy.summary.afterOff'),
-      // 用户标识拦截级别
-      formState.value.riskOpenIdLevel === 'enhanced'
-        ? $t('payment.risk.risk-strategy.summary.levelEnhanced')
-        : $t('payment.risk.risk-strategy.summary.levelNormal'),
     ];
     // 黑名单拦截（默认开启, 仅开启时展示）
     if (formState.value.blacklistEnabled) {
@@ -54,27 +46,7 @@
     if (formState.value.regionBlacklistEnabled) {
       items.push($t('payment.risk.risk-strategy.summary.regionOn'));
     }
-    // 地理围栏（默认关闭, 仅开启时展示）
-    if (formState.value.geoFenceEnabled) {
-      items.push($t('payment.risk.risk-strategy.summary.geoFenceOn'));
-      // 围栏开启时展示当前全局策略
-      const strategyKey = `payment.risk.risk-strategy.geoFenceStrategy.${formState.value.geoFenceStrategy}`;
-      const strategyLabel = $t(strategyKey);
-      // 策略 key 未命中时回退显示原始值
-      items.push(
-        `${$t('payment.risk.risk-strategy.summary.strategy')}${
-          strategyLabel === strategyKey ? formState.value.geoFenceStrategy : strategyLabel
-        }`,
-      );
-    }
     return items;
-  });
-
-  // 当前选中的围栏策略说明（未命中 i18n key 时显示空）
-  const geoFenceStrategyDesc = computed(() => {
-    const strategyDescKey = `payment.risk.risk-strategy.geoFenceStrategy.${formState.value.geoFenceStrategy}Desc`;
-    const strategyDesc = $t(strategyDescKey);
-    return strategyDesc === strategyDescKey ? '' : strategyDesc;
   });
 
   /**
@@ -183,7 +155,7 @@
             <a-switch v-model:checked="formState.riskEnabled" :disabled="!isEditing" />
           </div>
 
-          <!-- 公共设置: 影响海外/地区/围栏等 IP 归属地检查的公共开关 -->
+          <!-- 公共设置: 影响海外/地区等 IP 归属地检查的公共开关 -->
           <div class="config-section">
             <div class="config-section__title">{{ $t('payment.risk.risk-strategy.section.common') }}</div>
             <div class="config-grid">
@@ -215,7 +187,7 @@
             </div>
           </div>
 
-          <!-- 名单拦截: 按 IP 与用户标识匹配黑名单名单 -->
+          <!-- 名单拦截: 按 IP 匹配黑名单名单 -->
           <div class="config-section">
             <div class="config-section__title">{{ $t('payment.risk.risk-strategy.section.blacklist') }}</div>
             <div class="config-grid">
@@ -233,30 +205,6 @@
                   v-model:checked="formState.blacklistEnabled"
                   :disabled="!isEditing || !formState.riskEnabled"
                 />
-              </div>
-
-              <!-- 用户标识拦截级别（黑名单关闭时禁用） -->
-              <div class="config-item">
-                <div class="config-item__main">
-                  <div class="config-item__label">{{
-                    $t('payment.risk.risk-strategy.riskOpenIdLevel.label')
-                  }}</div>
-                  <div class="config-item__desc">{{
-                    $t('payment.risk.risk-strategy.riskOpenIdLevel.desc')
-                  }}</div>
-                </div>
-                <a-radio-group
-                  v-model:value="formState.riskOpenIdLevel"
-                  button-style="solid"
-                  :disabled="!isEditing || !formState.riskEnabled || !formState.blacklistEnabled"
-                >
-                  <a-radio-button value="normal">
-                    {{ $t('payment.risk.risk-strategy.riskOpenIdLevel.normal') }}
-                  </a-radio-button>
-                  <a-radio-button value="enhanced">
-                    {{ $t('payment.risk.risk-strategy.riskOpenIdLevel.enhanced') }}
-                  </a-radio-button>
-                </a-radio-group>
               </div>
             </div>
           </div>
@@ -299,53 +247,6 @@
             </div>
           </div>
 
-          <!-- 门店围栏: 以门店所在城市为基准比对支付 IP 归属城市 -->
-          <div class="config-section">
-            <div class="config-section__title">{{ $t('payment.risk.risk-strategy.section.fence') }}</div>
-            <div class="config-grid">
-              <!-- 地理围栏 -->
-              <div class="config-item">
-                <div class="config-item__main">
-                  <div class="config-item__label">{{
-                    $t('payment.risk.risk-strategy.geoFenceEnabled.label')
-                  }}</div>
-                  <div class="config-item__desc">{{
-                    $t('payment.risk.risk-strategy.geoFenceEnabled.desc')
-                  }}</div>
-                </div>
-                <a-switch
-                  v-model:checked="formState.geoFenceEnabled"
-                  :disabled="!isEditing || !formState.riskEnabled"
-                />
-              </div>
-
-              <!-- 围栏策略（仅围栏开启时展示，与开关同行两列；左侧随选中项展示说明） -->
-              <div v-if="formState.geoFenceEnabled" class="config-item">
-                <div class="config-item__main">
-                  <div class="config-item__label">{{
-                    $t('payment.risk.risk-strategy.geoFenceStrategy.label')
-                  }}</div>
-                  <div class="config-item__desc">{{ geoFenceStrategyDesc }}</div>
-                </div>
-                <a-radio-group
-                  v-model:value="formState.geoFenceStrategy"
-                  button-style="solid"
-                  :disabled="!isEditing || !formState.riskEnabled"
-                >
-                  <a-radio-button value="strict">
-                    {{ $t('payment.risk.risk-strategy.geoFenceStrategy.strict') }}
-                  </a-radio-button>
-                  <a-radio-button value="balanced">
-                    {{ $t('payment.risk.risk-strategy.geoFenceStrategy.balanced') }}
-                  </a-radio-button>
-                  <a-radio-button value="loose">
-                    {{ $t('payment.risk.risk-strategy.geoFenceStrategy.loose') }}
-                  </a-radio-button>
-                </a-radio-group>
-              </div>
-            </div>
-          </div>
-
           <!-- 拦截策略 -->
           <div class="config-section">
             <div class="config-section__title">
@@ -364,22 +265,6 @@
                 </div>
                 <a-switch
                   v-model:checked="formState.riskBlockBeforePay"
-                  :disabled="!isEditing || !formState.riskEnabled"
-                />
-              </div>
-
-              <!-- 事后补录命中 -->
-              <div class="config-item">
-                <div class="config-item__main">
-                  <div class="config-item__label">{{
-                    $t('payment.risk.risk-strategy.riskCheckAfterPay.label')
-                  }}</div>
-                  <div class="config-item__desc">{{
-                    $t('payment.risk.risk-strategy.riskCheckAfterPay.desc')
-                  }}</div>
-                </div>
-                <a-switch
-                  v-model:checked="formState.riskCheckAfterPay"
                   :disabled="!isEditing || !formState.riskEnabled"
                 />
               </div>

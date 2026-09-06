@@ -104,7 +104,6 @@
   "menu.plugin.easypay.refund": "易支付退款",
   "menu.payment.merchant.gatewayPayConfig": "網關支付配置",
   "menu.payment.merchant.notifyConfig": "非同步通知配置",
-  "menu.payment.merchant.riskConfig": "風控配置",
   "menu.trade.transfer": "轉帳訂單",
   "menu.trade.transfer.wechat": "微信轉帳",
   "menu.trade.transfer.alipay": "支付寶轉帳",

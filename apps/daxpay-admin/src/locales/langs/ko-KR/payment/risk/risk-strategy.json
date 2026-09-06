@@ -6,21 +6,14 @@
     "disabled": "리스크 관리: 꺼짐",
     "blockOn": "히트: 주문 차단",
     "blockOff": "히트: 기록만",
-    "afterOn": "사후 기록: 켜짐",
-    "afterOff": "사후 기록: 꺼짐",
-    "levelNormal": "레벨: 일반",
-    "levelEnhanced": "레벨: 강화",
     "overseasOn": "해외 IP: 차단",
     "regionOn": "지역 차단: 켜짐",
-    "blacklistOn": "블랙리스트: 켜짐",
-    "geoFenceOn": "지오펜스: 켜짐",
-    "strategy": "전략: "
+    "blacklistOn": "블랙리스트: 켜짐"
   },
   "section": {
     "common": "공통 설정",
     "blacklist": "블랙리스트 차단",
     "region": "지역 제한",
-    "fence": "매장 지오펜스",
     "strategy": "차단 전략"
   },
   "riskEnabled": {
@@ -29,21 +22,11 @@
   },
   "blacklistEnabled": {
     "label": "블랙리스트 차단",
-    "desc": "켜면 IP 및 사용자 식별자(Alipay userId / WeChat openId) 블랙리스트 검사를 실행합니다."
+    "desc": "켜면 IP 블랙리스트 검사를 실행합니다."
   },
   "riskBlockBeforePay": {
     "label": "히트 시 주문 차단",
     "desc": "켜면 결제 전 리스크 룰 히트(블랙리스트·지역·해외 IP 등) 시 주문을 거부합니다. 끄면 히트를 기록만 하고 거래를 차단하지 않습니다."
-  },
-  "riskCheckAfterPay": {
-    "label": "결제 후 히트 기록",
-    "desc": "켜면 결제 성공 후 히트를 기록하여 사후 분석에 사용합니다. 자금 상태에 영향을 주지 않습니다."
-  },
-  "riskOpenIdLevel": {
-    "label": "사용자 식별자 차단 레벨",
-    "desc": "일반 차단: JSAPI/미니 등 네이티브 방식만 차단. 강화 차단: H5/QR 결제 등 인식 가능 환경에서 OAuth 를 강제하여 사용자 식별자를 획득 후 차단.",
-    "normal": "일반 차단",
-    "enhanced": "강화 차단"
   },
   "blockOverseasIp": {
     "label": "해외 IP 차단",
@@ -55,20 +38,7 @@
   },
   "ipv6MatchEnabled": {
     "label": "IPv6 지역 매칭",
-    "desc": "기본 비활성화. 활성화하면 성급, 시급, 해외, 지오펜스 4가지 지역 검사가 IPv6 주소에 대해 실행됩니다. 오픈소스 IPv6 오프라인 데이터는 정확도가 제한되어 기본적으로 비활성화되어 있습니다. 더 높은 신뢰성이 필요한 경우 상용 IP 데이터베이스 연동을 고려하세요.",
+    "desc": "기본 비활성화. 활성화하면 성급, 시급, 해외 IP 3가지 지역 검사가 IPv6 주소에 대해 실행됩니다. 오픈소스 IPv6 오프라인 데이터는 정확도가 제한되어 기본적으로 비활성화되어 있습니다. 더 높은 신뢰성이 필요한 경우 상용 IP 데이터베이스 연동을 고려하세요.",
     "precisionHint": "IPv6 오프라인 데이터는 정확도가 제한적이며 일부 주소 대역에서 위치 편차가 클 수 있습니다. 신뢰성이 중요한 경우 상용 IP 데이터베이스(예: ip2region 상용판, 순진 IP 등) 구매를 권장합니다."
-  },
-  "geoFenceEnabled": {
-    "label": "지오펜스",
-    "desc": "매장 시 단위 지오펜스 스위치. 활성화 시 결제 IP 귀속 도시와 매장 소재 도시를 비교하여 불일치 시 차단 전략에 따라 처리합니다. 매장은 행정구역 주소를 등록해야 하며, 미등록 매장은 허용됩니다(fail-open). 플랫폼 활성화 후, 각 가맹점 리스크 설정에서 펜스를 개별적으로 활성화하세요. 펜스 전략은 아래에서 전역으로 설정합니다."
-  },
-  "geoFenceStrategy": {
-    "label": "펜스 전략",
-    "strict": "엄격",
-    "strictDesc": "매장 소재 도시만",
-    "balanced": "균형",
-    "balancedDesc": "매장 도시 + 인접 도시(권장)",
-    "loose": "완화",
-    "looseDesc": "매장 도시 + 인접 + 동일 성"
   }
 }

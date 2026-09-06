@@ -15,13 +15,10 @@
       "expireTime": "Expire time",
       "remark": "Remark",
       "createTime": "Created at",
-      "payApp": "決済アプリ",
-      "scope": "適用範囲",
-      "wxAppId": "WeChat アプリ ID"
+      "scope": "適用範囲"
     },
     "type": {
       "ip": "IP",
-      "open_id": "OpenId",
       "alipay_user": "Alipay ユーザー",
       "wechat_openid": "WeChat OpenId",
       "province": "省",
@@ -46,14 +43,12 @@
       "ip": "IP アドレスを入力",
       "alipayUserId": "Alipay userId を入力",
       "wechatOpenId": "WeChat openId を入力",
-      "payApp": "プラットフォーム決済アプリを選択",
       "province": "省を選択してください",
       "city": "都市を選択"
     }
   },
   "hit": {
     "title": "Risk hits",
-    "viewTitle": "View hit",
     "field": {
       "phase": "Phase",
       "hitType": "Hit type",
@@ -71,10 +66,7 @@
       "scene": "Scene",
       "createTime": "Created at",
       "merchant": "加盟店",
-      "clientCity": "IP都市",
-      "storeCity": "店舗都市",
-      "storeNo": "店舗番号",
-      "geoFenceStrategy": "フェンス戦略"
+      "clientCity": "IP都市"
     },
     "phase": {
       "before_pay": "Before pay",
@@ -93,13 +85,7 @@
       "wechat_openid": "WeChat OpenId",
       "overseas_ip": "海外IP",
       "province": "省",
-      "geo_fence": "ジオフェンス",
       "city": "都市"
-    },
-    "strategy": {
-      "strict": "厳格",
-      "balanced": "バランス",
-      "loose": "緩和"
     }
   }
 }

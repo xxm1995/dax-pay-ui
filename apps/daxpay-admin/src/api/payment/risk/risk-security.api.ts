@@ -52,22 +52,14 @@ export interface ApiSecurityConfig {
 export interface PaySecurityConfig {
   /** 风控总开关（关闭后所有风控检查跳过） */
   riskEnabled?: boolean;
-  /** 黑名单拦截开关（IP / 用户标识） */
+  /** 黑名单拦截开关（IP / 省市地区） */
   blacklistEnabled?: boolean;
   /** 命中黑名单后是否阻断下单（false=仅记录不拦截） */
   riskBlockBeforePay?: boolean;
-  /** 支付成功后是否补录命中（用于事后分析） */
-  riskCheckAfterPay?: boolean;
-  /** 用户标识拦截级别（normal=正常拦截 / enhanced=增强拦截） */
-  riskOpenIdLevel?: string;
   /** 海外 IP 拦截（默认关闭, 拦截境外 IP 支付请求） */
   blockOverseasIp?: boolean;
   /** 地区拦截（默认关闭, 开启后按 IP 归属地匹配省级与市级黑名单; 省级命中后不执行市级检查） */
   regionBlacklistEnabled?: boolean;
   /** IPv6 地区匹配开关（默认关闭, 开启后地域检查对 IPv6 执行匹配; 离线数据精度有限） */
   ipv6MatchEnabled?: boolean;
-  /** 地理围栏全局开关（默认关闭, 开启后各商户围栏 opt-in 才生效） */
-  geoFenceEnabled?: boolean;
-  /** 地理围栏全局策略（strict 严格 / balanced 平衡 / loose 宽松） */
-  geoFenceStrategy?: string;
 }

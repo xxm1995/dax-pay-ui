@@ -6,21 +6,14 @@
     "disabled": "Kawalan Risiko: Mati",
     "blockOn": "Hit: Sekat Pesanan",
     "blockOff": "Hit: Rekod Sahaja",
-    "afterOn": "Rekod Pasca-Bayar: Aktif",
-    "afterOff": "Rekod Pasca-Bayar: Mati",
-    "levelNormal": "Tahap: Biasa",
-    "levelEnhanced": "Tahap: Diperkuat",
     "overseasOn": "IP Luar Negara: Sekat",
     "regionOn": "Wilayah: Sekat",
-    "blacklistOn": "Senarai Hitam: Aktif",
-    "geoFenceOn": "Pagar Geo: Aktif",
-    "strategy": "Strategi: "
+    "blacklistOn": "Senarai Hitam: Aktif"
   },
   "section": {
     "common": "Tetapan Umum",
     "blacklist": "Sekatan Senarai Hitam",
     "region": "Sekatan Wilayah",
-    "fence": "Geo-fence Kedai",
     "strategy": "Strategi Sekatan"
   },
   "riskEnabled": {
@@ -29,21 +22,11 @@
   },
   "blacklistEnabled": {
     "label": "Sekatan Senarai Hitam",
-    "desc": "Apabila aktif, semakan senarai hitam IP dan pengecam pengguna (Alipay userId / WeChat openId) dilakukan."
+    "desc": "Apabila aktif, semakan senarai hitam IP dilakukan."
   },
   "riskBlockBeforePay": {
     "label": "Sekat Pesanan semasa Hit",
     "desc": "Apabila aktif, hit peraturan risiko apa pun sebelum pembayaran (senarai hitam, wilayah, IP luar negara, dll.) akan menolak pesanan; apabila dimatikan, hit hanya direkod tanpa menyekat."
-  },
-  "riskCheckAfterPay": {
-    "label": "Rekod Hit Selepas Pembayaran",
-    "desc": "Apabila aktif, hit direkod selepas pembayaran berjaya untuk analisis pasca-peristiwa, tanpa menjejaskan dana."
-  },
-  "riskOpenIdLevel": {
-    "label": "Tahap Sekatan Pengecam Pengguna",
-    "desc": "Biasa: hanya sekat kaedah native JSAPI/Mini. Diperkuat: juga memaksa OAuth untuk mendapatkan pengecam pengguna pada H5/QR dalam persekitaran yang dikenali.",
-    "normal": "Biasa",
-    "enhanced": "Diperkuat"
   },
   "blockOverseasIp": {
     "label": "Sekatan IP Luar Negara",
@@ -55,20 +38,7 @@
   },
   "ipv6MatchEnabled": {
     "label": "Pemadanan Rantau IPv6",
-    "desc": "Lalai dimatikan. Apabila diaktifkan, keempat-empat semakan rantau (wilayah, bandar, luar negara, geo-pagar) akan dipadankan terhadap alamat IPv6. Disebabkan ketepatan data luar talian IPv6 sumber terbuka terhad, ia dilumpuhkan secara lalai; untuk kebolehpercayaan yang lebih tinggi, pertimbangkan pangkalan data IP komersial.",
+    "desc": "Lalai dimatikan. Apabila diaktifkan, tiga semakan rantau (wilayah, bandar, IP luar negara) akan dipadankan terhadap alamat IPv6. Disebabkan ketepatan data luar talian IPv6 sumber terbuka terhad, ia dilumpuhkan secara lalai; untuk kebolehpercayaan yang lebih tinggi, pertimbangkan pangkalan data IP komersial.",
     "precisionHint": "Data luar talian IPv6 mempunyai ketepatan terhad; beberapa julat alamat mungkin mempunyai sisihan penyetempatan yang ketara. Untuk kebolehpercayaan tinggi, disyorkan membeli pangkalan data IP komersial (cth. ip2region Pro, CZ88, dll.) untuk menggantikan sumber data lalai."
-  },
-  "geoFenceEnabled": {
-    "label": "Pagar Geo",
-    "desc": "Suis geo-pagar peringkat bandar kedai. Apabila diaktifkan, bandar IP pelanggan dibandingkan dengan bandar kedai; ketidakpadanan dikendalikan mengikut strategi sekat. Kedai mesti merekodkan alamat wilayah; kedai tanpa alamat dibenarkan (fail-open). Selepas suis platform diaktifkan, fence juga perlu diaktifkan per merchant. Strategi fence dikonfigurasi secara global di bawah."
-  },
-  "geoFenceStrategy": {
-    "label": "Strategi fence",
-    "strict": "Ketat",
-    "strictDesc": "Hanya bandar kedai",
-    "balanced": "Seimbang",
-    "balancedDesc": "Bandar kedai + bandar berdekatan (disyorkan)",
-    "loose": "Longgar",
-    "looseDesc": "Bandar kedai + berdekatan + wilayah sama"
   }
 }

@@ -15,13 +15,10 @@
       "expireTime": "Expire time",
       "remark": "Remark",
       "createTime": "Created at",
-      "payApp": "Payment app",
-      "scope": "Scope",
-      "wxAppId": "WeChat app ID"
+      "scope": "Scope"
     },
     "type": {
       "ip": "IP",
-      "open_id": "OpenId",
       "alipay_user": "Alipay user",
       "wechat_openid": "WeChat OpenId",
       "province": "Province",
@@ -46,14 +43,12 @@
       "ip": "Enter IP address",
       "alipayUserId": "Enter Alipay userId",
       "wechatOpenId": "Enter WeChat openId",
-      "payApp": "Select a platform payment app",
       "province": "Please select province",
       "city": "Select city"
     }
   },
   "hit": {
     "title": "Risk hits",
-    "viewTitle": "View hit",
     "field": {
       "phase": "Phase",
       "hitType": "Hit type",
@@ -71,10 +66,7 @@
       "scene": "Scene",
       "createTime": "Created at",
       "merchant": "Merchant",
-      "clientCity": "IP City",
-      "storeCity": "Store City",
-      "storeNo": "Store No",
-      "geoFenceStrategy": "Fence strategy"
+      "clientCity": "IP City"
     },
     "phase": {
       "before_pay": "Before pay",
@@ -93,13 +85,7 @@
       "wechat_openid": "WeChat OpenId",
       "overseas_ip": "Overseas IP",
       "province": "Province",
-      "geo_fence": "Geo-fence",
       "city": "City"
-    },
-    "strategy": {
-      "strict": "Strict",
-      "balanced": "Balanced",
-      "loose": "Relaxed"
     }
   }
 }

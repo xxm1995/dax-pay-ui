@@ -6,21 +6,14 @@
     "disabled": "Kontrol Risiko: Nonaktif",
     "blockOn": "Hit: Blokir Pesanan",
     "blockOff": "Hit: Catat Saja",
-    "afterOn": "Catatan Pascabayar: Aktif",
-    "afterOff": "Catatan Pascabayar: Nonaktif",
-    "levelNormal": "Level: Normal",
-    "levelEnhanced": "Level: Ditingkatkan",
     "overseasOn": "IP Luar Negeri: Blokir",
     "regionOn": "Wilayah: Blokir",
-    "blacklistOn": "Daftar Hitam: Aktif",
-    "geoFenceOn": "Geo-pagar: Aktif",
-    "strategy": "Strategi: "
+    "blacklistOn": "Daftar Hitam: Aktif"
   },
   "section": {
     "common": "Pengaturan Umum",
     "blacklist": "Pemblokiran Daftar Hitam",
     "region": "Pembatasan Wilayah",
-    "fence": "Geo-fence Toko",
     "strategy": "Strategi Intersepsi"
   },
   "riskEnabled": {
@@ -29,21 +22,11 @@
   },
   "blacklistEnabled": {
     "label": "Pemblokiran Daftar Hitam",
-    "desc": "Saat aktif, pemeriksaan daftar hitam IP dan identifier pengguna (Alipay userId / WeChat openId) dilakukan."
+    "desc": "Saat aktif, pemeriksaan daftar hitam IP dilakukan."
   },
   "riskBlockBeforePay": {
     "label": "Blokir Pesanan saat Hit",
     "desc": "Saat aktif, hit aturan risiko apa pun sebelum pembayaran (daftar hitam, provinsi, IP luar negeri, dll.) akan menolak pesanan; saat nonaktif, hit hanya dicatat tanpa memblokir."
-  },
-  "riskCheckAfterPay": {
-    "label": "Pencatatan Hit Pasca Pembayaran",
-    "desc": "Saat aktif, hit dicatat setelah pembayaran berhasil untuk analisis pasca-peristiwa, tanpa memengaruhi dana."
-  },
-  "riskOpenIdLevel": {
-    "label": "Level Intersepsi Identifier Pengguna",
-    "desc": "Normal: hanya blokir metode native JSAPI/Mini. Ditingkatkan: juga memaksa OAuth untuk mendapatkan identifier pengguna pada H5/QR dalam lingkungan yang dikenali.",
-    "normal": "Normal",
-    "enhanced": "Ditingkatkan"
   },
   "blockOverseasIp": {
     "label": "Pemblokiran IP Luar Negeri",
@@ -55,20 +38,7 @@
   },
   "ipv6MatchEnabled": {
     "label": "Pencocokan Wilayah IPv6",
-    "desc": "Nonaktif secara default. Saat diaktifkan, keempat pemeriksaan wilayah (provinsi, kota, luar negeri, geo-pagar) akan mencocokkan alamat IPv6. Karena akurasi data offline IPv6 sumber terbuka terbatas, fitur ini nonaktif secara default; untuk keandalan yang lebih tinggi, pertimbangkan basis data IP komersial.",
+    "desc": "Nonaktif secara default. Saat diaktifkan, tiga pemeriksaan wilayah (provinsi, kota, IP luar negeri) akan mencocokkan alamat IPv6. Karena akurasi data offline IPv6 sumber terbuka terbatas, fitur ini nonaktif secara default; untuk keandalan yang lebih tinggi, pertimbangkan basis data IP komersial.",
     "precisionHint": "Data offline IPv6 memiliki akurasi terbatas; beberapa rentang alamat mungkin memiliki deviasi lokasi yang signifikan. Untuk keandalan tinggi, disarankan membeli basis data IP komersial (mis. ip2region Pro, CZ88, dll.) untuk menggantikan sumber data default."
-  },
-  "geoFenceEnabled": {
-    "label": "Geo-pagar",
-    "desc": "Sakelar geo-pagar tingkat kota toko. Saat diaktifkan, kota IP klien dibandingkan dengan kota toko; ketidaksesuaian ditangani sesuai strategi blokir. Toko harus mencatat alamat wilayah; toko tanpa alamat diizinkan (fail-open). Setelah sakelar platform diaktifkan, fence juga harus diaktifkan per merchant. Strategi fence dikonfigurasi secara global di bawah."
-  },
-  "geoFenceStrategy": {
-    "label": "Strategi fence",
-    "strict": "Ketat",
-    "strictDesc": "Hanya kota toko",
-    "balanced": "Seimbang",
-    "balancedDesc": "Kota toko + kota yang berdekatan (disarankan)",
-    "loose": "Longgar",
-    "looseDesc": "Kota toko + berdekatan + provinsi sama"
   }
 }

@@ -104,7 +104,6 @@
   "menu.plugin.easypay.refund": "EasyPay返金",
   "menu.payment.merchant.gatewayPayConfig": "ゲートウェイ支払い設定",
   "menu.payment.merchant.notifyConfig": "非同期通知設定",
-  "menu.payment.merchant.riskConfig": "リスク制御",
   "menu.trade.transfer": "送金注文",
   "menu.trade.transfer.wechat": "WeChat送金",
   "menu.trade.transfer.alipay": "Alipay送金",

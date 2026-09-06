@@ -15,13 +15,10 @@
       "expireTime": "Expire time",
       "remark": "Remark",
       "createTime": "Created at",
-      "payApp": "결제 앱",
-      "scope": "적용 범위",
-      "wxAppId": "위챗 앱 ID"
+      "scope": "적용 범위"
     },
     "type": {
       "ip": "IP",
-      "open_id": "OpenId",
       "alipay_user": "알리페이 사용자",
       "wechat_openid": "위챗 OpenId",
       "province": "성(省)",
@@ -46,14 +43,12 @@
       "ip": "IP 주소를 입력하세요",
       "alipayUserId": "알리페이 userId를 입력하세요",
       "wechatOpenId": "위챗 openId를 입력하세요",
-      "payApp": "플랫폼 결제 앱을 선택하세요",
       "province": "성을 선택해 주세요",
       "city": "도시 선택"
     }
   },
   "hit": {
     "title": "Risk hits",
-    "viewTitle": "View hit",
     "field": {
       "phase": "Phase",
       "hitType": "Hit type",
@@ -71,10 +66,7 @@
       "scene": "Scene",
       "createTime": "Created at",
       "merchant": "가맹점",
-      "clientCity": "IP 도시",
-      "storeCity": "매장 도시",
-      "storeNo": "매장 번호",
-      "geoFenceStrategy": "펜스 전략"
+      "clientCity": "IP 도시"
     },
     "phase": {
       "before_pay": "Before pay",
@@ -93,13 +85,7 @@
       "wechat_openid": "위챗 OpenId",
       "overseas_ip": "해외 IP",
       "province": "성(省)",
-      "geo_fence": "지오펜스",
       "city": "도시"
-    },
-    "strategy": {
-      "strict": "엄격",
-      "balanced": "균형",
-      "loose": "완화"
     }
   }
 }

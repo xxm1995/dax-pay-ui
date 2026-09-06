@@ -15,13 +15,10 @@
       "expireTime": "หมดอายุ",
       "remark": "หมายเหตุ",
       "createTime": "สร้างเมื่อ",
-      "payApp": "แอปชำระเงิน",
-      "scope": "ขอบเขต",
-      "wxAppId": "AppId WeChat"
+      "scope": "ขอบเขต"
     },
     "type": {
       "ip": "IP",
-      "open_id": "OpenId",
       "alipay_user": "ผู้ใช้ Alipay",
       "wechat_openid": "OpenId WeChat",
       "province": "จังหวัด",
@@ -46,14 +43,12 @@
       "ip": "กรอกที่อยู่ IP",
       "alipayUserId": "กรอก userId Alipay",
       "wechatOpenId": "กรอก openId WeChat",
-      "payApp": "เลือกแอปชำระเงินของแพลตฟอร์ม",
       "province": "กรุณาเลือกจังหวัด",
       "city": "เลือกเมือง"
     }
   },
   "hit": {
     "title": "การตรวจจับความเสี่ยง",
-    "viewTitle": "ดูรายการ",
     "field": {
       "phase": "ช่วง",
       "hitType": "ประเภทการตรวจจับ",
@@ -71,10 +66,7 @@
       "scene": "ฉาก",
       "createTime": "สร้างเมื่อ",
       "merchant": "ร้านค้า",
-      "clientCity": "เมือง IP",
-      "storeCity": "เมืองร้านค้า",
-      "storeNo": "เลขร้านค้า",
-      "geoFenceStrategy": "กลยุทธ์รั้ว"
+      "clientCity": "เมือง IP"
     },
     "phase": {
       "before_pay": "ก่อนชำระ",
@@ -93,13 +85,7 @@
       "wechat_openid": "OpenId WeChat",
       "overseas_ip": "IP ต่างประเทศ",
       "province": "จังหวัด",
-      "geo_fence": "รั้วภูมิศาสตร์",
       "city": "เมือง"
-    },
-    "strategy": {
-      "strict": "เข้มงวด",
-      "balanced": "สมดุล",
-      "loose": "ผ่อนปรน"
     }
   }
 }

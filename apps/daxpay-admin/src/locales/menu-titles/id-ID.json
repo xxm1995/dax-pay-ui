@@ -104,7 +104,6 @@
   "menu.plugin.easypay.refund": "Pengembalian EasyPay",
   "menu.payment.merchant.gatewayPayConfig": "Konfigurasi Pembayaran Gateway",
   "menu.payment.merchant.notifyConfig": "Konfigurasi Notifikasi Asinkron",
-  "menu.payment.merchant.riskConfig": "Kontrol Risiko",
   "menu.trade.transfer": "Pesanan Transfer",
   "menu.trade.transfer.wechat": "Transfer WeChat",
   "menu.trade.transfer.alipay": "Transfer Alipay",

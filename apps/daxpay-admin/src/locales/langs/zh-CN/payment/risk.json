@@ -10,18 +10,15 @@
       "value": "名单值",
       "channel": "通道",
       "channelAppId": "通道应用 AppId",
-      "payApp": "支付应用",
       "scope": "作用范围",
       "status": "状态",
       "reason": "拉黑原因",
       "expireTime": "过期时间",
       "remark": "备注",
-      "createTime": "创建时间",
-      "wxAppId": "微信应用 AppId"
+      "createTime": "创建时间"
     },
     "type": {
       "ip": "IP",
-      "open_id": "OpenId",
       "alipay_user": "支付宝用户",
       "wechat_openid": "微信 OpenId",
       "province": "省份",
@@ -38,7 +35,6 @@
       "ip": "请输入 IP 地址",
       "alipayUserId": "请输入支付宝 userId",
       "wechatOpenId": "请输入微信 openId",
-      "payApp": "请选择平台支付应用",
       "province": "请选择省份",
       "city": "请选择城市"
     },
@@ -53,7 +49,6 @@
   },
   "hit": {
     "title": "风险命中记录",
-    "viewTitle": "查看命中",
     "field": {
       "phase": "阶段",
       "hitType": "命中类型",
@@ -71,10 +66,7 @@
       "scene": "来源场景",
       "createTime": "创建时间",
       "merchant": "商户",
-      "clientCity": "IP城市",
-      "storeCity": "门店城市",
-      "storeNo": "门店号",
-      "geoFenceStrategy": "围栏策略"
+      "clientCity": "IP城市"
     },
     "phase": {
       "before_pay": "事前拦截",
@@ -93,13 +85,7 @@
       "wechat_openid": "微信 OpenId",
       "overseas_ip": "海外IP",
       "province": "省份",
-      "geo_fence": "地理围栏",
       "city": "城市"
-    },
-    "strategy": {
-      "strict": "严格",
-      "balanced": "平衡",
-      "loose": "宽松"
     }
   }
 }
