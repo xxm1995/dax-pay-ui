@@ -423,7 +423,7 @@ catalogs:
       version: 4.18.2
     vxe-table:
       specifier: ^4.21.5
-      version: 4.21.6
+      version: 4.21.7
     watermark-js-plus:
       specifier: ^1.6.3
       version: 1.6.3
@@ -637,7 +637,7 @@ importers:
         version: 4.18.2(vue@3.5.38(typescript@5.9.3))
       vxe-table:
         specifier: 'catalog:'
-        version: 4.21.6
+        version: 4.21.7
     devDependencies:
       '@types/qrcode':
         specifier: 'catalog:'
@@ -743,7 +743,7 @@ importers:
         version: 4.18.2(vue@3.5.38(typescript@5.9.3))
       vxe-table:
         specifier: 'catalog:'
-        version: 4.21.6
+        version: 4.21.7
     devDependencies:
       '@types/qrcode':
         specifier: 'catalog:'
@@ -1349,7 +1349,7 @@ importers:
         version: 4.18.2(vue@3.5.38(typescript@5.9.3))
       vxe-table:
         specifier: 'catalog:'
-        version: 4.21.6
+        version: 4.21.7
     devDependencies:
       axios:
         specifier: 'catalog:'
@@ -1591,7 +1591,7 @@ importers:
         version: 4.18.2(vue@3.5.38(typescript@5.9.3))
       vxe-table:
         specifier: 'catalog:'
-        version: 4.21.6
+        version: 4.21.7
 
   packages/effects/request:
     dependencies:
@@ -9243,8 +9243,8 @@ packages:
   vxe-pc-ui@4.18.2:
     resolution: {integrity: sha512-3PFyWM4nmHSaJ7UDfsmRqKVQT28MirChaJJ+pvM+E2G1lvfdFvjxvF2mHGx8/cIPvXmVt7xn6C7gWRBu274pRw==}
 
-  vxe-table@4.21.6:
-    resolution: {integrity: sha512-SpBlYNe7TBDFIwHQFJaBgEsIO6BEJRtnFDxNJOdyUF23OXbJkPid93d3tXJyTkHtgyyQlcZVu0znf2oPJ/Gnsg==}
+  vxe-table@4.21.7:
+    resolution: {integrity: sha512-R49+3bDi0UxTc+NGKC9fcSwnsBXKnFs1SzQxwHeFH9h3Sz5eVk0XBOeVt60K9uKB6HfqYVG6fv0GvcX7A0tV1w==}
 
   w3c-keyname@2.2.8:
     resolution: {integrity: sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==}
@@ -17794,7 +17794,7 @@ snapshots:
     transitivePeerDependencies:
       - vue
 
-  vxe-table@4.21.6: {}
+  vxe-table@4.21.7: {}
 
   w3c-keyname@2.2.8: {}
 
