@@ -1,24 +1,25 @@
 <script lang="ts" setup>
   import type { VxeTableInstance, VxeToolbarInstance } from 'vxe-table';
 
+  import type { Dict } from '#/api/system/dict/dict.api';
+
   import { computed, onMounted, ref } from 'vue';
 
   import { $t } from '@vben/locales';
 
   import { DictApi } from '#/api/system/dict/dict.api';
   import { BQuery, type QueryField } from '#/components/query';
-  import { FormEditType } from '#/enums/formEditType';
   import { PermCodes } from '#/constants/perm-codes';
+  import { FormEditType } from '#/enums/formEditType';
   import { useMessage } from '#/hooks/useMessage';
   import { usePermission } from '#/hooks/usePermission';
+  import useTablePage from '#/hooks/useTablePage';
 
   import DictEdit from './DictEdit.vue';
   import DictItemList from './DictItemList.vue';
 
   const { confirm, message } = useMessage();
   const { hasPermission } = usePermission();
-
-  const loading = ref(false);
 
   const xTable = ref<VxeTableInstance>();
   const xToolbar = ref<VxeToolbarInstance>();
@@ -44,16 +45,6 @@
     },
   ]);
 
-  // 分页配置
-  const pageConfig = ref({
-    currentPage: 1,
-    pageSize: 10,
-    total: 0,
-  });
-
-  // 表格数据
-  const tableData = ref<any[]>([]);
-
   onMounted(() => {
     xTable.value?.connectToolbar(xToolbar.value as VxeToolbarInstance);
     queryPage();
@@ -62,30 +53,25 @@
   /**
    * 查询分页数据
    */
-  function queryPage() {
-    loading.value = true;
-    DictApi.page({
-      current: pageConfig.value.currentPage,
-      size: pageConfig.value.pageSize,
+  async function queryPage() {
+    const { data } = await DictApi.page({
+      current: pages.current,
+      size: pages.size,
       ...queryForm.value,
-    })
-      .then((res) => {
-        tableData.value = res.data.records || [];
-        pageConfig.value.total = Number(res.data.total) || 0;
-        loading.value = false;
-      })
-      .catch(() => {
-        loading.value = false;
-      });
-    return Promise.resolve();
+    });
+    pageQueryResHandle(data);
   }
+
+  const { loading, pages, pagination, pageQueryResHandle, handleTableChange } = useTablePage<Dict>(queryPage);
+  // 保持原有每页 10 条
+  pages.size = 10;
 
   /**
    * 重置查询
    */
   function resetQuery() {
     queryForm.value = {};
-    pageConfig.value.currentPage = 1;
+    pages.current = 1;
     queryPage();
   }
 
@@ -129,15 +115,6 @@
       },
     });
   }
-
-  /**
-   * 分页变化
-   */
-  function handlePageChange({ currentPage, pageSize }: any) {
-    pageConfig.value.currentPage = currentPage;
-    pageConfig.value.pageSize = pageSize;
-    queryPage();
-  }
 </script>
 
 <template>
@@ -159,7 +136,7 @@
           </template>
         </vxe-toolbar>
         <!-- 数据表格 -->
-        <vxe-table ref="xTable" :row-config="{ keyField: 'id' }" :data="tableData" :loading="loading">
+        <vxe-table ref="xTable" :row-config="{ keyField: 'id' }" :data="pagination.records" :loading="loading">
           <!-- 序号 -->
           <vxe-column type="seq" :title="$t('common.seq')" width="60" align="center" />
           <!-- 字典编码 -->
@@ -191,7 +168,12 @@
           <!-- 备注 -->
           <vxe-column field="remark" :title="$t('system.dict.remark')" :min-width="150" />
           <!-- 创建时间 -->
-          <vxe-column field="createTime" :title="$t('system.dict.createTime')" :min-width="160" formatter="formatDateTime" />
+          <vxe-column
+            field="createTime"
+            :title="$t('system.dict.createTime')"
+            :min-width="160"
+            formatter="formatDateTime"
+          />
           <!-- 操作 -->
           <vxe-column fixed="right" width="200" :show-overflow="false" :title="$t('common.operation')">
             <template #default="{ row }">
@@ -231,10 +213,10 @@
         <vxe-pager
           size="medium"
           :loading="loading"
-          :current-page="pageConfig.currentPage"
-          :page-size="pageConfig.pageSize"
-          :total="Number(pageConfig.total)"
-          @page-change="handlePageChange"
+          :current-page="pages.current"
+          :page-size="pages.size"
+          :total="pagination.total"
+          @page-change="handleTableChange"
         />
       </a-card>
     </div>

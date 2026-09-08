@@ -2,6 +2,8 @@
   import type { MenuProps } from 'antdv-next';
   import type { VxeTableInstance, VxeToolbarInstance } from 'vxe-table';
 
+  import type { User } from '#/api/iam/user.api';
+
   import { computed, onMounted, ref } from 'vue';
 
   import { $t } from '@vben/locales';
@@ -16,6 +18,7 @@
   import { useClientOptions } from '#/hooks/useClientOptions';
   import { useMessage } from '#/hooks/useMessage';
   import { usePermission } from '#/hooks/usePermission';
+  import useTablePage from '#/hooks/useTablePage';
 
   import UserAdd from './components/UserAdd.vue';
   import UserEdit from './components/UserEdit.vue';
@@ -63,14 +66,8 @@
   const userRoleAssignRef = ref();
   const userSocialBindRef = ref();
 
-  // 加载状态
-  const loading = ref(false);
-
-  // 表格数据
-  const tableData = ref<any[]>([]);
-
   // 选中的行
-  const selectedRows = ref<any[]>([]);
+  const selectedRows = ref<User[]>([]);
 
   // 查询条件
   const queryForm = ref<Record<string, any>>({
@@ -95,13 +92,6 @@
     { field: 'email', name: $t('iam.user.field.email'), placeholder: $t('common.pleaseInput') },
   ]);
 
-  // 分页配置
-  const pageConfig = ref({
-    currentPage: 1,
-    pageSize: 20,
-    total: 0,
-  });
-
   // 是否显示新增按钮（只有运营端才显示）
   const showAddButton = ref(true);
 
@@ -116,22 +106,18 @@
   /**
    * 查询分页数据
    */
-  function queryPage() {
-    loading.value = true;
-    UserApi.page({
-      current: pageConfig.value.currentPage,
-      size: pageConfig.value.pageSize,
+  async function queryPage() {
+    const { data } = await UserApi.page({
+      current: pages.current,
+      size: pages.size,
       ...queryForm.value,
-    })
-      .then((res) => {
-        tableData.value = res.data.records || [];
-        pageConfig.value.total = Number(res.data.total) || 0;
-        loading.value = false;
-      })
-      .catch(() => {
-        loading.value = false;
-      });
+    });
+    pageQueryResHandle(data);
   }
+
+  const { loading, pages, pagination, pageQueryResHandle, handleTableChange } = useTablePage<User>(queryPage);
+  // 保持原有每页 20 条
+  pages.size = 20;
 
   /**
    * Tab 切换处理
@@ -142,7 +128,7 @@
     queryForm.value.clientCode = tabItem?.clientCode || '';
     // 只有运营端才显示新增按钮
     showAddButton.value = queryForm.value.clientCode === ClientCode.ADMIN;
-    pageConfig.value.currentPage = 1;
+    pages.current = 1;
     queryPage();
   }
 
@@ -153,16 +139,7 @@
     // 只重置查询条件，不改变 Tab 状态（clientCode）
     const clientCode = queryForm.value.clientCode;
     queryForm.value = { clientCode };
-    pageConfig.value.currentPage = 1;
-    queryPage();
-  }
-
-  /**
-   * 分页变化
-   */
-  function handlePageChange({ currentPage, pageSize }: any) {
-    pageConfig.value.currentPage = currentPage;
-    pageConfig.value.pageSize = pageSize;
+    pages.current = 1;
     queryPage();
   }
 
@@ -292,7 +269,7 @@
         },
       ],
       onClick: ({ key }: { key: string }) => {
-        const userIds = selectedRows.value.map((row) => row.id);
+        const userIds = selectedRows.value.map((row) => row.id!);
         switch (key) {
           case 'ban': {
             handleBan(userIds);
@@ -466,7 +443,7 @@
           ref="xTable"
           :row-config="{ keyField: 'id' }"
           :checkbox-config="{ reserve: true }"
-          :data="tableData"
+          :data="pagination.records"
           :loading="loading"
           @checkbox-change="handleCheckboxChange"
           @checkbox-all="handleCheckboxChange"
@@ -535,10 +512,10 @@
         <vxe-pager
           size="medium"
           :loading="loading"
-          :current-page="pageConfig.currentPage"
-          :page-size="pageConfig.pageSize"
-          :total="pageConfig.total"
-          @page-change="handlePageChange"
+          :current-page="pages.current"
+          :page-size="pages.size"
+          :total="pagination.total"
+          @page-change="handleTableChange"
         />
       </a-card>
     </div>

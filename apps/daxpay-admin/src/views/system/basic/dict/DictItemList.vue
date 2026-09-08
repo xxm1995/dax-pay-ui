@@ -1,18 +1,20 @@
 <script lang="ts" setup>
   import type { VxeTableInstance, VxeToolbarInstance } from 'vxe-table';
 
+  import type { DictItem } from '#/api/system/dict/dict-item.api';
   import type { Dict } from '#/api/system/dict/dict.api';
 
   import { computed, onMounted, ref } from 'vue';
 
   import { $t } from '@vben/locales';
 
-  import { DictApi } from '#/api/system/dict/dict.api';
   import { DictItemApi } from '#/api/system/dict/dict-item.api';
-  import { FormEditType } from '#/enums/formEditType';
+  import { DictApi } from '#/api/system/dict/dict.api';
   import { PermCodes } from '#/constants/perm-codes';
+  import { FormEditType } from '#/enums/formEditType';
   import { useMessage } from '#/hooks/useMessage';
   import { usePermission } from '#/hooks/usePermission';
+  import useTablePage from '#/hooks/useTablePage';
 
   import DictItemEdit from './DictItemEdit.vue';
 
@@ -20,22 +22,11 @@
   const { hasPermission } = usePermission();
 
   const visible = ref(false);
-  const loading = ref(false);
   const currentDict = ref<Dict | null>(null);
 
   const xTable = ref<VxeTableInstance>();
   const xToolbar = ref<VxeToolbarInstance>();
   const dictItemEdit = ref();
-
-  // 分页配置
-  const pageConfig = ref({
-    currentPage: 1,
-    pageSize: 10,
-    total: 0,
-  });
-
-  // 表格数据
-  const tableData = ref<any[]>([]);
 
   // 显示字典名称（优先 i18nKey 翻译，fallback name）
   const displayDictName = computed(() => {
@@ -62,23 +53,18 @@
   /**
    * 查询分页数据
    */
-  function queryPage() {
-    if (!currentDict.value?.id) return Promise.resolve();
-    loading.value = true;
-    DictItemApi.pageByDictionaryId(currentDict.value.id, {
-      current: pageConfig.value.currentPage,
-      size: pageConfig.value.pageSize,
-    })
-      .then((res) => {
-        tableData.value = res.data.records || [];
-        pageConfig.value.total = res.data.total || 0;
-        loading.value = false;
-      })
-      .catch(() => {
-        loading.value = false;
-      });
-    return Promise.resolve();
+  async function queryPage() {
+    if (!currentDict.value?.id) return;
+    const { data } = await DictItemApi.pageByDictionaryId(currentDict.value.id, {
+      current: pages.current,
+      size: pages.size,
+    });
+    pageQueryResHandle(data);
   }
+
+  const { loading, pages, pagination, pageQueryResHandle, handleTableChange } = useTablePage<DictItem>(queryPage);
+  // 保持原有每页 10 条
+  pages.size = 10;
 
   /**
    * 新增
@@ -115,15 +101,6 @@
     });
   }
 
-  /**
-   * 分页变化
-   */
-  function handlePageChange({ currentPage, pageSize }: any) {
-    pageConfig.value.currentPage = currentPage;
-    pageConfig.value.pageSize = pageSize;
-    queryPage();
-  }
-
   function handleClose() {
     visible.value = false;
   }
@@ -151,7 +128,7 @@
     </vxe-toolbar>
 
     <!-- 数据表格 -->
-    <vxe-table ref="xTable" :row-config="{ keyField: 'id' }" :data="tableData" :loading="loading">
+    <vxe-table ref="xTable" :row-config="{ keyField: 'id' }" :data="pagination.records" :loading="loading">
       <!-- 序号 -->
       <vxe-column type="seq" :title="$t('common.seq')" width="60" align="center" />
       <!-- 字典项编码 -->
@@ -176,7 +153,12 @@
       <!-- 备注 -->
       <vxe-column field="remark" :title="$t('system.dict.remark')" :min-width="150" />
       <!-- 创建时间 -->
-      <vxe-column field="createTime" :title="$t('system.dict.createTime')" :min-width="160" formatter="formatDateTime" />
+      <vxe-column
+        field="createTime"
+        :title="$t('system.dict.createTime')"
+        :min-width="160"
+        formatter="formatDateTime"
+      />
       <!-- 操作 -->
       <vxe-column fixed="right" width="150" :show-overflow="false" :title="$t('common.operation')">
         <template #default="{ row }">
@@ -209,10 +191,10 @@
     <vxe-pager
       size="medium"
       :loading="loading"
-      :current-page="pageConfig.currentPage"
-      :page-size="pageConfig.pageSize"
-      :total="Number(pageConfig.total)"
-      @page-change="handlePageChange"
+      :current-page="pages.current"
+      :page-size="pages.size"
+      :total="pagination.total"
+      @page-change="handleTableChange"
     />
 
     <DictItemEdit ref="dictItemEdit" @ok="queryPage" />

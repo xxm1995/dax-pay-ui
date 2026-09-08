@@ -17,6 +17,7 @@
   import { useDeleteConfirm } from '#/hooks/useDeleteConfirm';
   import { useMessage } from '#/hooks/useMessage';
   import { usePermission } from '#/hooks/usePermission';
+  import useTablePage from '#/hooks/useTablePage';
 
   import RoleEdit from './RoleEdit.vue';
   import RolePermAssign from './RolePermAssign.vue';
@@ -25,7 +26,6 @@
   const { openDeleteConfirm } = useDeleteConfirm();
   const { hasPermission } = usePermission();
 
-  const loading = ref(false);
   const xTable = ref<VxeTableInstance>();
   const xToolbar = ref<VxeToolbarInstance>();
   const roleEdit = ref();
@@ -54,16 +54,6 @@
     },
   ]);
 
-  // 分页配置
-  const pageConfig = ref({
-    currentPage: 1,
-    pageSize: 10,
-    total: 0,
-  });
-
-  // 表格数据
-  const tableData = ref<Role[]>([]);
-
   onMounted(() => {
     xTable.value?.connectToolbar(xToolbar.value as VxeToolbarInstance);
     queryPage();
@@ -72,30 +62,25 @@
   /**
    * 查询分页数据
    */
-  function queryPage() {
-    loading.value = true;
-    RoleApi.page({
-      current: pageConfig.value.currentPage,
-      size: pageConfig.value.pageSize,
+  async function queryPage() {
+    const { data } = await RoleApi.page({
+      current: pages.current,
+      size: pages.size,
       ...queryForm.value,
-    })
-      .then((res) => {
-        tableData.value = res.data.records || [];
-        pageConfig.value.total = Number(res.data.total) || 0;
-        loading.value = false;
-      })
-      .catch(() => {
-        loading.value = false;
-      });
-    return Promise.resolve();
+    });
+    pageQueryResHandle(data);
   }
+
+  const { loading, pages, pagination, pageQueryResHandle, handleTableChange } = useTablePage<Role>(queryPage);
+  // 保持原有每页 10 条
+  pages.size = 10;
 
   /**
    * 重置查询
    */
   function resetQuery() {
     queryForm.value = {};
-    pageConfig.value.currentPage = 1;
+    pages.current = 1;
     queryPage();
   }
 
@@ -176,12 +161,14 @@
       },
     ];
     if (!row.internal) {
-      items.push({ type: 'divider' });
-      items.push({
-        key: 'delete',
-        label: $t('common.delete'),
-        danger: true,
-      });
+      items.push(
+        { type: 'divider' },
+        {
+          key: 'delete',
+          label: $t('common.delete'),
+          danger: true,
+        },
+      );
     }
     return {
       items,
@@ -194,15 +181,6 @@
         }
       },
     };
-  }
-
-  /**
-   * 分页变化
-   */
-  function handlePageChange({ currentPage, pageSize }: any) {
-    pageConfig.value.currentPage = currentPage;
-    pageConfig.value.pageSize = pageSize;
-    queryPage();
   }
 </script>
 
@@ -230,7 +208,7 @@
             </a-space>
           </template>
         </vxe-toolbar>
-        <vxe-table ref="xTable" :row-config="{ keyField: 'id' }" :data="tableData" :loading="loading">
+        <vxe-table ref="xTable" :row-config="{ keyField: 'id' }" :data="pagination.records" :loading="loading">
           <!-- 序号 -->
           <vxe-column type="seq" :title="$t('common.seq')" width="60" align="center" />
           <!-- 角色编码 -->
@@ -299,10 +277,10 @@
         <vxe-pager
           size="medium"
           :loading="loading"
-          :current-page="pageConfig.currentPage"
-          :page-size="pageConfig.pageSize"
-          :total="pageConfig.total"
-          @page-change="handlePageChange"
+          :current-page="pages.current"
+          :page-size="pages.size"
+          :total="pagination.total"
+          @page-change="handleTableChange"
         />
       </a-card>
     </div>
