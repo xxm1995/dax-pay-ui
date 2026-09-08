@@ -56,8 +56,6 @@ export interface WechatDirectKeyConfigResult {
 export interface WechatDirectKeyConfigParam {
   /** 通道商户号 */
   channelMchNo: string;
-  /** 商户号（后端强制 PaymentContext，前端可不传） */
-  mchNo?: string;
   /** API V3密钥 */
   apiKeyV3?: string;
   /** 支付公钥 */
