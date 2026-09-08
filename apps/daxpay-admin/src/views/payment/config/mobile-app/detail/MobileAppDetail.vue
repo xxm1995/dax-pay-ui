@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import type { FormInstance, Rule } from 'antdv-next';
+  import type { ComponentPublicInstance } from 'vue';
 
   import { computed, onMounted, reactive, ref, watch } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
@@ -11,23 +11,30 @@
   import {
     type AlipayMiniAppConfig,
     type DyMiniAppConfig,
+    MobileAppApi,
     type MobileAppParam,
     type MobileAppResult,
     type WxMiniAppConfig,
-    MobileAppApi,
   } from '#/api/payment/mobile-app.api';
   import { useFormEdit } from '#/hooks/useFormEdit';
   import { useMessage } from '#/hooks/useMessage';
-  import { readFileAsText } from '#/utils/file';
+
+  import AlipayMiniForm from './components/AlipayMiniForm.vue';
+  import { AUTH_TYPE_CERT, AUTH_TYPE_KEY } from './components/constants';
+  import DyMiniForm from './components/DyMiniForm.vue';
+  import PlatformEditBar from './components/PlatformEditBar.vue';
+  import WxMiniForm from './components/WxMiniForm.vue';
 
   defineOptions({ name: 'MobileAppDetail' });
 
-  // 鉴权方式: public_key(公钥模式) / cert(证书模式)
-  const AUTH_TYPE_KEY = 'public_key';
-  const AUTH_TYPE_CERT = 'cert';
-
   /** 已支持强类型表单的平台 */
-  const STRUCTURED_PLATFORMS = new Set(['wx_mini', 'alipay_mini', 'dy_mini']);
+  const STRUCTURED_PLATFORMS = new Set(['alipay_mini', 'dy_mini', 'wx_mini']);
+
+  /** 平台表单子组件暴露的校验能力(三个平台表单组件统一约定) */
+  interface PlatformFormExpose {
+    clearValidate: () => void;
+    validate: () => Promise<void>;
+  }
 
   const route = useRoute();
   const router = useRouter();
@@ -40,14 +47,11 @@
   const saving = ref(false);
   // 是否处于编辑状态
   const isEditing = ref(false);
-  // 各平台 a-form 实例
-  const formRefMap = reactive<Record<string, FormInstance>>({});
+  // 各平台表单子组件实例
+  const formRefMap = reactive<Record<string, PlatformFormExpose>>({});
 
   // 各端支持的平台: disabled 表示暂不可用(灰显)
-  const PLATFORMS_BY_APP_TYPE: Record<
-    string,
-    { disabled?: boolean; platform: string }[]
-  > = {
+  const PLATFORMS_BY_APP_TYPE: Record<string, { disabled?: boolean; platform: string }[]> = {
     admin: [
       { platform: 'wx_mini' },
       { platform: 'alipay_mini' },
@@ -56,11 +60,7 @@
       { platform: 'ios', disabled: true },
     ],
     // 收银台仅三小程序; 无 H5/APP
-    cashier: [
-      { platform: 'wx_mini' },
-      { platform: 'alipay_mini' },
-      { platform: 'dy_mini' },
-    ],
+    cashier: [{ platform: 'wx_mini' }, { platform: 'alipay_mini' }, { platform: 'dy_mini' }],
     // 商户端
     merchant: [
       { platform: 'wx_mini' },
@@ -71,19 +71,13 @@
     ],
   };
 
-  const platformItems = computed(
-    () => PLATFORMS_BY_APP_TYPE[appType.value] || [],
-  );
-  const platforms = computed(() =>
-    platformItems.value.map((item) => item.platform),
-  );
+  const platformItems = computed(() => PLATFORMS_BY_APP_TYPE[appType.value] || []);
+  const platforms = computed(() => platformItems.value.map((item) => item.platform));
 
   // 各平台外壳表单(含嵌套配置)
   const formDataMap = reactive<Record<string, MobileAppParam>>({});
   // 嵌套配置快照(用于敏感字段 diffForm)
-  const originalNestedMap = reactive<
-    Record<string, AlipayMiniAppConfig | DyMiniAppConfig | WxMiniAppConfig>
-  >({});
+  const originalNestedMap = reactive<Record<string, AlipayMiniAppConfig | DyMiniAppConfig | WxMiniAppConfig>>({});
 
   const appTitle = computed(() => {
     if (appType.value) {
@@ -96,10 +90,7 @@
    * 判断平台是否暂不可用
    */
   function isPlatformDisabled(platform: string): boolean {
-    return (
-      platformItems.value.find((item) => item.platform === platform)
-        ?.disabled === true
-    );
+    return platformItems.value.find((item) => item.platform === platform)?.disabled === true;
   }
 
   /**
@@ -148,12 +139,23 @@
       notifyConfig: '',
       remark: '',
     };
-    if (platform === 'wx_mini') {
-      base.wxMini = emptyWxMini();
-    } else if (platform === 'alipay_mini') {
-      base.alipayMini = emptyAlipayMini();
-    } else if (platform === 'dy_mini') {
-      base.dyMini = emptyDyMini();
+    switch (platform) {
+      case 'alipay_mini': {
+        base.alipayMini = emptyAlipayMini();
+
+        break;
+      }
+      case 'dy_mini': {
+        base.dyMini = emptyDyMini();
+
+        break;
+      }
+      case 'wx_mini': {
+        base.wxMini = emptyWxMini();
+
+        break;
+      }
+      // No default
     }
     return base;
   }
@@ -161,9 +163,7 @@
   /**
    * 当前平台嵌套配置(表单 model)
    */
-  function nestedOf(
-    platform: string,
-  ): AlipayMiniAppConfig | DyMiniAppConfig | WxMiniAppConfig | undefined {
+  function nestedOf(platform: string): AlipayMiniAppConfig | DyMiniAppConfig | undefined | WxMiniAppConfig {
     const form = formDataMap[platform];
     if (!form) return undefined;
     if (platform === 'wx_mini') return form.wxMini;
@@ -172,28 +172,18 @@
     return undefined;
   }
 
-  /**
-   * 是否证书模式
-   */
-  function isCertMode(platform: string): boolean {
-    const nested = formDataMap[platform]?.alipayMini;
-    return nested?.authType === AUTH_TYPE_CERT;
-  }
-
   // 表单 ref 回调缓存
-  const formRefBinders: Record<
-    string,
-    (el: Element | FormInstance | null) => void
-  > = {};
+  const formRefBinders: Record<string, (el: ComponentPublicInstance | Element | null) => void> = {};
 
   /**
    * 获取/创建某平台的稳定 form ref 绑定回调
    */
   function bindFormRef(platform: string) {
     if (!formRefBinders[platform]) {
-      formRefBinders[platform] = (el: Element | FormInstance | null) => {
+      formRefBinders[platform] = (el) => {
         if (el) {
-          formRefMap[platform] = el as FormInstance;
+          // 模板 ref 收到子组件实例, 三个平台表单组件均 expose 约定的 validate/clearValidate
+          formRefMap[platform] = el as unknown as PlatformFormExpose;
         } else {
           delete formRefMap[platform];
         }
@@ -205,112 +195,14 @@
   /**
    * 当前平台表单实例
    */
-  function getActiveFormRef(): FormInstance | undefined {
+  function getActiveFormRef(): PlatformFormExpose | undefined {
     return formRefMap[activePlatform.value];
   }
 
   /**
-   * 按平台生成表单校验规则
-   */
-  const nestedRulesMap = computed(() => {
-    const map: Record<string, Record<string, Rule[]>> = {};
-    for (const platform of platforms.value) {
-      if (platform === 'wx_mini' || platform === 'dy_mini') {
-        map[platform] = {
-          appId: [
-            {
-              required: true,
-              whitespace: true,
-              message: $t('payment.mobileApp.fields.appIdRequired'),
-            },
-          ],
-          appSecret: [
-            {
-              required: true,
-              whitespace: true,
-              message: $t('payment.mobileApp.fields.appSecretRequired'),
-            },
-          ],
-        };
-        continue;
-      }
-      if (platform === 'alipay_mini') {
-        const certMode = isCertMode(platform);
-        map[platform] = {
-          appId: [
-            {
-              required: true,
-              whitespace: true,
-              message: $t('payment.mobileApp.fields.appIdRequired'),
-            },
-          ],
-          authType: [
-            {
-              required: true,
-              message: $t('payment.mobileApp.fields.authTypeRequired'),
-            },
-          ],
-          privateKey: [
-            {
-              required: true,
-              whitespace: true,
-              message: $t('payment.mobileApp.fields.privateKeyRequired'),
-            },
-          ],
-          alipayPublicKey: certMode
-            ? []
-            : [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: $t(
-                    'payment.mobileApp.fields.alipayPublicKeyRequired',
-                  ),
-                },
-              ],
-          appCert: !certMode
-            ? []
-            : [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: $t('payment.mobileApp.fields.appCertRequired'),
-                },
-              ],
-          alipayCert: !certMode
-            ? []
-            : [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: $t(
-                    'payment.mobileApp.fields.alipayCertRequired',
-                  ),
-                },
-              ],
-          alipayRootCert: !certMode
-            ? []
-            : [
-                {
-                  required: true,
-                  whitespace: true,
-                  message: $t(
-                    'payment.mobileApp.fields.alipayRootCertRequired',
-                  ),
-                },
-              ],
-        };
-      }
-    }
-    return map;
-  });
-
-  /**
    * 组装提交用的嵌套配置: 非敏感字段全量, 敏感字段仅 diff 有变更时写入
    */
-  function buildNestedSubmit(
-    platform: string,
-  ): Pick<MobileAppParam, 'alipayMini' | 'dyMini' | 'wxMini'> {
+  function buildNestedSubmit(platform: string): Pick<MobileAppParam, 'alipayMini' | 'dyMini' | 'wxMini'> {
     const nested = nestedOf(platform);
     const original = originalNestedMap[platform];
     if (!nested || !original) {
@@ -325,9 +217,7 @@
         wxMini: {
           appId: current.appId,
           originalId: current.originalId,
-          ...(sensitive.appSecret !== undefined
-            ? { appSecret: sensitive.appSecret }
-            : {}),
+          ...(sensitive.appSecret === undefined ? {} : { appSecret: sensitive.appSecret }),
         },
       };
     }
@@ -348,21 +238,11 @@
         alipayMini: {
           appId: current.appId,
           authType: current.authType || AUTH_TYPE_KEY,
-          ...(sensitive.privateKey !== undefined
-            ? { privateKey: sensitive.privateKey }
-            : {}),
-          ...(sensitive.alipayPublicKey !== undefined
-            ? { alipayPublicKey: sensitive.alipayPublicKey }
-            : {}),
-          ...(sensitive.appCert !== undefined
-            ? { appCert: sensitive.appCert }
-            : {}),
-          ...(sensitive.alipayCert !== undefined
-            ? { alipayCert: sensitive.alipayCert }
-            : {}),
-          ...(sensitive.alipayRootCert !== undefined
-            ? { alipayRootCert: sensitive.alipayRootCert }
-            : {}),
+          ...(sensitive.privateKey === undefined ? {} : { privateKey: sensitive.privateKey }),
+          ...(sensitive.alipayPublicKey === undefined ? {} : { alipayPublicKey: sensitive.alipayPublicKey }),
+          ...(sensitive.appCert === undefined ? {} : { appCert: sensitive.appCert }),
+          ...(sensitive.alipayCert === undefined ? {} : { alipayCert: sensitive.alipayCert }),
+          ...(sensitive.alipayRootCert === undefined ? {} : { alipayRootCert: sensitive.alipayRootCert }),
         },
       };
     }
@@ -374,9 +254,7 @@
       return {
         dyMini: {
           appId: current.appId,
-          ...(sensitive.appSecret !== undefined
-            ? { appSecret: sensitive.appSecret }
-            : {}),
+          ...(sensitive.appSecret === undefined ? {} : { appSecret: sensitive.appSecret }),
         },
       };
     }
@@ -385,83 +263,41 @@
   }
 
   /**
-   * 上传证书文件
-   */
-  function handleCertUpload(
-    platform: string,
-    fieldName: 'appCert' | 'alipayCert' | 'alipayRootCert',
-    info: { file: File },
-  ) {
-    const file = info.file;
-    if (!file) {
-      return;
-    }
-    const nested = formDataMap[platform]?.alipayMini;
-    if (!nested) {
-      return;
-    }
-    readFileAsText(file).then((content) => {
-      nested[fieldName] = content;
-      message.success(
-        $t('components.upload.uploadSuccess', { name: file.name }),
-      );
-      formRefMap[platform]?.validateFields([fieldName]).catch(() => {});
-    });
-  }
-
-  /**
-   * 支付宝鉴权方式切换
-   */
-  function handleAuthTypeChange(platform: string) {
-    formRefMap[platform]?.clearValidate([
-      'alipayPublicKey',
-      'appCert',
-      'alipayCert',
-      'alipayRootCert',
-    ]);
-  }
-
-  /**
-   * 截断证书内容用于 tooltip 预览
-   */
-  function truncateContent(content: string, maxLength = 500): string {
-    if (!content) {
-      return '';
-    }
-    if (content.length <= maxLength) {
-      return content;
-    }
-    return `${content.slice(0, Math.max(0, maxLength))}...`;
-  }
-
-  /**
    * 从接口结果填充表单嵌套
    */
   function applyResultNested(platform: string, item: MobileAppResult) {
     const form = formDataMap[platform];
     if (!form) return;
-    if (platform === 'wx_mini') {
-      form.wxMini = {
-        ...emptyWxMini(),
-        ...(item.wxMini || {}),
-      };
-      originalNestedMap[platform] = { ...form.wxMini };
-    } else if (platform === 'alipay_mini') {
-      form.alipayMini = {
-        ...emptyAlipayMini(),
-        ...(item.alipayMini || {}),
-        authType:
-          item.alipayMini?.authType === AUTH_TYPE_CERT
-            ? AUTH_TYPE_CERT
-            : AUTH_TYPE_KEY,
-      };
-      originalNestedMap[platform] = { ...form.alipayMini };
-    } else if (platform === 'dy_mini') {
-      form.dyMini = {
-        ...emptyDyMini(),
-        ...(item.dyMini || {}),
-      };
-      originalNestedMap[platform] = { ...form.dyMini };
+    switch (platform) {
+      case 'alipay_mini': {
+        form.alipayMini = {
+          ...emptyAlipayMini(),
+          ...item.alipayMini,
+          authType: item.alipayMini?.authType === AUTH_TYPE_CERT ? AUTH_TYPE_CERT : AUTH_TYPE_KEY,
+        };
+        originalNestedMap[platform] = { ...form.alipayMini };
+
+        break;
+      }
+      case 'dy_mini': {
+        form.dyMini = {
+          ...emptyDyMini(),
+          ...item.dyMini,
+        };
+        originalNestedMap[platform] = { ...form.dyMini };
+
+        break;
+      }
+      case 'wx_mini': {
+        form.wxMini = {
+          ...emptyWxMini(),
+          ...item.wxMini,
+        };
+        originalNestedMap[platform] = { ...form.wxMini };
+
+        break;
+      }
+      // No default
     }
   }
 
@@ -469,7 +305,7 @@
    * 加载该端所有平台配置
    */
   async function loadData(keepPlatform = false) {
-    if (!appType.value || !platforms.value.length) return;
+    if (!appType.value || platforms.value.length === 0) return;
     loading.value = true;
     try {
       for (const p of platforms.value) {
@@ -493,8 +329,7 @@
       }
       if (!keepPlatform || !activePlatform.value) {
         const firstEnabled = platformItems.value.find((item) => !item.disabled);
-        activePlatform.value =
-          firstEnabled?.platform || platforms.value[0] || '';
+        activePlatform.value = firstEnabled?.platform || platforms.value[0] || '';
       }
     } finally {
       loading.value = false;
@@ -546,9 +381,7 @@
       }
     }
 
-    const nestedSubmit = isStructuredPlatform(platform)
-      ? buildNestedSubmit(platform)
-      : {};
+    const nestedSubmit = isStructuredPlatform(platform) ? buildNestedSubmit(platform) : {};
 
     const submit: MobileAppParam = {
       id: form.id,
@@ -616,10 +449,7 @@
             @click="handleBack"
           >
             <template #icon>
-              <IconifyIcon
-                icon="ant-design:arrow-left-outlined"
-                class="text-lg"
-              />
+              <IconifyIcon icon="ant-design:arrow-left-outlined" class="text-lg" />
             </template>
           </a-button>
           <span class="text-lg font-bold text-foreground">{{ appTitle }}</span>
@@ -639,415 +469,50 @@
 
         <a-tabs v-model:active-key="activePlatform">
           <template #rightExtra>
-            <a-space v-if="!isPlatformDisabled(activePlatform)">
-              <template v-if="!isEditing">
-                <a-button type="primary" @click="handleEdit">
-                  {{ $t('common.edit') }}
-                </a-button>
-              </template>
-              <template v-else>
-                <a-button @click="handleCancel">
-                  {{ $t('common.cancel') }}
-                </a-button>
-                <a-button
-                  type="primary"
-                  :loading="saving"
-                  @click="handleSave"
-                >
-                  {{ $t('common.save') }}
-                </a-button>
-              </template>
-            </a-space>
+            <!-- 页签右侧编辑操作条 -->
+            <PlatformEditBar
+              :editing="isEditing"
+              :saving="saving"
+              :disabled="isPlatformDisabled(activePlatform)"
+              @edit="handleEdit"
+              @cancel="handleCancel"
+              @save="handleSave"
+            />
           </template>
 
-          <a-tab-pane
-            v-for="item in platformItems"
-            :key="item.platform"
-            :disabled="item.disabled"
-          >
+          <a-tab-pane v-for="item in platformItems" :key="item.platform" :disabled="item.disabled">
             <template #tab>
               <span :class="{ 'opacity-50': item.disabled }">
-                {{
-                  $t(`payment.mobileApp.platformNames.${item.platform}`)
-                }}
-                <a-tag
-                  v-if="item.disabled"
-                  color="orange"
-                  class="ml-1"
-                  style="font-size: 11px; line-height: 18px"
-                >
+                {{ $t(`payment.mobileApp.platformNames.${item.platform}`) }}
+                <a-tag v-if="item.disabled" color="orange" class="ml-1" style="font-size: 11px; line-height: 18px">
                   {{ $t('payment.mobileApp.card.comingSoon') }}
                 </a-tag>
               </span>
             </template>
 
-            <a-empty
-              v-if="item.disabled"
-              :description="
-                $t('payment.mobileApp.detail.platformComingSoon')
-              "
-            />
+            <a-empty v-if="item.disabled" :description="$t('payment.mobileApp.detail.platformComingSoon')" />
 
-            <!-- 强类型表单: wx_mini / alipay_mini / dy_mini -->
-            <a-form
-              v-else-if="
-                isStructuredPlatform(item.platform) &&
-                formDataMap[item.platform] &&
-                nestedOf(item.platform)
-              "
+            <!-- 微信小程序表单 -->
+            <WxMiniForm
+              v-else-if="item.platform === 'wx_mini' && formDataMap[item.platform]?.wxMini"
               :ref="bindFormRef(item.platform)"
-              :model="nestedOf(item.platform)"
-              :rules="nestedRulesMap[item.platform]"
-              layout="vertical"
-              class="max-w-2xl"
-            >
-              <!-- 微信小程序 -->
-              <template v-if="item.platform === 'wx_mini' && formDataMap[item.platform]?.wxMini">
-                <a-form-item
-                  name="appId"
-                  :label="$t('payment.mobileApp.fields.wxAppId')"
-                >
-                  <a-input
-                    v-model:value="formDataMap[item.platform]!.wxMini!.appId"
-                    :disabled="!isEditing"
-                    :placeholder="
-                      $t('payment.mobileApp.fields.wxAppIdPlaceholder')
-                    "
-                  />
-                </a-form-item>
-                <a-form-item
-                  name="appSecret"
-                  :label="$t('payment.mobileApp.fields.wxAppSecret')"
-                >
-                  <a-input
-                    v-model:value="
-                      formDataMap[item.platform]!.wxMini!.appSecret
-                    "
-                    :disabled="!isEditing"
-                    allow-clear
-                    :placeholder="
-                      $t(
-                        'payment.mobileApp.fields.wxAppSecretPlaceholder',
-                      )
-                    "
-                  />
-                </a-form-item>
-                <a-form-item
-                  name="originalId"
-                  :label="$t('payment.mobileApp.fields.originalId')"
-                >
-                  <a-input
-                    v-model:value="
-                      formDataMap[item.platform]!.wxMini!.originalId
-                    "
-                    :disabled="!isEditing"
-                    :placeholder="
-                      $t(
-                        'payment.mobileApp.fields.originalIdPlaceholder',
-                      )
-                    "
-                  />
-                </a-form-item>
-              </template>
-
-              <!-- 支付宝小程序 -->
-              <template
-                v-else-if="
-                  item.platform === 'alipay_mini' &&
-                  formDataMap[item.platform]?.alipayMini
-                "
-              >
-                <a-form-item
-                  name="appId"
-                  :label="$t('payment.mobileApp.fields.alipayAppId')"
-                >
-                  <a-input
-                    v-model:value="
-                      formDataMap[item.platform]!.alipayMini!.appId
-                    "
-                    :disabled="!isEditing"
-                    :placeholder="
-                      $t(
-                        'payment.mobileApp.fields.alipayAppIdPlaceholder',
-                      )
-                    "
-                  />
-                </a-form-item>
-                <a-form-item
-                  name="authType"
-                  :label="$t('payment.mobileApp.fields.authType')"
-                >
-                  <a-radio-group
-                    v-model:value="
-                      formDataMap[item.platform]!.alipayMini!.authType
-                    "
-                    button-style="solid"
-                    :disabled="!isEditing"
-                    @change="handleAuthTypeChange(item.platform)"
-                  >
-                    <a-radio-button :value="AUTH_TYPE_KEY">
-                      {{ $t('payment.mobileApp.fields.authTypeKey') }}
-                    </a-radio-button>
-                    <a-radio-button :value="AUTH_TYPE_CERT">
-                      {{ $t('payment.mobileApp.fields.authTypeCert') }}
-                    </a-radio-button>
-                  </a-radio-group>
-                </a-form-item>
-                <a-form-item
-                  name="privateKey"
-                  :label="$t('payment.mobileApp.fields.privateKey')"
-                >
-                  <a-textarea
-                    v-model:value="
-                      formDataMap[item.platform]!.alipayMini!.privateKey
-                    "
-                    :disabled="!isEditing"
-                    :rows="4"
-                    allow-clear
-                    :placeholder="
-                      $t(
-                        'payment.mobileApp.fields.privateKeyPlaceholder',
-                      )
-                    "
-                  />
-                </a-form-item>
-                <a-form-item
-                  v-if="!isCertMode(item.platform)"
-                  name="alipayPublicKey"
-                  :label="$t('payment.mobileApp.fields.alipayPublicKey')"
-                >
-                  <a-textarea
-                    v-model:value="
-                      formDataMap[item.platform]!.alipayMini!.alipayPublicKey
-                    "
-                    :disabled="!isEditing"
-                    :rows="4"
-                    allow-clear
-                    :placeholder="
-                      $t(
-                        'payment.mobileApp.fields.alipayPublicKeyPlaceholder',
-                      )
-                    "
-                  />
-                </a-form-item>
-                <template v-else>
-                  <a-form-item
-                    name="appCert"
-                    :label="$t('payment.mobileApp.fields.appCert')"
-                  >
-                    <a-upload
-                      v-if="!formDataMap[item.platform]!.alipayMini!.appCert"
-                      :disabled="!isEditing"
-                      :multiple="false"
-                      :show-upload-list="false"
-                      accept=".crt"
-                      :before-upload="() => false"
-                      @change="
-                        (info: any) =>
-                          handleCertUpload(item.platform, 'appCert', info)
-                      "
-                    >
-                      <a-button :disabled="!isEditing">
-                        <template #icon>
-                          <IconifyIcon
-                            icon="ant-design:upload-outlined"
-                            class="text-lg"
-                          />
-                        </template>
-                        {{ $t('payment.mobileApp.fields.uploadAppCert') }}
-                      </a-button>
-                    </a-upload>
-                    <a-tooltip
-                      v-else
-                      :title="
-                        truncateContent(
-                          formDataMap[item.platform]!.alipayMini!.appCert ||
-                            '',
-                        )
-                      "
-                      placement="top"
-                      :mouse-enter-delay="0.3"
-                    >
-                      <a-input value="appCert.crt" disabled>
-                        <template #suffix>
-                          <span
-                            v-if="isEditing"
-                            class="cursor-pointer text-gray-400"
-                            @click="
-                              formDataMap[item.platform]!.alipayMini!.appCert =
-                                ''
-                            "
-                          >
-                            <IconifyIcon
-                              icon="ant-design:close-circle-outlined"
-                              class="text-lg"
-                            />
-                          </span>
-                        </template>
-                      </a-input>
-                    </a-tooltip>
-                  </a-form-item>
-                  <a-form-item
-                    name="alipayCert"
-                    :label="$t('payment.mobileApp.fields.alipayCert')"
-                  >
-                    <a-upload
-                      v-if="!formDataMap[item.platform]!.alipayMini!.alipayCert"
-                      :disabled="!isEditing"
-                      :multiple="false"
-                      :show-upload-list="false"
-                      accept=".crt"
-                      :before-upload="() => false"
-                      @change="
-                        (info: any) =>
-                          handleCertUpload(item.platform, 'alipayCert', info)
-                      "
-                    >
-                      <a-button :disabled="!isEditing">
-                        <template #icon>
-                          <IconifyIcon
-                            icon="ant-design:upload-outlined"
-                            class="text-lg"
-                          />
-                        </template>
-                        {{ $t('payment.mobileApp.fields.uploadAlipayCert') }}
-                      </a-button>
-                    </a-upload>
-                    <a-tooltip
-                      v-else
-                      :title="
-                        truncateContent(
-                          formDataMap[item.platform]!.alipayMini!.alipayCert ||
-                            '',
-                        )
-                      "
-                      placement="top"
-                      :mouse-enter-delay="0.3"
-                    >
-                      <a-input value="alipayCert.crt" disabled>
-                        <template #suffix>
-                          <span
-                            v-if="isEditing"
-                            class="cursor-pointer text-gray-400"
-                            @click="
-                              formDataMap[
-                                item.platform
-                              ]!.alipayMini!.alipayCert = ''
-                            "
-                          >
-                            <IconifyIcon
-                              icon="ant-design:close-circle-outlined"
-                              class="text-lg"
-                            />
-                          </span>
-                        </template>
-                      </a-input>
-                    </a-tooltip>
-                  </a-form-item>
-                  <a-form-item
-                    name="alipayRootCert"
-                    :label="$t('payment.mobileApp.fields.alipayRootCert')"
-                  >
-                    <a-upload
-                      v-if="
-                        !formDataMap[item.platform]!.alipayMini!.alipayRootCert
-                      "
-                      :disabled="!isEditing"
-                      :multiple="false"
-                      :show-upload-list="false"
-                      accept=".crt"
-                      :before-upload="() => false"
-                      @change="
-                        (info: any) =>
-                          handleCertUpload(
-                            item.platform,
-                            'alipayRootCert',
-                            info,
-                          )
-                      "
-                    >
-                      <a-button :disabled="!isEditing">
-                        <template #icon>
-                          <IconifyIcon
-                            icon="ant-design:upload-outlined"
-                            class="text-lg"
-                          />
-                        </template>
-                        {{ $t('payment.mobileApp.fields.uploadRootCert') }}
-                      </a-button>
-                    </a-upload>
-                    <a-tooltip
-                      v-else
-                      :title="
-                        truncateContent(
-                          formDataMap[item.platform]!.alipayMini!
-                            .alipayRootCert || '',
-                        )
-                      "
-                      placement="top"
-                      :mouse-enter-delay="0.3"
-                    >
-                      <a-input value="alipayRootCert.crt" disabled>
-                        <template #suffix>
-                          <span
-                            v-if="isEditing"
-                            class="cursor-pointer text-gray-400"
-                            @click="
-                              formDataMap[
-                                item.platform
-                              ]!.alipayMini!.alipayRootCert = ''
-                            "
-                          >
-                            <IconifyIcon
-                              icon="ant-design:close-circle-outlined"
-                              class="text-lg"
-                            />
-                          </span>
-                        </template>
-                      </a-input>
-                    </a-tooltip>
-                  </a-form-item>
-                </template>
-              </template>
-
-              <!-- 抖音小程序 -->
-              <template
-                v-else-if="
-                  item.platform === 'dy_mini' &&
-                  formDataMap[item.platform]?.dyMini
-                "
-              >
-                <a-form-item
-                  name="appId"
-                  :label="$t('payment.mobileApp.fields.dyAppId')"
-                >
-                  <a-input
-                    v-model:value="formDataMap[item.platform]!.dyMini!.appId"
-                    :disabled="!isEditing"
-                    :placeholder="
-                      $t('payment.mobileApp.fields.dyAppIdPlaceholder')
-                    "
-                  />
-                </a-form-item>
-                <a-form-item
-                  name="appSecret"
-                  :label="$t('payment.mobileApp.fields.dyAppSecret')"
-                >
-                  <a-input
-                    v-model:value="
-                      formDataMap[item.platform]!.dyMini!.appSecret
-                    "
-                    :disabled="!isEditing"
-                    allow-clear
-                    :placeholder="
-                      $t(
-                        'payment.mobileApp.fields.dyAppSecretPlaceholder',
-                      )
-                    "
-                  />
-                </a-form-item>
-              </template>
-            </a-form>
+              :wx-mini="formDataMap[item.platform]!.wxMini!"
+              :disabled="!isEditing"
+            />
+            <!-- 支付宝小程序表单 -->
+            <AlipayMiniForm
+              v-else-if="item.platform === 'alipay_mini' && formDataMap[item.platform]?.alipayMini"
+              :ref="bindFormRef(item.platform)"
+              :alipay-mini="formDataMap[item.platform]!.alipayMini!"
+              :disabled="!isEditing"
+            />
+            <!-- 抖音小程序表单 -->
+            <DyMiniForm
+              v-else-if="item.platform === 'dy_mini' && formDataMap[item.platform]?.dyMini"
+              :ref="bindFormRef(item.platform)"
+              :dy-mini="formDataMap[item.platform]!.dyMini!"
+              :disabled="!isEditing"
+            />
           </a-tab-pane>
         </a-tabs>
       </a-spin>

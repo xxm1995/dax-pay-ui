@@ -1,0 +1,87 @@
+<script lang="ts" setup>
+  import type { FormInstance, Rule } from 'antdv-next';
+
+  import type { WxMiniAppConfig } from '#/api/payment/mobile-app.api';
+
+  import { computed, ref } from 'vue';
+
+  import { $t } from '@vben/locales';
+
+  /**
+   * 微信小程序配置表单
+   *
+   * 嵌套配置对象由壳层持有并传入引用, 表单字段直接写回该对象;
+   * 校验规则随组件自治, 壳层经 expose 的 validate/clearValidate 驱动。
+   */
+  const props = defineProps<{
+    /** 是否禁用(非编辑态) */
+    disabled?: boolean;
+    /** 微信小程序嵌套配置(响应式引用, 壳层持有) */
+    wxMini: WxMiniAppConfig;
+  }>();
+
+  const formRef = ref<FormInstance>();
+
+  // 表单模型中转: v-model 绑定 props 对象的嵌套属性(对象引用由壳层持有), 避免触发 props 突变规则
+  const model = computed(() => props.wxMini);
+
+  // 校验规则: appId/appSecret 必填
+  const rules = computed<Record<string, Rule[]>>(() => ({
+    appId: [
+      {
+        required: true,
+        whitespace: true,
+        message: $t('payment.mobileApp.fields.appIdRequired'),
+      },
+    ],
+    appSecret: [
+      {
+        required: true,
+        whitespace: true,
+        message: $t('payment.mobileApp.fields.appSecretRequired'),
+      },
+    ],
+  }));
+
+  /** 校验表单(失败抛出, 由壳层捕获) */
+  async function validate() {
+    await formRef.value?.validate();
+  }
+
+  /** 清除校验状态 */
+  function clearValidate() {
+    formRef.value?.clearValidate();
+  }
+
+  defineExpose({ validate, clearValidate });
+</script>
+
+<template>
+  <a-form ref="formRef" :model="model" :rules="rules" layout="vertical" class="max-w-2xl">
+    <!-- 微信 AppId -->
+    <a-form-item name="appId" :label="$t('payment.mobileApp.fields.wxAppId')">
+      <a-input
+        v-model:value="model.appId"
+        :disabled="disabled"
+        :placeholder="$t('payment.mobileApp.fields.wxAppIdPlaceholder')"
+      />
+    </a-form-item>
+    <!-- 微信 AppSecret -->
+    <a-form-item name="appSecret" :label="$t('payment.mobileApp.fields.wxAppSecret')">
+      <a-input
+        v-model:value="model.appSecret"
+        :disabled="disabled"
+        allow-clear
+        :placeholder="$t('payment.mobileApp.fields.wxAppSecretPlaceholder')"
+      />
+    </a-form-item>
+    <!-- 原始 ID -->
+    <a-form-item name="originalId" :label="$t('payment.mobileApp.fields.originalId')">
+      <a-input
+        v-model:value="model.originalId"
+        :disabled="disabled"
+        :placeholder="$t('payment.mobileApp.fields.originalIdPlaceholder')"
+      />
+    </a-form-item>
+  </a-form>
+</template>
