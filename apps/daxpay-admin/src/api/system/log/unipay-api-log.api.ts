@@ -9,7 +9,7 @@ export const UnipayApiLogApi = {
   /**
    * 分页查询支付接口日志
    */
-  page(params: any): Promise<Result<PageResult<UnipayApiLog>>> {
+  page(params: UnipayApiLogQuery): Promise<Result<PageResult<UnipayApiLog>>> {
     return defHttp.get({ url: '/log/unipay/page', params });
   },
   /**
@@ -64,4 +64,21 @@ export interface UnipayApiLog extends BaseEntity {
   resBody?: string;
   /** 操作时间 */
   operateTime?: string;
+}
+
+export interface UnipayApiLogQuery {
+  /** 当前页 */
+  current?: number;
+  /** 每页条数 */
+  size?: number;
+  /** 商户号 */
+  mchNo?: string;
+  /** 接口路径 */
+  apiPath?: string;
+  /** 请求ID */
+  reqId?: string;
+  /** 链路ID */
+  traceId?: string;
+  /** 是否成功 */
+  success?: boolean;
 }

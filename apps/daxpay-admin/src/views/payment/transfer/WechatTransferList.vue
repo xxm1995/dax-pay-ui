@@ -6,6 +6,8 @@
   import { $t } from '@vben/locales';
   import { formatDateTime } from '@vben/utils';
 
+  import { formatFen as formatAmount } from '@daxpay/ui-biz/utils/pay-amount';
+
   import {
     TransferApi,
     type WechatTransferOrderQuery,
@@ -101,11 +103,6 @@
     pageConfig.value.currentPage = currentPage;
     pageConfig.value.pageSize = pageSize;
     queryPage();
-  }
-
-  function formatAmount(amount?: number): string {
-    if (amount === null || amount === undefined) return '-';
-    return (amount / 100).toFixed(2);
   }
 
   function statusColor(status?: string): string {

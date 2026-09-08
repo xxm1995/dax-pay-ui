@@ -87,7 +87,7 @@
       const res = await SocialApi.exchangeLogin(oauthCode, state as string, source.value, CLIENT_CODE);
       // 需二次验证: 拦截器对 40101 直接返回响应体, 不抛失败; 2FA 不静默吞掉
       if (res.code === TWO_FACTOR_REQUIRED_CODE) {
-        const preAuthToken = (res.data as any)?.preAuthToken ?? '';
+        const preAuthToken = res.data?.preAuthToken ?? '';
         authStore.enterTwoFactor(preAuthToken);
         showTwoFactor.value = true;
         return;

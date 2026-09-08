@@ -9,7 +9,7 @@ export const OperateLogApi = {
   /**
    * 分页查询操作日志
    */
-  page(params: any): Promise<Result<PageResult<OperateLog>>> {
+  page(params: OperateLogQuery): Promise<Result<PageResult<OperateLog>>> {
     return defHttp.get({ url: '/log/operate/page', params });
   },
   /**
@@ -64,4 +64,17 @@ export interface OperateLog extends BaseEntity {
   os?: string;
   /** 浏览器类型 */
   browser?: string;
+}
+
+export interface OperateLogQuery {
+  /** 当前页 */
+  current?: number;
+  /** 每页条数 */
+  size?: number;
+  /** 操作模块 */
+  title?: string;
+  /** 操作账号 */
+  account?: string;
+  /** 是否成功 */
+  success?: boolean;
 }

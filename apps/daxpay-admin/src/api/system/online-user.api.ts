@@ -9,7 +9,7 @@ export const OnlineUserApi = {
   /**
    * 分页查询在线用户列表
    */
-  page(params: OnlineUserQuery): Promise<PageResult<OnlineUser>> {
+  page(params: OnlineUserQuery): Promise<Result<PageResult<OnlineUser>>> {
     return defHttp.get({ url: '/online/page', params });
   },
   /**

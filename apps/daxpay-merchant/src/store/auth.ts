@@ -85,11 +85,12 @@ export const useAuthStore = defineStore('auth', () => {
 
       // 密码通过但需二次验证: 记录临时凭证并切到验证界面
       if (loginResult.code === TWO_FACTOR_REQUIRED_CODE) {
-        enterTwoFactor((loginResult.data as any)?.preAuthToken ?? '');
+        const data = loginResult.data;
+        enterTwoFactor(typeof data === 'object' && data !== null ? data.preAuthToken : '');
         return { userInfo: null };
       }
 
-      const accessToken = loginResult.data;
+      const accessToken = typeof loginResult.data === 'string' ? loginResult.data : '';
       if (accessToken) {
         accessStore.setAccessToken(accessToken);
 

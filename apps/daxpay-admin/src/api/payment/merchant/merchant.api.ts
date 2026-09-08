@@ -11,7 +11,7 @@ export const MerchantApi = {
   /**
    * 商户分页查询
    */
-  page(params: any): Promise<Result<PageResult<MerchantInfo>>> {
+  page(params: MerchantQuery): Promise<Result<PageResult<MerchantInfo>>> {
     return defHttp.get({ url: '/admin/merchant/page', params });
   },
   /**
@@ -96,5 +96,18 @@ export interface MerchantParam extends BaseEntity {
   mchName?: string;
   mchShortName?: string;
   subjectType?: string;
+  status?: string;
+}
+
+export interface MerchantQuery {
+  /** 当前页 */
+  current?: number;
+  /** 每页条数 */
+  size?: number;
+  /** 商户名称 */
+  mchName?: string;
+  /** 主体类型 */
+  subjectType?: string;
+  /** 商户状态 */
   status?: string;
 }

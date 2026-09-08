@@ -9,7 +9,7 @@ export const LoginLogApi = {
   /**
    * 分页查询登录日志
    */
-  page(params: any): Promise<Result<PageResult<LoginLog>>> {
+  page(params: LoginLogQuery): Promise<Result<PageResult<LoginLog>>> {
     return defHttp.get({ url: '/log/login/page', params });
   },
   /**
@@ -52,4 +52,15 @@ export interface LoginLog extends BaseEntity {
   msg?: string;
   /** 访问时间 */
   loginTime?: string;
+}
+
+export interface LoginLogQuery {
+  /** 当前页 */
+  current?: number;
+  /** 每页条数 */
+  size?: number;
+  /** 用户账号 */
+  account?: string;
+  /** 是否登录成功 */
+  login?: boolean;
 }

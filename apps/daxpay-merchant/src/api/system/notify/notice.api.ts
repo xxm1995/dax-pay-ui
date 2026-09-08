@@ -11,7 +11,7 @@ export const NotifyNoticeApi = {
   /**
    * 已发布公告分页查询（后端强制 published 且在生效时间窗内，置顶优先）
    */
-  page(params: any): Promise<Result<PageResult<NotifyNotice>>> {
+  page(params: NotifyNoticeQuery): Promise<Result<PageResult<NotifyNotice>>> {
     return defHttp.get({ url: '/mch/dashboard/notice/page', params });
   },
   /**
@@ -42,4 +42,11 @@ export interface NotifyNotice extends BaseEntity {
   status?: string;
   /** 最后修改时间 */
   lastModifiedTime?: string;
+}
+
+export interface NotifyNoticeQuery {
+  /** 当前页 */
+  current?: number;
+  /** 每页条数 */
+  size?: number;
 }

@@ -6,6 +6,8 @@
   import { $t } from '@vben/locales';
   import { formatDateTime } from '@vben/utils';
 
+  import { formatFen as formatAmount } from '@daxpay/ui-biz/utils/pay-amount';
+
   import { TransferApi, type TransferTradeQuery, type TransferTradeResult } from '#/api/payment/transfer/transfer.api';
   import { BQuery, type QueryField } from '#/components/query';
   defineOptions({ name: 'TransferTradeList' });
@@ -92,11 +94,6 @@
     pageConfig.value.currentPage = currentPage;
     pageConfig.value.pageSize = pageSize;
     queryPage();
-  }
-
-  function formatAmount(amount?: number): string {
-    if (amount === null || amount === undefined) return '-';
-    return (amount / 100).toFixed(2);
   }
 
   function statusColor(status?: string): string {
@@ -241,9 +238,9 @@
 </template>
 
 <style scoped>
-/* 标题列按内容撑开，避免多语言下 label 文案过长被压窄折行 */
-.transfer-desc :deep(.ant-descriptions-item-label) {
-  width: 1%;
-  white-space: nowrap;
-}
+  /* 标题列按内容撑开，避免多语言下 label 文案过长被压窄折行 */
+  .transfer-desc :deep(.ant-descriptions-item-label) {
+    width: 1%;
+    white-space: nowrap;
+  }
 </style>

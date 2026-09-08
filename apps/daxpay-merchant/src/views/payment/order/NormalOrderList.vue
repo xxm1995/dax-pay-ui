@@ -6,6 +6,8 @@
   import { $t } from '@vben/locales';
   import { formatDateTime } from '@vben/utils';
 
+  import { formatFen as formatAmount } from '@daxpay/ui-biz/utils/pay-amount';
+
   import { OrderCloseApi } from '#/api/payment/order/close.api';
   import { NormalOrderApi, type NormalOrderQuery, type NormalOrderResult } from '#/api/payment/order/normal-order.api';
   import { BQuery, type QueryField } from '#/components/query';
@@ -140,14 +142,6 @@
     pageConfig.value.currentPage = currentPage;
     pageConfig.value.pageSize = pageSize;
     queryPage();
-  }
-
-  /**
-   * 金额分转元
-   */
-  function formatAmount(amount?: number): string {
-    if (amount === null || amount === undefined) return '-';
-    return (amount / 100).toFixed(2);
   }
 
   /**

@@ -7,7 +7,7 @@ import { defHttp } from '#/api/request';
  */
 export const UserProtocolVersionApi = {
   /** 分页查询版本 */
-  page(params: any): Promise<Result<PageResult<UserProtocolVersion>>> {
+  page(params: UserProtocolVersionQuery): Promise<Result<PageResult<UserProtocolVersion>>> {
     return defHttp.get({ url: '/user/protocol/version/page', params });
   },
   /** 获取版本详情 */
@@ -67,4 +67,13 @@ export interface UserProtocolVersion extends BaseEntity {
   effectiveTime?: string;
   /** 变更说明 */
   summary?: string;
+}
+
+export interface UserProtocolVersionQuery {
+  /** 当前页 */
+  current?: number;
+  /** 每页条数 */
+  size?: number;
+  /** 所属协议ID */
+  protocolId?: string;
 }

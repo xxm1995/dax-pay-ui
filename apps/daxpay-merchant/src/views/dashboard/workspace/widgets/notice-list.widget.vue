@@ -39,7 +39,7 @@
   /** 拉取已发布公告（后端强制 published 且在生效时间窗内，按置顶+时间倒序取 20 条） */
   async function load() {
     loading.value = true;
-    const res: any = await NotifyNoticeApi.page({ current: 1, size: 20 });
+    const res = await NotifyNoticeApi.page({ current: 1, size: 20 });
     records.value = res?.data?.records || [];
     loading.value = false;
   }

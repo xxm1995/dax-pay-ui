@@ -36,9 +36,12 @@ export default function useTablePage<T = any>(queryPageCallback: () => Promise<v
     loading.value = true;
     try {
       await queryPageCallback();
+    } catch (error) {
+      // 查询异常: 请求层拦截器已有全局提示, 此处仅吞掉防止 unhandled rejection
+      console.warn('[useTablePage] 查询执行异常', error);
     } finally {
-      // 注意：如果 queryPageCallback 内部调用了 pageQueryResHandle，loading 会被设为 false
-      // 这里作为兜底，防止遗漏
+      // 兜底复位: 回调抛异常或提前 return 未走 pageQueryResHandle 时, 避免表格卡在加载态
+      loading.value = false;
     }
   }
 

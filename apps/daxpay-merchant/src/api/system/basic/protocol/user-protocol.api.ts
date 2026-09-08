@@ -7,7 +7,7 @@ import { defHttp } from '#/api/request';
  */
 export const UserProtocolApi = {
   /** 分页查询用户协议 */
-  page(params: any): Promise<Result<PageResult<UserProtocol>>> {
+  page(params: UserProtocolQuery): Promise<Result<PageResult<UserProtocol>>> {
     return defHttp.get({ url: '/user/protocol/page', params });
   },
   /** 获取用户协议详情 */
@@ -98,4 +98,17 @@ export interface UserProtocolContent extends BaseEntity {
   contentFormat?: string;
   /** 生效时间 */
   effectiveTime?: string;
+}
+
+export interface UserProtocolQuery {
+  /** 当前页 */
+  current?: number;
+  /** 每页条数 */
+  size?: number;
+  /** 协议名称 */
+  name?: string;
+  /** 协议类型 */
+  type?: string;
+  /** 客户端类型 */
+  clientType?: string;
 }

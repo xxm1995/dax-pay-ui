@@ -128,7 +128,7 @@
       size: pageConfig.value.pageSize,
       ...queryForm.value,
     })
-      .then((res: any) => {
+      .then((res) => {
         tableData.value = res.data.records || [];
         pageConfig.value.total = Number(res.data.total) || 0;
         // 同步清空表格勾选与业务选中态, 避免按钮/复选框状态不一致

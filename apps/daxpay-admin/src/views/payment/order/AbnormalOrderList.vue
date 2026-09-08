@@ -6,6 +6,8 @@
   import { $t } from '@vben/locales';
   import { formatDateTime } from '@vben/utils';
 
+  import { formatFen as formatAmount } from '@daxpay/ui-biz/utils/pay-amount';
+
   import {
     AbnormalOrderApi,
     type AbnormalOrderQuery,
@@ -135,12 +137,6 @@
     if (status === 'confirmed') return $t('payment.order.abnormalOrder.statusConfirmed');
     if (status === 'ignored') return $t('payment.order.abnormalOrder.statusIgnored');
     return status || '-';
-  }
-
-  // 金额分转元
-  function formatAmount(amount?: number): string {
-    if (amount === null || amount === undefined) return '-';
-    return (amount / 100).toFixed(2);
   }
 
   function formatNotifyInfo(raw?: string) {

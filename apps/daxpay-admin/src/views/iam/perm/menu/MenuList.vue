@@ -115,7 +115,7 @@
   function queryPage() {
     loading.value = true;
     MenuApi.tree(clientCode.value)
-      .then((res: any) => {
+      .then((res) => {
         remoteTableData.value = res.data || [];
         menuMap.value = flattenMenuMap(remoteTableData.value);
         applyFilters();

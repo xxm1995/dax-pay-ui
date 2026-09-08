@@ -48,10 +48,10 @@
   ];
 
   onMounted(() => {
-    UserProtocolApi.typeOptions().then((res: any) => {
+    UserProtocolApi.typeOptions().then((res) => {
       typeOptions.value = res.data || [];
     });
-    UserProtocolApi.clientTypeOptions().then((res: any) => {
+    UserProtocolApi.clientTypeOptions().then((res) => {
       clientTypeOptions.value = res.data || [];
     });
   });

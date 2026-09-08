@@ -48,7 +48,7 @@
     }
     loading.value = true;
     PermCodeApi.findByMenu(menuContext.value.id)
-      .then((res: any) => {
+      .then((res) => {
         tableData.value = res.data || [];
       })
       .finally(() => {

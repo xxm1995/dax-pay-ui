@@ -9,7 +9,7 @@ export const DictApi = {
   /**
    * 分页查询字典
    */
-  page(params: any): Promise<Result<PageResult<Dict>>> {
+  page(params: DictQuery): Promise<Result<PageResult<Dict>>> {
     return defHttp.get({ url: '/dict/page', params });
   },
   /**
@@ -74,4 +74,15 @@ export interface Dict extends BaseEntity {
   internal?: boolean;
   /** 备注 */
   remark?: string;
+}
+
+export interface DictQuery {
+  /** 当前页 */
+  current?: number;
+  /** 每页条数 */
+  size?: number;
+  /** 字典编码 */
+  code?: string;
+  /** 字典名称 */
+  name?: string;
 }

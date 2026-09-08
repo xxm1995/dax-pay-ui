@@ -39,3 +39,14 @@ export function formatYuan(yuan: number): string {
     minimumFractionDigits: 2,
   });
 }
+
+/**
+ * 金额分 → 元展示字符串（保留 2 位小数，缺失时返回 '-' 占位）
+ *
+ * 列表页金额列的标准格式化函数；替代散落各页面的本地 formatAmount 副本。
+ */
+export function formatFen(fen?: unknown): string {
+  const n = toNumber(fen);
+  if (n === undefined) return '-';
+  return (n / 100).toFixed(2);
+}

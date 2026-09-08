@@ -9,7 +9,7 @@ export const MailRecordApi = {
   /**
    * 邮件发送记录分页查询
    */
-  page(params: any): Promise<Result<PageResult<MailRecord>>> {
+  page(params: MailRecordQuery): Promise<Result<PageResult<MailRecord>>> {
     return defHttp.get({ url: '/notify/mail/page', params });
   },
   /**
@@ -70,4 +70,17 @@ export interface MailRecord extends BaseEntity {
   retryCount?: number;
   /** 实际发送时间 */
   sendTime?: string;
+}
+
+export interface MailRecordQuery {
+  /** 当前页 */
+  current?: number;
+  /** 每页条数 */
+  size?: number;
+  /** 业务类型 */
+  businessType?: string;
+  /** 收件邮箱 */
+  receiverEmail?: string;
+  /** 发送状态 */
+  status?: string;
 }

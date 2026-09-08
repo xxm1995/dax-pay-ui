@@ -9,7 +9,7 @@ export const UserApi = {
   /**
    * 分页查询用户列表
    */
-  page(params: UserQuery): Promise<PageResult<User>> {
+  page(params: UserQuery): Promise<Result<PageResult<User>>> {
     return defHttp.get({ url: '/user/admin/page', params });
   },
   /**

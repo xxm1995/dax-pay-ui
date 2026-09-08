@@ -6,6 +6,8 @@
   import { $t } from '@vben/locales';
   import { formatDateTime } from '@vben/utils';
 
+  import { formatFen as formatAmount } from '@daxpay/ui-biz/utils/pay-amount';
+
   import { AllocOrderApi, type AllocOrderQuery, type AllocOrderResult } from '#/api/payment/order/alloc-order.api';
   import { BQuery, type QueryField } from '#/components/query';
   import { PermCodes } from '#/constants/perm-codes';
@@ -119,11 +121,6 @@
   }
 
   // 金额分转元展示
-  function formatAmount(amount?: number): string {
-    if (amount === null || amount === undefined) return '-';
-    return (amount / 100).toFixed(2);
-  }
-
   function statusColor(status?: string): string {
     return status ? $t(`payment.order.alloc.statusColor.${status}`) : 'default';
   }
@@ -342,12 +339,22 @@
           <vxe-column field="amount" :title="$t('payment.order.field.amount')" :min-width="90" align="right">
             <template #default="{ row }">{{ formatAmount(row.amount) }}</template>
           </vxe-column>
-          <vxe-column field="result" :title="$t('payment.order.alloc.detailResultLabel')" :min-width="90" align="center">
+          <vxe-column
+            field="result"
+            :title="$t('payment.order.alloc.detailResultLabel')"
+            :min-width="90"
+            align="center"
+          >
             <template #default="{ row }">
               <a-tag :color="statusColor(row.result)">{{ detailResultLabel(row.result) }}</a-tag>
             </template>
           </vxe-column>
-          <vxe-column field="finishTime" :title="$t('payment.order.field.finishTime')" :min-width="160" formatter="formatDateTime" />
+          <vxe-column
+            field="finishTime"
+            :title="$t('payment.order.field.finishTime')"
+            :min-width="160"
+            formatter="formatDateTime"
+          />
         </vxe-table>
       </a-spin>
 

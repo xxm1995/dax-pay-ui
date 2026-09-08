@@ -195,6 +195,8 @@ export interface SocialExchangeResult {
   result?: string;
   /** 错误码(unbind=未绑定, state_invalid=state过期, oauth_failed=授权失败) */
   error?: string;
+  /** 需二次验证时的临时凭证(业务码 40101 时返回) */
+  preAuthToken?: string;
 }
 
 /**

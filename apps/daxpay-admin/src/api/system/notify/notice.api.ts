@@ -9,7 +9,7 @@ export const NotifyNoticeApi = {
   /**
    * 公告分页查询
    */
-  page(params: any): Promise<Result<PageResult<NotifyNotice>>> {
+  page(params: NotifyNoticeQuery): Promise<Result<PageResult<NotifyNotice>>> {
     return defHttp.get({ url: '/notify/notice/page', params });
   },
   /**
@@ -90,4 +90,15 @@ export interface NotifyNotice extends BaseEntity {
   status?: string;
   /** 最后修改时间 */
   lastModifiedTime?: string;
+}
+
+export interface NotifyNoticeQuery {
+  /** 当前页 */
+  current?: number;
+  /** 每页条数 */
+  size?: number;
+  /** 公告标题 */
+  title?: string;
+  /** 公告状态(工作台仅拉取已发布) */
+  status?: string;
 }

@@ -90,10 +90,10 @@
 
   /** 加载枚举选项 */
   function loadOptions() {
-    UserProtocolApi.typeOptions().then((res: any) => {
+    UserProtocolApi.typeOptions().then((res) => {
       typeOptions.value = res.data || [];
     });
-    UserProtocolApi.clientTypeOptions().then((res: any) => {
+    UserProtocolApi.clientTypeOptions().then((res) => {
       clientTypeOptions.value = res.data || [];
     });
   }
@@ -106,7 +106,7 @@
       size: pageConfig.value.pageSize,
       ...queryForm.value,
     })
-      .then((res: any) => {
+      .then((res) => {
         tableData.value = res.data?.records || [];
         pageConfig.value.total = Number(res.data?.total) || 0;
         loading.value = false;

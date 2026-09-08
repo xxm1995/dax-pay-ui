@@ -92,7 +92,7 @@ export const MerchantUserApi = {
   /**
    * 分页查询商户用户列表
    */
-  page(params: MerchantUserQuery): Promise<PageResult<MerchantUserResult>> {
+  page(params: MerchantUserQuery): Promise<Result<PageResult<MerchantUserResult>>> {
     return defHttp.get({ url: '/admin/merchant/user/page', params });
   },
 

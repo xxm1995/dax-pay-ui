@@ -6,6 +6,8 @@
   import { $t } from '@vben/locales';
   import { formatDateTime } from '@vben/utils';
 
+  import { formatFen as formatAmount } from '@daxpay/ui-biz/utils/pay-amount';
+
   import { FundFlowApi, type FundFlowQuery, type FundFlowResult } from '#/api/payment/record/fund-flow.api';
   import { BQuery, type QueryField } from '#/components/query';
 
@@ -75,12 +77,6 @@
     if (type === 'pay') return $t('payment.record.fundFlow.typePay');
     if (type === 'refund') return $t('payment.record.fundFlow.typeRefund');
     return type || '-';
-  }
-
-  // 金额分转元
-  function formatAmount(amount?: number): string {
-    if (amount === null || amount === undefined) return '-';
-    return (amount / 100).toFixed(2);
   }
 
   async function queryPage() {

@@ -69,7 +69,7 @@
       current: pageConfig.value.currentPage,
       size: pageConfig.value.pageSize,
     })
-      .then((res: any) => {
+      .then((res) => {
         tableData.value = res.data.records || [];
         pageConfig.value.total = res.data.total || 0;
         loading.value = false;

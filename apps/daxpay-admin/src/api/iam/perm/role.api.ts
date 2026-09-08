@@ -9,7 +9,7 @@ export const RoleApi = {
   /**
    * 分页查询角色
    */
-  page(params: any): Promise<Result<PageResult<Role>>> {
+  page(params: RoleQuery): Promise<Result<PageResult<Role>>> {
     return defHttp.get({ url: '/role/page', params });
   },
   /**
@@ -64,4 +64,15 @@ export interface Role extends BaseEntity {
   internal?: boolean;
   /** 备注 */
   remark?: string;
+}
+
+export interface RoleQuery {
+  /** 当前页 */
+  current?: number;
+  /** 每页条数 */
+  size?: number;
+  /** 角色编码 */
+  code?: string;
+  /** 所属身份域 */
+  clientCode?: string;
 }

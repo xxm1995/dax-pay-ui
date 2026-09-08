@@ -72,7 +72,7 @@
       mchNo: props.mchNo,
       channelMchNo: props.channelMchNo,
     })
-      .then((res: any) => {
+      .then((res) => {
         tableData.value = res.data.records || [];
         pageConfig.value.total = Number(res.data.total) || 0;
         loading.value = false;

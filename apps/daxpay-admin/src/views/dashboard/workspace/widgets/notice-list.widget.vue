@@ -39,7 +39,7 @@
   /** 拉取已发布公告（按时间倒序取 20 条） */
   async function load() {
     loading.value = true;
-    const res: any = await NotifyNoticeApi.page({ current: 1, size: 20, status: 'published' });
+    const res = await NotifyNoticeApi.page({ current: 1, size: 20, status: 'published' });
     records.value = res?.data?.records || [];
     loading.value = false;
   }

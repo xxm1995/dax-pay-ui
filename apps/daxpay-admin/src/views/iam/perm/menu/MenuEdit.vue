@@ -356,7 +356,7 @@
    * 加载菜单树
    */
   function loadMenuTree(clientCode: string) {
-    MenuApi.tree(clientCode).then((res: any) => {
+    MenuApi.tree(clientCode).then((res) => {
       treeData.value = convertToTreeSelect(res.data || []);
     });
   }

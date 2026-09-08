@@ -105,7 +105,7 @@
       size: pageConfig.value.pageSize,
       ...queryForm.value,
     })
-      .then((res: any) => {
+      .then((res) => {
         tableData.value = res.data.page?.records || [];
         pageConfig.value.total = Number(res.data.page?.total) || 0;
         lockoutEnabled.value = res.data.lockoutEnabled !== false;

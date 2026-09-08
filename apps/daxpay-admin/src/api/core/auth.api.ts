@@ -3,13 +3,21 @@ import type { Result } from '#/types/web';
 import { requestClient } from '#/api/request';
 
 /**
+ * 密码通过但需二次验证时的临时凭证载体(业务码 40101 时 data 为该对象, 其余为 token 字符串)
+ */
+export interface TwoFactorPreAuth {
+  /** 临时凭证 preAuthToken */
+  preAuthToken: string;
+}
+
+/**
  * 认证 API
  */
 export const AuthApi = {
   /**
    * 登录
    */
-  login(data: LoginParams): Promise<Result<string>> {
+  login(data: LoginParams): Promise<Result<string | TwoFactorPreAuth>> {
     const formData = new URLSearchParams();
     formData.set('account', data.account);
     formData.set('password', data.password);

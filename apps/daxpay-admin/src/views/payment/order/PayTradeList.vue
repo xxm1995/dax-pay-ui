@@ -9,6 +9,8 @@
 
   import { IconifyIcon } from '@vben-core/icons';
 
+  import { formatFen as formatAmount } from '@daxpay/ui-biz/utils/pay-amount';
+
   import { OrderCloseApi } from '#/api/payment/order/close.api';
   import { PayTradeApi, type PayTradeQuery, type PayTradeResult } from '#/api/payment/order/pay-trade.api';
   import { BQuery, type QueryField } from '#/components/query';
@@ -162,14 +164,6 @@
   }
 
   /**
-   * 金额分转元
-   */
-  function formatAmount(amount?: number): string {
-    if (amount === null || amount === undefined) return '-';
-    return (amount / 100).toFixed(2);
-  }
-
-  /**
    * 资金状态颜色
    */
   function statusColor(status?: string): string {
@@ -234,16 +228,16 @@
       items,
       onClick: ({ key }: { key: string }) => {
         switch (key) {
+          case 'alloc': {
+            allocDrawerRef.value?.open(row);
+            break;
+          }
           case 'close': {
             handleClose(row);
             break;
           }
           case 'refund': {
             refundModalRef.value?.open(row);
-            break;
-          }
-          case 'alloc': {
-            allocDrawerRef.value?.open(row);
             break;
           }
           case 'sync': {
