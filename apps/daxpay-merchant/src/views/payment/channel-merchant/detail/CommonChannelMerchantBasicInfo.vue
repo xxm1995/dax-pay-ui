@@ -96,11 +96,7 @@
       <a-descriptions-item :label="$t('payment.merchant.channelMerchant.source')">
         {{ sourceLabel }}
       </a-descriptions-item>
-      <a-descriptions-item
-        v-for="field in extraFields || []"
-        :key="field.label"
-        :label="field.label"
-      >
+      <a-descriptions-item v-for="field in extraFields || []" :key="field.label" :label="field.label">
         {{ field.value }}
       </a-descriptions-item>
     </a-descriptions>
