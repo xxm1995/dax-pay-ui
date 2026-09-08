@@ -10,6 +10,7 @@
 
   import { UserApi } from '#/api/iam/user.api';
   import { BQuery, type QueryField } from '#/components/query';
+  import { ResetPasswordModal } from '#/components/reset-password';
   import { PermCodes } from '#/constants/perm-codes';
   import { ClientCode, clientCodeColorMap, clientCodeI18nMap } from '#/enums/clientCode';
   import { useClientOptions } from '#/hooks/useClientOptions';
@@ -19,7 +20,6 @@
   import UserAdd from './components/UserAdd.vue';
   import UserEdit from './components/UserEdit.vue';
   import UserInfo from './components/UserInfo.vue';
-  import UserResetPassword from './components/UserResetPassword.vue';
   import UserRoleAssign from './components/UserRoleAssign.vue';
   import UserSocialBind from './components/UserSocialBind.vue';
 
@@ -546,7 +546,12 @@
     <UserAdd ref="userAddRef" @ok="queryPage" />
     <UserEdit ref="userEditRef" @ok="queryPage" />
     <UserInfo ref="userInfoRef" />
-    <UserResetPassword ref="userResetPasswordRef" @ok="queryPage" />
+    <ResetPasswordModal
+      ref="userResetPasswordRef"
+      :restart-password="UserApi.restartPassword"
+      :restart-password-batch="UserApi.restartPasswordBatch"
+      @ok="queryPage"
+    />
     <UserRoleAssign ref="userRoleAssignRef" @ok="queryPage" />
     <UserSocialBind ref="userSocialBindRef" />
   </div>

@@ -37,6 +37,20 @@ export interface PageResult<T = any> {
 }
 
 /**
+ * 重置密码结果(后端按密码策略生成随机密码并一次性返回明文)
+ */
+export interface UserPasswordResult {
+  /** 用户ID */
+  userId?: string;
+  /** 登录账号 */
+  account?: string;
+  /** 用户名称 */
+  name?: string;
+  /** 初始密码明文 */
+  password?: string;
+}
+
+/**
  * 基础实体对象
  */
 export interface BaseEntity {

@@ -189,6 +189,10 @@
       "types": "./src/components/input-password/index.ts",
       "default": "./src/components/input-password/index.ts"
     },
+    "./components/reset-password": {
+      "types": "./src/components/reset-password/index.ts",
+      "default": "./src/components/reset-password/index.ts"
+    },
     "./components/social": {
       "types": "./src/components/social/index.ts",
       "default": "./src/components/social/index.ts"

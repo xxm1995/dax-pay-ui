@@ -11,13 +11,13 @@
 
   import { MerchantUserApi, type MerchantUserResult } from '#/api/payment/merchant/merchant-user.api';
   import { BQuery, type QueryField } from '#/components/query';
+  import { ResetPasswordModal } from '#/components/reset-password';
   import RouteQueryMissingState from '#/components/route/RouteQueryMissingState.vue';
   import { useMessage } from '#/hooks/useMessage';
   import { useRequiredRouteQuery } from '#/hooks/useRequiredRouteQuery';
 
   import MerchantUserAdd from './add/MerchantUserAdd.vue';
   import MerchantUserEdit from './edit/MerchantUserEdit.vue';
-  import MerchantUserResetPassword from './password/MerchantUserResetPassword.vue';
   import MerchantUserRoleAssign from './role/MerchantUserRoleAssign.vue';
 
   defineOptions({ name: 'MerchantUserList' });
@@ -421,7 +421,12 @@
 
     <MerchantUserAdd ref="userAddRef" @ok="queryPage" />
     <MerchantUserEdit ref="userEditRef" @ok="queryPage" />
-    <MerchantUserResetPassword ref="userResetPasswordRef" @ok="queryPage" />
+    <ResetPasswordModal
+      ref="userResetPasswordRef"
+      :restart-password="MerchantUserApi.restartPassword"
+      :restart-password-batch="MerchantUserApi.restartPasswordBatch"
+      @ok="queryPage"
+    />
     <MerchantUserRoleAssign ref="userRoleAssignRef" @ok="queryPage" />
   </div>
 </template>

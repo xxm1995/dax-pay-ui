@@ -52,6 +52,9 @@ function withAlertDefaults(config: ModalConfig, defaultTitleKey: string): ModalC
  * 业务语义强时由调用方显式传 title 覆盖
  */
 export function useMessage() {
+  // 上下文版实例优先(挂载在 App 上下文内可响应主题), 回退静态实例
+  const messageApi = antdAppContext?.message ?? message;
+
   /**
    * 确认框（二次确认）
    */
@@ -107,13 +110,41 @@ export function useMessage() {
     return Modal.success(merged);
   }
 
+  /**
+   * 操作确认: 确认弹窗 + 执行动作 + 成功提示 + 后续回调的常用四件套
+   *
+   * 收敛列表页"确认后调接口 → message.success → 刷新列表"的复制样板;
+   * 动作抛错时请求层拦截器已全局提示, 成功消息与回调不会执行。
+   *
+   * @param config    确认框文案(title/content), 其余 Modal 参数透传
+   * @param action    确认后执行的操作
+   * @param options.successKey 成功提示词条(默认 common.saveSuccess, 删除场景传 common.deleteSuccess)
+   * @param options.onSuccess  成功后的回调(如刷新列表)
+   */
+  function confirmAction(
+    config: Partial<ModalConfig> & { content: ModalConfig['content']; title?: ModalConfig['title'] },
+    action: () => Promise<unknown>,
+    options: { onSuccess?: () => void; successKey?: string } = {},
+  ) {
+    const { successKey = 'common.saveSuccess', onSuccess } = options;
+    confirm({
+      ...config,
+      onOk: async () => {
+        await action();
+        messageApi.success($t(successKey));
+        onSuccess?.();
+      },
+    });
+  }
+
   return {
     confirm,
+    confirmAction,
     info,
     warning,
     error,
     success,
-    message: antdAppContext?.message ?? message,
+    message: messageApi,
     notification: antdAppContext?.notification ?? notification,
   };
 }

@@ -1,12 +1,24 @@
 <script lang="ts" setup>
-  import type { UserPasswordResult } from '#/api/iam/user.api';
+  import type { Result, UserPasswordResult } from '../../types/web';
 
   import { computed, ref } from 'vue';
 
   import { $t } from '@vben/locales';
 
-  import { UserApi } from '#/api/iam/user.api';
-  import { useMessage } from '#/hooks/useMessage';
+  import { useMessage } from '../../hooks/useMessage';
+
+  /**
+   * 重置密码弹窗(通用)
+   *
+   * 重置接口由调用方以函数 props 注入(运营端/商户端各自传入 Api 方法), 组件不感知具体端点。
+   * 后端按密码策略生成随机密码并一次性返回明文, 关闭后无法再次查看。
+   */
+  const props = defineProps<{
+    /** 单条重置密码接口 */
+    restartPassword: (id: string) => Promise<Result<UserPasswordResult>>;
+    /** 批量重置密码接口 */
+    restartPasswordBatch: (ids: string[]) => Promise<Result<UserPasswordResult[]>>;
+  }>();
 
   const emit = defineEmits(['ok']);
 
@@ -59,10 +71,10 @@
       // 单条返回对象, 批量返回数组, 统一为数组便于渲染
       let list: UserPasswordResult[];
       if (userIds.value.length === 1) {
-        const { data } = await UserApi.restartPassword(userIds.value[0]!);
+        const { data } = await props.restartPassword(userIds.value[0]!);
         list = [data!];
       } else {
-        const { data } = await UserApi.restartPasswordBatch(userIds.value);
+        const { data } = await props.restartPasswordBatch(userIds.value);
         list = data!;
       }
       results.value = list;

@@ -11,6 +11,7 @@
   import { MerchantUserApi, type MerchantUserResult } from '#/api/payment/merchant/merchant-user.api';
   import { MerchantApi } from '#/api/payment/merchant/merchant.api';
   import { BQuery, type QueryField } from '#/components/query';
+  import { ResetPasswordModal } from '#/components/reset-password';
   import { PermCodes } from '#/constants/perm-codes';
   import { useMessage } from '#/hooks/useMessage';
   import { usePermission } from '#/hooks/usePermission';
@@ -18,7 +19,6 @@
   import MerchantUserAdd from './add/MerchantUserAdd.vue';
   import MerchantUserEdit from './edit/MerchantUserEdit.vue';
   import MerchantUserInfo from './info/MerchantUserInfo.vue';
-  import MerchantUserResetPassword from './password/MerchantUserResetPassword.vue';
   import MerchantUserRoleAssign from './role/MerchantUserRoleAssign.vue';
 
   defineOptions({ name: 'MerchantUserList' });
@@ -437,7 +437,12 @@
     <MerchantUserAdd ref="userAddRef" @ok="queryPage" />
     <MerchantUserEdit ref="userEditRef" @ok="queryPage" />
     <MerchantUserInfo ref="userInfoRef" />
-    <MerchantUserResetPassword ref="userResetPasswordRef" @ok="queryPage" />
+    <ResetPasswordModal
+      ref="userResetPasswordRef"
+      :restart-password="MerchantUserApi.restartPassword"
+      :restart-password-batch="MerchantUserApi.restartPasswordBatch"
+      @ok="queryPage"
+    />
     <MerchantUserRoleAssign ref="userRoleAssignRef" @ok="queryPage" />
   </div>
 </template>
