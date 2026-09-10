@@ -79,6 +79,10 @@
       <a-descriptions-item :label="$t('payment.channel.allocReceiver.name')" :span="2">
         {{ row.receiverName || '-' }}
       </a-descriptions-item>
+      <!-- 别名(本地备注, 不上送通道) -->
+      <a-descriptions-item :label="$t('payment.channel.allocReceiver.alias')" :span="2">
+        {{ row.alias || '-' }}
+      </a-descriptions-item>
       <!-- 分账关系(微信/抖音) -->
       <a-descriptions-item v-if="config?.hasRelation" :label="$t('payment.channel.allocReceiver.relationLabel')">
         {{ relationText(row) }}

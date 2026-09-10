@@ -36,6 +36,10 @@ function receiverApi(prefix: string) {
     delete(id: string): Promise<Result<void>> {
       return defHttp.post({ url: `${prefix}/delete`, params: { id } });
     },
+    /** 修改别名(纯本地备注, 不上送通道; 传空串即清空) */
+    updateAlias(id: string, alias: string): Promise<Result<void>> {
+      return defHttp.post({ url: `${prefix}/update-alias`, params: { id, alias } });
+    },
   };
 }
 
@@ -76,6 +80,8 @@ export interface AllocReceiverResult extends MchEntity {
   receiverAccount?: string;
   /** 接收方名称 */
   receiverName?: string;
+  /** 接收方别名(本地备注, 不上送通道) */
+  alias?: string;
   /** 分账关系类型(微信/抖音) */
   relationType?: string;
   /** 自定义分账关系名 */
@@ -130,6 +136,8 @@ export interface AllocReceiverCreateParam {
   receiverAccount: string;
   /** 接收方名称 */
   receiverName?: string;
+  /** 接收方别名(本地备注, 不上送通道, 可后续修改) */
+  alias?: string;
   /** 分账关系类型(微信/抖音必填) */
   relationType?: string;
   /** 自定义分账关系名(relationType=CUSTOM 时必填) */

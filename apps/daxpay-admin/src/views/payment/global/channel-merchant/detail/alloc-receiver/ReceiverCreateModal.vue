@@ -45,6 +45,7 @@
     receiverType: '',
     receiverAccount: '',
     receiverName: '',
+    alias: '',
     relationType: '',
     customRelation: '',
     channelAppId: '',
@@ -207,6 +208,7 @@
       receiverType: '',
       receiverAccount: '',
       receiverName: '',
+      alias: '',
       relationType: '',
       customRelation: '',
       channelAppId: '',
@@ -236,6 +238,7 @@
         mchNo: mchNo.value,
         receiverAccount: formData.receiverAccount.trim(),
         receiverName: formData.receiverName?.trim() || undefined,
+        alias: formData.alias?.trim() || undefined,
         receiverType: formData.receiverType,
         relationType: config.value?.hasRelation ? formData.relationType : undefined,
       };
@@ -314,6 +317,19 @@
         <a-input
           v-model:value="formData.receiverName"
           :placeholder="$t('payment.channel.allocReceiver.namePlaceholder')"
+        />
+      </a-form-item>
+      <!-- 别名(本地备注, 不上送通道, 选填; 后续可随时修改) -->
+      <a-form-item
+        :label="$t('payment.channel.allocReceiver.alias')"
+        name="alias"
+        :extra="$t('payment.channel.allocReceiver.aliasTip')"
+      >
+        <a-input
+          v-model:value="formData.alias"
+          :maxlength="50"
+          allow-clear
+          :placeholder="$t('payment.channel.allocReceiver.aliasPlaceholder')"
         />
       </a-form-item>
       <!-- 分账关系类型(微信/抖音) -->

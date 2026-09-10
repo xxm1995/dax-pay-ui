@@ -13,6 +13,7 @@
   import { useMessage } from '#/hooks/useMessage';
 
   import { PRODUCT_CONFIG, STATUS_COLOR } from './alloc-receiver/constants';
+  import ReceiverAliasModal from './alloc-receiver/ReceiverAliasModal.vue';
   import ReceiverBindModal from './alloc-receiver/ReceiverBindModal.vue';
   import ReceiverCreateModal from './alloc-receiver/ReceiverCreateModal.vue';
   import ReceiverDetailModal from './alloc-receiver/ReceiverDetailModal.vue';
@@ -40,6 +41,7 @@
   /** 弹窗子组件实例 */
   const createModalRef = ref<InstanceType<typeof ReceiverCreateModal>>();
   const bindModalRef = ref<InstanceType<typeof ReceiverBindModal>>();
+  const aliasModalRef = ref<InstanceType<typeof ReceiverAliasModal>>();
 
   /** 详情弹窗的应用下拉(支付宝直连应用名解析) */
   const { appOptions, loadAppOptions } = useReceiverAppOptions();
@@ -68,6 +70,7 @@
       { title: $t('payment.channel.allocReceiver.typeLabel'), dataIndex: 'receiverType', width: 150 },
       { title: $t('payment.channel.allocReceiver.account'), dataIndex: 'receiverAccount', width: 170, ellipsis: true },
       { title: $t('payment.channel.allocReceiver.name'), dataIndex: 'receiverName', width: 140, ellipsis: true },
+      { title: $t('payment.channel.allocReceiver.alias'), dataIndex: 'alias', width: 130, ellipsis: true },
     ];
     if (config.value?.hasRelation) {
       cols.push({ title: $t('payment.channel.allocReceiver.relationLabel'), dataIndex: 'relationType', width: 120 });
@@ -78,7 +81,7 @@
     cols.push(
       { title: $t('payment.channel.allocReceiver.statusLabel'), dataIndex: 'status', width: 110 },
       { title: $t('payment.channel.allocReceiver.bindTime'), dataIndex: 'bindTime', width: 160 },
-      { title: $t('common.operation'), dataIndex: 'action', width: 190, fixed: 'right' },
+      { title: $t('common.operation'), dataIndex: 'action', width: 220, fixed: 'right' },
     );
     return cols;
   });
@@ -145,11 +148,23 @@
     viewVisible.value = true;
   }
 
-  /** 非绑定状态行的更多菜单(删除为危险操作, 置底红色) */
+  /** 打开别名弹窗(纯本地字段, 任意绑定状态均可改) */
+  function openAliasModal(row: AllocReceiverResult) {
+    aliasModalRef.value?.open(row, product.value);
+  }
+
+  /** 行更多菜单(改别名对所有状态可用; 删除仅非绑定状态, 危险操作置底红色) */
   function getActionMenu(row: AllocReceiverResult): MenuProps {
+    const items: MenuProps['items'] = [{ key: 'alias', label: $t('payment.channel.allocReceiver.aliasEdit') }];
+    if (row.status !== 'bound') {
+      items.push({ type: 'divider' }, { key: 'delete', label: $t('common.delete'), danger: true });
+    }
     return {
-      items: [{ key: 'delete', label: $t('common.delete'), danger: true }],
+      items,
       onClick: ({ key }: { key: string }) => {
+        if (key === 'alias') {
+          openAliasModal(row);
+        }
         if (key === 'delete') {
           handleDelete(row);
         }
@@ -213,7 +228,7 @@
   <a-drawer
     v-model:open="visible"
     :title="$t('payment.channel.allocReceiver.drawerTitle')"
-    :width="960"
+    :width="1100"
     destroy-on-hidden
   >
     <div v-if="config" class="flex h-full flex-col">
@@ -238,7 +253,7 @@
           total: pagination.total,
           showSizeChanger: true,
         }"
-        :scroll="{ x: 1000 }"
+        :scroll="{ x: 1080 }"
         size="small"
         row-key="id"
         @change="handlePageChange"
@@ -253,9 +268,16 @@
               <span>{{ record.receiverAccount || '-' }}</span>
             </a-tooltip>
           </template>
+          <!-- 接收方名称(通道侧真值, 商户号类型为商户全称) -->
           <template v-else-if="column.dataIndex === 'receiverName'">
             <a-tooltip :title="record.receiverName">
               <span>{{ record.receiverName || '-' }}</span>
+            </a-tooltip>
+          </template>
+          <!-- 接收方别名(纯本地备注, 不上送通道) -->
+          <template v-else-if="column.dataIndex === 'alias'">
+            <a-tooltip :title="record.alias">
+              <span>{{ record.alias || '-' }}</span>
             </a-tooltip>
           </template>
           <template v-else-if="column.dataIndex === 'relationType'">
@@ -296,18 +318,17 @@
               >
                 {{ $t('payment.channel.allocReceiver.unbind') }}
               </a-button>
-              <!-- 绑定失败/已解绑: 重新绑定(可换应用) + 删除(收入更多) -->
-              <template v-if="record.status !== 'bound'">
-                <a-button type="link" size="small" @click="openBindModal(record)">
-                  {{ $t('payment.channel.allocReceiver.bind') }}
+              <!-- 绑定失败/已解绑: 重新绑定(可换应用) -->
+              <a-button v-if="record.status !== 'bound'" type="link" size="small" @click="openBindModal(record)">
+                {{ $t('payment.channel.allocReceiver.bind') }}
+              </a-button>
+              <!-- 更多: 改别名(全状态可用) + 删除(仅非绑定状态, 危险操作置底) -->
+              <a-dropdown :menu="getActionMenu(record)">
+                <a-button type="link" size="small">
+                  {{ $t('common.more') }}
+                  <IconifyIcon icon="ant-design:down-outlined" class="inline" />
                 </a-button>
-                <a-dropdown :menu="getActionMenu(record)">
-                  <a-button type="link" size="small">
-                    {{ $t('common.more') }}
-                    <IconifyIcon icon="ant-design:down-outlined" class="inline" />
-                  </a-button>
-                </a-dropdown>
-              </template>
+              </a-dropdown>
             </a-space>
           </template>
         </template>
@@ -319,6 +340,9 @@
 
     <!-- 重新绑定弹窗 -->
     <ReceiverBindModal ref="bindModalRef" @success="loadRecords" />
+
+    <!-- 别名弹窗(纯本地备注, 不上送通道) -->
+    <ReceiverAliasModal ref="aliasModalRef" @success="loadRecords" />
 
     <!-- 查看详情弹窗 -->
     <ReceiverDetailModal

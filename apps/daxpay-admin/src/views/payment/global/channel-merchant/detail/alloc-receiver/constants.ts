@@ -26,6 +26,7 @@ export interface ProductConfig {
       params: AllocReceiverQueryParam,
     ) => Promise<{ data: { current?: number; records?: AllocReceiverResult[]; size?: number; total?: number } }>;
     unbind: (id: string) => Promise<unknown>;
+    updateAlias: (id: string, alias: string) => Promise<unknown>;
   };
   appMode: AppMode;
   /** 是否有分账关系类型(微信/抖音) */
