@@ -125,6 +125,10 @@
       "types": "./src/utils/pay-amount.ts",
       "default": "./src/utils/pay-amount.ts"
     },
+    "./utils/currency": {
+      "types": "./src/utils/currency.ts",
+      "default": "./src/utils/currency.ts"
+    },
     "./utils/auto-social-login": {
       "types": "./src/utils/auto-social-login.ts",
       "default": "./src/utils/auto-social-login.ts"

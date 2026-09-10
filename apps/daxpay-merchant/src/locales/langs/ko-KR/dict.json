@@ -44,5 +44,13 @@
     "alipay": "支付宝渠道报送",
     "union": "유니온페이 채널 신고",
     "common": "标准上报"
+  },
+  "currency": {
+    "cny": "위안화",
+    "usd": "USD",
+    "jpy": "엔",
+    "eur": "EUR",
+    "hkd": "HKD",
+    "gbp": "GBP"
   }
 }

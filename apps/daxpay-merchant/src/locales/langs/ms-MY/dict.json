@@ -44,5 +44,13 @@
     "alipay": "支付宝渠道报送",
     "union": "Laporan saluran UnionPay",
     "common": "标准上报"
+  },
+  "currency": {
+    "cny": "CNY",
+    "usd": "USD",
+    "jpy": "JPY",
+    "eur": "EUR",
+    "hkd": "HKD",
+    "gbp": "GBP"
   }
 }

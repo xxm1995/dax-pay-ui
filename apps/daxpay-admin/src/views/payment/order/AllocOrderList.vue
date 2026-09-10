@@ -6,6 +6,7 @@
   import { $t } from '@vben/locales';
   import { formatDateTime } from '@vben/utils';
 
+  import { currencyLabel } from '@daxpay/ui-biz/utils/currency';
   import { formatFen as formatAmount } from '@daxpay/ui-biz/utils/pay-amount';
 
   import { AllocOrderApi, type AllocOrderQuery, type AllocOrderResult } from '#/api/payment/order/alloc-order.api';
@@ -297,7 +298,7 @@
             </a-tag>
           </a-descriptions-item>
           <a-descriptions-item :label="$t('payment.order.field.currency')">
-            {{ detail.currency || '-' }}
+            {{ currencyLabel(detail.currency) }}
           </a-descriptions-item>
           <a-descriptions-item :label="$t('payment.order.field.amount')">
             {{ formatAmount(detail.amount) }}

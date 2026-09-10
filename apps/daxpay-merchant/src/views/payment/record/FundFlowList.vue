@@ -6,6 +6,7 @@
   import { $t } from '@vben/locales';
   import { formatDateTime } from '@vben/utils';
 
+  import { currencyLabel } from '@daxpay/ui-biz/utils/currency';
   import { formatFen as formatAmount } from '@daxpay/ui-biz/utils/pay-amount';
 
   import { FundFlowApi, type FundFlowQuery, type FundFlowResult } from '#/api/payment/record/fund-flow.api';
@@ -183,7 +184,7 @@
         <div>{{ $t('payment.order.field.bizOrderNo') }}: {{ detail.bizOrderNo || '-' }}</div>
         <div>{{ $t('payment.order.field.title') }}: {{ detail.title || '-' }}</div>
         <div>{{ $t('payment.order.field.amount') }}: {{ formatAmount(detail.amount) }}</div>
-        <div>{{ $t('payment.order.field.currency') }}: {{ detail.currency || '-' }}</div>
+        <div>{{ $t('payment.order.field.currency') }}: {{ currencyLabel(detail.currency) }}</div>
         <div>{{ $t('payment.order.field.channel') }}: {{ detail.channel || '-' }}</div>
         <div>{{ $t('payment.order.field.provider') }}: {{ detail.provider || '-' }}</div>
         <div>{{ $t('payment.order.field.outOrderNo') }}: {{ detail.outOrderNo || '-' }}</div>

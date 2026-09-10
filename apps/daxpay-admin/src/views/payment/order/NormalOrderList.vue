@@ -6,6 +6,7 @@
   import { $t } from '@vben/locales';
   import { formatDateTime } from '@vben/utils';
 
+  import { currencyLabel } from '@daxpay/ui-biz/utils/currency';
   import { formatFen as formatAmount } from '@daxpay/ui-biz/utils/pay-amount';
 
   import { OrderCloseApi } from '#/api/payment/order/close.api';
@@ -323,7 +324,7 @@
             {{ formatAmount(detail.amount) }}
           </a-descriptions-item>
           <a-descriptions-item :label="$t('payment.order.field.currency')">
-            {{ detail.currency || '-' }}
+            {{ currencyLabel(detail.currency) }}
           </a-descriptions-item>
           <a-descriptions-item :label="$t('payment.order.field.product')">
             {{ productLabel(detail.product) }}
