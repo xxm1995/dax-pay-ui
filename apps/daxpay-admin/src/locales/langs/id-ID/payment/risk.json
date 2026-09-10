@@ -8,19 +8,14 @@
     "field": {
       "type": "Jenis",
       "value": "Nilai",
-      "channel": "Kanal",
-      "channelAppId": "AppId kanal",
       "status": "Status",
       "reason": "Alasan",
       "expireTime": "Waktu kedaluwarsa",
       "remark": "Catatan",
-      "createTime": "Dibuat pada",
-      "scope": "Cakupan"
+      "createTime": "Dibuat pada"
     },
     "type": {
       "ip": "IP",
-      "alipay_user": "Pengguna Alipay",
-      "wechat_openid": "OpenId WeChat",
       "province": "Provinsi",
       "city": "Kota"
     },
@@ -30,19 +25,11 @@
     },
     "tip": {
       "expireEmpty": "Kosong berarti permanen",
-      "openIdBoundaryHint": "Kode bayar / APP / browser eksternal hanya dicatat setelah pembayaran.",
-      "alipayGlobalHint": "userId Alipay berlaku global di platform, tanpa membedakan aplikasi/produk.",
-      "wechatAppHint": "Hanya memblokir openId dari aplikasi pembayaran platform yang dipilih.",
       "ipHint": "Cocok dengan IP klien secara tepat (tanpa CIDR/range); berlaku di seluruh platform, terlepas dari aplikasi/produk.",
       "regionHint": "Dicocokkan berdasarkan provinsi dan kota IP (resolusi offline ip2region); berlaku setelah mengaktifkan saklar \"Pemblokiran Wilayah\" di Strategi Risiko. Saat provinsi terkena hit, pemeriksaan kota tidak dijalankan; untuk kotamadya, daftar kota setara dengan tingkat provinsi. IPv6, alamat jaringan internal, dan kegagalan resolusi dilewati."
     },
-    "scope": {
-      "global": "Global"
-    },
     "placeholder": {
       "ip": "Masukkan alamat IP",
-      "alipayUserId": "Masukkan userId Alipay",
-      "wechatOpenId": "Masukkan openId WeChat",
       "province": "Pilih provinsi",
       "city": "Pilih kota"
     }
@@ -81,8 +68,6 @@
     },
     "hitType": {
       "ip": "IP",
-      "alipay_user": "Pengguna Alipay",
-      "wechat_openid": "OpenId WeChat",
       "overseas_ip": "IP Luar Negeri",
       "province": "Provinsi",
       "city": "Kota"

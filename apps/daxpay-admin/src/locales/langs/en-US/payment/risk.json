@@ -8,19 +8,14 @@
     "field": {
       "type": "Type",
       "value": "Value",
-      "channel": "Channel",
-      "channelAppId": "Channel app ID",
       "status": "Status",
       "reason": "Reason",
       "expireTime": "Expire time",
       "remark": "Remark",
-      "createTime": "Created at",
-      "scope": "Scope"
+      "createTime": "Created at"
     },
     "type": {
       "ip": "IP",
-      "alipay_user": "Alipay user",
-      "wechat_openid": "WeChat OpenId",
       "province": "Province",
       "city": "City"
     },
@@ -30,19 +25,11 @@
     },
     "tip": {
       "expireEmpty": "Leave empty for permanent",
-      "openIdBoundaryHint": "Payment code / APP / external browser scenarios are logged after payment only.",
-      "alipayGlobalHint": "Alipay userId applies platform-wide and is not split by app or product.",
-      "wechatAppHint": "Only blocks openIds obtained under the selected platform payment app; pick the mini program app for cashier.",
       "ipHint": "Matches the exact client IP (no CIDR/ranges); applies platform-wide, regardless of app or product.",
       "regionHint": "Matches the client IP’s region, province and city (offline ip2region). Requires enabling \"Region Blocking\" in Risk Strategy. A province hit skips the city check; for municipalities the city list equals the province level. IPv6, intranet, and unresolvable IPs are allowed."
     },
-    "scope": {
-      "global": "Global"
-    },
     "placeholder": {
       "ip": "Enter IP address",
-      "alipayUserId": "Enter Alipay userId",
-      "wechatOpenId": "Enter WeChat openId",
       "province": "Please select province",
       "city": "Select city"
     }
@@ -81,8 +68,6 @@
     },
     "hitType": {
       "ip": "IP",
-      "alipay_user": "Alipay user",
-      "wechat_openid": "WeChat OpenId",
       "overseas_ip": "Overseas IP",
       "province": "Province",
       "city": "City"

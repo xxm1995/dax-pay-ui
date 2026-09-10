@@ -37,8 +37,6 @@
       placeholder: $t('common.pleaseSelect'),
       selectList: [
         { label: $t('payment.risk.hit.hitType.ip'), value: 'ip' },
-        { label: $t('payment.risk.hit.hitType.alipay_user'), value: 'alipay_user' },
-        { label: $t('payment.risk.hit.hitType.wechat_openid'), value: 'wechat_openid' },
         { label: $t('payment.risk.hit.hitType.overseas_ip'), value: 'overseas_ip' },
         { label: $t('payment.risk.hit.hitType.province'), value: 'province' },
         { label: $t('payment.risk.hit.hitType.city'), value: 'city' },
@@ -99,8 +97,6 @@
   /** 命中类型展示 */
   function hitTypeLabel(type?: string) {
     if (type === 'ip') return $t('payment.risk.hit.hitType.ip');
-    if (type === 'alipay_user') return $t('payment.risk.hit.hitType.alipay_user');
-    if (type === 'wechat_openid') return $t('payment.risk.hit.hitType.wechat_openid');
     if (type === 'overseas_ip') return $t('payment.risk.hit.hitType.overseas_ip');
     if (type === 'province') return $t('payment.risk.hit.hitType.province');
     if (type === 'city') return $t('payment.risk.hit.hitType.city');

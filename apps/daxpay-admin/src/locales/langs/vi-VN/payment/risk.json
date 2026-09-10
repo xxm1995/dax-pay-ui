@@ -8,19 +8,14 @@
     "field": {
       "type": "Loại",
       "value": "Giá trị",
-      "channel": "Kênh",
-      "channelAppId": "AppId kênh",
       "status": "Trạng thái",
       "reason": "Lý do",
       "expireTime": "Hết hạn",
       "remark": "Ghi chú",
-      "createTime": "Thời gian tạo",
-      "scope": "Phạm vi"
+      "createTime": "Thời gian tạo"
     },
     "type": {
       "ip": "IP",
-      "alipay_user": "Người dùng Alipay",
-      "wechat_openid": "OpenId WeChat",
       "province": "Tỉnh",
       "city": "Thành phố"
     },
@@ -30,19 +25,11 @@
     },
     "tip": {
       "expireEmpty": "Để trống là vĩnh viễn",
-      "openIdBoundaryHint": "Mã thanh toán / APP / trình duyệt ngoài chỉ ghi nhận sau thanh toán.",
-      "alipayGlobalHint": "userId Alipay áp dụng toàn nền tảng, không tách theo ứng dụng/sản phẩm.",
-      "wechatAppHint": "Chỉ chặn openId lấy từ ứng dụng thanh toán nền tảng đã chọn.",
       "ipHint": "Khớp chính xác IP khách hàng (không hỗ trợ CIDR/dải); áp dụng toàn nền tảng, không phân biệt ứng dụng/sản phẩm.",
       "regionHint": "So khớp theo tỉnh và thành phố của IP (phân giải offline ip2region); có hiệu lực sau khi bật công tắc \"Chặn theo khu vực\" trong Chiến lược rủi ro. Khi tỉnh trúng, không thực hiện kiểm tra cấp thành phố; với thành phố trực thuộc trung ương, danh sách cấp thành phố tương đương cấp tỉnh. IPv6, địa chỉ nội bộ và lỗi phân giải được bỏ qua."
     },
-    "scope": {
-      "global": "Toàn cục"
-    },
     "placeholder": {
       "ip": "Nhập địa chỉ IP",
-      "alipayUserId": "Nhập userId Alipay",
-      "wechatOpenId": "Nhập openId WeChat",
       "province": "Vui lòng chọn tỉnh",
       "city": "Chọn thành phố"
     }
@@ -81,8 +68,6 @@
     },
     "hitType": {
       "ip": "IP",
-      "alipay_user": "Người dùng Alipay",
-      "wechat_openid": "OpenId WeChat",
       "overseas_ip": "IP nước ngoài",
       "province": "Tỉnh",
       "city": "Thành phố"

@@ -8,19 +8,14 @@
     "field": {
       "type": "ประเภท",
       "value": "ค่า",
-      "channel": "ช่องทาง",
-      "channelAppId": "AppId ช่องทาง",
       "status": "สถานะ",
       "reason": "เหตุผล",
       "expireTime": "หมดอายุ",
       "remark": "หมายเหตุ",
-      "createTime": "สร้างเมื่อ",
-      "scope": "ขอบเขต"
+      "createTime": "สร้างเมื่อ"
     },
     "type": {
       "ip": "IP",
-      "alipay_user": "ผู้ใช้ Alipay",
-      "wechat_openid": "OpenId WeChat",
       "province": "จังหวัด",
       "city": "เมือง"
     },
@@ -30,19 +25,11 @@
     },
     "tip": {
       "expireEmpty": "ว่าง = ถาวร",
-      "openIdBoundaryHint": "รหัสชำระเงิน / APP / เบราว์เซอร์ภายนอกจะบันทึกหลังชำระเงินเท่านั้น",
-      "alipayGlobalHint": "userId Alipay มีผลทั้งแพลตฟอร์ม ไม่แยกตามแอป/ผลิตภัณฑ์",
-      "wechatAppHint": "บล็อกเฉพาะ openId จากแอปชำระเงินแพลตฟอร์มที่เลือก",
       "ipHint": "จับคู่ IP ของลูกค้าแบบตรงทั้งหมด (ไม่รองรับ CIDR/ช่วง) มีผลทั่วทั้งแพลตฟอร์ม ไม่จำกัดเฉพาะแอป/สินค้า",
       "regionHint": "จับคู่ตามจังหวัดและเมืองของ IP (วิเคราะห์แบบออฟไลน์ ip2region); มีผลเมื่อเปิดสวิตช์ \"บล็อกภูมิภาค\" ในกลยุทธ์ความเสี่ยง เมื่อจังหวัดตรงกัน จะไม่ตรวจสอบระดับเมือง สำหรับเมืองที่อยู่ใต้จังหวัดโดยตรง รายชื่อระดับเมืองเทียบเท่าระดับจังหวัด IPv6 ที่อยู่ภายในเครือข่าย และการวิเคราะห์ล้มเหลวจะปล่อยผ่าน"
     },
-    "scope": {
-      "global": "ทั่วทั้งระบบ"
-    },
     "placeholder": {
       "ip": "กรอกที่อยู่ IP",
-      "alipayUserId": "กรอก userId Alipay",
-      "wechatOpenId": "กรอก openId WeChat",
       "province": "กรุณาเลือกจังหวัด",
       "city": "เลือกเมือง"
     }
@@ -81,8 +68,6 @@
     },
     "hitType": {
       "ip": "IP",
-      "alipay_user": "ผู้ใช้ Alipay",
-      "wechat_openid": "OpenId WeChat",
       "overseas_ip": "IP ต่างประเทศ",
       "province": "จังหวัด",
       "city": "เมือง"

@@ -14,7 +14,7 @@
   import { useMessage } from '#/hooks/useMessage';
 
   /** 名单类型（与后端 type 一致） */
-  type BlacklistType = 'alipay_user' | 'city' | 'ip' | 'province' | 'wechat_openid';
+  type BlacklistType = 'city' | 'ip' | 'province';
 
   const emit = defineEmits(['ok']);
 
@@ -34,7 +34,6 @@
     id: '',
     type: 'ip',
     value: '',
-    wxAppId: '',
     status: 'enable',
     reason: '',
     expireTime: undefined,
@@ -60,24 +59,12 @@
   });
 
   const valuePlaceholder = computed(() => {
+    // 名单值输入框仅 IP 类型使用, 省市类型走区划选择
     if (formState.value.type === 'ip') {
       // IP 地址
       return $t('payment.risk.blacklist.placeholder.ip');
     }
-    if (formState.value.type === 'alipay_user') {
-      // 支付宝 userId
-      return $t('payment.risk.blacklist.placeholder.alipayUserId');
-    }
-    if (formState.value.type === 'province') {
-      // 选择省份
-      return $t('payment.risk.blacklist.placeholder.province');
-    }
-    if (formState.value.type === 'city') {
-      // 选择城市
-      return $t('payment.risk.blacklist.placeholder.city');
-    }
-    // 微信 openId
-    return $t('payment.risk.blacklist.placeholder.wechatOpenId');
+    return $t('common.pleaseInput');
   });
 
   // 省份选项（value 存行政区划编码, 与后端黑名单存储一致）
@@ -106,20 +93,12 @@
     },
   );
 
-  // 黑名单类型选项（新增可选: IP / 省份 / 城市; 用户标识类型为商业版独占, 编辑/查看历史数据仍需全量映射展示中文标签）
-  const typeOptions = computed(() => {
-    const allOptions = [
-      { value: 'ip', label: $t('payment.risk.blacklist.type.ip') },
-      { value: 'alipay_user', label: $t('payment.risk.blacklist.type.alipay_user') },
-      { value: 'wechat_openid', label: $t('payment.risk.blacklist.type.wechat_openid') },
-      { value: 'province', label: $t('payment.risk.blacklist.type.province') },
-      { value: 'city', label: $t('payment.risk.blacklist.type.city') },
-    ];
-    // 用户标识名单为商业版独占, 新增只允许 IP / 省份 / 城市
-    return isAdd.value
-      ? allOptions.filter((o) => ['ip', 'province', 'city'].includes(o.value))
-      : allOptions;
-  });
+  // 黑名单类型选项
+  const typeOptions = computed(() => [
+    { value: 'ip', label: $t('payment.risk.blacklist.type.ip') },
+    { value: 'province', label: $t('payment.risk.blacklist.type.province') },
+    { value: 'city', label: $t('payment.risk.blacklist.type.city') },
+  ]);
 
   /** 加载省份列表（含市级 children, 供 city 类型联动） */
   async function loadProvinces() {
@@ -150,7 +129,6 @@
       id: '',
       type: 'ip',
       value: '',
-      wxAppId: '',
       status: 'enable',
       reason: '',
       expireTime: undefined,
@@ -173,7 +151,6 @@
         id: row.id!,
         type: row.type,
         value: row.value,
-        wxAppId: row.wxAppId || '',
         status: row.status,
         reason: row.reason,
         expireTime: row.expireTime,
@@ -211,10 +188,9 @@
     await fillForm(record);
   }
 
-  /** 切换类型时清理微信 AppId 与级联路径 */
+  /** 切换类型时清理级联路径 */
   function handleTypeChange(val: BlacklistType | string) {
     formState.value.type = val;
-    formState.value.wxAppId = val === 'wechat_openid' ? formState.value.wxAppId : '';
     formState.value.regionPath = val === 'city' ? formState.value.regionPath : [];
   }
 
@@ -228,12 +204,7 @@
     confirmLoading.value = true;
     try {
       // 剔除级联用字段 regionPath（非后端字段）
-      const { regionPath: _regionPath, ...rest } = formState.value;
-      const payload: PayBlacklistParam = {
-        ...rest,
-        // 基础版无微信应用选择入口, 编辑历史 wechat_openid 数据时保留原值
-        wxAppId: formState.value.wxAppId || '',
-      };
+      const { regionPath: _regionPath, ...payload } = formState.value;
       // 新增走 add, 编辑走 update
       await (isAdd.value
         ? PayBlacklistApi.add(payload)
@@ -289,22 +260,6 @@
             show-icon
           />
         </div>
-        <!-- 支付宝：全局说明 -->
-        <div v-if="formState.type === 'alipay_user'" class="mb-4">
-          <a-alert
-            :message="$t('payment.risk.blacklist.tip.alipayGlobalHint')"
-            type="info"
-            show-icon
-          />
-        </div>
-        <!-- 微信：应用作用域说明 -->
-        <div v-if="formState.type === 'wechat_openid'" class="mb-4">
-          <a-alert
-            :message="$t('payment.risk.blacklist.tip.wechatAppHint')"
-            type="info"
-            show-icon
-          />
-        </div>
         <!-- 省/市：IP 归属匹配说明（地区拦截开关统一生效） -->
         <div
           v-if="formState.type === 'province' || formState.type === 'city'"
@@ -313,17 +268,6 @@
           <a-alert
             :message="$t('payment.risk.blacklist.tip.regionHint')"
             type="info"
-            show-icon
-          />
-        </div>
-        <!-- openId 边界：付款码等事后补录 -->
-        <div
-          v-if="formState.type === 'alipay_user' || formState.type === 'wechat_openid'"
-          class="mb-4"
-        >
-          <a-alert
-            :message="$t('payment.risk.blacklist.tip.openIdBoundaryHint')"
-            type="warning"
             show-icon
           />
         </div>
