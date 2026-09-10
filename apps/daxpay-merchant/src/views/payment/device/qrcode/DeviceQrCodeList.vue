@@ -97,7 +97,7 @@
   const codeVisible = ref(false);
   const qrCodeUrl = ref('');
 
-  // 认领码牌弹窗
+  // 绑定码牌弹窗
   const claimVisible = ref(false);
   const claimLoading = ref(false);
   const claimCode = ref('');
@@ -144,7 +144,7 @@
   }
 
   /**
-   * 打开认领码牌弹窗(平台空白码 → 当前商户名下)
+   * 打开绑定码牌弹窗(平台空白码 → 当前商户名下)
    */
   function handleClaimOpen() {
     claimCode.value = '';
@@ -152,7 +152,7 @@
   }
 
   /**
-   * 提交认领
+   * 提交绑定
    */
   async function handleClaimOk() {
     if (!claimCode.value.trim()) {
@@ -228,7 +228,7 @@
         <vxe-toolbar ref="xToolbar" custom refresh :refresh-options="{ queryMethod: queryPage }">
           <template #buttons>
             <a-space>
-              <!-- 认领码牌: 平台分发的空白码牌按编号认领到自己商户名下 -->
+              <!-- 绑定码牌: 平台分发的空白码牌按编号绑定到自己商户名下 -->
               <a-button v-if="hasPermission(PermCodes.Device.QrCode.MANAGE)" type="primary" @click="handleClaimOpen">{{
                 $t('payment.device.qrcode.claim')
               }}</a-button>

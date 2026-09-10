@@ -67,7 +67,7 @@ export const DeviceQrCodeApi = {
   },
 
   /**
-   * 认领空白码牌(按编码将平台空白库存码认领到当前商户)
+   * 绑定空白码牌(后端 claim 接口: 按编码将平台空白库存码绑定到当前商户)
    */
   claim(data: DeviceQrCodeClaimParam): Promise<Result<void>> {
     return defHttp.post({ url: '/mch/device/qrcode/claim', data });
@@ -138,7 +138,7 @@ export interface DeviceQrCodeBindStoreParam {
   storeNo: string;
 }
 
-/** 认领空白码牌参数 */
+/** 绑定空白码牌参数 */
 export interface DeviceQrCodeClaimParam {
   /** 码牌编码 */
   code: string;
