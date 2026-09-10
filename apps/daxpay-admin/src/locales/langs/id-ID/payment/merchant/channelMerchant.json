@@ -137,5 +137,6 @@
   "transferSceneName": "Nama Skenario Transfer",
   "transferSceneReportInfoContent": "Konten Informasi yang Dilaporkan",
   "transferSceneSetDefaultConfirm": "Jadikan skenario ini sebagai default? Skenario default akan digunakan saat transfer dikirim tanpa menentukan skenario",
-  "transferSceneDefaultTip": "Satu merchant saluran hanya dapat memiliki satu skenario default"
+  "transferSceneDefaultTip": "Satu merchant saluran hanya dapat memiliki satu skenario default",
+  "globalListTip": "Penambahan atau penghapusan pedagang saluran hanya dapat dilakukan dari daftar pedagang saluran di Manajemen Pedagang"
 }

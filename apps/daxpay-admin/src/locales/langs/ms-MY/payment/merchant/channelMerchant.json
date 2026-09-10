@@ -137,5 +137,6 @@
   "transferSceneName": "Nama Senario Pemindahan",
   "transferSceneReportInfoContent": "Kandungan Maklumat yang Dilaporkan",
   "transferSceneSetDefaultConfirm": "Sahkan jadikan senario ini sebagai lalai? Apabila memulakan pemindahan tanpa menentukan senario, senario lalai akan digunakan",
-  "transferSceneDefaultTip": "Satu peniaga saluran hanya boleh mempunyai satu senario lalai"
+  "transferSceneDefaultTip": "Satu peniaga saluran hanya boleh mempunyai satu senario lalai",
+  "globalListTip": "Penambahan atau pemadaman peniaga saluran hanya boleh dilakukan dari senarai peniaga saluran dalam Pengurusan Peniaga"
 }

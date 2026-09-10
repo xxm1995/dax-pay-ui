@@ -176,6 +176,11 @@
 
 <template>
   <div class="m-3 p-3 bg-background rounded-lg list-page-compact">
+    <!-- 本页为平台侧公共(跨商户)通道商户只读视图, 增删需从商户管理下的通道商户列表操作 -->
+    <div class="mb-4">
+      <a-alert type="info" show-icon :message="$t('payment.merchant.channelMerchant.globalListTip')" />
+    </div>
+
     <a-card>
       <BQuery :fields="queryFields" :query-params="queryForm" @query="queryPage" @reset="resetQuery" />
     </a-card>

@@ -137,5 +137,6 @@
   "transferApp": "출금 앱",
   "transferAppPlaceholder": "이체 출금 앱을 선택하세요",
   "transferConfigTipDesc": "이체 출금 앱 바인딩: 이체 시 해당 앱의 Alipay AppId와 키가 사용됩니다. 먼저 '앱 관리'에서 앱과 키를 설정하세요",
-  "transferAppNotConfigured": "이체 앱이 아직 바인딩되지 않았습니다. '편집'을 클릭하여 선택하세요"
+  "transferAppNotConfigured": "이체 앱이 아직 바인딩되지 않았습니다. '편집'을 클릭하여 선택하세요",
+  "globalListTip": "채널 판매자의 추가 및 삭제는 가맹점 관리의 채널 판매자 목록에서만 가능합니다"
 }

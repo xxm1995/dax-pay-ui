@@ -137,5 +137,6 @@
   "transferSceneName": "Tên kịch bản chuyển khoản",
   "transferSceneReportInfoContent": "Nội dung thông tin báo cáo",
   "transferSceneSetDefaultConfirm": "Xác nhận đặt kịch bản này làm mặc định? Khi chuyển khoản mà không chỉ định kịch bản, kịch bản mặc định sẽ được sử dụng",
-  "transferSceneDefaultTip": "Mỗi merchant kênh chỉ có thể có một kịch bản mặc định"
+  "transferSceneDefaultTip": "Mỗi merchant kênh chỉ có thể có một kịch bản mặc định",
+  "globalListTip": "Việc thêm hoặc xóa người bán kênh chỉ có thể thực hiện từ danh sách người bán kênh trong Quản lý người bán"
 }
