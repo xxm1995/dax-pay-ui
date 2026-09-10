@@ -1,5 +1,20 @@
 {
   "title": "Pengurusan Kod QR",
+  "field": {
+    "code": "Kod",
+    "name": "Nama",
+    "programType": "Jenis Kod",
+    "batchNo": "No. Kumpulan",
+    "appId": "Aplikasi",
+    "store": "Kedai",
+    "storeNo": "No. Kedai",
+    "amountType": "Jenis Amaun",
+    "fixedAmount": "Amaun Tetap",
+    "status": "Status",
+    "allocation": "Alokasi",
+    "createTime": "Masa Dicipta",
+    "remark": "Catatan"
+  },
   "status": {
     "enabled": "Didayakan",
     "disabled": "Dilumpuhkan"
@@ -42,10 +57,10 @@
     "h5": "H5",
     "mini": "Program Mini"
   },
-  "claim": "Claim QR Code",
-  "claimTitle": "Claim QR Code",
+  "claim": "Bind QR Code",
+  "claimTitle": "Bind QR Code",
   "claimCodePlaceholder": "Please enter the QR code",
-  "claimTip": "Enter the code printed on the QR code board to claim a blank platform QR code to your merchant",
+  "claimTip": "Scan the QR code board or enter its number to bind it for payment",
   "claimRequired": "Please enter the QR code",
-  "claimSuccess": "QR code claimed successfully"
+  "claimSuccess": "Bound successfully"
 }

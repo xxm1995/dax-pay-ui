@@ -1,5 +1,20 @@
 {
   "title": "碼牌管理",
+  "field": {
+    "code": "碼牌編碼",
+    "name": "碼牌名稱",
+    "programType": "碼牌類型",
+    "batchNo": "批次號",
+    "appId": "應用",
+    "store": "門店",
+    "storeNo": "門店號",
+    "amountType": "金額類型",
+    "fixedAmount": "固定金額",
+    "status": "狀態",
+    "allocation": "分帳",
+    "createTime": "創建時間",
+    "remark": "備註"
+  },
   "status": {
     "enabled": "啓用",
     "disabled": "停用"
@@ -42,10 +57,10 @@
     "h5": "H5",
     "mini": "小程式"
   },
-  "claim": "認領碼牌",
-  "claimTitle": "認領碼牌",
+  "claim": "綁定碼牌",
+  "claimTitle": "綁定碼牌",
   "claimCodePlaceholder": "請輸入碼牌編號",
-  "claimTip": "輸入印製在碼牌物料上的編號，將平台空白碼牌認領到當前商戶名下",
+  "claimTip": "掃描碼牌二維碼或輸入編號，綁定後即可用於收款",
   "claimRequired": "請輸入碼牌編號",
-  "claimSuccess": "認領成功"
+  "claimSuccess": "綁定成功"
 }

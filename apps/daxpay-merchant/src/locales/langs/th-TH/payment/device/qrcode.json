@@ -1,5 +1,20 @@
 {
   "title": "การจัดการรหัส QR",
+  "field": {
+    "code": "รหัส",
+    "name": "ชื่อ",
+    "programType": "ประเภทโค้ด",
+    "batchNo": "หมายเลขแบตช์",
+    "appId": "แอป",
+    "store": "สาขา",
+    "storeNo": "รหัสสาขา",
+    "amountType": "ประเภทจำนวนเงิน",
+    "fixedAmount": "จำนวนเงินคงที่",
+    "status": "สถานะ",
+    "allocation": "การแบ่งเงิน",
+    "createTime": "เวลาสร้าง",
+    "remark": "หมายเหตุ"
+  },
   "status": {
     "enabled": "เปิดใช้งานแล้ว",
     "disabled": "พิการ"
@@ -42,10 +57,10 @@
     "h5": "H5",
     "mini": "มินิโปรแกรม"
   },
-  "claim": "Claim QR Code",
-  "claimTitle": "Claim QR Code",
+  "claim": "Bind QR Code",
+  "claimTitle": "Bind QR Code",
   "claimCodePlaceholder": "Please enter the QR code",
-  "claimTip": "Enter the code printed on the QR code board to claim a blank platform QR code to your merchant",
+  "claimTip": "Scan the QR code board or enter its number to bind it for payment",
   "claimRequired": "Please enter the QR code",
-  "claimSuccess": "QR code claimed successfully"
+  "claimSuccess": "Bound successfully"
 }

@@ -1,5 +1,20 @@
 {
   "title": "QRコード管理",
+  "field": {
+    "code": "コード番号",
+    "name": "名称",
+    "programType": "コード種別",
+    "batchNo": "バッチ番号",
+    "appId": "アプリ",
+    "store": "店舗",
+    "storeNo": "店舗番号",
+    "amountType": "金額タイプ",
+    "fixedAmount": "固定金額",
+    "status": "ステータス",
+    "allocation": "分配",
+    "createTime": "作成日時",
+    "remark": "備考"
+  },
   "status": {
     "enabled": "有効",
     "disabled": "無効"
@@ -42,10 +57,10 @@
     "h5": "H5",
     "mini": "ミニプログラム"
   },
-  "claim": "QRコードを取得",
-  "claimTitle": "QRコードを取得",
+  "claim": "QRコードを紐付け",
+  "claimTitle": "QRコードを紐付け",
   "claimCodePlaceholder": "コードを入力してください",
-  "claimTip": "QRコードボードに印字されたコードを入力すると、プラットフォームの未割り当てQRコードを自分の加盟店に取得できます",
+  "claimTip": "QRコードをスキャンするか番号を入力すると、紐付け後すぐに決済に利用できます",
   "claimRequired": "コードを入力してください",
-  "claimSuccess": "取得しました"
+  "claimSuccess": "紐付けました"
 }

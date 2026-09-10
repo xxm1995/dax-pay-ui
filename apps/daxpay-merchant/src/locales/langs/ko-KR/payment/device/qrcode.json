@@ -1,5 +1,20 @@
 {
   "title": "QR 코드 관리",
+  "field": {
+    "code": "코드 번호",
+    "name": "이름",
+    "programType": "코드 유형",
+    "batchNo": "배치 번호",
+    "appId": "앱",
+    "store": "매장",
+    "storeNo": "매장 번호",
+    "amountType": "금액 유형",
+    "fixedAmount": "고정 금액",
+    "status": "상태",
+    "allocation": "분할",
+    "createTime": "생성 시간",
+    "remark": "비고"
+  },
   "status": {
     "enabled": "활성화됨",
     "disabled": "장애가 있는"
@@ -42,10 +57,10 @@
     "h5": "H5",
     "mini": "미니프로그램"
   },
-  "claim": "QR 코드 등록",
-  "claimTitle": "QR 코드 등록",
+  "claim": "QR 코드 연결",
+  "claimTitle": "QR 코드 연결",
   "claimCodePlaceholder": "코드를 입력해 주세요",
-  "claimTip": "QR 코드 보드에 인쇄된 코드를 입력하면 플랫폼의 미할당 QR 코드를 내 가맹점에 등록할 수 있습니다",
+  "claimTip": "QR 코드를 스캔하거나 번호를 입력하면 연결 후 바로 결제에 사용할 수 있습니다",
   "claimRequired": "코드를 입력해 주세요",
-  "claimSuccess": "등록되었습니다"
+  "claimSuccess": "연결되었습니다"
 }

@@ -1,5 +1,20 @@
 {
   "title": "码牌管理",
+  "field": {
+    "code": "码牌编码",
+    "name": "码牌名称",
+    "programType": "码牌类型",
+    "batchNo": "批次号",
+    "appId": "应用",
+    "store": "门店",
+    "storeNo": "门店号",
+    "amountType": "金额类型",
+    "fixedAmount": "固定金额",
+    "status": "状态",
+    "allocation": "分账",
+    "createTime": "创建时间",
+    "remark": "备注"
+  },
   "status": {
     "enabled": "启用",
     "disabled": "停用"
@@ -42,10 +57,10 @@
     "h5": "H5",
     "mini": "小程序"
   },
-  "claim": "认领码牌",
-  "claimTitle": "认领码牌",
+  "claim": "绑定码牌",
+  "claimTitle": "绑定码牌",
   "claimCodePlaceholder": "请输入码牌编号",
-  "claimTip": "输入印制在码牌物料上的编号，将平台空白码牌认领到当前商户名下",
+  "claimTip": "扫描码牌二维码或输入编号，绑定后即可用于收款",
   "claimRequired": "请输入码牌编号",
-  "claimSuccess": "认领成功"
+  "claimSuccess": "绑定成功"
 }
