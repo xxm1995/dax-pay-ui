@@ -345,11 +345,6 @@
               <span v-else class="text-muted-foreground">{{ $t('common.no') }}</span>
             </template>
           </vxe-column>
-          <vxe-column
-            field="contactPhone"
-            :title="$t('payment.merchant.store.store.field.contactPhone')"
-            :min-width="130"
-          />
           <vxe-column field="address" :title="$t('payment.merchant.store.store.field.address')" :min-width="240">
             <template #default="{ row }">
               <span>{{ fullAddress(row) }}</span>
