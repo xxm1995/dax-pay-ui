@@ -22,9 +22,9 @@
     data: undefined,
   });
 
-  // 趋势时间跨度切换
+  // 趋势时间跨度切换(默认近 30 天, 与支付渠道分布卡片保持一致)
   type TrendRange = '7days' | '30days';
-  const activeRange = ref<TrendRange>('7days');
+  const activeRange = ref<TrendRange>('30days');
 
   const chartRef = ref<EchartsUIType>();
   const { renderEcharts } = useEcharts(chartRef);
