@@ -110,8 +110,10 @@
 <style scoped>
   .third-platform-page {
     box-sizing: border-box;
-    height: 100%;
-    min-height: 0;
+
+    /* 锁定为视口内内容区高度(顶栏+页签栏由 --vben-header-height 表达, 布局启动即写入 :root),
+       左右栏在各自内部滚动, 不再随 document 整页滚动 */
+    height: calc(100vh - var(--vben-header-height, 88px));
     padding: 12px;
   }
 
