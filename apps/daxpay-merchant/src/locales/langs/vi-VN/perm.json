@@ -87,6 +87,7 @@
   "plugin:easypay-refund:view": "Xem",
   "system:dict:manage": "Quản lý",
   "system:dict:view": "Xem",
+  "system:file:manage": "Quản lý",
   "system:file:view": "Xem",
   "system:log:login:manage": "Quản lý",
   "system:log:login:view": "Xem",

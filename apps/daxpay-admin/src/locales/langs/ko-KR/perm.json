@@ -89,6 +89,7 @@
   "plugin:easypay-refund:view": "보기",
   "system:dict:manage": "관리하다",
   "system:dict:view": "보다",
+  "system:file:manage": "관리하다",
   "system:file:view": "보다",
   "system:log:login:manage": "관리하다",
   "system:log:login:view": "보다",

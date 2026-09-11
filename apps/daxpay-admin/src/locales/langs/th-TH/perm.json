@@ -89,6 +89,7 @@
   "plugin:easypay-refund:view": "ดู",
   "system:dict:manage": "จัดการ",
   "system:dict:view": "ดู",
+  "system:file:manage": "จัดการ",
   "system:file:view": "ดู",
   "system:log:login:manage": "จัดการ",
   "system:log:login:view": "ดู",

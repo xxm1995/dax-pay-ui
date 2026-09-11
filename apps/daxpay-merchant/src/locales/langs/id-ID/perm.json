@@ -87,6 +87,7 @@
   "plugin:easypay-refund:view": "Lihat",
   "system:dict:manage": "Mengelola",
   "system:dict:view": "Melihat",
+  "system:file:manage": "Mengelola",
   "system:file:view": "Melihat",
   "system:log:login:manage": "Mengelola",
   "system:log:login:view": "Melihat",

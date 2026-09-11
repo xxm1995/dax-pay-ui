@@ -87,6 +87,7 @@
   "plugin:easypay-refund:view": "Lihat",
   "system:dict:manage": "Uruskan",
   "system:dict:view": "Lihat",
+  "system:file:manage": "Uruskan",
   "system:file:view": "Lihat",
   "system:log:login:manage": "Uruskan",
   "system:log:login:view": "Lihat",

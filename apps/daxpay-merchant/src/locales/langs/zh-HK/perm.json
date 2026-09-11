@@ -87,6 +87,7 @@
   "plugin:easypay-refund:view": "查看",
   "system:dict:manage": "管理",
   "system:dict:view": "查看",
+  "system:file:manage": "管理",
   "system:file:view": "查看",
   "system:log:login:manage": "管理",
   "system:log:login:view": "查看",

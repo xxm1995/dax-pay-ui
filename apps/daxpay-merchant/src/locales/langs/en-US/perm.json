@@ -87,6 +87,7 @@
   "plugin:easypay-refund:view": "View",
   "system:dict:manage": "Manage",
   "system:dict:view": "View",
+  "system:file:manage": "Manage",
   "system:file:view": "View",
   "system:log:login:manage": "Manage",
   "system:log:login:view": "View",
