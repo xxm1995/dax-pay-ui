@@ -129,8 +129,8 @@
       : $t('payment.develop.trade.result.failModalTitle'),
   );
 
-  // 完整 DaxResult(展示用): 把 resTime 从 ISO 8601 (如 2026-07-19T13:34:58.8753181Z)
-  // 格式化为本地 yyyy-MM-dd HH:mm:ss, 便于联调阅读; 格式化失败保留原值
+  // 完整 DaxResult(展示用): resTime 由平台下发北京时间 (如 2026-07-19 21:34:58)
+  // 与展示格式一致, 此处格式化仅为兜底(兼容历史 ISO 报文); 格式化失败保留原值
   const displayResultData = computed<DaxResult<PayResult>>(() => {
     const raw = resultData.value;
     if (!raw?.resTime) {
