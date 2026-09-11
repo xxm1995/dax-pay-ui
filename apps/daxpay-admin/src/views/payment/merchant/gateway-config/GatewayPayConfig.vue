@@ -16,6 +16,7 @@
   } from '#/api/payment/merchant/gateway-config.api';
   import { MchAppInfoApi, type MchAppInfoResult } from '#/api/payment/merchant/mch-app-info.api';
   import { PayRouteApi } from '#/api/payment/route/pay-route.api';
+  import { PageShell } from '@daxpay/ui-biz/components/page-shell';
   import ChannelMerchantSelect from '#/components/channel/ChannelMerchantSelect.vue';
   import RouteQueryMissingState from '#/components/route/RouteQueryMissingState.vue';
   import { useMessage } from '#/hooks/useMessage';
@@ -487,38 +488,29 @@
     :back-text="$t('payment.merchant.workbench.workbench.backToList')"
     @back="routeContext.goFallback"
   />
-  <div v-else class="m-4">
-    <a-card variant="borderless" class="rounded-xl shadow-sm">
-      <template #title>
-        <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <a-button type="text" @click="handleBack">
-            <template #icon>
-              <IconifyIcon icon="ant-design:arrow-left-outlined" />
-            </template>
-          </a-button>
-          <span class="text-lg font-bold">{{ $t('payment.merchant.gatewayConfig.gatewayConfig.title') }}</span>
-          <!-- 应用名：窄屏换行完整展示 -->
-          <span v-if="appInfo.appName" class="min-w-0 break-all text-sm text-muted-foreground">
-            ({{ appInfo.appName }})
-          </span>
-        </div>
+  <PageShell
+    v-else
+    :title="$t('payment.merchant.gatewayConfig.gatewayConfig.title')"
+    :description="appInfo.appName || ''"
+    :loading="loading || routeHitLoading"
+  >
+    <!-- 编辑操作：桌面在右上角常驻；移动端编辑态由底部固定操作栏承接 -->
+    <template #actions>
+      <a-button type="text" @click="handleBack">
+        <template #icon>
+          <IconifyIcon icon="ant-design:arrow-left-outlined" />
+        </template>
+      </a-button>
+      <a-button v-if="!editing" type="primary" @click="startEdit">
+        {{ $t('common.edit') }}
+      </a-button>
+      <template v-else-if="!isMobile">
+        <a-button type="primary" @click="save">{{ $t('common.save') }}</a-button>
+        <a-button @click="cancel">{{ $t('common.cancel') }}</a-button>
       </template>
+    </template>
 
-      <!-- 编辑操作：桌面在卡片右上角；移动端编辑态由底部固定操作栏承接 -->
-      <template #extra>
-        <div class="flex gap-2">
-          <a-button v-if="!editing" type="primary" @click="startEdit">
-            {{ $t('common.edit') }}
-          </a-button>
-          <template v-else-if="!isMobile">
-            <a-button type="primary" @click="save">{{ $t('common.save') }}</a-button>
-            <a-button @click="cancel">{{ $t('common.cancel') }}</a-button>
-          </template>
-        </div>
-      </template>
-
-      <a-spin :spinning="loading || routeHitLoading">
-        <!-- 配置模式切换：移动端纵向堆叠，桌面横排 -->
+    <!-- 配置模式切换：移动端纵向堆叠，桌面横排 -->
         <div class="mb-5 flex flex-col items-start gap-3 md:flex-row md:flex-wrap md:items-center">
           <span class="text-sm font-medium">{{
             $t('payment.merchant.gatewayConfig.gatewayConfig.editModeLabel')
@@ -785,8 +777,7 @@
             </div>
           </template>
         </div>
-      </a-spin>
-    </a-card>
+    </PageShell>
 
     <!-- 移动端编辑态底部占位，防止内容被固定操作栏遮挡 -->
     <div v-if="isMobile && editing" class="h-20"></div>
@@ -803,7 +794,6 @@
         </a-button>
       </div>
     </div>
-  </div>
 </template>
 
 <style scoped>

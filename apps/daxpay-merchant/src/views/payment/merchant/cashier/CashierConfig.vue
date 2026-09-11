@@ -10,6 +10,7 @@
   import { CashierConfigApi, type CashierItemResult } from '#/api/payment/merchant/cashier.api';
   import { MchAppInfoApi, type MchAppInfoResult } from '#/api/payment/merchant/mch-app-info.api';
   import { PayRouteApi } from '#/api/payment/route/pay-route.api';
+  import { PageShell } from '@daxpay/ui-biz/components/page-shell';
   import RouteQueryMissingState from '#/components/route/RouteQueryMissingState.vue';
   import { PermCodes } from '#/constants/perm-codes';
   import { useMessage } from '#/hooks/useMessage';
@@ -224,28 +225,22 @@
     :back-text="$t('payment.merchant.workbench.workbench.backToList')"
     @back="routeContext.goFallback"
   />
-  <div v-else class="m-4">
-    <a-card variant="borderless" class="rounded-xl shadow-sm">
-      <template #title>
-        <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <a-button type="text" @click="handleBack">
-            <template #icon>
-              <IconifyIcon icon="ant-design:arrow-left-outlined" />
-            </template>
-          </a-button>
-          <span class="text-lg font-bold">{{ $t('payment.merchant.cashier.cashier.title') }}</span>
-          <!-- 应用名：窄屏换行完整展示 -->
-          <span v-if="appInfo.appName" class="min-w-0 break-all text-sm text-muted-foreground">
-            ({{ appInfo.appName }})
-          </span>
-        </div>
-      </template>
-
-      <template #extra>
-        <a-button v-if="canManage" type="primary" @click="handleAdd">
-          {{ $t('payment.merchant.cashier.cashier.addItem') }}
-        </a-button>
-      </template>
+  <PageShell
+    v-else
+    :title="$t('payment.merchant.cashier.cashier.title')"
+    :description="appInfo.appName || ''"
+    :loading="loading"
+  >
+    <template #actions>
+      <a-button type="text" @click="handleBack">
+        <template #icon>
+          <IconifyIcon icon="ant-design:arrow-left-outlined" />
+        </template>
+      </a-button>
+      <a-button v-if="canManage" type="primary" @click="handleAdd">
+        {{ $t('payment.merchant.cashier.cashier.addItem') }}
+      </a-button>
+    </template>
 
       <!-- 一级: H5 / WEB / 小程序（移动端档位按钮 chips 化允许换行） -->
       <div class="radio-chips mb-4">
@@ -269,9 +264,8 @@
         </a-radio-group>
       </div>
 
-      <a-spin :spinning="loading">
-        <!-- 桌面：vxe-table -->
-        <vxe-table v-if="!isMobile" :data="tableData" :row-config="{ keyField: 'id' }" min-height="200">
+      <!-- 桌面：vxe-table -->
+      <vxe-table v-if="!isMobile" :data="tableData" :row-config="{ keyField: 'id' }" min-height="200">
           <vxe-column type="seq" :title="$t('common.seq')" width="60" align="center" />
           <vxe-column field="name" :title="$t('payment.merchant.cashier.cashier.name')" min-width="70" />
           <vxe-column field="icon" :title="$t('payment.merchant.cashier.cashier.icon')" width="120" align="center">
@@ -395,11 +389,9 @@
             {{ $t('payment.merchant.cashier.cashier.empty') }}
           </div>
         </template>
-      </a-spin>
-    </a-card>
+  </PageShell>
 
     <CashierItemEdit ref="itemEditRef" @ok="loadList" />
-  </div>
 </template>
 
 <style scoped>

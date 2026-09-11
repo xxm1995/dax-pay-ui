@@ -14,6 +14,7 @@
   } from '#/api/payment/merchant/credential.api';
   import { KeyGenApi } from '#/api/payment/merchant/key-gen.api';
   import { MerchantApi } from '#/api/payment/merchant/merchant.api';
+  import { PageShell } from '@daxpay/ui-biz/components/page-shell';
   import { PermCodes } from '#/constants/perm-codes';
   import { useFormEdit } from '#/hooks/useFormEdit';
   import { useMessage } from '#/hooks/useMessage';
@@ -194,35 +195,27 @@
 </script>
 
 <template>
-  <div class="m-4">
-    <a-card variant="borderless" class="rounded-xl shadow-sm">
-      <template #title>
-        <!-- 对接配置（与菜单 menu.payment.merchant.credential 一致） -->
-        <span class="text-lg font-bold text-foreground">{{ $t('menu.payment.merchant.credential') }}</span>
+  <PageShell :title="$t('menu.payment.merchant.credential')" :loading="loading">
+    <!-- 对接配置（与菜单 menu.payment.merchant.credential 一致） -->
+    <template #actions>
+      <template v-if="!isEditing">
+        <a-button v-if="hasPermission(PermCodes.Merchant.Credential.MANAGE)" type="primary" @click="handleEdit">{{
+          $t('common.edit')
+        }}</a-button>
       </template>
-
-      <template #extra>
-        <template v-if="!isEditing">
-          <a-button v-if="hasPermission(PermCodes.Merchant.Credential.MANAGE)" type="primary" @click="handleEdit">{{
-            $t('common.edit')
-          }}</a-button>
-        </template>
-        <template v-else>
-          <a-space>
-            <a-button @click="handleCancel">{{ $t('common.cancelText') }}</a-button>
-            <a-button
-              v-if="hasPermission(PermCodes.Merchant.Credential.MANAGE)"
-              type="primary"
-              :loading="saving"
-              @click="handleSave"
-            >
-              {{ $t('common.save') }}
-            </a-button>
-          </a-space>
-        </template>
+      <template v-else>
+        <a-button @click="handleCancel">{{ $t('common.cancelText') }}</a-button>
+        <a-button
+          v-if="hasPermission(PermCodes.Merchant.Credential.MANAGE)"
+          type="primary"
+          :loading="saving"
+          @click="handleSave"
+        >
+          {{ $t('common.save') }}
+        </a-button>
       </template>
+    </template>
 
-      <a-spin :spinning="loading">
         <div class="credential-form-container max-w-4xl px-4 py-2">
           <!-- 信息提示 -->
           <div class="info-banner">
@@ -303,8 +296,6 @@
             </a-form-item>
           </a-form>
         </div>
-      </a-spin>
-    </a-card>
 
     <!-- RSA 密钥对弹窗 -->
     <a-modal
@@ -340,7 +331,7 @@
         </div>
       </div>
     </a-modal>
-  </div>
+  </PageShell>
 </template>
 
 <style scoped lang="less">

@@ -8,6 +8,7 @@
 
   import { PayProductConfigApi, type PayProductConfigResult } from '#/api/payment/config/pay-product-config.api';
   import { PayEnvApi } from '#/api/payment/masterdata/pay-env.api';
+  import { PageShell } from '@daxpay/ui-biz/components/page-shell';
   import ChannelLogo from '#/components/channel/ChannelLogo.vue';
   import { productI18nMap, productNameMap } from '#/enums/payment';
   import { useMessage } from '#/hooks/useMessage';
@@ -128,18 +129,8 @@
 </script>
 
 <template>
-  <div class="m-4">
-    <a-card variant="borderless" class="rounded-xl shadow-sm">
-      <template #title>
-        <div class="flex items-center gap-2">
-          <span class="text-lg font-bold text-foreground">{{
-            $t('payment.constant.product.productConfig.title')
-          }}</span>
-        </div>
-      </template>
-
-      <a-spin :spinning="loading">
-        <div v-if="productList.length === 0 && !loading" class="flex items-center justify-center empty-container">
+  <PageShell :title="$t('payment.constant.product.productConfig.title')" :loading="loading">
+    <div v-if="productList.length === 0 && !loading" class="flex items-center justify-center empty-container">
           <a-empty :description="$t('payment.constant.product.productConfig.emptyDesc')" />
         </div>
         <div v-else class="product-config-grid">
@@ -211,9 +202,7 @@
             </div>
           </a-card>
         </div>
-      </a-spin>
-    </a-card>
-  </div>
+  </PageShell>
 </template>
 
 <style scoped>

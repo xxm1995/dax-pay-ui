@@ -5,6 +5,8 @@
 
   import { IconifyIcon } from '@vben-core/icons';
 
+  import { PageShell } from '@daxpay/ui-biz/components/page-shell';
+
   defineOptions({ name: 'MobileAppConfig' });
 
   const router = useRouter();
@@ -56,15 +58,8 @@
 </script>
 
 <template>
-  <div class="m-4">
-    <a-card variant="borderless" class="rounded-xl shadow-sm">
-      <template #title>
-        <span class="text-lg font-bold text-foreground">{{
-          $t('payment.mobileApp.title')
-        }}</span>
-      </template>
-
-      <div class="mobile-app-grid">
+  <PageShell :title="$t('payment.mobileApp.title')">
+    <div class="mobile-app-grid">
         <div
           v-for="card in cards"
           :key="card.appType"
@@ -102,8 +97,7 @@
           </div>
         </div>
       </div>
-    </a-card>
-  </div>
+  </PageShell>
 </template>
 
 <style scoped>

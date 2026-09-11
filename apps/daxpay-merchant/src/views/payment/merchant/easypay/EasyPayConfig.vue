@@ -15,6 +15,7 @@
   } from '#/api/payment/merchant/easypay-credential.api';
   import { KeyGenApi } from '#/api/payment/merchant/key-gen.api';
   import { MchAppInfoApi, type MchAppInfoResult } from '#/api/payment/merchant/mch-app-info.api';
+  import { PageShell } from '@daxpay/ui-biz/components/page-shell';
   import RouteQueryMissingState from '#/components/route/RouteQueryMissingState.vue';
   import { PermCodes } from '#/constants/perm-codes';
   import { useFormEdit } from '#/hooks/useFormEdit';
@@ -277,39 +278,32 @@
     :back-text="$t('payment.merchant.app.app.backToAppList')"
     @back="routeContext.goFallback"
   />
-  <div v-else class="m-4">
-    <a-card variant="borderless" class="rounded-xl shadow-sm">
-      <template #title>
-        <div class="flex items-center gap-2">
-          <a-button type="text" @click="handleBack">
-            <template #icon>
-              <IconifyIcon icon="ant-design:arrow-left-outlined" />
-            </template>
+  <PageShell
+    v-else
+    :title="$t('menu.payment.merchant.easypay')"
+    :description="appInfo.appName || ''"
+    :loading="loading"
+  >
+    <!-- 页头与菜单 i18n_key 一致 -->
+    <template #actions>
+      <a-button type="text" @click="handleBack">
+        <template #icon>
+          <IconifyIcon icon="ant-design:arrow-left-outlined" />
+        </template>
+      </a-button>
+      <template v-if="canManage">
+        <template v-if="!isEditing">
+          <a-button type="primary" @click="handleEdit">{{ $t('common.edit') }}</a-button>
+        </template>
+        <template v-else>
+          <a-button @click="handleCancel">{{ $t('common.cancelText') }}</a-button>
+          <a-button type="primary" :loading="saving" @click="handleSave">
+            {{ $t('common.save') }}
           </a-button>
-          <!-- 页头与菜单 i18n_key 一致 -->
-          <span class="text-lg font-bold text-foreground">
-            {{ $t('menu.payment.merchant.easypay') }}
-          </span>
-        </div>
-      </template>
-
-      <template #extra>
-        <template v-if="canManage">
-          <template v-if="!isEditing">
-            <a-button type="primary" @click="handleEdit">{{ $t('common.edit') }}</a-button>
-          </template>
-          <template v-else>
-            <a-space>
-              <a-button @click="handleCancel">{{ $t('common.cancelText') }}</a-button>
-              <a-button type="primary" :loading="saving" @click="handleSave">
-                {{ $t('common.save') }}
-              </a-button>
-            </a-space>
-          </template>
         </template>
       </template>
+    </template>
 
-      <a-spin :spinning="loading">
         <div class="easypay-form-container max-w-6xl px-4 py-2">
           <!-- 信息提示 -->
           <div class="info-banner">
@@ -552,8 +546,6 @@
             </div>
           </a-form>
         </div>
-      </a-spin>
-    </a-card>
 
     <!-- RSA 密钥对弹窗 -->
     <a-modal
@@ -586,7 +578,7 @@
         </div>
       </div>
     </a-modal>
-  </div>
+  </PageShell>
 </template>
 
 <style scoped lang="less">

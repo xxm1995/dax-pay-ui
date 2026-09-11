@@ -15,6 +15,7 @@
   MerchantCredentialApi, type MerchantCredentialParam, type MerchantCredentialResult,
   } from '#/api/payment/merchant/credential.api';
   import { KeyGenApi } from '#/api/payment/merchant/key-gen.api';
+  import { PageShell } from '@daxpay/ui-biz/components/page-shell';
   import RouteQueryMissingState from '#/components/route/RouteQueryMissingState.vue';
   import { useFormEdit } from '#/hooks/useFormEdit';
   import { PermCodes } from '#/constants/perm-codes';
@@ -220,47 +221,41 @@
     :back-text="$t('payment.merchant.workbench.workbench.backToList')"
     @back="routeContext.goFallback"
   />
-  <div v-else class="m-4">
-    <a-card variant="borderless" class="rounded-xl shadow-sm">
-      <template #title>
-        <div class="flex items-center gap-2">
-          <a-button
-            type="text"
-            class="flex items-center justify-center rounded-full hover:bg-accent"
-            @click="handleBack"
-          >
-            <template #icon>
-              <IconifyIcon icon="ant-design:arrow-left-outlined" class="text-lg" />
-            </template>
-          </a-button>
-          <!-- 国际化：对接配置 -->
-          <span class="text-lg font-bold text-foreground">{{ $t('payment.merchant.credential.credential.title') }}</span>
-          <span v-if="merchantInfo.mchName" class="text-sm text-muted-foreground">({{ merchantInfo.mchName }})</span>
-        </div>
-      </template>
-
-      <template #extra>
-        <template v-if="!isEditing">
-          <a-button v-if="hasPermission(PermCodes.Merchant.Credential.MANAGE)" type="primary" @click="handleEdit">{{
-            $t('common.edit')
-          }}</a-button>
+  <PageShell
+    v-else
+    :title="$t('payment.merchant.credential.credential.title')"
+    :description="merchantInfo.mchName || ''"
+    :loading="loading"
+  >
+    <!-- 国际化：对接配置 -->
+    <template #actions>
+      <a-button
+        type="text"
+        class="flex items-center justify-center rounded-full hover:bg-accent"
+        @click="handleBack"
+      >
+        <template #icon>
+          <IconifyIcon icon="ant-design:arrow-left-outlined" class="text-lg" />
         </template>
-        <template v-else>
-          <a-space>
-            <a-button @click="handleCancel">{{ $t('common.cancelText') }}</a-button>
-            <a-button
-              v-if="hasPermission(PermCodes.Merchant.Credential.MANAGE)"
-              type="primary"
-              :loading="saving"
-              @click="handleSave"
-            >
-              {{ $t('common.save') }}
-            </a-button>
-          </a-space>
-        </template>
+      </a-button>
+      <template v-if="!isEditing">
+        <a-button v-if="hasPermission(PermCodes.Merchant.Credential.MANAGE)" type="primary" @click="handleEdit">{{
+          $t('common.edit')
+        }}</a-button>
       </template>
+      <template v-else>
+        <a-button @click="handleCancel">{{ $t('common.cancelText') }}</a-button>
+        <a-button
+          v-if="hasPermission(PermCodes.Merchant.Credential.MANAGE)"
+          type="primary"
+          :loading="saving"
+          @click="handleSave"
+        >
+          {{ $t('common.save') }}
+        </a-button>
+      </template>
+    </template>
 
-      <a-spin :spinning="loading">
         <div class="credential-form-container max-w-4xl px-4 py-2">
           <!-- 信息提示 -->
           <div class="info-banner">
@@ -344,8 +339,6 @@
             </a-form-item>
           </a-form>
         </div>
-      </a-spin>
-    </a-card>
 
     <!-- RSA密钥对弹窗 -->
     <!-- 国际化：RSA密钥对 -->
@@ -380,7 +373,7 @@
         </div>
       </div>
     </a-modal>
-  </div>
+  </PageShell>
 </template>
 
 <style scoped lang="less">

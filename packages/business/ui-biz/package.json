@@ -201,6 +201,10 @@
       "types": "./src/components/social/index.ts",
       "default": "./src/components/social/index.ts"
     },
+    "./components/page-shell": {
+      "types": "./src/components/page-shell/index.ts",
+      "default": "./src/components/page-shell/index.ts"
+    },
     "./components/AntdAppProvider": {
       "types": "./src/components/AntdAppProvider.vue",
       "default": "./src/components/AntdAppProvider.vue"
