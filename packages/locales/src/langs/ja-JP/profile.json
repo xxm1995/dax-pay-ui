@@ -1,4 +1,11 @@
 {
   "updatePassword": "パスワードを更新する",
-  "updateBasicProfile": "基本プロファイルの更新"
+  "updateBasicProfile": "基本プロファイルの更新",
+  "passwordStatus": {
+    "validUntil": "パスワード有効期限 {date}",
+    "remaining": "残り {days} 日",
+    "expiringSoon": "パスワードは {days} 日後に期限切れになります。早めに変更してください",
+    "expired": "パスワードが期限切れです。すぐに変更してください",
+    "unlimited": "定期更新は現在無効です"
+  }
 }

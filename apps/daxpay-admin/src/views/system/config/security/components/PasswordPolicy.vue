@@ -57,6 +57,10 @@
       // 复杂度项数
       $t('system.security.password-policy.summary.complexity', { count: complexityCount }),
       rotationText,
+      // 过期提醒阈值
+      $t('system.security.password-policy.summary.expireWarn', {
+        days: formState.value.expireWarnDays ?? 0,
+      }),
       // 历史记录次数
       $t('system.security.password-policy.summary.history', { count: formState.value.historyCount ?? 0 }),
     ];
@@ -306,6 +310,28 @@
                   :min="0"
                   :max="365"
                   :placeholder="$t('system.security.password-policy.rotationDays.placeholder')"
+                  :disabled="!isEditing"
+                  style="width: 180px"
+                />
+                <!-- 单位：天 -->
+                <span class="number-field__suffix">{{ $t('system.security.common.unit.day') }}</span>
+              </div>
+            </div>
+
+            <div class="config-item config-item--block">
+              <div class="config-item__main">
+                <!-- 过期提醒天数标签 -->
+                <div class="config-item__label">{{ $t('system.security.password-policy.expireWarnDays.label') }}</div>
+                <!-- 过期提醒天数描述 -->
+                <div class="config-item__desc">{{ $t('system.security.password-policy.expireWarnDays.desc') }}</div>
+              </div>
+              <div class="number-field">
+                <!-- 国际化：请输入过期提醒天数 -->
+                <a-input-number
+                  v-model:value="formState.expireWarnDays"
+                  :min="1"
+                  :max="90"
+                  :placeholder="$t('system.security.password-policy.expireWarnDays.placeholder')"
                   :disabled="!isEditing"
                   style="width: 180px"
                 />

@@ -1,4 +1,11 @@
 {
   "updatePassword": "Perbarui Kata Sandi",
-  "updateBasicProfile": "Perbarui Profil Dasar"
+  "updateBasicProfile": "Perbarui Profil Dasar",
+  "passwordStatus": {
+    "validUntil": "Kata sandi berlaku hingga {date}",
+    "remaining": "Sisa {days} hari",
+    "expiringSoon": "Kata sandi akan kedaluwarsa dalam {days} hari. Segera ubah",
+    "expired": "Kata sandi sudah kedaluwarsa. Segera ubah",
+    "unlimited": "Rotasi kata sandi berkala tidak diaktifkan"
+  }
 }

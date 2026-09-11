@@ -39,12 +39,18 @@ export interface UserBaseInfoParam {
 export interface PasswordStatus {
   /** 是否已过期 */
   expired: boolean;
-  /** 是否即将过期(7天内) */
+  /** 是否即将过期(剩余天数不超过提醒阈值) */
   expiringSoon: boolean;
-  /** 过期时间 (UTC ISO) */
+  /** 过期时间 (UTC ISO), 为空表示未设置有效期 */
   expireTime: null | string;
+  /** 剩余天数(已过期返回 0), 未设置有效期返回 null */
+  remainingDays: null | number;
   /** 是否初始密码(管理员代设, 需首次登录修改) */
   initialPassword: boolean;
+  /** 平台是否启用定期轮换 */
+  rotationEnabled: boolean;
+  /** 过期提醒阈值（天） */
+  warnDays: null | number;
 }
 
 /**
@@ -84,6 +90,14 @@ export const UserCommonApi = {
    */
   updateBaseInfo(data: UserBaseInfoParam): Promise<Result<void>> {
     return requestClient.post('/user/auth/update-base-info', data);
+  },
+  /**
+   * 获取当前用户的密码状态(个人中心「密码设置」展示有效期)
+   *
+   * 与 getUserInfo 内的 passwordStatus 区别: 该接口不做超管豁免, 只反映客观状态
+   */
+  getPasswordStatus(): Promise<Result<PasswordStatus>> {
+    return requestClient.get('/user/auth/password-status');
   },
   /**
    * 修改密码

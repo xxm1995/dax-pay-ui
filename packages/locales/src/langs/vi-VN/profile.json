@@ -1,4 +1,11 @@
 {
   "updatePassword": "Cập nhật mật khẩu",
-  "updateBasicProfile": "Cập nhật hồ sơ cơ bản"
+  "updateBasicProfile": "Cập nhật hồ sơ cơ bản",
+  "passwordStatus": {
+    "validUntil": "Mật khẩu có hiệu lực đến {date}",
+    "remaining": "Còn {days} ngày",
+    "expiringSoon": "Mật khẩu sẽ hết hạn sau {days} ngày. Vui lòng đổi sớm",
+    "expired": "Mật khẩu đã hết hạn. Vui lòng đổi ngay",
+    "unlimited": "Chưa bật thay đổi mật khẩu định kỳ"
+  }
 }

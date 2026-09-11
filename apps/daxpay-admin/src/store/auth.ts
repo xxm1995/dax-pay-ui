@@ -260,18 +260,29 @@ export const useAuthStore = defineStore('auth', () => {
       name: data?.name ?? '',
     } as UserInfo;
     userStore.setUserInfo(userInfo);
+    // 密码即将过期提示: 覆盖刷新/重新进入系统的场景, 与登录后的提示按天去重
+    notifyPasswordExpiringSoon();
     return userInfo;
   }
 
-  /** 登录成功后提示密码即将过期 */
+  /** 密码即将过期提示(同一用户同一天只提示一次) */
   function notifyPasswordExpiringSoon() {
-    if (!passwordStatus.value?.expiringSoon || needChangePassword.value) {
+    const status = passwordStatus.value;
+    if (!status?.expiringSoon || needChangePassword.value) {
       return;
     }
+    // 按天去重: 登录成功、刷新页面都会走到这里, 避免反复弹出
+    const dedupeKey = `pwd-expire-notify:${userStore.userInfo?.id ?? ''}:${new Date().toISOString().slice(0, 10)}`;
+    if (localStorage.getItem(dedupeKey)) {
+      return;
+    }
+    localStorage.setItem(dedupeKey, '1');
     const { notification } = useMessage();
     notification.warning({
-      // 密码即将过期提示
-      description: $t('_core.authentication.passwordExpiringSoon'),
+      // 密码即将过期提示(剩余天数由后端计算)
+      description: $t('_core.authentication.passwordExpiringSoon', {
+        days: status.remainingDays ?? status.warnDays ?? 0,
+      }),
       duration: 6,
       title: $t('common.warning'),
     });

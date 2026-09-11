@@ -1,4 +1,11 @@
 {
   "updatePassword": "Kemas kini Kata Laluan",
-  "updateBasicProfile": "Kemas kini Profil Asas"
+  "updateBasicProfile": "Kemas kini Profil Asas",
+  "passwordStatus": {
+    "validUntil": "Kata laluan sah sehingga {date}",
+    "remaining": "Baki {days} hari",
+    "expiringSoon": "Kata laluan akan tamat tempoh dalam {days} hari. Sila tukar segera",
+    "expired": "Kata laluan telah tamat tempoh. Sila tukar segera",
+    "unlimited": "Putaran kata laluan berkala tidak diaktifkan"
+  }
 }

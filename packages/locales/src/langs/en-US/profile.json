@@ -1,4 +1,11 @@
 {
   "updatePassword": "Update Password",
-  "updateBasicProfile": "Update Basic Profile"
+  "updateBasicProfile": "Update Basic Profile",
+  "passwordStatus": {
+    "validUntil": "Password valid until {date}",
+    "remaining": "{days} days remaining",
+    "expiringSoon": "Your password will expire in {days} days. Please change it soon",
+    "expired": "Your password has expired. Please change it now",
+    "unlimited": "Periodic password rotation is not enabled"
+  }
 }

@@ -15,7 +15,10 @@
     "registerTime": "Waktu Pendaftaran",
     "loginCount": "Jumlah Login",
     "lastLoginIp": "IP Login Terakhir",
-    "emailNotBound": "Belum terikat"
+    "emailNotBound": "Belum terikat",
+    "passwordExpireTime": "Waktu Kedaluwarsa Kata Sandi",
+    "lastChangePasswordTime": "Perubahan Kata Sandi Terakhir",
+    "initialPassword": "Kata Sandi Awal"
   },
   "status": {
     "normal": "Normal",

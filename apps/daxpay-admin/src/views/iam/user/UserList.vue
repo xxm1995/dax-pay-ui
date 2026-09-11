@@ -7,6 +7,7 @@
   import { computed, onMounted, ref } from 'vue';
 
   import { $t } from '@vben/locales';
+  import { formatDateTime } from '@vben/utils';
 
   import { IconifyIcon } from '@vben-core/icons';
 
@@ -473,6 +474,29 @@
               <a-tag :color="getStatusColor(row.status)">
                 {{ getStatusLabel(row.status) }}
               </a-tag>
+            </template>
+          </vxe-column>
+          <!-- 密码到期时间 -->
+          <vxe-column
+            field="passwordExpireTime"
+            :title="$t('iam.user.field.passwordExpireTime')"
+            min-width="160"
+            formatter="formatDateTime"
+          >
+            <template #default="{ row }">
+              {{ formatDateTime(row.passwordExpireTime) || $t('common.none') }}
+            </template>
+          </vxe-column>
+          <!-- 初始密码标记 -->
+          <vxe-column
+            field="initialPassword"
+            :title="$t('iam.user.field.initialPassword')"
+            min-width="100"
+            align="center"
+          >
+            <template #default="{ row }">
+              <a-tag v-if="row.initialPassword" color="orange">{{ $t('common.yes') }}</a-tag>
+              <span v-else>{{ $t('common.no') }}</span>
             </template>
           </vxe-column>
           <!-- 创建时间 -->

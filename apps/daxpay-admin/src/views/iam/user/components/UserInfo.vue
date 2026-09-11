@@ -150,6 +150,19 @@
         <a-descriptions-item :label="$t('iam.user.field.lastLoginTime')">
           {{ formatDateTime(userInfo.lastLoginTime) || '-' }}
         </a-descriptions-item>
+        <!-- 密码到期时间 -->
+        <a-descriptions-item :label="$t('iam.user.field.passwordExpireTime')">
+          {{ formatDateTime(userInfo.passwordExpireTime) || $t('common.none') }}
+        </a-descriptions-item>
+        <!-- 上次修改密码时间 -->
+        <a-descriptions-item :label="$t('iam.user.field.lastChangePasswordTime')">
+          {{ formatDateTime(userInfo.lastChangePasswordTime) || $t('common.none') }}
+        </a-descriptions-item>
+        <!-- 是否初始密码 -->
+        <a-descriptions-item :label="$t('iam.user.field.initialPassword')" :span="2">
+          <a-tag v-if="userInfo.initialPassword" color="orange">{{ $t('common.yes') }}</a-tag>
+          <span v-else>{{ $t('common.no') }}</span>
+        </a-descriptions-item>
       </a-descriptions>
     </a-spin>
 

@@ -1,4 +1,11 @@
 {
   "updatePassword": "อัปเดตรหัสผ่าน",
-  "updateBasicProfile": "อัปเดตโปรไฟล์พื้นฐาน"
+  "updateBasicProfile": "อัปเดตโปรไฟล์พื้นฐาน",
+  "passwordStatus": {
+    "validUntil": "รหัสผ่านใช้ได้ถึง {date}",
+    "remaining": "เหลืออีก {days} วัน",
+    "expiringSoon": "รหัสผ่านจะหมดอายุใน {days} วัน โปรดเปลี่ยนโดยเร็ว",
+    "expired": "รหัสผ่านหมดอายุแล้ว โปรดเปลี่ยนทันที",
+    "unlimited": "ยังไม่ได้เปิดใช้การเปลี่ยนรหัสผ่านเป็นระยะ"
+  }
 }

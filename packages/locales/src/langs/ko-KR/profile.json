@@ -1,4 +1,11 @@
 {
   "updatePassword": "비밀번호 업데이트",
-  "updateBasicProfile": "기본 프로필 업데이트"
+  "updateBasicProfile": "기본 프로필 업데이트",
+  "passwordStatus": {
+    "validUntil": "비밀번호 유효 기간 {date}",
+    "remaining": "{days}일 남음",
+    "expiringSoon": "비밀번호가 {days}일 후 만료됩니다. 빠르게 변경해 주세요",
+    "expired": "비밀번호가 만료되었습니다. 즉시 변경해 주세요",
+    "unlimited": "정기 변경이 현재 비활성화되어 있습니다"
+  }
 }

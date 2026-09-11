@@ -1,4 +1,11 @@
 {
   "updatePassword": "更新密碼",
-  "updateBasicProfile": "更新基本信息"
+  "updateBasicProfile": "更新基本信息",
+  "passwordStatus": {
+    "validUntil": "密碼有效期至 {date}",
+    "remaining": "剩餘 {days} 天",
+    "expiringSoon": "密碼將於 {days} 天後到期，請盡快修改",
+    "expired": "密碼已過期，請立即修改",
+    "unlimited": "目前未啟用定期輪換"
+  }
 }

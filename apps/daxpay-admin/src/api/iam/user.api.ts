@@ -158,6 +158,12 @@ export interface User {
   lastLoginTime?: string;
   /** 头像 */
   avatar?: string;
+  /** 密码过期时间 (UTC ISO), 为空表示未设置有效期 */
+  passwordExpireTime?: string;
+  /** 上次修改密码时间 (UTC ISO) */
+  lastChangePasswordTime?: string;
+  /** 是否初始密码（管理员代设, 需用户首次登录修改） */
+  initialPassword?: boolean;
 }
 
 /**
